@@ -17,6 +17,24 @@
 		4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
 		4C384E4214B29789007B4F48 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* MainViewController.m */; };
 		4C384E4514B29789007B4F48 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4414B29789007B4F48 /* FlipsideViewController.m */; };
+		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */; };
+		4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */; };
+		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
+		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
+		4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
+		4C76F0C214B529E6005DCE49 /* UIImagePictureFrame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */; };
+		4C76F0C514B52ABE005DCE49 /* UIImageLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */; };
+		4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
+		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
+		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
+		4C76F0F214B556F5005DCE49 /* FormulaInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */; };
+		4C76F0F314B556F5005DCE49 /* FormulaInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */; };
+		4C76F0F414B556F5005DCE49 /* ImageInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */; };
+		4C76F0F514B556F5005DCE49 /* ImageInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */; };
+		4C76F0F614B556F5005DCE49 /* LabelInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */; };
+		4C76F0F714B556F5005DCE49 /* LabelInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */; };
+		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,18 +42,42 @@
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		4C384E3014B29789007B4F48 /* TheReportViewer-Info.plist */ = {isa = PBXFileReference; path = "TheReportViewer-Info.plist"; sourceTree = "<group>"; };
+		4C384E3014B29789007B4F48 /* TheReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TheReportViewer-Info.plist"; sourceTree = "<group>"; };
 		4C384E3214B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C384E3414B29789007B4F48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C384E3614B29789007B4F48 /* TheReportViewer-Prefix.pch */ = {isa = PBXFileReference; path = "TheReportViewer-Prefix.pch"; sourceTree = "<group>"; };
-		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		4C384E3614B29789007B4F48 /* TheReportViewer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TheReportViewer-Prefix.pch"; sourceTree = "<group>"; };
+		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		4C384E4014B29789007B4F48 /* MainViewController.h */ = {isa = PBXFileReference; path = MainViewController.h; sourceTree = "<group>"; };
+		4C384E4014B29789007B4F48 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		4C384E4114B29789007B4F48 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		4C384E4314B29789007B4F48 /* FlipsideViewController.h */ = {isa = PBXFileReference; path = FlipsideViewController.h; sourceTree = "<group>"; };
+		4C384E4314B29789007B4F48 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
 		4C384E4414B29789007B4F48 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
+		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
+		4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDesignerViewController.m; sourceTree = "<group>"; };
+		4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDesignerViewController.h; sourceTree = "<group>"; };
+		4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewDashboard.h; sourceTree = "<group>"; };
+		4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewDashboard.m; sourceTree = "<group>"; };
+		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageToolbarDatabase.png; sourceTree = "<group>"; };
+		4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageToolbarDatabase@2x.png"; sourceTree = "<group>"; };
+		4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePictureFrame.png; sourceTree = "<group>"; };
+		4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePictureFrame@2x.png"; sourceTree = "<group>"; };
+		4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageLandscape.png; sourceTree = "<group>"; };
+		4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageLandscape@2x.png"; sourceTree = "<group>"; };
+		4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageArrowDown.png; sourceTree = "<group>"; };
+		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
+		4C76F0E914B556F4005DCE49 /* FormulaInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulaInformationViewController.h; sourceTree = "<group>"; };
+		4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormulaInformationViewController.m; sourceTree = "<group>"; };
+		4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FormulaInformationViewController.xib; sourceTree = "<group>"; };
+		4C76F0EC14B556F4005DCE49 /* ImageInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageInformationViewController.h; sourceTree = "<group>"; };
+		4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageInformationViewController.m; sourceTree = "<group>"; };
+		4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageInformationViewController.xib; sourceTree = "<group>"; };
+		4C76F0EF14B556F5005DCE49 /* LabelInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelInformationViewController.h; sourceTree = "<group>"; };
+		4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelInformationViewController.m; sourceTree = "<group>"; };
+		4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelInformationViewController.xib; sourceTree = "<group>"; };
+		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +124,23 @@
 		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
 			isa = PBXGroup;
 			children = (
+				4C76F0E914B556F4005DCE49 /* FormulaInformationViewController.h */,
+				4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */,
+				4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */,
+				4C76F0EC14B556F4005DCE49 /* ImageInformationViewController.h */,
+				4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */,
+				4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */,
+				4C76F0EF14B556F5005DCE49 /* LabelInformationViewController.h */,
+				4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */,
+				4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */,
+				4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */,
+				4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */,
+				4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */,
+				4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */,
+				4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */,
+				4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */,
+				4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */,
+				4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
@@ -90,7 +149,14 @@
 				4C384E4114B29789007B4F48 /* MainViewController.m */,
 				4C384E4314B29789007B4F48 /* FlipsideViewController.h */,
 				4C384E4414B29789007B4F48 /* FlipsideViewController.m */,
+				4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */,
+				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
+				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
+				4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */,
+				4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */,
+				4C76F0F814B5E720005DCE49 /* Constants.h */,
+				4C76F0F914B5E746005DCE49 /* Constants.m */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -159,6 +225,17 @@
 				4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */,
 				4C384E3C14B29789007B4F48 /* MainStoryboard_iPhone.storyboard in Resources */,
 				4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */,
+				4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */,
+				4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */,
+				4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */,
+				4C76F0C214B529E6005DCE49 /* UIImagePictureFrame@2x.png in Resources */,
+				4C76F0C514B52ABE005DCE49 /* UIImageLandscape.png in Resources */,
+				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
+				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
+				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
+				4C76F0F314B556F5005DCE49 /* FormulaInformationViewController.xib in Resources */,
+				4C76F0F514B556F5005DCE49 /* ImageInformationViewController.xib in Resources */,
+				4C76F0F714B556F5005DCE49 /* LabelInformationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +250,13 @@
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
 				4C384E4214B29789007B4F48 /* MainViewController.m in Sources */,
 				4C384E4514B29789007B4F48 /* FlipsideViewController.m in Sources */,
+				4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */,
+				4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */,
+				4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */,
+				4C76F0F214B556F5005DCE49 /* FormulaInformationViewController.m in Sources */,
+				4C76F0F414B556F5005DCE49 /* ImageInformationViewController.m in Sources */,
+				4C76F0F614B556F5005DCE49 /* LabelInformationViewController.m in Sources */,
+				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,8 +376,22 @@
 				4C384E4A14B29789007B4F48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */,
+			);
+			currentVersion = 4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */;
+			path = TrvFileType.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 4C384E1B14B29789007B4F48 /* Project object */;
 }
