@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class LabelInformationViewController;
+
+@protocol LabelInformationViewControllerDelegate
+- (void)labelInformationViewControllerDidFinish:(LabelInformationViewController *)controller;
+@end
+
 @interface LabelInformationViewController : UIViewController
+
+@property (assign, nonatomic) IBOutlet id <LabelInformationViewControllerDelegate> delegate;
+
+- (IBAction)done:(id)sender;
 
 @end

@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class ImageInformationViewController;
+
+@protocol ImageInformationViewControllerDelegate
+- (void)imageInformationViewControllerDidFinish:(ImageInformationViewController *)controller;
+@end
+
 @interface ImageInformationViewController : UIViewController
+
+@property (assign, nonatomic) IBOutlet id <ImageInformationViewControllerDelegate> delegate;
+
+- (IBAction)done:(id)sender;
 
 @end

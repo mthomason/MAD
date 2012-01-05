@@ -8,15 +8,9 @@
 
 #import "ReportDesignerViewController.h"
 #import "Constants.h"
-#import "LabelInformationViewController.h"
-#import "ImageInformationViewController.h"
-#import "FormulaInformationViewController.h"
 
 @interface ReportDesignerViewController()
 
-@property (retain, nonatomic) FormulaInformationViewController *formulaInformation;
-@property (retain, nonatomic) ImageInformationViewController *imageInformation;
-@property (retain, nonatomic) LabelInformationViewController *labelInformation;
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
 @property (assign) BOOL labelInformationViewIsVisable;
@@ -28,9 +22,7 @@
 @synthesize delegate = _delegate;
 @synthesize containerView = _containerView;
 @synthesize designScrollView = _designScrollView;
-@synthesize formulaInformation = _formulaInformation;
-@synthesize imageInformation = _imageInformation;
-@synthesize labelInformation = _labelInformation;
+@synthesize informationButton = _informationButton;
 
 @synthesize formualInformationViewIsVisable = _formualInformationViewIsVisable;
 @synthesize imageInformationViewIsVisable = _imageInformationViewIsVisable;
@@ -39,19 +31,8 @@
 - (void)dealloc {
     [_designScrollView release];
     [_containerView release];
+    [_informationButton release];
     [super dealloc];
-    if (_formulaInformation != nil) {
-        [_formulaInformation release];
-        _formulaInformation = nil;
-    }
-    if (_imageInformation != nil) {
-        [_imageInformation release];
-        _imageInformation = nil;
-    }
-    if (_labelInformation != nil) {
-        [_labelInformation release];
-        _labelInformation = nil;
-    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -76,6 +57,7 @@
 - (void)viewDidUnload {
     [self setDesignScrollView:nil];
     [self setContainerView:nil];
+    [self setInformationButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -111,34 +93,60 @@
 - (IBAction)info:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         //Make sure there are no information views open
-        if (!self.labelInformationViewIsVisable &&
-            !self.imageInformationViewIsVisable &&
-            !self.formualInformationViewIsVisable) {
-            
-            if (self.labelInformation == nil) {
-                LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
-                [self setLabelInformation:lblControl];
-                [lblControl release];
-                CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height / 2.0000f);
-                CGRect infoViewFrameOnScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + viewFrame.size.height, viewFrame.size.width, viewFrame.size.height);
-                CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
-                [[[self labelInformation] view] setFrame:infoViewFrameOffScreen];
-                [[self view] addSubview:[[self labelInformation] view]];
-
-                [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
-                                 animations: ^{
-                    [[self containerView] setFrame: viewFrame];
-                    [[[self labelInformation] view] setFrame: infoViewFrameOnScreen];
-                } completion:^(BOOL finished) {
-                
-                }];
-            }
-            
-        }
+        
+        [[self informationButton] setEnabled: NO];
+        
+        LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
+        [lblControl setDelegate: self];
+        CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height / 2.0000f);
+        CGRect infoViewFrameOnScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + viewFrame.size.height, viewFrame.size.width, viewFrame.size.height);
+        CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
+        [[lblControl view] setFrame:infoViewFrameOffScreen];
+        [[self view] addSubview:[lblControl view]];
+        
+        [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
+                         animations: ^{
+                             [[self containerView] setFrame: viewFrame];
+                             [[lblControl view] setFrame: infoViewFrameOnScreen];
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+        
     } else {
         //UIPopoverController *popControl = [[UIPopoverController alloc] initWithContentViewController:lblControl];
         //[popControl release];
     }
+}
+
+#pragma mark -
+#pragma mark Delegates
+
+- (void)imageInformationViewControllerDidFinish:(ImageInformationViewController *)controller {
+    [[controller view] removeFromSuperview];
+    [controller release];
+}
+
+- (void)formulaInformationViewControllerDidFinish:(FormulaInformationViewController *)controller {
+    [[controller view] removeFromSuperview];
+    [controller release];
+}
+
+- (void)labelInformationViewControllerDidFinish:(LabelInformationViewController *)controller {
+    
+    CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height);
+    CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
+    
+    [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
+                     animations: ^{
+                         [[self containerView] setFrame: viewFrame];
+                         [[controller view] setFrame: infoViewFrameOffScreen];
+                     } completion:^(BOOL finished) {
+                         [[controller view] removeFromSuperview];
+                         [controller release];
+                         [[self informationButton] setEnabled: YES];
+                     }];
+    
+    
 }
 
 #pragma mark -

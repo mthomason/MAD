@@ -124,6 +124,7 @@
                     <connections>
                         <outlet property="containerView" destination="lDw-BI-5xH" id="bDh-3W-oGj"/>
                         <outlet property="designScrollView" destination="lma-we-TIM" id="H8I-0A-d89"/>
+                        <outlet property="informationButton" destination="OjZ-K0-Nfy" id="2OZ-4y-csV"/>
                         <outlet property="view" destination="lLt-so-kJY" id="nov-Zf-9lU"/>
                     </connections>
                 </viewController>
@@ -185,6 +186,7 @@
                 <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewDashboard"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
             </relationships>
         </class>
         <class className="UIScrollViewDashboard" superclassName="UIScrollView">
