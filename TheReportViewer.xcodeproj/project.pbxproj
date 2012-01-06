@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4C00815B14B6BE2C003DF437 /* EditObjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */; };
+		4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
 		4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
 		4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
@@ -48,14 +48,14 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
-		4CE9985B14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */; };
-		4CE9985F14B69AA80015C8D1 /* FontSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */; };
+		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
+		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
 		4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelStrikethrough.m; sourceTree = "<group>"; };
-		4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditObjectViewController.m; sourceTree = "<group>"; };
+		4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerToolbox.m; sourceTree = "<group>"; };
 		4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignCenter20.png; sourceTree = "<group>"; };
 		4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignLeft20.png; sourceTree = "<group>"; };
 		4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignRight20.png; sourceTree = "<group>"; };
@@ -103,12 +103,12 @@
 		4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageLandscape@2x.png"; sourceTree = "<group>"; };
 		4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageArrowDown.png; sourceTree = "<group>"; };
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
-		4C76F0EF14B556F5005DCE49 /* EditObjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditObjectViewController.h; sourceTree = "<group>"; };
+		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ObjectEditFormatStoryboard.storyboard; sourceTree = "<group>"; };
-		4CE9985C14B69AA70015C8D1 /* FontSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSettingsTableViewController.h; sourceTree = "<group>"; };
-		4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSettingsTableViewController.m; sourceTree = "<group>"; };
+		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
+		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
+		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,10 +128,15 @@
 		4C00815914B6BDB6003DF437 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */,
+				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
+				4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */,
+				4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */,
+				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
+				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
+				4C00818314B738A2003DF437 /* Main */,
+				4C00818214B73884003DF437 /* Toolbox */,
 				4C00816E14B6C4F8003DF437 /* Images */,
-				4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */,
-				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
-				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -167,6 +172,41 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		4C00818214B73884003DF437 /* Toolbox */ = {
+			isa = PBXGroup;
+			children = (
+				4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */,
+				4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */,
+				4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */,
+				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
+				4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */,
+				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
+				4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */,
+			);
+			name = Toolbox;
+			sourceTree = "<group>";
+		};
+		4C00818314B738A2003DF437 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
+				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
+				4C384E4014B29789007B4F48 /* MainViewController.h */,
+				4C384E4114B29789007B4F48 /* MainViewController.m */,
+				4C384E4314B29789007B4F48 /* FlipsideViewController.h */,
+				4C384E4414B29789007B4F48 /* FlipsideViewController.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		4C00818414B738E9003DF437 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
@@ -197,29 +237,13 @@
 		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
 			isa = PBXGroup;
 			children = (
-				4C00815914B6BDB6003DF437 /* UI */,
-				4C76F0EF14B556F5005DCE49 /* EditObjectViewController.h */,
-				4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */,
-				4CE9985C14B69AA70015C8D1 /* FontSettingsTableViewController.h */,
-				4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */,
-				4C384E3714B29789007B4F48 /* AppDelegate.h */,
-				4C384E3814B29789007B4F48 /* AppDelegate.m */,
-				4C384E4014B29789007B4F48 /* MainViewController.h */,
-				4C384E4114B29789007B4F48 /* MainViewController.m */,
-				4C384E4314B29789007B4F48 /* FlipsideViewController.h */,
-				4C384E4414B29789007B4F48 /* FlipsideViewController.m */,
-				4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */,
-				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
-				4C384E2F14B29789007B4F48 /* Supporting Files */,
-				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
-				4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */,
-				4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
-				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
-				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
-				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
-				4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */,
+				4C384E3714B29789007B4F48 /* AppDelegate.h */,
+				4C384E3814B29789007B4F48 /* AppDelegate.m */,
+				4C00818414B738E9003DF437 /* Model */,
+				4C00815914B6BDB6003DF437 /* UI */,
+				4C384E2F14B29789007B4F48 /* Supporting Files */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -296,7 +320,7 @@
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
-				4CE9985B14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard in Resources */,
+				4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
@@ -331,9 +355,9 @@
 				4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */,
 				4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
-				4CE9985F14B69AA80015C8D1 /* FontSettingsTableViewController.m in Sources */,
+				4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */,
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
-				4C00815B14B6BE2C003DF437 /* EditObjectViewController.m in Sources */,
+				4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */,
 				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIScrollViewDashboard.h"
-#import "EditObjectViewController.h"
+#import "UIViewControllerToolbox.h"
 
 @class ReportDesignerViewController;
 

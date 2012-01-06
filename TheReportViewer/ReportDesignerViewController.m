@@ -96,8 +96,8 @@
         
         [[self informationButton] setEnabled: NO];
         
-        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"ObjectEditFormatStoryboard" bundle:nil] retain];
-        EditObjectViewController *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
+        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"StoryboardToolbox" bundle:nil] retain];
+        UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
         //LabelInformationViewController *lblControl = [[[navControl viewControllers] objectAtIndex:0] retain];
         
         //LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
@@ -128,7 +128,7 @@
 #pragma mark -
 #pragma mark Delegates
 
-- (void)labelInformationViewControllerDidFinish:(EditObjectViewController *)controller {
+- (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
     
     CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height);
     CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
