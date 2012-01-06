@@ -18,12 +18,11 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="cR3-PG-s3G"/>
-                                    <barButtonItem title="Item" id="1hU-KR-y5e">
+                                    <barButtonItem title="Open" id="1hU-KR-y5e">
                                         <connections>
                                             <segue destination="d6e-CT-kmt" kind="modal" identifier="showReportDesigner" id="yUs-hV-cCl"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Item" id="TSg-O0-IHl"/>
                                     <barButtonItem style="plain" id="ZaG-ya-IlP">
                                         <button key="customView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="10">
                                             <rect key="frame" x="290" y="13" width="18" height="19"/>
@@ -93,8 +92,6 @@
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="vRz-Yl-3Fc"/>
-                                            <barButtonItem image="UIImageLandscape.png" style="plain" id="7Fc-Te-AQG"/>
-                                            <barButtonItem image="UIImageToolbarDatabase.png" style="plain" id="VRq-SD-JZA"/>
                                             <barButtonItem style="plain" id="x3P-pr-1zF">
                                                 <button key="customView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="OjZ-K0-Nfy">
                                                     <rect key="frame" x="290" y="13" width="18" height="19"/>
@@ -163,10 +160,6 @@
             <point key="canvasLocation" x="445" y="40"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="UIImageLandscape.png" width="24" height="18"/>
-        <image name="UIImageToolbarDatabase.png" width="18" height="24"/>
-    </resources>
     <classes>
         <class className="FlipsideViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FlipsideViewController.h"/>

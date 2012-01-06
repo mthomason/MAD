@@ -1,0 +1,33 @@
+//
+//  UITableViewControllerFontSelector.h
+//  TheReportViewer
+//
+//  Created by Michael Thomason on 1/6/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class UITableViewControllerFontSelector;
+
+@protocol UITableViewControllerFontSelectorDelegate
+- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
+@end
+
+@interface UITableViewControllerFontSelector : UITableViewController
+    <UITableViewDelegate>
+
+@property (assign, nonatomic) IBOutlet id <UITableViewControllerFontSelectorDelegate> delegate;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontArial;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontCourierNew;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontCourier;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontGeorgia;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontHelvetica;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontHelveticaNeue;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontTimesNewRoman;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontVerdana;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontZapfino;
+
+@end

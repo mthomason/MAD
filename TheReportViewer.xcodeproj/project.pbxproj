@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
+		4C00815B14B6BE2C003DF437 /* EditObjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */; };
+		4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
+		4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
+		4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
+		4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
+		4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
+		4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
+		4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
+		4C00816D14B6C4EF003DF437 /* UIImageJustified20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816914B6C4EF003DF437 /* UIImageJustified20@2x.png */; };
+		4C00817714B6CAAF003DF437 /* UIImageBold20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816F14B6CAAF003DF437 /* UIImageBold20.png */; };
+		4C00817814B6CAAF003DF437 /* UIImageBold20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817014B6CAAF003DF437 /* UIImageBold20@2x.png */; };
+		4C00817914B6CAAF003DF437 /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
+		4C00817A14B6CAAF003DF437 /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
+		4C00817B14B6CAAF003DF437 /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
+		4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817414B6CAAF003DF437 /* UIImageStrikethrough20@2x.png */; };
+		4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817514B6CAAF003DF437 /* UIImageUnderline20.png */; };
+		4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */; };
+		4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -28,16 +47,33 @@
 		4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
-		4C76F0F214B556F5005DCE49 /* FormulaInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */; };
-		4C76F0F314B556F5005DCE49 /* FormulaInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */; };
-		4C76F0F414B556F5005DCE49 /* ImageInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */; };
-		4C76F0F514B556F5005DCE49 /* ImageInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */; };
-		4C76F0F614B556F5005DCE49 /* LabelInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */; };
-		4C76F0F714B556F5005DCE49 /* LabelInformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4CE9985B14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */; };
+		4CE9985F14B69AA80015C8D1 /* FontSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
+		4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelStrikethrough.m; sourceTree = "<group>"; };
+		4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditObjectViewController.m; sourceTree = "<group>"; };
+		4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignCenter20.png; sourceTree = "<group>"; };
+		4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignLeft20.png; sourceTree = "<group>"; };
+		4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignRight20.png; sourceTree = "<group>"; };
+		4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageJustified20.png; sourceTree = "<group>"; };
+		4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignCenter20@2x.png"; sourceTree = "<group>"; };
+		4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignLeft20@2x.png"; sourceTree = "<group>"; };
+		4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignRight20@2x.png"; sourceTree = "<group>"; };
+		4C00816914B6C4EF003DF437 /* UIImageJustified20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageJustified20@2x.png"; sourceTree = "<group>"; };
+		4C00816F14B6CAAF003DF437 /* UIImageBold20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBold20.png; sourceTree = "<group>"; };
+		4C00817014B6CAAF003DF437 /* UIImageBold20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageBold20@2x.png"; sourceTree = "<group>"; };
+		4C00817114B6CAAF003DF437 /* UIImageItalic20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageItalic20.png; sourceTree = "<group>"; };
+		4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageItalic20@2x.png"; sourceTree = "<group>"; };
+		4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageStrikethrough20.png; sourceTree = "<group>"; };
+		4C00817414B6CAAF003DF437 /* UIImageStrikethrough20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageStrikethrough20@2x.png"; sourceTree = "<group>"; };
+		4C00817514B6CAAF003DF437 /* UIImageUnderline20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageUnderline20.png; sourceTree = "<group>"; };
+		4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageUnderline20@2x.png"; sourceTree = "<group>"; };
+		4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSelector.h; sourceTree = "<group>"; };
+		4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSelector.m; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* TheReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -67,17 +103,12 @@
 		4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageLandscape@2x.png"; sourceTree = "<group>"; };
 		4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageArrowDown.png; sourceTree = "<group>"; };
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
-		4C76F0E914B556F4005DCE49 /* FormulaInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulaInformationViewController.h; sourceTree = "<group>"; };
-		4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormulaInformationViewController.m; sourceTree = "<group>"; };
-		4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FormulaInformationViewController.xib; sourceTree = "<group>"; };
-		4C76F0EC14B556F4005DCE49 /* ImageInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageInformationViewController.h; sourceTree = "<group>"; };
-		4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageInformationViewController.m; sourceTree = "<group>"; };
-		4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageInformationViewController.xib; sourceTree = "<group>"; };
-		4C76F0EF14B556F5005DCE49 /* LabelInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelInformationViewController.h; sourceTree = "<group>"; };
-		4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelInformationViewController.m; sourceTree = "<group>"; };
-		4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelInformationViewController.xib; sourceTree = "<group>"; };
+		4C76F0EF14B556F5005DCE49 /* EditObjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditObjectViewController.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ObjectEditFormatStoryboard.storyboard; sourceTree = "<group>"; };
+		4CE9985C14B69AA70015C8D1 /* FontSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSettingsTableViewController.h; sourceTree = "<group>"; };
+		4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSettingsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +125,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C00815914B6BDB6003DF437 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				4C00816E14B6C4F8003DF437 /* Images */,
+				4CE9985A14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard */,
+				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
+				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		4C00816E14B6C4F8003DF437 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4C00816F14B6CAAF003DF437 /* UIImageBold20.png */,
+				4C00817014B6CAAF003DF437 /* UIImageBold20@2x.png */,
+				4C00817114B6CAAF003DF437 /* UIImageItalic20.png */,
+				4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */,
+				4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */,
+				4C00817414B6CAAF003DF437 /* UIImageStrikethrough20@2x.png */,
+				4C00817514B6CAAF003DF437 /* UIImageUnderline20.png */,
+				4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */,
+				4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */,
+				4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */,
+				4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */,
+				4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */,
+				4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */,
+				4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */,
+				4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */,
+				4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */,
+				4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */,
+				4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */,
+				4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */,
+				4C00816914B6C4EF003DF437 /* UIImageJustified20@2x.png */,
+				4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */,
+				4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */,
+				4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */,
+				4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
@@ -124,27 +197,13 @@
 		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
 			isa = PBXGroup;
 			children = (
-				4C76F0E914B556F4005DCE49 /* FormulaInformationViewController.h */,
-				4C76F0EA14B556F4005DCE49 /* FormulaInformationViewController.m */,
-				4C76F0EB14B556F4005DCE49 /* FormulaInformationViewController.xib */,
-				4C76F0EC14B556F4005DCE49 /* ImageInformationViewController.h */,
-				4C76F0ED14B556F4005DCE49 /* ImageInformationViewController.m */,
-				4C76F0EE14B556F5005DCE49 /* ImageInformationViewController.xib */,
-				4C76F0EF14B556F5005DCE49 /* LabelInformationViewController.h */,
-				4C76F0F014B556F5005DCE49 /* LabelInformationViewController.m */,
-				4C76F0F114B556F5005DCE49 /* LabelInformationViewController.xib */,
-				4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */,
-				4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */,
-				4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */,
-				4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */,
-				4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */,
-				4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */,
-				4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */,
-				4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */,
+				4C00815914B6BDB6003DF437 /* UI */,
+				4C76F0EF14B556F5005DCE49 /* EditObjectViewController.h */,
+				4C00815A14B6BE2C003DF437 /* EditObjectViewController.m */,
+				4CE9985C14B69AA70015C8D1 /* FontSettingsTableViewController.h */,
+				4CE9985D14B69AA70015C8D1 /* FontSettingsTableViewController.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
-				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
-				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
 				4C384E4014B29789007B4F48 /* MainViewController.h */,
 				4C384E4114B29789007B4F48 /* MainViewController.m */,
 				4C384E4314B29789007B4F48 /* FlipsideViewController.h */,
@@ -157,6 +216,10 @@
 				4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
+				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
+				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
+				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
+				4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -233,9 +296,23 @@
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
-				4C76F0F314B556F5005DCE49 /* FormulaInformationViewController.xib in Resources */,
-				4C76F0F514B556F5005DCE49 /* ImageInformationViewController.xib in Resources */,
-				4C76F0F714B556F5005DCE49 /* LabelInformationViewController.xib in Resources */,
+				4CE9985B14B6369A0015C8D1 /* ObjectEditFormatStoryboard.storyboard in Resources */,
+				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
+				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
+				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
+				4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */,
+				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
+				4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */,
+				4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */,
+				4C00816D14B6C4EF003DF437 /* UIImageJustified20@2x.png in Resources */,
+				4C00817714B6CAAF003DF437 /* UIImageBold20.png in Resources */,
+				4C00817814B6CAAF003DF437 /* UIImageBold20@2x.png in Resources */,
+				4C00817914B6CAAF003DF437 /* UIImageItalic20.png in Resources */,
+				4C00817A14B6CAAF003DF437 /* UIImageItalic20@2x.png in Resources */,
+				4C00817B14B6CAAF003DF437 /* UIImageStrikethrough20.png in Resources */,
+				4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */,
+				4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */,
+				4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,10 +330,11 @@
 				4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */,
 				4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */,
 				4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */,
-				4C76F0F214B556F5005DCE49 /* FormulaInformationViewController.m in Sources */,
-				4C76F0F414B556F5005DCE49 /* ImageInformationViewController.m in Sources */,
-				4C76F0F614B556F5005DCE49 /* LabelInformationViewController.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
+				4CE9985F14B69AA80015C8D1 /* FontSettingsTableViewController.m in Sources */,
+				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
+				4C00815B14B6BE2C003DF437 /* EditObjectViewController.m in Sources */,
+				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

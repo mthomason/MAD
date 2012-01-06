@@ -96,14 +96,21 @@
         
         [[self informationButton] setEnabled: NO];
         
-        LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
+        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"ObjectEditFormatStoryboard" bundle:nil] retain];
+        EditObjectViewController *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
+        //LabelInformationViewController *lblControl = [[[navControl viewControllers] objectAtIndex:0] retain];
+        
+        //LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
+        [sbLblControl release];
         [lblControl setDelegate: self];
         CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height / 2.0000f);
         CGRect infoViewFrameOnScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + viewFrame.size.height, viewFrame.size.width, viewFrame.size.height);
         CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
         [[lblControl view] setFrame:infoViewFrameOffScreen];
         [[self view] addSubview:[lblControl view]];
-        
+        NSLog(@"ScrolFrame: %@", NSStringFromCGRect([[lblControl view] frame]));
+        //NSLog(@"TableFrame: %@", NSStringFromCGRect([v frame]));
+
         [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
                          animations: ^{
                              [[self containerView] setFrame: viewFrame];
@@ -121,17 +128,7 @@
 #pragma mark -
 #pragma mark Delegates
 
-- (void)imageInformationViewControllerDidFinish:(ImageInformationViewController *)controller {
-    [[controller view] removeFromSuperview];
-    [controller release];
-}
-
-- (void)formulaInformationViewControllerDidFinish:(FormulaInformationViewController *)controller {
-    [[controller view] removeFromSuperview];
-    [controller release];
-}
-
-- (void)labelInformationViewControllerDidFinish:(LabelInformationViewController *)controller {
+- (void)labelInformationViewControllerDidFinish:(EditObjectViewController *)controller {
     
     CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height);
     CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);

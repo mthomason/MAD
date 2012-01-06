@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIScrollViewDashboard.h"
-#import "LabelInformationViewController.h"
-#import "ImageInformationViewController.h"
-#import "FormulaInformationViewController.h"
+#import "EditObjectViewController.h"
 
 @class ReportDesignerViewController;
 
@@ -20,9 +18,7 @@
 
 @interface ReportDesignerViewController : UIViewController
     <UITableViewDataSource, UITableViewDelegate,
-        LabelInformationViewControllerDelegate,
-        ImageInformationViewControllerDelegate,
-        FormulaInformationViewControllerDelegate>
+        LabelInformationViewControllerDelegate>
 
 @property (assign, nonatomic) IBOutlet id <ReportDesignerViewControllerDelegate> delegate;
 
