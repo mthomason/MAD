@@ -26,6 +26,12 @@
 		4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817514B6CAAF003DF437 /* UIImageUnderline20.png */; };
 		4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */; };
 		4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
+		4C00818B14B745C9003DF437 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
+		4C00819014B83E92003DF437 /* UIImageStacks20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818C14B83E92003DF437 /* UIImageStacks20.png */; };
+		4C00819114B83E92003DF437 /* UIImageStacks20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */; };
+		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
+		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
+		4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -37,6 +43,10 @@
 		4C384E4214B29789007B4F48 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* MainViewController.m */; };
 		4C384E4514B29789007B4F48 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4414B29789007B4F48 /* FlipsideViewController.m */; };
 		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C6CDFB414B84BA700DABF86 /* UIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */; };
+		4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
+		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
+		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */; };
 		4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
@@ -74,6 +84,13 @@
 		4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageUnderline20@2x.png"; sourceTree = "<group>"; };
 		4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSelector.h; sourceTree = "<group>"; };
 		4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSelector.m; sourceTree = "<group>"; };
+		4C00818914B745C9003DF437 /* NSFileManager+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Common.h"; sourceTree = "<group>"; };
+		4C00818A14B745C9003DF437 /* NSFileManager+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Common.m"; sourceTree = "<group>"; };
+		4C00818C14B83E92003DF437 /* UIImageStacks20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageStacks20.png; sourceTree = "<group>"; };
+		4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageStacks20@2x.png"; sourceTree = "<group>"; };
+		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageWrench20.png; sourceTree = "<group>"; };
+		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageWrench20@2x.png"; sourceTree = "<group>"; };
+		4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvAppData.xcdatamodel; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* TheReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -91,6 +108,12 @@
 		4C384E4314B29789007B4F48 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
 		4C384E4414B29789007B4F48 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
 		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
+		4C6CDFB214B84BA700DABF86 /* UIViewControllerTemplateSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerTemplateSelector.h; sourceTree = "<group>"; };
+		4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIVewControllerTemplateSelector.m; sourceTree = "<group>"; };
+		4C6CDFC214B85BFC00DABF86 /* UITableViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellDocument.h; sourceTree = "<group>"; };
+		4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellDocument.m; sourceTree = "<group>"; };
+		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentBlank.png; sourceTree = "<group>"; };
+		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDesignerViewController.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDesignerViewController.h; sourceTree = "<group>"; };
 		4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewDashboard.h; sourceTree = "<group>"; };
@@ -128,6 +151,10 @@
 		4C00815914B6BDB6003DF437 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */,
+				4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */,
+				4C6CDFC214B85BFC00DABF86 /* UITableViewCellDocument.h */,
+				4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */,
 				4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */,
 				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
 				4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */,
@@ -144,6 +171,10 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C00818C14B83E92003DF437 /* UIImageStacks20.png */,
+				4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */,
+				4C00818E14B83E92003DF437 /* UIImageWrench20.png */,
+				4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */,
 				4C00816F14B6CAAF003DF437 /* UIImageBold20.png */,
 				4C00817014B6CAAF003DF437 /* UIImageBold20@2x.png */,
 				4C00817114B6CAAF003DF437 /* UIImageItalic20.png */,
@@ -203,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
+				4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -244,6 +276,10 @@
 				4C00818414B738E9003DF437 /* Model */,
 				4C00815914B6BDB6003DF437 /* UI */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
+				4C00818914B745C9003DF437 /* NSFileManager+Common.h */,
+				4C00818A14B745C9003DF437 /* NSFileManager+Common.m */,
+				4C6CDFB214B84BA700DABF86 /* UIViewControllerTemplateSelector.h */,
+				4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -337,6 +373,12 @@
 				4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */,
 				4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */,
 				4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */,
+				4C00819014B83E92003DF437 /* UIImageStacks20.png in Resources */,
+				4C00819114B83E92003DF437 /* UIImageStacks20@2x.png in Resources */,
+				4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */,
+				4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */,
+				4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */,
+				4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +401,10 @@
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
 				4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */,
 				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
+				4C00818B14B745C9003DF437 /* NSFileManager+Common.m in Sources */,
+				4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */,
+				4C6CDFB414B84BA700DABF86 /* UIVewControllerTemplateSelector.m in Sources */,
+				4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +529,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */,
+			);
+			currentVersion = 4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */;
+			path = TrvAppData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (

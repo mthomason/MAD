@@ -13,11 +13,86 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackTranslucent" id="OZv-Fm-41l">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="OZv-Fm-41l">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
+                                    <barButtonItem systemItem="add" id="RVr-rU-MsM">
+                                        <connections>
+                                            <segue destination="GWk-3f-Lwl" kind="modal" identifier="showTemplateSelector" modalTransitionStyle="crossDissolve" id="riV-g5-37V"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="cDl-od-sHM"/>
+                                    <barButtonItem style="plain" id="h6U-sH-LJ8">
+                                        <view key="customView" opaque="NO" alpha="0.0" contentMode="scaleToFill" id="Udn-Sm-aQE">
+                                            <rect key="frame" x="122" y="6" width="75" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Reports" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="Vda-wz-6YR">
+                                                    <rect key="frame" x="0.0" y="6" width="75" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="cR3-PG-s3G"/>
+                                    <barButtonItem systemItem="edit" id="Jlf-xH-L5b"/>
+                                </items>
+                            </toolbar>
+                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zUD-bA-veu">
+                                <rect key="frame" x="0.0" y="44" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="lUA-KW-syd" customClass="UITableViewCellDocument">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="73"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" id="s41-vf-3tB">
+                                                    <rect key="frame" x="20" y="4" width="64" height="64"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blank Report" lineBreakMode="tailTruncation" minimumFontSize="10" id="vF0-zo-Dt8">
+                                                    <rect key="frame" x="92" y="20" width="208" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A blank report template." lineBreakMode="tailTruncation" minimumFontSize="10" id="xVe-RO-1AI">
+                                                    <rect key="frame" x="92" y="40" width="208" height="12"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <connections>
+                                            <outlet property="imageThumbnail" destination="s41-vf-3tB" id="nD5-8t-AYa"/>
+                                            <outlet property="labelH1" destination="vF0-zo-Dt8" id="vFF-rU-GTn"/>
+                                            <outlet property="labelH2" destination="xVe-RO-1AI" id="HUi-tB-FAG"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="2" id="vBb-KD-eNy"/>
+                                    <outlet property="delegate" destination="2" id="PQQ-XZ-f8q"/>
+                                </connections>
+                            </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="aZ3-JE-Iuz">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
                                     <barButtonItem title="Open" id="1hU-KR-y5e">
                                         <connections>
                                             <segue destination="d6e-CT-kmt" kind="modal" identifier="showReportDesigner" id="yUs-hV-cCl"/>
@@ -25,7 +100,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="ZaG-ya-IlP">
                                         <button key="customView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="10">
-                                            <rect key="frame" x="290" y="13" width="18" height="19"/>
+                                            <rect key="frame" x="67" y="13" width="18" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                                             <state key="normal">
@@ -42,29 +117,91 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zUD-bA-veu">
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <connections>
+                        <outlet property="tableViewDocuments" destination="zUD-bA-veu" id="tox-SC-cCK"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-255" y="106"/>
+        </scene>
+        <scene sceneID="F6q-Ap-wl0">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IvO-ic-iVU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="GWk-3f-Lwl" customClass="UIViewControllerTemplateSelector" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GHA-i9-F1a">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="j91-GK-0V0">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="cancel" id="wIu-q5-7uU">
+                                        <connections>
+                                            <action selector="done:" destination="GWk-3f-Lwl" id="Nca-iH-wzo"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8ak-PQ-eRf">
                                 <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CustomCell1" id="lUA-KW-syd">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="NjH-tx-gYJ" customClass="UITableViewCellDocument">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" id="eH3-b2-hY5">
+                                                    <rect key="frame" x="20" y="4" width="64" height="64"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blank Report" lineBreakMode="tailTruncation" minimumFontSize="10" id="Mx0-j0-DZa">
+                                                    <rect key="frame" x="92" y="20" width="208" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A blank report template." lineBreakMode="tailTruncation" minimumFontSize="10" id="8HF-1e-bIc">
+                                                    <rect key="frame" x="92" y="40" width="208" height="12"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                </label>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <outlet property="imageThumbnail" destination="eH3-b2-hY5" id="3NA-oR-q5Q"/>
+                                            <outlet property="labelH1" destination="Mx0-j0-DZa" id="DND-cI-Ux8"/>
+                                            <outlet property="labelH2" destination="8HF-1e-bIc" id="wgK-lQ-XNw"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="GWk-3f-Lwl" id="Jak-dj-KYF"/>
+                                    <outlet property="delegate" destination="GWk-3f-Lwl" id="mmq-qU-iWg"/>
+                                </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </view>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <connections>
+                        <outlet property="tableViewTemplates" destination="8ak-PQ-eRf" id="c3k-Vr-IsS"/>
+                        <outlet property="view" destination="GHA-i9-F1a" id="F25-cz-6F0"/>
+                    </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-51" y="182"/>
+            <point key="canvasLocation" x="176" y="-469"/>
         </scene>
         <scene sceneID="Lfd-iY-3rn">
             <objects>
@@ -82,7 +219,7 @@
                                         <rect key="frame" x="0.0" y="44" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </scrollView>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackTranslucent" id="9VI-qP-p12">
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="9VI-qP-p12">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <items>
@@ -92,6 +229,18 @@
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="vRz-Yl-3Fc"/>
+                                            <barButtonItem image="UIImageWrench20.png" style="plain" id="Yli-Ut-BGk">
+                                                <connections>
+                                                    <segue destination="MMV-ry-fTY" kind="modal" id="QiM-Oe-RbQ"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="Dgj-Ma-0kt"/>
+                                            <barButtonItem image="UIImageStacks20.png" style="plain" id="jOh-GI-bw3">
+                                                <connections>
+                                                    <segue destination="3HS-08-nqe" kind="modal" id="NDh-6T-tN8"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="JZr-dR-l00"/>
                                             <barButtonItem style="plain" id="x3P-pr-1zF">
                                                 <button key="customView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="OjZ-K0-Nfy">
                                                     <rect key="frame" x="290" y="13" width="18" height="19"/>
@@ -126,7 +275,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="445" y="616"/>
+            <point key="canvasLocation" x="101" y="968"/>
         </scene>
         <scene sceneID="9">
             <objects>
@@ -157,9 +306,58 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="445" y="40"/>
+            <point key="canvasLocation" x="413" y="200"/>
+        </scene>
+        <scene sceneID="AGJ-6U-2vA">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rNL-wu-BYd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="MMV-ry-fTY" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bur-Pm-aK0">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="8ip-4z-u1m">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="done" id="wzX-0F-LgC"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="831" y="603"/>
+        </scene>
+        <scene sceneID="wNx-6h-y1K">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6mt-5v-N2L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="3HS-08-nqe" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="v3J-cp-20z">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="ecw-x7-KdH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="done" id="dO5-dR-c8c"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="675" y="1297"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="UIImageDocumentBlank.png" width="64" height="64"/>
+        <image name="UIImageStacks20.png" width="20" height="20"/>
+        <image name="UIImageWrench20.png" width="20" height="20"/>
+    </resources>
     <classes>
         <class className="FlipsideViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FlipsideViewController.h"/>
@@ -170,6 +368,10 @@
         </class>
         <class className="MainViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewDocuments" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
         </class>
         <class className="ReportDesignerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ReportDesignerViewController.h"/>
@@ -184,6 +386,23 @@
         </class>
         <class className="UIScrollViewDashboard" superclassName="UIScrollView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewDashboard.h"/>
+        </class>
+        <class className="UITableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerTemplateSelector" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerTemplateSelector.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
