@@ -15,3 +15,8 @@ CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE = 0.4870f;
 CGFloat const TVC_DOCUMENT_HEIGHT = 73.0000f;
 
 NSString * const UIIMAGEDOCUMENTBLANK = @"UIImageDocumentBlank";
+NSString * const APPLICATIONDATA_FILENAME = @"appdata";
+NSString * const TRVDATA_FILENAME = @"settings";
+
+NSString * const TRVDATA_PATH_EXTENSION = @"trvp";
+NSString * const REPORT_PATH_EXTENSION = @"trv";

@@ -7,6 +7,8 @@
 //
 
 #import "MainViewController.h"
+#import <CoreData/CoreData.h>
+#import "Constants.h"
 #import "NSFileManager+Common.h"
 
 @interface MainViewController()
@@ -51,7 +53,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setAvailableFilesCache: [NSFileManager contentsOfDocumentsDirectory]];
+    [self setAvailableFilesCache: [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:REPORT_PATH_EXTENSION]];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -7,13 +7,19 @@
 //
 
 #import "AppDelegate.h"
+#import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 
+@synthesize applicationPreferences = _applicationPreferences;
+@synthesize openReport = _openReport;
+
 - (void)dealloc {
+    [_applicationPreferences release];
+    [_openReport release];
     [_window release];
     [super dealloc];
 }
@@ -21,13 +27,66 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    NSLog(@"applicationDocumentsDirectory: %@", [NSFileManager applicationDocumentsDirectory]);
+    //NSLog(@"applicationDocumentsDirectory: %@", [NSFileManager applicationDocumentsDirectory]);
     
     NSLog(@"contentsOfDocumentsDirectory: %@", [NSFileManager contentsOfDocumentsDirectory]);
+
+    
+    //Open or create the applications settings file.
+    
+    NSURL *applicationFileUrlWithExtention = [[[[NSFileManager applicationDocumentsDirectoryUrl]
+                                                URLByAppendingPathComponent: @"ApplicationPreferences"]
+                                                    URLByAppendingPathExtension: @"trvp"] retain];
+        
+    UIManagedDocumentTrvApplicationData *managedDocument = [[UIManagedDocumentTrvApplicationData alloc] initWithFileURL:applicationFileUrlWithExtention];
+    [self setApplicationPreferences: managedDocument];
+    [managedDocument release];
+
+    [[self applicationPreferences] setPersistentStoreOptions: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                               [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                                                               [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil]];
+    
+    NSLog(@"Path: %@", [applicationFileUrlWithExtention path]);
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
+        [[self applicationPreferences] openWithCompletionHandler: ^(BOOL success) {
+            if (success) {  //File opened
+                NSLog(@"Final Path: %@", [[[self applicationPreferences] fileURL] absoluteString]);
+                switch ([[self applicationPreferences] documentState]) {
+                    case UIDocumentStateNormal: {
+                        //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            } else {
+                NSLog(@"couldn’t open document at %@", @"");//applicationFileUrlWithExtention);
+            }
+        }];
+    } else {
+        [[self applicationPreferences] saveToURL: [[self applicationPreferences] fileURL]
+                                forSaveOperation: UIDocumentSaveForCreating
+                               completionHandler: ^(BOOL success) {
+                                   if (success) {  //File created for the first time evar
+                                       switch ([[self applicationPreferences] documentState]) {
+                                           case UIDocumentStateNormal: {
+                                               //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
+                                               break;
+                                           }
+                                           default:
+                                               break;
+                                       }
+                                   } else {
+                                       NSLog(@"Couldn’t create document at %@", @"");//applicationFileUrlWithExtention);
+                                   }
+                               }];
+    }
+    [applicationFileUrlWithExtention release];
     
     return YES;
 }
-							
+			
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -62,19 +121,26 @@
      */
 }
 
+#pragma mark -
+
 - (void)openReport:(NSURL *)url {
-    UIManagedDocument *document = [[[UIManagedDocument alloc] initWithFileURL:url] autorelease];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         [document openWithCompletionHandler:^(BOOL success) {
-            //if (success) [self documentIsReady];
-            if (!success) NSLog(@"couldn’t open document at %@", url);
-        }]; } else {
-            [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating
-              completionHandler:^(BOOL success) {
-                  //if (success) [self documentIsReady];
-                  if (!success) NSLog(@"couldn’t create document at %@", url);
-              }];
-        }
+            if (success) {
+                //[self documentIsReady];
+            } else {
+                NSLog(@"couldn’t open document at %@", url);
+            }
+        }];
+    } else {
+        [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) NSLog(@"New file created"); //[self documentIsReady];
+              else NSLog(@"couldn’t create document at %@", url);
+          }];
+    }
+    [document release];
     // can’t do anything with the document yet (do it in do
 }
 

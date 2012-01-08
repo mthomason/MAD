@@ -9,7 +9,9 @@
 @interface NSFileManager (Common)
 
 + (NSMutableArray *)contentsOfDocumentsDirectory;
++ (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 + (NSArray *)contentsOfPrivateDirectory;
++ (NSURL *)applicationDocumentsDirectoryUrl;
 + (NSString *)applicationDocumentsDirectory;
 + (NSString *)applicationPrivateDocumentsDirectory;
 

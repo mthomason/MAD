@@ -15,31 +15,42 @@
     NSString *documentsDirectoryPath = [[NSFileManager applicationDocumentsDirectory] retain];
 	NSArray *documentsDirectoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL] retain];
 
-	for (NSString* curFileName in [documentsDirectoryContents objectEnumerator]){
-		NSString *filePath = [[documentsDirectoryPath stringByAppendingPathComponent:curFileName] retain];
-        
+    [documentsDirectoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *filePath = [[documentsDirectoryPath stringByAppendingPathComponent:obj] retain];
 		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
 		BOOL isDirectory;
         [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
         //FIXME
-        if (!(isDirectory /*&& [curFileName isEqualToString: @"Inbox"]*/)){//é um arquivo normal
+        if (!isDirectory){
             [doc addObject:fileURL];
-        }else{//é a pasta inbox
-            NSError *error;
-            NSString *arquivoNaInbox=[[[NSFileManager defaultManager] contentsOfDirectoryAtPath:filePath error:&error] objectAtIndex:0];//pega o arquivo que esta dentro dela
-            NSString *arquivoNaInboxPath=[NSString stringWithFormat:@"%@/%@",filePath,arquivoNaInbox];
-            if ( [[NSFileManager defaultManager] fileExistsAtPath:arquivoNaInboxPath]){
-                NSString *toURL=[NSString stringWithFormat:@"%@/%@",[NSFileManager applicationDocumentsDirectory],arquivoNaInbox];
-                if ([[NSFileManager defaultManager] moveItemAtPath:arquivoNaInboxPath toPath:toURL error:&error]) {//move o arquivo
-                    [[NSFileManager defaultManager]removeItemAtPath:filePath error:&error];//deleta a pasta
-                    NSURL *fileInboxURL = [NSURL fileURLWithPath:toURL];
-                    [doc addObject:fileInboxURL];
-                }
-            }
         }
         [fileURL release];
         [filePath release];
-	}
+        
+    }];
+        
+    [documentsDirectoryContents release];
+    [documentsDirectoryPath release];
+    return [doc autorelease];
+}
+
++ (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
+    NSMutableArray *doc = [[NSMutableArray array] retain];
+    NSString *documentsDirectoryPath = [[NSFileManager applicationDocumentsDirectory] retain];
+	NSArray *documentsDirectoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL] retain];
+    
+    [documentsDirectoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		NSString *filePath = [[documentsDirectoryPath stringByAppendingPathComponent:obj] retain];
+        
+		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
+		BOOL isDirectory;
+        [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
+        if ([[fileURL pathExtension] isEqualToString:extension]) {
+            [doc addObject:fileURL];
+        }
+        [fileURL release];
+        [filePath release];
+    }];
     
     [documentsDirectoryContents release];
     [documentsDirectoryPath release];
@@ -48,6 +59,13 @@
 
 + (NSArray *)contentsOfPrivateDirectory {
 	return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSFileManager applicationPrivateDocumentsDirectory] error:NULL];
+}
+
++ (NSURL *)applicationDocumentsDirectoryUrl {
+    NSArray *directories = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask ] retain];
+    NSURL *result = [[[directories lastObject] retain] autorelease];
+    [directories release];
+    return result;
 }
 
 + (NSString *)applicationDocumentsDirectory {

@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "FlipsideViewController.h"
 #import "ReportDesignerViewController.h"
 #import "UIViewControllerTemplateSelector.h"
