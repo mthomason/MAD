@@ -22,7 +22,7 @@
 
 @property (strong, nonatomic) UIPopoverController *flipsidePopoverController;
 @property (strong, nonatomic) UIPopoverController *reportDesignerPopoverController;
-
+@property (strong, nonatomic) UIPopoverController *templateSelectorPopoverController;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewDocuments;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;

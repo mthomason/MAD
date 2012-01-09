@@ -3,16 +3,22 @@
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/6/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 @interface NSFileManager (Common)
 
 + (NSMutableArray *)contentsOfDocumentsDirectory;
 + (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
-+ (NSArray *)contentsOfPrivateDirectory;
++ (NSMutableArray *)contentsOfTemplateDirectoryWithPathExtension:(NSString *)extension;
++ (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension;
+
 + (NSURL *)applicationDocumentsDirectoryUrl;
++ (NSURL *)applicationSupportDirectoryUrl;
++ (NSURL *)applicationLibraryTemplatesDirectoryUrl;
+
++ (NSString *)applicationSupportDirectory;
 + (NSString *)applicationDocumentsDirectory;
-+ (NSString *)applicationPrivateDocumentsDirectory;
++ (NSString *)applicationLibraryTemplatesDirectory;
 
 @end

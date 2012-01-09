@@ -7,6 +7,7 @@
 //
 
 #import "NSFileManager+Common.h"
+#import "Constants.h"
 
 @implementation NSFileManager (Common)
 
@@ -35,50 +36,74 @@
 }
 
 + (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
-    NSMutableArray *doc = [[NSMutableArray array] retain];
-    NSString *documentsDirectoryPath = [[NSFileManager applicationDocumentsDirectory] retain];
-	NSArray *documentsDirectoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL] retain];
+    return [NSFileManager contentsOfDirectory:[NSFileManager applicationDocumentsDirectory] withPathExtension:extension];
+}
+
++ (NSMutableArray *)contentsOfTemplateDirectoryWithPathExtension:(NSString *)extension {
+    return [NSFileManager contentsOfDirectory:[NSFileManager applicationLibraryTemplatesDirectory] withPathExtension:extension];
+}
+
++ (NSMutableArray *)contentsOfApplicationSupportDirectoryWithPathExtension:(NSString *)extension {
+    return [NSFileManager contentsOfDirectory:[NSFileManager applicationSupportDirectory] withPathExtension:extension];
+}
+
++ (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension {
+    NSMutableArray *result = [[NSMutableArray array] retain];
+	NSArray *directoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:NULL] retain];
     
-    [documentsDirectoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		NSString *filePath = [[documentsDirectoryPath stringByAppendingPathComponent:obj] retain];
-        
+    [directoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+
+		NSString *filePath = [[directory stringByAppendingPathComponent:obj] retain];
 		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
 		BOOL isDirectory;
-        [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
-        if ([[fileURL pathExtension] isEqualToString:extension]) {
-            [doc addObject:fileURL];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory] &&
+            [[fileURL pathExtension] isEqualToString:extension]) {
+            
+            [result addObject:fileURL];
+
         }
+        
         [fileURL release];
         [filePath release];
     }];
     
-    [documentsDirectoryContents release];
-    [documentsDirectoryPath release];
-    return [doc autorelease];
-}
-
-+ (NSArray *)contentsOfPrivateDirectory {
-	return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSFileManager applicationPrivateDocumentsDirectory] error:NULL];
+    [directoryContents release];
+    return [result autorelease];
 }
 
 + (NSURL *)applicationDocumentsDirectoryUrl {
-    NSArray *directories = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask ] retain];
-    NSURL *result = [[[directories lastObject] retain] autorelease];
-    [directories release];
-    return result;
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSURL *)applicationSupportDirectoryUrl {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSURL *)applicationLibraryTemplatesDirectoryUrl {
+    NSURL *applicationLibrary = [[[[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:TEMPLATES] retain];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[applicationLibrary path]]) {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:[applicationLibrary path] withIntermediateDirectories:YES attributes:nil error:&error];   
+    }
+	return [applicationLibrary autorelease];
+}
+
++ (NSString *)applicationSupportDirectory {
+	return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
 }
 
 + (NSString *)applicationDocumentsDirectory {
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
 
-+ (NSString *)applicationPrivateDocumentsDirectory {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    NSString *privateDict = [paths objectAtIndex:0];
-    privateDict = [privateDict stringByAppendingPathComponent:@"Private Documents"];
-    NSError *error;
-    [[NSFileManager defaultManager] createDirectoryAtPath:privateDict withIntermediateDirectories:YES attributes:nil error:&error];   
-	return privateDict;
++ (NSString *)applicationLibraryTemplatesDirectory {
+    NSString *applicationLibrary = [[[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:TEMPLATES] retain];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:applicationLibrary]) {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:applicationLibrary withIntermediateDirectories:YES attributes:nil error:&error];   
+    }
+	return [applicationLibrary autorelease];
 }
 
 @end

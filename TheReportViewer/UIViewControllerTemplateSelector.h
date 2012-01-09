@@ -12,6 +12,8 @@
 @class UIViewControllerTemplateSelector;
 
 @protocol UIViewControllerTemplateSelectorDelegate
+- (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
+- (void)uIViewControllerTemplateSelectorRequestOpenOfFileAtUrl:(NSURL *)url;        //Just open it
 - (void)uIViewControllerTemplateSelectorDidFinish:(UIViewControllerTemplateSelector *)controller;
 @end
 

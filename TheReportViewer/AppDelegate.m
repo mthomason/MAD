@@ -124,7 +124,7 @@
 #pragma mark -
 
 - (void)openReport:(NSURL *)url {
-    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    UIManagedDocumentTrvApplicationData *document = [[UIManagedDocumentTrvApplicationData alloc] initWithFileURL:url];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         [document openWithCompletionHandler:^(BOOL success) {
             if (success) {
@@ -145,10 +145,60 @@
 }
 
 - (NSURL *)createAndOpenNewDocumentNamed:(NSString *)name withPathExtention:(NSString *)extention {
-    NSURL *result = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    result = [result URLByAppendingPathComponent: name];
-    result = [result URLByAppendingPathExtension: extention];
-    return result;
+    
+    NSURL *baseUrl = [[[NSFileManager applicationDocumentsDirectoryUrl]
+                      URLByAppendingPathComponent: name] retain];
+    NSURL *applicationFileUrlWithExtention = [[baseUrl URLByAppendingPathExtension: @"trvp"] retain];
+
+    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+    NSInteger ctr = 0;
+    BOOL isDirectory;
+    while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention absoluteString] isDirectory:&isDirectory]) {
+
+        [applicationFileUrlWithExtention release];
+        applicationFileUrlWithExtention = [[[baseUrl URLByAppendingPathComponent:[NSString stringWithFormat:@" %d", ctr]]
+                                            URLByAppendingPathExtension: @"trvp"] retain];
+        ctr++;
+    }
+    [baseUrl release];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
+        [[self openReport] openWithCompletionHandler: ^(BOOL success) {
+            if (success) {  //File opened
+                NSLog(@"Final Path: %@", [[[self openReport] fileURL] absoluteString]);
+                switch ([[self openReport] documentState]) {
+                    case UIDocumentStateNormal: {
+                        //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            } else {
+                NSLog(@"couldn’t open document at %@", @"");//applicationFileUrlWithExtention);
+            }
+        }];
+    } else {
+        [[self openReport] saveToURL: [[self openReport] fileURL]
+                                forSaveOperation: UIDocumentSaveForCreating
+                               completionHandler: ^(BOOL success) {
+                                   if (success) {  //File created for the first time evar
+                                       switch ([[self openReport] documentState]) {
+                                           case UIDocumentStateNormal: {
+                                               //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
+                                               break;
+                                           }
+                                           default:
+                                               break;
+                                       }
+                                   } else {
+                                       NSLog(@"Couldn’t create document at %@", @"");//applicationFileUrlWithExtention);
+                                   }
+                               }];
+    }
+
+    [applicationFileUrlWithExtention autorelease];
+    return applicationFileUrlWithExtention;
 }
 
 @end

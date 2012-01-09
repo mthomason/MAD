@@ -8,8 +8,11 @@
 
 #import "ReportDesignerViewController.h"
 #import "Constants.h"
+#import "NSFileManager+Common.h"
 
 @interface ReportDesignerViewController()
+
+@property (retain) UIManagedDocumentTrvFileData *managedDocumentCurrent;
 
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
@@ -20,6 +23,11 @@
 @implementation ReportDesignerViewController
 
 @synthesize delegate = _delegate;
+
+@synthesize settingsPopoverController = _settingsPopoverController;
+
+@synthesize managedDocumentCurrent = _managedDocumentCurrent;
+
 @synthesize containerView = _containerView;
 @synthesize designScrollView = _designScrollView;
 @synthesize informationButton = _informationButton;
@@ -29,6 +37,8 @@
 @synthesize labelInformationViewIsVisable = _labelInformationViewIsVisable;
 
 - (void)dealloc {
+    [_settingsPopoverController release];
+    if (_managedDocumentCurrent) [_managedDocumentCurrent release];
     [_designScrollView release];
     [_containerView release];
     [_informationButton release];
@@ -36,22 +46,33 @@
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showSettings"]) {
+        UINavigationController *navController = [[segue destinationViewController] retain];
+        if (navController) {
+            if ([[navController viewControllers] count] > 0) {
+                UITableViewControllerSettings *tvcSettings = [[[navController viewControllers] objectAtIndex: 0] retain];
+                [tvcSettings setDelegate:self];
+                [tvcSettings release];
+            }
+        }
+        [navController release];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            [self setSettingsPopoverController: popoverController];
+            popoverController.delegate = self;
+        }
+    }
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload {
@@ -59,8 +80,6 @@
     [self setContainerView:nil];
     [self setInformationButton:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,11 +99,52 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Actions
+
+- (void)openReport:(NSURL *)url {
+    UIManagedDocumentTrvFileData *trvFile = [[UIManagedDocumentTrvFileData alloc] initWithFileURL:url];
+    
+    [trvFile release];
+}
+
+//Copy template to application-user-documents-directory and open it
+- (void)openTemplate:(NSURL *)url {
+    
+    NSString *origionalFileName = [[url lastPathComponent] retain];
+    
+    NSURL *urlLibraryTemplate = [[NSFileManager applicationLibraryTemplatesDirectoryUrl] retain];
+    NSURL *urlFilenameWithoutExtention = [[[urlLibraryTemplate URLByAppendingPathComponent:origionalFileName] URLByDeletingPathExtension] retain];
+    
+    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+    NSString *templateDestinationName = [[templateDestination lastPathComponent] retain];
+    
+    BOOL fileWritten = NO;
+    
+    NSInteger ctr = 0;
+    while (!fileWritten) {
+        NSError *error;
+        fileWritten = [[NSFileManager defaultManager] copyItemAtURL:url toURL:templateDestination error:&error];
+        if (!fileWritten) {
+            [templateDestination release];
+            NSString *p = [[[urlFilenameWithoutExtention path] stringByAppendingFormat:@" %d", (ctr + 1)] retain];
+            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+            [p release];
+        }
+    }
+    [urlFilenameWithoutExtention release];
+    [urlLibraryTemplate release];
+    [templateDestinationName release];
+    [origionalFileName release];
+    
+    
+    //Now that we copied the file, we open it.  Yay!
+    [self openReport:templateDestination];
+    
+    [templateDestination release];
+}
 
 - (IBAction)done:(id)sender {
     [self.delegate reportDesignerViewControllerDidFinish:self];
@@ -144,6 +204,15 @@
                      }];
     
     
+}
+
+- (void)uIViewControllerSettingsDidFinish:(UITableViewControllerSettings *)controller {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated:YES];
+    } else {
+        [[self settingsPopoverController] dismissPopoverAnimated:YES];
+        [self setSettingsPopoverController: nil];
+    }
 }
 
 #pragma mark -

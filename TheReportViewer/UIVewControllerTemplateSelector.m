@@ -7,15 +7,25 @@
 //
 
 #import "UIViewControllerTemplateSelector.h"
+#import "NSFileManager+Common.h"
 #import "UITableViewCellDocument.h"
+#import "Constants.h"
+
+@interface UIViewControllerTemplateSelector()
+
+@property (retain) NSMutableArray *availableFilesCache;
+
+@end
 
 @implementation UIViewControllerTemplateSelector
 
 @synthesize delegate;
 @synthesize tableViewTemplates;
 @synthesize uITableViewCellDocument;
+@synthesize availableFilesCache = _availableFilesCache;
 
 - (void)dealloc {
+    [_availableFilesCache release];
     [tableViewTemplates release];
     [super dealloc];
 }
@@ -37,7 +47,32 @@
 
 #pragma mark - View lifecycle
 
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setAvailableFilesCache: [NSFileManager contentsOfTemplateDirectoryWithPathExtension:TEMPLATE_PATH_EXTENSION]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+}
+
+
 - (void)viewDidUnload {
+    [self setAvailableFilesCache:nil];
     [self setTableViewTemplates:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
@@ -152,7 +187,18 @@
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    NSUInteger row = [indexPath row];
+    if (row < [[self availableFilesCache] count]) {
+        [delegate uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl: [[self availableFilesCache] objectAtIndex: row]];
+    }
+    
+}
+
+/*- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
@@ -162,11 +208,7 @@
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
+}*/
 
 /*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 0.0000f;

@@ -20,3 +20,6 @@ NSString * const TRVDATA_FILENAME = @"settings";
 
 NSString * const TRVDATA_PATH_EXTENSION = @"trvp";
 NSString * const REPORT_PATH_EXTENSION = @"trv";
+NSString * const TEMPLATE_PATH_EXTENSION = @"trvt";
+
+NSString * const TEMPLATES = @"Templates";

@@ -24,8 +24,10 @@
 @synthesize tableViewDocuments = _tableViewDocuments;
 @synthesize uITableViewCellDocument;
 @synthesize availableFilesCache = _availableFilesCache;
+@synthesize templateSelectorPopoverController = _templateSelectorPopoverController;
 
 - (void)dealloc {
+    [_templateSelectorPopoverController release];
     [_reportDesignerPopoverController release];
     [_flipsidePopoverController release];
     [_availableFilesCache release];
@@ -41,20 +43,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)viewDidUnload {
     [self setTableViewDocuments:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self setAvailableFilesCache: [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:REPORT_PATH_EXTENSION]];
-    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -110,6 +109,7 @@
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     self.flipsidePopoverController = nil;
     self.reportDesignerPopoverController = nil;
+    self.templateSelectorPopoverController = nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -121,8 +121,43 @@
             self.flipsidePopoverController = popoverController;
             popoverController.delegate = self;
         }
+    } else if ([[segue identifier] isEqualToString:@"showReportDesignerOpenReport"]) {
+        
+        ReportDesignerViewController *destinationController = [[segue destinationViewController] retain];
+        NSURL *report = [sender retain];
+        if (destinationController && report) {
+            [destinationController setDelegate: self];
+            [destinationController openReport: report];
+        }
+        [report release];
+        [destinationController release];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            self.reportDesignerPopoverController = popoverController;
+            popoverController.delegate = self;
+        }
+    } else if ([[segue identifier] isEqualToString:@"showReportDesignerOpenTemplate"]) {
+        ReportDesignerViewController *destinationController = [[segue destinationViewController] retain];
+        NSURL *report = [sender retain];
+        if (destinationController && report) {
+            [destinationController setDelegate: self];
+            [destinationController openTemplate: report];
+        }
+        [report release];
+        [destinationController release];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            self.reportDesignerPopoverController = popoverController;
+            popoverController.delegate = self;
+        }
     } else if ([[segue identifier] isEqualToString:@"showReportDesigner"]) {
-        [[segue destinationViewController] setDelegate:self];
+        ReportDesignerViewController *destinationController = [[segue destinationViewController] retain];
+        if (destinationController) {
+            [destinationController setDelegate: self];
+        }
+        [destinationController release];
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
@@ -134,7 +169,7 @@
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            self.reportDesignerPopoverController = popoverController;
+            self.templateSelectorPopoverController = popoverController;
             popoverController.delegate = self;
         }
     }
@@ -146,6 +181,24 @@
         self.flipsidePopoverController = nil;
     } else {
         [self performSegueWithIdentifier:@"showAlternate" sender:sender];
+    }
+}
+
+#pragma - UIViewController Template Selector Delegate
+
+- (void)uIViewControllerTemplateSelectorRequestOpenOfFileAtUrl:(NSURL *)url {
+    if (self.templateSelectorPopoverController) {
+        [self.templateSelectorPopoverController dismissPopoverAnimated:YES];
+        self.templateSelectorPopoverController = nil;
+        [self performSegueWithIdentifier:@"showReportDesignerOpenReport" sender:url];
+    }
+}
+
+- (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url {
+    if (self.templateSelectorPopoverController) {
+        [self.templateSelectorPopoverController dismissPopoverAnimated:YES];
+        self.templateSelectorPopoverController = nil;
+        [self performSegueWithIdentifier:@"showReportDesignerOpenTemplate" sender:url];
     }
 }
 
@@ -246,9 +299,9 @@
  }
  */
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    return nil;
+//}
 
 
 #pragma mark -
