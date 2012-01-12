@@ -68,7 +68,15 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
-		4CA0638514BAD7C30025009E /* UIViewLasso.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewLasso.m */; };
+		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
+		4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
+		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
+		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
+		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
+		4CE8A02514BD3939007C8345 /* my_config.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE89FF614BD3939007C8345 /* my_config.h.in */; };
+		4CE8A02614BD3939007C8345 /* mysql.h.pp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A00C14BD3939007C8345 /* mysql.h.pp */; };
+		4CE8A02714BD3939007C8345 /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A01014BD3939007C8345 /* mysql_version.h.in */; };
+		4CE8A02814BD3939007C8345 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8A02414BD3939007C8345 /* libmysqlclient.a */; };
 		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 /* End PBXBuildFile section */
@@ -119,6 +127,9 @@
 		4C384E4314B29789007B4F48 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
 		4C384E4414B29789007B4F48 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
 		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
+		4C3F1F7414BD328300532FA4 /* libdbmysql-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libdbmysql-Prefix.pch"; sourceTree = "<group>"; };
+		4C3F1F7514BD328300532FA4 /* libdbmysql.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libdbmysql.h; sourceTree = "<group>"; };
+		4C3F1F7614BD328300532FA4 /* libdbmysql.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libdbmysql.m; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvApplicationData.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentTrvApplicationData.m; sourceTree = "<group>"; };
 		4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvFileData.h; sourceTree = "<group>"; };
@@ -157,8 +168,85 @@
 		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		4CA0638314BAD7C30025009E /* UIViewLasso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewLasso.h; sourceTree = "<group>"; };
-		4CA0638414BAD7C30025009E /* UIViewLasso.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewLasso.m; sourceTree = "<group>"; };
+		4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipLink.m; sourceTree = "<group>"; };
+		4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSchema.h; sourceTree = "<group>"; };
+		4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
+		4CA0638914BAE35B0025009E /* UIViewControllerDatabaseSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSources.h; sourceTree = "<group>"; };
+		4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSources.m; sourceTree = "<group>"; };
+		4CA0638C14BAEC000025009E /* UIViewEntityRelationshipTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipTable.h; sourceTree = "<group>"; };
+		4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipTable.m; sourceTree = "<group>"; };
+		4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipLink.h; sourceTree = "<group>"; };
+		4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIViewEntityRelationshipTable.xib; sourceTree = "<group>"; };
+		4CE89FDE14BD3939007C8345 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
+		4CE89FDF14BD3939007C8345 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
+		4CE89FE014BD3939007C8345 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
+		4CE89FE114BD3939007C8345 /* rwlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwlock.h; sourceTree = "<group>"; };
+		4CE89FE214BD3939007C8345 /* x86-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "x86-gcc.h"; sourceTree = "<group>"; };
+		4CE89FE314BD3939007C8345 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		4CE89FE414BD3939007C8345 /* config-win.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "config-win.h"; sourceTree = "<group>"; };
+		4CE89FE514BD3939007C8345 /* decimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decimal.h; sourceTree = "<group>"; };
+		4CE89FE614BD3939007C8345 /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
+		4CE89FE714BD3939007C8345 /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
+		4CE89FE814BD3939007C8345 /* keycache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keycache.h; sourceTree = "<group>"; };
+		4CE89FE914BD3939007C8345 /* lf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lf.h; sourceTree = "<group>"; };
+		4CE89FEA14BD3939007C8345 /* m_ctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_ctype.h; sourceTree = "<group>"; };
+		4CE89FEB14BD3939007C8345 /* m_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_string.h; sourceTree = "<group>"; };
+		4CE89FEC14BD3939007C8345 /* my_aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_aes.h; sourceTree = "<group>"; };
+		4CE89FED14BD3939007C8345 /* my_alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_alarm.h; sourceTree = "<group>"; };
+		4CE89FEE14BD3939007C8345 /* my_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_alloc.h; sourceTree = "<group>"; };
+		4CE89FEF14BD3939007C8345 /* my_atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_atomic.h; sourceTree = "<group>"; };
+		4CE89FF014BD3939007C8345 /* my_attribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_attribute.h; sourceTree = "<group>"; };
+		4CE89FF114BD3939007C8345 /* my_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_base.h; sourceTree = "<group>"; };
+		4CE89FF214BD3939007C8345 /* my_bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_bit.h; sourceTree = "<group>"; };
+		4CE89FF314BD3939007C8345 /* my_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_bitmap.h; sourceTree = "<group>"; };
+		4CE89FF414BD3939007C8345 /* my_charsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_charsets.h; sourceTree = "<group>"; };
+		4CE89FF514BD3939007C8345 /* my_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_config.h; sourceTree = "<group>"; };
+		4CE89FF614BD3939007C8345 /* my_config.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = my_config.h.in; sourceTree = "<group>"; };
+		4CE89FF714BD3939007C8345 /* my_dbug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_dbug.h; sourceTree = "<group>"; };
+		4CE89FF814BD3939007C8345 /* my_dir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_dir.h; sourceTree = "<group>"; };
+		4CE89FF914BD3939007C8345 /* my_getopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_getopt.h; sourceTree = "<group>"; };
+		4CE89FFA14BD3939007C8345 /* my_global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_global.h; sourceTree = "<group>"; };
+		4CE89FFB14BD3939007C8345 /* my_libwrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_libwrap.h; sourceTree = "<group>"; };
+		4CE89FFC14BD3939007C8345 /* my_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_list.h; sourceTree = "<group>"; };
+		4CE89FFD14BD3939007C8345 /* my_md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_md5.h; sourceTree = "<group>"; };
+		4CE89FFE14BD3939007C8345 /* my_net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_net.h; sourceTree = "<group>"; };
+		4CE89FFF14BD3939007C8345 /* my_no_pthread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_no_pthread.h; sourceTree = "<group>"; };
+		4CE8A00014BD3939007C8345 /* my_nosys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_nosys.h; sourceTree = "<group>"; };
+		4CE8A00114BD3939007C8345 /* my_pthread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_pthread.h; sourceTree = "<group>"; };
+		4CE8A00214BD3939007C8345 /* my_stacktrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_stacktrace.h; sourceTree = "<group>"; };
+		4CE8A00314BD3939007C8345 /* my_sys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_sys.h; sourceTree = "<group>"; };
+		4CE8A00414BD3939007C8345 /* my_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_time.h; sourceTree = "<group>"; };
+		4CE8A00514BD3939007C8345 /* my_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_tree.h; sourceTree = "<group>"; };
+		4CE8A00614BD3939007C8345 /* my_trie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_trie.h; sourceTree = "<group>"; };
+		4CE8A00714BD3939007C8345 /* my_uctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_uctype.h; sourceTree = "<group>"; };
+		4CE8A00814BD3939007C8345 /* my_vle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_vle.h; sourceTree = "<group>"; };
+		4CE8A00914BD3939007C8345 /* my_xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_xml.h; sourceTree = "<group>"; };
+		4CE8A00A14BD3939007C8345 /* myisampack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myisampack.h; sourceTree = "<group>"; };
+		4CE8A00B14BD3939007C8345 /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql.h; sourceTree = "<group>"; };
+		4CE8A00C14BD3939007C8345 /* mysql.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = mysql.h.pp; sourceTree = "<group>"; };
+		4CE8A00D14BD3939007C8345 /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com.h; sourceTree = "<group>"; };
+		4CE8A00E14BD3939007C8345 /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
+		4CE8A00F14BD3939007C8345 /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
+		4CE8A01014BD3939007C8345 /* mysql_version.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mysql_version.h.in; sourceTree = "<group>"; };
+		4CE8A01114BD3939007C8345 /* mysqld_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysqld_error.h; sourceTree = "<group>"; };
+		4CE8A01314BD3939007C8345 /* rijndael.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rijndael.h; sourceTree = "<group>"; };
+		4CE8A01414BD3939007C8345 /* mysys_err.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysys_err.h; sourceTree = "<group>"; };
+		4CE8A01514BD3939007C8345 /* queues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queues.h; sourceTree = "<group>"; };
+		4CE8A01614BD3939007C8345 /* service_versions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = service_versions.h; sourceTree = "<group>"; };
+		4CE8A01714BD3939007C8345 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		4CE8A01814BD3939007C8345 /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
+		4CE8A01914BD3939007C8345 /* sql_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sql_common.h; sourceTree = "<group>"; };
+		4CE8A01A14BD3939007C8345 /* sslopt-case.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-case.h"; sourceTree = "<group>"; };
+		4CE8A01B14BD3939007C8345 /* sslopt-longopts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-longopts.h"; sourceTree = "<group>"; };
+		4CE8A01C14BD3939007C8345 /* sslopt-vars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sslopt-vars.h"; sourceTree = "<group>"; };
+		4CE8A01D14BD3939007C8345 /* t_ctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = t_ctype.h; sourceTree = "<group>"; };
+		4CE8A01E14BD3939007C8345 /* thr_alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thr_alarm.h; sourceTree = "<group>"; };
+		4CE8A01F14BD3939007C8345 /* thr_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thr_lock.h; sourceTree = "<group>"; };
+		4CE8A02014BD3939007C8345 /* typelib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typelib.h; sourceTree = "<group>"; };
+		4CE8A02114BD3939007C8345 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
+		4CE8A02214BD3939007C8345 /* waiting_threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = waiting_threads.h; sourceTree = "<group>"; };
+		4CE8A02314BD3939007C8345 /* wqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wqueue.h; sourceTree = "<group>"; };
+		4CE8A02414BD3939007C8345 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = TheReportViewer/APIs/libmysqlclient.framework/libmysqlclient.a; sourceTree = "<group>"; };
 		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
@@ -173,6 +261,7 @@
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
+				4CE8A02814BD3939007C8345 /* libmysqlclient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +278,10 @@
 				4C00818314B738A2003DF437 /* Main */,
 				4CA0637D14BAD1D20025009E /* Templates */,
 				4C00816E14B6C4F8003DF437 /* Images */,
+				4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */,
+				4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */,
+				4CA0638914BAE35B0025009E /* UIViewControllerDatabaseSources.h */,
+				4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -272,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				4C384E2E14B29789007B4F48 /* TheReportViewer */,
+				4C3F1F7214BD328300532FA4 /* libdbmysql */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -288,6 +382,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CE89FDB14BD3927007C8345 /* MySql */,
 				4C6CDFD114B8E9B600DABF86 /* CoreData.framework */,
 				4C384E2814B29789007B4F48 /* UIKit.framework */,
 				4C384E2A14B29789007B4F48 /* Foundation.framework */,
@@ -299,7 +394,8 @@
 		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
 			isa = PBXGroup;
 			children = (
-				4C5F02D914B9A42200C49BE9 /* New Group */,
+				4C3F1F6914BD306600532FA4 /* APIs */,
+				4C5F02D914B9A42200C49BE9 /* TemplateFiles */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
@@ -328,13 +424,38 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4C5F02D914B9A42200C49BE9 /* New Group */ = {
+		4C3F1F6914BD306600532FA4 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = APIs;
+			sourceTree = "<group>";
+		};
+		4C3F1F7214BD328300532FA4 /* libdbmysql */ = {
+			isa = PBXGroup;
+			children = (
+				4C3F1F7514BD328300532FA4 /* libdbmysql.h */,
+				4C3F1F7614BD328300532FA4 /* libdbmysql.m */,
+				4C3F1F7314BD328300532FA4 /* Supporting Files */,
+			);
+			path = libdbmysql;
+			sourceTree = "<group>";
+		};
+		4C3F1F7314BD328300532FA4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C3F1F7414BD328300532FA4 /* libdbmysql-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C5F02D914B9A42200C49BE9 /* TemplateFiles */ = {
 			isa = PBXGroup;
 			children = (
 				4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */,
 				4C5F02DC14B9A48900C49BE9 /* Blank.trvt */,
 			);
-			name = "New Group";
+			name = TemplateFiles;
 			sourceTree = "<group>";
 		};
 		4CA0637D14BAD1D20025009E /* Templates */ = {
@@ -385,12 +506,117 @@
 		4CA0638214BAD3D40025009E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4CA0638314BAD7C30025009E /* UIViewLasso.h */,
-				4CA0638414BAD7C30025009E /* UIViewLasso.m */,
+				4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */,
+				4CA0638C14BAEC000025009E /* UIViewEntityRelationshipTable.h */,
+				4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */,
+				4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */,
+				4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */,
 				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
 				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		4CE89FDB14BD3927007C8345 /* MySql */ = {
+			isa = PBXGroup;
+			children = (
+				4CE89FDC14BD3939007C8345 /* Headers */,
+				4CE8A02414BD3939007C8345 /* libmysqlclient.a */,
+			);
+			name = MySql;
+			sourceTree = "<group>";
+		};
+		4CE89FDC14BD3939007C8345 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				4CE89FDD14BD3939007C8345 /* atomic */,
+				4CE89FE314BD3939007C8345 /* base64.h */,
+				4CE89FE414BD3939007C8345 /* config-win.h */,
+				4CE89FE514BD3939007C8345 /* decimal.h */,
+				4CE89FE614BD3939007C8345 /* errmsg.h */,
+				4CE89FE714BD3939007C8345 /* hash.h */,
+				4CE89FE814BD3939007C8345 /* keycache.h */,
+				4CE89FE914BD3939007C8345 /* lf.h */,
+				4CE89FEA14BD3939007C8345 /* m_ctype.h */,
+				4CE89FEB14BD3939007C8345 /* m_string.h */,
+				4CE89FEC14BD3939007C8345 /* my_aes.h */,
+				4CE89FED14BD3939007C8345 /* my_alarm.h */,
+				4CE89FEE14BD3939007C8345 /* my_alloc.h */,
+				4CE89FEF14BD3939007C8345 /* my_atomic.h */,
+				4CE89FF014BD3939007C8345 /* my_attribute.h */,
+				4CE89FF114BD3939007C8345 /* my_base.h */,
+				4CE89FF214BD3939007C8345 /* my_bit.h */,
+				4CE89FF314BD3939007C8345 /* my_bitmap.h */,
+				4CE89FF414BD3939007C8345 /* my_charsets.h */,
+				4CE89FF514BD3939007C8345 /* my_config.h */,
+				4CE89FF614BD3939007C8345 /* my_config.h.in */,
+				4CE89FF714BD3939007C8345 /* my_dbug.h */,
+				4CE89FF814BD3939007C8345 /* my_dir.h */,
+				4CE89FF914BD3939007C8345 /* my_getopt.h */,
+				4CE89FFA14BD3939007C8345 /* my_global.h */,
+				4CE89FFB14BD3939007C8345 /* my_libwrap.h */,
+				4CE89FFC14BD3939007C8345 /* my_list.h */,
+				4CE89FFD14BD3939007C8345 /* my_md5.h */,
+				4CE89FFE14BD3939007C8345 /* my_net.h */,
+				4CE89FFF14BD3939007C8345 /* my_no_pthread.h */,
+				4CE8A00014BD3939007C8345 /* my_nosys.h */,
+				4CE8A00114BD3939007C8345 /* my_pthread.h */,
+				4CE8A00214BD3939007C8345 /* my_stacktrace.h */,
+				4CE8A00314BD3939007C8345 /* my_sys.h */,
+				4CE8A00414BD3939007C8345 /* my_time.h */,
+				4CE8A00514BD3939007C8345 /* my_tree.h */,
+				4CE8A00614BD3939007C8345 /* my_trie.h */,
+				4CE8A00714BD3939007C8345 /* my_uctype.h */,
+				4CE8A00814BD3939007C8345 /* my_vle.h */,
+				4CE8A00914BD3939007C8345 /* my_xml.h */,
+				4CE8A00A14BD3939007C8345 /* myisampack.h */,
+				4CE8A00B14BD3939007C8345 /* mysql.h */,
+				4CE8A00C14BD3939007C8345 /* mysql.h.pp */,
+				4CE8A00D14BD3939007C8345 /* mysql_com.h */,
+				4CE8A00E14BD3939007C8345 /* mysql_time.h */,
+				4CE8A00F14BD3939007C8345 /* mysql_version.h */,
+				4CE8A01014BD3939007C8345 /* mysql_version.h.in */,
+				4CE8A01114BD3939007C8345 /* mysqld_error.h */,
+				4CE8A01214BD3939007C8345 /* mysys */,
+				4CE8A01414BD3939007C8345 /* mysys_err.h */,
+				4CE8A01514BD3939007C8345 /* queues.h */,
+				4CE8A01614BD3939007C8345 /* service_versions.h */,
+				4CE8A01714BD3939007C8345 /* sha1.h */,
+				4CE8A01814BD3939007C8345 /* sha2.h */,
+				4CE8A01914BD3939007C8345 /* sql_common.h */,
+				4CE8A01A14BD3939007C8345 /* sslopt-case.h */,
+				4CE8A01B14BD3939007C8345 /* sslopt-longopts.h */,
+				4CE8A01C14BD3939007C8345 /* sslopt-vars.h */,
+				4CE8A01D14BD3939007C8345 /* t_ctype.h */,
+				4CE8A01E14BD3939007C8345 /* thr_alarm.h */,
+				4CE8A01F14BD3939007C8345 /* thr_lock.h */,
+				4CE8A02014BD3939007C8345 /* typelib.h */,
+				4CE8A02114BD3939007C8345 /* violite.h */,
+				4CE8A02214BD3939007C8345 /* waiting_threads.h */,
+				4CE8A02314BD3939007C8345 /* wqueue.h */,
+			);
+			name = Headers;
+			path = TheReportViewer/APIs/libmysqlclient.framework/Headers;
+			sourceTree = "<group>";
+		};
+		4CE89FDD14BD3939007C8345 /* atomic */ = {
+			isa = PBXGroup;
+			children = (
+				4CE89FDE14BD3939007C8345 /* gcc_builtins.h */,
+				4CE89FDF14BD3939007C8345 /* generic-msvc.h */,
+				4CE89FE014BD3939007C8345 /* nolock.h */,
+				4CE89FE114BD3939007C8345 /* rwlock.h */,
+				4CE89FE214BD3939007C8345 /* x86-gcc.h */,
+			);
+			path = atomic;
+			sourceTree = "<group>";
+		};
+		4CE8A01214BD3939007C8345 /* mysys */ = {
+			isa = PBXGroup;
+			children = (
+				4CE8A01314BD3939007C8345 /* rijndael.h */,
+			);
+			path = mysys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,6 +705,9 @@
 				4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */,
 				4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */,
 				4C5F02DD14B9A48900C49BE9 /* Blank.trvt in Resources */,
+				4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */,
+				4CE8A02514BD3939007C8345 /* my_config.h.in in Resources */,
+				4CE8A02714BD3939007C8345 /* mysql_version.h.in in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,7 +741,11 @@
 				4C5F02E614BA3A6700C49BE9 /* UITableViewCellStoreItemReportTemplate.m in Sources */,
 				4C5F02E914BA477200C49BE9 /* UIViewControllerSettings.m in Sources */,
 				4C5F02EC14BA480400C49BE9 /* UITableViewControllerSettings.m in Sources */,
-				4CA0638514BAD7C30025009E /* UIViewLasso.m in Sources */,
+				4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */,
+				4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */,
+				4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */,
+				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
+				4CE8A02614BD3939007C8345 /* mysql.h.pp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,9 +827,20 @@
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TheReportViewer/APIs\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
 				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TheReportViewer\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/LibMySql.framework\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -605,9 +849,20 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TheReportViewer/APIs\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
 				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TheReportViewer\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/LibMySql.framework\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
