@@ -16,4 +16,5 @@
 
 @property (strong, nonatomic) UIManagedDocumentTrvApplicationData *applicationPreferences;
 @property (retain, nonatomic) UIManagedDocumentTrvFileData *openReport;
+
 @end

@@ -40,8 +40,7 @@
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C384E3C14B29789007B4F48 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */; };
 		4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
-		4C384E4214B29789007B4F48 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* MainViewController.m */; };
-		4C384E4514B29789007B4F48 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4414B29789007B4F48 /* FlipsideViewController.m */; };
+		4C384E4214B29789007B4F48 /* UIViewControllerReports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* UIViewControllerReports.m */; };
 		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
 		4C5F02D414B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
 		4C5F02D814B9755400C49BE9 /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
@@ -73,10 +72,20 @@
 		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
 		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
+		4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
+		4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
 		4CE8A02514BD3939007C8345 /* my_config.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE89FF614BD3939007C8345 /* my_config.h.in */; };
-		4CE8A02614BD3939007C8345 /* mysql.h.pp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A00C14BD3939007C8345 /* mysql.h.pp */; };
 		4CE8A02714BD3939007C8345 /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A01014BD3939007C8345 /* mysql_version.h.in */; };
 		4CE8A02814BD3939007C8345 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8A02414BD3939007C8345 /* libmysqlclient.a */; };
+		4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
+		4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
+		4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
+		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
+		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
+		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
+		4CE8A04314C01ABB007C8345 /* UIViewControllerDatabases.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */; };
+		4CE8A04614C01C7B007C8345 /* UITableViewControllerDataSourceTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */; };
+		4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */; };
 		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 /* End PBXBuildFile section */
@@ -122,14 +131,10 @@
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		4C384E4014B29789007B4F48 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		4C384E4114B29789007B4F48 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		4C384E4314B29789007B4F48 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
-		4C384E4414B29789007B4F48 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
+		4C384E4014B29789007B4F48 /* UIViewControllerReports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIViewControllerReports.h; sourceTree = "<group>"; };
+		4C384E4114B29789007B4F48 /* UIViewControllerReports.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerReports.m; sourceTree = "<group>"; };
+		4C384E4314B29789007B4F48 /* UIViewControllerDatabases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabases.h; sourceTree = "<group>"; };
 		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
-		4C3F1F7414BD328300532FA4 /* libdbmysql-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libdbmysql-Prefix.pch"; sourceTree = "<group>"; };
-		4C3F1F7514BD328300532FA4 /* libdbmysql.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libdbmysql.h; sourceTree = "<group>"; };
-		4C3F1F7614BD328300532FA4 /* libdbmysql.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libdbmysql.m; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvApplicationData.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentTrvApplicationData.m; sourceTree = "<group>"; };
 		4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvFileData.h; sourceTree = "<group>"; };
@@ -177,6 +182,10 @@
 		4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipTable.m; sourceTree = "<group>"; };
 		4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipLink.h; sourceTree = "<group>"; };
 		4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIViewEntityRelationshipTable.xib; sourceTree = "<group>"; };
+		4CE7B76814C038AF007D0148 /* NSDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabase.h; sourceTree = "<group>"; };
+		4CE7B76914C038AF007D0148 /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabase.m; sourceTree = "<group>"; };
+		4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabaseMySql.h; sourceTree = "<group>"; };
+		4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabaseMySql.m; sourceTree = "<group>"; };
 		4CE89FDE14BD3939007C8345 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CE89FDF14BD3939007C8345 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CE89FE014BD3939007C8345 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
@@ -223,7 +232,6 @@
 		4CE8A00914BD3939007C8345 /* my_xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_xml.h; sourceTree = "<group>"; };
 		4CE8A00A14BD3939007C8345 /* myisampack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myisampack.h; sourceTree = "<group>"; };
 		4CE8A00B14BD3939007C8345 /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql.h; sourceTree = "<group>"; };
-		4CE8A00C14BD3939007C8345 /* mysql.h.pp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = mysql.h.pp; sourceTree = "<group>"; };
 		4CE8A00D14BD3939007C8345 /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com.h; sourceTree = "<group>"; };
 		4CE8A00E14BD3939007C8345 /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
 		4CE8A00F14BD3939007C8345 /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
@@ -247,6 +255,18 @@
 		4CE8A02214BD3939007C8345 /* waiting_threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = waiting_threads.h; sourceTree = "<group>"; };
 		4CE8A02314BD3939007C8345 /* wqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wqueue.h; sourceTree = "<group>"; };
 		4CE8A02414BD3939007C8345 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = TheReportViewer/APIs/libmysqlclient.framework/libmysqlclient.a; sourceTree = "<group>"; };
+		4CE8A03414BFF6AC007C8345 /* UIManagedDocumentMySqlDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentMySqlDatabase.h; sourceTree = "<group>"; };
+		4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentMySqlDatabase.m; sourceTree = "<group>"; };
+		4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DatabaseDefinationFileType.xcdatamodel; sourceTree = "<group>"; };
+		4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocuments20.png; sourceTree = "<group>"; };
+		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
+		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
+		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
+		4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabases.m; sourceTree = "<group>"; };
+		4CE8A04414C01C7A007C8345 /* UITableViewControllerDataSourceTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceTypes.h; sourceTree = "<group>"; };
+		4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceTypes.m; sourceTree = "<group>"; };
+		4CE8A04714C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupMySql.h; sourceTree = "<group>"; };
+		4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceSetupMySql.m; sourceTree = "<group>"; };
 		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
@@ -282,6 +302,10 @@
 				4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */,
 				4CA0638914BAE35B0025009E /* UIViewControllerDatabaseSources.h */,
 				4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */,
+				4CE8A04414C01C7A007C8345 /* UITableViewControllerDataSourceTypes.h */,
+				4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */,
+				4CE8A04714C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.h */,
+				4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -289,6 +313,10 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */,
+				4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */,
+				4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */,
+				4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */,
 				4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */,
 				4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */,
 				4C00818C14B83E92003DF437 /* UIImageStacks20.png */,
@@ -340,10 +368,10 @@
 		4C00818314B738A2003DF437 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E4014B29789007B4F48 /* MainViewController.h */,
-				4C384E4114B29789007B4F48 /* MainViewController.m */,
-				4C384E4314B29789007B4F48 /* FlipsideViewController.h */,
-				4C384E4414B29789007B4F48 /* FlipsideViewController.m */,
+				4C384E4014B29789007B4F48 /* UIViewControllerReports.h */,
+				4C384E4114B29789007B4F48 /* UIViewControllerReports.m */,
+				4C384E4314B29789007B4F48 /* UIViewControllerDatabases.h */,
+				4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */,
 				4C6CDFC214B85BFC00DABF86 /* UITableViewCellDocument.h */,
 				4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */,
 			);
@@ -353,10 +381,15 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
 				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
 				4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */,
 				4C5F02DE14B9A91500C49BE9 /* Templates.h */,
 				4C5F02DF14B9A91500C49BE9 /* Templates.m */,
+				4CE7B76814C038AF007D0148 /* NSDatabase.h */,
+				4CE7B76914C038AF007D0148 /* NSDatabase.m */,
+				4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */,
+				4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -365,7 +398,6 @@
 			isa = PBXGroup;
 			children = (
 				4C384E2E14B29789007B4F48 /* TheReportViewer */,
-				4C3F1F7214BD328300532FA4 /* libdbmysql */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -402,13 +434,10 @@
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C00818414B738E9003DF437 /* Model */,
 				4C00815914B6BDB6003DF437 /* UI */,
+				4CE8A04A14C027B2007C8345 /* Managed Documents */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C00818914B745C9003DF437 /* NSFileManager+Common.h */,
 				4C00818A14B745C9003DF437 /* NSFileManager+Common.m */,
-				4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */,
-				4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */,
-				4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */,
-				4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -429,24 +458,6 @@
 			children = (
 			);
 			name = APIs;
-			sourceTree = "<group>";
-		};
-		4C3F1F7214BD328300532FA4 /* libdbmysql */ = {
-			isa = PBXGroup;
-			children = (
-				4C3F1F7514BD328300532FA4 /* libdbmysql.h */,
-				4C3F1F7614BD328300532FA4 /* libdbmysql.m */,
-				4C3F1F7314BD328300532FA4 /* Supporting Files */,
-			);
-			path = libdbmysql;
-			sourceTree = "<group>";
-		};
-		4C3F1F7314BD328300532FA4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C3F1F7414BD328300532FA4 /* libdbmysql-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4C5F02D914B9A42200C49BE9 /* TemplateFiles */ = {
@@ -571,7 +582,6 @@
 				4CE8A00914BD3939007C8345 /* my_xml.h */,
 				4CE8A00A14BD3939007C8345 /* myisampack.h */,
 				4CE8A00B14BD3939007C8345 /* mysql.h */,
-				4CE8A00C14BD3939007C8345 /* mysql.h.pp */,
 				4CE8A00D14BD3939007C8345 /* mysql_com.h */,
 				4CE8A00E14BD3939007C8345 /* mysql_time.h */,
 				4CE8A00F14BD3939007C8345 /* mysql_version.h */,
@@ -617,6 +627,19 @@
 				4CE8A01314BD3939007C8345 /* rijndael.h */,
 			);
 			path = mysys;
+			sourceTree = "<group>";
+		};
+		4CE8A04A14C027B2007C8345 /* Managed Documents */ = {
+			isa = PBXGroup;
+			children = (
+				4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */,
+				4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */,
+				4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */,
+				4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */,
+				4CE8A03414BFF6AC007C8345 /* UIManagedDocumentMySqlDatabase.h */,
+				4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */,
+			);
+			name = "Managed Documents";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -708,6 +731,10 @@
 				4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */,
 				4CE8A02514BD3939007C8345 /* my_config.h.in in Resources */,
 				4CE8A02714BD3939007C8345 /* mysql_version.h.in in Resources */,
+				4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */,
+				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
+				4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */,
+				4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,8 +747,7 @@
 			files = (
 				4C384E3514B29789007B4F48 /* main.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
-				4C384E4214B29789007B4F48 /* MainViewController.m in Sources */,
-				4C384E4514B29789007B4F48 /* FlipsideViewController.m in Sources */,
+				4C384E4214B29789007B4F48 /* UIViewControllerReports.m in Sources */,
 				4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */,
 				4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */,
 				4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */,
@@ -745,7 +771,13 @@
 				4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */,
 				4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */,
 				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
-				4CE8A02614BD3939007C8345 /* mysql.h.pp in Sources */,
+				4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */,
+				4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
+				4CE8A04314C01ABB007C8345 /* UIViewControllerDatabases.m in Sources */,
+				4CE8A04614C01C7B007C8345 /* UITableViewControllerDataSourceTypes.m in Sources */,
+				4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */,
+				4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */,
+				4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +870,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/LibMySql.framework\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -860,7 +891,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/LibMySql.framework\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -909,6 +939,16 @@
 			);
 			currentVersion = 4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */;
 			path = TrvFileType.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */,
+			);
+			currentVersion = 4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */;
+			path = DatabaseDefinationFileType.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

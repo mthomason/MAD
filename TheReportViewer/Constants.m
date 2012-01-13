@@ -16,6 +16,7 @@ CGFloat const TVC_DOCUMENT_HEIGHT = 73.0000f;
 
 NSString * const UIIMAGEDOCUMENTBLANK = @"UIImageDocumentBlank";
 NSString * const APPLICATIONDATA_FILENAME = @"appdata";
+NSString * const MYSQLDATABASEDATA_FILENAME = @"mydata";
 NSString * const TRVDATA_FILENAME = @"settings";
 
 NSString * const TRVDATA_PATH_EXTENSION = @"trvp";

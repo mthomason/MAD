@@ -1,0 +1,102 @@
+//
+//  FlipsideViewController.m
+//  TheReportViewer
+//
+//  Created by Michael Thomason on 1/2/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "UIViewControllerDatabases.h"
+
+@implementation UIViewControllerDatabases
+
+@synthesize delegate = _delegate;
+@synthesize tableViewControllerDataSourceTypes = _tableViewControllerDataSourceTypes;
+
+- (void)dealloc {
+    [_tableViewControllerDataSourceTypes release];
+    [super dealloc];
+}
+
+- (void)awakeFromNib {
+    self.contentSizeForViewInPopover = CGSizeMake(320.0, 480.0);
+    [super awakeFromNib];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	// Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    } else {
+        return YES;
+    }
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    [self setTableViewControllerDataSourceTypes: nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showAlternate"]) {
+        [[segue destinationViewController] setDelegate:self];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            [self setTableViewControllerDataSourceTypes: popoverController];
+            [popoverController setDelegate: self];
+        }
+    }
+}
+
+#pragma mark - Actions
+
+- (IBAction)done:(id)sender {
+    [self.delegate flipsideViewControllerDidFinish:self];
+}
+
+#pragma mark - Delegates
+
+- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated: YES];
+    } else {
+        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
+        [self setTableViewControllerDataSourceTypes: nil];
+    }
+}
+
+@end

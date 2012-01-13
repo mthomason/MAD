@@ -9,8 +9,9 @@
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
-#include "my_global.h"
+#import "my_global.h"
 #import "mysql.h"
+#import "Constants.h"
 
 @implementation AppDelegate
 
@@ -28,46 +29,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+        
 
-    printf("MySQL client version: %s\n", mysql_get_client_info());
-    
-    /*
-        MYSQL *conn;
-        MYSQL_RES *result;
-        MYSQL_ROW row;
-        int num_fields;
-        int i;
-        
-        conn = mysql_init(NULL);
-        mysql_real_connect(conn, "107.20.231.48", "root", "1noniceguy", "quotationary", 3306, NULL, 0);
-        
-        mysql_query(conn, "SELECT * FROM quotes LIMIT 10;");
-        result = mysql_store_result(conn);
-        
-        num_fields = mysql_num_fields(result);
-        
-    @autoreleasepool {
-        while ((row = mysql_fetch_row(result)))
-        {
-            for(i = 0; i < num_fields; i++)
-            {
-                printf("%s ", row[i] ? row[i] : "NULL");
-            }
-            printf("\n");
-        }
-    }    
-        
-        mysql_free_result(result);
-        mysql_close(conn);
-        */
     
     //NSLog(@"applicationDocumentsDirectory: %@", [NSFileManager applicationDocumentsDirectory]);
     
-    NSLog(@"contentsOfDocumentsDirectory: %@", [NSFileManager contentsOfDocumentsDirectory]);
+    //NSLog(@"contentsOfDocumentsDirectory: %@", [NSFileManager contentsOfDocumentsDirectory]);
 
     
     //Open or create the applications settings file.
-    
+    /*
     NSURL *applicationFileUrlWithExtention = [[[[NSFileManager applicationDocumentsDirectoryUrl]
                                                 URLByAppendingPathComponent: @"ApplicationPreferences"]
                                                     URLByAppendingPathExtension: @"trvp"] retain];
@@ -117,6 +88,7 @@
                                }];
     }
     [applicationFileUrlWithExtention release];
+    */
     
     return YES;
 }
@@ -155,7 +127,43 @@
      */
 }
 
-#pragma mark -
+/*
+#pragma mark - Persistent Store Coordinator
+
+- (NSPersistentStoreCoordinator *) persistentStoreCoordinator {
+    
+    if (![self persistentStoreCoordinatorMain]) {
+        NSError *error;
+        
+        NSPersistentStoreCoordinator *ps = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]]; 
+        [self setPersistentStoreCoordinatorMain: ps];
+        [ps release];
+        
+        NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
+        
+        NSArray *types = [[NSArray alloc] initWithObjects:PRESISTENT_STORE_TYPE_MYSQL, nil]; 
+
+        for (NSString * type in types) {
+            if (![[self persistentStoreCoordinatorMain] addPersistentStoreWithType:type configuration:nil URL:dataStoreURL options:options error:&error]){
+                if ([error code] == 134100) {
+                    //If we failed with an incorrect data model error then pass the version identifiers of the store to the delegate to decide what to do next
+                    if ([[self delegate] respondsToSelector:@selector(coreDataManager:encounteredIncorrectModelWithVersionIdentifiers:)]) {
+                        persistentStoreCoordinator = nil;
+                        NSDictionary *metadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:initialType URL:dataStoreURL error:&error];
+                        [[self delegate] coreDataManager:self encounteredIncorrectModelWithVersionIdentifiers:[metadata objectForKey:NSStoreModelVersionIdentifiersKey]];
+                    } else {
+                        //FIXME: Show error!!!
+                        //[[UIApplication sharedApplication] presentError:error];
+                    }
+                }
+            }    
+        }
+    }
+
+    return persistentStoreCoordinator;
+}*/
+
+#pragma mark - Actions
 
 - (void)openReport:(NSURL *)url {
     UIManagedDocumentTrvApplicationData *document = [[UIManagedDocumentTrvApplicationData alloc] initWithFileURL:url];

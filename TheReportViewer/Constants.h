@@ -14,6 +14,7 @@ extern CGFloat const TVC_DOCUMENT_HEIGHT;
 
 extern NSString * const UIIMAGEDOCUMENTBLANK;
 extern NSString * const APPLICATIONDATA_FILENAME;
+extern NSString * const MYSQLDATABASEDATA_FILENAME;
 extern NSString * const TRVDATA_FILENAME;
 
 extern NSString * const TRVDATA_PATH_EXTENSION;
