@@ -74,6 +74,7 @@
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
 		4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
+		4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
 		4CE8A02514BD3939007C8345 /* my_config.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE89FF614BD3939007C8345 /* my_config.h.in */; };
 		4CE8A02714BD3939007C8345 /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A01014BD3939007C8345 /* mysql_version.h.in */; };
 		4CE8A02814BD3939007C8345 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8A02414BD3939007C8345 /* libmysqlclient.a */; };
@@ -186,6 +187,8 @@
 		4CE7B76914C038AF007D0148 /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabase.m; sourceTree = "<group>"; };
 		4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabaseMySql.h; sourceTree = "<group>"; };
 		4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabaseMySql.m; sourceTree = "<group>"; };
+		4CE7B77314C2D168007D0148 /* UIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerObjectSelector.h; sourceTree = "<group>"; };
+		4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerObjectSelector.m; sourceTree = "<group>"; };
 		4CE89FDE14BD3939007C8345 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CE89FDF14BD3939007C8345 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CE89FE014BD3939007C8345 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
@@ -306,6 +309,8 @@
 				4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */,
 				4CE8A04714C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.h */,
 				4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */,
+				4CE7B77314C2D168007D0148 /* UIViewControllerObjectSelector.h */,
+				4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -778,6 +783,7 @@
 				4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */,
 				4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */,
 				4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */,
+				4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
