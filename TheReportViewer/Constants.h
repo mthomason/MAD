@@ -9,6 +9,10 @@
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM;
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF;
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE;
+extern CGFloat const ANIMATION_DURATION_SLOW;
+extern CGFloat const ANIMATION_DURATION_FAST;
+extern CGFloat const ANIMATION_DURATION_NORMAL;
+extern CGFloat const ANIMATION_DURATION_NONE;
 
 extern CGFloat const TVC_DOCUMENT_HEIGHT;
 
@@ -21,3 +25,9 @@ extern NSString * const TRVDATA_PATH_EXTENSION;
 extern NSString * const REPORT_PATH_EXTENSION;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
+
+extern NSString * const NSDATABASE_USERNAME;
+extern NSString * const NSDATABASE_PASSWORD;
+extern NSString * const NSDATABASE_DATABASE;
+extern NSString * const NSDATABASE_PORT;
+extern NSString * const NSDATABASE_HOST;

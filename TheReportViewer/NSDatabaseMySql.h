@@ -8,6 +8,22 @@
 
 #import "NSDatabase.h"
 
-@interface NSDatabaseMySql : NSDatabase
+@interface NSDatabaseMySql : NSDatabase {
+    const char *h;
+    const char *u;
+    const char *p;    
+}
+
+@property (retain, nonatomic) NSString *username;
+@property (retain, nonatomic) NSString *password;
+@property (retain, nonatomic) NSString *host;
+@property (assign, nonatomic) NSInteger port;
+
+- (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password;
+- (id)initWithOptions:(NSDictionary *)optons;
+
+- (NSSet *)tablesFor:(NSString *)database;
+- (NSSet *)fieldsFor:(NSString *)database andTable:(NSString *)table;
+- (BOOL)testConnection;
 
 @end

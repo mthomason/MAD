@@ -7,6 +7,8 @@
 //
 
 #import "UITableViewControllerDataSourceSetupMySql.h"
+#import "NSDatabaseMySql.h"
+#import "Constants.h"
 
 @implementation UITableViewControllerDataSourceSetupMySql
 
@@ -85,13 +87,55 @@
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-    [[self delegate] uITableViewControllerDataSourceSetupMySqlDidFinish: self];
+- (IBAction)test:(id)sender {
+    
+    NSString *username = [[NSString alloc] initWithString: [[self textFieldUsername] text]];
+    NSString *password = [[NSString alloc] initWithString: [[self textFieldPassword] text]];
+    NSString *host = [[NSString alloc] initWithString: [[self textFieldHost] text]];
+    NSString *port = [[[self textFieldPort] text] retain];
+    NSDictionary *credentals = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                username, NSDATABASE_USERNAME,
+                                password, NSDATABASE_PASSWORD,
+                                host, NSDATABASE_HOST,
+                                [NSNumber numberWithInteger: [port integerValue]], NSDATABASE_PORT, nil];
+
+    //NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithOptions: credentals];
+
+    NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithHost:host port:[port integerValue] username:username andPassword:password];
+
+
+    NSSet *s = [[db tablesFor:@"quotationary"] retain];
+    NSLog(@"Tables %@", [s allObjects]);
+    [s release];
+    
+    //BOOL result = [db testConnection];
+    //NSLog(@"result: %@", result ? @"YES" : @"NO");
+    /*
+    [UIView animateWithDuration:ANIMATION_DURATION_SLOW delay:ANIMATION_DURATION_NONE options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [[self tableViewCellTestConnection] setBackgroundColor: result ? [UIColor greenColor] : [UIColor redColor]];
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:ANIMATION_DURATION_SLOW delay:ANIMATION_DURATION_NONE options:UIViewAnimationOptionCurveEaseIn animations:^{
+            if (finished) [[self tableViewCellTestConnection] setBackgroundColor: [UIColor whiteColor]];
+        } completion:^(BOOL finished) { }];
+    }];
+     */
+    
+    [username release];
+    [password release];
+    [host release];
+    [port release];
+
+    [db release];
+    [credentals release];
 }
 
 - (IBAction)save:(id)sender {
     //Create UIManaged Document that Stores the Database Schema
     
+}
+
+- (IBAction)done:(id)sender {
+    [[self delegate] uITableViewControllerDataSourceSetupMySqlDidFinish: self];
 }
 
 - (IBAction)usernameDidEndOnExit:(id)sender {
@@ -123,6 +167,7 @@
     
     if ([[tableView cellForRowAtIndexPath: indexPath] isEqual: [self tableViewCellTestConnection]]) {
         NSLog(@"Test connection!!!");
+        [self test:nil];
     }
     
 }
@@ -140,4 +185,5 @@
     [textFieldPort release];
     [super dealloc];
 }
+
 @end

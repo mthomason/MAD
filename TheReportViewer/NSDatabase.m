@@ -10,12 +10,4 @@
 
 @implementation NSDatabase
 
-- (id)initWithOptions:(NSDictionary *)optons {
-    self = [super init];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 @end

@@ -11,6 +11,10 @@
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM = 0.7000f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF = 0.3500f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE = 0.4870f;
+CGFloat const ANIMATION_DURATION_SLOW = 0.12000f;
+CGFloat const ANIMATION_DURATION_NORMAL = 0.7000f;
+CGFloat const ANIMATION_DURATION_FAST = 0.3000f;
+CGFloat const ANIMATION_DURATION_NONE = 0.0000f;
 
 CGFloat const TVC_DOCUMENT_HEIGHT = 73.0000f;
 
@@ -24,3 +28,9 @@ NSString * const REPORT_PATH_EXTENSION = @"trv";
 NSString * const TEMPLATE_PATH_EXTENSION = @"trvt";
 
 NSString * const TEMPLATES = @"Templates";
+
+NSString * const NSDATABASE_USERNAME = @"username";
+NSString * const NSDATABASE_PASSWORD = @"password";
+NSString * const NSDATABASE_DATABASE = @"database";
+NSString * const NSDATABASE_PORT = @"port";
+NSString * const NSDATABASE_HOST = @"host";

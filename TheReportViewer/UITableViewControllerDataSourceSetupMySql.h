@@ -31,8 +31,9 @@
 @property (retain, nonatomic) IBOutlet UITextField *textFieldHost;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPort;
 
-- (IBAction)done:(id)sender;
+- (IBAction)test:(id)sender;
 - (IBAction)save:(id)sender;
+- (IBAction)done:(id)sender;
 
 - (IBAction)usernameDidEndOnExit:(id)sender;
 - (IBAction)passwordDidEndOnExit:(id)sender;

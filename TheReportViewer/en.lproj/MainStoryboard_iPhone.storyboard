@@ -1102,7 +1102,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="Yrx-Rz-Oez">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="root" borderStyle="roundedRect" minimumFontSize="17" id="Yrx-Rz-Oez">
                                                     <rect key="frame" x="160" y="6" width="120" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1131,7 +1131,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="test" borderStyle="roundedRect" minimumFontSize="17" id="b6f-Wi-K0w">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1noniceguy" borderStyle="roundedRect" minimumFontSize="17" id="b6f-Wi-K0w">
                                                     <rect key="frame" x="160" y="6" width="120" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1160,7 +1160,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="MCy-cT-QCO">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="everydayapps.com" borderStyle="roundedRect" minimumFontSize="17" id="MCy-cT-QCO">
                                                     <rect key="frame" x="160" y="6" width="120" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1189,7 +1189,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="X3V-Ro-9K7">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" borderStyle="roundedRect" minimumFontSize="17" id="X3V-Ro-9K7">
                                                     <rect key="frame" x="160" y="6" width="120" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1266,7 +1266,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="1944" y="717"/>
+            <point key="canvasLocation" x="1944" y="624"/>
         </scene>
         <scene sceneID="Ccn-3q-IDa">
             <objects>
@@ -1657,7 +1657,7 @@
                     </view>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1944" y="128"/>
+            <point key="canvasLocation" x="1944" y="-22"/>
         </scene>
     </scenes>
     <resources>
@@ -1668,6 +1668,129 @@
         <image name="UIImageStacks20.png" width="20" height="20"/>
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="ReportDesignerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReportDesignerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="info:"/>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewDashboard"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UIScrollViewDashboard" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewDashboard.h"/>
+        </class>
+        <class className="UITableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellStoreItemReportTemplate" superclassName="UITableViewCellDocument">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerDataSourceSetupMySql" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupMySql.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hostDidEndOnExit:"/>
+                <relationship kind="action" name="passwordDidEndOnExit:"/>
+                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="test:"/>
+                <relationship kind="action" name="usernameDidEndOnExit:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTestConnection" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerDataSourceTypes" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceTypes.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerSettings" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabaseSchema" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSchema.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabaseSources" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSources.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabases" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabases.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerObjectSelector" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerObjectSelector.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerReports" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerReports.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewDocuments" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerStoreTemplates" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerStoreTemplates.h"/>
+        </class>
+        <class className="UIViewControllerTemplateSelector" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerTemplateSelector.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

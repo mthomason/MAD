@@ -10,6 +10,4 @@
 
 @interface NSDatabase : NSObject
 
-- (id)initWithOptions:(NSDictionary *)optons;
-
 @end
