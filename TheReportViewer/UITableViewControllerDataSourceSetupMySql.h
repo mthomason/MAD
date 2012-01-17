@@ -17,7 +17,6 @@
 @interface UITableViewControllerDataSourceSetupMySql : UITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
-
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerDataSourceSetupMySqlDelegate> delegate;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellUsername;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPassword;
@@ -31,7 +30,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *textFieldHost;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPort;
 
-- (IBAction)test:(id)sender;
+- (void)test:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;
 

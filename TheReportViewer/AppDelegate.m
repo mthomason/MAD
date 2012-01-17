@@ -9,9 +9,14 @@
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
-#import "my_global.h"
 #import "mysql.h"
-#import "Constants.h"
+#import "GC_MYSQL_BIND.h"
+//#import "my_global.h"
+//#import "MysqlConnection.h"
+//#import "MysqlConnection.h"
+//#import "MysqlFetch.h"
+//#import "Constants.h"
+#import "NSConnection.h"
 
 @implementation AppDelegate
 
@@ -29,9 +34,47 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-        
+    
 
     
+    //[pool drain];
+
+    /*
+    NSString *host = @"everydayapps.com";
+    NSString *user = @"root";
+    NSString *pass = @"1noniceguy";
+    NSString *schema = @"quotationary";
+    long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
+    if(!TARGET_IPHONE_SIMULATOR) {
+        MysqlConnection *connection = [MysqlConnection connectToHost:host user:user password:pass schema:schema flags:flags];
+        
+        
+        MysqlFetch *fetch = [[MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:connection] retain];
+        NSMutableDictionary *dailyLIPS = [[NSMutableDictionary alloc] init];
+        for(NSDictionary *row in fetch.results) {
+            [dailyLIPS setObject:[row objectForKey:@"score"] forKey:[row objectForKey:@"day"]];
+        }
+        NSLog(@"Result %@", dailyLIPS);
+        [dailyLIPS release];
+        [fetch release];
+        
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mysql Connect" message:@"The MySQL library cannot be used in the iPhone simulator.  No data will be sent or received from the daily LIPS database." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        //return nil;
+    }*/
+    
+    //}
+    
+    //}
+	//}
+	//else {
+	//	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mysql Connect" message:@"The MySQL library cannot be used in the iPhone simulator.  No data will be sent or received from the daily LIPS database." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	//	[alert show];
+		//return nil;
+	//}
+
     //NSLog(@"applicationDocumentsDirectory: %@", [NSFileManager applicationDocumentsDirectory]);
     
     //NSLog(@"contentsOfDocumentsDirectory: %@", [NSFileManager contentsOfDocumentsDirectory]);

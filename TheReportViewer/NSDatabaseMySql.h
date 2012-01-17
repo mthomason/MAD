@@ -8,6 +8,9 @@
 
 #import "NSDatabase.h"
 
+//FIXME: MySQL Currently does not work.  Takes too much time/too little value to fix.  Maybe find
+//          third party distribution.
+
 @interface NSDatabaseMySql : NSDatabase {
     const char *h;
     const char *u;
@@ -22,7 +25,7 @@
 - (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password;
 - (id)initWithOptions:(NSDictionary *)optons;
 
-- (NSSet *)tablesFor:(NSString *)database;
+- (NSArray *)tablesFor:(NSString *)database;
 - (NSSet *)fieldsFor:(NSString *)database andTable:(NSString *)table;
 - (BOOL)testConnection;
 
