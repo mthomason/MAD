@@ -8,34 +8,34 @@
 
 #import "NSDatabaseMySql.h"
 #import "mysql.h"
-#import "NSConnection.h"
+#import "MNSConnection.h"
 #import "Constants.h"
 #import <stdio.h>
 
 @implementation NSDatabaseMySql
 
-@synthesize username = _username;
-@synthesize password = _password;
-@synthesize host = _host;
-@synthesize port = _port;
+@synthesize username;
+@synthesize password;
+@synthesize host;
+@synthesize port;
 
 - (void)dealloc {
-    //[_username release];
-    //[_password release];
-    //[_host release];
+    [username release];
+    [password release];
+    [host release];
     [super dealloc];
 }
 
-- (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password {
+- (id)initWithHost:(NSString *)_host port:(NSInteger)_port username:(NSString *)_username andPassword:(NSString *)_password {
     self = [super init];
     if (self) {
-        [self setUsername: username];
-        [self setPassword: password];
-        [self setHost: host];
-        [self setPort: port];
-        h = [host UTF8String];
-        u = [username UTF8String];
-        p = [password UTF8String];
+        [self setUsername: _username];
+        [self setPassword: _password];
+        [self setHost: _host];
+        [self setPort: _port];
+        h = [[self host] UTF8String];
+        u = [[self username] UTF8String];
+        p = [[self password] UTF8String];
     }
     return self;
 }
@@ -43,22 +43,22 @@
 - (id)initWithOptions:(NSDictionary *)optons {
     self = [super init];
     if (self) {
-        NSString *user = [[optons objectForKey:NSDATABASE_USERNAME] retain];
-        NSString *pass = [[optons objectForKey:NSDATABASE_PASSWORD] retain];
-        NSString *host = [[optons objectForKey:NSDATABASE_HOST] retain];
+        NSString *_user = [[optons objectForKey:NSDATABASE_USERNAME] retain];
+        NSString *_pass = [[optons objectForKey:NSDATABASE_PASSWORD] retain];
+        NSString *_host = [[optons objectForKey:NSDATABASE_HOST] retain];
         
-        h = [host UTF8String];
-        u = [user UTF8String];
-        p = [pass UTF8String];
+        h = [_host UTF8String];
+        u = [_user UTF8String];
+        p = [_pass UTF8String];
         
-        [self setUsername: user];
-        [self setPassword: pass];
-        [self setHost: host];
+        [self setUsername: _user];
+        [self setPassword: _pass];
+        [self setHost: _host];
         [self setPort: [[optons objectForKey:NSDATABASE_PORT] integerValue]];
         
-        [pass release];
-        [host release];
-        [user release];
+        [_pass release];
+        [_host release];
+        [_user release];
     }
     return self;
 }
@@ -67,13 +67,16 @@
     
     NSMutableArray *resultArray = [[NSMutableArray alloc] init];
     
-    NSConnection *connection = [[NSConnection alloc] init];
+    MNSConnection *connection = [[MNSConnection alloc] init];
+
+       
     mysql_init(&(connection->conn));
     //long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
+    //mysql_options(&(connection->conn), MYSQL_READ_DEFAULT_GROUP, "libmysqlclient.a");
     mysql_real_connect(&(connection->conn), "everydayapps.com", "root", "1noniceguy", "quotationary", 3306, NULL, 0);
     
-    NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
-    char query[[q length] + 12];
+    //NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
+    char query[1024];
     sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
     NSLog(@"query %s", query);
     mysql_query(&(connection->conn), query);
@@ -81,38 +84,36 @@
     MYSQL_RES *result = mysql_store_result(&(connection->conn));
     NSMutableSet *mutableResult = nil;
     
-    if (result) {
-        int num_rows = mysql_num_rows(result);
-        mutableResult = [[[NSMutableSet alloc] initWithCapacity:num_rows] autorelease];
+    if (result != NULL) {
+        //int num_rows = mysql_num_rows(result);
+        mutableResult = [[NSMutableSet alloc] initWithCapacity:300];
         
         //@autoreleasepool {
         MYSQL_ROW row;
         //@autoreleasepool {
         //mysql_fetch_row(result);
         //printf("row %s", row[0]);
-        while ((row = mysql_fetch_row(result))) {
-            NSLog(@"Got row");
-            if (row[0]) {
-                NSString *name = [[NSString alloc] initWithUTF8String:row[0]];
-                [resultArray addObject: name];
-                if (name) {
-                    [mutableResult addObject: name];
+        //@autoreleasepool {
+            while ((row = mysql_fetch_row(result))) {
+                //NSLog(@"Got row");
+                if (row[0]) {
+                    NSLog(@"N: %@, K: %@", [NSString stringWithUTF8String:row[0]], [NSString stringWithUTF8String:row[0]]);                    
                 } else {
-                    NSLog(@"Not got name");
+                    //NSLog(@"Not got row!!!");
                 }
-                NSLog(@"row %s", row[0]);
-                NSLog(@"name %@", name);
-                [name release];
-                
-            } else {
-                NSLog(@"Not got row!!!");
-            }
+            //}
         }
+        
+        [mutableResult autorelease];
         
         
         mysql_free_result(result);
     }    
     mysql_close(&(connection->conn));
+    mysql_server_end();
+        
+    
+
     [connection release];
 
     

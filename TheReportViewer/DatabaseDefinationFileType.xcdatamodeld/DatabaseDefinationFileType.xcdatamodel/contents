@@ -3,31 +3,41 @@
     <entity name="Database" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Table" inverseName="inDatabase" inverseEntity="Table" syncable="YES"/>
-        <relationship name="ownedByUser" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="UserCredentals" inverseName="hasDatabases" inverseEntity="UserCredentals" syncable="YES"/>
+        <relationship name="ownedByUser" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="UserCredentals" inverseName="haveDatabases" inverseEntity="UserCredentals" syncable="YES"/>
     </entity>
     <entity name="Field" syncable="YES">
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Table" inverseName="hasFields" inverseEntity="Table" syncable="YES"/>
     </entity>
     <entity name="Table" syncable="YES">
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label_plural" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="queryable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Field" inverseName="inTable" inverseEntity="Field" syncable="YES"/>
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="hasTables" inverseEntity="Database" syncable="YES"/>
     </entity>
     <entity name="UserCredentals" syncable="YES">
-        <attribute name="databasetype" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="filepath" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="port" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="hasDatabases" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="ownedByUser" inverseEntity="Database" syncable="YES"/>
+        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mysql_port" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mysql_username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_domain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_login_redirect_uri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sf_username" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="haveDatabases" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="ownedByUser" inverseEntity="Database" syncable="YES"/>
     </entity>
     <elements>
-        <element name="UserCredentals" positionX="-326" positionY="-351" width="128" height="150"/>
         <element name="Database" positionX="-126" positionY="-333" width="128" height="90"/>
-        <element name="Table" positionX="34" positionY="-324" width="128" height="90"/>
         <element name="Field" positionX="216" positionY="-324" width="128" height="90"/>
+        <element name="Table" positionX="34" positionY="-324" width="128" height="90"/>
+        <element name="UserCredentals" positionX="-326" positionY="-351" width="128" height="240"/>
     </elements>
 </model>

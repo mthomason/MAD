@@ -14,7 +14,12 @@
 @interface NSDatabaseMySql : NSDatabase {
     const char *h;
     const char *u;
-    const char *p;    
+    const char *p;
+
+    NSString *username;
+    NSString *password;
+    NSString *host;
+    NSInteger port;
 }
 
 @property (retain, nonatomic) NSString *username;

@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+	NSDatabaseQueryTypeNone = 0,
+	NSDatabaseQueryTypeGetTables,
+	NSDatabaseQueryTypeGetFields,
+	NSDatabaseQueryTypeVerify
+} NSDatabaseQueryType;
+
 @interface NSDatabase : NSObject
 
 //- (id)initWithOptions:(NSDictionary *)optons;

@@ -16,7 +16,7 @@
 //#import "MysqlConnection.h"
 //#import "MysqlFetch.h"
 //#import "Constants.h"
-#import "NSConnection.h"
+#import "MNSConnection.h"
 
 @implementation AppDelegate
 

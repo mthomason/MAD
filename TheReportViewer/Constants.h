@@ -31,3 +31,6 @@ extern NSString * const NSDATABASE_PASSWORD;
 extern NSString * const NSDATABASE_DATABASE;
 extern NSString * const NSDATABASE_PORT;
 extern NSString * const NSDATABASE_HOST;
+
+extern NSString * const NSDATABASE_SF_OAUTH_KEY;
+extern NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL;
