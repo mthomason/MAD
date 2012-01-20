@@ -27,11 +27,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @synthesize username = _username, password = _password;
 @synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
-/*
-@synthesize resultBlockTableNames;
-@synthesize resultBlockFieldNames;
-@synthesize resultBlockLoginComplete;
-*/
+
 @synthesize currentQueryType;
 
 - (void)dealloc {
@@ -39,11 +35,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;
-/*
-    [resultBlockTableNames release];
-    [resultBlockFieldNames release];
-    [resultBlockLoginComplete release];
-  */  
+
     [_username release];
     [_password release];
     [_loginDomain release];
@@ -97,23 +89,61 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 #pragma mark - SFRestAPIDelegate
 
 - (void)request:(SFRestRequest *)request didLoadResponse:(id)jsonResponse {
-    NSArray *records = [[jsonResponse objectForKey:@"records"] retain];
-    NSLog(@"request:didLoadResponse: #records: %d", records.count);
-    NSLog(@"request:didLoadResponse:  records: %@", records);
-
     switch ([self currentQueryType]) {
         case NSDatabaseQueryTypeGetTables: {
-            rsltBlk_tblNames tableNamesResultBlock = resultBlockTableNames;
-            tableNamesResultBlock(self, records);
+            
+            NSDictionary *response = [jsonResponse retain];
+            [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                if ([key isEqualToString:@"sobjects"]) {
+                    NSArray *tables = [obj retain];
+                    NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [tables count]];
+                    [tables enumerateObjectsUsingBlock:^(id objt, NSUInteger idx, BOOL *stop) {
+                        NSDictionary *table = [objt retain];
+                        [records addObject:[NSString stringWithString: [table objectForKey:@"name"]]];
+                        [table release];
+                    }];
+                    
+                    rsltBlk_tblNames tableNamesResultBlock = resultBlockTableNames;
+                    tableNamesResultBlock(self, records);                    
+                    
+                    [records release];
+                    [tables release];
+                }
+                
+            }];
+            [response release];
+
             break;
         }
-        case NSDatabaseQueryTypeGetFields:
-            ;
+        case NSDatabaseQueryTypeGetFields: {
+            NSDictionary *response = [jsonResponse retain];
+            //NSLog(@"response: %@", response);
+            [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                //NSLog(@"Field {%@, %@}", key, obj);
+                if ([key isEqualToString:@"fields"]) {
+                    NSArray *fields = [obj retain];
+                    NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [fields count]];
+                    [fields enumerateObjectsUsingBlock:^(id objf, NSUInteger idx, BOOL *stop) {
+                        NSDictionary *field = [objf retain];
+                        //NSLog(@"%@", field);                        
+                        //NSLog(@"%@", [field objectForKey:@"name"]);
+                        [records addObject:[NSString stringWithString: [field objectForKey:@"name"]]];
+                        [field release];
+                    }];
+                    
+                    rsltBlk_tblNames fieldNamesResultBlock = resultBlockFieldNames;
+                    fieldNamesResultBlock(self, records);                    
+                    
+                    [records release];
+                    [fields release];
+                }
+            }];
+            [response release];
             break;
+        }
         default:
             break;
     }
-    [records release];
 }
 
 
@@ -146,14 +176,17 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     
     resultBlockTableNames = completion;
     
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];    
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];
     [[SFRestAPI sharedInstance] send:request delegate:self];
     
 }
 
 - (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
               completion:(void (^)(NSDatabaseSalesForce *database, NSArray *fields))completion {
+
     [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
+    
+    resultBlockFieldNames = completion;
 
     SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: table];    
     [[SFRestAPI sharedInstance] send:request delegate:self];
@@ -206,12 +239,15 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 - (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
     //kickoff authentication
     resultBlockLoginComplete = completion;
-    resultBlockLoginComplete(self, NO);
     [[self coordinator] authenticate];
 }
 
 
 - (void)logout {
+    [[self coordinator] revokeAuthentication];
+}
+
+- (void)reAuthenticate {
     [[self coordinator] revokeAuthentication];
     [[self coordinator] authenticate];
 }
@@ -236,49 +272,21 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 #pragma mark - SFOAuthCoordinatorDelegate
 
-- (void)oauthCoordinator:(SFOAuthCoordinator *)coordinator willBeginAuthenticationWithView:(UIWebView *)view {
-    NSLog(@"oauthCoordinator:willBeginAuthenticationWithView");
-    [resultBlockLoginComplete release];
-}
+- (void)oauthCoordinator:(SFOAuthCoordinator *)coordinator willBeginAuthenticationWithView:(UIWebView *)view { }
 
 
 - (void)oauthCoordinator:(SFOAuthCoordinator *)coordinator didBeginAuthenticationWithView:(UIWebView *)view {
-    NSLog(@"oauthCoordinator:didBeginAuthenticationWithView");
-    [resultBlockLoginComplete release];
     [[self delegate] showWebView: view];
-
 }
 
 - (void)oauthCoordinatorDidAuthenticate:(SFOAuthCoordinator *)coordinator {
-    NSLog(@"Logged in yo!");
-    NSLog(@"oauthCoordinatorDidAuthenticate for userId: %@", coordinator.credentials.userId);
     [coordinator.view removeFromSuperview];
     [[SFRestAPI sharedInstance] setCoordinator:self.coordinator];
-    
-    switch ([self currentQueryType]) {
-        case NSDatabaseQueryTypeGetTables:
-
-            break;
-        case NSDatabaseQueryTypeGetFields:
-            break;
-        default:
-            break;
-    }
-    
-    
     resultBlockLoginComplete(self, YES);
-    /*
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //rsltBlk_loginComplete loginBlock = 
-            //loginBlock(YES);
-        });
-    });
-    */
 }
 
 - (void)oauthCoordinator:(SFOAuthCoordinator *)coordinator didFailWithError:(NSError *)error {
-    NSLog(@"oauthCoordinator:didFailWithError: %@", error);
+    //NSLog(@"oauthCoordinator:didFailWithError: %@", error);
     [coordinator.view removeFromSuperview];
     
     if (error.code == kSFOAuthErrorInvalidGrant) {  //invalid cached refresh token
