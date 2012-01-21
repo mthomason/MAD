@@ -169,36 +169,46 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     return (const char *)[theData bytes];
 }
 
+//Create new file using core data with
+// the table names and fields inside it.
+// This will be used as the program
+// schema.
 - (void)test:(id)sender {
 
     if (![self db]) {       //Create query database file.  Make sure only created once.
 
-        NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] init];
-        [d setDelegate: self];
-        [self setDb:d];
-        [d release];
-        
-        //Create salesforce.com database.
-        ;
-        [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
-            if (complete) {
-                NSLog(@"Login good");
-                [database tablesInDataseAsyc:nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
-                    
-                    [tables enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        NSLog(@"TABLE - %@", obj);
-                        
-                        [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+        if ([[[self textFieldNickname] text] length] > 0) {
+            NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(NSURL *filepath, BOOL success) {
+                [d setDelegate: self];
+                [self setDb:d];
+                [d release];
+                
+                //Create salesforce.com database.
+
+                [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
+                    if (complete) {
+                        NSLog(@"Login good");
+                        [database tablesInDataseAsyc:nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
                             
-                            NSLog(@"     FIELD - %@", fields)                        ;
+                            [tables enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                
+                                NSLog(@"TABLE - %@", obj);
+                                
+                                [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+                                    
+                                    NSLog(@"     FIELD - %@", fields)                        ;
+                                    
+                                }];
+                                
+                            }];
                             
                         }];
-                        
-                    }];
-                    
+                    }
                 }];
-            }
-        }];
+                
+            }];
+        }
+
     }
     
 }

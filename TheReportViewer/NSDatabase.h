@@ -3,7 +3,7 @@
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/13/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -20,9 +20,9 @@ typedef enum {
 
 @property (strong, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
 
-- (id)initWithFileName:(NSString *)name;
-- (id)initWithUrl:(NSURL *)url;
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(NSURL *filepath, BOOL success))completion;
+- (id)initExistingFileWithUrl:(NSURL *)url;
 
-- (void)openFile:(NSURL *)url;
+- (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion;
 
 @end

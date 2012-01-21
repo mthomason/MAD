@@ -19,7 +19,7 @@
 }
 
 //Init with url. Open the file at that url.
-- (id)initWithUrl:(NSURL *)url {
+- (id)initExistingFileWithUrl:(NSURL *)url {
     self = [super init];
     if (self) {
         
@@ -28,10 +28,10 @@
 }
 
 //Init with new file name. Create and open the file at that url.
-- (id)initWithFileName:(NSString *)name {
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(NSURL *filepath, BOOL success))completion {
     self = [super init];
     if (self) {
-        
+
         NSURL *baseUrl = [[[NSFileManager applicationDocumentsDirectoryUrl]
                            URLByAppendingPathComponent: name] retain];
         NSURL *applicationFileUrlWithExtention = [[baseUrl URLByAppendingPathExtension: @"trvq"] retain];
@@ -55,12 +55,12 @@
                     switch ([[self managedDocumentQuery] documentState]) {
                         case UIDocumentStateNormal: {
                             //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
-                            
                             break;
                         }
                         default:
                             break;
                     }
+                    completion([[self managedDocumentQuery] fileURL], success);
                 } else {
                     NSLog(@"couldn’t open document at %@", @"");//applicationFileUrlWithExtention);
                 }
@@ -81,19 +81,17 @@
                                      } else {
                                          NSLog(@"Couldn’t create document at %@", @"");//applicationFileUrlWithExtention);
                                      }
+                                     completion([[self managedDocumentQuery] fileURL], success);
                                  }];
         }
-        
-        [applicationFileUrlWithExtention autorelease];
-        //return applicationFileUrlWithExtention;        
-        
+        [applicationFileUrlWithExtention release];
     }
     return self;
 }
 
 #pragma mark - Public Actions
 
-- (void)openFile:(NSURL *)url {
+- (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion {
     UIManagedDocumentQuery *document = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         [document openWithCompletionHandler:^(BOOL success) {
@@ -102,12 +100,14 @@
             } else {
                 NSLog(@"couldn’t open document at %@", url);
             }
+            completion(success);
         }];
     } else {
         [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating
           completionHandler:^(BOOL success) {
               if (success) NSLog(@"New file created"); //[self documentIsReady];
               else NSLog(@"couldn’t create document at %@", url);
+              completion(success);
           }];
     }
     [document release];
