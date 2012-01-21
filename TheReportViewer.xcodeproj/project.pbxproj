@@ -80,6 +80,12 @@
 		4C86D29B14C53EB6008B58B5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C86D28A14C53EB6008B58B5 /* notes.txt */; };
 		4C86D29C14C53EB6008B58B5 /* NSString_MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */; };
 		4C86D29F14C5426D008B58B5 /* MNSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D29E14C5426D008B58B5 /* MNSConnection.m */; };
+		4C8779BE14CA95F9005CBE6F /* Table.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779BD14CA95F9005CBE6F /* Table.m */; };
+		4C8779C514CA95F9005CBE6F /* Field.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779C414CA95F9005CBE6F /* Field.m */; };
+		4C8779C814CA95FA005CBE6F /* Relationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779C714CA95FA005CBE6F /* Relationship.m */; };
+		4C8779CF14CA965B005CBE6F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779CE14CA965B005CBE6F /* Database.m */; };
+		4C8779D814CA965D005CBE6F /* UserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779D714CA965D005CBE6F /* UserCredentals.m */; };
+		4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
 		4C8C971114C5B93D007FB629 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C970F14C5B881007FB629 /* libmysqlclient.a */; };
 		4C8C97A614C5C43D007FB629 /* libRestKitCoreData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C978814C5C43C007FB629 /* libRestKitCoreData.a */; };
 		4C8C97A714C5C43D007FB629 /* libRestKitNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C978914C5C43C007FB629 /* libRestKitNetwork.a */; };
@@ -306,6 +312,18 @@
 		4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_MysqlEscape.m; sourceTree = "<group>"; };
 		4C86D29D14C5426D008B58B5 /* MNSConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSConnection.h; sourceTree = "<group>"; };
 		4C86D29E14C5426D008B58B5 /* MNSConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSConnection.m; sourceTree = "<group>"; };
+		4C8779BC14CA95F9005CBE6F /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
+		4C8779BD14CA95F9005CBE6F /* Table.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Table.m; sourceTree = "<group>"; };
+		4C8779C314CA95F9005CBE6F /* Field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Field.h; sourceTree = "<group>"; };
+		4C8779C414CA95F9005CBE6F /* Field.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Field.m; sourceTree = "<group>"; };
+		4C8779C614CA95FA005CBE6F /* Relationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Relationship.h; sourceTree = "<group>"; };
+		4C8779C714CA95FA005CBE6F /* Relationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Relationship.m; sourceTree = "<group>"; };
+		4C8779CD14CA965A005CBE6F /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		4C8779CE14CA965B005CBE6F /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		4C8779D614CA965C005CBE6F /* UserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCredentals.h; sourceTree = "<group>"; };
+		4C8779D714CA965D005CBE6F /* UserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCredentals.m; sourceTree = "<group>"; };
+		4C8779DC14CA9D90005CBE6F /* UIManagedDocumentQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentQuery.h; sourceTree = "<group>"; };
+		4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentQuery.m; sourceTree = "<group>"; };
 		4C8C970F14C5B881007FB629 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = APIs/libmysqlclient.framework/libmysqlclient.a; sourceTree = "<group>"; };
 		4C8C971714C5C43C007FB629 /* CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreData.h; sourceTree = "<group>"; };
 		4C8C971814C5C43C007FB629 /* NSManagedObject+ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ActiveRecord.h"; sourceTree = "<group>"; };
@@ -604,6 +622,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
 				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
 				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
@@ -906,6 +925,23 @@
 				4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */,
 			);
 			path = Exceptions;
+			sourceTree = "<group>";
+		};
+		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
+			isa = PBXGroup;
+			children = (
+				4C8779D614CA965C005CBE6F /* UserCredentals.h */,
+				4C8779D714CA965D005CBE6F /* UserCredentals.m */,
+				4C8779CD14CA965A005CBE6F /* Database.h */,
+				4C8779CE14CA965B005CBE6F /* Database.m */,
+				4C8779C614CA95FA005CBE6F /* Relationship.h */,
+				4C8779C714CA95FA005CBE6F /* Relationship.m */,
+				4C8779C314CA95F9005CBE6F /* Field.h */,
+				4C8779C414CA95F9005CBE6F /* Field.m */,
+				4C8779BC14CA95F9005CBE6F /* Table.h */,
+				4C8779BD14CA95F9005CBE6F /* Table.m */,
+			);
+			name = "Auto Generated";
 			sourceTree = "<group>";
 		};
 		4C8C971314C5C43C007FB629 /* RestKit */ = {
@@ -1302,6 +1338,8 @@
 		4CE8A04A14C027B2007C8345 /* Managed Documents */ = {
 			isa = PBXGroup;
 			children = (
+				4C8779DC14CA9D90005CBE6F /* UIManagedDocumentQuery.h */,
+				4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */,
 				4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */,
 				4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */,
 				4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */,
@@ -1465,6 +1503,12 @@
 				4C8C97BA14C5C636007FB629 /* NSDatabaseSalesForce.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
 				4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */,
+				4C8779BE14CA95F9005CBE6F /* Table.m in Sources */,
+				4C8779C514CA95F9005CBE6F /* Field.m in Sources */,
+				4C8779C814CA95FA005CBE6F /* Relationship.m in Sources */,
+				4C8779CF14CA965B005CBE6F /* Database.m in Sources */,
+				4C8779D814CA965D005CBE6F /* UserCredentals.m in Sources */,
+				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

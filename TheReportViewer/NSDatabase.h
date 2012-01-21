@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIManagedDocumentQuery.h"
 
 typedef enum {
 	NSDatabaseQueryTypeNone = 0,
@@ -17,6 +18,11 @@ typedef enum {
 
 @interface NSDatabase : NSObject
 
-//- (id)initWithOptions:(NSDictionary *)optons;
+@property (strong, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
+
+- (id)initWithFileName:(NSString *)name;
+- (id)initWithUrl:(NSURL *)url;
+
+- (void)openFile:(NSURL *)url;
 
 @end

@@ -10,6 +10,10 @@
 
 #import "Constants.h"
 
+#import "UIManagedDocumentQuery.h"
+
+#import "NSFileManager+Common.h"
+
 #import "SFOAuthCredentials.h"
 #import "SFRestAPI.h"
 
@@ -25,19 +29,16 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @synthesize coordinator = _coordinator;
 
-@synthesize username = _username, password = _password;
 @synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
 
 @synthesize currentQueryType;
 
 - (void)dealloc {
-    
+        
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;
 
-    [_username release];
-    [_password release];
     [_loginDomain release];
     [_loginIdentifier release];
     [_loginKey release];
@@ -54,36 +55,59 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     return self;
 }
 
-- (id)initWithLoginDomain:(NSString *)domain accountIdentifier:(NSString *)identifier remoteAccessConsumerKey:(NSString *)key oauthRedirectUri:(NSString *)uri {
+//Init with url. Open the file at that url.
+- (id)initWithUrl:(NSURL *)url {
     self = [super init];
     if (self) {
-        [self setLoginDomain: domain];
-        [self setLoginIdentifier: identifier];
-        [self setLoginKey: key];
-        [self setLoginRedirectUri: uri];
-        [self setCurrentQueryType: NSDatabaseQueryTypeNone];
+
     }
     return self;
 }
 
-- (id)initWithUsername:(NSString *)username andPassword:(NSString *)password {
+//Init with new file name. Create and open the file at that url.
+- (id)initWithFileName:(NSString *)name {
     self = [super init];
     if (self) {
-        [self setUsername: username];
-        [self setPassword: password];
-        [self setCurrentQueryType: NSDatabaseQueryTypeNone];
+        
     }
     return self;
 }
 
-- (id)initWithOptions:(NSDictionary *)optons {
-    self = [super init];
-    if (self) {
-        [self setUsername: [optons objectForKey:NSDATABASE_USERNAME]];
-        [self setPassword: [optons objectForKey:NSDATABASE_PASSWORD]];
-        [self setCurrentQueryType: NSDatabaseQueryTypeNone];
-    }
-    return self;
+#pragma mark - Public Actions
+
+- (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {
+    
+    [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
+    
+    resultBlockTableNames = completion;
+    
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];
+    [[SFRestAPI sharedInstance] send:request delegate:self];
+    
+}
+
+- (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
+              completion:(void (^)(NSDatabaseSalesForce *database, NSArray *fields))completion {
+    
+    [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
+    
+    resultBlockFieldNames = completion;
+    
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: table];    
+    [[SFRestAPI sharedInstance] send:request delegate:self];
+    
+}
+
+- (void)newQueryFile {
+    
+}
+
+- (BOOL)testConnection {
+    [self setCurrentQueryType: NSDatabaseQueryTypeVerify];
+    
+    __block BOOL result = NO;
+    
+    return result;
 }
 
 #pragma mark - SFRestAPIDelegate
@@ -166,39 +190,6 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     //add your failed error handling here
     
     [self setCurrentQueryType:NSDatabaseQueryTypeNone];
-}
-
-#pragma mark - Public Actions
-
-- (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {
-    
-    [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
-    
-    resultBlockTableNames = completion;
-    
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];
-    [[SFRestAPI sharedInstance] send:request delegate:self];
-    
-}
-
-- (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, NSArray *fields))completion {
-
-    [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
-    
-    resultBlockFieldNames = completion;
-
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: table];    
-    [[SFRestAPI sharedInstance] send:request delegate:self];
-    
-}
-
-- (BOOL)testConnection {
-    [self setCurrentQueryType: NSDatabaseQueryTypeVerify];
-    
-    __block BOOL result = NO;
-        
-    return result;
 }
 
 #pragma mark - Salesforce.com login helpers

@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Database" syncable="YES">
+    <entity name="Database" representedClassName="Database" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Relationship" inverseName="inDatabase" inverseEntity="Relationship" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Table" inverseName="inDatabase" inverseEntity="Table" syncable="YES"/>
         <relationship name="ownedByUser" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="UserCredentals" inverseName="haveDatabases" inverseEntity="UserCredentals" syncable="YES"/>
     </entity>
-    <entity name="Field" syncable="YES">
+    <entity name="Field" representedClassName="Field" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="inRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Relationship" inverseName="hasFields" inverseEntity="Relationship" syncable="YES"/>
         <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Table" inverseName="hasFields" inverseEntity="Table" syncable="YES"/>
     </entity>
-    <entity name="Table" syncable="YES">
+    <entity name="Relationship" representedClassName="Relationship" syncable="YES">
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasFields" optional="YES" toMany="YES" minCount="2" maxCount="2" deletionRule="Nullify" destinationEntity="Field" inverseName="inRelationships" inverseEntity="Field" syncable="YES"/>
+        <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="hasRelationships" inverseEntity="Database" syncable="YES"/>
+    </entity>
+    <entity name="Table" representedClassName="Table" syncable="YES">
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label_plural" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,12 +27,12 @@
         <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Field" inverseName="inTable" inverseEntity="Field" syncable="YES"/>
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="hasTables" inverseEntity="Database" syncable="YES"/>
     </entity>
-    <entity name="UserCredentals" syncable="YES">
+    <entity name="UserCredentals" representedClassName="UserCredentals" syncable="YES">
         <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mysql_port" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mysql_port" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="mysql_username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sf_login_domain" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sf_login_identifier" optional="YES" attributeType="String" syncable="YES"/>
@@ -39,5 +47,6 @@
         <element name="Field" positionX="216" positionY="-324" width="128" height="90"/>
         <element name="Table" positionX="34" positionY="-324" width="128" height="90"/>
         <element name="UserCredentals" positionX="-326" positionY="-351" width="128" height="240"/>
+        <element name="Relationship" positionX="-20" positionY="216" width="128" height="90"/>
     </elements>
 </model>

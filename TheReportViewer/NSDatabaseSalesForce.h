@@ -7,6 +7,9 @@
 //
 
 #import "NSDatabase.h"
+
+#import "UIManagedDocumentQuery.h"
+
 #import "SFOAuthCoordinator.h"
 #import "SFRestAPI.h"
 
@@ -28,8 +31,6 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
 @private
     SFOAuthCoordinator *_coordinator;
     
-    NSString *_username;
-    NSString *_password;
     NSString *_loginDomain;
     NSString *_loginIdentifier;
     NSString *_loginKey;
@@ -46,8 +47,6 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
 
 @property (retain, nonatomic) SFOAuthCoordinator *coordinator;
 
-@property (retain) NSString *username;
-@property (retain) NSString *password;
 @property (retain) NSString *loginDomain;
 @property (retain) NSString *loginIdentifier;
 @property (retain) NSString *loginKey;
@@ -64,10 +63,6 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
 - (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
 
 - (void)logout;
-
-- (id)initWithLoginDomain:(NSString *)domain accountIdentifier:(NSString *)identifier remoteAccessConsumerKey:(NSString *)key oauthRedirectUri:(NSString *)uri;
-- (id)initWithUsername:(NSString *)username andPassword:(NSString *)password;
-- (id)initWithOptions:(NSDictionary *)optons;
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
 - (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table

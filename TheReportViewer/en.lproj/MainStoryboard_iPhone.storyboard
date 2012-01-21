@@ -546,7 +546,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="QYi-7s-WZN" detailTextLabel="fxM-gp-nGM" style="IBUITableViewCellStyleValue1" id="YFM-WM-szy">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDatabaseFieldName" textLabel="QYi-7s-WZN" detailTextLabel="fxM-gp-nGM" style="IBUITableViewCellStyleValue1" id="YFM-WM-szy">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -571,7 +571,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="eIB-pv-FUl" detailTextLabel="Vrg-UA-UU6" style="IBUITableViewCellStyleValue2" id="cOY-X4-3wp">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDatabaseFieldType" textLabel="eIB-pv-FUl" detailTextLabel="Vrg-UA-UU6" style="IBUITableViewCellStyleValue2" id="cOY-X4-3wp">
                                         <rect key="frame" x="0.0" y="66" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2084,22 +2084,13 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupSalesforce.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="hostDidEndOnExit:"/>
-                <relationship kind="action" name="passwordDidEndOnExit:"/>
-                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="nicknameDidEndOnExit:"/>
                 <relationship kind="action" name="save:"/>
-                <relationship kind="action" name="usernameDidEndOnExit:"/>
                 <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTestConnection" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="UITableViewControllerDataSourceTypes" superclassName="UITableViewController">

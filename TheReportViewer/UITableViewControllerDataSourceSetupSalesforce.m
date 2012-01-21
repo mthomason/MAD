@@ -17,12 +17,12 @@
     rsltBlk_loginComplete blockCompleteLogin;
     rsltBlk_tblNames blockCompleteTable;
     
-    __block NSDatabaseSalesForce *db;
+    NSDatabaseSalesForce *db;
 
 }
 
 @property (retain) NSMutableString *inputNickname;
-@property (retain) __block NSDatabaseSalesForce *db;
+@property (retain) NSDatabaseSalesForce *db;
 
 @end
 
@@ -41,11 +41,12 @@
 typedef void (^loginComplete)(NSDatabaseSalesForce *database, BOOL complete);
 typedef void (^tablesComplete)(NSDatabaseSalesForce *database, NSArray *tables);
 
+/*
 tablesComplete tablesCompleteBlock = ^(NSDatabaseSalesForce *database, NSArray *tables) {
     NSLog(@"results: %@", tables);
-    //[database logout];
-    //[[self db] release];
-    //db = nil;
+    [database logout];
+    [database release];
+    database = nil;
     NSLog(@"Credentals released");
 };
 
@@ -55,7 +56,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
         [database tablesInDataseAsyc:nil completion: tablesCompleteBlock];
     }
 };
-/*
+
 loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL complete) {
     if (complete) {
         NSLog(@"Login good");
@@ -70,6 +71,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     }
 };
 */
+
 - (void)dealloc {
 
     if (db != nil) {
@@ -78,7 +80,6 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
         db = nil;
     }
     
-    [db release];
     [inputNickname release];
     [activityIndicatorTestConnection release];
     [textFieldNickname release];
@@ -89,11 +90,6 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     self = [super initWithCoder:aDecoder];
     if (self) {
         // Custom initialization
-        __block NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] init];
-        [d setDelegate: self];
-        [self setDb:d];
-        [d release];
-        
         NSMutableString *blank = [[NSMutableString alloc] initWithString:@""];
         [self setInputNickname: blank];
         [blank release];
@@ -105,11 +101,6 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        __block NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] init];
-        [d setDelegate: self];
-        [self setDb:d];
-        [d release];
-
         NSMutableString *blank = [[NSMutableString alloc] initWithString:@""];
         [self setInputNickname: blank];
         [blank release];
@@ -179,30 +170,37 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 }
 
 - (void)test:(id)sender {
-    NSLog(@"Database released");
-    //Create salesforce.com database.
-    
-    [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
-        if (complete) {
-            NSLog(@"Login good");
-            [database tablesInDataseAsyc:nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
-                
-                [tables enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSLog(@"TABLE - %@", obj);
+
+    if (![self db]) {       //Create query database file.  Make sure only created once.
+
+        NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] init];
+        [d setDelegate: self];
+        [self setDb:d];
+        [d release];
+        
+        //Create salesforce.com database.
+        ;
+        [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
+            if (complete) {
+                NSLog(@"Login good");
+                [database tablesInDataseAsyc:nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
                     
-                    [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+                    [tables enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSLog(@"TABLE - %@", obj);
                         
-                        NSLog(@"     FIELD - %@", fields);                        
+                        [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+                            
+                            NSLog(@"     FIELD - %@", fields)                        ;
+                            
+                        }];
                         
                     }];
                     
                 }];
-                
-            }];
-        }
-    }];
-    //[[self db] login: loginCompleteBlock];
-
+            }
+        }];
+    }
+    
 }
 
 - (IBAction)save:(id)sender {

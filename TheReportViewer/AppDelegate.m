@@ -3,19 +3,12 @@
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
-#import "mysql.h"
-#import "GC_MYSQL_BIND.h"
-//#import "my_global.h"
-//#import "MysqlConnection.h"
-//#import "MysqlConnection.h"
-//#import "MysqlFetch.h"
-//#import "Constants.h"
 #import "MNSConnection.h"
 
 @implementation AppDelegate
@@ -254,6 +247,7 @@
                 switch ([[self openReport] documentState]) {
                     case UIDocumentStateNormal: {
                         //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
+                        
                         break;
                     }
                     default:
