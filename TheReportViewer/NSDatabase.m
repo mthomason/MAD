@@ -59,14 +59,12 @@
             NSLog(@"Lets create a new file.");
             [[self managedDocumentQuery] saveToURL:applicationFileUrlWithExtention forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
                 NSLog(@"Lets call this saved files completin handler, because yeah. SUccESS: %@", success ? @"YES" : @"NO");
-                //NSLog(@"resultBlockFilePath(%@, %@)", [[self managedDocumentQuery] fileURL], success ? @"YES" : @"NO");
                 completion(success);
             }];
         } else if ([[self managedDocumentQuery] documentState] == UIDocumentStateClosed) {
             NSLog(@"Lets open this file because it's closed: %@", [self managedDocumentQuery]);
             [[self managedDocumentQuery] openWithCompletionHandler: ^(BOOL success) {
                 completion(success);
-                NSLog(@"Did call resultBlockFilePath");
             }];
         } else if ([[self managedDocumentQuery] documentState] == UIDocumentStateNormal) {
             NSLog(@"This file was already open.");

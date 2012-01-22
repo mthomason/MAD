@@ -75,26 +75,18 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 }
 
 //Init with new file name. Create and open the file at that url.
+//  Fill that file with the table names and fields names from this database.
 - (id)initNewFileWithName:(NSString *)name completion: (void (^)(BOOL success))completion {
     self = [super initNewFileWithName: name completion: ^(BOOL success) {
         if (self) {
-            resultBlockFilePathSF = completion;
-            NSLog(@"Yeah, init. 2!  Want to log that in.");
-
             switch ([[self managedDocumentQuery] documentState]) {
                 case UIDocumentStateNormal: {
-                    NSLog(@"Login");
-                    //Login to salesforce.com
                     [self login: ^(NSDatabaseSalesForce *database, BOOL complete) {
-                        NSLog(@"Yeah, init.");
-
                         if (complete) {
                             [self resetDataWithCompletionHandler:^(NSDatabaseSalesForce *database, BOOL complete) {
-                                NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
                                 completion(YES);
                             }];
                         } else {
-                            NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
                             completion(NO);
                         }
                     }];
@@ -107,20 +99,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     }];
     return self;
 }
-/*
-rsltBlk_loginComplete resultBlockLoginComplete = ^(NSDatabaseSalesForce *database, BOOL complete) {
-    NSLog(@"Yeah, init.");
-    
-    if (complete) {
-        [database resetDataWithCompletionHandler:^(NSDatabaseSalesForce *database, BOOL complete) {
-            NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
-            resultBlockFilePathSF(YES);
-        }];
-    } else {
-        NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
-        resultBlockFilePathSF(NO);
-    }
-};*/
+
 #pragma mark - Public Actions
 
 - (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
@@ -310,8 +289,8 @@ rsltBlk_loginComplete resultBlockLoginComplete = ^(NSDatabaseSalesForce *databas
     if (nil == _coordinator) {
         
         NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
-        NSString *loginDomain = [self loginDomain];
-        NSString *accountIdentifier = [self loginIdentifier];
+        NSString *loginDomain = @"login.salesforce.com";
+        NSString *accountIdentifier = @"Default";
         //here we use the login domain as part of the identifier
         //to distinguish between eg  sandbox and production credentials
         NSString *fullKeychainIdentifier = [NSString stringWithFormat:@"%@-%@-%@", appName, accountIdentifier, loginDomain];
@@ -386,7 +365,6 @@ rsltBlk_loginComplete resultBlockLoginComplete = ^(NSDatabaseSalesForce *databas
 - (void)oauthCoordinatorDidAuthenticate:(SFOAuthCoordinator *)coordinator {
     [coordinator.view removeFromSuperview];
     [[SFRestAPI sharedInstance] setCoordinator:self.coordinator];
-    NSLog(@"%@", self.resultBlockComplete);
     self.resultBlockComplete(self, YES);
 }
 

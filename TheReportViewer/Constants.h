@@ -22,6 +22,7 @@ extern NSString * const MYSQLDATABASEDATA_FILENAME;
 extern NSString * const QUERYDATA_FILENAME;
 extern NSString * const TRVDATA_FILENAME;
 
+extern NSString * const SCHEMA_PATH_EXTENSION;
 extern NSString * const TRVDATA_PATH_EXTENSION;
 extern NSString * const REPORT_PATH_EXTENSION;
 extern NSString * const TEMPLATE_PATH_EXTENSION;

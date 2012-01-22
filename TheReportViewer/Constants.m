@@ -18,23 +18,24 @@ CGFloat const ANIMATION_DURATION_NONE = 0.0000f;
 
 CGFloat const TVC_DOCUMENT_HEIGHT = 73.0000f;
 
-NSString * const UIIMAGEDOCUMENTBLANK = @"UIImageDocumentBlank";
-NSString * const APPLICATIONDATA_FILENAME = @"appdata";
-NSString * const MYSQLDATABASEDATA_FILENAME = @"mydata";
-NSString * const QUERYDATA_FILENAME = @"query";
-NSString * const TRVDATA_FILENAME = @"settings";
+NSString * const UIIMAGEDOCUMENTBLANK               = @"UIImageDocumentBlank";
+NSString * const APPLICATIONDATA_FILENAME           = @"appdata";
+NSString * const MYSQLDATABASEDATA_FILENAME         = @"mydata";
+NSString * const QUERYDATA_FILENAME                 = @"query";
+NSString * const TRVDATA_FILENAME                   = @"settings";
 
-NSString * const TRVDATA_PATH_EXTENSION = @"trvp";
-NSString * const REPORT_PATH_EXTENSION = @"trv";
-NSString * const TEMPLATE_PATH_EXTENSION = @"trvt";
+NSString * const SCHEMA_PATH_EXTENSION              = @"trvq";
+NSString * const TRVDATA_PATH_EXTENSION             = @"trvp";
+NSString * const REPORT_PATH_EXTENSION              = @"trv";
+NSString * const TEMPLATE_PATH_EXTENSION            = @"trvt";
 
-NSString * const TEMPLATES = @"Templates";
+NSString * const TEMPLATES                          = @"Templates";
 
-NSString * const NSDATABASE_USERNAME = @"username";
-NSString * const NSDATABASE_PASSWORD = @"password";
-NSString * const NSDATABASE_DATABASE = @"database";
-NSString * const NSDATABASE_PORT = @"port";
-NSString * const NSDATABASE_HOST = @"host";
+NSString * const NSDATABASE_USERNAME                = @"username";
+NSString * const NSDATABASE_PASSWORD                = @"password";
+NSString * const NSDATABASE_DATABASE                = @"database";
+NSString * const NSDATABASE_PORT                    = @"port";
+NSString * const NSDATABASE_HOST                    = @"host";
 
-NSString * const NSDATABASE_SF_OAUTH_KEY = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
-NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL = @"eda://reports.everydayapps.com/";
+NSString * const NSDATABASE_SF_OAUTH_KEY            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
+NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL  = @"eda://reports.everydayapps.com/";

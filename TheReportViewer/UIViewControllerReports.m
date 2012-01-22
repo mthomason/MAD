@@ -9,7 +9,7 @@
 #import "UIViewControllerReports.h"
 #import <CoreData/CoreData.h>
 #import "Constants.h"
-#import "NSFileManager+Common.h"
+#import "NSFileManager+Reports.h"
 
 @interface UIViewControllerReports()
 
@@ -52,8 +52,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setAvailableFilesCache: [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:REPORT_PATH_EXTENSION]];
 
+    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager reportFiles]];
+    [self setAvailableFilesCache: a];
+    [a release];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

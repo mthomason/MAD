@@ -18,7 +18,6 @@
 typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
 typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, NSArray *fields);
 typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
-//typedef void (^rsltBlk_complete)(BOOL complete);
 
 @protocol NSDatabaseSalesForceDelegate
 - (void)showWebView:(UIWebView *)view;
@@ -37,13 +36,11 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     NSString *_loginKey;
     NSString *_loginRedirectUri;
     
-    rsltBlk_tblNames resultBlockTableNames;
-    rsltBlk_fldNames resultBlockFieldNames;
-    rsltBlk_complete resultBlockComplete;
+    rsltBlk_tblNames resultBlockTableNames;     //Points to the return of the tables
+    rsltBlk_fldNames resultBlockFieldNames;     //Points to the return of the fields
+    rsltBlk_complete resultBlockComplete;       //Points to the ...
+
     NSDatabaseQueryType currentQueryType;
-    
-    rsltBlk_filePath resultBlockFilePathSF;
-        
 }
 
 @property (assign, nonatomic) IBOutlet id <NSDatabaseSalesForceDelegate> delegate;

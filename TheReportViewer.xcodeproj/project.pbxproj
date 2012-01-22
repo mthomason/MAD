@@ -109,6 +109,7 @@
 		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
 		4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
 		4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
+		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
 		4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
@@ -469,6 +470,8 @@
 		4CBFF2FA14C7E988000237D3 /* UIModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIModalViewController.h; sourceTree = "<group>"; };
 		4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIModalViewController.m; sourceTree = "<group>"; };
 		4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIModalViewController.xib; sourceTree = "<group>"; };
+		4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Reports.h"; sourceTree = "<group>"; };
+		4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Reports.m"; sourceTree = "<group>"; };
 		4CE7B76814C038AF007D0148 /* NSDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabase.h; sourceTree = "<group>"; };
 		4CE7B76914C038AF007D0148 /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabase.m; sourceTree = "<group>"; };
 		4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabaseMySql.h; sourceTree = "<group>"; };
@@ -685,6 +688,8 @@
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C00818914B745C9003DF437 /* NSFileManager+Common.h */,
 				4C00818A14B745C9003DF437 /* NSFileManager+Common.m */,
+				4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */,
+				4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */,
 			);
 			path = TheReportViewer;
 			sourceTree = "<group>";
@@ -1509,6 +1514,7 @@
 				4CA77A3314CC017E00B6832A /* UserCredentals.m in Sources */,
 				4CA77A3614CC017E00B6832A /* Database.m in Sources */,
 				4CA77A3914CC017E00B6832A /* Relationship.m in Sources */,
+				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

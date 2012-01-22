@@ -410,7 +410,7 @@
                                 <items>
                                     <barButtonItem systemItem="add" id="Ly4-gz-zla">
                                         <connections>
-                                            <segue destination="L7q-hL-LvR" kind="modal" id="pgj-T0-WiR"/>
+                                            <segue destination="L7q-hL-LvR" kind="modal" identifier="showDatabasesDrivers" id="pgj-T0-WiR"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="uAB-hm-Byd"/>
@@ -473,13 +473,13 @@
                                             <outlet property="imageThumbnail" destination="cRV-Qj-A3K" id="fGn-9R-J4V"/>
                                             <outlet property="labelH1" destination="GFe-iG-Egi" id="NXW-ij-hoS"/>
                                             <outlet property="labelH2" destination="Nlg-i1-4BM" id="yRC-Zu-Qug"/>
-                                            <segue destination="6Ud-Rv-UQO" kind="modal" id="bQK-8m-XPE"/>
+                                            <segue destination="6Ud-Rv-UQO" kind="modal" identifier="showDatabaseDetails" id="bQK-8m-XPE"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="2" id="XgY-uH-htg"/>
-                                    <outlet property="delegate" destination="2" id="u7k-Wy-fmi"/>
+                                    <outlet property="dataSource" destination="6" id="PAu-xB-MH3"/>
+                                    <outlet property="delegate" destination="6" id="Vrd-c9-JmA"/>
                                 </connections>
                             </tableView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="30g-Ln-4LG">
@@ -500,6 +500,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
                         <outlet property="delegate" destination="2" id="15"/>
+                        <outlet property="tableViewQueries" destination="gW9-un-K2H" id="MJV-G1-vXZ"/>
                     </connections>
                 </viewController>
             </objects>
@@ -604,7 +605,7 @@
                     <navigationItem key="navigationItem" id="fNz-nH-6xs"/>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="948" y="624"/>
+            <point key="canvasLocation" x="1008" y="624"/>
         </scene>
         <scene sceneID="j4g-hu-vsa">
             <objects>
@@ -1416,7 +1417,7 @@
                     </connections>
                 </navigationController>
             </objects>
-            <point key="canvasLocation" x="948" y="54"/>
+            <point key="canvasLocation" x="1008" y="54"/>
         </scene>
         <scene sceneID="na4-ko-XBw">
             <objects>
@@ -1815,7 +1816,7 @@
                     <navigationItem key="navigationItem" id="cwb-UU-Yfc">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="658-4O-Vhm">
                             <connections>
-                                <action selector="done:" destination="ZV6-4A-f9x" id="F0x-M2-1eT"/>
+                                <action selector="done:" destination="ZV6-4A-f9x" id="SEo-Tz-4w8"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Jb4-rM-RZn">
@@ -2135,6 +2136,7 @@
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="UIViewControllerObjectSelector" superclassName="UIViewController">

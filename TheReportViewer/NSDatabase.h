@@ -18,10 +18,7 @@ typedef enum {
 
 typedef void (^rsltBlk_filePath)(BOOL success);
 
-@interface NSDatabase : NSObject {
-//@private
-    rsltBlk_filePath resultBlockFilePath;
-}
+@interface NSDatabase : NSObject
 
 @property (strong, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
 
