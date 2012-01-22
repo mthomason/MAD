@@ -14,7 +14,7 @@
 @private
     NSMutableString *inputNickname;
     
-    rsltBlk_loginComplete blockCompleteLogin;
+    //rsltBlk_loginComplete blockCompleteLogin;
     rsltBlk_tblNames blockCompleteTable;
     
     NSDatabaseSalesForce *db;
@@ -174,43 +174,43 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 // This will be used as the program
 // schema.
 - (void)test:(id)sender {
-
-    if (![self db]) {       //Create query database file.  Make sure only created once.
+    NSLog(@"Test");
+    //if (![self db]) {       //Create query database file.  Make sure only created once.
 
         if ([[[self textFieldNickname] text] length] > 0) {
-            NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(NSURL *filepath, BOOL success) {
-                [d setDelegate: self];
-                [self setDb:d];
-                [d release];
-                
-                //Create salesforce.com database.
+            NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
+                NSLog(@"New File Init Was A Go!");
+                /*
+                //Create salesforce.com database name make sure it's ready to use.
+                if ([self db]) {
 
-                [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
-                    if (complete) {
-                        NSLog(@"Login good");
-                        [database tablesInDataseAsyc:nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
+                    switch ([[db managedDocumentQuery] documentState]) {
+                        case UIDocumentStateNormal: {
                             
-                            [tables enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                
-                                NSLog(@"TABLE - %@", obj);
-                                
-                                [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+                            //Login to salesforce.com
+                            [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
+                                if (complete) {
+                                    NSLog(@"Login good");
                                     
-                                    NSLog(@"     FIELD - %@", fields)                        ;
-                                    
-                                }];
-                                
+                                }
                             }];
                             
-                        }];
+                            
+                            break;
+                        }
+                        default:
+                            break;
                     }
-                }];
-                
-            }];
-        }
+                }*/
 
-    }
-    
+            }];
+
+            [d setDelegate: self];
+            [self setDb:d];
+            [d release];
+
+        }
+    //}
 }
 
 - (IBAction)save:(id)sender {

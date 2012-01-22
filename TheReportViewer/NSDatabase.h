@@ -16,11 +16,16 @@ typedef enum {
 	NSDatabaseQueryTypeVerify
 } NSDatabaseQueryType;
 
-@interface NSDatabase : NSObject
+typedef void (^rsltBlk_filePath)(BOOL success);
+
+@interface NSDatabase : NSObject {
+//@private
+    rsltBlk_filePath resultBlockFilePath;
+}
 
 @property (strong, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
 
-- (id)initNewFileWithName:(NSString *)name completion:(void (^)(NSURL *filepath, BOOL success))completion;
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
 - (id)initExistingFileWithUrl:(NSURL *)url;
 
 - (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion;

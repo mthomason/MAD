@@ -17,6 +17,12 @@
 #import "SFOAuthCredentials.h"
 #import "SFRestAPI.h"
 
+#import "Database.h"
+#import "Table.h"
+#import "Field.h"
+#import "UserCredentals.h"
+#import "Relationship.h"
+
 static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @interface NSDatabaseSalesForce (Private)
@@ -33,8 +39,12 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @synthesize currentQueryType;
 
+@synthesize resultBlockComplete, resultBlockTableNames, resultBlockFieldNames;
+
 - (void)dealloc {
-        
+    if (resultBlockComplete != nil) [resultBlockComplete release];
+    if (resultBlockTableNames != nil) [resultBlockTableNames release];
+    if (resultBlockFieldNames != nil) [resultBlockFieldNames release];
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;
@@ -56,8 +66,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 }
 
 //Init with url. Open the file at that url.
-- (id)initWithUrl:(NSURL *)url {
-    self = [super init];
+- (id)initExistingFileWithUrl:(NSURL *)url {
+    self = [super initExistingFileWithUrl:url];
     if (self) {
 
     }
@@ -65,24 +75,127 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 }
 
 //Init with new file name. Create and open the file at that url.
-- (id)initWithFileName:(NSString *)name {
-    self = [super init];
-    if (self) {
-        
-    }
+- (id)initNewFileWithName:(NSString *)name completion: (void (^)(BOOL success))completion {
+    self = [super initNewFileWithName: name completion: ^(BOOL success) {
+        if (self) {
+            resultBlockFilePathSF = completion;
+            NSLog(@"Yeah, init. 2!  Want to log that in.");
+
+            switch ([[self managedDocumentQuery] documentState]) {
+                case UIDocumentStateNormal: {
+                    NSLog(@"Login");
+                    //Login to salesforce.com
+                    [self login: ^(NSDatabaseSalesForce *database, BOOL complete) {
+                        NSLog(@"Yeah, init.");
+
+                        if (complete) {
+                            [self resetDataWithCompletionHandler:^(NSDatabaseSalesForce *database, BOOL complete) {
+                                NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
+                                completion(YES);
+                            }];
+                        } else {
+                            NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
+                            completion(NO);
+                        }
+                    }];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }];
     return self;
 }
-
+/*
+rsltBlk_loginComplete resultBlockLoginComplete = ^(NSDatabaseSalesForce *database, BOOL complete) {
+    NSLog(@"Yeah, init.");
+    
+    if (complete) {
+        [database resetDataWithCompletionHandler:^(NSDatabaseSalesForce *database, BOOL complete) {
+            NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
+            resultBlockFilePathSF(YES);
+        }];
+    } else {
+        NSLog(@"resultBlockFilePathSF: %@", resultBlockFilePathSF);
+        resultBlockFilePathSF(NO);
+    }
+};*/
 #pragma mark - Public Actions
 
+- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
+    NSLog(@"Starting data request");
+    
+    //Request data
+    
+    NSLog(@"[NSFetchRequest fetchRequestWithEntityName: @\"%@\"]", NSStringFromClass([Database class]));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([Database class])];
+
+    NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
+    NSError *error = nil;
+    NSArray *databases = [moc executeFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+    } else {
+        if (databases && [databases count] > 0) {
+            [databases enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [moc deleteObject: obj];
+            }];
+        }
+        
+        NSLog(@"What yup");
+        
+        Database *db = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([Database class])
+                                                     inManagedObjectContext: moc];
+        
+        NSLog(@"Got that DB");
+        
+        [db setName: @""];
+        [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
+            
+            NSLog(@"Got that 3");
+            [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+                NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([Table class])
+                                                               inManagedObjectContext: moc];
+                Table *t = [[Table alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
+                [t setName: obj];
+                [t setLabel: obj];
+                NSLog(@"Table: %@", obj);
+                [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
+                    [fields enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSLog(@"Table: %@", obj);
+                        NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([Field class])
+                                                                       inManagedObjectContext: moc];
+
+                        Field *f = [[Field alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
+                        [f setName:obj];
+                        [t addHasFieldsObject:f];
+                        [f release];
+                    }];
+                }];
+                [db addHasTablesObject: t];
+                [t release];
+            }];
+            NSLog(@"completion %@", completion);
+            completion(database, YES);
+            
+        }];
+    }
+
+
+}
+
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {
-    
+    NSLog(@"ww");
     [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
+    NSLog(@"zz");
     
-    resultBlockTableNames = completion;
+    self.resultBlockTableNames = completion;
+    NSLog(@"wdds");
     
     SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];
     [[SFRestAPI sharedInstance] send:request delegate:self];
+    NSLog(@"ewds");
     
 }
 
@@ -91,7 +204,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
     
-    resultBlockFieldNames = completion;
+    self.resultBlockFieldNames = completion;
     
     SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: table];    
     [[SFRestAPI sharedInstance] send:request delegate:self];
@@ -115,7 +228,6 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 - (void)request:(SFRestRequest *)request didLoadResponse:(id)jsonResponse {
     switch ([self currentQueryType]) {
         case NSDatabaseQueryTypeGetTables: {
-            
             NSDictionary *response = [jsonResponse retain];
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if ([key isEqualToString:@"sobjects"]) {
@@ -127,8 +239,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                         [table release];
                     }];
                     
-                    rsltBlk_tblNames tableNamesResultBlock = resultBlockTableNames;
-                    tableNamesResultBlock(self, records);                    
+                    self.resultBlockTableNames(self, records);                    
                     
                     [records release];
                     [tables release];
@@ -141,7 +252,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         }
         case NSDatabaseQueryTypeGetFields: {
             NSDictionary *response = [jsonResponse retain];
-            //NSLog(@"response: %@", response);
+            NSLog(@"response: %@", response);
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 //NSLog(@"Field {%@, %@}", key, obj);
                 if ([key isEqualToString:@"fields"]) {
@@ -155,8 +266,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                         [field release];
                     }];
                     
-                    rsltBlk_tblNames fieldNamesResultBlock = resultBlockFieldNames;
-                    fieldNamesResultBlock(self, records);                    
+                    self.resultBlockFieldNames(self, records);                    
                     
                     [records release];
                     [fields release];
@@ -229,7 +339,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 - (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
     //kickoff authentication
-    resultBlockLoginComplete = completion;
+    self.resultBlockComplete = completion;
+    //NSLog(@"self->resultBlockLoginComplete: %@", resultBlockLoginComplete);
     [[self coordinator] authenticate];
 }
 
@@ -240,7 +351,9 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 - (void)reAuthenticate {
     [[self coordinator] revokeAuthentication];
-    [[self coordinator] authenticate];
+    [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
+
+    }];
 }
 
 - (NSString *)getUserAgentString {
@@ -273,7 +386,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 - (void)oauthCoordinatorDidAuthenticate:(SFOAuthCoordinator *)coordinator {
     [coordinator.view removeFromSuperview];
     [[SFRestAPI sharedInstance] setCoordinator:self.coordinator];
-    resultBlockLoginComplete(self, YES);
+    NSLog(@"%@", self.resultBlockComplete);
+    self.resultBlockComplete(self, YES);
 }
 
 - (void)oauthCoordinator:(SFOAuthCoordinator *)coordinator didFailWithError:(NSError *)error {
@@ -295,14 +409,17 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         [alert show];
         [alert release];
     }
-    rsltBlk_loginComplete loginBlock = resultBlockLoginComplete;
-    loginBlock(self, NO);
+
+    self.resultBlockComplete(self, NO);
+
 }
 
 #pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self.coordinator authenticate];    
+    [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
+        
+    }];
 }
 
 @end

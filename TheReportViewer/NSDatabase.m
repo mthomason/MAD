@@ -28,7 +28,7 @@
 }
 
 //Init with new file name. Create and open the file at that url.
-- (id)initNewFileWithName:(NSString *)name completion:(void (^)(NSURL *filepath, BOOL success))completion {
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
     self = [super init];
     if (self) {
 
@@ -47,43 +47,32 @@
             ctr++;
         }
         [baseUrl release];
+
+        NSLog(@"File name: %@", name);
+        NSLog(@"URL: %@", applicationFileUrlWithExtention);
         
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
-            [[self managedDocumentQuery] openWithCompletionHandler: ^(BOOL success) {
-                if (success) {  //File opened
-                    NSLog(@"Final Path: %@", [[[self managedDocumentQuery] fileURL] absoluteString]);
-                    switch ([[self managedDocumentQuery] documentState]) {
-                        case UIDocumentStateNormal: {
-                            //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    completion([[self managedDocumentQuery] fileURL], success);
-                } else {
-                    NSLog(@"couldn’t open document at %@", @"");//applicationFileUrlWithExtention);
-                }
+        UIManagedDocumentQuery *document = [[UIManagedDocumentQuery alloc] initWithFileURL:applicationFileUrlWithExtention];
+        [self setManagedDocumentQuery: document];
+        [document release];
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
+            NSLog(@"Lets create a new file.");
+            [[self managedDocumentQuery] saveToURL:applicationFileUrlWithExtention forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+                NSLog(@"Lets call this saved files completin handler, because yeah. SUccESS: %@", success ? @"YES" : @"NO");
+                //NSLog(@"resultBlockFilePath(%@, %@)", [[self managedDocumentQuery] fileURL], success ? @"YES" : @"NO");
+                completion(success);
             }];
-        } else {
-            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
-                                  forSaveOperation: UIDocumentSaveForCreating
-                                 completionHandler: ^(BOOL success) {
-                                     if (success) {  //File created for the first time evar
-                                         switch ([[self managedDocumentQuery] documentState]) {
-                                             case UIDocumentStateNormal: {
-                                                 //NSManagedObjectContext *context = self.applicationPreferences.managedObjectContext;
-                                                 break;
-                                             }
-                                             default:
-                                                 break;
-                                         }
-                                     } else {
-                                         NSLog(@"Couldn’t create document at %@", @"");//applicationFileUrlWithExtention);
-                                     }
-                                     completion([[self managedDocumentQuery] fileURL], success);
-                                 }];
+        } else if ([[self managedDocumentQuery] documentState] == UIDocumentStateClosed) {
+            NSLog(@"Lets open this file because it's closed: %@", [self managedDocumentQuery]);
+            [[self managedDocumentQuery] openWithCompletionHandler: ^(BOOL success) {
+                completion(success);
+                NSLog(@"Did call resultBlockFilePath");
+            }];
+        } else if ([[self managedDocumentQuery] documentState] == UIDocumentStateNormal) {
+            NSLog(@"This file was already open.");
+            completion(YES);
         }
+
         [applicationFileUrlWithExtention release];
     }
     return self;

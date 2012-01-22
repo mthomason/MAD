@@ -2,7 +2,7 @@
 //  Field.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/21/12.
+//  Created by Michael Thomason on 1/22/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,11 +13,11 @@
 
 @implementation Field
 
+@dynamic id;
 @dynamic label;
 @dynamic name;
 @dynamic type;
-@dynamic id;
-@dynamic inTable;
 @dynamic inRelationships;
+@dynamic inTable;
 
 @end

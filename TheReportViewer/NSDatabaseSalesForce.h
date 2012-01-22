@@ -17,7 +17,8 @@
 
 typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
 typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, NSArray *fields);
-typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL complete);
+typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
+//typedef void (^rsltBlk_complete)(BOOL complete);
 
 @protocol NSDatabaseSalesForceDelegate
 - (void)showWebView:(UIWebView *)view;
@@ -38,9 +39,11 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
     
     rsltBlk_tblNames resultBlockTableNames;
     rsltBlk_fldNames resultBlockFieldNames;
-    rsltBlk_loginComplete resultBlockLoginComplete;
-        
+    rsltBlk_complete resultBlockComplete;
     NSDatabaseQueryType currentQueryType;
+    
+    rsltBlk_filePath resultBlockFilePathSF;
+        
 }
 
 @property (assign, nonatomic) IBOutlet id <NSDatabaseSalesForceDelegate> delegate;
@@ -52,13 +55,14 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
 @property (retain) NSString *loginKey;
 @property (retain) NSString *loginRedirectUri;
 
-/*
-@property (retain) rsltBlk_tblNames resultBlockTableNames;
-@property (retain) rsltBlk_fldNames resultBlockFieldNames;
-@property (retain) rsltBlk_loginComplete resultBlockLoginComplete;
-*/
-
 @property (assign) NSDatabaseQueryType currentQueryType;
+
+@property (nonatomic, copy) rsltBlk_complete resultBlockComplete;
+@property (nonatomic, copy) rsltBlk_tblNames resultBlockTableNames;
+@property (nonatomic, copy) rsltBlk_tblNames resultBlockFieldNames;
+
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
+- (id)initExistingFileWithUrl:(NSURL *)url;
 
 - (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
 
@@ -68,5 +72,7 @@ typedef void (^rsltBlk_loginComplete)(NSDatabaseSalesForce *database, BOOL compl
 - (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
               completion:(void (^)(NSDatabaseSalesForce *database, NSArray *fields))completion;
 - (BOOL)testConnection;
+
+- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
 
 @end

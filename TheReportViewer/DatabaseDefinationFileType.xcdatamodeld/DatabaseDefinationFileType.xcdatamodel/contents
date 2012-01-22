@@ -44,9 +44,9 @@
     </entity>
     <elements>
         <element name="Database" positionX="-126" positionY="-333" width="128" height="90"/>
-        <element name="Field" positionX="216" positionY="-324" width="128" height="90"/>
-        <element name="Table" positionX="34" positionY="-324" width="128" height="90"/>
+        <element name="Field" positionX="306" positionY="-198" width="128" height="90"/>
+        <element name="Relationship" positionX="-108" positionY="-63" width="128" height="90"/>
+        <element name="Table" positionX="54" positionY="-351" width="128" height="90"/>
         <element name="UserCredentals" positionX="-326" positionY="-351" width="128" height="240"/>
-        <element name="Relationship" positionX="-20" positionY="216" width="128" height="90"/>
     </elements>
 </model>
