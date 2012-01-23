@@ -13,6 +13,11 @@
 @synthesize delegate = _delegate;
 @synthesize scrollViewMain = _scrollViewMain;
 
+- (void)dealloc {
+    [_scrollViewMain release];
+    [super dealloc];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -48,8 +53,4 @@
     [[self delegate] viewControllerDatabaseSchemaDidFinish: self];
 }
 
-- (void)dealloc {
-    [_scrollViewMain release];
-    [super dealloc];
-}
 @end

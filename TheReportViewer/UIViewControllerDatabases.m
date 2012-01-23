@@ -118,18 +118,35 @@
             [self setTableViewControllerDataSourceTypes: popoverController];
             [popoverController setDelegate: self];
         }
+    } else if ([[segue identifier] isEqualToString:@"showQueryBuilder"]) {
+        [[segue destinationViewController] setDelegate:self];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            [self setTableViewControllerDataSourceTypes: popoverController];
+            [popoverController setDelegate: self];
+        }
     }
 }
 
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [self.delegate flipsideViewControllerDidFinish:self];
+    [[self delegate] flipsideViewControllerDidFinish: self];
 }
 
 #pragma mark - Delegates
 
 - (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated: YES];
+    } else {
+        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
+        [self setTableViewControllerDataSourceTypes: nil];
+    }
+}
+
+- (void)uIViewControllerSchemaTablesDelegateDidFinish:(UIViewControllerSchemaTables *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissModalViewControllerAnimated: YES];
     } else {
