@@ -1,5 +1,5 @@
 //
-//  UIViewControllerSchemaTables.m
+//  CoreDataTableViewController.m
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/22/12.
@@ -7,6 +7,8 @@
 //
 
 #import "UIViewControllerSchemaTables.h"
+#import "UIViewControllerSchemaAddTable.h"
+#import "UIViewControllerSchemaAddLink.h"
 #import "Constants.h"
 
 typedef enum {
@@ -40,7 +42,17 @@ typedef enum {
 @synthesize uITableViewCellOverride;
 @synthesize uITableViewCellQueryInput;
 
+@synthesize managedDocumentQuery = _managedDocumentQuery;
+
+@synthesize uIViewControllerAddTable = _uIViewControllerAddTable, uIViewControllerAddLink = _uIViewControllerAddLink;
+
+@synthesize uIViewControllerBuildQuery = _uIViewControllerBuildQuery, uIViewControllerTables = _uIViewControllerTables, uIViewControllerLinks = _uIViewControllerLinks, uIViewControllerQuery = _uIViewControllerQuery;
+
+
 - (void)dealloc {
+    [_managedDocumentQuery release];
+    [_uIViewControllerAddTable release];
+    [_uIViewControllerAddLink release];
     [_tableMetaData release];
     [tableViewQueryBuilder release];
     [super dealloc];
@@ -49,8 +61,43 @@ typedef enum {
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        // Custom initialization
+                
+        //Initalize the add table and add links views (could be lazy loaded).
+
+        //Initalize the header views
+        UIStoryboard *sb = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
+        UIViewController *vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderBuildQuery"] retain];
+        [self setUIViewControllerBuildQuery: vc];
+        [vc release];
+        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderTables"] retain];
+        for (id subview in [[vc view] subviews]) {
+            if ([subview isKindOfClass: [UIButton class]]) {
+                UIButton *button = (UIButton *)subview;
+                if (button) {
+                    [button addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+        [self setUIViewControllerTables: vc];
+        [vc release];
+        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLinks"] retain];
+        for (id subview in [[vc view] subviews]) {
+            if ([subview isKindOfClass: [UIButton class]]) {
+                UIButton *button = (UIButton *)subview;
+                if (button) {
+                    [button addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+        }
+        [self setUIViewControllerLinks: vc];
+        [vc release];
+        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderQuery"] retain];
+        [self setUIViewControllerQuery: vc];
+        [vc release];
+        [sb release];
         
+        
+        //These files define common attributes of the mostly static table.
         NSArray *sections = [[NSArray alloc] initWithObjects:
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsInstructions],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsTables],
@@ -133,10 +180,73 @@ typedef enum {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showAddTableViewController"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UIViewControllerSchemaAddTable class]]) {
+                    
+                    UIViewControllerSchemaAddTable *tvc = (UIViewControllerSchemaAddTable *)[navControl topViewController];
+                    [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                    if (tvc) {
+                        [tvc setDelegate:self];
+                    }
+                    
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Table"];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    //request.predicate = [NSPredicate predicateWithFormat:@"name like %@", @"%"];
+                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                            sectionNameKeyPath: nil
+                                                                                                     cacheName: nil];
+                    [tvc setFetchedResultsController: frc];
+                    [frc release];
+
+                }
+            }
+            
+            [navControl release];
+        }
+
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"showAddLinkViewController"]) {
+        [[segue destinationViewController] setDelegate:self];
+    }
+}
+
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
     [[self delegate] uIViewControllerSchemaTablesDelegateDidFinish: self];
+}
+
+- (void)addTable:(id)sender {
+    [self performSegueWithIdentifier: @"showAddTableViewController" sender: sender];
+}
+
+- (void)addLink:(id)sender {
+    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+}
+
+#pragma mark - Model Delegates
+
+- (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLink *)controller {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)viewControllerSchemaAddTableDidFinish:(UIViewControllerSchemaAddTable *)controller {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)viewControllerSchemaAddTableDidSelectTable:(Table *)controller {
+    [self dismissModalViewControllerAnimated:YES];
+    //FIXME: Do something here.
 }
 
 #pragma mark -
@@ -328,9 +438,26 @@ typedef enum {
  }
  */
 
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    return nil;
-//}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *results = nil;
+    switch (section) {
+        case UIViewControllerSchemaTablesSectionsInstructions:
+            results = [[[[self uIViewControllerBuildQuery] view] retain] autorelease];
+            break;
+        case UIViewControllerSchemaTablesSectionsTables:
+            results = [[[[self uIViewControllerTables] view] retain] autorelease];
+            break;
+        case UIViewControllerSchemaTablesSectionsLinks:
+            results = [[[[self uIViewControllerLinks] view] retain] autorelease];
+            break;
+        case UIViewControllerSchemaTablesSectionsSql:
+            results = [[[[self uIViewControllerQuery] view] retain] autorelease];
+            break;
+        default:
+            break;
+    }
+    return results;
+}
 
 
 #pragma mark -
@@ -352,9 +479,9 @@ typedef enum {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-/*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
- return 0.0000f;
- }*/
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 29.0000f;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat result = UITABLEVIEWCELL_HEIGHT_DEFAULT;
@@ -363,8 +490,7 @@ typedef enum {
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
     } else {
         NSDictionary *tableMetaHeight = [[self tableMetaData] objectForKey:KEY_TBL_SEC_ROW_HEIGHT];
-        if (tableMetaHeight)
-            result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
+        if (tableMetaHeight) result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
     }
     return result;
 }

@@ -694,6 +694,8 @@
                     <navigationItem key="navigationItem" id="fNz-nH-6xs"/>
                     <connections>
                         <outlet property="tableViewQueryBuilder" destination="0Le-GO-xmI" id="RhJ-CG-7zi"/>
+                        <segue destination="n4n-Sn-MmP" kind="modal" identifier="showAddTableViewController" id="Xja-Vb-I2h"/>
+                        <segue destination="bUw-df-pAe" kind="modal" identifier="showAddLinkViewController" id="idj-ud-PyC"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1104,7 +1106,7 @@
                     </navigationItem>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2046" y="1445"/>
+            <point key="canvasLocation" x="2472" y="1550"/>
         </scene>
         <scene sceneID="ELZ-ha-gxf">
             <objects>
@@ -1494,7 +1496,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2264" y="1"/>
+            <point key="canvasLocation" x="2675" y="26"/>
         </scene>
         <scene sceneID="Ccn-3q-IDa">
             <objects>
@@ -2022,6 +2024,46 @@
             </objects>
             <point key="canvasLocation" x="1944" y="-581"/>
         </scene>
+        <scene sceneID="Aby-QO-zRg">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FRV-Pt-bRy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="UIViewControllerTableHeaderTables" id="Uie-pc-4DC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sAc-h6-ZKV">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="ZVp-q4-o3V">
+                                <rect key="frame" x="274" y="0.0" width="29" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tables" lineBreakMode="tailTruncation" minimumFontSize="10" id="9Hj-YE-HNx">
+                                <rect key="frame" x="10" y="3" width="215" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <size key="shadowOffset" width="1" height="1"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.7803921568627451" green="0.78431372549019607" blue="0.792156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1008" y="1293"/>
+        </scene>
         <scene sceneID="xoV-Fn-aBA">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m57-np-sdJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2111,7 +2153,223 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2264" y="559"/>
+            <point key="canvasLocation" x="2675" y="584"/>
+        </scene>
+        <scene sceneID="X8T-uF-K8k">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cI2-WU-J1g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="UIViewControllerTableHeaderLinks" id="Fui-wT-RSQ" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="94b-cQ-BqF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="nKj-6K-1wS">
+                                <rect key="frame" x="274" y="0.0" width="29" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Links" lineBreakMode="tailTruncation" minimumFontSize="10" id="tpr-70-iHw">
+                                <rect key="frame" x="10" y="3" width="215" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <size key="shadowOffset" width="1" height="1"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.7803921568627451" green="0.78431372549019607" blue="0.792156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1008" y="1405"/>
+        </scene>
+        <scene sceneID="ohs-YM-lr2">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="41T-XW-wDu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="UIViewControllerTableHeaderQuery" id="Doo-c4-Yoa" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aOW-dY-wQ3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Query" lineBreakMode="tailTruncation" minimumFontSize="10" id="cxk-eQ-scP">
+                                <rect key="frame" x="10" y="3" width="215" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <size key="shadowOffset" width="1" height="1"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.7803921568627451" green="0.78431372549019607" blue="0.792156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1008" y="1526"/>
+        </scene>
+        <scene sceneID="uum-Nn-2rt">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UWE-0g-2mr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="UIViewControllerTableHeaderBuildQuery" id="5pn-cv-K0I" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AzP-r9-jr7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Build Query" lineBreakMode="tailTruncation" minimumFontSize="10" id="TDG-cE-1bB">
+                                <rect key="frame" x="10" y="3" width="215" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <size key="shadowOffset" width="1" height="1"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.7803921568627451" green="0.78431372549019607" blue="0.792156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1008" y="1185"/>
+        </scene>
+        <scene sceneID="dd7-QV-7gf">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Rm-04-Mi7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController definesPresentationContext="YES" id="bUw-df-pAe" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="GqL-xS-idQ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="dUM-3k-aoF" kind="relationship" relationship="rootViewController" id="T8q-gl-mPd"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="1461" y="1180"/>
+        </scene>
+        <scene sceneID="4LL-vK-QZK">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gsQ-BL-IIG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="dUM-3k-aoF" customClass="UIViewControllerSchemaAddLink" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="DPr-9C-Q5G">
+                        <rect key="frame" x="0.0" y="64" width="320" height="220"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellAddTable" textLabel="hzA-JI-gLY" style="IBUITableViewCellStyleDefault" id="ZYF-3c-Twh">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hzA-JI-gLY">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Add Link" id="cO0-pL-nCB">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="7tp-tc-OHW">
+                            <connections>
+                                <action selector="done:" destination="dUM-3k-aoF" id="uhQ-d4-WSH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1906" y="1286"/>
+        </scene>
+        <scene sceneID="gRJ-md-9uF">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Drk-ys-be5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController definesPresentationContext="YES" id="n4n-Sn-MmP" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="loR-uo-s3U">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="asI-dl-jqJ" kind="relationship" relationship="rootViewController" id="3ts-DI-COz"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="1461" y="624"/>
+        </scene>
+        <scene sceneID="vSz-bH-FXK">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N1b-i4-klr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="asI-dl-jqJ" customClass="UIViewControllerSchemaAddTable" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cLL-Ca-fL1">
+                        <rect key="frame" x="0.0" y="64" width="320" height="200"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellTableName" textLabel="sr3-0C-HdK" style="IBUITableViewCellStyleDefault" id="iy6-iy-ZkR">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sr3-0C-HdK">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="asI-dl-jqJ" id="6FI-oq-P1s"/>
+                            <outlet property="delegate" destination="asI-dl-jqJ" id="ZUW-hy-0be"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Add Table" id="mA4-mP-NAS">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="CRZ-zt-jeM">
+                            <connections>
+                                <action selector="done:" destination="asI-dl-jqJ" id="Tri-1l-hzo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1906" y="732"/>
         </scene>
     </scenes>
     <resources>
@@ -2122,6 +2380,190 @@
         <image name="UIImageStacks20.png" width="20" height="20"/>
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="CoreDataTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CoreDataTableViewController.h"/>
+        </class>
+        <class className="ReportDesignerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReportDesignerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="info:"/>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewDashboard"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UIScrollViewDashboard" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewDashboard.h"/>
+        </class>
+        <class className="UITableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellInstruction" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
+        </class>
+        <class className="UITableViewCellOverride" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
+        </class>
+        <class className="UITableViewCellQueryInput" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
+        </class>
+        <class className="UITableViewCellQueryLink" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
+        </class>
+        <class className="UITableViewCellStoreItemReportTemplate" superclassName="UITableViewCellDocument">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellTableName" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
+        </class>
+        <class className="UITableViewControllerDataSourceSetupMySql" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupMySql.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hostDidEndOnExit:"/>
+                <relationship kind="action" name="passwordDidEndOnExit:"/>
+                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="usernameDidEndOnExit:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTestConnection" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerDataSourceSetupSalesforce" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupSalesforce.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="nicknameDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerDataSourceTypes" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceTypes.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerSettings" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabaseSchema" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSchema.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabaseSources" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSources.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerDatabases" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabases.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerObjectSelector" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerObjectSelector.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerReports" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerReports.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewDocuments" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerSchemaAddLink" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLink.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerSchemaAddTable" superclassName="CoreDataTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddTable.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerSchemaTables" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaTables.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="uITableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="uITableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="uITableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="uITableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+            </relationships>
+        </class>
+        <class className="UIViewControllerStoreTemplates" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerStoreTemplates.h"/>
+        </class>
+        <class className="UIViewControllerTemplateSelector" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerTemplateSelector.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

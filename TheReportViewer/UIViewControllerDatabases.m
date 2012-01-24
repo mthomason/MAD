@@ -13,6 +13,7 @@
 @interface UIViewControllerDatabases()
 
 @property (retain) NSMutableArray *availableFilesCache;
+@property (assign) NSUInteger selectedDocument;             //The document inside the array to to open.
 
 @end
 
@@ -23,6 +24,7 @@
 @synthesize uITableViewCellDocument;
 @synthesize tableViewQueries = _tableViewQueries;
 @synthesize availableFilesCache = _availableFilesCache;
+@synthesize selectedDocument = _selectedDocument;
 
 - (void)dealloc {
     [_availableFilesCache release];
@@ -119,7 +121,26 @@
             [popoverController setDelegate: self];
         }
     } else if ([[segue identifier] isEqualToString:@"showQueryBuilder"]) {
+        
         [[segue destinationViewController] setDelegate:self];
+        
+        if ([self selectedDocument] < [[self availableFilesCache] count]) {
+            
+            NSURL *url = [[[self availableFilesCache] objectAtIndex: [self selectedDocument]] retain];
+            UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
+            
+            if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+                [mdq openWithCompletionHandler:^(BOOL success) {
+                    if (success) {
+                        [[segue destinationViewController] setManagedDocumentQuery: mdq];
+                    } else {
+                        NSLog(@"couldn’t open document at %@", url);
+                    }
+                }];
+            }
+            [mdq release];
+            [url release];
+        }
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
@@ -273,6 +294,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self setSelectedDocument: [indexPath row]];
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -232,7 +232,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     [[self view] addSubview: view];
 }
 
-#pragma mark - Table view delegate
+#pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: YES];

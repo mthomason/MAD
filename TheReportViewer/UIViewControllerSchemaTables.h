@@ -12,6 +12,8 @@
 #import "UITableViewCellQueryLink.h"
 #import "UITableViewCellOverride.h"
 #import "UITableViewCellQueryInput.h"
+#import "UIViewControllerSchemaAddTable.h"
+#import "UIViewControllerSchemaAddLink.h"
 
 @class UIViewControllerSchemaTables;
 
@@ -20,7 +22,10 @@
 @end
 
 @interface UIViewControllerSchemaTables : UIViewController
-    <UITableViewDataSource, UITableViewDelegate>
+    <UITableViewDataSource, UITableViewDelegate,
+        UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate>
+
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
 @property (retain) NSDictionary *tableMetaData;
 
@@ -34,6 +39,16 @@
 @property (assign, nonatomic) IBOutlet UITableViewCellOverride      *uITableViewCellOverride;
 @property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *uITableViewCellQueryInput;
 
+@property (retain, nonatomic) UIViewController             *uIViewControllerBuildQuery;
+@property (retain, nonatomic) UIViewController             *uIViewControllerTables;
+@property (retain, nonatomic) UIViewController             *uIViewControllerLinks;
+@property (retain, nonatomic) UIViewController             *uIViewControllerQuery;
+
+@property (retain, nonatomic) UIViewController             *uIViewControllerAddTable;
+@property (retain, nonatomic) UIViewController             *uIViewControllerAddLink;
+
 - (IBAction)done:(id)sender;
+- (IBAction)addTable:(id)sender;
+- (IBAction)addLink:(id)sender;
 
 @end
