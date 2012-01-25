@@ -22,8 +22,10 @@
 @end
 
 @interface UIViewControllerSchemaTables : UIViewController
-    <UITableViewDataSource, UITableViewDelegate,
+    <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate,
         UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate>
+
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
@@ -46,6 +48,9 @@
 
 @property (retain, nonatomic) UIViewController             *uIViewControllerAddTable;
 @property (retain, nonatomic) UIViewController             *uIViewControllerAddLink;
+
+@property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+@property BOOL debug;
 
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;

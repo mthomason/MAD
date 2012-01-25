@@ -131,11 +131,11 @@
             
             if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
                 [mdq openWithCompletionHandler:^(BOOL success) {
-                    if (success) {
+                    //if (success) {
                         [[segue destinationViewController] setManagedDocumentQuery: mdq];
-                    } else {
-                        NSLog(@"couldn’t open document at %@", url);
-                    }
+                    //} else {
+                    //    NSLog(@"Could not open document %@.", url);
+                    //}
                 }];
             }
             [mdq release];

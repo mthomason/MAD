@@ -10,6 +10,11 @@
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLink.h"
 #import "Constants.h"
+#import "RptqDocument.h"
+#import "RptqTable.h"
+#import "RptqQueryTables.h"
+#import "RptqQuery.h"
+
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
@@ -18,18 +23,25 @@ typedef enum {
     UIViewControllerSchemaTablesSectionsSql = 3
 } UIViewControllerSchemaTablesSections;
 
-@interface UIViewControllerSchemaTables() {
-@private
-    NSArray *tableSectionTitles;
-}
+#pragma mark - Private Category
+
+@interface UIViewControllerSchemaTables()
+
+@property (nonatomic) BOOL beganUpdates;
 
 @property (retain) NSArray *tableSectionTitles;
 
 @end
 
+#pragma mark - Main
+
 @implementation UIViewControllerSchemaTables
 
-@synthesize tableSectionTitles;
+@synthesize debug = _debug;
+@synthesize fetchedResultsController = _fetchedResultsController;
+@synthesize suspendAutomaticTrackingOfChangesInManagedObjectContext = _suspendAutomaticTrackingOfChangesInManagedObjectContext;
+
+@synthesize beganUpdates = _beganUpdates, tableSectionTitles = _tableSectionTitles;
 
 @synthesize tableMetaData = _tableMetaData;
 
@@ -50,7 +62,9 @@ typedef enum {
 
 
 - (void)dealloc {
+    [_fetchedResultsController release];
     [_managedDocumentQuery release];
+    [_tableSectionTitles release];
     [_uIViewControllerAddTable release];
     [_uIViewControllerAddLink release];
     [_tableMetaData release];
@@ -63,7 +77,7 @@ typedef enum {
     if (self) {
                 
         //Initalize the add table and add links views (could be lazy loaded).
-
+        
         //Initalize the header views
         UIStoryboard *sb = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
         UIViewController *vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderBuildQuery"] retain];
@@ -185,7 +199,7 @@ typedef enum {
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showAddTableViewController"]) {
+    if ([[segue identifier] isEqualToString: @"showAddTableViewController"]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -197,17 +211,22 @@ typedef enum {
                         [tvc setDelegate:self];
                     }
                     
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Table"];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    //request.predicate = [NSPredicate predicateWithFormat:@"name like %@", @"%"];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsController: frc];
-                    [frc release];
-
+                    NSError *error = nil;
+                    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+                    if (!error) {
+                        NSLog(@"TableResults %@", tablesResults);
+                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                              managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                                sectionNameKeyPath: nil
+                                                                                                         cacheName: nil];
+                        [tvc setFetchedResultsController: frc];
+                        [frc release];
+                    } else {
+                        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+                    }
                 }
             }
             
@@ -244,9 +263,30 @@ typedef enum {
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)viewControllerSchemaAddTableDidSelectTable:(Table *)controller {
+- (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissModalViewControllerAnimated:YES];
     //FIXME: Do something here.
+    if ([self managedDocumentQuery]) {
+        
+        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+        NSError *error = nil;
+        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
+        if ([documents count] > 0) {
+            RptqDocument *doc = [documents objectAtIndex: 0];
+            
+            NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+            RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+            [tab setName: [table name]];
+            [[doc hasQuery] addHasQueryTablesObject:tab];
+            [tab release];
+        }
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+            if (!success) {
+                NSLog(@"FAIL");
+            }
+        }];
+    }
+
 }
 
 #pragma mark -
@@ -393,7 +433,7 @@ typedef enum {
     if (numberOfRows < 0) {
         switch (section) {
             case UIViewControllerSchemaTablesSectionsTables: {
-                numberOfRows = 0;   //FIXME: NUMBER Tables Count
+                numberOfRows = [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
                 break;
             }
             case UIViewControllerSchemaTablesSectionsLinks: {
@@ -559,5 +599,114 @@ typedef enum {
  
  }
  */
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        [self.tableViewQueryBuilder beginUpdates];
+        self.beganUpdates = YES;
+    }
+}
+
+- (void)controller: (NSFetchedResultsController *)controller
+  didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex: (NSUInteger)sectionIndex
+	 forChangeType: (NSFetchedResultsChangeType)type {
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [self.tableViewQueryBuilder insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [self.tableViewQueryBuilder deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
+    }
+}
+
+
+- (void)controller: (NSFetchedResultsController *)controller
+   didChangeObject: (id)anObject
+	   atIndexPath: (NSIndexPath *)indexPath
+	 forChangeType: (NSFetchedResultsChangeType)type
+	  newIndexPath: (NSIndexPath *)newIndexPath {		
+    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self.tableViewQueryBuilder reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeMove:
+                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    if (self.beganUpdates) [self.tableViewQueryBuilder endUpdates];
+}
+
+- (void)endSuspensionOfUpdatesDueToContextChanges {
+    _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
+}
+
+- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(BOOL)suspend {
+    if (suspend) {
+        _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
+    } else {
+        [self performSelector:@selector(endSuspensionOfUpdatesDueToContextChanges) withObject:0 afterDelay:0];
+    }
+}
+
+#pragma mark - Fetching
+
+- (void)performFetch {
+    if (self.fetchedResultsController) {
+        if (self.fetchedResultsController.fetchRequest.predicate) {
+            if (self.debug) NSLog(@"[%@ %@] fetching %@ with predicate: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), self.fetchedResultsController.fetchRequest.entityName, self.fetchedResultsController.fetchRequest.predicate);
+        } else {
+            if (self.debug) NSLog(@"[%@ %@] fetching all %@ (i.e., no predicate)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), self.fetchedResultsController.fetchRequest.entityName);
+        }
+        NSError *error = nil;
+        [self.fetchedResultsController performFetch:&error];
+        if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
+    } else {
+        if (self.debug) NSLog(@"[%@ %@] no NSFetchedResultsController (yet?)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    }
+    [self.tableViewQueryBuilder reloadData];
+}
+
+- (void)setFetchedResultsController:(NSFetchedResultsController *)newfrc {
+    NSFetchedResultsController *oldfrc = _fetchedResultsController;
+    if (newfrc != oldfrc) {
+        [_fetchedResultsController release];
+        [newfrc retain];
+        _fetchedResultsController = newfrc;
+        newfrc.delegate = self;
+        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {
+            self.title = newfrc.fetchRequest.entity.name;
+        }
+        if (newfrc) {
+            NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
+            if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
+            [self performFetch];
+        } else {
+            if (self.debug) NSLog(@"[%@ %@] reset to nil", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+            [self.tableViewQueryBuilder reloadData];
+        }
+    }
+}
 
 @end

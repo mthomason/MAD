@@ -8,6 +8,8 @@
 
 #import "NSDatabaseSalesForce.h"
 
+#import "RptqDocument.h"
+
 #import "Constants.h"
 
 #import "UIManagedDocumentQuery.h"
@@ -17,11 +19,12 @@
 #import "SFOAuthCredentials.h"
 #import "SFRestAPI.h"
 
-#import "Database.h"
-#import "Table.h"
-#import "Field.h"
-#import "UserCredentals.h"
-#import "Relationship.h"
+#import "RptqDatabase.h"
+#import "RptqTable.h"
+#import "RptqField.h"
+#import "RptqQuery.h"
+#import "RptqUserCredentals.h"
+#import "RptqRelationship.h"
 
 static NSString * const kSFMobileSDKVersion = @"1.0";
 
@@ -76,7 +79,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 //Init with new file name. Create and open the file at that url.
 //  Fill that file with the table names and fields names from this database.
-- (id)initNewFileWithName:(NSString *)name completion: (void (^)(BOOL success))completion {
+- (id)initNewFileWithName: (NSString *)name completion: (void (^)(BOOL success))completion {
     self = [super initNewFileWithName: name completion: ^(BOOL success) {
         if (self) {
             switch ([[self managedDocumentQuery] documentState]) {
@@ -103,79 +106,82 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 #pragma mark - Public Actions
 
 - (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
-    NSLog(@"Starting data request");
     
-    //Request data
-    
-    NSLog(@"[NSFetchRequest fetchRequestWithEntityName: @\"%@\"]", NSStringFromClass([Database class]));
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([Database class])];
-
+    //Fetch the existing object model.
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
     NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
     NSError *error = nil;
-    NSArray *databases = [moc executeFetchRequest:request error:&error];
-    if (error) {
-        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-    } else {
-        if (databases && [databases count] > 0) {
-            [databases enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    NSArray *documents = [moc executeFetchRequest:request error:&error];
+
+    if (!error) {
+
+        //Delete any contents of the existing object modal.
+        if (documents && [documents count] > 0) {
+            [documents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 [moc deleteObject: obj];
             }];
         }
+
+        RptqDocument *doc = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocument class])
+                                                          inManagedObjectContext: moc];
+        NSLog(@"hasDatabaseSchema: %@", [doc hasDatabaseSchema]);
+        [doc setHasDatabaseSchema: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class])
+                                                         inManagedObjectContext: moc]];
+        NSLog(@"hasDatabaseSchema: %@", [doc hasDatabaseSchema]);
+        NSLog(@"hasQuery: %@", [doc hasQuery]);
+        [doc setHasQuery: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class])
+                                                        inManagedObjectContext: moc]];
+        NSLog(@"hasQuery: %@", [doc hasQuery]);
         
-        NSLog(@"What yup");
-        
-        Database *db = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([Database class])
-                                                     inManagedObjectContext: moc];
-        
-        NSLog(@"Got that DB");
-        
-        [db setName: @""];
+        [doc.hasDatabaseSchema setName: @"Schema Name"];
+
         [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
             
-            NSLog(@"Got that 3");
+            //NSLog(@"Got that 3");
             [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-                NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([Table class])
+                
+                NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
                                                                inManagedObjectContext: moc];
-                Table *t = [[Table alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
+                RptqTable *t = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
                 [t setName: obj];
                 [t setLabel: obj];
-                NSLog(@"Table: %@", obj);
+                //NSLog(@"Table: %@", t);
                 [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
                     [fields enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        NSLog(@"Table: %@", obj);
-                        NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([Field class])
+                        NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class])
                                                                        inManagedObjectContext: moc];
 
-                        Field *f = [[Field alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
-                        [f setName:obj];
-                        [t addHasFieldsObject:f];
+                        RptqField *f = [[RptqField alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
+                        [f setName: obj];
+                        [t addHasFieldsObject: f];
                         [f release];
+                        NSLog(@"Table: %@", t);                        
                     }];
+                    
                 }];
-                [db addHasTablesObject: t];
+                [doc.hasDatabaseSchema addHasTablesObject: t];
                 [t release];
             }];
-            NSLog(@"completion %@", completion);
+            //NSLog(@"completion %@", completion);
+            [self save];
             completion(database, YES);
             
         }];
+    } else {
+        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
     }
 
 
 }
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {
-    NSLog(@"ww");
+
     [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
-    NSLog(@"zz");
-    
-    self.resultBlockTableNames = completion;
-    NSLog(@"wdds");
-    
+
+    [self setResultBlockTableNames: completion];
+
     SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeGlobal];
     [[SFRestAPI sharedInstance] send:request delegate:self];
-    NSLog(@"ewds");
-    
 }
 
 - (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
@@ -231,7 +237,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         }
         case NSDatabaseQueryTypeGetFields: {
             NSDictionary *response = [jsonResponse retain];
-            NSLog(@"response: %@", response);
+            //NSLog(@"response: %@", response);
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 //NSLog(@"Field {%@, %@}", key, obj);
                 if ([key isEqualToString:@"fields"]) {

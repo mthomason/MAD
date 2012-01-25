@@ -99,16 +99,22 @@
 		4C8F7CE314CEC12B006171A7 /* UIViewControllerSchemaAddTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */; };
 		4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
+		4C8F7DE714D0082F006171A7 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DE614D0082F006171A7 /* RptqDatabase.m */; };
+		4C8F7DEA14D0082F006171A7 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DE914D0082F006171A7 /* RptqUserCredentals.m */; };
+		4C8F7DED14D00830006171A7 /* RptqQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DEC14D00830006171A7 /* RptqQueryPredicate.m */; };
+		4C8F7DF014D00830006171A7 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DEF14D00830006171A7 /* RptqQuery.m */; };
+		4C8F7DF314D00831006171A7 /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DF214D00831006171A7 /* RptqDocument.m */; };
+		4C8F7DF614D00831006171A7 /* RptqQueryFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DF514D00831006171A7 /* RptqQueryFields.m */; };
+		4C8F7DF914D00832006171A7 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DF814D00832006171A7 /* RptqQuerySort.m */; };
+		4C8F7DFC14D00832006171A7 /* RptqTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DFB14D00832006171A7 /* RptqTable.m */; };
+		4C8F7DFF14D00832006171A7 /* RptqField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7DFE14D00832006171A7 /* RptqField.m */; };
+		4C8F7E0214D00832006171A7 /* RptqQueryTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7E0114D00832006171A7 /* RptqQueryTables.m */; };
+		4C8F7E0514D00832006171A7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7E0414D00832006171A7 /* RptqRelationship.m */; };
 		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
 		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
 		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
-		4CA77A2D14CC017E00B6832A /* Table.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA77A2C14CC017E00B6832A /* Table.m */; };
-		4CA77A3014CC017E00B6832A /* Field.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA77A2F14CC017E00B6832A /* Field.m */; };
-		4CA77A3314CC017E00B6832A /* UserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA77A3214CC017E00B6832A /* UserCredentals.m */; };
-		4CA77A3614CC017E00B6832A /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA77A3514CC017E00B6832A /* Database.m */; };
-		4CA77A3914CC017E00B6832A /* Relationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA77A3814CC017E00B6832A /* Relationship.m */; };
 		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
 		4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
 		4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
@@ -460,8 +466,30 @@
 		4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddTable.m; sourceTree = "<group>"; };
 		4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLink.h; sourceTree = "<group>"; };
 		4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLink.m; sourceTree = "<group>"; };
-		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
+		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
+		4C8F7DE514D0082F006171A7 /* RptqDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabase.h; sourceTree = "<group>"; };
+		4C8F7DE614D0082F006171A7 /* RptqDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabase.m; sourceTree = "<group>"; };
+		4C8F7DE814D0082F006171A7 /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
+		4C8F7DE914D0082F006171A7 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
+		4C8F7DEB14D00830006171A7 /* RptqQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryPredicate.h; sourceTree = "<group>"; };
+		4C8F7DEC14D00830006171A7 /* RptqQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryPredicate.m; sourceTree = "<group>"; };
+		4C8F7DEE14D00830006171A7 /* RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuery.h; sourceTree = "<group>"; };
+		4C8F7DEF14D00830006171A7 /* RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuery.m; sourceTree = "<group>"; };
+		4C8F7DF114D00831006171A7 /* RptqDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocument.h; sourceTree = "<group>"; };
+		4C8F7DF214D00831006171A7 /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocument.m; sourceTree = "<group>"; };
+		4C8F7DF414D00831006171A7 /* RptqQueryFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryFields.h; sourceTree = "<group>"; };
+		4C8F7DF514D00831006171A7 /* RptqQueryFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryFields.m; sourceTree = "<group>"; };
+		4C8F7DF714D00832006171A7 /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuerySort.h; sourceTree = "<group>"; };
+		4C8F7DF814D00832006171A7 /* RptqQuerySort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuerySort.m; sourceTree = "<group>"; };
+		4C8F7DFA14D00832006171A7 /* RptqTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqTable.h; sourceTree = "<group>"; };
+		4C8F7DFB14D00832006171A7 /* RptqTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqTable.m; sourceTree = "<group>"; };
+		4C8F7DFD14D00832006171A7 /* RptqField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqField.h; sourceTree = "<group>"; };
+		4C8F7DFE14D00832006171A7 /* RptqField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqField.m; sourceTree = "<group>"; };
+		4C8F7E0014D00832006171A7 /* RptqQueryTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryTables.h; sourceTree = "<group>"; };
+		4C8F7E0114D00832006171A7 /* RptqQueryTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryTables.m; sourceTree = "<group>"; };
+		4C8F7E0314D00832006171A7 /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqRelationship.h; sourceTree = "<group>"; };
+		4C8F7E0414D00832006171A7 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
 		4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipLink.m; sourceTree = "<group>"; };
 		4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSchema.h; sourceTree = "<group>"; };
 		4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
@@ -471,16 +499,6 @@
 		4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipTable.m; sourceTree = "<group>"; };
 		4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipLink.h; sourceTree = "<group>"; };
 		4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIViewEntityRelationshipTable.xib; sourceTree = "<group>"; };
-		4CA77A2B14CC017E00B6832A /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
-		4CA77A2C14CC017E00B6832A /* Table.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Table.m; sourceTree = "<group>"; };
-		4CA77A2E14CC017E00B6832A /* Field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Field.h; sourceTree = "<group>"; };
-		4CA77A2F14CC017E00B6832A /* Field.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Field.m; sourceTree = "<group>"; };
-		4CA77A3114CC017E00B6832A /* UserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCredentals.h; sourceTree = "<group>"; };
-		4CA77A3214CC017E00B6832A /* UserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCredentals.m; sourceTree = "<group>"; };
-		4CA77A3414CC017E00B6832A /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
-		4CA77A3514CC017E00B6832A /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
-		4CA77A3714CC017E00B6832A /* Relationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Relationship.h; sourceTree = "<group>"; };
-		4CA77A3814CC017E00B6832A /* Relationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Relationship.m; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupSalesforce.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceSetupSalesforce.m; sourceTree = "<group>"; };
 		4CBFF2FA14C7E988000237D3 /* UIModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIModalViewController.h; sourceTree = "<group>"; };
@@ -662,7 +680,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C8779CC14CA9605005CBE6F /* Auto Generated */,
+				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
 				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
 				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
@@ -972,16 +990,28 @@
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
 			isa = PBXGroup;
 			children = (
-				4CA77A3714CC017E00B6832A /* Relationship.h */,
-				4CA77A3814CC017E00B6832A /* Relationship.m */,
-				4CA77A3414CC017E00B6832A /* Database.h */,
-				4CA77A3514CC017E00B6832A /* Database.m */,
-				4CA77A3114CC017E00B6832A /* UserCredentals.h */,
-				4CA77A3214CC017E00B6832A /* UserCredentals.m */,
-				4CA77A2E14CC017E00B6832A /* Field.h */,
-				4CA77A2F14CC017E00B6832A /* Field.m */,
-				4CA77A2B14CC017E00B6832A /* Table.h */,
-				4CA77A2C14CC017E00B6832A /* Table.m */,
+				4C8F7E0314D00832006171A7 /* RptqRelationship.h */,
+				4C8F7E0414D00832006171A7 /* RptqRelationship.m */,
+				4C8F7E0014D00832006171A7 /* RptqQueryTables.h */,
+				4C8F7E0114D00832006171A7 /* RptqQueryTables.m */,
+				4C8F7DFD14D00832006171A7 /* RptqField.h */,
+				4C8F7DFE14D00832006171A7 /* RptqField.m */,
+				4C8F7DFA14D00832006171A7 /* RptqTable.h */,
+				4C8F7DFB14D00832006171A7 /* RptqTable.m */,
+				4C8F7DF714D00832006171A7 /* RptqQuerySort.h */,
+				4C8F7DF814D00832006171A7 /* RptqQuerySort.m */,
+				4C8F7DF414D00831006171A7 /* RptqQueryFields.h */,
+				4C8F7DF514D00831006171A7 /* RptqQueryFields.m */,
+				4C8F7DF114D00831006171A7 /* RptqDocument.h */,
+				4C8F7DF214D00831006171A7 /* RptqDocument.m */,
+				4C8F7DEE14D00830006171A7 /* RptqQuery.h */,
+				4C8F7DEF14D00830006171A7 /* RptqQuery.m */,
+				4C8F7DEB14D00830006171A7 /* RptqQueryPredicate.h */,
+				4C8F7DEC14D00830006171A7 /* RptqQueryPredicate.m */,
+				4C8F7DE814D0082F006171A7 /* RptqUserCredentals.h */,
+				4C8F7DE914D0082F006171A7 /* RptqUserCredentals.m */,
+				4C8F7DE514D0082F006171A7 /* RptqDatabase.h */,
+				4C8F7DE614D0082F006171A7 /* RptqDatabase.m */,
 			);
 			name = "Auto Generated";
 			sourceTree = "<group>";
@@ -1297,6 +1327,14 @@
 			path = SBJson;
 			sourceTree = "<group>";
 		};
+		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
+			isa = PBXGroup;
+			children = (
+				4C8779CC14CA9605005CBE6F /* Auto Generated */,
+			);
+			name = Rptq;
+			sourceTree = "<group>";
+		};
 		4CA0637D14BAD1D20025009E /* Templates */ = {
 			isa = PBXGroup;
 			children = (
@@ -1448,6 +1486,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
 			};
 			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "TheReportViewer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1575,11 +1614,6 @@
 				4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
 				4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */,
 				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */,
-				4CA77A2D14CC017E00B6832A /* Table.m in Sources */,
-				4CA77A3014CC017E00B6832A /* Field.m in Sources */,
-				4CA77A3314CC017E00B6832A /* UserCredentals.m in Sources */,
-				4CA77A3614CC017E00B6832A /* Database.m in Sources */,
-				4CA77A3914CC017E00B6832A /* Relationship.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* UIViewControllerSchemaTables.m in Sources */,
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
@@ -1591,6 +1625,17 @@
 				4C8F7CE314CEC12B006171A7 /* UIViewControllerSchemaAddTable.m in Sources */,
 				4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLink.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
+				4C8F7DE714D0082F006171A7 /* RptqDatabase.m in Sources */,
+				4C8F7DEA14D0082F006171A7 /* RptqUserCredentals.m in Sources */,
+				4C8F7DED14D00830006171A7 /* RptqQueryPredicate.m in Sources */,
+				4C8F7DF014D00830006171A7 /* RptqQuery.m in Sources */,
+				4C8F7DF314D00831006171A7 /* RptqDocument.m in Sources */,
+				4C8F7DF614D00831006171A7 /* RptqQueryFields.m in Sources */,
+				4C8F7DF914D00832006171A7 /* RptqQuerySort.m in Sources */,
+				4C8F7DFC14D00832006171A7 /* RptqTable.m in Sources */,
+				4C8F7DFF14D00832006171A7 /* RptqField.m in Sources */,
+				4C8F7E0214D00832006171A7 /* RptqQueryTables.m in Sources */,
+				4C8F7E0514D00832006171A7 /* RptqRelationship.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

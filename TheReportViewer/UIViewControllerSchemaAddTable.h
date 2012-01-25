@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
 #import "UIManagedDocumentQuery.h"
-#import "Table.h"
+#import "RptqTable.h"
 
 @class UIViewControllerSchemaAddTable;
 
 @protocol UIViewControllerSchemaAddTableDelegate
 - (void)viewControllerSchemaAddTableDidFinish:(UIViewControllerSchemaAddTable *)controller;
-- (void)viewControllerSchemaAddTableDidSelectTable:(Table *)controller;
+- (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)controller;
 @end
 
 @interface UIViewControllerSchemaAddTable : UITableViewControllerCoreDataResults

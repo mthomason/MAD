@@ -179,32 +179,8 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 
         if ([[[self textFieldNickname] text] length] > 0) {
             NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
-                NSLog(@"New File Init Was A Go!");
-                /*
-                //Create salesforce.com database name make sure it's ready to use.
-                if ([self db]) {
-
-                    switch ([[db managedDocumentQuery] documentState]) {
-                        case UIDocumentStateNormal: {
-                            
-                            //Login to salesforce.com
-                            [[self db] login: ^(NSDatabaseSalesForce *database, BOOL complete) {
-                                if (complete) {
-                                    NSLog(@"Login good");
-                                    
-                                }
-                            }];
-                            
-                            
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                }*/
 
             }];
-
             [d setDelegate: self];
             [self setDb:d];
             [d release];

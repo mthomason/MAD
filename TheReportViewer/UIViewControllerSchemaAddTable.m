@@ -8,7 +8,10 @@
 
 #import "UIViewControllerSchemaAddTable.h"
 #import "UITableViewControllerCoreDataResults.h"
-#import "Table.h"
+#import "RptqDocument.h"
+#import "RptqTable.h"
+#import "RptqQuery.h"
+#import "RptqQueryTables.h"
 
 @interface UIViewControllerSchemaAddTable ()
 
@@ -56,23 +59,11 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    // Custom initialization
-    if ([self managedDocumentQuery]) {
-        
-        /*
-        NSFetchRequest *r = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([Table class])];
-        NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
-        NSError *error = nil;
-        NSArray *t = [moc executeFetchRequest:r error:&error];
-        NSLog(@"Tables: %@", t);
-        */
-        
-    }
-
+    [super viewWillAppear: animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    
+    [super viewDidAppear: animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -98,7 +89,7 @@
     
     NSLog(@"Index path: {%d, %d}", [indexPath section], [indexPath row]);
     //NSLog(@"[self fetchedResultsController]: %@", [self fetchedResultsController]);
-    Table *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [tablea name]];
     [tablea release];
     
@@ -110,7 +101,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    Table *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerSchemaAddTableDidSelectTable: tablea];
     [tablea release];
 }

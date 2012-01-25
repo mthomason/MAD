@@ -27,4 +27,6 @@ typedef void (^rsltBlk_filePath)(BOOL success);
 
 - (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion;
 
+- (void)save;
+
 @end
