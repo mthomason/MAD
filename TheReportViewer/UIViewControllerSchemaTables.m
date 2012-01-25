@@ -278,13 +278,19 @@ typedef enum {
             RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
             [tab setName: [table name]];
             [[doc hasQuery] addHasQueryTablesObject:tab];
+            NSLog(@"Added query table name %@", [tab name]);
             [tab release];
+            
+            [[self tableViewQueryBuilder] reloadData];
+            
+            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+                if (!success) {
+                    NSLog(@"FAIL");
+                } else {
+                    NSLog(@"SAVE");
+                }
+            }];
         }
-        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-            if (!success) {
-                NSLog(@"FAIL");
-            }
-        }];
     }
 
 }
@@ -339,6 +345,9 @@ typedef enum {
                 result = [self uITableViewCellTableName];
                 [self setUITableViewCellTableName:nil];
             }
+            RptqQueryTables *tablea = [[[self fetchedResultsController] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            [[result textLabel] setText: [tablea name]];
+            [tablea release];
             break;
         }
         case UIViewControllerSchemaTablesSectionsLinks: {
@@ -433,7 +442,7 @@ typedef enum {
     if (numberOfRows < 0) {
         switch (section) {
             case UIViewControllerSchemaTablesSectionsTables: {
-                numberOfRows = [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
+                numberOfRows = [[[self.fetchedResultsController sections] objectAtIndex: 0] numberOfObjects];
                 break;
             }
             case UIViewControllerSchemaTablesSectionsLinks: {
@@ -616,11 +625,11 @@ typedef enum {
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         switch(type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableViewQueryBuilder insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder insertSections:[NSIndexSet indexSetWithIndex:sectionIndex + 1] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeDelete:
-                [self.tableViewQueryBuilder deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex + 1] withRowAnimation:UITableViewRowAnimationFade];
                 break;
         }
     }
@@ -631,24 +640,28 @@ typedef enum {
    didChangeObject: (id)anObject
 	   atIndexPath: (NSIndexPath *)indexPath
 	 forChangeType: (NSFetchedResultsChangeType)type
-	  newIndexPath: (NSIndexPath *)newIndexPath {		
+	  newIndexPath: (NSIndexPath *)newIndexPath {
+    
+    NSIndexPath *adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row] inSection:[indexPath section] + 1];
+    NSIndexPath *adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row] inSection:[newIndexPath section] + 1];
+    
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         switch(type) {
             case NSFetchedResultsChangeInsert:
-                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:adjustedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeDelete:
-                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:adjustedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [self.tableViewQueryBuilder reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder reloadRowsAtIndexPaths:[NSArray arrayWithObject:adjustedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeMove:
-                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder deleteRowsAtIndexPaths:[NSArray arrayWithObject:adjustedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableViewQueryBuilder insertRowsAtIndexPaths:[NSArray arrayWithObject:adjustedNewIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
         }
     }

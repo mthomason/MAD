@@ -9,6 +9,7 @@
 #import "UIViewControllerDatabases.h"
 #import "UITableViewCellDocument.h"
 #import "NSFileManager+Reports.h"
+#import "RptqQueryTables.h"
 
 @interface UIViewControllerDatabases()
 
@@ -124,20 +125,41 @@
         
         [[segue destinationViewController] setDelegate:self];
         
+        
+        
+        UIViewControllerSchemaTables *tvc = (UIViewControllerSchemaTables *)[segue destinationViewController];
+        [tvc setDelegate: self];
+        
+        
         if ([self selectedDocument] < [[self availableFilesCache] count]) {
             
             NSURL *url = [[[self availableFilesCache] objectAtIndex: [self selectedDocument]] retain];
+
             UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
-            
+            [tvc setManagedDocumentQuery: mdq];
             if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-                [mdq openWithCompletionHandler:^(BOOL success) {
-                    //if (success) {
-                        [[segue destinationViewController] setManagedDocumentQuery: mdq];
-                    //} else {
-                    //    NSLog(@"Could not open document %@.", url);
-                    //}
+                [[tvc managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
+
                 }];
             }
+            
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            NSError *error = nil;
+            NSArray *tablesResults = [[[tvc managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+            if (!error) {
+                NSLog(@"TableResults %@", tablesResults);
+                NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                      managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                        sectionNameKeyPath: nil
+                                                                                                 cacheName: nil];
+                [tvc setFetchedResultsController: frc];
+                [frc release];
+            } else {
+                NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+            }
+
             [mdq release];
             [url release];
         }
