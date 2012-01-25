@@ -265,7 +265,7 @@ typedef enum {
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissModalViewControllerAnimated:YES];
-    //FIXME: Do something here.
+
     if ([self managedDocumentQuery]) {
         
         NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
@@ -273,23 +273,27 @@ typedef enum {
         NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
         if ([documents count] > 0) {
             RptqDocument *doc = [documents objectAtIndex: 0];
-            
-            NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-            RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-            [tab setName: [table name]];
-            [[doc hasQuery] addHasQueryTablesObject:tab];
-            NSLog(@"Added query table name %@", [tab name]);
-            [tab release];
-            
-            [[self tableViewQueryBuilder] reloadData];
-            
-            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                if (!success) {
-                    NSLog(@"FAIL");
-                } else {
-                    NSLog(@"SAVE");
-                }
-            }];
+            if (doc) {
+                NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+                RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+                [tab setName: [table name]];
+                [[doc hasQuery] addHasQueryTablesObject:tab];
+                NSLog(@"Added query table name %@", [tab name]);
+                [tab release];
+
+                [[self tableViewQueryBuilder] reloadData];
+                
+                NSLog(@"[[self managedDocumentQuery] fileURL]: %@", [[self managedDocumentQuery] fileURL]);
+                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+                    if (!success) {
+                        NSLog(@"FAIL");
+                    } else {
+                        NSLog(@"SAVE");
+                    }
+                }];
+            } else {
+                NSLog(@"Doc is nil");
+            }
         }
     }
 
@@ -325,7 +329,6 @@ typedef enum {
     switch (section) {
         case UIViewControllerSchemaTablesSectionsInstructions: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
-            //UITableViewCellInstruction *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             if (!result) {
                 UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellInstruction" bundle:nil];
@@ -337,7 +340,6 @@ typedef enum {
         }
         case UIViewControllerSchemaTablesSectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
-            //UITableViewCellTableName *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             if (!result) {
                 UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellTableName" bundle:nil];
@@ -352,7 +354,6 @@ typedef enum {
         }
         case UIViewControllerSchemaTablesSectionsLinks: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
-            //UITableViewCellQueryLink *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             if (!result) {
                 UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryLink" bundle:nil];
@@ -366,7 +367,6 @@ typedef enum {
             switch (row) {
                 case 0: {
                     static NSString *MyIdentifierUITableViewCellOverride = @"UITableViewCellOverride";
-                    //UITableViewCellOverride *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellOverride];
                     result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellOverride];
                     if (!result) {
                         UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellOverride" bundle:nil];
@@ -378,7 +378,6 @@ typedef enum {
                 }
                 default: {
                     static NSString *MyIdentifierUITableViewCellQueryInput = @"UITableViewCellQueryInput";
-                    //UITableViewCellQueryInput *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellQueryInput];
                     result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellQueryInput];
                     if (!result) {
                         UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryInput" bundle:nil];

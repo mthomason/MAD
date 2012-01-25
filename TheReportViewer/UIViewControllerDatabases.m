@@ -123,45 +123,50 @@
         }
     } else if ([[segue identifier] isEqualToString:@"showQueryBuilder"]) {
         
-        [[segue destinationViewController] setDelegate:self];
-        
+        NSUInteger row = 0;
+        if ([sender isKindOfClass:[UITableViewCellDocument class]]) {
+            UITableViewCellDocument *senderCell = sender;
+            row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
+        }
         
         
         UIViewControllerSchemaTables *tvc = (UIViewControllerSchemaTables *)[segue destinationViewController];
         [tvc setDelegate: self];
         
         
-        if ([self selectedDocument] < [[self availableFilesCache] count]) {
+        if (row < [[self availableFilesCache] count]) {
             
-            NSURL *url = [[[self availableFilesCache] objectAtIndex: [self selectedDocument]] retain];
+            NSURL *url = [[[self availableFilesCache] objectAtIndex: row] retain];
+            NSLog(@"URL: %@", url);
 
             UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
             [tvc setManagedDocumentQuery: mdq];
             if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
                 [[tvc managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
 
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    NSManagedObjectContext *moc = [[tvc managedDocumentQuery] managedObjectContext];
+                    NSError *error = nil;
+                    NSArray *tablesResults = [moc executeFetchRequest:request error:&error];
+                    if (!error) {
+                        NSLog(@"TableResults %@", tablesResults);
+                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                                sectionNameKeyPath: nil
+                                                                                                         cacheName: nil];
+                        [tvc setFetchedResultsController: frc];
+                        [frc release];
+                    } else {
+                        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+                    }
+                    
+                    [mdq release];
+                    [url release];
+                    
                 }];
             }
-            
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            NSError *error = nil;
-            NSArray *tablesResults = [[[tvc managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-            if (!error) {
-                NSLog(@"TableResults %@", tablesResults);
-                NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                      managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                        sectionNameKeyPath: nil
-                                                                                                 cacheName: nil];
-                [tvc setFetchedResultsController: frc];
-                [frc release];
-            } else {
-                NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-            }
-
-            [mdq release];
-            [url release];
         }
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
