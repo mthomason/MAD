@@ -7,16 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIManagedDocumentQuery.h"
+#import "UITableViewControllerCoreDataResults.h"
 
 @class UIViewControllerSchemaAddLink;
 
 @protocol UIViewControllerSchemaAddLinkDelegate
-- (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLink *)controller;
+- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document;
 @end
 
-@interface UIViewControllerSchemaAddLink : UITableViewController
+@interface UIViewControllerSchemaAddLink : UITableViewControllerCoreDataResults
+    <UITableViewDataSource, UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerSchemaAddLinkDelegate> delegate;
+
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
 - (IBAction)done:(id)sender;
 

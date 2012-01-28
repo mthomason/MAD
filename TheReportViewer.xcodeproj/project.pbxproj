@@ -42,6 +42,10 @@
 		4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
 		4C384E4214B29789007B4F48 /* UIViewControllerReports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* UIViewControllerReports.m */; };
 		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C507B1114D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */; };
+		4C507B1214D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */; };
+		4C507B1314D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */; };
+		4C507B1414D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */; };
 		4C5F02D414B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
 		4C5F02D814B9755400C49BE9 /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
 		4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
@@ -115,6 +119,7 @@
 		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
 		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
+		4CB12C9E14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
 		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
 		4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
 		4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
@@ -197,6 +202,14 @@
 		4C49C8BA14C56F35001B3298 /* libmysqlclient.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.dylib; sourceTree = "<group>"; };
 		4C49C8BB14C56F35001B3298 /* libmysqlclient_r.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient_r.dylib; sourceTree = "<group>"; };
 		4C49C8BC14C56F35001B3298 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkFirstField.h; sourceTree = "<group>"; };
+		4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkFirstField.m; sourceTree = "<group>"; };
+		4C507B0B14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkJoinType.h; sourceTree = "<group>"; };
+		4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkJoinType.m; sourceTree = "<group>"; };
+		4C507B0D14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkSecondField.h; sourceTree = "<group>"; };
+		4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkSecondField.m; sourceTree = "<group>"; };
+		4C507B0F14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkSecondTable.h; sourceTree = "<group>"; };
+		4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkSecondTable.m; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvApplicationData.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentTrvApplicationData.m; sourceTree = "<group>"; };
 		4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvFileData.h; sourceTree = "<group>"; };
@@ -499,6 +512,8 @@
 		4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipTable.m; sourceTree = "<group>"; };
 		4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipLink.h; sourceTree = "<group>"; };
 		4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIViewEntityRelationshipTable.xib; sourceTree = "<group>"; };
+		4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerLinkBuilder.h; sourceTree = "<group>"; };
+		4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerLinkBuilder.m; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupSalesforce.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceSetupSalesforce.m; sourceTree = "<group>"; };
 		4CBFF2FA14C7E988000237D3 /* UIModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIModalViewController.h; sourceTree = "<group>"; };
@@ -582,7 +597,6 @@
 				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
 				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
 				4CA0638214BAD3D40025009E /* Views */,
-				4CA0638014BAD3030025009E /* Tools */,
 				4C00818314B738A2003DF437 /* Main */,
 				4CA0637D14BAD1D20025009E /* Templates */,
 				4C00816E14B6C4F8003DF437 /* Images */,
@@ -601,12 +615,6 @@
 				4CBFF2FA14C7E988000237D3 /* UIModalViewController.h */,
 				4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */,
 				4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */,
-				4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */,
-				4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */,
-				4C8F7CE114CEC12B006171A7 /* UIViewControllerSchemaAddTable.h */,
-				4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */,
-				4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLink.h */,
-				4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -669,10 +677,8 @@
 		4C00818314B738A2003DF437 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E4014B29789007B4F48 /* UIViewControllerReports.h */,
-				4C384E4114B29789007B4F48 /* UIViewControllerReports.m */,
-				4C384E4314B29789007B4F48 /* UIViewControllerDatabases.h */,
-				4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */,
+				4C507B0414D0687D00DE67E3 /* RPTQ */,
+				4C507B0014D067E800DE67E3 /* RPTT */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -836,6 +842,65 @@
 				4C49C8BB14C56F35001B3298 /* libmysqlclient_r.dylib */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		4C507B0014D067E800DE67E3 /* RPTT */ = {
+			isa = PBXGroup;
+			children = (
+				4CA0638014BAD3030025009E /* Tools */,
+				4C384E4014B29789007B4F48 /* UIViewControllerReports.h */,
+				4C384E4114B29789007B4F48 /* UIViewControllerReports.m */,
+			);
+			name = RPTT;
+			sourceTree = "<group>";
+		};
+		4C507B0214D067EE00DE67E3 /* Query Builder */ = {
+			isa = PBXGroup;
+			children = (
+				4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */,
+				4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */,
+				4C507B0614D07A5E00DE67E3 /* Add Table */,
+				4C507B0814D07A8200DE67E3 /* Add Relationship */,
+			);
+			name = "Query Builder";
+			sourceTree = "<group>";
+		};
+		4C507B0414D0687D00DE67E3 /* RPTQ */ = {
+			isa = PBXGroup;
+			children = (
+				4C384E4314B29789007B4F48 /* UIViewControllerDatabases.h */,
+				4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */,
+				4C507B0214D067EE00DE67E3 /* Query Builder */,
+			);
+			name = RPTQ;
+			sourceTree = "<group>";
+		};
+		4C507B0614D07A5E00DE67E3 /* Add Table */ = {
+			isa = PBXGroup;
+			children = (
+				4C8F7CE114CEC12B006171A7 /* UIViewControllerSchemaAddTable.h */,
+				4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */,
+			);
+			name = "Add Table";
+			sourceTree = "<group>";
+		};
+		4C507B0814D07A8200DE67E3 /* Add Relationship */ = {
+			isa = PBXGroup;
+			children = (
+				4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */,
+				4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */,
+				4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLink.h */,
+				4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */,
+				4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */,
+				4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */,
+				4C507B0F14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.h */,
+				4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */,
+				4C507B0D14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.h */,
+				4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */,
+				4C507B0B14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.h */,
+				4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */,
+			);
+			name = "Add Relationship";
 			sourceTree = "<group>";
 		};
 		4C5F02D914B9A42200C49BE9 /* TemplateFiles */ = {
@@ -1636,6 +1701,11 @@
 				4C8F7DFF14D00832006171A7 /* RptqField.m in Sources */,
 				4C8F7E0214D00832006171A7 /* RptqQueryTables.m in Sources */,
 				4C8F7E0514D00832006171A7 /* RptqRelationship.m in Sources */,
+				4C507B1114D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m in Sources */,
+				4C507B1214D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m in Sources */,
+				4C507B1314D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m in Sources */,
+				4C507B1414D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m in Sources */,
+				4CB12C9E14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

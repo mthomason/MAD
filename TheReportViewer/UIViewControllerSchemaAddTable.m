@@ -7,15 +7,8 @@
 //
 
 #import "UIViewControllerSchemaAddTable.h"
-#import "UITableViewControllerCoreDataResults.h"
-#import "RptqDocument.h"
 #import "RptqTable.h"
-#import "RptqQuery.h"
 #import "RptqQueryTables.h"
-
-@interface UIViewControllerSchemaAddTable ()
-
-@end
 
 @implementation UIViewControllerSchemaAddTable
 
@@ -27,43 +20,11 @@
     [super dealloc];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidUnload {
+    [self setManagedDocumentQuery:nil];
     [super viewDidUnload];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear: animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear: animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -87,8 +48,6 @@
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
     }
     
-    NSLog(@"Index path: {%d, %d}", [indexPath section], [indexPath row]);
-    //NSLog(@"[self fetchedResultsController]: %@", [self fetchedResultsController]);
     RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [tablea name]];
     [tablea release];
@@ -104,10 +63,6 @@
     RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerSchemaAddTableDidSelectTable: tablea];
     [tablea release];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return NSLocalizedString(@"Tables", @"Tables");
 }
 
 @end

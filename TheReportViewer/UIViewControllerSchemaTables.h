@@ -14,6 +14,7 @@
 #import "UITableViewCellQueryInput.h"
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLink.h"
+#import "UITableViewControllerLinkBuilder.h"
 
 @class UIViewControllerSchemaTables;
 
@@ -23,7 +24,8 @@
 
 @interface UIViewControllerSchemaTables : UIViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate,
-        UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate>
+        UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate,
+        UITableViewControllerLinkBuilderDelegate>
 
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsController;
 

@@ -42,7 +42,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @synthesize currentQueryType;
 
-@synthesize resultBlockComplete, resultBlockTableNames, resultBlockFieldNames;
+@synthesize resultBlockComplete, resultBlockTableNames;
+@synthesize resultBlockFieldNames;
 
 - (void)dealloc {
     if (resultBlockComplete != nil) [resultBlockComplete release];
@@ -140,27 +141,37 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             //NSLog(@"Got that 3");
             [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
                 
+                __block NSDictionary *tableDictionary = obj;
+                //NSLog(@"tableDictionary %@", [tableDictionary class]);
                 NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
                                                                inManagedObjectContext: moc];
                 RptqTable *t = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
-                [t setName: obj];
-                [t setLabel: obj];
-                //NSLog(@"Table: %@", t);
-                [database fieldsInDatabase:nil andTable:obj completion:^(NSDatabaseSalesForce *database, NSArray *fields) {
-                    [fields enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString *tableName = [[tableDictionary objectForKey: @"name"] retain];
+                [t setName: tableName];
+                [t setLabel: tableName];
+                [doc.hasDatabaseSchema addHasTablesObject: t];
+                //__block RptqTable *tableForBlock = t;
+                //NSLog(@"TableNameBefore: %@", [t name]);
+                //__block NSString *tableName = obj;
+                [database fieldsInDatabase:nil andTable:t completion:^(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields) {
+                    [fields retain];
+                    NSLog(@"Database Table %@ has %d fields.", [tableName name], [fields count]);
+                    [fields enumerateObjectsUsingBlock:^(id objFieldName, NSUInteger idx, BOOL *stop) {
+                        NSDictionary *fieldDictionary = [objFieldName retain];
                         NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class])
                                                                        inManagedObjectContext: moc];
 
                         RptqField *f = [[RptqField alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
-                        [f setName: obj];
-                        [t addHasFieldsObject: f];
+                        [f setName: [fieldDictionary objectForKey:@"name"]];
+                        if (tableName) [tableName addHasFieldsObject: f];
+                        //NSLog(@"Table: %@ \t\t\t\t%@", [t name], [f name]);
                         [f release];
-                        NSLog(@"Table: %@", t);                        
+                        [fieldDictionary release];
                     }];
-                    
+                    [fields release];
                 }];
-                [doc.hasDatabaseSchema addHasTablesObject: t];
                 [t release];
+                [tableName release];
             }];
             //NSLog(@"completion %@", completion);
             [self save];
@@ -184,14 +195,14 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     [[SFRestAPI sharedInstance] send:request delegate:self];
 }
 
-- (void)fieldsInDatabase:(NSString *)database andTable:(NSString *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, NSArray *fields))completion {
+- (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
+              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields))completion {
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
     
     self.resultBlockFieldNames = completion;
     
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: table];    
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType: [table name]];    
     [[SFRestAPI sharedInstance] send:request delegate:self];
     
 }
@@ -217,17 +228,19 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if ([key isEqualToString:@"sobjects"]) {
                     NSArray *tables = [obj retain];
+                    /*
                     NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [tables count]];
                     [tables enumerateObjectsUsingBlock:^(id objt, NSUInteger idx, BOOL *stop) {
+                        NSLog(@"Tables: %@", objt);
                         NSDictionary *table = [objt retain];
                         [records addObject:[NSString stringWithString: [table objectForKey:@"name"]]];
                         [table release];
                     }];
-                    
-                    self.resultBlockTableNames(self, records);                    
-                    
+                    self.resultBlockTableNames(self, records);
                     [records release];
-                    [tables release];
+                    */
+                    self.resultBlockTableNames(self, tables);
+                    [tables autorelease];
                 }
                 
             }];
@@ -237,26 +250,51 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         }
         case NSDatabaseQueryTypeGetFields: {
             NSDictionary *response = [jsonResponse retain];
-            //NSLog(@"response: %@", response);
+            NSLog(@"requestrequest: %@", request);
+            NSString *tableName = nil;
+            //The path should be of the form /v23.0/sobjects/TaskPriority/describe. 
+            NSArray *pathComponents = [[[request path] componentsSeparatedByString: @"/"] retain];
+            NSLog(@"pathComponents %@", pathComponents);
+            if ([pathComponents count] > 1) {
+                tableName = [[[pathComponents objectAtIndex: ([pathComponents count] - 2)] retain] autorelease];
+            }
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 //NSLog(@"Field {%@, %@}", key, obj);
                 if ([key isEqualToString:@"fields"]) {
                     NSArray *fields = [obj retain];
+ 
+                    /*
                     NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [fields count]];
                     [fields enumerateObjectsUsingBlock:^(id objf, NSUInteger idx, BOOL *stop) {
                         NSDictionary *field = [objf retain];
-                        //NSLog(@"%@", field);                        
+                        NSLog(@"%@", field);                        
                         //NSLog(@"%@", [field objectForKey:@"name"]);
                         [records addObject:[NSString stringWithString: [field objectForKey:@"name"]]];
                         [field release];
                     }];
-                    
                     self.resultBlockFieldNames(self, records);                    
-                    
                     [records release];
-                    [fields release];
+                     */
+                    NSFetchRequest *getTableWithName = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    [getTableWithName setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", tableName];
+                    [getTableWithName setPredicate: predicate];
+                    NSError *error = nil;
+                    NSArray *results = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:getTableWithName error:&error];
+                    RptqTable *origionalTable = nil;
+                    if (!error) {
+                        if (results) {
+                            if ([results count] > 0) {
+                                origionalTable = [[[results objectAtIndex: 0] retain] autorelease];
+                            }
+                        }
+                    }
+                    self.resultBlockFieldNames(self, origionalTable, fields);
+                    [fields autorelease];
                 }
             }];
+            [pathComponents release];
             [response release];
             break;
         }
@@ -311,7 +349,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         creds.redirectUri = @"eda://reports.everydayapps.com/user/login";
         
         SFOAuthCoordinator *coord = [[SFOAuthCoordinator alloc] initWithCredentials:creds];
-        coord.scopes = [NSSet setWithObjects:@"visualforce", @"api",nil]; 
+        coord.scopes = [NSSet setWithObjects: @"api",nil]; 
         
         coord.delegate = self;
         [self setCoordinator: coord];

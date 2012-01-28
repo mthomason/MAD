@@ -1,0 +1,72 @@
+//
+//  UIViewControllerSchemaAddLink.m
+//  TheReportViewer
+//
+//  Created by Michael Thomason on 1/24/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import "UIViewControllerSchemaAddLinkSecondField.h"
+#import "RptqTable.h"
+#import "RptqField.h"
+#import "RptqQueryTables.h"
+#import "UIViewControllerSchemaAddLinkJoinType.h"
+
+@implementation UIViewControllerSchemaAddLinkSecondField
+
+@synthesize delegate = _delegate;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
+
+- (void)dealloc {
+    [_managedDocumentQuery release];
+    [super dealloc];
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidUnload {
+    [self setManagedDocumentQuery:nil];
+    [super viewDidUnload];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - Actions
+
+- (IBAction)done:(id)sender {
+
+}
+
+#pragma mark -
+#pragma mark Table View Data Source Protocol
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"UITableViewCellSecondField";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: CellIdentifier] autorelease];
+    }
+    
+    RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[cell textLabel] setText: [field name]];
+    [[cell detailTextLabel] setText: [[field inTable] name]];
+    [field release];
+    
+    return cell;
+}
+
+#pragma mark -
+#pragma mark Table View Delegate Protocol
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: [field name] from:[self managedDocumentQuery]];
+    [field release];
+}
+
+@end

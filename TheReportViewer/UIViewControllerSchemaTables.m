@@ -9,6 +9,7 @@
 #import "UIViewControllerSchemaTables.h"
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLink.h"
+//#import "UITableViewControllerLinkBuilder.h"
 #import "Constants.h"
 #import "RptqDocument.h"
 #import "RptqTable.h"
@@ -229,13 +230,35 @@ typedef enum {
                     }
                 }
             }
-            
             [navControl release];
         }
-
-        [[segue destinationViewController] setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showAddLinkViewController"]) {
-        [[segue destinationViewController] setDelegate:self];
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerLinkBuilder class]]) {
+                    
+                    UITableViewControllerLinkBuilder *tvc = (UITableViewControllerLinkBuilder *)[navControl topViewController];
+                    [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                    if (tvc) {
+                        [tvc setDelegate:self];
+                    }
+                    
+                    /*
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                            sectionNameKeyPath: nil
+                                                                                                     cacheName: nil];
+                    [tvc setFetchedResultsController: frc];
+                    [frc release];
+                     */
+                }
+            }
+            [navControl release];
+        }
     }
 }
 

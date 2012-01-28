@@ -7,30 +7,31 @@
 //
 
 #import "UIViewControllerSchemaAddLink.h"
+#import "RptqTable.h"
+#import "RptqField.h"
+#import "RptqQueryTables.h"
+#import "UIViewControllerSchemaAddLinkFirstField.h"
 
 @implementation UIViewControllerSchemaAddLink
 
 @synthesize delegate = _delegate;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
+    [_managedDocumentQuery release];
     [super dealloc];
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) { }
     return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidUnload {
+    [self setManagedDocumentQuery:nil];
     [super viewDidUnload];
 }
 
@@ -40,8 +41,64 @@
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-    [[self delegate] viewControllerSchemaAddLinkDidFinish: self];
+- (IBAction)done:(id)sender { }
+
+#pragma mark -
+#pragma mark Table View Data Source Protocol
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"UITableViewCellFirstTable";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
+    }
+    
+    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[cell textLabel] setText: [tablea name]];
+    [[cell detailTextLabel] setText: @""];
+    [tablea release];
+/*
+    switch ([self sectionCounter]) {
+        case 0: {
+            break;
+        }
+        case 1: {
+            RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            [[cell textLabel] setText: [field name]];
+            [[cell detailTextLabel] setText: [[field inTable] name]];
+            [field release];
+            break;
+        }
+        case 2: {
+            RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            [[cell textLabel] setText: [tablea name]];
+            [[cell detailTextLabel] setText: @""];
+            [tablea release];
+            break;
+        }
+        case 3: {
+            RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            [[cell textLabel] setText: [field name]];
+            [[cell detailTextLabel] setText: [[field inTable] name]];
+            [field release];
+            break;
+        }
+        default:
+            break;
+    }
+    */
+    return cell;
+}
+
+#pragma mark -
+#pragma mark Table View Delegate Protocol
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[self delegate] viewControllerSchemaAddLinkDidFinishWith:[tablea name] from:[self managedDocumentQuery]];
+    [tablea release];
 }
 
 @end
