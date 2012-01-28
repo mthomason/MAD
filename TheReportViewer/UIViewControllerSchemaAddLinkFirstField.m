@@ -33,37 +33,6 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-/*
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showSecondTableInput"]) {
-        NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
-        if ([[segue destinationViewController] isKindOfClass: [UIViewControllerSchemaAddLinkSecondTable class]]) {
-            UIViewControllerSchemaAddLinkSecondTable *vcFf = [segue destinationViewController];
-            if (vcFf) {                
-
-                [vcFf setFirstTableName: [self firstTableName]];
-                [vcFf setFirstFieldName: [self firstFieldName]];
-
-                [vcFf setManagedDocumentQuery: [self managedDocumentQuery]];
-                
-                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self firstTableName]];
-                //request.predicate = predicate;
-                request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                      managedObjectContext: [[self fetchedResultsController] managedObjectContext]
-                                                                                        sectionNameKeyPath: nil
-                                                                                                 cacheName: nil];
-                [vcFf setFetchedResultsController: frc];
-                
-                [frc release];
-            }
-        }
-    }
-}
-*/
-
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {

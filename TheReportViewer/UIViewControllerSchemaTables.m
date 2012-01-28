@@ -278,6 +278,13 @@ typedef enum {
 
 #pragma mark - Model Delegates
 
+- (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable
+                                            firstFieldName:(NSString *)firstFieldName
+                                           secondTableName:(NSString *)secondTableName
+                                           secondFieldName:(NSString *)secondFieldName {
+    
+}
+
 - (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLink *)controller {
     [self dismissModalViewControllerAnimated:YES];
 }

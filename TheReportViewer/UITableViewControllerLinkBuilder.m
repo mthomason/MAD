@@ -103,7 +103,6 @@
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    //NSLog(@"Request: %@", request);
                     NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[self managedDocumentQuery] managedObjectContext]);
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
@@ -123,8 +122,8 @@
                     
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self firstTableName]];
-                    //request.predicate = predicate;
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self firstTableName]];
+                    request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[vcFf managedDocumentQuery] managedObjectContext]

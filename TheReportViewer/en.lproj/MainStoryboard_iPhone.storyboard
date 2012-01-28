@@ -2496,6 +2496,7 @@
                                 <action selector="done:" destination="dUM-3k-aoF" id="uhQ-d4-WSH"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="V4a-hk-cx7"/>
                     </navigationItem>
                     <connections>
                         <outlet property="tableViewCellFieldOne" destination="qoy-f5-eOd" id="3yF-Qw-cQn"/>

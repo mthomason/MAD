@@ -40,6 +40,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
 
+@synthesize schemaName = _schemaName;
+
 @synthesize currentQueryType;
 
 @synthesize resultBlockComplete, resultBlockTableNames;
@@ -52,7 +54,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;
-
+    [_schemaName release];
     [_loginDomain release];
     [_loginIdentifier release];
     [_loginKey release];
@@ -83,6 +85,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 - (id)initNewFileWithName: (NSString *)name completion: (void (^)(BOOL success))completion {
     self = [super initNewFileWithName: name completion: ^(BOOL success) {
         if (self) {
+            [self setSchemaName: name];
             switch ([[self managedDocumentQuery] documentState]) {
                 case UIDocumentStateNormal: {
                     [self login: ^(NSDatabaseSalesForce *database, BOOL complete) {
@@ -111,11 +114,11 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     //Fetch the existing object model.
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
     NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
+
     NSError *error = nil;
     NSArray *documents = [moc executeFetchRequest:request error:&error];
 
     if (!error) {
-
         //Delete any contents of the existing object modal.
         if (documents && [documents count] > 0) {
             [documents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -123,57 +126,56 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             }];
         }
 
-        RptqDocument *doc = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocument class])
+        RptqDocument *rptqDocumentHead = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocument class])
                                                           inManagedObjectContext: moc];
-        NSLog(@"hasDatabaseSchema: %@", [doc hasDatabaseSchema]);
-        [doc setHasDatabaseSchema: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class])
+        [rptqDocumentHead setHasDatabaseSchema: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class])
                                                          inManagedObjectContext: moc]];
-        NSLog(@"hasDatabaseSchema: %@", [doc hasDatabaseSchema]);
-        NSLog(@"hasQuery: %@", [doc hasQuery]);
-        [doc setHasQuery: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class])
+        [rptqDocumentHead setHasQuery: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class])
                                                         inManagedObjectContext: moc]];
-        NSLog(@"hasQuery: %@", [doc hasQuery]);
+        [rptqDocumentHead.hasDatabaseSchema setName: [self schemaName]];
         
-        [doc.hasDatabaseSchema setName: @"Schema Name"];
-
         [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
             
-            //NSLog(@"Got that 3");
             [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-                
-                __block NSDictionary *tableDictionary = obj;
-                //NSLog(@"tableDictionary %@", [tableDictionary class]);
+                NSLog(@"Table object: %@", obj);
+                NSDictionary *tableDictionary = [obj retain];
                 NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
                                                                inManagedObjectContext: moc];
-                RptqTable *t = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
-                NSString *tableName = [[tableDictionary objectForKey: @"name"] retain];
-                [t setName: tableName];
-                [t setLabel: tableName];
-                [doc.hasDatabaseSchema addHasTablesObject: t];
-                //__block RptqTable *tableForBlock = t;
-                //NSLog(@"TableNameBefore: %@", [t name]);
-                //__block NSString *tableName = obj;
-                [database fieldsInDatabase:nil andTable:t completion:^(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields) {
+                
+                RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
+                [rptqTable setName: [tableDictionary objectForKey: @"name"]];
+                [rptqTable setLabel: [tableDictionary objectForKey: @"label"]];
+                [rptqTable setQueryable: [NSNumber numberWithBool: [[tableDictionary objectForKey: @"queryable"] boolValue]]];
+                [rptqTable setLabel_plural: [tableDictionary objectForKey: @"labelPlural"]];
+                [tableDictionary release];
+
+                [rptqDocumentHead.hasDatabaseSchema addHasTablesObject: rptqTable];
+
+                [database fieldsInDatabase:nil andTable:rptqTable completion:^(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields) {
                     [fields retain];
-                    NSLog(@"Database Table %@ has %d fields.", [tableName name], [fields count]);
-                    [fields enumerateObjectsUsingBlock:^(id objFieldName, NSUInteger idx, BOOL *stop) {
-                        NSDictionary *fieldDictionary = [objFieldName retain];
+                    [fields enumerateObjectsUsingBlock:^(id objField, NSUInteger idx, BOOL *stop) {
+                        NSLog(@"Field object: %@", objField);
+                        NSDictionary *fieldDictionary = [objField retain];
                         NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class])
                                                                        inManagedObjectContext: moc];
-
-                        RptqField *f = [[RptqField alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
-                        [f setName: [fieldDictionary objectForKey:@"name"]];
-                        if (tableName) [tableName addHasFieldsObject: f];
-                        //NSLog(@"Table: %@ \t\t\t\t%@", [t name], [f name]);
-                        [f release];
+                        RptqField *rptqField = [[RptqField alloc] initWithEntity: fieldEntity
+                                              insertIntoManagedObjectContext: moc];
+                        [rptqField setLabel: [fieldDictionary objectForKey:@"label"]];
+                        [rptqField setName: [fieldDictionary objectForKey:@"name"]];
+                        [rptqField setType: [fieldDictionary objectForKey:@"type"]];
                         [fieldDictionary release];
+
+                        if (originTable) [originTable addHasFieldsObject: rptqField];
+
+                        [rptqField release];
                     }];
                     [fields release];
+
                 }];
-                [t release];
-                [tableName release];
+
+                [rptqTable release];
             }];
-            //NSLog(@"completion %@", completion);
+            
             [self save];
             completion(database, YES);
             
@@ -196,7 +198,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 }
 
 - (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields))completion {
+              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion {
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
     
@@ -228,17 +230,6 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if ([key isEqualToString:@"sobjects"]) {
                     NSArray *tables = [obj retain];
-                    /*
-                    NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [tables count]];
-                    [tables enumerateObjectsUsingBlock:^(id objt, NSUInteger idx, BOOL *stop) {
-                        NSLog(@"Tables: %@", objt);
-                        NSDictionary *table = [objt retain];
-                        [records addObject:[NSString stringWithString: [table objectForKey:@"name"]]];
-                        [table release];
-                    }];
-                    self.resultBlockTableNames(self, records);
-                    [records release];
-                    */
                     self.resultBlockTableNames(self, tables);
                     [tables autorelease];
                 }
@@ -250,31 +241,15 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         }
         case NSDatabaseQueryTypeGetFields: {
             NSDictionary *response = [jsonResponse retain];
-            NSLog(@"requestrequest: %@", request);
             NSString *tableName = nil;
             //The path should be of the form /v23.0/sobjects/TaskPriority/describe. 
             NSArray *pathComponents = [[[request path] componentsSeparatedByString: @"/"] retain];
-            NSLog(@"pathComponents %@", pathComponents);
             if ([pathComponents count] > 1) {
                 tableName = [[[pathComponents objectAtIndex: ([pathComponents count] - 2)] retain] autorelease];
             }
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                //NSLog(@"Field {%@, %@}", key, obj);
                 if ([key isEqualToString:@"fields"]) {
                     NSArray *fields = [obj retain];
- 
-                    /*
-                    NSMutableArray *records = [[NSMutableArray alloc] initWithCapacity: [fields count]];
-                    [fields enumerateObjectsUsingBlock:^(id objf, NSUInteger idx, BOOL *stop) {
-                        NSDictionary *field = [objf retain];
-                        NSLog(@"%@", field);                        
-                        //NSLog(@"%@", [field objectForKey:@"name"]);
-                        [records addObject:[NSString stringWithString: [field objectForKey:@"name"]]];
-                        [field release];
-                    }];
-                    self.resultBlockFieldNames(self, records);                    
-                    [records release];
-                     */
                     NSFetchRequest *getTableWithName = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     [getTableWithName setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
@@ -292,6 +267,8 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                     }
                     self.resultBlockFieldNames(self, origionalTable, fields);
                     [fields autorelease];
+                } else {
+                    NSLog(@"ELSE {%@, %@}", key, obj);
                 }
             }];
             [pathComponents release];

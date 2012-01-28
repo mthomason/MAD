@@ -18,7 +18,7 @@
 @class NSDatabaseSalesForce;
 
 typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
-typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields);
+typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
 typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 @protocol NSDatabaseSalesForceDelegate
@@ -60,6 +60,8 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 @property (nonatomic, copy) rsltBlk_tblNames resultBlockTableNames;
 @property (nonatomic, copy) rsltBlk_fldNames resultBlockFieldNames;
 
+@property (retain) NSString *schemaName;
+
 - (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
 - (id)initExistingFileWithUrl:(NSURL *)url;
 
@@ -69,7 +71,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
 - (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *tableName, NSArray *fields))completion;
+              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
 - (BOOL)testConnection;
 
 - (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
