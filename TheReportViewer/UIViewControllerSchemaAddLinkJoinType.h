@@ -19,7 +19,7 @@ typedef enum {
     MNSLinkTypeFullOuterJoin,
 } MNSLinkType;
 
-#define MNSLinkTypeReuseIds [NSArray arrayWithObjects: @"UITableViewCellInnerJoin", @"UITableViewCellEquiJoin", @"UITableViewCellNaturalJoin", @"UITableViewCellCrossJoin", @"UITableViewCellLeftOuterJoin", @"UITableViewCellRightOuterJoin", @"UITableViewCellFullOuterJoin", nil]
+#define MNSLinkTypeReuseIds [NSArray arrayWithObjects: @"MNSJoinTypeInnerJoin", @"MNSJoinTypeEquiJoin", @"MNSJoinTypeNaturalJoin", @"MNSJoinTypeCrossJoin", @"MNSJoinTypeLeftOuterJoin", @"MNSJoinTypeRightOuterJoin", @"MNSJoinTypeFullOuterJoin", nil]
 
 #define MNSLinkTypeNames [NSArray arrayWithObjects: NSLocalizedString(@"Inner-Join", @"Inner-Join"), NSLocalizedString(@"Equi-Join", @"Equi-Join"), NSLocalizedString(@"Natural Join", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"Left Outer Join", @"Left Outer Join"), NSLocalizedString(@"Right Outer Join", @"Right Outer Join"), NSLocalizedString(@"Full Outer Join", @"Full Outer Join"), nil]
 

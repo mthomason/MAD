@@ -27,9 +27,12 @@
         UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate,
         UITableViewControllerLinkBuilderDelegate>
 
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @property (retain) NSDictionary *tableMetaData;
 
@@ -57,5 +60,6 @@
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;
 - (IBAction)addLink:(id)sender;
+- (IBAction)edit:(id)sender;
 
 @end

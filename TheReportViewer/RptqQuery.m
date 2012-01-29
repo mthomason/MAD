@@ -2,7 +2,7 @@
 //  RptqQuery.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/25/12.
+//  Created by Michael Thomason on 1/28/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,9 +17,10 @@
 
 @dynamic override;
 @dynamic overrideText;
-@dynamic inQueryBuilderDocument;
-@dynamic hasQueryTables;
-@dynamic hasQuerySort;
 @dynamic hasQueryPredicate;
+@dynamic hasQuerySort;
+@dynamic hasQueryTables;
+@dynamic inQueryBuilderDocument;
+@dynamic hasQueryLinks;
 
 @end

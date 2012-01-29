@@ -18,7 +18,7 @@
 
 @protocol UITableViewControllerLinkBuilderDelegate
 - (void)viewControllerSchemaAddLinkDidFinish:(UITableViewControllerLinkBuilder *)controller;
-- (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable firstFieldName:(NSString *)firstFieldName secondTableName:(NSString *)secondTableName secondFieldName:(NSString *)secondFieldName;
+- (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable firstFieldName:(NSString *)firstFieldName secondTableName:(NSString *)secondTableName secondFieldName:(NSString *)secondFieldName withJoinType:(MNSLinkType)joinType;
 @end
 
 @interface UITableViewControllerLinkBuilder : UITableViewController
@@ -45,5 +45,7 @@
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
 - (IBAction)done:(id)sender;
+- (IBAction)save:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end

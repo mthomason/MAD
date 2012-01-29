@@ -2,7 +2,7 @@
 //  RptqDatabase.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/25/12.
+//  Created by Michael Thomason on 1/28/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,8 +16,8 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *hasRelationships;
 @property (nonatomic, retain) NSSet *hasTables;
-@property (nonatomic, retain) NSSet *ownedByUser;
 @property (nonatomic, retain) RptqDocument *ownedByQueryAsStaticResource;
+@property (nonatomic, retain) NSSet *ownedByUser;
 @end
 
 @interface RptqDatabase (CoreDataGeneratedAccessors)

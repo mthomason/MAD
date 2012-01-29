@@ -186,6 +186,18 @@
     
 }
 
+- (IBAction)save:(id)sender {
+    [[self delegate] viewControllerSchemaAddLinkDidSelectFirstTableName:[self firstTableName]
+                                                         firstFieldName:[self firstFieldName]
+                                                        secondTableName:[self secondTableName]
+                                                        secondFieldName:[self secondFieldName]
+                                                           withJoinType:[self linkType]];
+}
+
+- (IBAction)cancel:(id)sender {
+    [[self delegate] viewControllerSchemaAddLinkDidFinish: self];
+}
+
 #pragma mark - Delegate callbacks
 
 - (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {

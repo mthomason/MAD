@@ -2,7 +2,7 @@
 //  RptqQuerySort.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/25/12.
+//  Created by Michael Thomason on 1/28/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @interface RptqQuerySort : NSManagedObject
 
-@property (nonatomic, retain) NSString * fields;
 @property (nonatomic, retain) NSNumber * ascending;
+@property (nonatomic, retain) NSString * fields;
 @property (nonatomic, retain) RptqQuery *inQuery;
 
 @end

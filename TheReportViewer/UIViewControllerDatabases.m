@@ -10,6 +10,7 @@
 #import "UITableViewCellDocument.h"
 #import "NSFileManager+Reports.h"
 #import "RptqQueryTables.h"
+#import "RptqQueryLinks.h"
 
 @interface UIViewControllerDatabases()
 
@@ -146,21 +147,24 @@
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSManagedObjectContext *moc = [[tvc managedDocumentQuery] managedObjectContext];
-                    NSError *error = nil;
-                    NSArray *tablesResults = [moc executeFetchRequest:request error:&error];
-                    if (!error) {
-                        NSLog(@"TableResults %@", tablesResults);
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsController: frc];
-                        [frc release];
-                    } else {
-                        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-                    }
-                                        
+                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                          managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                            sectionNameKeyPath: nil
+                                                                                                     cacheName: nil];
+                    [tvc setFetchedResultsControllerTables: frc];
+                    [frc release];
+                    frc = nil;
+                    
+                    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
+                    sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                sectionNameKeyPath: nil
+                                                                         cacheName: nil];
+                    [tvc setFetchedResultsControllerLinks: frc];
+                    [frc release];
+                    
                 }];
             }
             [url release];

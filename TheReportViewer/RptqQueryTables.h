@@ -2,7 +2,7 @@
 //  RptqQueryTables.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/25/12.
+//  Created by Michael Thomason on 1/28/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,8 +14,8 @@
 @interface RptqQueryTables : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) RptqQuery *inQuery;
 @property (nonatomic, retain) NSSet *hasFields;
+@property (nonatomic, retain) RptqQuery *inQuery;
 @end
 
 @interface RptqQueryTables (CoreDataGeneratedAccessors)
