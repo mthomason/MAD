@@ -1,1 +1,1 @@
-libmysqlclient.a is currently in clang llvm 1.0 for i386 simulator and armv7 device.  It doesn't work.  Come back to it.  Brings back results, but some internal bug causes it to crash out.
+Copyright Everyday Apps LLC 2011.  All rights reserved.
