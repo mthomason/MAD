@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSString * datatype;
 @property (nonatomic, retain) NSSet *inRelationships;
 @property (nonatomic, retain) RptqTable *inTable;
 @end

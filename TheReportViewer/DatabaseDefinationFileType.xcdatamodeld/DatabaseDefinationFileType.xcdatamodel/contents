@@ -20,10 +20,10 @@
         <relationship name="hasQuery" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="inQueryBuilderDocument" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
     <entity name="RptqField" representedClassName="RptqField" syncable="YES">
+        <attribute name="datatype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqRelationship" inverseName="hasFields" inverseEntity="RptqRelationship" syncable="YES"/>
         <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqTable" inverseName="hasFields" inverseEntity="RptqTable" syncable="YES"/>
     </entity>
@@ -93,7 +93,7 @@
     </entity>
     <elements>
         <element name="RptqDatabase" positionX="-126" positionY="-333" width="128" height="120"/>
-        <element name="RptqDocument" positionX="-414" positionY="-681" width="128" height="195"/>
+        <element name="RptqDocument" positionX="-414" positionY="-681" width="128" height="120"/>
         <element name="RptqField" positionX="306" positionY="-198" width="128" height="135"/>
         <element name="RptqQuery" positionX="-479" positionY="-396" width="128" height="135"/>
         <element name="RptqQueryFields" positionX="-488" positionY="48" width="128" height="75"/>

@@ -8,6 +8,7 @@
 
 #import "UIViewControllerSchemaAddLinkFirstField.h"
 #import "RptqTable.h"
+#import "RptqField.h"
 #import "RptqQueryTables.h"
 #import "RptqQueryFields.h"
 #import "UIViewControllerSchemaAddLinkSecondTable.h"
@@ -52,7 +53,7 @@
     
     RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [field name]];
-    [[cell detailTextLabel] setText: [[field inTable] name]];
+    [[cell detailTextLabel] setText: [field datatype]];
     [field release];
     
     return cell;

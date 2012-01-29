@@ -52,7 +52,7 @@
     
     RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [field name]];
-    [[cell detailTextLabel] setText: [[field inTable] name]];
+    [[cell detailTextLabel] setText: [field datatype]];
     [field release];
     
     return cell;

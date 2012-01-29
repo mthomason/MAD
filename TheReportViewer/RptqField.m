@@ -16,7 +16,7 @@
 @dynamic id;
 @dynamic label;
 @dynamic name;
-@dynamic type;
+@dynamic datatype;
 @dynamic inRelationships;
 @dynamic inTable;
 

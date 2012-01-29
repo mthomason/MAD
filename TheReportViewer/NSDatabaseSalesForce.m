@@ -165,7 +165,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                                               insertIntoManagedObjectContext: moc];
                         [rptqField setLabel: [fieldDictionary objectForKey:@"label"]];
                         [rptqField setName: [fieldDictionary objectForKey:@"name"]];
-                        [rptqField setType: [fieldDictionary objectForKey:@"type"]];
+                        [rptqField setDatatype: [fieldDictionary objectForKey:@"type"]];
                         [fieldDictionary release];
 
                         if (originTable) [originTable addHasFieldsObject: rptqField];
