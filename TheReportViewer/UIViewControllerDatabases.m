@@ -91,14 +91,16 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showDatabasesDrivers"]) {
+    if ([[segue identifier] isEqualToString:@"showCreateNewReport"]) {
         //Set UITableViewControllerDataSourceTypes delegate
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerDataSourceTypes class]]) {
-                    UITableViewControllerDataSourceTypes *tvc = (UITableViewControllerDataSourceTypes *)[[navControl topViewController] retain];
-                    if (tvc) [tvc setDelegate:self];
+                if ([[navControl topViewController] isKindOfClass:[UIViewControllerTemplateSelector class]]) {
+                    UIViewControllerTemplateSelector *tvc = (UIViewControllerTemplateSelector *)[[navControl topViewController] retain];
+                    if (tvc) {
+                        [tvc setDelegate:self];
+                    }
                     [tvc release];
                 }
             }
@@ -202,6 +204,10 @@
         [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
         [self setTableViewControllerDataSourceTypes: nil];
     }
+}
+
+- (void)uIViewControllerTemplateSelectorDidCancel:(UIViewControllerTemplateSelector *)controller {
+    [self dismissModalViewControllerAnimated: YES];
 }
 
 #pragma mark -

@@ -8,7 +8,7 @@
 
 #import "UIViewControllerSchemaTables.h"
 #import "UIViewControllerSchemaAddTable.h"
-#import "UIViewControllerSchemaAddLink.h"
+#import "UIViewControllerSchemaAddLinkFirstTable.h"
 #import "Constants.h"
 #import "RptqDocument.h"
 #import "RptqTable.h"
@@ -19,9 +19,10 @@
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
-	UIViewControllerSchemaTablesSectionsTables = 1,
-	UIViewControllerSchemaTablesSectionsLinks = 2,
-    UIViewControllerSchemaTablesSectionsSql = 3
+    UIViewControllerSchemaTablesSectionsDatasource = 1,
+	UIViewControllerSchemaTablesSectionsTables = 2,
+	UIViewControllerSchemaTablesSectionsLinks = 3,
+    UIViewControllerSchemaTablesSectionsSql = 4
 } UIViewControllerSchemaTablesSections;
 
 #pragma mark - Private Category
@@ -118,11 +119,13 @@ typedef enum {
         //These files define common attributes of the mostly static table.
         NSArray *sections = [[NSArray alloc] initWithObjects:
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsInstructions],
+                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsDatasource],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsTables],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsLinks],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsSql], nil];
         
         NSArray *countRowsForSection = [[NSArray alloc] initWithObjects:
+                                        [NSNumber numberWithInt: 1],
                                         [NSNumber numberWithInt: 1],
                                         [NSNumber numberWithInt: -1],
                                         [NSNumber numberWithInt: -1],
@@ -131,13 +134,24 @@ typedef enum {
                                                                                     forKeys: sections];
         [countRowsForSection release];
         
-        NSArray *headersSection = [[NSArray alloc] initWithObjects: @"Build Query", @"Tables", @"Links", @"SQL", nil];
+        NSString *h1 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
+        NSString *h2 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
+        NSString *h3 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
+        NSString *h4 = NSLocalizedString(@"Override the SQL", @"Override the SQL");
+        
+        NSArray *headersSection = [[NSArray alloc] initWithObjects:
+                                   NSLocalizedString(@"Overview", @"Overview"),
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h1],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h2],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h3],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h4], nil];
         NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                                forKeys: sections];
         [headersSection release];
         
         NSArray *heightRowsForSection = [[NSArray alloc] initWithObjects:
                                          [NSNumber numberWithFloat: [UITableViewCellInstruction defaultHeight]],
+                                         [NSNumber numberWithFloat: 44.0000f],
                                          [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
                                          [NSNumber numberWithFloat: [UITableViewCellQueryLink defaultHeight]],
                                          [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
@@ -204,7 +218,23 @@ typedef enum {
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString: @"showAddTableViewController"]) {
+    if ([[segue identifier] isEqualToString:@"showDatabasesDrivers"]) {
+        //Set UITableViewControllerDataSourceTypes delegate
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerDataSourceTypes class]]) {
+                    UITableViewControllerDataSourceTypes *tvc = (UITableViewControllerDataSourceTypes *)[[navControl topViewController] retain];
+                    if (tvc) [tvc setDelegate:self];
+                    [tvc release];
+                }
+            }
+            
+            [navControl release];
+        }
+        [[segue destinationViewController] setDelegate:self];
+        
+    } else if ([[segue identifier] isEqualToString: @"showAddTableViewController"]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -293,31 +323,20 @@ typedef enum {
     [[self tableViewQueryBuilder] setEditing: editing];
     [barButtonItem release];
 }
-/*
-- (void)updateBarButtonItemChecked:(BOOL)checked {
-    if ([self toolbarItems] == nil) {
-        toolbarItems = [[NSMutableArray arrayWithArray:toolbar.items] retain];
-        checkUncheckIndex = -1;
-        
-        for (NSUInteger i = 0; i < [toolbarItems count]; i++) {
-            UIBarButtonItem *barButtonItem = [toolbarItems objectAtIndex:i];
-            if (barButtonItem.action == @selector(checkUncheckClicked)) {
-                favoriteIndex = i;
-                break;
-            }
-        }
-    }
-    
-    if (checkUncheckIndex != -1) {
-        UIBarButtonItem *barButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:checked ? @"checked.png" : @"unchecked.png"] 
-                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(checkUncheckClicked)] autorelease];
-        [toolbarItems replaceObjectAtIndex:checkUncheckIndex withObject:barButtonItem];
-        
-        toolbar.items = toolbarItems;
-    }
-}*/
 
 #pragma mark - Model Delegates
+
+#pragma mark - Delegates
+
+- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated: YES];
+    } else {
+        [self dismissModalViewControllerAnimated: YES];
+        //[[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
+        //[self setTableViewControllerDataSourceTypes: nil];
+    }
+}
 
 - (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable
                                             firstFieldName:(NSString *)firstFieldName
@@ -358,7 +377,7 @@ typedef enum {
 
 }
 
-- (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLink *)controller {
+- (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLinkFirstTable *)controller {
     [self dismissModalViewControllerAnimated: YES];
 }
 

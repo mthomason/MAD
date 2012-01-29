@@ -44,7 +44,6 @@
 @synthesize textFieldPassword;
 @synthesize textFieldHost;
 @synthesize textFieldPort;
-//@synthesize conn;
 
 @synthesize inputUsername, inputPassword, inputHost, inputPort;
 
@@ -136,6 +135,7 @@
     [self setTextFieldPassword:nil];
     [self setTextFieldHost:nil];
     [self setTextFieldPort:nil];
+    [self setTest:nil];
     [super viewDidUnload];
 }
 
@@ -352,7 +352,49 @@
 
 - (IBAction)save:(id)sender {
     //Create UIManaged Document that Stores the Database Schema
+    MYSQL conn;
+    mysql_init(&conn);
+    //long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
+    //mysql_options(&(connection->conn), MYSQL_READ_DEFAULT_GROUP, "libmysqlclient.a");
+    mysql_real_connect(&conn, "everydayapps.com", "root", "1noniceguy", "quotationary", 3306, NULL, 0);
     
+    //NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
+    char query[1024];
+    sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
+    NSLog(@"query %s", query);
+    mysql_query(&conn, query);
+    
+    MYSQL_RES *result = mysql_store_result(&conn);
+    NSMutableSet *mutableResult = nil;
+    
+    if (result != NULL) {
+        //int num_rows = mysql_num_rows(result);
+        mutableResult = [[NSMutableSet alloc] initWithCapacity:300];
+        
+        //@autoreleasepool {
+        MYSQL_ROW row;
+        //@autoreleasepool {
+        //mysql_fetch_row(result);
+        //printf("row %s", row[0]);
+        //@autoreleasepool {
+        while ((row = mysql_fetch_row(result))) {
+            //NSLog(@"Got row");
+            if (row[0]) {
+                NSLog(@"N: %@, K: %@", [NSString stringWithUTF8String:row[0]], [NSString stringWithUTF8String:row[0]]);                    
+            } else {
+                //NSLog(@"Not got row!!!");
+            }
+            //}
+        }
+        
+        [mutableResult autorelease];
+        
+        
+        mysql_free_result(result);
+    }    
+    mysql_close(&conn);
+    mysql_server_end();
+    [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
 }
 
 - (IBAction)done:(id)sender {

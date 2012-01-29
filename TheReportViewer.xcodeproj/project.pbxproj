@@ -101,7 +101,7 @@
 		4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4C8C97BA14C5C636007FB629 /* NSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8C97B914C5C636007FB629 /* NSDatabaseSalesForce.m */; };
 		4C8F7CE314CEC12B006171A7 /* UIViewControllerSchemaAddTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */; };
-		4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */; };
+		4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m */; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
 		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
@@ -478,8 +478,8 @@
 		4C8C97B914C5C636007FB629 /* NSDatabaseSalesForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabaseSalesForce.m; sourceTree = "<group>"; };
 		4C8F7CE114CEC12B006171A7 /* UIViewControllerSchemaAddTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddTable.h; sourceTree = "<group>"; };
 		4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddTable.m; sourceTree = "<group>"; };
-		4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLink.h; sourceTree = "<group>"; };
-		4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLink.m; sourceTree = "<group>"; };
+		4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.h */ = {isa = PBXFileReference; fileEncoding = 4; path = UIViewControllerSchemaAddLinkFirstTable.h; sourceTree = "<group>"; };
+		4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkFirstTable.m; sourceTree = "<group>"; };
 		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
 		4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipLink.m; sourceTree = "<group>"; };
@@ -892,8 +892,8 @@
 			children = (
 				4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */,
 				4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */,
-				4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLink.h */,
-				4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLink.m */,
+				4C8F7CE514CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.h */,
+				4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m */,
 				4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */,
 				4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */,
 				4C507B0F14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.h */,
@@ -1693,7 +1693,7 @@
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
 				4C8F7CE314CEC12B006171A7 /* UIViewControllerSchemaAddTable.m in Sources */,
-				4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLink.m in Sources */,
+				4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
 				4C507B1114D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m in Sources */,
 				4C507B1214D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m in Sources */,

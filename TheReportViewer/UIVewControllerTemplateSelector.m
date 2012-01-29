@@ -90,6 +90,10 @@
     [[self delegate] uIViewControllerTemplateSelectorDidFinish: self];
 }
 
+- (IBAction)cancel:(id)sender {
+    [[self delegate] uIViewControllerTemplateSelectorDidCancel: self];
+}
+
 #pragma mark -
 #pragma mark Table View Data Source Protocol
 
@@ -161,28 +165,27 @@
  }
  */
 
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
- NSString *result;
- switch (section) {
- case 0:
- result = @"";
- break;
- case 1:
- result = @"";
- break;
- default:
- result = @"";
- break;
- }
- return result;
- }
- */
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *result;
+    switch (section) {
+        case 0:
+            result = NSLocalizedString(@"Choose a Template", @"Choose a Template");
+            break;
+        case 1:
+            result = @"";
+            break;
+        default:
+            result = @"";
+            break;
+    }
+    return result;
+}
 
+/*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     return nil;
 }
-
+*/
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol

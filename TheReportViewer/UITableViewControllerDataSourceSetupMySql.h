@@ -30,7 +30,6 @@
 @property (retain, nonatomic) IBOutlet UITextField *textFieldHost;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPort;
 
-- (void)test:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;
 

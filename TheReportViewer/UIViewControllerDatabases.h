@@ -10,6 +10,7 @@
 #import "UITableViewControllerDataSourceTypes.h"
 #import "UITableViewCellDocument.h"
 #import "UIViewControllerSchemaTables.h"
+#import "UIViewControllerTemplateSelector.h"
 
 @class UIViewControllerDatabases;
 
@@ -21,6 +22,7 @@
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
+        UIViewControllerTemplateSelectorDelegate,
         UITableViewControllerDataSourceTypesDelegate,
         UIViewControllerSchemaTablesDelegate>
 

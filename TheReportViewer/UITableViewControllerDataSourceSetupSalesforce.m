@@ -174,9 +174,6 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 // This will be used as the program
 // schema.
 - (void)test:(id)sender {
-    NSLog(@"Test");
-    //if (![self db]) {       //Create query database file.  Make sure only created once.
-
         if ([[[self textFieldNickname] text] length] > 0) {
             NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
 
@@ -186,12 +183,21 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
             [d release];
 
         }
-    //}
 }
 
 - (IBAction)save:(id)sender {
     //Create UIManaged Document that Stores the Database Schema
-    
+    if ([[[self textFieldNickname] text] length] > 0) {
+        NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
+            if (success) {
+                [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
+            }
+        }];
+        [d setDelegate: self];
+        [self setDb:d];
+        [d release];
+        
+    }
 }
 
 - (IBAction)done:(id)sender {

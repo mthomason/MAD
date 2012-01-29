@@ -95,8 +95,8 @@
         
         if ([[segue identifier] isEqualToString:@"showSelectTableOne"]) {
             NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
-            if ([[segue destinationViewController] isKindOfClass: [UIViewControllerSchemaAddLink class]]) {
-                UIViewControllerSchemaAddLink *tvc = [segue destinationViewController];
+            if ([[segue destinationViewController] isKindOfClass: [UIViewControllerSchemaAddLinkFirstTable class]]) {
+                UIViewControllerSchemaAddLinkFirstTable *tvc = [segue destinationViewController];
                 if (tvc) {
                     [tvc setDelegate:self];
                     [tvc setManagedDocumentQuery: [self managedDocumentQuery]];

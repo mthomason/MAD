@@ -12,9 +12,11 @@
 @class UIViewControllerTemplateSelector;
 
 @protocol UIViewControllerTemplateSelectorDelegate
+@optional
+- (void)uIViewControllerTemplateSelectorDidCancel:(UIViewControllerTemplateSelector *)controller;
+- (void)uIViewControllerTemplateSelectorDidFinish:(UIViewControllerTemplateSelector *)controller;
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
 - (void)uIViewControllerTemplateSelectorRequestOpenOfFileAtUrl:(NSURL *)url;        //Just open it
-- (void)uIViewControllerTemplateSelectorDidFinish:(UIViewControllerTemplateSelector *)controller;
 @end
 
 @interface UIViewControllerTemplateSelector : UIViewController
@@ -26,5 +28,6 @@
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;
 
 - (IBAction)done:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end
