@@ -14,6 +14,7 @@
 #import "RptqTable.h"
 #import "RptqQueryTables.h"
 #import "RptqQueryLinks.h"
+#import "RptqUserCredentals.h"
 #import "RptqQuery.h"
 
 
@@ -460,6 +461,33 @@ typedef enum {
             }
             break;
         }
+        case UIViewControllerSchemaTablesSectionsDatasource: {
+            static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellDataSource";
+            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
+            if (!result) {
+                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellDataSource" bundle:nil];
+                [resultCellNib instantiateWithOwner:self options:nil];
+                result = [self uITableViewCellTableName];
+                [self setUITableViewCellTableName:nil];
+            }
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
+            request.sortDescriptors = [NSArray arrayWithObject: sortDescriptor];
+            NSError *error = nil;
+            NSArray *connections = [[[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error] retain];
+            if (!error) {
+                if ([connections count] >= 1) {
+                    RptqUserCredentals *connection = [[connections objectAtIndex: 0] retain];
+                    [[result textLabel] setText:[connection database_driver_type]];
+                    [[result detailTextLabel] setText:@""];
+                    [connection release];
+                }
+            } else {
+                NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
+            }
+            [connections release];
+            break;
+        }
         case UIViewControllerSchemaTablesSectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
@@ -734,6 +762,7 @@ typedef enum {
 
     NSUInteger newSectionIndex = sectionIndex;
     newSectionIndex++;
+    newSectionIndex++;
     if (![controller isEqual:[self fetchedResultsControllerTables]]) {
         newSectionIndex++;
     }
@@ -763,11 +792,11 @@ typedef enum {
     NSIndexPath *adjustedNewIndexPath;
     
     if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row] inSection:[indexPath section] + 1];
-        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row] inSection:[newIndexPath section] + 1];
-    } else {
         adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row] inSection:[indexPath section] + 2];
         adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row] inSection:[newIndexPath section] + 2];
+    } else {
+        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row] inSection:[indexPath section] + 3];
+        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row] inSection:[newIndexPath section] + 3];
     }
     
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {

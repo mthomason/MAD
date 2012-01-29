@@ -406,7 +406,11 @@
                                         </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="fp1-gN-eWc"/>
-                                    <barButtonItem systemItem="edit" id="sDx-xO-Iad"/>
+                                    <barButtonItem systemItem="edit" id="sDx-xO-Iad">
+                                        <connections>
+                                            <action selector="edit:" destination="6" id="N0k-2K-ITF"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="gW9-un-K2H">
@@ -474,6 +478,7 @@
                     <connections>
                         <outlet property="delegate" destination="2" id="15"/>
                         <outlet property="tableViewQueries" destination="gW9-un-K2H" id="MJV-G1-vXZ"/>
+                        <outlet property="toolbar" destination="uB2-V6-4Hn" id="fBv-Q0-TAj"/>
                     </connections>
                 </viewController>
             </objects>
@@ -528,11 +533,11 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellDataSource" textLabel="89U-5Y-CZI" detailTextLabel="d5q-LQ-s6X" style="IBUITableViewCellStyleValue1" id="Nqh-Qr-JBE">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellDataSource" textLabel="89U-5Y-CZI" detailTextLabel="d5q-LQ-s6X" style="IBUITableViewCellStyleValue1" id="Nqh-Qr-JBE">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="89U-5Y-CZI">
@@ -543,7 +548,7 @@
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="d5q-LQ-s6X">
-                                                    <rect key="frame" x="246" y="11" width="44" height="21"/>
+                                                    <rect key="frame" x="266" y="11" width="44" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.2196078431372549" green="0.32941176470588235" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
@@ -2518,7 +2523,7 @@
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="2316" y="1185"/>
+            <point key="canvasLocation" x="1906" y="1193"/>
         </scene>
         <scene sceneID="vSz-bH-FXK">
             <objects>
@@ -2847,153 +2852,23 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
-        <class className="ReportDesignerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReportDesignerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="info:"/>
-                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewDashboard"/>
-                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="UIScrollViewDashboard" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewDashboard.h"/>
-        </class>
-        <class className="UITableViewCellDocument" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellDocument.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
-            </relationships>
-        </class>
         <class className="UITableViewCellInstruction" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
         </class>
         <class className="UITableViewCellOverride" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
         </class>
-        <class className="UITableViewCellQueryInput" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
-        </class>
-        <class className="UITableViewCellQueryLink" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
-            <relationships>
-                <relationship kind="outlet" name="labelFieldLeft" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelFieldRight" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelJoinDesc" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelTableLeft" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
-            </relationships>
-        </class>
         <class className="UITableViewCellStoreItemReportTemplate" superclassName="UITableViewCellDocument">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
-            <relationships>
-                <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>
-            </relationships>
         </class>
         <class className="UITableViewCellTableName" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
-        </class>
-        <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
-        </class>
-        <class className="UITableViewControllerDataSourceSetupMySql" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupMySql.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="hostDidEndOnExit:"/>
-                <relationship kind="action" name="passwordDidEndOnExit:"/>
-                <relationship kind="action" name="portDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="action" name="usernameDidEndOnExit:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTestConnection" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerDataSourceSetupSalesforce" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupSalesforce.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="nicknameDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerDataSourceTypes" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceTypes.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerLinkBuilder" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerLinkBuilder.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerSettings" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerDatabaseSchema" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSchema.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
-            </relationships>
         </class>
         <class className="UIViewControllerDatabaseSources" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSources.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerDatabases" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabases.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
         </class>
         <class className="UIViewControllerObjectSelector" superclassName="UIViewController">
@@ -3003,30 +2878,11 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="UIViewControllerReports" superclassName="UIViewController">
+        <class className="UIViewControllerReports">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerReports.h"/>
             <relationships>
                 <relationship kind="outlet" name="tableViewDocuments" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkFirstField" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstField.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkFirstTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstTable.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkJoinType" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkJoinType.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
         <class className="UIViewControllerSchemaAddLinkSecondField" superclassName="UITableViewControllerCoreDataResults">
@@ -3035,27 +2891,9 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="UIViewControllerSchemaAddLinkSecondTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkSecondTable.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddTable.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
         <class className="UIViewControllerSchemaTables" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaTables.h"/>
             <relationships>
-                <relationship kind="action" name="addLink:"/>
-                <relationship kind="action" name="addTable:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="uITableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
@@ -3063,19 +2901,6 @@
                 <relationship kind="outlet" name="uITableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
                 <relationship kind="outlet" name="uITableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
                 <relationship kind="outlet" name="uITableViewCellTableName" candidateClass="UITableViewCellTableName"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerStoreTemplates" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerStoreTemplates.h"/>
-        </class>
-        <class className="UIViewControllerTemplateSelector" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerTemplateSelector.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
         </class>
     </classes>

@@ -2,14 +2,14 @@
 //  RptqQuery.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/28/12.
+//  Created by Michael Thomason on 1/29/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocument, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
+@class RptqDocument, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
 
 @interface RptqQuery : NSManagedObject
 
@@ -29,8 +29,8 @@
 - (void)addHasQueryTables:(NSSet *)values;
 - (void)removeHasQueryTables:(NSSet *)values;
 
-- (void)addHasQueryLinksObject:(NSManagedObject *)value;
-- (void)removeHasQueryLinksObject:(NSManagedObject *)value;
+- (void)addHasQueryLinksObject:(RptqQueryLinks *)value;
+- (void)removeHasQueryLinksObject:(RptqQueryLinks *)value;
 - (void)addHasQueryLinks:(NSSet *)values;
 - (void)removeHasQueryLinks:(NSSet *)values;
 

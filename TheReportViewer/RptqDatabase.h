@@ -2,7 +2,7 @@
 //  RptqDatabase.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/28/12.
+//  Created by Michael Thomason on 1/29/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,11 +13,11 @@
 
 @interface RptqDatabase : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * database_driver_type;
 @property (nonatomic, retain) NSSet *hasRelationships;
 @property (nonatomic, retain) NSSet *hasTables;
 @property (nonatomic, retain) RptqDocument *ownedByQueryAsStaticResource;
-@property (nonatomic, retain) NSSet *ownedByUser;
+@property (nonatomic, retain) RptqUserCredentals *ownedByUser;
 @end
 
 @interface RptqDatabase (CoreDataGeneratedAccessors)
@@ -31,10 +31,5 @@
 - (void)removeHasTablesObject:(RptqTable *)value;
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
-
-- (void)addOwnedByUserObject:(RptqUserCredentals *)value;
-- (void)removeOwnedByUserObject:(RptqUserCredentals *)value;
-- (void)addOwnedByUser:(NSSet *)values;
-- (void)removeOwnedByUser:(NSSet *)values;
 
 @end

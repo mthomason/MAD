@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqRelationship" inverseName="inDatabase" inverseEntity="RptqRelationship" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqTable" inverseName="inDatabase" inverseEntity="RptqTable" syncable="YES"/>
         <relationship name="ownedByQueryAsStaticResource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDatabaseSchema" inverseEntity="RptqDocument" syncable="YES"/>
-        <relationship name="ownedByUser" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="RptqUserCredentals" inverseName="haveDatabases" inverseEntity="RptqUserCredentals" syncable="YES"/>
+        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqUserCredentals" inverseName="inDatabase" inverseEntity="RptqUserCredentals" syncable="YES"/>
     </entity>
     <entity name="RptqDocument" representedClassName="RptqDocument" syncable="YES">
+        <attribute name="author_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="copyright" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="override" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasDatabaseSchema" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByQueryAsStaticResource" inverseEntity="RptqDatabase" syncable="YES"/>
@@ -72,6 +77,7 @@
     </entity>
     <entity name="RptqUserCredentals" representedClassName="RptqUserCredentals" syncable="YES">
         <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="inUse" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="mysql_database" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mysql_host" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mysql_password" optional="YES" attributeType="String" syncable="YES"/>
@@ -83,11 +89,11 @@
         <attribute name="sf_login_redirect_uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sf_password" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sf_username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="haveDatabases" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
+        <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <elements>
         <element name="RptqDatabase" positionX="-126" positionY="-333" width="128" height="120"/>
-        <element name="RptqDocument" positionX="-414" positionY="-681" width="128" height="120"/>
+        <element name="RptqDocument" positionX="-414" positionY="-681" width="128" height="195"/>
         <element name="RptqField" positionX="306" positionY="-198" width="128" height="135"/>
         <element name="RptqQuery" positionX="-479" positionY="-396" width="128" height="135"/>
         <element name="RptqQueryFields" positionX="-488" positionY="48" width="128" height="75"/>

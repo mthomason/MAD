@@ -30,7 +30,9 @@
 @property (strong, nonatomic) UIPopoverController *tableViewControllerDataSourceTypes;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 
 - (IBAction)done:(id)sender;
+- (IBAction)edit:(id)sender;
 
 @end

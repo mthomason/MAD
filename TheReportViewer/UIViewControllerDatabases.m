@@ -23,6 +23,7 @@
 @synthesize delegate = _delegate;
 @synthesize tableViewControllerDataSourceTypes = _tableViewControllerDataSourceTypes;
 @synthesize uITableViewCellDocument;
+@synthesize toolbar = _toolbar;
 @synthesize tableViewQueries = _tableViewQueries;
 @synthesize availableFilesCache = _availableFilesCache;
 
@@ -30,6 +31,7 @@
     [_availableFilesCache release];
     [_tableViewControllerDataSourceTypes release];
     [_tableViewQueries release];
+    [_toolbar release];
     [super dealloc];
 }
 
@@ -52,6 +54,7 @@
 
 - (void)viewDidUnload {
     [self setTableViewQueries:nil];
+    [self setToolbar:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -186,6 +189,20 @@
     [[self delegate] flipsideViewControllerDidFinish: self];
 }
 
+- (IBAction)edit:(id)sender {
+    BOOL editing = ![[self tableViewQueries] isEditing];
+    UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                   target: self
+                                                                                   action: @selector(edit:)];
+    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbar] items]];
+    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
+    [[self toolbar] setItems: tbItems];
+    [tbItems release];
+    [[self tableViewQueries] setEditing: editing];
+    [barButtonItem release];
+}
+
 #pragma mark - Delegates
 
 - (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
@@ -224,7 +241,7 @@
  */
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+	return YES;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {

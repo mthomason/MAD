@@ -2,7 +2,7 @@
 //  RptqDatabase.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/28/12.
+//  Created by Michael Thomason on 1/29/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,7 +15,7 @@
 
 @implementation RptqDatabase
 
-@dynamic name;
+@dynamic database_driver_type;
 @dynamic hasRelationships;
 @dynamic hasTables;
 @dynamic ownedByQueryAsStaticResource;

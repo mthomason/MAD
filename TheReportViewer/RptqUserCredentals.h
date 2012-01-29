@@ -2,7 +2,7 @@
 //  RptqUserCredentals.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/28/12.
+//  Created by Michael Thomason on 1/29/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -25,14 +25,7 @@
 @property (nonatomic, retain) NSString * sf_login_redirect_uri;
 @property (nonatomic, retain) NSString * sf_password;
 @property (nonatomic, retain) NSString * sf_username;
-@property (nonatomic, retain) NSSet *haveDatabases;
-@end
-
-@interface RptqUserCredentals (CoreDataGeneratedAccessors)
-
-- (void)addHaveDatabasesObject:(RptqDatabase *)value;
-- (void)removeHaveDatabasesObject:(RptqDatabase *)value;
-- (void)addHaveDatabases:(NSSet *)values;
-- (void)removeHaveDatabases:(NSSet *)values;
+@property (nonatomic, retain) NSNumber * inUse;
+@property (nonatomic, retain) RptqDatabase *inDatabase;
 
 @end

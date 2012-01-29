@@ -127,13 +127,16 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         }
 
         RptqDocument *rptqDocumentHead = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocument class])
-                                                          inManagedObjectContext: moc];
+                                                                       inManagedObjectContext: moc];
         [rptqDocumentHead setHasDatabaseSchema: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class])
-                                                         inManagedObjectContext: moc]];
+                                                                              inManagedObjectContext: moc]];
         [rptqDocumentHead setHasQuery: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class])
-                                                        inManagedObjectContext: moc]];
-        [rptqDocumentHead.hasDatabaseSchema setName: [self schemaName]];
-        
+                                                                     inManagedObjectContext: moc]];
+        [[rptqDocumentHead hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class])
+                                                                                            inManagedObjectContext: moc]];
+        [[[rptqDocumentHead hasDatabaseSchema] ownedByUser] setDatabase_driver_type:KEY_DB_TYPE_SF];
+        [rptqDocumentHead setName: [self schemaName]];
+        [rptqDocumentHead.hasDatabaseSchema setDatabase_driver_type: KEY_DB_TYPE_SF];
         [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
             
             [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
