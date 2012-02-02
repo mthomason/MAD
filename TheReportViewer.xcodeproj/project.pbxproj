@@ -124,6 +124,8 @@
 		4CC8992614D5BF430094E17E /* RptqTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8992514D5BF430094E17E /* RptqTable.m */; };
 		4CC8992914D5BF430094E17E /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8992814D5BF430094E17E /* RptqUserCredentals.m */; };
 		4CC8992C14D5C1470094E17E /* RptqField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8992B14D5C1470094E17E /* RptqField.m */; };
+		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
+		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4CD0F7C514CC532A003DA079 /* UIViewControllerSchemaTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */; };
 		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
@@ -522,6 +524,8 @@
 		4CC8992814D5BF430094E17E /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
 		4CC8992A14D5C1470094E17E /* RptqField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqField.h; sourceTree = "<group>"; };
 		4CC8992B14D5C1470094E17E /* RptqField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqField.m; sourceTree = "<group>"; };
+		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
+		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Reports.h"; sourceTree = "<group>"; };
 		4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Reports.m"; sourceTree = "<group>"; };
 		4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaTables.h; sourceTree = "<group>"; };
@@ -625,6 +629,8 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CC8993114DAF87A0094E17E /* UIImageBolt20.png */,
+				4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */,
 				4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */,
 				4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */,
 				4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */,
@@ -1624,6 +1630,8 @@
 				4C86D29B14C53EB6008B58B5 /* notes.txt in Resources */,
 				4CEEA0D814C559B000BB9ABC /* README.txt in Resources */,
 				4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */,
+				4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */,
+				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

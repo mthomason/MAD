@@ -173,7 +173,6 @@ typedef enum {
         [headersSectionDictionary release];
         [countRowsForSectionDictionary release];
         [sections release];
-        
     }
     return self;
 }
@@ -189,7 +188,6 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload {
@@ -202,6 +200,9 @@ typedef enum {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    //[[self tableViewQueryBuilder] setBackgroundView:nil];
+    //[[self tableViewQueryBuilder] setBackgroundColor:[UIColor  clearColor]];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -485,6 +486,7 @@ typedef enum {
             } else {
                 NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
             }
+            [request release];
             [connections release];
             break;
         }
