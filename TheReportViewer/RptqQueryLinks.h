@@ -2,7 +2,7 @@
 //  RptqQueryLinks.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/29/12.
+//  Created by Michael Thomason on 2/2/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,11 +13,11 @@
 
 @interface RptqQueryLinks : NSManagedObject
 
+@property (nonatomic, retain) NSString * fieldleft;
+@property (nonatomic, retain) NSString * fieldright;
 @property (nonatomic, retain) NSString * jointype;
 @property (nonatomic, retain) NSString * tableleft;
-@property (nonatomic, retain) NSString * fieldleft;
 @property (nonatomic, retain) NSString * tableright;
-@property (nonatomic, retain) NSString * fieldright;
 @property (nonatomic, retain) RptqQuery *inQuery;
 
 @end

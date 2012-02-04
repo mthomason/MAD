@@ -14,16 +14,19 @@
 #import "RptqTable.h"
 #import "RptqQueryTables.h"
 #import "RptqQueryLinks.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryPredicate.h"
 #import "RptqUserCredentals.h"
 #import "RptqQuery.h"
-
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
     UIViewControllerSchemaTablesSectionsDatasource = 1,
 	UIViewControllerSchemaTablesSectionsTables = 2,
 	UIViewControllerSchemaTablesSectionsLinks = 3,
-    UIViewControllerSchemaTablesSectionsSql = 4
+	UIViewControllerSchemaTablesSectionsGroups = 4,
+	UIViewControllerSchemaTablesSectionsPredicate = 5,
+    UIViewControllerSchemaTablesSectionsSql = 6
 } UIViewControllerSchemaTablesSections;
 
 #pragma mark - Private Category
@@ -41,7 +44,8 @@ typedef enum {
 @implementation UIViewControllerSchemaTables
 
 @synthesize debug = _debug;
-@synthesize fetchedResultsControllerTables = _fetchedResultsControllerTables, fetchedResultsControllerLinks = _fetchedResultsControllerLinks;
+@synthesize fetchedResultsControllerTables = _fetchedResultsControllerTables, fetchedResultsControllerLinks = _fetchedResultsControllerLinks, fetchedResultsControllerGroups = _fetchedResultsControllerGroups, fetchedResultsControllerPredicates = _fetchedResultsControllerPredicates;
+
 @synthesize toolbar = _toolbar;
 @synthesize suspendAutomaticTrackingOfChangesInManagedObjectContext = _suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
@@ -68,6 +72,8 @@ typedef enum {
 - (void)dealloc {
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
+    [_fetchedResultsControllerGroups release];
+    [_fetchedResultsControllerPredicates release];
     [_managedDocumentQuery release];
     [_tableSectionTitles release];
     [_uIViewControllerAddTable release];
@@ -81,48 +87,15 @@ typedef enum {
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-                
-        //Initalize the add table and add links views (could be lazy loaded).
-        
-        //Initalize the header views
-        UIStoryboard *sb = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
-        UIViewController *vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderBuildQuery"] retain];
-        [self setUIViewControllerBuildQuery: vc];
-        [vc release];
-        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderTables"] retain];
-        for (id subview in [[vc view] subviews]) {
-            if ([subview isKindOfClass: [UIButton class]]) {
-                UIButton *button = (UIButton *)subview;
-                if (button) {
-                    [button addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-                }
-            }
-        }
-        [self setUIViewControllerTables: vc];
-        [vc release];
-        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLinks"] retain];
-        for (id subview in [[vc view] subviews]) {
-            if ([subview isKindOfClass: [UIButton class]]) {
-                UIButton *button = (UIButton *)subview;
-                if (button) {
-                    [button addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-                }
-            }
-        }
-        [self setUIViewControllerLinks: vc];
-        [vc release];
-        vc = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderQuery"] retain];
-        [self setUIViewControllerQuery: vc];
-        [vc release];
-        [sb release];
-        
-        
+
         //These files define common attributes of the mostly static table.
         NSArray *sections = [[NSArray alloc] initWithObjects:
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsInstructions],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsDatasource],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsTables],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsLinks],
+                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsGroups],
+                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsPredicate],
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsSql], nil];
         
         NSArray *countRowsForSection = [[NSArray alloc] initWithObjects:
@@ -130,22 +103,31 @@ typedef enum {
                                         [NSNumber numberWithInt: 1],
                                         [NSNumber numberWithInt: -1],
                                         [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: 2], nil];
+                                        [NSNumber numberWithInt: -1],
+                                        [NSNumber numberWithInt: -1],
+                                        [NSNumber numberWithInt: 2],
+                                        nil];
         NSDictionary *countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
                                                                                     forKeys: sections];
         [countRowsForSection release];
         
-        NSString *h1 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
-        NSString *h2 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
-        NSString *h3 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
-        NSString *h4 = NSLocalizedString(@"Override the SQL", @"Override the SQL");
+        NSString *h1 = NSLocalizedString(@"Overview", @"Overview");
+        NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
+        NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
+        NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
+        NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
+        NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
+        NSString *h7 = NSLocalizedString(@"Override the SQL", @"Override the SQL");
         
         NSArray *headersSection = [[NSArray alloc] initWithObjects:
-                                   NSLocalizedString(@"Overview", @"Overview"),
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h1],
+                                   h1,
                                    [NSString stringWithFormat:@"Step %d: %@", 1, h2],
                                    [NSString stringWithFormat:@"Step %d: %@", 1, h3],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h4], nil];
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h4],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h5],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h6],
+                                   [NSString stringWithFormat:@"Step %d: %@", 1, h7],                                   
+                                   nil];
         NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                                forKeys: sections];
         [headersSection release];
@@ -155,6 +137,8 @@ typedef enum {
                                          [NSNumber numberWithFloat: 44.0000f],
                                          [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
                                          [NSNumber numberWithFloat: [UITableViewCellQueryLink defaultHeight]],
+                                         [NSNumber numberWithFloat: 44.0000f],
+                                         [NSNumber numberWithFloat: 44.0000f],
                                          [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
         NSDictionary *heightRowsForSectionDictionaryDictionary = [[NSDictionary alloc] initWithObjects: heightRowsForSection
                                                                                                forKeys: sections];
@@ -312,6 +296,14 @@ typedef enum {
     [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
 }
 
+- (void)addPredicate:(id)sender {
+    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+}
+
+- (void)addGroup:(id)sender {
+    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+}
+
 - (IBAction)edit:(id)sender {
     BOOL editing = ![tableViewQueryBuilder isEditing];
     UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
@@ -441,7 +433,7 @@ typedef enum {
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+    return ([indexPath section] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -522,6 +514,38 @@ typedef enum {
             [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [links jointype]];
             //[[(UITableViewCellQueryLink *)result labelTableLeft] setText: [links tableleft]];
             [links release];
+            break;
+        }
+        case UIViewControllerSchemaTablesSectionsGroups: {
+            static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
+            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
+            if (!result) {
+                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryGroup" bundle:nil];
+                [resultCellNib instantiateWithOwner:self options:nil];
+                result = [self uITableViewCellQueryLink];
+                [self setUITableViewCellQueryLink:nil];
+            }
+            RptqQueryGroup *group = [[[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            
+            [[(UITableViewCellQueryGroup *)result labelMain] setText: [group field]];
+            [[(UITableViewCellQueryGroup *)result labelDetail] setText: [NSString stringWithFormat:@"Sort %d",[group sort]]];
+            [group release];
+            break;
+        }
+        case UIViewControllerSchemaTablesSectionsPredicate: {
+            static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
+            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
+            if (!result) {
+                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryPredicate" bundle:nil];
+                [resultCellNib instantiateWithOwner:self options:nil];
+                result = [self uITableViewCellQueryLink];
+                [self setUITableViewCellQueryLink:nil];
+            }
+            RptqQueryPredicate *predicate = [[[self fetchedResultsControllerPredicates] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            
+            [[(UITableViewCellQueryPredicate *)result labelMain] setText: [predicate fieldleft]];
+            [[(UITableViewCellQueryPredicate *)result labelDetail] setText: [predicate fieldright]];
+            [predicate release];
             break;
         }
         case UIViewControllerSchemaTablesSectionsSql: {
@@ -627,24 +651,88 @@ typedef enum {
  */
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *results = nil;
+    UIView *result = nil;
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    
     switch (section) {
-        case UIViewControllerSchemaTablesSectionsInstructions:
-            results = [[[[self uIViewControllerBuildQuery] view] retain] autorelease];
+        case UIViewControllerSchemaTablesSectionsInstructions: {
+            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderBuildQuery"] view];
             break;
-        case UIViewControllerSchemaTablesSectionsTables:
-            results = [[[[self uIViewControllerTables] view] retain] autorelease];
+        }
+        case UIViewControllerSchemaTablesSectionsDatasource: {
+            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderDatasource"] view];
             break;
-        case UIViewControllerSchemaTablesSectionsLinks:
-            results = [[[[self uIViewControllerLinks] view] retain] autorelease];
+        }
+        case UIViewControllerSchemaTablesSectionsTables: {
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderTables"];
+            for (id subview in [[vc view] subviews]) {
+                if ([subview isKindOfClass: [UIButton class]]) {
+                    UIButton *button = subview;
+                    if (button) {
+                        [button addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }
+            }
+            result = [vc view];
             break;
-        case UIViewControllerSchemaTablesSectionsSql:
-            results = [[[[self uIViewControllerQuery] view] retain] autorelease];
+        }
+        case UIViewControllerSchemaTablesSectionsLinks: {
+
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLinks"];
+            for (id subview in [[vc view] subviews]) {
+                if ([subview isKindOfClass: [UIButton class]]) {
+                    UIButton *button = subview;
+                    if (button) {
+                        [button addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }
+            }
+            result = [vc view];
             break;
-        default:
+        }
+
+        case UIViewControllerSchemaTablesSectionsGroups: {
+            
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderGroups"];
+            for (id subview in [[vc view] subviews]) {
+                if ([subview isKindOfClass: [UIButton class]]) {
+                    UIButton *button = subview;
+                    if (button) {
+                        [button addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }
+            }
+            result = [vc view];
             break;
+        }
+
+        case UIViewControllerSchemaTablesSectionsPredicate: {
+            
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderPredicate"];
+            for (id subview in [[vc view] subviews]) {
+                if ([subview isKindOfClass: [UIButton class]]) {
+                    UIButton *button = subview;
+                    if (button) {
+                        [button addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }
+            }
+            result = [vc view];
+            break;
+        }
+
+        
+        case UIViewControllerSchemaTablesSectionsSql: {
+            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderQuery"] view];
+            break;
+        }
+        default: {
+            break;
+        }
     }
-    return results;
+
+    return result;
 }
 
 

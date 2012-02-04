@@ -2,7 +2,7 @@
 //  RptqUserCredentals.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/29/12.
+//  Created by Michael Thomason on 2/2/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 @implementation RptqUserCredentals
 
 @dynamic database_driver_type;
+@dynamic inUse;
 @dynamic mysql_database;
 @dynamic mysql_host;
 @dynamic mysql_password;
@@ -24,7 +25,6 @@
 @dynamic sf_login_redirect_uri;
 @dynamic sf_password;
 @dynamic sf_username;
-@dynamic inUse;
 @dynamic inDatabase;
 
 @end

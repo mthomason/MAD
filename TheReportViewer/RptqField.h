@@ -2,7 +2,7 @@
 //  RptqField.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/29/12.
+//  Created by Michael Thomason on 2/2/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,10 +13,10 @@
 
 @interface RptqField : NSManagedObject
 
+@property (nonatomic, retain) NSString * datatype;
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * datatype;
 @property (nonatomic, retain) NSSet *inRelationships;
 @property (nonatomic, retain) RptqTable *inTable;
 @end

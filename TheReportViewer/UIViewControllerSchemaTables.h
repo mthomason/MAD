@@ -12,6 +12,8 @@
 #import "UITableViewCellQueryLink.h"
 #import "UITableViewCellOverride.h"
 #import "UITableViewCellQueryInput.h"
+#import "UITableViewCellQueryGroup.h"
+#import "UITableViewCellQueryPredicate.h"
 #import "UITableViewControllerDataSourceTypes.h"
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
@@ -31,6 +33,8 @@
 
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 

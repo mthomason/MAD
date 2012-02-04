@@ -2,7 +2,7 @@
 //  RptqField.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 1/29/12.
+//  Created by Michael Thomason on 2/2/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,10 +13,10 @@
 
 @implementation RptqField
 
+@dynamic datatype;
 @dynamic id;
 @dynamic label;
 @dynamic name;
-@dynamic datatype;
 @dynamic inRelationships;
 @dynamic inTable;
 

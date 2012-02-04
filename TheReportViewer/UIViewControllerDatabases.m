@@ -11,6 +11,8 @@
 #import "NSFileManager+Reports.h"
 #import "RptqQueryTables.h"
 #import "RptqQueryLinks.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryPredicate.h"
 
 @interface UIViewControllerDatabases()
 
@@ -157,6 +159,7 @@
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsControllerTables: frc];
+                    
                     [frc release];
                     frc = nil;
                     
@@ -168,6 +171,31 @@
                                                                 sectionNameKeyPath: nil
                                                                          cacheName: nil];
                     [tvc setFetchedResultsControllerLinks: frc];
+
+                    [frc release];
+                    frc = nil;
+                    
+                    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+                    sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                sectionNameKeyPath: nil
+                                                                         cacheName: nil];
+                    [tvc setFetchedResultsControllerGroups: frc];
+
+                    [frc release];
+                    frc = nil;
+                    
+                    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
+                    sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"comparson" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                sectionNameKeyPath: nil
+                                                                         cacheName: nil];
+                    [tvc setFetchedResultsControllerPredicates: frc];
+                    
                     [frc release];
                     
                 }];
