@@ -32,6 +32,9 @@
 		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
+		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
+		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
+		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -137,6 +140,8 @@
 		4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
 		4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
 		4CD9CB0614DDE152000E5946 /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0514DDE152000E5946 /* RptqQueryGroup.m */; };
+		4CD9CB0C14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0B14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m */; };
+		4CD9CB0F14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m */; };
 		4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
 		4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
@@ -183,6 +188,12 @@
 		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageWrench20.png; sourceTree = "<group>"; };
 		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageWrench20@2x.png"; sourceTree = "<group>"; };
 		4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvAppData.xcdatamodel; sourceTree = "<group>"; };
+		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
+		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
+		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
+		4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerOpperators.m; sourceTree = "<group>"; };
+		4C1A585B14DE348200184445 /* UITableViewControllerSortType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSortType.h; sourceTree = "<group>"; };
+		4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSortType.m; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* Reports.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reports.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -551,6 +562,10 @@
 		4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryLink.m; sourceTree = "<group>"; };
 		4CD9CB0414DDE152000E5946 /* RptqQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryGroup.h; sourceTree = "<group>"; };
 		4CD9CB0514DDE152000E5946 /* RptqQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryGroup.m; sourceTree = "<group>"; };
+		4CD9CB0A14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSchemaAddPredicate.h; sourceTree = "<group>"; };
+		4CD9CB0B14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSchemaAddPredicate.m; sourceTree = "<group>"; };
+		4CD9CB0D14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSchemaAddGroup.h; sourceTree = "<group>"; };
+		4CD9CB0E14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSchemaAddGroup.m; sourceTree = "<group>"; };
 		4CE7B76814C038AF007D0148 /* NSDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabase.h; sourceTree = "<group>"; };
 		4CE7B76914C038AF007D0148 /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabase.m; sourceTree = "<group>"; };
 		4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabaseMySql.h; sourceTree = "<group>"; };
@@ -877,6 +892,8 @@
 			children = (
 				4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */,
 				4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */,
+				4CD9CB0914DE0602000E5946 /* Add Predicate */,
+				4CD9CB0814DE05F7000E5946 /* Add Group */,
 				4C507B0614D07A5E00DE67E3 /* Add Table */,
 				4C507B0814D07A8200DE67E3 /* Add Relationship */,
 			);
@@ -1512,6 +1529,30 @@
 			name = UITableViewCell;
 			sourceTree = "<group>";
 		};
+		4CD9CB0814DE05F7000E5946 /* Add Group */ = {
+			isa = PBXGroup;
+			children = (
+				4CD9CB0D14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.h */,
+				4CD9CB0E14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m */,
+				4C1A585B14DE348200184445 /* UITableViewControllerSortType.h */,
+				4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */,
+			);
+			name = "Add Group";
+			sourceTree = "<group>";
+		};
+		4CD9CB0914DE0602000E5946 /* Add Predicate */ = {
+			isa = PBXGroup;
+			children = (
+				4CD9CB0A14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.h */,
+				4CD9CB0B14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m */,
+				4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */,
+				4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */,
+				4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */,
+				4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */,
+			);
+			name = "Add Predicate";
+			sourceTree = "<group>";
+		};
 		4CDE860614CD6FF8008BD98E /* Schema Editor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1738,6 +1779,11 @@
 				4C6F763014DB5EAC0057377C /* RptqRelationship.m in Sources */,
 				4C6F763314DB5EAC0057377C /* RptqField.m in Sources */,
 				4CD9CB0614DDE152000E5946 /* RptqQueryGroup.m in Sources */,
+				4CD9CB0C14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m in Sources */,
+				4CD9CB0F14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m in Sources */,
+				4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
+				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
+				4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

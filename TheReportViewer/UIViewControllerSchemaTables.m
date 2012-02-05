@@ -64,11 +64,6 @@ typedef enum {
 
 @synthesize managedDocumentQuery = _managedDocumentQuery;
 
-@synthesize uIViewControllerAddTable = _uIViewControllerAddTable, uIViewControllerAddLink = _uIViewControllerAddLink;
-
-@synthesize uIViewControllerBuildQuery = _uIViewControllerBuildQuery, uIViewControllerTables = _uIViewControllerTables, uIViewControllerLinks = _uIViewControllerLinks, uIViewControllerQuery = _uIViewControllerQuery;
-
-
 - (void)dealloc {
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
@@ -76,8 +71,6 @@ typedef enum {
     [_fetchedResultsControllerPredicates release];
     [_managedDocumentQuery release];
     [_tableSectionTitles release];
-    [_uIViewControllerAddTable release];
-    [_uIViewControllerAddLink release];
     [_tableMetaData release];
     [tableViewQueryBuilder release];
     [_toolbar release];

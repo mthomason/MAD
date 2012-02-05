@@ -52,14 +52,6 @@
 @property (assign, nonatomic) IBOutlet UITableViewCellOverride      *uITableViewCellOverride;
 @property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *uITableViewCellQueryInput;
 
-@property (retain, nonatomic) UIViewController             *uIViewControllerBuildQuery;
-@property (retain, nonatomic) UIViewController             *uIViewControllerTables;
-@property (retain, nonatomic) UIViewController             *uIViewControllerLinks;
-@property (retain, nonatomic) UIViewController             *uIViewControllerQuery;
-
-@property (retain, nonatomic) UIViewController             *uIViewControllerAddTable;
-@property (retain, nonatomic) UIViewController             *uIViewControllerAddLink;
-
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 @property BOOL debug;
 
