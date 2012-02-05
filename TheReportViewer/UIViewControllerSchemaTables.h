@@ -18,6 +18,8 @@
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
 #import "UITableViewControllerLinkBuilder.h"
+#import "UITableViewControllerSchemaAddGroup.h"
+#import "UITableViewControllerSchemaAddPredicate.h"
 
 @class UIViewControllerSchemaTables;
 
@@ -27,7 +29,10 @@
 
 @interface UIViewControllerSchemaTables : UIViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate,
-        UIViewControllerSchemaAddLinkDelegate, UIViewControllerSchemaAddTableDelegate,
+        UIViewControllerSchemaAddLinkDelegate,
+        UIViewControllerSchemaAddTableDelegate,
+        UITableViewControllerSchemaAddPredicateDelegate,
+        UITableViewControllerSchemaAddGroupDelegate,
         UITableViewControllerDataSourceTypesDelegate,
         UITableViewControllerLinkBuilderDelegate>
 

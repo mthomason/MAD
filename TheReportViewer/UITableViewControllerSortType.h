@@ -21,7 +21,7 @@ typedef enum {
 @end
 
 @interface UITableViewControllerSortType : UITableViewController
-<UITableViewDataSource, UITableViewDelegate>
+    <UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerSortTypeDelegate> delegate;
 

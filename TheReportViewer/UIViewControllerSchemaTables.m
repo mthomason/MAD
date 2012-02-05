@@ -9,6 +9,7 @@
 #import "UIViewControllerSchemaTables.h"
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
+#import "UITableViewControllerSchemaAddGroup.h"
 #import "Constants.h"
 #import "RptqDocument.h"
 #import "RptqTable.h"
@@ -256,22 +257,44 @@ typedef enum {
                     if (tvc) {
                         [tvc setDelegate:self];
                     }
-                    
-                    /*
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsController: frc];
-                    [frc release];
-                     */
                 }
             }
             [navControl release];
         }
+    } else if ([[segue identifier] isEqualToString:@"showAddPredicateViewController"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddGroup class]]) {
+                    
+                    UITableViewControllerSchemaAddGroup *tvc = (UITableViewControllerSchemaAddGroup *)[navControl topViewController];
+                    //[tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                    if (tvc) {
+                        [tvc setDelegate:self];
+                    }
+                    
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    NSError *error = nil;
+                    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+                    if (!error) {
+                        NSLog(@"TableResults %@", tablesResults);
+                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                              managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                                sectionNameKeyPath: nil
+                                                                                                         cacheName: nil];
+                        [tvc setFetchedResultsController: frc];
+                        [frc release];
+                    } else {
+                        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+                    }
+                }
+            }
+            [navControl release];
+        }
+    } else if ([[segue identifier] isEqualToString:@"showAddGroupViewController"]) {
+        
     }
 }
 
@@ -369,6 +392,14 @@ typedef enum {
 }
 
 - (void)viewControllerSchemaAddTableDidFinish:(UIViewControllerSchemaAddTable *)controller {
+    [self dismissModalViewControllerAnimated: YES];
+}
+
+- (void)uITableViewControllerSchemaAddGroupDidFinish:(UITableViewControllerSchemaAddGroup *)controller {
+    [self dismissModalViewControllerAnimated: YES];
+}
+
+- (void)uITableViewControllerSchemaAddPredicateDidFinish:(UITableViewControllerSchemaAddPredicate *)controller {
     [self dismissModalViewControllerAnimated: YES];
 }
 

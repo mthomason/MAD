@@ -771,8 +771,8 @@
                         <outlet property="toolbar" destination="xVO-9D-O7m" id="adZ-Yu-Uo2"/>
                         <segue destination="n4n-Sn-MmP" kind="modal" identifier="showAddTableViewController" id="Xja-Vb-I2h"/>
                         <segue destination="bUw-df-pAe" kind="modal" identifier="showAddLinkViewController" id="idj-ud-PyC"/>
-                        <segue destination="ouR-uU-io8" kind="modal" id="MuE-kH-9se"/>
-                        <segue destination="yu8-fa-CaA" kind="modal" id="gJB-rC-0ZL"/>
+                        <segue destination="ouR-uU-io8" kind="modal" identifier="showAddGroupViewController" id="MuE-kH-9se"/>
+                        <segue destination="yu8-fa-CaA" kind="modal" identifier="showAddPredicateViewController" id="gJB-rC-0ZL"/>
                     </connections>
                 </viewController>
             </objects>
@@ -2939,7 +2939,7 @@
         <scene sceneID="9NY-IW-ypl">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XsF-3H-2sW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="ddJ-v9-gEY" sceneMemberID="viewController">
+                <tableViewController id="ddJ-v9-gEY" customClass="UITableViewControllerSortType" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7r5-wQ-W2N">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3001,7 +3001,7 @@
         <scene sceneID="RCn-aj-ZyM">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0L7-bY-ucZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="eop-L6-mkF" sceneMemberID="viewController">
+                <tableViewController id="eop-L6-mkF" customClass="UITableViewControllerSchemaAddGroup" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="QbH-9x-aBz">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3073,9 +3073,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Group" id="0XA-i0-xMo">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="NGV-aS-hvY"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7S4-4h-WaB"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="NGV-aS-hvY">
+                            <connections>
+                                <action selector="cancel:" destination="eop-L6-mkF" id="mVi-WU-ksw"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7S4-4h-WaB">
+                            <connections>
+                                <action selector="save:" destination="eop-L6-mkF" id="J3t-tS-02l"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableViewCellField" destination="aa3-6a-4fe" id="Kxd-UU-LZb"/>
+                        <outlet property="tableViewCellSort" destination="JAr-jg-9nE" id="Ccy-xq-vID"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1906" y="53"/>
@@ -3737,6 +3749,16 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
+        <class className="UITableViewControllerSchemaAddGroup" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSchemaAddGroup.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellField" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellSort" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
         <class className="UITableViewControllerSchemaAddPredicate" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSchemaAddPredicate.h"/>
             <relationships>
@@ -3761,6 +3783,12 @@
                 <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
                 <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
                 <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerSortType" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSortType.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
         <class className="UIViewControllerDatabaseSchema" superclassName="UIViewController">

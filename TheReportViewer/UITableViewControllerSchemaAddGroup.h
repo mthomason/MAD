@@ -7,7 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UITableViewControllerSortType.h"
+#import "RptqQueryGroup.h"
+
+@class UITableViewControllerSchemaAddGroup;
+
+@protocol UITableViewControllerSchemaAddGroupDelegate
+- (void)uITableViewControllerSchemaAddGroupDidFinish:(UITableViewControllerSchemaAddGroup *)controller;
+- (void)uITableViewControllerSchemaAddGroupDidAddGroup:(RptqQueryGroup *)group;
+@end
 
 @interface UITableViewControllerSchemaAddGroup : UITableViewController
+    <UITableViewDelegate,
+        UITableViewControllerSortTypeDelegate>
+
+@property (assign, nonatomic) IBOutlet id <UITableViewControllerSchemaAddGroupDelegate> delegate;
+
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellField;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellSort;
+
+- (IBAction)cancel:(id)sender;
+- (IBAction)save:(id)sender;
 
 @end
