@@ -8,11 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+	MNSPredicateOperatorEqual = 0,
+	MNSPredicateOperatorNotEqual,
+	MNSPredicateOperatorGreaterThan,
+	MNSPredicateOperatorGreaterThanOrEqualTo,
+	MNSPredicateOperatorLessThan,
+	MNSPredicateOperatorLessThanOrEqualTo
+} MNSPredicateOperator;
+
+#define MNSPredicateOperatorReuseIds [NSArray arrayWithObjects: @"UITableViewCellPredicateOperatorEqual", @"UITableViewCellPredicateOperatorNotEqual", @"UITableViewCellPredicateOperatorGreaterThan", @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo", @"UITableViewCellPredicateOperatorLessThan", @"UITableViewCellPredicateOperatorLessThanOrEqualTo", nil]
+
+#define MNSPredicateOperatorNames [NSArray arrayWithObjects: NSLocalizedString(@"Equal", @"Equal"), NSLocalizedString(@"Not Equal", @"Not Equal"), NSLocalizedString(@"Greater Than", @"Greater Than"), NSLocalizedString(@"Greater Than or Equal To", @"Greater Than or Equal To"), NSLocalizedString(@"Less Than", @"Less Than"), NSLocalizedString(@"Less Than or Equal To", @"Less Than or Equal To"), nil]
+
 @class UITableViewControllerOpperators;
 
 @protocol UITableViewControllerOpperatorsDelegate
+- (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType;
+@optional
 - (void)uITableViewControllerOpperatorsDidFinish:(UITableViewControllerOpperators *)controller;
-- (void)uITableViewControllerOpperatorsDidSelectOperator:(NSPredicateOperatorType)operatorType;
 @end
 
 @interface UITableViewControllerOpperators : UITableViewController

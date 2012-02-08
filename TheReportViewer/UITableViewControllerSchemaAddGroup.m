@@ -15,8 +15,7 @@
 @synthesize tableViewCellField = _tableViewCellField;
 @synthesize tableViewCellSort = _tableViewCellSort;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -24,8 +23,7 @@
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -34,8 +32,7 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
@@ -45,8 +42,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [self setTableViewCellField:nil];
     [self setTableViewCellSort:nil];
     [super viewDidUnload];
@@ -54,41 +50,58 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showGroupSortOrders"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerSortType class]]) {
+            [[segue destinationViewController] setDelegate:self];
+        }
+    }
 }
 
 #pragma mark - Table View Sort Type Delegate
 
 - (void)uITableViewControllerSortTypeDidFinish:(UITableViewControllerSortType *)controller {
-#warning Do something here?
+    [[self navigationController] popToViewController:self animated:YES];
 }
 
 - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType {
-#warning Do something here?
+    [[self navigationController] popToViewController:self animated:YES];
+    NSString *label = nil;
+    switch (sortOrderType) {
+        case MNSSortOrderAccending:
+            label = NSLocalizedString(@"Accending", @"Accending");
+            break;
+        case MNSSortOrderDecending:
+            label = NSLocalizedString(@"Decending", @"Decending");
+            break;
+        default:
+            label = NSLocalizedString(@"Default", @"Default");
+            break;
+    }
+    [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
 }
+
 
 #pragma mark - Table view delegate
 

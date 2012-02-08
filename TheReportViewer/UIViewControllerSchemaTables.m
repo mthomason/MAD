@@ -265,36 +265,27 @@ typedef enum {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddGroup class]]) {
-                    
-                    UITableViewControllerSchemaAddGroup *tvc = (UITableViewControllerSchemaAddGroup *)[navControl topViewController];
-                    //[tvc setManagedDocumentQuery: [self managedDocumentQuery]];
-                    if (tvc) {
-                        [tvc setDelegate:self];
-                    }
-                    
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSError *error = nil;
-                    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-                    if (!error) {
-                        NSLog(@"TableResults %@", tablesResults);
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsController: frc];
-                        [frc release];
-                    } else {
-                        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-                    }
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddPredicate class]]) {
+                    UITableViewControllerSchemaAddPredicate *tvc = (UITableViewControllerSchemaAddPredicate *)[navControl topViewController];
+                    if (tvc) [tvc setDelegate:self];
                 }
             }
             [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupViewController"]) {
-        
+
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddGroup class]]) {
+                    UITableViewControllerSchemaAddGroup *tvc = (UITableViewControllerSchemaAddGroup *)[navControl topViewController];
+                    if (tvc) [tvc setDelegate:self];
+                }
+            }
+            [navControl release];
+        }
+
+    
     }
 }
 
@@ -313,11 +304,11 @@ typedef enum {
 }
 
 - (void)addPredicate:(id)sender {
-    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+    [self performSegueWithIdentifier: @"showAddPredicateViewController" sender: sender];
 }
 
 - (void)addGroup:(id)sender {
-    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+    [self performSegueWithIdentifier: @"showAddGroupViewController" sender: sender];
 }
 
 - (IBAction)edit:(id)sender {

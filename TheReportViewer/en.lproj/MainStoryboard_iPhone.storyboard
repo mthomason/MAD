@@ -2272,7 +2272,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Right Side" id="rBn-8n-6Tn">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="p7i-Ju-lFq">
+                        <barButtonItem key="rightBarButtonItem" id="p7i-Ju-lFq">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="oPu-Cr-ufn">
                                 <rect key="frame" x="215" y="7" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2915,7 +2915,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Left Side" id="1bo-MX-7fM">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="UEv-4s-nZ5">
+                        <barButtonItem key="rightBarButtonItem" id="UEv-4s-nZ5">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="NYU-Zw-v1F">
                                 <rect key="frame" x="215" y="7" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3061,7 +3061,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="ddJ-v9-gEY" kind="push" id="B3N-D7-ldx"/>
+                                            <segue destination="ddJ-v9-gEY" kind="push" identifier="showGroupSortOrders" id="B3N-D7-ldx"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -3158,7 +3158,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="DNS-Uz-Tfb" kind="push" id="CwB-f6-wTT"/>
+                                            <segue destination="DNS-Uz-Tfb" kind="push" identifier="showAddPredicateOperator" id="CwB-f6-wTT"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="HMw-7W-Dsg" detailTextLabel="fey-1Z-kQw" style="IBUITableViewCellStyleValue1" id="Bp1-t1-4Hq">
@@ -3210,6 +3210,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="tableViewCellLeftSide" destination="RfV-Gg-TVh" id="Gek-GI-Xzo"/>
+                        <outlet property="tableViewCellOperator" destination="ZD6-ch-l5V" id="rEN-sI-L0N"/>
+                        <outlet property="tableViewCellRightSide" destination="Bp1-t1-4Hq" id="gIi-cu-mTU"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1891" y="-1147"/>
