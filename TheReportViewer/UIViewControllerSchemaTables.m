@@ -221,8 +221,8 @@ typedef enum {
                 if ([[navControl topViewController] isKindOfClass:[UIViewControllerSchemaAddTable class]]) {
                     
                     UIViewControllerSchemaAddTable *tvc = (UIViewControllerSchemaAddTable *)[navControl topViewController];
-                    [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
                     if (tvc) {
+                        [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
                         [tvc setDelegate:self];
                     }
                     
@@ -267,7 +267,10 @@ typedef enum {
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddPredicate class]]) {
                     UITableViewControllerSchemaAddPredicate *tvc = (UITableViewControllerSchemaAddPredicate *)[navControl topViewController];
-                    if (tvc) [tvc setDelegate:self];
+                    if (tvc) {
+                        [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                        [tvc setDelegate:self];
+                    }
                 }
             }
             [navControl release];

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "RptqField.h"
+#import "UITableViewControllerDataFieldSelector.h"
 
 @class UITableViewControllerFieldOrCustomValue;
 
@@ -17,7 +18,7 @@
 - (void)uITableViewControllerFieldOrCustomValueDidAddValue:(id)value;
 @end
 
-@interface UITableViewControllerFieldOrCustomValue : UITableViewController
+@interface UITableViewControllerFieldOrCustomValue : UITableViewControllerDataFieldSelector
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerFieldOrCustomValueDelegate> delegate;

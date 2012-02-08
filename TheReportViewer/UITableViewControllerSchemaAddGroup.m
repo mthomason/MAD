@@ -79,6 +79,16 @@
     }
 }
 
+#pragma mark - Actions
+
+- (IBAction)cancel:(id)sender {
+    [[self delegate] uITableViewControllerSchemaAddGroupDidFinish:self];
+}
+
+- (IBAction)save:(id)sender {
+#warning Do something here?
+}
+
 #pragma mark - Table View Sort Type Delegate
 
 - (void)uITableViewControllerSortTypeDidFinish:(UITableViewControllerSortType *)controller {
@@ -111,14 +121,6 @@
     [_tableViewCellField release];
     [_tableViewCellSort release];
     [super dealloc];
-}
-
-- (IBAction)cancel:(id)sender {
-    [[self delegate] uITableViewControllerSchemaAddGroupDidFinish:self];
-}
-
-- (IBAction)save:(id)sender {
-#warning Do something here?
 }
 
 @end

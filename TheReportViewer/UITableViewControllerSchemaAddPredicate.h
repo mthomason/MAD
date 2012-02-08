@@ -10,6 +10,7 @@
 #import "RptqQueryPredicate.h"
 #import "UITableViewControllerOpperators.h"
 #import "UITableViewControllerFieldOrCustomValue.h"
+#import "UIManagedDocumentQuery.h"
 
 @class UITableViewControllerSchemaAddPredicate;
 
@@ -28,6 +29,8 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellLeftSide;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellRightSide;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellOperator;
+
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

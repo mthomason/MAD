@@ -2899,12 +2899,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="hwt-xU-b68">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="upU-9l-Nde" detailTextLabel="aaA-hV-d0m" style="IBUITableViewCellStyleValue1" id="hwt-xU-b68">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upU-9l-Nde">
+                                            <rect key="frame" x="10" y="11" width="35" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aaA-hV-d0m">
+                                            <rect key="frame" x="266" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.2196078431372549" green="0.32941176470588235" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </tableViewCell>
@@ -3129,7 +3145,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="wlp-wD-qxw" kind="push" id="kPX-hH-DKi"/>
+                                            <segue destination="wlp-wD-qxw" kind="push" identifier="showAddPredicateLeftSide" id="kPX-hH-DKi"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="aFa-Z1-qxP" detailTextLabel="9A9-6J-pYd" style="IBUITableViewCellStyleValue1" id="ZD6-ch-l5V">
@@ -3187,7 +3203,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="0nn-t6-iT0" kind="push" id="vX0-r6-0HV"/>
+                                            <segue destination="0nn-t6-iT0" kind="push" identifier="showAddPredicateRightSide" id="vX0-r6-0HV"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -3684,6 +3700,12 @@
         <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
         </class>
+        <class className="UITableViewControllerDataFieldSelector" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataFieldSelector.h"/>
+            <relationships>
+                <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
         <class className="UITableViewControllerDataSourceSetupMySql" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupMySql.h"/>
             <relationships>
@@ -3726,7 +3748,7 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerFieldOrCustomValue" superclassName="UITableViewController">
+        <class className="UITableViewControllerFieldOrCustomValue" superclassName="UITableViewControllerDataFieldSelector">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerFieldOrCustomValue.h"/>
             <relationships>
                 <relationship kind="action" name="segmentedControlValueChanged:"/>

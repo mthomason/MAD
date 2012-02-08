@@ -35,6 +35,10 @@
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
+		4C1A586614E23DDB00184445 /* UIViewSectionHeaderTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewSectionHeaderTable.m */; };
+		4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
+		4C1A586A14E240C000184445 /* UITableViewControllerDataFieldSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586914E240C000184445 /* UITableViewControllerDataFieldSelector.m */; };
+		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -194,6 +198,13 @@
 		4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerOpperators.m; sourceTree = "<group>"; };
 		4C1A585B14DE348200184445 /* UITableViewControllerSortType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSortType.h; sourceTree = "<group>"; };
 		4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSortType.m; sourceTree = "<group>"; };
+		4C1A586214E23DDA00184445 /* UIViewSectionHeaderTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewSectionHeaderTable.h; sourceTree = "<group>"; };
+		4C1A586314E23DDA00184445 /* UIViewSectionHeaderTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewSectionHeaderTable.m; sourceTree = "<group>"; };
+		4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqFieldSelectorManager.h; sourceTree = "<group>"; };
+		4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqFieldSelectorManager.m; sourceTree = "<group>"; };
+		4C1A586814E240BF00184445 /* UITableViewControllerDataFieldSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataFieldSelector.h; sourceTree = "<group>"; };
+		4C1A586914E240C000184445 /* UITableViewControllerDataFieldSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataFieldSelector.m; sourceTree = "<group>"; };
+		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C384E2414B29789007B4F48 /* Reports.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reports.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -595,6 +606,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
 				4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */,
@@ -622,6 +634,12 @@
 		4C00815914B6BDB6003DF437 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4C1A586814E240BF00184445 /* UITableViewControllerDataFieldSelector.h */,
+				4C1A586914E240C000184445 /* UITableViewControllerDataFieldSelector.m */,
+				4C1A586214E23DDA00184445 /* UIViewSectionHeaderTable.h */,
+				4C1A586314E23DDA00184445 /* UIViewSectionHeaderTable.m */,
+				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,
+				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
 				4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */,
 				4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */,
 				4CD0F7D514CD20E8003DA079 /* UITableViewCell */,
@@ -735,6 +753,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C1A586B14E247C700184445 /* QuartzCore.framework */,
 				4C49C8AD14C56F35001B3298 /* APIs */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
 				4C384E2E14B29789007B4F48 /* TheReportViewer */,
@@ -1784,6 +1803,9 @@
 				4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
 				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
 				4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */,
+				4C1A586614E23DDB00184445 /* UIViewSectionHeaderTable.m in Sources */,
+				4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */,
+				4C1A586A14E240C000184445 /* UITableViewControllerDataFieldSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

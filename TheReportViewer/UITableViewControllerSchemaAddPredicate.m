@@ -7,17 +7,20 @@
 //
 
 #import "UITableViewControllerSchemaAddPredicate.h"
-
+#import "UITableViewControllerDataFieldSelector.h"
+#import "RptqTable.h"
 
 @implementation UITableViewControllerSchemaAddPredicate
 
 @synthesize delegate = _delegate;
 @synthesize tableViewCellLeftSide = _tableViewCellLeftSide, tableViewCellRightSide = _tableViewCellRightSide, tableViewCellOperator = _tableViewCellOperator;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
     [_tableViewCellLeftSide release];
     [_tableViewCellRightSide release];
     [_tableViewCellOperator release];
+    [_managedDocumentQuery release];
     [super dealloc];
 }
 
@@ -40,6 +43,24 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showAddPredicateOperator"]) {
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerOpperators class]]) {
+            [[segue destinationViewController] setDelegate:self];
+        }
+    } else if ([[segue identifier] isEqualToString:@"showAddPredicateLeftSide"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerFieldOrCustomValue class]] ||
+            [[segue destinationViewController] isKindOfClass: [UITableViewControllerDataFieldSelector class]]) {
+
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            NSError *error = nil;
+            NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+
+            [[segue destinationViewController] setDelegate:self];            
+            
+            [(UITableViewControllerDataFieldSelector *)[segue destinationViewController] setDataTables: tablesResults]; 
+        }
+    } else if ([[segue identifier] isEqualToString:@"showAddPredicateRightSide"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerFieldOrCustomValue class]]) {
             [[segue destinationViewController] setDelegate:self];
         }
     }
