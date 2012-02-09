@@ -14,6 +14,11 @@
 @synthesize delegate = _delegate;
 @synthesize segmentedControlDisplayType = _segmentedControlDisplayType;
 
+- (void)dealloc {
+    [_segmentedControlDisplayType release];
+    [super dealloc];
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) { }
@@ -28,6 +33,10 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (IBAction)segmentedControlValueChanged:(id)sender {
+    
 }
 
 #pragma mark - View lifecycle
@@ -132,21 +141,17 @@
 
 #pragma mark - Table view delegate
 
+/*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     // Navigation logic may go here. Create and push another view controller.
-    /*
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
      // ...
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      [detailViewController release];
-     */
 }
+*/
 
-- (void)dealloc {
-    [_segmentedControlDisplayType release];
-    [super dealloc];
-}
-- (IBAction)segmentedControlValueChanged:(id)sender {
-}
 @end

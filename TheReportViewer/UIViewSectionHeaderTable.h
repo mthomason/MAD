@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol SectionHeaderViewDelegate;
 
+@class UIViewSectionHeaderTable;
+
+@protocol SectionHeaderViewDelegate <NSObject>
+
+@optional
+-(void)sectionHeaderView:(UIViewSectionHeaderTable*)sectionHeaderView sectionOpened:(NSInteger)section;
+-(void)sectionHeaderView:(UIViewSectionHeaderTable*)sectionHeaderView sectionClosed:(NSInteger)section;
+
+@end
 
 @interface UIViewSectionHeaderTable : UIView 
 
@@ -22,17 +30,3 @@
 -(void)toggleOpenWithUserAction:(BOOL)userAction;
 
 @end
-
-
-
-/*
- Protocol to be adopted by the section header's delegate; the section header tells its delegate when the section should be opened and closed.
- */
-@protocol SectionHeaderViewDelegate <NSObject>
-
-@optional
--(void)sectionHeaderView:(UIViewSectionHeaderTable*)sectionHeaderView sectionOpened:(NSInteger)section;
--(void)sectionHeaderView:(UIViewSectionHeaderTable*)sectionHeaderView sectionClosed:(NSInteger)section;
-
-@end
-

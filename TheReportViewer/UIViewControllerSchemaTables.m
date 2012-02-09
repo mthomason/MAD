@@ -10,6 +10,7 @@
 #import "UIViewControllerSchemaAddTable.h"
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
 #import "UITableViewControllerSchemaAddGroup.h"
+#import "UITableViewControllerPredicateFormat.h"
 #import "Constants.h"
 #import "RptqDocument.h"
 #import "RptqTable.h"
@@ -264,12 +265,21 @@ typedef enum {
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateViewController"]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
+            NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddPredicate class]]) {
                     UITableViewControllerSchemaAddPredicate *tvc = (UITableViewControllerSchemaAddPredicate *)[navControl topViewController];
                     if (tvc) {
                         [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
                         [tvc setDelegate:self];
+                    }
+                } else if ([[navControl topViewController] isKindOfClass:[UITableViewControllerPredicateFormat class]]) {
+                    UITableViewControllerPredicateFormat *tvc = (UITableViewControllerPredicateFormat *)[navControl topViewController];
+                    if (tvc) {
+                        [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                        [tvc setAddPredicateDelegate: self];
+                        [tvc setDelegate: self];
+                        
                     }
                 }
             }
@@ -306,7 +316,7 @@ typedef enum {
     [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
 }
 
-- (void)addPredicate:(id)sender {
+- (void)showAddPredicateModalView:(id)sender {
     [self performSegueWithIdentifier: @"showAddPredicateViewController" sender: sender];
 }
 
@@ -331,6 +341,31 @@ typedef enum {
 #pragma mark - Model Delegates
 
 #pragma mark - Delegates
+
+- (void)modalTableViewControllerDidFinish:(id)controller {
+    [self dismissModalViewControllerAnimated: YES];
+}
+
+- (void)addPredicate:(RptqQueryPredicate *)predicate {
+    [self dismissModalViewControllerAnimated: YES];
+    
+    if ([self managedDocumentQuery]) {
+        
+        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+        NSError *error = nil;
+        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
+        if ([documents count] > 0) {
+            RptqDocument *doc = [documents objectAtIndex: 0];
+            if (doc) {
+                [[doc hasQuery] addHasQueryPredicateObject: predicate];
+            }
+        }
+    }
+}
+
+- (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
+    [self dismissModalViewControllerAnimated: YES];
+}
 
 - (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -732,7 +767,7 @@ typedef enum {
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
                     if (button) {
-                        [button addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
+                        [button addTarget:self action:@selector(showAddPredicateModalView:) forControlEvents:UIControlEventTouchUpInside];
                     }
                 }
             }

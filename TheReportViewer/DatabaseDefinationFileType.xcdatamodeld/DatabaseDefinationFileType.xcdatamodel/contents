@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11D50b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
         <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqRelationship" inverseName="inDatabase" inverseEntity="RptqRelationship" syncable="YES"/>
@@ -32,7 +32,7 @@
         <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasQueryGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="inQuery" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="hasQueryLinks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="inQuery" inverseEntity="RptqQueryLinks" syncable="YES"/>
-        <relationship name="hasQueryPredicate" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="inQuery" inverseEntity="RptqQueryPredicate" syncable="YES"/>
+        <relationship name="hasQueryPredicate" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="inQuery" inverseEntity="RptqQueryPredicate" syncable="YES"/>
         <relationship name="hasQuerySort" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuerySort" inverseName="inQuery" inverseEntity="RptqQuerySort" syncable="YES"/>
         <relationship name="hasQueryTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryTables" inverseName="inQuery" inverseEntity="RptqQueryTables" syncable="YES"/>
         <relationship name="inQueryBuilderDocument" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasQuery" inverseEntity="RptqDocument" syncable="YES"/>
@@ -104,17 +104,17 @@
     </entity>
     <elements>
         <element name="RptqDatabase" positionX="-126" positionY="-333" width="128" height="120"/>
-        <element name="RptqDocument" positionX="-414" positionY="-681" width="128" height="120"/>
-        <element name="RptqField" positionX="306" positionY="-198" width="128" height="135"/>
+        <element name="RptqDocument" positionX="-407" positionY="-693" width="128" height="120"/>
+        <element name="RptqField" positionX="135" positionY="-63" width="128" height="135"/>
         <element name="RptqQuery" positionX="-479" positionY="-396" width="128" height="165"/>
-        <element name="RptqQueryFields" positionX="-488" positionY="48" width="128" height="75"/>
-        <element name="RptqQueryGroup" positionX="-234" positionY="-297" width="128" height="105"/>
+        <element name="RptqQueryFields" positionX="-873" positionY="-48" width="128" height="75"/>
+        <element name="RptqQueryGroup" positionX="-297" positionY="-195" width="128" height="105"/>
         <element name="RptqQueryLinks" positionX="-486" positionY="-198" width="128" height="135"/>
-        <element name="RptqQueryPredicate" positionX="-630" positionY="-378" width="128" height="135"/>
-        <element name="RptqQuerySort" positionX="-659" positionY="-216" width="128" height="90"/>
-        <element name="RptqQueryTables" positionX="-614" positionY="-84" width="128" height="90"/>
+        <element name="RptqQueryPredicate" positionX="-675" positionY="-414" width="128" height="135"/>
+        <element name="RptqQuerySort" positionX="-747" positionY="-234" width="128" height="90"/>
+        <element name="RptqQueryTables" positionX="-711" positionY="-81" width="128" height="90"/>
         <element name="RptqRelationship" positionX="-108" positionY="-63" width="128" height="90"/>
         <element name="RptqTable" positionX="54" positionY="-351" width="128" height="135"/>
-        <element name="RptqUserCredentals" positionX="-326" positionY="-351" width="128" height="240"/>
+        <element name="RptqUserCredentals" positionX="-299" positionY="-51" width="128" height="240"/>
     </elements>
 </model>

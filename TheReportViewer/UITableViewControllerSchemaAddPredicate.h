@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "RptqQueryPredicate.h"
 #import "UITableViewControllerOpperators.h"
-#import "UITableViewControllerFieldOrCustomValue.h"
 #import "UIManagedDocumentQuery.h"
+#import "UITableViewControllerChooseField.h"
+#import "UITableViewControllerEnterString.h"
+
+typedef enum {
+	MNSPredicateLeft = 0,
+	MNSPredicateCenter,
+	MNSPredicateRight,
+	MNSPredicateNone
+} MNSPredicatePart;
 
 @class UITableViewControllerSchemaAddPredicate;
 
@@ -21,14 +29,22 @@
 
 @interface UITableViewControllerSchemaAddPredicate : UITableViewController
     <UITableViewDelegate,
-        UITableViewControllerFieldOrCustomValueDelegate,
-        UITableViewControllerOpperatorsDelegate>
+        UITableViewControllerOpperatorsDelegate,
+        UITableViewControllerChooseFieldDelegate,
+        UITableViewControllerEnterStringDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerSchemaAddPredicateDelegate> delegate;
+
+@property (assign) MNSPredicatePart currentlyEditingPart;
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellLeftSide;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellRightSide;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellOperator;
+
+@property (assign) MNSPredicateOperator predicateOperator;
+@property (retain) NSString *leftValue;
+@property (retain) NSString *rightValue;
+
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 

@@ -11,15 +11,11 @@
 
 @implementation UIViewSectionHeaderTable
 
-
 @synthesize titleLabel=_titleLabel, disclosureButton=_disclosureButton, delegate=_delegate, section=_section;
 
-
 + (Class)layerClass {
-    
     return [CAGradientLayer class];
 }
-
 
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
     
@@ -82,10 +78,8 @@
 
 
 -(IBAction)toggleOpen:(id)sender {
-    
     [self toggleOpenWithUserAction:YES];
 }
-
 
 -(void)toggleOpenWithUserAction:(BOOL)userAction {
     
@@ -106,8 +100,5 @@
         }
     }
 }
-
-
-
 
 @end

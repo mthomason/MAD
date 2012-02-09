@@ -20,6 +20,8 @@
 #import "UITableViewControllerLinkBuilder.h"
 #import "UITableViewControllerSchemaAddGroup.h"
 #import "UITableViewControllerSchemaAddPredicate.h"
+#import "UIModalTableViewController.h"
+#import "UITableViewControllerPredicateFormat.h"
 
 @class UIViewControllerSchemaTables;
 
@@ -34,7 +36,9 @@
         UITableViewControllerSchemaAddPredicateDelegate,
         UITableViewControllerSchemaAddGroupDelegate,
         UITableViewControllerDataSourceTypesDelegate,
-        UITableViewControllerLinkBuilderDelegate>
+        UITableViewControllerLinkBuilderDelegate,
+        UIModalTableViewControllerDelegate,
+        AddPredicateDelegate>
 
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;

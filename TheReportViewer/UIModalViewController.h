@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class UIModalViewController;
+
+@protocol ModalViewControllerDelegate
+- (void)modalViewControllerDidFinish:(id)controller;
+@end
+
 @interface UIModalViewController : UIViewController
+
+@property (assign, nonatomic) IBOutlet id <ModalViewControllerDelegate> delegate;
+
+- (IBAction)done:(id)sender;
 
 @end
