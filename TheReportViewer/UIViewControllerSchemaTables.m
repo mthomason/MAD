@@ -20,6 +20,7 @@
 #import "RptqQueryPredicate.h"
 #import "RptqUserCredentals.h"
 #import "RptqQuery.h"
+#import "UIColor+EverydayApps.h"
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
@@ -167,6 +168,7 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
 }
 
 - (void)viewDidUnload {

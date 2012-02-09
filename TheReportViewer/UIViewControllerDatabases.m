@@ -13,6 +13,7 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryPredicate.h"
+#import "UIColor+EverydayApps.h"
 
 @interface UIViewControllerDatabases()
 
@@ -51,6 +52,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    [[UIToolbar appearance] setTintColor: [UIColor edaBlackish]];
+
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

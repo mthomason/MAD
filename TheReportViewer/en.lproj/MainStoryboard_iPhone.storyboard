@@ -2119,7 +2119,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRV-Pt-bRy" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderTables" id="Uie-pc-4DC" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="sAc-h6-ZKV">
+                    <view key="view" contentMode="scaleToFill" id="sAc-h6-ZKV" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -2305,7 +2305,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cI2-WU-J1g" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderLinks" id="Fui-wT-RSQ" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="94b-cQ-BqF">
+                    <view key="view" contentMode="scaleToFill" id="94b-cQ-BqF" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -2345,7 +2345,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="41T-XW-wDu" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderQuery" id="Doo-c4-Yoa" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="aOW-dY-wQ3">
+                    <view key="view" contentMode="scaleToFill" id="aOW-dY-wQ3" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -2373,7 +2373,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UWE-0g-2mr" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderBuildQuery" id="5pn-cv-K0I" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="AzP-r9-jr7">
+                    <view key="view" contentMode="scaleToFill" id="AzP-r9-jr7" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -3577,7 +3577,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VvY-Vk-f7A" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderGroups" id="lEc-kG-T6U" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hni-jH-W6j">
+                    <view key="view" contentMode="scaleToFill" id="hni-jH-W6j" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -3617,7 +3617,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4M-3x-ckg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderPredicate" id="XEB-S9-tuY" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="jit-4h-BAK">
+                    <view key="view" contentMode="scaleToFill" id="jit-4h-BAK" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -3657,7 +3657,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Zm-Lt-U1t" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewControllerTableHeaderDatasource" id="pP5-Wx-UKD" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="YPC-Bu-TZE">
+                    <view key="view" contentMode="scaleToFill" id="YPC-Bu-TZE" customClass="UIViewTableSectionHeaderQueryBuilder">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -4121,6 +4121,9 @@
                 <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
+        </class>
+        <class className="UIViewTableSectionHeaderQueryBuilder" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewTableSectionHeaderQueryBuilder.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

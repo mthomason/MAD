@@ -10,7 +10,7 @@
 //#import "QuoteCell.h"
 //#import "HighlightingTextView.h"
 #import "RptqFieldSelectorManager.h"
-#import "UIViewSectionHeaderTable.h"
+#import "UIViewTableSectionHeaderDatabaseTable.h"
 
 #import "RptqTable.h"
 
@@ -149,7 +149,7 @@
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
     if (!sectionInfo.headerView) {
 		NSString *playName = sectionInfo.table.name;
-        UIViewSectionHeaderTable *vsht = [[UIViewSectionHeaderTable alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, HEADER_HEIGHT) title:playName section:section delegate:self];
+        UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, HEADER_HEIGHT) title:playName section:section delegate:self];
         [sectionInfo setHeaderView: vsht];
         [vsht release];
     }
@@ -178,7 +178,7 @@
 
 #pragma mark Section header delegate
 
--(void)sectionHeaderView:(UIViewSectionHeaderTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
+-(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:sectionOpened];
 	
@@ -235,7 +235,7 @@
 }
 
 
--(void)sectionHeaderView:(UIViewSectionHeaderTable *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
+-(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
     
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.

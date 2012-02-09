@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "UIViewSectionHeaderTable.h"
+#import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "RptqField.h"
 
 @class UITableViewControllerChooseField;

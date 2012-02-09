@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
 #import "MNSConnection.h"
+#import "UIColor+EverydayApps.h"
 
 @implementation AppDelegate
 
@@ -26,6 +27,10 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
+    [[UINavigationBar appearance] setTintColor: [UIColor edaGreenDark]];
+    
     // Override point for customization after application launch.
     
 

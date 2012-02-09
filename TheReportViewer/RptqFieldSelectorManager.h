@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class UIViewSectionHeaderTable;
+@class UIViewTableSectionHeaderDatabaseTable;
 @class RptqTable;
 
 
@@ -17,7 +17,7 @@
 @property (assign) BOOL open;
 @property (retain) RptqTable *table;
 @property (retain) NSArray *fields;
-@property (retain) UIViewSectionHeaderTable* headerView;
+@property (retain) UIViewTableSectionHeaderDatabaseTable* headerView;
 
 @property (nonatomic, retain) NSMutableArray *rowHeights;
 
