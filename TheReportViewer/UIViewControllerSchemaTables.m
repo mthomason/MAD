@@ -531,11 +531,17 @@ typedef enum {
         NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
         NSError *error = nil;
         NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if ([documents count] > 0) {
-            RptqDocument *doc = [documents objectAtIndex: 0];
-            if (doc) {
-                [[doc retain] autorelease];
+        if (!error) {
+            if ([documents count] > 0) {
+                doc = [documents objectAtIndex: 0];
+                if (doc) {
+                    [[doc retain] autorelease];
+                }
+            } else {
+                NSLog(@"Document doesn't exist");
             }
+        } else {
+            NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
         }
     }
     return doc;
