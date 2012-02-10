@@ -24,6 +24,7 @@
 #import "UITableViewControllerPredicateFormat.h"
 
 @class UIViewControllerSchemaTables;
+@class RptqDocument;
 
 @protocol UIViewControllerSchemaTablesDelegate
 - (void)uIViewControllerSchemaTablesDelegateDidFinish:(UIViewControllerSchemaTables *)controller;
@@ -68,5 +69,7 @@
 - (IBAction)addTable:(id)sender;
 - (IBAction)addLink:(id)sender;
 - (IBAction)edit:(id)sender;
+
+- (RptqDocument *)getDocument;
 
 @end

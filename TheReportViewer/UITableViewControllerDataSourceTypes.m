@@ -12,8 +12,26 @@
 
 @synthesize delegate = _delegate;
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
+    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
+    [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+}
+
+
 - (IBAction)done:(id)sender {
     [[self delegate] uITableViewControllerDataSourceTypesDidFinish:self];
 }
 
+- (IBAction)cancel:(id)sender {
+    [[self delegate] uITableViewControllerDataSourceTypesDidFinish:self];
+}
+
+- (void)dealloc {
+    [super dealloc];
+}
+- (void)viewDidUnload {
+    [super viewDidUnload];
+}
 @end

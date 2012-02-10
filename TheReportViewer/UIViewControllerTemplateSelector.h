@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewCellDocument.h"
+#import "UITableViewControllerDataSourceTypes.h"
 
 @class UIViewControllerTemplateSelector;
 
@@ -20,7 +21,8 @@
 @end
 
 @interface UIViewControllerTemplateSelector : UIViewController
-    <UITableViewDataSource, UITableViewDelegate>
+    <UITableViewDataSource, UITableViewDelegate,
+        UITableViewControllerDataSourceTypesDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerTemplateSelectorDelegate> delegate;
 

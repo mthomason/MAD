@@ -19,5 +19,6 @@
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerDataSourceTypesDelegate> delegate;
 
 - (IBAction)done:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end

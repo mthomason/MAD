@@ -23,6 +23,7 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellNickname;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellConnectionCreate;
 
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldNickname;
 

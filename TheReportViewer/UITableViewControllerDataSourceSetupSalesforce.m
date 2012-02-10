@@ -9,6 +9,7 @@
 #import "UITableViewControllerDataSourceSetupSalesforce.h"
 #import "NSDatabaseSalesForce.h"
 #import "Constants.h"
+#import "UIColor+EverydayApps.h"
 
 @interface UITableViewControllerDataSourceSetupSalesforce() {
 @private
@@ -31,6 +32,7 @@
 @synthesize delegate;
 @synthesize tableViewCellNickname;
 @synthesize tableViewCellConnectionCreate;
+@synthesize saveButton;
 @synthesize activityIndicatorTestConnection;
 @synthesize textFieldNickname;
 @synthesize db;
@@ -83,6 +85,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     [inputNickname release];
     [activityIndicatorTestConnection release];
     [textFieldNickname release];
+    [saveButton release];
     [super dealloc];
 }
 
@@ -120,6 +123,11 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
+
+    [[self textFieldNickname] selectAll: self];
+
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = YES;
  
@@ -132,6 +140,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     [self setTableViewCellConnectionCreate:nil];
     [self setActivityIndicatorTestConnection:nil];
     [self setTextFieldNickname:nil];
+    [self setSaveButton:nil];
     [super viewDidUnload];
 }
 
@@ -141,6 +150,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[self textFieldNickname] becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -188,15 +198,28 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 - (IBAction)save:(id)sender {
     //Create UIManaged Document that Stores the Database Schema
     if ([[[self textFieldNickname] text] length] > 0) {
+        [[self saveButton] setEnabled: NO];
         NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
             if (success) {
                 [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
+            } else {
+                [[self saveButton] setEnabled: YES];
             }
         }];
         [d setDelegate: self];
         [self setDb:d];
         [d release];
         
+    } else {
+        [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+            [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor edaOrange]];
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+                [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor clearColor]];
+            } completion:^(BOOL finished) {
+
+            }];
+        }];
     }
 }
 
@@ -206,6 +229,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 
 - (IBAction)nicknameDidEndOnExit:(id)sender {
     [sender resignFirstResponder];
+    [self save: sender];
 }
 
 #pragma mark - MNSDatabaseSalesForce Delegate

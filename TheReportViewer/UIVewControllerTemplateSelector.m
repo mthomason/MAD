@@ -9,6 +9,7 @@
 #import "UIViewControllerTemplateSelector.h"
 #import "NSFileManager+Common.h"
 #import "UITableViewCellDocument.h"
+#import "UITableViewControllerDataSourceTypes.h"
 #import "Constants.h"
 
 @interface UIViewControllerTemplateSelector()
@@ -34,6 +35,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+        self.title = NSLocalizedString(@"Templates", @"Templates");
     }
     return self;    
 }
@@ -42,6 +44,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+        self.title = NSLocalizedString(@"Templates", @"Templates");
     }
     return self;
 }
@@ -70,6 +73,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[self navigationItem] setPrompt: NSLocalizedString(@"Choose A Template", @"Choose A Template")];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -104,8 +108,13 @@
     [[self delegate] uIViewControllerTemplateSelectorDidCancel: self];
 }
 
-#pragma mark -
-#pragma mark Table View Data Source Protocol
+#pragma mark - Table View Controller Data Source Delegate
+
+- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+    [[self delegate] uIViewControllerTemplateSelectorDidCancel: self];
+}
+
+#pragma mark - Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;

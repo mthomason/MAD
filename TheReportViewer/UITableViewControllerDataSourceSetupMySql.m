@@ -117,6 +117,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
+    
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = YES;
  

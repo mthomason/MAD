@@ -70,7 +70,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[UIToolbar appearance] setTintColor: [UIColor edaBlackish]];
+    [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -90,6 +90,8 @@
     [self setAvailableFilesCache: a];
     [a release];
     [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
+    
+    [[self tableViewQueries] reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

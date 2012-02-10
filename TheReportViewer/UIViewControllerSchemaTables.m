@@ -358,77 +358,53 @@ typedef enum {
 
 - (void)addPredicate:(RptqQueryPredicate *)predicate {
     [self dismissModalViewControllerAnimated: YES];
-    NSLog(@"Trying to add this f'n predicate yo, %@", predicate);
-    if ([self managedDocumentQuery]) {
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
+        NSLog(@"About to save it yo!  %@", [doc hasQuery]);
+        [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: predicate]];
         
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if (!error) {
-            if ([documents count] > 0) {
-                RptqDocument *doc = [documents objectAtIndex: 0];
-                if (doc) {
-                    NSLog(@"About to save it yo!  %@", [doc hasQuery]);
-                    [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: predicate]];
-                    
-                    [[self tableViewQueryBuilder] reloadData];
-                    
-                    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                    }];
-                }
-            }
-        } else {
-#warning Alert box or something here?
-        }
+        [[self tableViewQueryBuilder] reloadData];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+        }];
     }
-    NSLog(@"When it's all said and done. %@", predicate);
+    [doc release];
 }
 
 - (void)addPredicateWithLeft:(NSString *)leftField
                    comparson:(MNSPredicateOperator)comparsonOperator
                andRightValue:(NSString *)rightValue {
-
+    
     [self dismissModalViewControllerAnimated: YES];
-
-    if ([self managedDocumentQuery]) {
+    
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
         
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if (!error) {
-            if ([documents count] > 0) {
-                RptqDocument *doc = [documents objectAtIndex: 0];
-                if (doc) {
-                    
-                    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                    [queryPredicate setFieldleftpred: leftField];
-                    [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
-                    [queryPredicate setFieldrightpred: rightValue];
- 
-                    NSLog(@"Here");
-                    [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
-
-                    [queryPredicate autorelease];
-                    
-                    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                        
-                        
-                        
-                        NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-                        NSError *error = nil;
-                        NSArray *predicates = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
-                        NSLog(@"Predicates %@", predicates);
-                        
-                        
-                        [[self tableViewQueryBuilder] reloadData];
-                    }];
-                }
-            }
-        } else {
-#warning Alert box or something here?
-        }
+        NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        [queryPredicate setFieldleftpred: leftField];
+        [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
+        [queryPredicate setFieldrightpred: rightValue];
+        
+        NSLog(@"Here");
+        [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
+        
+        [queryPredicate autorelease];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+            
+            
+            
+            NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
+            NSError *error = nil;
+            NSArray *predicates = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
+            NSLog(@"Predicates %@", predicates);
+            
+            
+            [[self tableViewQueryBuilder] reloadData];
+        }];
     }
+    [doc release];
 }
 
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
@@ -451,37 +427,27 @@ typedef enum {
                                            secondFieldName:(NSString *)secondFieldName
                                               withJoinType:(MNSLinkType)joinType {
     [self dismissModalViewControllerAnimated: YES];
-
-    if ([self managedDocumentQuery]) {
+    
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
+        NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
         
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if ([documents count] > 0) {
-            RptqDocument *doc = [documents objectAtIndex: 0];
-            if (doc) {
-                NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                
-                RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                [queryLinks setTableleft: firstTable];
-                [queryLinks setFieldleft: firstFieldName];
-                [queryLinks setTableright: secondTableName];
-                [queryLinks setFieldright: secondFieldName];
-                [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
-                
-                [[doc hasQuery] addHasQueryLinks:[NSSet setWithObject: queryLinks]];
-                [queryLinks release];
-                
-                [[self tableViewQueryBuilder] reloadData];
-                
-                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                }];
-            } else {
-                NSLog(@"Doc is nil");
-            }
-        }
+        RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        [queryLinks setTableleft: firstTable];
+        [queryLinks setFieldleft: firstFieldName];
+        [queryLinks setTableright: secondTableName];
+        [queryLinks setFieldright: secondFieldName];
+        [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
+        
+        [[doc hasQuery] addHasQueryLinks:[NSSet setWithObject: queryLinks]];
+        [queryLinks release];
+        
+        [[self tableViewQueryBuilder] reloadData];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+        }];
     }
-
+    [doc release];
 }
 
 - (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLinkFirstTable *)controller {
@@ -501,95 +467,78 @@ typedef enum {
 }
 
 - (void)addGroupDidAddGroupWithField:(NSString *)field andSort:(MNSSortOrder)sortOrder {
-
+    
     [self dismissModalViewControllerAnimated: YES];
     
-    if ([self managedDocumentQuery]) {
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if ([documents count] > 0) {
-            RptqDocument *doc = [documents objectAtIndex: 0];
-            if (doc) {
-                NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
-                NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:moc];
-
-                RptqQueryGroup *rqg = [[[RptqQueryGroup alloc] initWithEntity:ed insertIntoManagedObjectContext:moc] retain];
-                [rqg setField:field];
-                [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
-                [[doc hasQuery] addHasQueryGroupsObject: rqg];
-                [rqg release];
-                
-                [[self tableViewQueryBuilder] reloadData];
-                
-                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                }];
-                
-            } else {
-                NSLog(@"Doc is nil");
-            }
-        }
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
+        NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
+        NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:moc];
+        
+        RptqQueryGroup *rqg = [[RptqQueryGroup alloc] initWithEntity:ed insertIntoManagedObjectContext:moc];
+        [rqg setField:field];
+        [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
+        [[doc hasQuery] addHasQueryGroupsObject: rqg];
+        [rqg release];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+        }];
+        
     }
+    [doc release];
 }
 
 - (void)uITableViewControllerSchemaAddGroupDidAddGroup:(RptqQueryGroup *)group {
     [self dismissModalViewControllerAnimated: YES];
     
-    if ([self managedDocumentQuery]) {
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if ([documents count] > 0) {
-            RptqDocument *doc = [documents objectAtIndex: 0];
-            if (doc) {
-                
-                [[doc hasQuery] addHasQueryGroupsObject: group];
-                
-                [[self tableViewQueryBuilder] reloadData];
-
-                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                }];
-
-            } else {
-                NSLog(@"Doc is nil");
-            }
-        }
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
+        
+        [[doc hasQuery] addHasQueryGroupsObject: group];
+        
+        [[self tableViewQueryBuilder] reloadData];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+        }];
+        
     }
+    [doc release];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissModalViewControllerAnimated: YES];
-
-    if ([self managedDocumentQuery]) {
+    RptqDocument *doc = [[self getDocument] retain];
+    if (doc) {
+        NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        [tab setName: [table name]];
+        [[doc hasQuery] addHasQueryTablesObject:tab];
+        [tab release];
         
+        NSLog(@"[[self managedDocumentQuery] fileURL]: %@", [[self managedDocumentQuery] fileURL]);
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                              forSaveOperation: UIDocumentSaveForOverwriting
+                             completionHandler: ^(BOOL success) {
+                                 
+                             }];
+    }
+    [doc release];
+}
+
+- (RptqDocument *)getDocument {
+    RptqDocument *doc = nil;
+    if ([self managedDocumentQuery]) {
         NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
         NSError *error = nil;
         NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
         if ([documents count] > 0) {
             RptqDocument *doc = [documents objectAtIndex: 0];
             if (doc) {
-                NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                [tab setName: [table name]];
-                [[doc hasQuery] addHasQueryTablesObject:tab];
-                NSLog(@"Added query table name %@", [tab name]);
-                [tab release];
-
-                [[self tableViewQueryBuilder] reloadData];
-                
-                NSLog(@"[[self managedDocumentQuery] fileURL]: %@", [[self managedDocumentQuery] fileURL]);
-                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                    if (!success) {
-                        NSLog(@"FAIL");
-                    } else {
-                        NSLog(@"SAVE");
-                    }
-                }];
-            } else {
-                NSLog(@"Doc is nil");
+                [[doc retain] autorelease];
             }
         }
     }
+    return doc;
 }
 
 #pragma mark - Table View Data Source Protocol
