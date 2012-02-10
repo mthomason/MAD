@@ -16,6 +16,7 @@
 @protocol AddPredicateDelegate
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller;
 - (void)addPredicate:(RptqQueryPredicate *)predicate;
+- (void)addPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 
 @interface UITableViewControllerPredicateFormat : UIModalTableViewController

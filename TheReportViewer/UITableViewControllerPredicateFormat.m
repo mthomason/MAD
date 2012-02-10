@@ -56,6 +56,12 @@
     [[self addPredicateDelegate] addPredicate: predicate];
 }
 
+- (void)uITableViewControllerSchemaAddPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue {
+    NSLog(@"[[self addPredicateDelegate] addPredicateWithLeft:leftField comparson:comparsonOperator andRightValue:rightValue] %@, %d, %@", leftField, comparsonOperator, rightValue);
+    [[self addPredicateDelegate] addPredicateWithLeft:leftField comparson:comparsonOperator andRightValue:rightValue];
+}
+
+
 #pragma mark - View lifecycle
 
 - (void)viewDidUnload {

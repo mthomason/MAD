@@ -102,13 +102,7 @@
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-    [queryPredicate setFieldleft: [self leftValue]];
-    [queryPredicate setComparson: [NSNumber numberWithInt:[self predicateOperator]]];
-    [queryPredicate setFieldright: [self rightValue]];
-    [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate: queryPredicate];
-    [queryPredicate autorelease];
+    [[self delegate] uITableViewControllerSchemaAddPredicateWithLeft:[self leftValue] comparson:[self predicateOperator] andRightValue:[self rightValue]];
 }
 
 - (IBAction)cancel:(id)sender {

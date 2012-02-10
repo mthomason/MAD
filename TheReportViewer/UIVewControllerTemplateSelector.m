@@ -30,10 +30,18 @@
     [super dealloc];
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+    }
+    return self;    
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
     }
     return self;
 }
@@ -55,6 +63,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+
     [self setAvailableFilesCache: [NSFileManager contentsOfTemplateDirectoryWithPathExtension:TEMPLATE_PATH_EXTENSION]];
 }
 
@@ -165,6 +175,7 @@
  }
  */
 
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *result;
     switch (section) {
@@ -180,6 +191,8 @@
     }
     return result;
 }
+
+ */
 
 /*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

@@ -7,13 +7,22 @@
 //
 
 #import "UITableViewControllerSchemaAddGroup.h"
-
+#import "RptqTable.h"
 
 @implementation UITableViewControllerSchemaAddGroup
 
 @synthesize delegate = _delegate;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize tableViewCellField = _tableViewCellField;
 @synthesize tableViewCellSort = _tableViewCellSort;
+@synthesize field = _field, sortOrder = _sortOrder;
+
+- (void)dealloc {
+    [_managedDocumentQuery release];
+    [_tableViewCellField release];
+    [_tableViewCellSort release];
+    [super dealloc];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -76,27 +85,42 @@
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerSortType class]]) {
             [[segue destinationViewController] setDelegate:self];
         }
+    } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+            
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            NSError *error = nil;
+            NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+            if (!error) {
+                [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults]; 
+            } else {
+                NSLog(@"Error %@", [error localizedDescription]);
+            }
+            
+            [[segue destinationViewController] setDelegate:self];            
+        }
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Delegates
 
-- (IBAction)cancel:(id)sender {
-    [[self delegate] uITableViewControllerSchemaAddGroupDidFinish:self];
-}
+#pragma mark Choose Field
 
-- (IBAction)save:(id)sender {
-#warning Do something here?
-}
-
-#pragma mark - Table View Sort Type Delegate
-
-- (void)uITableViewControllerSortTypeDidFinish:(UITableViewControllerSortType *)controller {
+- (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
+    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [field name], [[field inTable] name]] retain];
+    [self setField:fieldName];
+    [[[self tableViewCellField] detailTextLabel] setText: [fieldName lowercaseString]];
+    [fieldName release];
 }
+
+#pragma mark Sort Type
 
 - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType {
     [[self navigationController] popToViewController:self animated:YES];
+    [self setSortOrder:sortOrderType];
     NSString *label = nil;
     switch (sortOrderType) {
         case MNSSortOrderAccending:
@@ -112,15 +136,24 @@
     [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
 }
 
+#pragma mark - Actions
+
+- (IBAction)cancel:(id)sender {
+    [[self delegate] uITableViewControllerSchemaAddGroupDidFinish:self];
+}
+
+- (IBAction)save:(id)sender {
+    [[self delegate] addGroupDidAddGroupWithField:[self field] andSort:[self sortOrder]];
+}
+
+#pragma mark - Table View Sort Type Delegate
+
+- (void)uITableViewControllerSortTypeDidFinish:(UITableViewControllerSortType *)controller {
+    [[self navigationController] popToViewController:self animated:YES];
+}
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)dealloc {
-    [_tableViewCellField release];
-    [_tableViewCellSort release];
-    [super dealloc];
-}
 
 @end

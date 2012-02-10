@@ -45,7 +45,7 @@
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="inQuery" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryGroups" inverseEntity="RptqQuery" syncable="YES"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryGroups" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
     <entity name="RptqQueryLinks" representedClassName="RptqQueryLinks" syncable="YES">
         <attribute name="fieldleft" optional="YES" attributeType="String" syncable="YES"/>
@@ -57,10 +57,8 @@
     </entity>
     <entity name="RptqQueryPredicate" representedClassName="RptqQueryPredicate" syncable="YES">
         <attribute name="comparson" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="fieldleft" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fieldright" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numberleft" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="numberright" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fieldleftpred" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fieldrightpred" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryPredicate" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
     <entity name="RptqQuerySort" representedClassName="RptqQuerySort" syncable="YES">
@@ -107,7 +105,7 @@
         <element name="RptqDocument" positionX="-407" positionY="-693" width="128" height="120"/>
         <element name="RptqField" positionX="135" positionY="-63" width="128" height="135"/>
         <element name="RptqQuery" positionX="-479" positionY="-396" width="128" height="165"/>
-        <element name="RptqQueryFields" positionX="-873" positionY="-48" width="128" height="75"/>
+        <element name="RptqQueryFields" positionX="-891" positionY="-147" width="128" height="75"/>
         <element name="RptqQueryGroup" positionX="-297" positionY="-195" width="128" height="105"/>
         <element name="RptqQueryLinks" positionX="-486" positionY="-198" width="128" height="135"/>
         <element name="RptqQueryPredicate" positionX="-675" positionY="-414" width="128" height="135"/>
