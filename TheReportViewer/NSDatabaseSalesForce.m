@@ -140,7 +140,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
         [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
             
             [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-                NSLog(@"Table object: %@", obj);
+                //NSLog(@"Table object: %@", obj);
                 NSDictionary *tableDictionary = [obj retain];
                 NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
                                                                inManagedObjectContext: moc];
@@ -157,7 +157,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                 [database fieldsInDatabase:nil andTable:rptqTable completion:^(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields) {
                     [fields retain];
                     [fields enumerateObjectsUsingBlock:^(id objField, NSUInteger idx, BOOL *stop) {
-                        NSLog(@"Field object: %@", objField);
+                        //NSLog(@"Field object: %@", objField);
                         NSDictionary *fieldDictionary = [objField retain];
                         NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class])
                                                                        inManagedObjectContext: moc];
@@ -184,6 +184,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             
         }];
     } else {
+#warning Display alert
         NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
     }
 
@@ -271,7 +272,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                     self.resultBlockFieldNames(self, origionalTable, fields);
                     [fields autorelease];
                 } else {
-                    NSLog(@"ELSE {%@, %@}", key, obj);
+                    //NSLog(@"ELSE {%@, %@}", key, obj);
                 }
             }];
             [pathComponents release];
@@ -285,21 +286,24 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 
 - (void)request:(SFRestRequest*)request didFailLoadWithError:(NSError*)error {
-    NSLog(@"request:didFailLoadWithError: %@", error);
+    //NSLog(@"request:didFailLoadWithError: %@", error);
+#warning Show alert
     //add your failed error handling here
 
     [self setCurrentQueryType:NSDatabaseQueryTypeNone];
 }
 
 - (void)requestDidCancelLoad:(SFRestRequest *)request {
-    NSLog(@"requestDidCancelLoad: %@", request);
+    //NSLog(@"requestDidCancelLoad: %@", request);
+#warning Show alert
     //add your failed error handling here
 
     [self setCurrentQueryType:NSDatabaseQueryTypeNone];
 }
 
 - (void)requestDidTimeout:(SFRestRequest *)request {
-    NSLog(@"requestDidTimeout: %@", request);
+    //NSLog(@"requestDidTimeout: %@", request);
+#warning Show alert
     //add your failed error handling here
     
     [self setCurrentQueryType:NSDatabaseQueryTypeNone];
@@ -398,7 +402,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     
     if (error.code == kSFOAuthErrorInvalidGrant) {  //invalid cached refresh token
         //restart the login process asynchronously
-        NSLog(@"Logging out because oauth failed with error code: %d",error.code);
+        //NSLog(@"Logging out because oauth failed with error code: %d",error.code);
         [self performSelector:@selector(logout) withObject:nil afterDelay:0];
     }
     else {

@@ -33,22 +33,26 @@
 
     self = [super init];
     if (self) {
-
+        NSFileManager *defaultFileManager = [NSFileManager defaultManager];
         NSURL *baseUrl = [[[NSFileManager applicationDocumentsDirectoryUrl]
                            URLByAppendingPathComponent: name] retain];
         NSURL *applicationFileUrlWithExtention = [[baseUrl URLByAppendingPathExtension: SCHEMA_PATH_EXTENSION] retain];
-        
-        NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-        NSInteger ctr = 0;
-        BOOL isDirectory;
-        while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention absoluteString] isDirectory:&isDirectory]) {
-            
-            [applicationFileUrlWithExtention release];
-            applicationFileUrlWithExtention = [[[baseUrl URLByAppendingPathComponent:[NSString stringWithFormat:@" %d", ctr]]
-                                                URLByAppendingPathExtension: SCHEMA_PATH_EXTENSION] retain];
-            ctr++;
-        }
         [baseUrl release];
+        
+        NSInteger ctr = 0;
+        while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {            
+            [applicationFileUrlWithExtention release];
+            
+            NSURL *baseUrlFormatted = [[[NSFileManager applicationDocumentsDirectoryUrl]
+                                        URLByAppendingPathComponent: [name stringByAppendingFormat:@" %d", ctr]] retain];
+
+            
+            applicationFileUrlWithExtention = [[baseUrlFormatted
+                                                URLByAppendingPathExtension: SCHEMA_PATH_EXTENSION] retain];
+            [baseUrlFormatted release];
+            ctr++;
+            NSLog(@"While file exist %@", applicationFileUrlWithExtention);
+        }
         
         UIManagedDocumentQuery *document = [[UIManagedDocumentQuery alloc] initWithFileURL:applicationFileUrlWithExtention];
         [self setManagedDocumentQuery: document];
