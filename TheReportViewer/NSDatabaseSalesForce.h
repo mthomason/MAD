@@ -66,12 +66,12 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 - (id)initExistingFileWithUrl:(NSURL *)url;
 
 - (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
-
 - (void)logout;
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
 - (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
               completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
+
 - (BOOL)testConnection;
 
 - (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;

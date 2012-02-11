@@ -2466,7 +2466,7 @@
                         <sections>
                             <tableViewSection id="RUw-k9-4DF">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="mhc-r0-QQh">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="mhc-r0-QQh">
                                         <rect key="frame" x="0.0" y="10" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2489,7 +2489,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="RRj-WB-8XV">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="RRj-WB-8XV">
                                         <rect key="frame" x="0.0" y="55" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2497,15 +2497,18 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Height" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PUH-ve-kDf">
-                                                    <rect key="frame" x="20" y="11" width="137" height="21"/>
+                                                    <rect key="frame" x="20" y="11" width="158" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="SWE-QX-aMe">
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="88" maximumValue="500" id="SWE-QX-aMe">
                                                     <rect key="frame" x="186" y="8" width="94" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <connections>
+                                                        <action selector="heightChanged:" destination="aNt-90-Z4U" eventType="valueChanged" id="gOr-HC-ruO"/>
+                                                    </connections>
                                                 </stepper>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2516,13 +2519,16 @@
                             </tableViewSection>
                         </sections>
                         <connections>
-                            <outlet property="dataSource" destination="aNt-90-Z4U" id="SFP-5p-Dr8"/>
                             <outlet property="delegate" destination="aNt-90-Z4U" id="UI3-gT-oHt"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Layout Settings" prompt="Configure the layout display settings." id="hYL-D9-81D">
                         <barButtonItem key="backBarButtonItem" title="Query" id="mHr-La-N73"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="heightStepper" destination="SWE-QX-aMe" id="rro-oe-apC"/>
+                        <outlet property="labelHeight" destination="PUH-ve-kDf" id="cHD-aq-xUr"/>
+                    </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="2005" y="1193"/>
@@ -4162,6 +4168,8 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSectionLayoutSettings.h"/>
             <relationships>
                 <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="UITableViewControllerSettings" superclassName="UITableViewController">

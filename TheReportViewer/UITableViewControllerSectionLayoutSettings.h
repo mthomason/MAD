@@ -18,5 +18,9 @@
     <UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <SectionLayoutSettingsDelegate> delegate;
+@property (retain, nonatomic) IBOutlet UILabel *labelHeight;
+@property (retain, nonatomic) IBOutlet UIStepper *heightStepper;
+
+- (double)stepperValueNormalized;
 
 @end
