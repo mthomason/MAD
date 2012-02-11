@@ -1,0 +1,22 @@
+//
+//  UITableViewControllerSectionLayoutSettings.h
+//  TheReportViewer
+//
+//  Created by Michael Thomason on 2/10/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class UITableViewControllerSectionLayoutSettings;
+
+@protocol SectionLayoutSettingsDelegate
+- (void)sectionLayoutSettingsDidFinish:(UITableViewControllerSectionLayoutSettings *)controller;
+@end
+
+@interface UITableViewControllerSectionLayoutSettings : UITableViewController
+    <UITableViewDelegate>
+
+@property (assign, nonatomic) IBOutlet id <SectionLayoutSettingsDelegate> delegate;
+
+@end

@@ -265,7 +265,7 @@
         default:
             break;
     }
-    [fieldName release];
+    [tableFieldName release];
 }
 
 - (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {

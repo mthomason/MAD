@@ -22,6 +22,7 @@
 #import "UITableViewControllerSchemaAddPredicate.h"
 #import "UIModalTableViewController.h"
 #import "UITableViewControllerPredicateFormat.h"
+#import "UITableViewControllerSectionLayoutSettings.h"
 
 @class UIViewControllerSchemaTables;
 @class RptqDocument;
@@ -39,6 +40,7 @@
         UITableViewControllerDataSourceTypesDelegate,
         UITableViewControllerLinkBuilderDelegate,
         UIModalTableViewControllerDelegate,
+        SectionLayoutSettingsDelegate,
         AddPredicateDelegate>
 
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;

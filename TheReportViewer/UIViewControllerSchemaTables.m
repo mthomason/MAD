@@ -22,6 +22,7 @@
 #import "RptqQuery.h"
 #import "UIColor+EverydayApps.h"
 #import "UIViewTableSectionHeaderQueryBuilder.h"
+#import "UITableViewControllerSectionLayoutSettings.h"
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
@@ -293,7 +294,6 @@ typedef enum {
             [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupViewController"]) {
-
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -307,8 +307,20 @@ typedef enum {
             }
             [navControl release];
         }
-
-    
+    } else if ([[segue identifier] isEqualToString:@"showLayoutSettings"]) {
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSectionLayoutSettings class]]) {
+                    UITableViewControllerSectionLayoutSettings *tvc = (UITableViewControllerSectionLayoutSettings *)[navControl topViewController];
+                    if (tvc) {
+                        //[tvc setManagedDocumentQuery: [self managedDocumentQuery]];
+                        [tvc setDelegate:self];
+                    }
+                }
+            }
+            [navControl release];
+        }        
     }
 }
 
