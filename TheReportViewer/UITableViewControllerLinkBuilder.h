@@ -13,8 +13,16 @@
 #import "UIViewControllerSchemaAddLinkSecondTable.h"
 #import "UIViewControllerSchemaAddLinkFirstField.h"
 #import "UIViewControllerSchemaAddLinkSecondField.h"
+#import "UITableViewControllerChooseField.h"
 
 @class UITableViewControllerLinkBuilder;
+
+typedef enum {
+	MNSLinkLeft = 0,
+	MNSLinkCenter,
+	MNSLinkRight,
+	MNSLinkNone
+} MNSLinkPart;
 
 @protocol UITableViewControllerLinkBuilderDelegate
 - (void)viewControllerSchemaAddLinkDidFinish:(UITableViewControllerLinkBuilder *)controller;
@@ -27,16 +35,26 @@
         UIViewControllerSchemaAddLinkDelegate,
         UIViewControllerSchemaAddLinkFirstFieldDelegate,
         UIViewControllerSchemaAddLinkSecondTableDelegate,
-        UIViewControllerSchemaAddLinkSecondFieldDelegate>
+        UIViewControllerSchemaAddLinkSecondFieldDelegate,
+        UITableViewControllerChooseFieldDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerLinkBuilderDelegate> delegate;
+
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellJoinType;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
+
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableOne;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFieldOne;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableTwo;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFieldTwo;
 
+@property (assign) MNSLinkPart currentlyEditingPart;
+
+@property (retain) NSString *firstTableFieldName;
 @property (assign) MNSLinkType linkType;
+@property (retain) NSString *secondTableFieldName;
+
 @property (retain) NSString *firstTableName;
 @property (retain) NSString *secondTableName;
 @property (retain) NSString *firstFieldName;

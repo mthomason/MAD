@@ -11,8 +11,10 @@
 
 @implementation UITableViewCellInstruction
 
+@synthesize labelGroupType = _labelGroupType, labelGroupTypeDetail = _labelGroupTypeDetail;
+
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELLINSTRUCTION_HEIGHT_DEFAULT;
+    return UITABLEVIEWCELL_HEIGHT_DEFAULT;
 }
 
 @end

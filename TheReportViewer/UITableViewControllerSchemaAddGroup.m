@@ -18,6 +18,7 @@
 @synthesize field = _field, sortOrder = _sortOrder;
 
 - (void)dealloc {
+    [_field release];
     [_managedDocumentQuery release];
     [_tableViewCellField release];
     [_tableViewCellSort release];
@@ -110,7 +111,7 @@
 
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
-    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [field name], [[field inTable] name]] retain];
+    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     [self setField:fieldName];
     [[[self tableViewCellField] detailTextLabel] setText: [fieldName lowercaseString]];
     [fieldName release];

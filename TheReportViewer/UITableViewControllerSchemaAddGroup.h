@@ -10,6 +10,7 @@
 #import "UITableViewControllerSortType.h"
 #import "UITableViewControllerChooseField.h"
 #import "RptqQueryGroup.h"
+#import "RptqField.h"
 #import "UIManagedDocumentQuery.h"
 
 @class UITableViewControllerSchemaAddGroup;

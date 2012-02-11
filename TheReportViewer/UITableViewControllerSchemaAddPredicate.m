@@ -123,7 +123,8 @@
 }
 
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
-    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [field name], [[field inTable] name]] retain];
+    [[self navigationController] popToViewController:self animated:YES];
+    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: fieldName];
         [[[self tableViewCellLeftSide] detailTextLabel] setText: [fieldName lowercaseString]];
@@ -132,7 +133,6 @@
         [[[self tableViewCellRightSide] detailTextLabel] setText: [fieldName lowercaseString]];
     }
     [fieldName release];
-    [[self navigationController] popToViewController:self animated:YES];
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType {

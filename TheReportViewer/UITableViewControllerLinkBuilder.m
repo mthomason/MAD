@@ -20,11 +20,17 @@
 @synthesize tableViewCellFieldOne = _tableViewCellFieldOne;
 @synthesize tableViewCellTableTwo = _tableViewCellTableTwo;
 @synthesize tableViewCellFieldTwo = _tableViewCellFieldTwo;
+@synthesize tableViewCellTableFieldOne = _tableViewCellTableFieldOne;
+@synthesize tableViewCellTableFieldTwo = _tableViewCellTableFieldTwo;
 @synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize linkType = _linkType;
 @synthesize firstTableName = _firstTableName, firstFieldName = _firstFieldName, secondTableName = _secondTableName, secondFieldName = _secondFieldName;
+@synthesize firstTableFieldName = _firstTableFieldName, secondTableFieldName = _secondTableFieldName;
+@synthesize currentlyEditingPart = _currentlyEditingPart;
 
 - (void)dealloc {
+    [_firstTableFieldName release];
+    [_secondTableFieldName release];
     [_firstTableName release];
     [_firstFieldName release];
     [_secondTableName release];
@@ -34,13 +40,15 @@
     [_tableViewCellFieldOne release];
     [_tableViewCellTableTwo release];
     [_tableViewCellFieldTwo release];
+    [_tableViewCellTableFieldOne release];
+    [_tableViewCellTableFieldTwo release];
     [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        // Custom initialization
+        [self setCurrentlyEditingPart: MNSLinkNone];
     }
     return self;
 }
@@ -48,7 +56,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self setCurrentlyEditingPart: MNSLinkNone];
     }
     return self;
 }
@@ -68,6 +76,8 @@
     [self setTableViewCellFieldOne:nil];
     [self setTableViewCellTableTwo:nil];
     [self setTableViewCellFieldTwo:nil];
+    [self setTableViewCellTableFieldOne:nil];
+    [self setTableViewCellTableFieldTwo:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -175,6 +185,38 @@
                     [frc release];
                 }
             }
+        } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldOne"]) {
+            
+            [self setCurrentlyEditingPart: MNSLinkLeft];
+            if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+                
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                NSError *error = nil;
+                NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+                
+                [[segue destinationViewController] setDelegate:self];            
+                
+                [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults]; 
+            }
+
+        } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldTwo"]) {
+            
+            [self setCurrentlyEditingPart: MNSLinkRight];
+            if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+                
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                NSError *error = nil;
+                NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+                
+                [[segue destinationViewController] setDelegate:self];            
+                
+                [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults]; 
+            }
+            
         }
     }
 }
@@ -199,6 +241,32 @@
 }
 
 #pragma mark - Delegate callbacks
+
+- (void)tableViewControllerChooseFieldDidFinish: (UITableViewControllerChooseField *)controller
+                                      withField: (RptqField *)field {
+    [[self navigationController] popToViewController: self animated: YES];
+    
+    NSString *tableName = [[field inTable] name];
+    NSString *fieldName = [field name];
+    NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
+    switch ([self currentlyEditingPart]) {
+        case MNSLinkLeft:
+            [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
+            [self setFirstTableName:tableName];
+            [self setFirstFieldName:fieldName];
+            [self setFirstTableFieldName:tableFieldName];
+            break;
+        case MNSLinkRight:
+            [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
+            [self setSecondTableName:tableName];
+            [self setSecondFieldName:fieldName];
+            [self setSecondTableFieldName:tableFieldName];
+            break;
+        default:
+            break;
+    }
+    [fieldName release];
+}
 
 - (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {
     [[self navigationController] popToViewController: self animated: YES];

@@ -70,6 +70,7 @@
 - (IBAction)addLink:(id)sender;
 - (IBAction)edit:(id)sender;
 
+- (NSInteger)getNumberOfGroups;
 - (RptqDocument *)getDocument;
 
 @end

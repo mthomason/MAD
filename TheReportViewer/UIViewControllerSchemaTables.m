@@ -96,7 +96,7 @@ typedef enum {
                              [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsSql], nil];
         
         NSArray *countRowsForSection = [[NSArray alloc] initWithObjects:
-                                        [NSNumber numberWithInt: 1],
+                                        [NSNumber numberWithInt: -1],
                                         [NSNumber numberWithInt: 1],
                                         [NSNumber numberWithInt: -1],
                                         [NSNumber numberWithInt: -1],
@@ -108,7 +108,7 @@ typedef enum {
                                                                                     forKeys: sections];
         [countRowsForSection release];
         
-        NSString *h1 = NSLocalizedString(@"Overview", @"Overview");
+        NSString *h1 = NSLocalizedString(@"Layout", @"Layout");
         NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
         NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
         NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
@@ -525,6 +525,12 @@ typedef enum {
     [doc release];
 }
 
+#pragma mark - Internal
+
+- (NSInteger)getNumberOfGroups {
+    return [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
+}
+
 - (RptqDocument *)getDocument {
     RptqDocument *doc = nil;
     if ([self managedDocumentQuery]) {
@@ -583,6 +589,41 @@ typedef enum {
                 result = [self uITableViewCellInstruction];
                 [self setUITableViewCellInstruction:nil];
             }
+            NSInteger numberOfGroups = [self getNumberOfGroups];
+            NSInteger documentHeader    = 0;
+            NSInteger pageHeader        = 1;
+            NSInteger body              = 2 + numberOfGroups;       //6
+            NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
+            NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
+            NSString *groupText = nil;
+            NSInteger indentLevel = 0;
+            if (row <= body) {
+                indentLevel = row;
+            } else {
+                indentLevel = body - (row - body);
+            }
+            if (row == documentHeader) {
+                groupText = NSLocalizedString(@"Report Header", @"Report Header");
+            } else if (row == pageHeader) {
+                groupText = NSLocalizedString(@"Page Header", @"Page Header");
+            } else if (row == body) {
+                groupText = NSLocalizedString(@"Report Detail", @" Report Detail");
+            } else if (row == pageFooter) {
+                groupText = NSLocalizedString(@"Page Footer", @"Page Footer");
+            } else if (row == documentFooter) {
+                groupText = NSLocalizedString(@"Report Footer", @"Report Footer");
+            } else {
+                NSInteger locationRelitaveToGroup = row - pageHeader;
+                BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
+                if (isGroupHeader) {
+                    groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @""), indentLevel - 1];
+                } else {
+                    groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @""), indentLevel - 1];
+                }
+            }
+            NSLog(@"{row, indent, name} {%d, %d, %@}", row, indentLevel, groupText);
+            [[(UITableViewCellInstruction *) result labelGroupType] setText:groupText];
+            [(UITableViewCellInstruction *) result setIndentationLevel: indentLevel];
             break;
         }
         case UIViewControllerSchemaTablesSectionsDatasource: {
@@ -659,7 +700,20 @@ typedef enum {
             RptqQueryGroup *group = [[[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             
             [[(UITableViewCellQueryGroup *)result labelMain] setText: [group field]];
-            [[(UITableViewCellQueryGroup *)result labelDetail] setText: [NSString stringWithFormat:@"Sort %d",[group sort]]];
+            NSString *sort;
+            MNSSortOrder sortOrder = [[group sort] integerValue];
+            switch (sortOrder) {
+                case MNSSortOrderAccending:
+                    sort = @"accending";
+                    break;
+                case MNSSortOrderDecending:
+                    sort = @"decending";
+                    break;
+                default:
+                    sort = @"";
+                    break;
+            }
+            [[(UITableViewCellQueryGroup *)result labelDetail] setText: [sort lowercaseString]];
             [group release];
             break;
         }
@@ -735,6 +789,13 @@ typedef enum {
     numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: section]] intValue];
     if (numberOfRows < 0) {
         switch (section) {
+            case UIViewControllerSchemaTablesSectionsInstructions: {
+                //The sections are report header, report footer, page header, page footer,
+                //  body, group header, and group footer
+                NSInteger numberOfGroups = [self getNumberOfGroups];
+                numberOfRows = (2 * numberOfGroups) + 5;
+                break;
+            }
             case UIViewControllerSchemaTablesSectionsTables: {
                 numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
                 break;
@@ -749,7 +810,7 @@ typedef enum {
                 break;
             }
             case UIViewControllerSchemaTablesSectionsGroups: {
-                numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
+                numberOfRows = [self getNumberOfGroups];
                 break;
             }
             default:
@@ -797,7 +858,7 @@ typedef enum {
     
     switch (section) {
         case UIViewControllerSchemaTablesSectionsInstructions: {
-            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderBuildQuery"] view];
+            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLayout"] view];
             break;
         }
         case UIViewControllerSchemaTablesSectionsDatasource: {
@@ -985,34 +1046,53 @@ typedef enum {
     }
 }
 
+- (NSMutableArray *)sectionsUsedByFetchedResultsController: (NSFetchedResultsController *)controller {
+
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 2];
+
+    if ([controller isEqual:[self fetchedResultsControllerTables]]) {
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsTables]];
+    } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsLinks]];
+    } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsInstructions]]; //Once for group header settings
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsInstructions]]; //Once for group footer settings
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsGroups]];
+    } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
+        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsPredicate]];
+    }
+    
+    return [result autorelease];
+
+}
+
 - (void)controller: (NSFetchedResultsController *)controller
   didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex: (NSUInteger)sectionIndex
 	 forChangeType: (NSFetchedResultsChangeType)type {
 
-    NSUInteger newSectionIndex = 0;
     
-    if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        newSectionIndex = UIViewControllerSchemaTablesSectionsTables;
-    } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
-        newSectionIndex = UIViewControllerSchemaTablesSectionsLinks;
-    } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        newSectionIndex = UIViewControllerSchemaTablesSectionsGroups;
-    } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
-        newSectionIndex = UIViewControllerSchemaTablesSectionsPredicate;
-    }
+    NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
     
-    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                [self.tableViewQueryBuilder insertSections:[NSIndexSet indexSetWithIndex:newSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                [self.tableViewQueryBuilder deleteSections:[NSIndexSet indexSetWithIndex:newSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-                break;
+    for (NSNumber *section in sections) {
+        UIViewControllerSchemaTablesSections updateSection = [section integerValue];
+        if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+            switch(type) {
+                case NSFetchedResultsChangeInsert:
+                    [self.tableViewQueryBuilder insertSections: [NSIndexSet indexSetWithIndex:updateSection]
+                                              withRowAnimation: UITableViewRowAnimationFade];
+                    break;
+                    
+                case NSFetchedResultsChangeDelete:
+                    [self.tableViewQueryBuilder deleteSections:
+                     [NSIndexSet indexSetWithIndex:updateSection] withRowAnimation:UITableViewRowAnimationFade];
+                    break;
+            }
         }
+
     }
+    
+    [sections release];
 }
 
 
@@ -1022,59 +1102,49 @@ typedef enum {
 	 forChangeType: (NSFetchedResultsChangeType)type
 	  newIndexPath: (NSIndexPath *)newIndexPath {
     
-    NSIndexPath *adjustedIndexPath = nil;
-    NSIndexPath *adjustedNewIndexPath = nil;
+    NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
     
-    if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row]
-                                               inSection: UIViewControllerSchemaTablesSectionsTables];
-        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row]
-                                                  inSection: UIViewControllerSchemaTablesSectionsTables];
-    } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
-        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row]
-                                               inSection: UIViewControllerSchemaTablesSectionsLinks];
-        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row]
-                                                  inSection: UIViewControllerSchemaTablesSectionsLinks];
-    } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row]
-                                               inSection: UIViewControllerSchemaTablesSectionsGroups];
-        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row]
-                                                  inSection: UIViewControllerSchemaTablesSectionsGroups];
-    } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
-        adjustedIndexPath = [NSIndexPath indexPathForRow: [indexPath row]
-                                               inSection: UIViewControllerSchemaTablesSectionsPredicate];
-        adjustedNewIndexPath = [NSIndexPath indexPathForRow: [newIndexPath row]
-                                                  inSection: UIViewControllerSchemaTablesSectionsPredicate];
-    }
-    
-    if (adjustedIndexPath && adjustedNewIndexPath) {
-        if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            switch(type) {
-                case NSFetchedResultsChangeInsert:
-                    [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:adjustedNewIndexPath]
-                                                      withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                    
-                case NSFetchedResultsChangeDelete:
-                    [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:adjustedIndexPath]
-                                                      withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                    
-                case NSFetchedResultsChangeUpdate:
-                    [self.tableViewQueryBuilder reloadRowsAtIndexPaths: [NSArray arrayWithObject:adjustedIndexPath]
-                                                      withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                    
-                case NSFetchedResultsChangeMove:
-                    [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:adjustedIndexPath]
-                                                      withRowAnimation: UITableViewRowAnimationFade];
-                    [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:adjustedNewIndexPath]
-                                                      withRowAnimation: UITableViewRowAnimationFade];
-                    break;
+    for (NSNumber *section in sections) {
+        UIViewControllerSchemaTablesSections updateSection = [section integerValue];
+        
+        NSIndexPath *path = [NSIndexPath indexPathForRow: [indexPath row]
+                                               inSection: updateSection];
+        
+        if (path) {
+            if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+                switch(type) {
+                    case NSFetchedResultsChangeInsert:
+                        [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                                                          withRowAnimation: UITableViewRowAnimationFade];
+                        break;
+                        
+                    case NSFetchedResultsChangeDelete:
+                        [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                                                          withRowAnimation: UITableViewRowAnimationFade];
+                        break;
+                        
+                    case NSFetchedResultsChangeUpdate:
+                        [self.tableViewQueryBuilder reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                                                          withRowAnimation: UITableViewRowAnimationFade];
+                        break;
+                        
+                    case NSFetchedResultsChangeMove:
+                        [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                                                          withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                                                          withRowAnimation: UITableViewRowAnimationFade];
+                        break;
+                }
             }
         }
     }
     
+    [sections release];
+    //[sections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+
+    //    NSNumber *section = obj;
+        
+    //}];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {

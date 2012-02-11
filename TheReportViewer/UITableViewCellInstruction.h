@@ -10,6 +10,9 @@
 
 @interface UITableViewCellInstruction : UITableViewCell
 
+@property (nonatomic, assign) IBOutlet UILabel *labelGroupType;
+@property (nonatomic, assign) IBOutlet UILabel *labelGroupTypeDetail;
+
 + (CGFloat)defaultHeight;
 
 @end
