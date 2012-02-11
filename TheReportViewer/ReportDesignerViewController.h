@@ -13,6 +13,7 @@
 #import "UITableViewControllerSettings.h"
 
 @class ReportDesignerViewController;
+@class UIManagedDocumentQuery;
 
 @protocol ReportDesignerViewControllerDelegate
 - (void)reportDesignerViewControllerDidFinish:(ReportDesignerViewController *)controller;
@@ -28,13 +29,21 @@
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIScrollViewDashboard *designScrollView;
 @property (retain, nonatomic) IBOutlet UIButton *informationButton;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemInfo;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSettings;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemObjects;
+@property (retain, nonatomic) IBOutlet UINavigationItem *navBar;
 
 - (void)openReport:(NSURL *)url;
 - (void)openTemplate:(NSURL *)url;
 - (IBAction)done:(id)sender;
 - (IBAction)info:(id)sender;
+- (IBAction)showObjects:(id)sender;
+- (IBAction)showSettings:(id)sender;
 
 @end

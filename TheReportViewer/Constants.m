@@ -8,6 +8,8 @@
 
 #import "Constants.h"
 
+#pragma mark - Customizable Constants
+
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM = 0.7000f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF = 0.3500f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE = 0.4870f;
@@ -55,3 +57,6 @@ CGFloat const UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT = 100.0000f;
 
 NSString * const KEY_DB_TYPE_SF = @"sf";
 NSString * const KEY_DB_TYPE_MYSQL = @"my";
+
+#pragma mark - Core Data Constants
+#pragma mark Do not change these.

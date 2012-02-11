@@ -19,6 +19,7 @@
 #import "RptqQueryGroup.h"
 #import "RptqQueryPredicate.h"
 #import "RptqUserCredentals.h"
+#import "RptqDocumentSection.h"
 #import "RptqQuery.h"
 #import "UIColor+EverydayApps.h"
 #import "UIViewTableSectionHeaderQueryBuilder.h"
@@ -105,6 +106,7 @@ typedef enum {
                                         [NSNumber numberWithInt: -1],
                                         [NSNumber numberWithInt: 2],
                                         nil];
+
         NSDictionary *countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
                                                                                     forKeys: sections];
         [countRowsForSection release];
@@ -170,7 +172,6 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
     UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableViewQueryBuilder] frame]];
     [[self tableViewQueryBuilder] setBackgroundView: gradentView];
     [gradentView release];
@@ -193,6 +194,8 @@ typedef enum {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
+    //[[UINavigationBar appearance] setTintColor: [UIColor edaBlueDark]];
+    //[[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
     [[self tableViewQueryBuilder] reloadData];
 }
 
@@ -207,7 +210,6 @@ typedef enum {
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDatabasesDrivers"]) {
-        //Set UITableViewControllerDataSourceTypes delegate
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -321,6 +323,11 @@ typedef enum {
             }
             [navControl release];
         }        
+    } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
+        if ([[segue destinationViewController] isKindOfClass: [ReportDesignerViewController class]]) {
+            [(ReportDesignerViewController *)[segue destinationViewController] setDelegate: self];
+            [(ReportDesignerViewController *)[segue destinationViewController] setManagedDocumentQuery: [self managedDocumentQuery]];
+        }
     }
 }
 
@@ -363,6 +370,10 @@ typedef enum {
 #pragma mark - Model Delegates
 
 #pragma mark - Delegates
+
+- (void)reportDesignerViewControllerDidFinish:(ReportDesignerViewController *)controller {
+    [self dismissModalViewControllerAnimated: YES];
+}
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
     [self dismissModalViewControllerAnimated: YES];
@@ -487,9 +498,22 @@ typedef enum {
         NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
         NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:moc];
         
+        NSEntityDescription *eds = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext:moc];
+        
         RptqQueryGroup *rqg = [[RptqQueryGroup alloc] initWithEntity:ed insertIntoManagedObjectContext:moc];
         [rqg setField:field];
         [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
+        
+        RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
+        [dsHeader setType: [NSNumber numberWithInteger: MNSSectionTypeGroupHeader]];
+        [rqg addHasSectionObject:dsHeader];
+        [dsHeader release];
+
+        RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
+        [dsFooter setType: [NSNumber numberWithInteger:MNSSectionTypeGroupFooter]];
+        [rqg addHasSectionObject:dsFooter];
+        [dsFooter release];
+
         [[doc hasQuery] addHasQueryGroupsObject: rqg];
         [rqg release];
         

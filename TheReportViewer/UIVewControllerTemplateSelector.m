@@ -34,7 +34,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+        //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
         self.title = NSLocalizedString(@"Templates", @"Templates");
     }
     return self;    
@@ -43,7 +43,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+        //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
         self.title = NSLocalizedString(@"Templates", @"Templates");
     }
     return self;
@@ -66,7 +66,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
+    //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
 
     [self setAvailableFilesCache: [NSFileManager contentsOfTemplateDirectoryWithPathExtension:TEMPLATE_PATH_EXTENSION]];
 }

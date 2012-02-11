@@ -51,7 +51,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
+        //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
     }
     return self;    
 }
@@ -59,7 +59,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
+        //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
     }
     return self;
 }
@@ -70,7 +70,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
+    //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -89,7 +89,7 @@
     NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
     [self setAvailableFilesCache: a];
     [a release];
-    [[UIToolbar appearance] setTintColor:[UIColor clearColor]];
+    //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
     
     [[self tableViewQueries] reloadData];
 }
@@ -121,7 +121,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showCreateNewReport"]) {
-        //Set UITableViewControllerDataSourceTypes delegate
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -160,108 +159,107 @@
         }
         
         
-        UIViewControllerSchemaTables *tvc = [(UIViewControllerSchemaTables *)[segue destinationViewController] retain];
-        [tvc setDelegate: self];
-        
-        
-        if (row < [[self availableFilesCache] count]) {
-            
-            NSURL *url = [[[self availableFilesCache] objectAtIndex: row] retain];
-            NSLog(@"URL: %@", url);
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [[segue destinationViewController] retain];
+            if ([navControl topViewController]) {
+                if ([[navControl topViewController] isKindOfClass:[UIViewControllerSchemaTables class]]) {
+                    UIViewControllerSchemaTables *tvc = [(UIViewControllerSchemaTables *)[navControl topViewController] retain];
+                    if (tvc) {
+                        [tvc setDelegate: self];
+                        if (row < [[self availableFilesCache] count]) {
+                            
+                            NSURL *url = [[[self availableFilesCache] objectAtIndex: row] retain];
+                            
+                            UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
+                            [tvc setManagedDocumentQuery: mdq];
+                            [mdq release];
 
-            UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
-            [tvc setManagedDocumentQuery: mdq];
-            [mdq release];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-                [[tvc managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
+                            if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+                                [[tvc managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
+                                    
+                                    {
+                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                                                sectionNameKeyPath: nil
+                                                                                                                         cacheName: nil];
+                                        [tvc setFetchedResultsControllerTables: frc];
+                                        
+                                        [frc release];
+                                        frc = nil;
+                                    }
+                                    
+                                    {
+                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
+                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
+                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                                                sectionNameKeyPath: nil
+                                                                                                                         cacheName: nil];
+                                        [tvc setFetchedResultsControllerLinks: frc];
+                                        
+                                        [frc release];
+                                        frc = nil;
+                                    }
+                                    
+                                    {
+                                        
+                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                                                sectionNameKeyPath: nil
+                                                                                                                         cacheName: nil];
+                                        [tvc setFetchedResultsControllerGroups: frc];
+                                        [frc release];
+                                        frc = nil;
+                                        
+                                    }
+                                    
+                                    {
+                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
+                                        
+                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
+                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                        
+                                        NSError *error = nil;
 
-                    {
-                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
-                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsControllerTables: frc];
+                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
+                                                                                                                sectionNameKeyPath: nil
+                                                                                                                         cacheName: nil];
+                                        
+                                        [tvc setFetchedResultsControllerPredicates: frc];
 
-                        NSLog(@"Table fetch results controller: %@", frc);
-                        NSLog(@"Table Sections %@, %d", [frc sections], [[frc sections] count]);
+                                        [frc release];
+                                        
+                                        frc = nil;
+                                    }
+                                    
+                                    [tvc release];
+                                    
+                                }];
+                            }
+                            [url release];
+                        }
                         
+                        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+                            [self setTableViewControllerDataSourceTypes: popoverController];
+                            [popoverController setDelegate: self];
+                        }
 
-                        [frc release];
-                        frc = nil;
                     }
-                    
-                    {
-                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsControllerLinks: frc];
-                        
-                        [frc release];
-                        frc = nil;
-                    }
-                    
-                    {
-                        
-                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsControllerGroups: frc];
-                        [frc release];
-                        frc = nil;
-                        
-                    }
-                    
-                    {
-                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-
-                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
-                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                        
-                        NSError *error = nil;
-                        //NSArray *predicates = [[[tvc managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-                        
-                        //NSLog(@"Erro %@, Get it done %@", error, predicates);
-                        
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        
-                        [tvc setFetchedResultsControllerPredicates: frc];
-                        //NSLog(@"Pred fetch results controller: %@", frc);
-                        
-                        //BOOL success = [frc performFetch:&error];
-                        //NSLog(@"Error: %@", error);
-                        //NSLog(@"Pred Sections %@, %d", [frc sections], [[frc sections] count]);
-                        
-                        [frc release];
-                        
-                        frc = nil;
-                    }
-
-                    [tvc release];
-
-                }];
+                }
             }
-            [url release];
+            [navControl release];
         }
-
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [self setTableViewControllerDataSourceTypes: popoverController];
-            [popoverController setDelegate: self];
-        }
+                
+        
     }
 }
 

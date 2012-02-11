@@ -9,10 +9,9 @@
 #import "ReportDesignerViewController.h"
 #import "Constants.h"
 #import "NSFileManager+Common.h"
+#import "UIManagedDocumentQuery.h"
 
 @interface ReportDesignerViewController()
-
-@property (retain) UIManagedDocumentTrvFileData *managedDocumentCurrent;
 
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
@@ -26,11 +25,15 @@
 
 @synthesize settingsPopoverController = _settingsPopoverController;
 
-@synthesize managedDocumentCurrent = _managedDocumentCurrent;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 @synthesize containerView = _containerView;
 @synthesize designScrollView = _designScrollView;
 @synthesize informationButton = _informationButton;
+@synthesize barButtonItemInfo = _barButtonItemInfo;
+@synthesize barButtonItemSettings = _barButtonItemSettings;
+@synthesize barButtonItemObjects = _barButtonItemObjects;
+@synthesize navBar = _navBar;
 
 @synthesize formualInformationViewIsVisable = _formualInformationViewIsVisable;
 @synthesize imageInformationViewIsVisable = _imageInformationViewIsVisable;
@@ -38,10 +41,14 @@
 
 - (void)dealloc {
     [_settingsPopoverController release];
-    if (_managedDocumentCurrent) [_managedDocumentCurrent release];
+    [_managedDocumentQuery release];
     [_designScrollView release];
     [_containerView release];
     [_informationButton release];
+    [_barButtonItemInfo release];
+    [_barButtonItemSettings release];
+    [_barButtonItemObjects release];
+    [_navBar release];
     [super dealloc];
 }
 
@@ -73,12 +80,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
 }
 
 - (void)viewDidUnload {
     [self setDesignScrollView:nil];
     [self setContainerView:nil];
     [self setInformationButton:nil];
+    [self setBarButtonItemInfo:nil];
+    [self setBarButtonItemSettings:nil];
+    [self setBarButtonItemObjects:nil];
+    [self setNavBar:nil];
     [super viewDidUnload];
 }
 
@@ -149,6 +162,10 @@
 - (IBAction)done:(id)sender {
     [self.delegate reportDesignerViewControllerDidFinish:self];
 }
+
+- (IBAction)showObjects:(id)sender { }
+
+- (IBAction)showSettings:(id)sender { }
 
 - (IBAction)info:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

@@ -51,3 +51,6 @@ extern NSString * const KEY_TBL_SEC_ROW_HEIGHT;
 
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_MYSQL;
+
+extern NSString * const KEY_DB_TYPE_SF;
+extern NSString * const KEY_DB_TYPE_MYSQL;

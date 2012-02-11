@@ -12,6 +12,9 @@
 #import "MNSConnection.h"
 #import "UIColor+EverydayApps.h"
 
+#import "UINavigationControllerQueryDesigner.h"
+#import "UINavigationControllerModelControllers.h"
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -28,8 +31,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
-    [[UINavigationBar appearance] setTintColor: [UIColor edaGreenDark]];
+    
+    //[[UIToolbar appearance] setTintColor: [UIColor edaBlueDark]];
+    //[[UINavigationBar appearance] setTintColor: [UIColor edaBlueDark]];
     
     // Override point for customization after application launch.
     

@@ -2,11 +2,12 @@
 //  RptqQueryGroup.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/9/12.
+//  Created by Michael Thomason on 2/11/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqQueryGroup.h"
+#import "RptqDocumentSection.h"
 #import "RptqQuery.h"
 
 
@@ -16,5 +17,6 @@
 @dynamic sort;
 @dynamic weight;
 @dynamic inQuery;
+@dynamic hasSection;
 
 @end

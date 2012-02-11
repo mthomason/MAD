@@ -2,14 +2,14 @@
 //  RptqQueryGroup.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/9/12.
+//  Created by Michael Thomason on 2/11/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqQuery;
+@class RptqDocumentSection, RptqQuery;
 
 @interface RptqQueryGroup : NSManagedObject
 
@@ -17,5 +17,14 @@
 @property (nonatomic, retain) NSNumber * sort;
 @property (nonatomic, retain) NSNumber * weight;
 @property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, retain) NSSet *hasSection;
+@end
+
+@interface RptqQueryGroup (CoreDataGeneratedAccessors)
+
+- (void)addHasSectionObject:(RptqDocumentSection *)value;
+- (void)removeHasSectionObject:(RptqDocumentSection *)value;
+- (void)addHasSection:(NSSet *)values;
+- (void)removeHasSection:(NSSet *)values;
 
 @end

@@ -23,6 +23,19 @@
 #import "UIModalTableViewController.h"
 #import "UITableViewControllerPredicateFormat.h"
 #import "UITableViewControllerSectionLayoutSettings.h"
+#import "ReportDesignerViewController.h"
+#import "Constants.h"
+
+//Do not change these enum values, as they are used in core data.
+typedef enum {
+	MNSSectionTypeReportHeader = 1,
+	MNSSectionTypeReportFooter = 2,
+	MNSSectionTypePageHeader = 3,
+	MNSSectionTypePageFooter = 4,
+    MNSSectionTypeBody = 5,
+    MNSSectionTypeGroupHeader = 6,
+    MNSSectionTypeGroupFooter = 7,
+} MNSSectionType;
 
 @class UIViewControllerSchemaTables;
 @class RptqDocument;
@@ -40,6 +53,7 @@
         UITableViewControllerDataSourceTypesDelegate,
         UITableViewControllerLinkBuilderDelegate,
         UIModalTableViewControllerDelegate,
+        ReportDesignerViewControllerDelegate,
         SectionLayoutSettingsDelegate,
         AddPredicateDelegate>
 
