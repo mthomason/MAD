@@ -2,7 +2,7 @@
 //  RptqDocument.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -24,15 +24,11 @@
 @property (nonatomic, retain) NSNumber * papersize;
 @property (nonatomic, retain) NSData * thumbnailpreview;
 @property (nonatomic, retain) RptqDatabase *hasDatabaseSchema;
+@property (nonatomic, retain) RptqDocumentSection *hasDetailSection;
+@property (nonatomic, retain) RptqDocumentSection *hasPageFooterSection;
+@property (nonatomic, retain) RptqDocumentSection *hasPageHeaderSection;
 @property (nonatomic, retain) RptqQuery *hasQuery;
-@property (nonatomic, retain) NSSet *hasSections;
-@end
-
-@interface RptqDocument (CoreDataGeneratedAccessors)
-
-- (void)addHasSectionsObject:(RptqDocumentSection *)value;
-- (void)removeHasSectionsObject:(RptqDocumentSection *)value;
-- (void)addHasSections:(NSSet *)values;
-- (void)removeHasSections:(NSSet *)values;
+@property (nonatomic, retain) RptqDocumentSection *hasReportFooterSection;
+@property (nonatomic, retain) RptqDocumentSection *hasReportHeaderSection;
 
 @end

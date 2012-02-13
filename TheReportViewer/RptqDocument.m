@@ -2,7 +2,7 @@
 //  RptqDocument.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -25,7 +25,11 @@
 @dynamic papersize;
 @dynamic thumbnailpreview;
 @dynamic hasDatabaseSchema;
+@dynamic hasDetailSection;
+@dynamic hasPageFooterSection;
+@dynamic hasPageHeaderSection;
 @dynamic hasQuery;
-@dynamic hasSections;
+@dynamic hasReportFooterSection;
+@dynamic hasReportHeaderSection;
 
 @end

@@ -9,6 +9,7 @@
 #import "NSDatabaseSalesForce.h"
 
 #import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
 
 #import "Constants.h"
 
@@ -112,83 +113,60 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 - (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
     
     //Fetch the existing object model.
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-    NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
-
-    NSError *error = nil;
-    NSArray *documents = [moc executeFetchRequest:request error:&error];
-
-    if (!error) {
-        //Delete any contents of the existing object modal.
-        if (documents && [documents count] > 0) {
-            [documents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [moc deleteObject: obj];
-            }];
-        }
-
-        RptqDocument *rptqDocumentHead = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocument class])
-                                                                       inManagedObjectContext: moc];
-        [rptqDocumentHead setHasDatabaseSchema: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class])
-                                                                              inManagedObjectContext: moc]];
-        [rptqDocumentHead setHasQuery: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class])
-                                                                     inManagedObjectContext: moc]];
-        [[rptqDocumentHead hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class])
-                                                                                            inManagedObjectContext: moc]];
-        [[[rptqDocumentHead hasDatabaseSchema] ownedByUser] setDatabase_driver_type:KEY_DB_TYPE_SF];
-        [rptqDocumentHead setName: [self schemaName]];
-        [rptqDocumentHead.hasDatabaseSchema setDatabase_driver_type: KEY_DB_TYPE_SF];
-        [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
+    NSManagedObjectContext *moc = [[[self managedDocumentQuery] managedObjectContext] retain];
+    
+    RptqDocument *doc = [[RptqDocument createMainDocumentForManagedObjectContext: moc] retain];
+[doc setName: [self schemaName]];
+    [[[doc hasDatabaseSchema] ownedByUser] setDatabase_driver_type:KEY_DB_TYPE_SF];
+    [[doc hasDatabaseSchema] setDatabase_driver_type: KEY_DB_TYPE_SF];
+    
+    [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
+        
+        [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
             
-            [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-                //NSLog(@"Table object: %@", obj);
-                NSDictionary *tableDictionary = [obj retain];
-                NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
-                                                               inManagedObjectContext: moc];
-                
-                RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
-                [rptqTable setName: [tableDictionary objectForKey: @"name"]];
-                [rptqTable setLabel: [tableDictionary objectForKey: @"label"]];
-                [rptqTable setQueryable: [NSNumber numberWithBool: [[tableDictionary objectForKey: @"queryable"] boolValue]]];
-                [rptqTable setLabel_plural: [tableDictionary objectForKey: @"labelPlural"]];
-                [tableDictionary release];
+            NSDictionary *tableDictionary = [obj retain];
+            NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqTable class])
+                                                           inManagedObjectContext: moc];
+            
+            RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:moc];
+            [rptqTable setName: [tableDictionary objectForKey: @"name"]];
+            [rptqTable setLabel: [tableDictionary objectForKey: @"label"]];
+            [rptqTable setQueryable: [NSNumber numberWithBool: [[tableDictionary objectForKey: @"queryable"] boolValue]]];
+            [rptqTable setLabel_plural: [tableDictionary objectForKey: @"labelPlural"]];
+            [tableDictionary release];
+            
+            [[doc hasDatabaseSchema] addHasTablesObject: rptqTable];
+            
+            [database fieldsInDatabase:nil andTable:rptqTable completion:^(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields) {
 
-                [rptqDocumentHead.hasDatabaseSchema addHasTablesObject: rptqTable];
-
-                [database fieldsInDatabase:nil andTable:rptqTable completion:^(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields) {
-                    [fields retain];
-                    [fields enumerateObjectsUsingBlock:^(id objField, NSUInteger idx, BOOL *stop) {
-                        //NSLog(@"Field object: %@", objField);
-                        NSDictionary *fieldDictionary = [objField retain];
-                        NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class])
-                                                                       inManagedObjectContext: moc];
-                        RptqField *rptqField = [[RptqField alloc] initWithEntity: fieldEntity
-                                              insertIntoManagedObjectContext: moc];
-                        [rptqField setLabel: [fieldDictionary objectForKey:@"label"]];
-                        [rptqField setName: [fieldDictionary objectForKey:@"name"]];
-                        [rptqField setDatatype: [fieldDictionary objectForKey:@"type"]];
-                        [fieldDictionary release];
-
-                        if (originTable) [originTable addHasFieldsObject: rptqField];
-
-                        [rptqField release];
-                    }];
-                    [fields release];
-
+                [fields retain];
+                [fields enumerateObjectsUsingBlock:^(id objField, NSUInteger idx, BOOL *stop) {
+                    
+                    NSDictionary *fieldDictionary = [objField retain];
+                    
+                    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqField class]) inManagedObjectContext: moc];
+                    RptqField *rptqField = [[RptqField alloc] initWithEntity: fieldEntity insertIntoManagedObjectContext: moc];
+                    [rptqField setLabel: [fieldDictionary objectForKey:@"label"]];
+                    [rptqField setName: [fieldDictionary objectForKey:@"name"]];
+                    [rptqField setDatatype: [fieldDictionary objectForKey:@"type"]];
+                    [fieldDictionary release];
+                    
+                    if (originTable) [originTable addHasFieldsObject: rptqField];
+                    
+                    [rptqField release];
                 }];
-
-                [rptqTable release];
+                [fields release];
+                
             }];
             
-            [self save];
-            completion(database, YES);
-            
+            [rptqTable release];
         }];
-    } else {
-#warning Display alert
-        NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
-    }
-
-
+        
+        [self save];
+        completion(database, YES);
+        
+    }];
+    [moc release];
 }
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {

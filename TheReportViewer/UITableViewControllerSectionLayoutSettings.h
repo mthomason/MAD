@@ -11,6 +11,9 @@
 @class UITableViewControllerSectionLayoutSettings;
 
 @protocol SectionLayoutSettingsDelegate
+- (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
+- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
+@optional
 - (void)sectionLayoutSettingsDidFinish:(UITableViewControllerSectionLayoutSettings *)controller;
 @end
 
@@ -20,6 +23,10 @@
 @property (assign, nonatomic) IBOutlet id <SectionLayoutSettingsDelegate> delegate;
 @property (retain, nonatomic) IBOutlet UILabel *labelHeight;
 @property (retain, nonatomic) IBOutlet UIStepper *heightStepper;
+@property (retain, nonatomic) IBOutlet UISwitch *visibilitySwitch;
+
+@property (assign) NSInteger initalStepperValue;
+@property (assign) BOOL initalSwitchValue;
 
 - (double)stepperValueNormalized;
 

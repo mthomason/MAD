@@ -25,17 +25,7 @@
 #import "UITableViewControllerSectionLayoutSettings.h"
 #import "ReportDesignerViewController.h"
 #import "Constants.h"
-
-//Do not change these enum values, as they are used in core data.
-typedef enum {
-	MNSSectionTypeReportHeader = 1,
-	MNSSectionTypeReportFooter = 2,
-	MNSSectionTypePageHeader = 3,
-	MNSSectionTypePageFooter = 4,
-    MNSSectionTypeBody = 5,
-    MNSSectionTypeGroupHeader = 6,
-    MNSSectionTypeGroupFooter = 7,
-} MNSSectionType;
+#import "RptqDocumentSection.h"
 
 @class UIViewControllerSchemaTables;
 @class RptqDocument;
@@ -48,7 +38,6 @@ typedef enum {
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate,
         UIViewControllerSchemaAddLinkDelegate,
         UIViewControllerSchemaAddTableDelegate,
-        UITableViewControllerSchemaAddPredicateDelegate,
         UITableViewControllerSchemaAddGroupDelegate,
         UITableViewControllerDataSourceTypesDelegate,
         UITableViewControllerLinkBuilderDelegate,
@@ -79,6 +68,9 @@ typedef enum {
 @property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *uITableViewCellQueryInput;
 
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+
+@property (assign) NSInteger lastSelectedRowNumber;
+
 @property BOOL debug;
 
 - (IBAction)done:(id)sender;
@@ -87,6 +79,5 @@ typedef enum {
 - (IBAction)edit:(id)sender;
 
 - (NSInteger)getNumberOfGroups;
-- (RptqDocument *)getDocument;
 
 @end

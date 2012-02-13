@@ -25,6 +25,7 @@ typedef enum {
 @protocol UITableViewControllerSchemaAddPredicateDelegate
 - (void)uITableViewControllerSchemaAddPredicateDidFinish:(UITableViewControllerSchemaAddPredicate *)controller;
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
+@optional
 - (void)uITableViewControllerSchemaAddPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 

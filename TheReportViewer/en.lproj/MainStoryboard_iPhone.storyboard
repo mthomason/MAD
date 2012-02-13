@@ -578,7 +578,6 @@
                                         <connections>
                                             <outlet property="labelGroupType" destination="udx-D6-xIf" id="mjk-jS-4kg"/>
                                             <outlet property="labelGroupTypeDetail" destination="JAV-Gp-oMu" id="bye-Qf-cif"/>
-                                            <segue destination="aNt-90-Z4U" kind="push" identifier="showLayoutSettings" id="xjV-XX-jZx"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellTableName" id="YFM-WM-szy" customClass="UITableViewCellTableName">
@@ -779,6 +778,7 @@
                         <segue destination="bUw-df-pAe" kind="modal" identifier="showAddLinkViewController" id="idj-ud-PyC"/>
                         <segue destination="ouR-uU-io8" kind="modal" identifier="showAddGroupViewController" id="MuE-kH-9se"/>
                         <segue destination="yu8-fa-CaA" kind="modal" identifier="showAddPredicateViewController" id="gJB-rC-0ZL"/>
+                        <segue destination="aNt-90-Z4U" kind="push" identifier="showLayoutSettings" id="uwG-NL-oc9"/>
                     </connections>
                 </viewController>
             </objects>
@@ -2476,6 +2476,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="ulc-86-ffo">
                                                     <rect key="frame" x="201" y="8" width="79" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="visibilityChanged:" destination="aNt-90-Z4U" eventType="valueChanged" id="nGv-dU-8cw"/>
+                                                    </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Visible" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zh8-Jf-j6r">
                                                     <rect key="frame" x="20" y="11" width="137" height="21"/>
@@ -2496,7 +2499,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Height" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PUH-ve-kDf">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Height: 44.0 pts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PUH-ve-kDf">
                                                     <rect key="frame" x="20" y="11" width="158" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -2528,6 +2531,7 @@
                     <connections>
                         <outlet property="heightStepper" destination="SWE-QX-aMe" id="rro-oe-apC"/>
                         <outlet property="labelHeight" destination="PUH-ve-kDf" id="cHD-aq-xUr"/>
+                        <outlet property="visibilitySwitch" destination="ulc-86-ffo" id="H31-FG-gJj"/>
                     </connections>
                 </tableViewController>
             </objects>
@@ -3022,7 +3026,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ter-LI-G9J" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="wlp-wD-qxw" customClass="UITableViewControllerChooseField" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="QRb-br-u92">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="136"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -4170,6 +4174,7 @@
                 <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="UITableViewControllerSettings" superclassName="UITableViewController">
@@ -4309,7 +4314,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="jCL-NW-r6y"/>
-        <segue reference="CwB-f6-wTT"/>
-        <segue reference="giJ-oQ-sLB"/>
+        <segue reference="G3D-As-8XI"/>
+        <segue reference="pfP-rZ-fVf"/>
     </inferredMetricsTieBreakers>
 </document>

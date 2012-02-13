@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,17 +16,17 @@
 
 @implementation RptqDocumentObject
 
-@dynamic sizewidth;
-@dynamic originy;
-@dynamic sizeheight;
-@dynamic originx;
-@dynamic type;
 @dynamic binary;
 @dynamic label;
+@dynamic originx;
+@dynamic originy;
+@dynamic sizeheight;
+@dynamic sizewidth;
+@dynamic type;
 @dynamic inSection;
 @dynamic isFormula;
 @dynamic isLabel;
-@dynamic isLabelLink;
 @dynamic isLabelDataField;
+@dynamic isLabelLink;
 
 @end

@@ -2,7 +2,7 @@
 //  RptqQueryGroup.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,7 +16,7 @@
 @dynamic field;
 @dynamic sort;
 @dynamic weight;
-@dynamic inQuery;
 @dynamic hasSection;
+@dynamic inQuery;
 
 @end

@@ -2,7 +2,7 @@
 //  RptqQueryGroup.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,8 +16,8 @@
 @property (nonatomic, retain) NSString * field;
 @property (nonatomic, retain) NSNumber * sort;
 @property (nonatomic, retain) NSNumber * weight;
-@property (nonatomic, retain) RptqQuery *inQuery;
 @property (nonatomic, retain) NSSet *hasSection;
+@property (nonatomic, retain) RptqQuery *inQuery;
 @end
 
 @interface RptqQueryGroup (CoreDataGeneratedAccessors)

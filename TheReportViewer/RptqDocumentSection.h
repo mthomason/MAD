@@ -2,7 +2,7 @@
 //  RptqDocumentSection.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/13/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,12 +13,13 @@
 
 @interface RptqDocumentSection : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * type;
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * height;
-@property (nonatomic, retain) RptqDocument *inReport;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * visibility;
 @property (nonatomic, retain) NSSet *hasObjects;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;
+@property (nonatomic, retain) RptqDocument *inReport;
 @end
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)

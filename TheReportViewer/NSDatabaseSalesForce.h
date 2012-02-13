@@ -69,6 +69,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 - (void)logout;
 
 - (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
+
 - (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
               completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
 

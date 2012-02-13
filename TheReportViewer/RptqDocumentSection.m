@@ -2,7 +2,7 @@
 //  RptqDocumentSection.m
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/11/12.
+//  Created by Michael Thomason on 2/13/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,11 +14,12 @@
 
 @implementation RptqDocumentSection
 
-@dynamic type;
-@dynamic name;
 @dynamic height;
-@dynamic inReport;
+@dynamic name;
+@dynamic type;
+@dynamic visibility;
 @dynamic hasObjects;
 @dynamic inGroup;
+@dynamic inReport;
 
 @end

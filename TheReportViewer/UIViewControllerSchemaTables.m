@@ -24,6 +24,8 @@
 #import "UIColor+EverydayApps.h"
 #import "UIViewTableSectionHeaderQueryBuilder.h"
 #import "UITableViewControllerSectionLayoutSettings.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDocumentSection+Extras.h"
 
 typedef enum {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
@@ -67,6 +69,8 @@ typedef enum {
 @synthesize uITableViewCellQueryLink;
 @synthesize uITableViewCellOverride;
 @synthesize uITableViewCellQueryInput;
+
+@synthesize lastSelectedRowNumber = _lastSelectedRowNumber;
 
 @synthesize managedDocumentQuery = _managedDocumentQuery;
 
@@ -276,13 +280,7 @@ typedef enum {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddPredicate class]]) {
-                    UITableViewControllerSchemaAddPredicate *tvc = (UITableViewControllerSchemaAddPredicate *)[navControl topViewController];
-                    if (tvc) {
-                        [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
-                        [tvc setDelegate:self];
-                    }
-                } else if ([[navControl topViewController] isKindOfClass:[UITableViewControllerPredicateFormat class]]) {
+                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerPredicateFormat class]]) {
                     UITableViewControllerPredicateFormat *tvc = (UITableViewControllerPredicateFormat *)[navControl topViewController];
                     if (tvc) {
                         NSLog(@"Setting add predicate log");
@@ -310,19 +308,23 @@ typedef enum {
             [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:@"showLayoutSettings"]) {
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSectionLayoutSettings class]]) {
-                    UITableViewControllerSectionLayoutSettings *tvc = (UITableViewControllerSectionLayoutSettings *)[navControl topViewController];
+                if ([[segue destinationViewController] isKindOfClass:[UITableViewControllerSectionLayoutSettings class]]) {
+                    UITableViewControllerSectionLayoutSettings *tvc = (UITableViewControllerSectionLayoutSettings *)[segue destinationViewController];
                     if (tvc) {
-                        //[tvc setManagedDocumentQuery: [self managedDocumentQuery]];
                         [tvc setDelegate:self];
+                        NSLog(@"Last selected row: %d", [self lastSelectedRowNumber]);
+                        RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                                                   withNumberOfGroups: [self getNumberOfGroups]
+                                                                              andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+                        NSLog(@"About to show section: %@", section);                        
+                        NSLog(@"Inital height: %@", [section height]);
+                        NSLog(@"Inital visibility: %@", [section visibility]);
+                        [tvc setInitalStepperValue:([[section height] floatValue] * 2)];
+                        [tvc setInitalSwitchValue:[[section visibility] boolValue]];
+                        [section release];
+
                     }
                 }
-            }
-            [navControl release];
-        }        
     } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
         if ([[segue destinationViewController] isKindOfClass: [ReportDesignerViewController class]]) {
             [(ReportDesignerViewController *)[segue destinationViewController] setDelegate: self];
@@ -367,7 +369,25 @@ typedef enum {
     [barButtonItem release];
 }
 
-#pragma mark - Model Delegates
+#pragma mark - Delegates
+
+#pragma mark Layout Settings Delegate
+
+- (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
+    RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                               withNumberOfGroups: [self getNumberOfGroups]
+                                                          andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+    [section setHeight: [NSNumber numberWithFloat:height]];
+    [section release];
+}
+
+- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
+    RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                               withNumberOfGroups: [self getNumberOfGroups]
+                                                          andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+    [section setVisibility: [NSNumber numberWithBool:isVisible]];
+    [section release];    
+}
 
 #pragma mark - Delegates
 
@@ -381,7 +401,7 @@ typedef enum {
 
 - (void)addPredicate:(RptqQueryPredicate *)predicate {
     [self dismissModalViewControllerAnimated: YES];
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         NSLog(@"About to save it yo!  %@", [doc hasQuery]);
         [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: predicate]];
@@ -400,7 +420,7 @@ typedef enum {
     
     [self dismissModalViewControllerAnimated: YES];
     
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         
         NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
@@ -451,7 +471,7 @@ typedef enum {
                                               withJoinType:(MNSLinkType)joinType {
     [self dismissModalViewControllerAnimated: YES];
     
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
         
@@ -493,7 +513,7 @@ typedef enum {
     
     [self dismissModalViewControllerAnimated: YES];
     
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         NSManagedObjectContext *moc = [[self managedDocumentQuery] managedObjectContext];
         NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:moc];
@@ -527,7 +547,7 @@ typedef enum {
 - (void)uITableViewControllerSchemaAddGroupDidAddGroup:(RptqQueryGroup *)group {
     [self dismissModalViewControllerAnimated: YES];
     
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         
         [[doc hasQuery] addHasQueryGroupsObject: group];
@@ -543,7 +563,7 @@ typedef enum {
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissModalViewControllerAnimated: YES];
-    RptqDocument *doc = [[self getDocument] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
         NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
         RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
@@ -565,28 +585,6 @@ typedef enum {
 
 - (NSInteger)getNumberOfGroups {
     return [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-}
-
-- (RptqDocument *)getDocument {
-    RptqDocument *doc = nil;
-    if ([self managedDocumentQuery]) {
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:docFetchRequest error:&error];
-        if (!error) {
-            if ([documents count] > 0) {
-                doc = [documents objectAtIndex: 0];
-                if (doc) {
-                    [[doc retain] autorelease];
-                }
-            } else {
-                NSLog(@"Document doesn't exist");
-            }
-        } else {
-            NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-        }
-    }
-    return doc;
 }
 
 #pragma mark - Table View Data Source Protocol
@@ -626,40 +624,11 @@ typedef enum {
                 [self setUITableViewCellInstruction:nil];
             }
             NSInteger numberOfGroups = [self getNumberOfGroups];
-            NSInteger documentHeader    = 0;
-            NSInteger pageHeader        = 1;
-            NSInteger body              = 2 + numberOfGroups;       //6
-            NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
-            NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
-            NSString *groupText = nil;
-            NSInteger indentLevel = 0;
-            if (row <= body) {
-                indentLevel = row;
-            } else {
-                indentLevel = body - (row - body);
-            }
-            if (row == documentHeader) {
-                groupText = NSLocalizedString(@"Report Header", @"Report Header");
-            } else if (row == pageHeader) {
-                groupText = NSLocalizedString(@"Page Header", @"Page Header");
-            } else if (row == body) {
-                groupText = NSLocalizedString(@"Report Detail", @" Report Detail");
-            } else if (row == pageFooter) {
-                groupText = NSLocalizedString(@"Page Footer", @"Page Footer");
-            } else if (row == documentFooter) {
-                groupText = NSLocalizedString(@"Report Footer", @"Report Footer");
-            } else {
-                NSInteger locationRelitaveToGroup = row - pageHeader;
-                BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
-                if (isGroupHeader) {
-                    groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @""), indentLevel - 1];
-                } else {
-                    groupText = [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @""), indentLevel - 1];
-                }
-            }
-            NSLog(@"{row, indent, name} {%d, %d, %@}", row, indentLevel, groupText);
-            [[(UITableViewCellInstruction *) result labelGroupType] setText:groupText];
-            [(UITableViewCellInstruction *) result setIndentationLevel: indentLevel];
+            NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
+            NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
+            [[(UITableViewCellInstruction *) result labelGroupType] setText:sectionName];
+            [(UITableViewCellInstruction *) result setIndentationLevel: sectionIndentLevel];
+            [sectionName release];
             break;
         }
         case UIViewControllerSchemaTablesSectionsDatasource: {
@@ -828,7 +797,7 @@ typedef enum {
             case UIViewControllerSchemaTablesSectionsInstructions: {
                 //The sections are report header, report footer, page header, page footer,
                 //  body, group header, and group footer
-                NSInteger numberOfGroups = [self getNumberOfGroups];
+                NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
                 numberOfRows = (2 * numberOfGroups) + 5;
                 break;
             }
@@ -846,7 +815,7 @@ typedef enum {
                 break;
             }
             case UIViewControllerSchemaTablesSectionsGroups: {
-                numberOfRows = [self getNumberOfGroups];
+                numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
                 break;
             }
             default:
@@ -976,6 +945,14 @@ typedef enum {
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([indexPath section] == UIViewControllerSchemaTablesSectionsInstructions) {
+        [self setLastSelectedRowNumber: [indexPath row]];
+        [self performSegueWithIdentifier:@"showLayoutSettings" sender:self];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	
 }
@@ -986,10 +963,6 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

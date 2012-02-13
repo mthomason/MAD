@@ -11,7 +11,6 @@
 
 @implementation UITableViewControllerFieldOrCustomValue
 
-@synthesize delegate = _delegate;
 @synthesize segmentedControlDisplayType = _segmentedControlDisplayType;
 
 - (void)dealloc {

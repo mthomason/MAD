@@ -12,16 +12,8 @@
 
 @class UITableViewControllerFieldOrCustomValue;
 
-@protocol UITableViewControllerFieldOrCustomValueDelegate
-- (void)uITableViewControllerFieldOrCustomValueDidFinish:(UITableViewControllerFieldOrCustomValue *)controller;
-- (void)uITableViewControllerFieldOrCustomValueDidAddField:(RptqField *)field;
-- (void)uITableViewControllerFieldOrCustomValueDidAddValue:(id)value;
-@end
-
 @interface UITableViewControllerFieldOrCustomValue : UITableViewControllerChooseField
     <UITableViewDataSource, UITableViewDelegate>
-
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerFieldOrCustomValueDelegate> delegate;
 
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlDisplayType;
 

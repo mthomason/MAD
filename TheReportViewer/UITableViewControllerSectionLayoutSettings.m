@@ -14,13 +14,16 @@
 @synthesize delegate = _delegate;
 @synthesize labelHeight = _labelHeight;
 @synthesize heightStepper = _heightStepper;
+@synthesize visibilitySwitch = _visibilitySwitch;
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+@synthesize initalStepperValue = _initalStepperValue;
+@synthesize initalSwitchValue = _initalSwitchValue;
+
+- (void)dealloc {
+    [_labelHeight release];
+    [_heightStepper release];
+    [_visibilitySwitch release];
+    [super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,14 +34,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[self visibilitySwitch] setOn:[self initalSwitchValue]];
+    [[self heightStepper] setValue:[self initalStepperValue]];
+
     UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableView] frame]];
     [[self tableView] setBackgroundView: gradentView];
     [gradentView release];
+    
+    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), [self stepperValueNormalized]]];
+
 }
 
 - (void)viewDidUnload {
     [self setLabelHeight:nil];
     [self setHeightStepper:nil];
+    [self setVisibilitySwitch:nil];
     [super viewDidUnload];
 }
 
@@ -63,8 +74,15 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 - (IBAction)heightChanged:(id)sender {
-    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), [self stepperValueNormalized]]];
+    double stepperValue = [self stepperValueNormalized];
+    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), stepperValue]];
+    [[self delegate] sectionLayoutDidUpdateHeight: stepperValue];
 }
+- (IBAction)visibilityChanged:(id)sender {
+    [[self delegate] sectionLayoutDidUpdateVisibility:[[self visibilitySwitch] isOn]];
+}
+
+#pragma mark - Helpers
 
 - (double)stepperValueNormalized {
     return ([[self heightStepper] value] / 2);
@@ -74,9 +92,4 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)dealloc {
-    [_labelHeight release];
-    [_heightStepper release];
-    [super dealloc];
-}
 @end
