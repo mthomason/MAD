@@ -105,7 +105,7 @@
         frame.size.height = [[sec height] floatValue];
     }
     [enumerator release];
-    
+    [[self designScrollView] setContentSize:CGSizeMake(paperWidth, frame.origin.y)];    
 }
 
 - (void)viewDidUnload {
