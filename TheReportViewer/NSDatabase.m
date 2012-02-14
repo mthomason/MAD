@@ -23,7 +23,7 @@
 - (id)initExistingFileWithUrl:(NSURL *)url {
     self = [super init];
     if (self) {
-        
+#warning Not implemented
     }
     return self;
 }

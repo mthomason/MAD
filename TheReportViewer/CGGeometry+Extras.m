@@ -8,10 +8,12 @@
 
 #import "CGGeometry+Extras.h"
 
-CG_INLINE CGPoint CGPointMakeRandomOffscreen() {
+//CG_INLINE
+CGPoint CGPointMakeRandomOffscreen() {
 	return randomOffscreenPoint(1);
 }
 
+//CG_INLINE
 CGPoint randomOffscreenPoint(int multiple) {
 	CGPoint offScreen;
 	CGFloat offSetSize = 200.0000f * multiple;
@@ -36,18 +38,22 @@ CGPoint randomOffscreenPoint(int multiple) {
 	return offScreen;
 }
 
-CG_INLINE CGFloat CGFloatPointsForInches(CGFloat inches) {
+//CG_INLINE
+CGFloat CGFloatPointsForInches(CGFloat inches) {
     return inches * 72.0000f;
 }
 
-CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points) {
+//CG_INLINE
+CGFloat CGFloatInchesForPoints(CGFloat points) {
     return points / 72.0000f;
 }
 
-CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) {
+//CG_INLINE
+CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) {
     return centemeters / 2.5400f;
 }
 
-CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches) {
+//CG_INLINE
+CGFloat CGFloatCentemetersForInches(CGFloat inches) {
     return inches * 2.5400f;
 }

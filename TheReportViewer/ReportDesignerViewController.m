@@ -7,9 +7,16 @@
 //
 
 #import "ReportDesignerViewController.h"
+#import <CoreData/CoreData.h>
 #import "Constants.h"
 #import "NSFileManager+Common.h"
 #import "UIManagedDocumentQuery.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+#import "CGGeometry+Extras.h"
+#import "UIColor+EverydayApps.h"
+#import "SectionEnumerator.h"
 
 @interface ReportDesignerViewController()
 
@@ -80,7 +87,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    RptqDocument *mainDocument = [RptqDocument getMainDocumentForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+    CGPoint origin = CGPointMake(5.0000f, 5.0000f);
+    CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
+    CGFloat sectionHeight = [[[mainDocument hasReportHeaderSection] height] floatValue];
+    CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, sectionHeight);
     
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] init];
+    [enumerator setManagedDocumentQuery:[self managedDocumentQuery]];
+    for (RptqDocumentSection *sec in enumerator) {
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
+        [scrollView setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
+        [[self designScrollView] addSubview:scrollView];
+        [scrollView release];
+        
+        frame.origin.y += frame.size.height + 10.0000f;
+        frame.size.height = [[sec height] floatValue];
+    }
+    [enumerator release];
     
 }
 

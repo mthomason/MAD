@@ -119,6 +119,7 @@
 		4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
 		4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
 		4C88A99614E8F8BF0069A0AF /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99514E8F8BF0069A0AF /* RptqDocumentSection.m */; };
+		4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
 		4C8C971114C5B93D007FB629 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C970F14C5B881007FB629 /* libmysqlclient.a */; };
 		4C8C97A614C5C43D007FB629 /* libRestKitCoreData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C978814C5C43C007FB629 /* libRestKitCoreData.a */; };
 		4C8C97A714C5C43D007FB629 /* libRestKitNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C978914C5C43C007FB629 /* libRestKitNetwork.a */; };
@@ -443,6 +444,8 @@
 		4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4C88A99414E8F8BF0069A0AF /* RptqDocumentSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSection.h; sourceTree = "<group>"; };
 		4C88A99514E8F8BF0069A0AF /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSection.m; sourceTree = "<group>"; };
+		4C88A99714EA22F80069A0AF /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
+		4C88A99814EA22F90069A0AF /* SectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionEnumerator.m; sourceTree = "<group>"; };
 		4C8C970F14C5B881007FB629 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = APIs/libmysqlclient.framework/libmysqlclient.a; sourceTree = "<group>"; };
 		4C8C971714C5C43C007FB629 /* CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreData.h; sourceTree = "<group>"; };
 		4C8C971814C5C43C007FB629 /* NSManagedObject+ActiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ActiveRecord.h"; sourceTree = "<group>"; };
@@ -1496,6 +1499,8 @@
 			isa = PBXGroup;
 			children = (
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
+				4C88A99714EA22F80069A0AF /* SectionEnumerator.h */,
+				4C88A99814EA22F90069A0AF /* SectionEnumerator.m */,
 			);
 			name = Rptq;
 			sourceTree = "<group>";
@@ -1964,6 +1969,7 @@
 				4C5505B014E79C1B00FF4527 /* RptqField.m in Sources */,
 				4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */,
 				4C88A99614E8F8BF0069A0AF /* RptqDocumentSection.m in Sources */,
+				4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2056,7 +2062,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2086,7 +2092,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

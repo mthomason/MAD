@@ -226,8 +226,6 @@
                                         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
                                         request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                                         
-                                        NSError *error = nil;
-
                                         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                                               managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
                                                                                                                 sectionNameKeyPath: nil

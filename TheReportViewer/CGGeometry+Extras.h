@@ -8,11 +8,18 @@
 
 /* Make a point from `(x, y)'. */
 
-CG_INLINE CGPoint CGPointMakeRandomOffscreen();
+//CG_INLINE
+CGPoint CGPointMakeRandomOffscreen();
 
+//CG_INLINE
 CGPoint randomOffscreenPoint(int multiple);
 
-CG_INLINE CGFloat CGFloatPointsForInches(CGFloat inches);
-CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);
-CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters);
-CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches);
+//CG_INLINE
+CGFloat CGFloatPointsForInches(CGFloat inches);
+//CG_INLINE
+CGFloat CGFloatInchesForPoints(CGFloat points);
+//CG_INLINE
+CGFloat
+CGFloatInchesForCentmeters(CGFloat centemeters);
+//CG_INLINE
+CGFloat CGFloatCentemetersForInches(CGFloat inches);

@@ -238,12 +238,12 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", tableName];
                     [getTableWithName setPredicate: predicate];
                     NSError *error = nil;
-                    NSArray *results = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:getTableWithName error:&error];
+                    NSArray *tables = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:getTableWithName error:&error];
                     RptqTable *origionalTable = nil;
                     if (!error) {
-                        if (results) {
-                            if ([results count] > 0) {
-                                origionalTable = [[[results objectAtIndex: 0] retain] autorelease];
+                        if (tables) {
+                            if ([tables count] > 0) {
+                                origionalTable = [[[tables objectAtIndex: 0] retain] autorelease];
                             }
                         }
                     }
