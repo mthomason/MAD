@@ -34,6 +34,8 @@
 
 @synthesize managedDocumentQuery = _managedDocumentQuery;
 
+@synthesize toolbox = _toolbox;
+
 @synthesize containerView = _containerView;
 @synthesize designScrollView = _designScrollView;
 @synthesize informationButton = _informationButton;
@@ -42,11 +44,17 @@
 @synthesize barButtonItemObjects = _barButtonItemObjects;
 @synthesize navBar = _navBar;
 
+@synthesize toolboxOffScreen = _toolboxOffScreen;
+@synthesize toolboxOnScreen = _toolboxOnScreen;
+@synthesize designScrollViewNormal = _designScrollViewNormal;
+@synthesize designScrollViewWithToolbox = _designScrollViewWithToolbox;
+
 @synthesize formualInformationViewIsVisable = _formualInformationViewIsVisable;
 @synthesize imageInformationViewIsVisable = _imageInformationViewIsVisable;
 @synthesize labelInformationViewIsVisable = _labelInformationViewIsVisable;
 
 - (void)dealloc {
+    if (_toolbox) [_toolbox release];
     [_settingsPopoverController release];
     [_managedDocumentQuery release];
     [_designScrollView release];
@@ -63,26 +71,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showSettings"]) {
-        UINavigationController *navController = [[segue destinationViewController] retain];
-        if (navController) {
-            if ([[navController viewControllers] count] > 0) {
-                UITableViewControllerSettings *tvcSettings = [[[navController viewControllers] objectAtIndex: 0] retain];
-                [tvcSettings setDelegate:self];
-                [tvcSettings release];
-            }
-        }
-        [navController release];
-        
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [self setSettingsPopoverController: popoverController];
-            popoverController.delegate = self;
-        }
-    }
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -92,6 +80,13 @@
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     CGFloat sectionHeight = [[[mainDocument hasReportHeaderSection] height] floatValue];
     CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, sectionHeight);
+    
+    CGFloat halfHeight = self.view.frame.size.height / 2;
+
+    [self setToolboxOnScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height - halfHeight, self.view.bounds.size.width, halfHeight)];
+    [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
+    [self setDesignScrollViewNormal: [[self designScrollView] frame]];
+    [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
     
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] init];
     [enumerator setManagedDocumentQuery:[self managedDocumentQuery]];
@@ -137,6 +132,26 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showSettings"]) {
+        UINavigationController *navController = [[segue destinationViewController] retain];
+        if (navController) {
+            if ([[navController viewControllers] count] > 0) {
+                UITableViewControllerSettings *tvcSettings = [[[navController viewControllers] objectAtIndex: 0] retain];
+                [tvcSettings setDelegate:self];
+                [tvcSettings release];
+            }
+        }
+        [navController release];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            [self setSettingsPopoverController: popoverController];
+            popoverController.delegate = self;
+        }
+    }
 }
 
 #pragma mark - Actions
@@ -194,35 +209,26 @@
 - (IBAction)info:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         //Make sure there are no information views open
-        
         [[self informationButton] setEnabled: NO];
         
         UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"StoryboardToolbox" bundle:nil] retain];
         UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
-        //LabelInformationViewController *lblControl = [[[navControl viewControllers] objectAtIndex:0] retain];
-        
-        //LabelInformationViewController *lblControl = [[LabelInformationViewController alloc] initWithNibName:@"LabelInformationViewController" bundle:nil];
+        [self setToolbox:lblControl];
+        [lblControl release];
         [sbLblControl release];
-        [lblControl setDelegate: self];
-        CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height / 2.0000f);
-        CGRect infoViewFrameOnScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + viewFrame.size.height, viewFrame.size.width, viewFrame.size.height);
-        CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
-        [[lblControl view] setFrame:infoViewFrameOffScreen];
-        [[self view] addSubview:[lblControl view]];
-        NSLog(@"ScrolFrame: %@", NSStringFromCGRect([[lblControl view] frame]));
-        //NSLog(@"TableFrame: %@", NSStringFromCGRect([v frame]));
-
+                
+        [[self toolbox] setDelegate: self];
+        [[[self toolbox] view] setFrame:[self toolboxOffScreen]];
+        [[self view] addSubview:[[self toolbox] view]];
+        
         [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
                          animations: ^{
-                             [[self containerView] setFrame: viewFrame];
-                             [[lblControl view] setFrame: infoViewFrameOnScreen];
+                             [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
+                             [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
                          } completion:^(BOOL finished) {
-                             
+                             NSLog(@"designScrollView: %@", NSStringFromCGRect( self.designScrollView.frame ));
+                             NSLog(@"toolbox: %@", NSStringFromCGRect( self.toolbox.view.frame ));
                          }];
-        
-    } else {
-        //UIPopoverController *popControl = [[UIPopoverController alloc] initWithContentViewController:lblControl];
-        //[popControl release];
     }
 }
 
@@ -230,21 +236,15 @@
 #pragma mark Delegates
 
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
-    
-    CGRect viewFrame = CGRectMake([self containerView].frame.origin.x, [self containerView].frame.origin.y, [self containerView].frame.size.width, [self view].frame.size.height);
-    CGRect infoViewFrameOffScreen = CGRectMake(viewFrame.origin.x, viewFrame.origin.y + [[self view] frame].size.height, viewFrame.size.width, viewFrame.size.height);
-    
+        
     [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
                      animations: ^{
-                         [[self containerView] setFrame: viewFrame];
-                         [[controller view] setFrame: infoViewFrameOffScreen];
+                         [[self designScrollView] setFrame:[self designScrollViewNormal]];
+                         [[[self toolbox] view] setFrame: [self toolboxOffScreen]];
                      } completion:^(BOOL finished) {
-                         [[controller view] removeFromSuperview];
-                         [controller release];
+                         [[[self toolbox] view] removeFromSuperview];
                          [[self informationButton] setEnabled: YES];
                      }];
-    
-    
 }
 
 - (void)uIViewControllerSettingsDidFinish:(UITableViewControllerSettings *)controller {

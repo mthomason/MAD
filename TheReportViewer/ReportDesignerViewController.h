@@ -11,6 +11,7 @@
 #import "UIViewControllerToolbox.h"
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
+#import "UIViewControllerToolbox.h"
 
 @class ReportDesignerViewController;
 @class UIManagedDocumentQuery;
@@ -20,10 +21,14 @@
 @end
 
 @interface ReportDesignerViewController : UIViewController
-    <UITableViewDataSource, UITableViewDelegate,
+    <UITableViewDataSource,
+        UITableViewDelegate,
         UIPopoverControllerDelegate,
         UITableViewControllerSettingsDelegate,
-        LabelInformationViewControllerDelegate>
+        LabelInformationViewControllerDelegate> {
+            CGRect toolboxOffScreen;
+            CGRect toolboxOnScreen;
+}
 
 @property (assign, nonatomic) IBOutlet id <ReportDesignerViewControllerDelegate> delegate;
 
@@ -31,7 +36,13 @@
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
+@property (assign) CGRect designScrollViewNormal;
+@property (assign) CGRect designScrollViewWithToolbox;
+@property (assign) CGRect toolboxOffScreen;
+@property (assign) CGRect toolboxOnScreen;
+
 @property (retain, nonatomic) IBOutlet UIView *containerView;
+@property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) IBOutlet UIScrollViewDashboard *designScrollView;
 @property (retain, nonatomic) IBOutlet UIButton *informationButton;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemInfo;

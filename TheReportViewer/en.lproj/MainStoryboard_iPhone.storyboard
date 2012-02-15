@@ -340,10 +340,10 @@
                                             <state key="highlighted">
                                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
+                                            <connections>
+                                                <action selector="info:" destination="d6e-CT-kmt" eventType="touchUpInside" id="jL6-fm-AJK"/>
+                                            </connections>
                                         </button>
-                                        <connections>
-                                            <action selector="info:" destination="d6e-CT-kmt" id="cv0-qp-w5k"/>
-                                        </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
@@ -354,7 +354,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="barButtonItemInfo" destination="x3P-pr-1zF" id="WmY-xI-3lI"/>
+                        <outlet property="barButtonItemInfo" destination="x3P-pr-1zF" id="OhZ-VS-KBR"/>
                         <outlet property="barButtonItemObjects" destination="U4m-Tl-FVb" id="P9q-uL-3Oo"/>
                         <outlet property="barButtonItemSettings" destination="Yli-Ut-BGk" id="yL5-2B-6sc"/>
                         <outlet property="designScrollView" destination="lma-we-TIM" id="H8I-0A-d89"/>

@@ -110,13 +110,15 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
 
     [[[self fontSettingsTableViewController] tableView] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, [[self mainScrollView] frame].size.width, [[self mainScrollView] frame].size.height)];
     [[[self uITableViewControllerFontSelector] tableView] setFrame:CGRectMake([[self mainScrollView] contentSize].width / 2.0000f, CGPointZero.y, [[self mainScrollView] frame].size.width, [[self mainScrollView] frame].size.height)];
-    [[self mainScrollView] addSubview: [[self fontSettingsTableViewController] tableView]];
-    [[self mainScrollView] addSubview: [[self uITableViewControllerFontSelector] tableView]];
+    //[[self mainScrollView] addSubview: [[self fontSettingsTableViewController] tableView]];
+    //[[self mainScrollView] addSubview: [[self uITableViewControllerFontSelector] tableView]];
 
     [[self fontSettingsTableViewController] updateFontSizeDisplay];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -129,8 +131,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [[[self fontSettingsTableViewController] tableView] removeFromSuperview];
-    [[[self uITableViewControllerFontSelector] tableView] removeFromSuperview];
+    //[[[self fontSettingsTableViewController] tableView] removeFromSuperview];
+    //[[[self uITableViewControllerFontSelector] tableView] removeFromSuperview];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
