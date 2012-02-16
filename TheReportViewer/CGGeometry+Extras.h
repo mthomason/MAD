@@ -8,18 +8,128 @@
 
 /* Make a point from `(x, y)'. */
 
-//CG_INLINE
-CGPoint CGPointMakeRandomOffscreen();
+CG_INLINE CGPoint CGPointMakeRandomOffscreen();
 
-//CG_INLINE
-CGPoint randomOffscreenPoint(int multiple);
+CG_INLINE CGPoint
+CGPointMakeRandomOffscreen() {
+	CGPoint offScreen;
+	CGFloat offSetSize = 200.0000f * 2;
+	if (rand()%2 == 0) {
+		if (rand()%2 == 0) {
+			//offscreen top
+			offScreen = CGPointMake(rand() % (int)1024.0000f, 0.0000f - offSetSize);
+		} else {
+			//offscreen left
+			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)1024.0000f);
+		}
+		
+	} else {
+		if (rand()%2 == 0) {
+			//offscreen bottom
+			offScreen = CGPointMake(rand() % (int)1024.0000f, 1024.0000f + offSetSize);
+		} else {
+			//offscreen right
+			offScreen = CGPointMake(1024.0000f + offSetSize, rand() % (int)1024.0000f);
+		}
+	}
+	return offScreen;
+}
 
-//CG_INLINE
-CGFloat CGFloatPointsForInches(CGFloat inches);
-//CG_INLINE
-CGFloat CGFloatInchesForPoints(CGFloat points);
-//CG_INLINE
-CGFloat
-CGFloatInchesForCentmeters(CGFloat centemeters);
-//CG_INLINE
-CGFloat CGFloatCentemetersForInches(CGFloat inches);
+CG_INLINE CGFloat CGFloatPointsForInches(CGFloat inches);
+
+CG_INLINE CGFloat
+CGFloatPointsForInches(CGFloat inches) {
+    return inches * 72.0000f;
+}
+
+CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);
+
+CG_INLINE CGFloat
+CGFloatInchesForPoints(CGFloat points) {
+    return points / 72.0000f;
+}
+
+CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters);
+
+CG_INLINE CGFloat
+CGFloatInchesForCentmeters(CGFloat centemeters) {
+    return centemeters / 2.5400f;
+}
+
+CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches);
+
+CG_INLINE CGFloat
+CGFloatCentemetersForInches(CGFloat inches) {
+    return inches * 2.5400f;
+}
+
+CG_INLINE CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2);
+
+CG_INLINE CGFloat
+CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
+	//y = m x + b;
+	CGFloat m = ((p2.y - p1.y) / (p2.x - p1.x));
+	CGFloat b = p1.y - (m * p1.x);
+	return (y - b) / m;
+}
+
+CG_INLINE CGFloat CGDistance(CGPoint p1, CGPoint p2);
+CG_INLINE CGFloat
+CGDistance(CGPoint p1, CGPoint p2) {
+	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
+}
+
+CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
+CG_INLINE CGFloat
+CGSlope(CGPoint p1, CGPoint p2) {
+	return ((p2.y - p1.y) / (p2.x - p1.x));
+}
+
+CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m);
+CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m) {
+	return (p2.y - (m * p2.x));
+}
+
+CG_INLINE CGFloat CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
+CG_INLINE CGFloat
+CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
+	if (t2 - t1 != 0) return (CGDistance(p1, p2) / ((t2 - t1) * 3));
+	else return 0;
+}
+
+CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, long d);
+CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, long d) {
+	CGPoint returnVal;
+	long double m = -1 * CGDistance(p1, p2);
+	long double b = CGInterceptBySlope(p2, m);
+	BOOL movingUp;
+	if (p1.y < p2.y) movingUp = YES;
+        else movingUp = NO;
+            
+            long double x = p2.x;
+            long double y = p2.y;
+            
+            if (d >= 0) {		
+                long double mPow2 = pow(m, 2);
+                long double bPow2 = pow(b, 2);
+                long double dPow2 = pow(d, 2);
+                long double u = p2.x;
+                long double v = p2.y;
+                long double sqrtPart = 0.0;
+                sqrtPart = (mPow2)*( ((-1)*(bPow2)) + ((dPow2)*(1+mPow2)) - (pow((((-1)*(m)*(u)) + v),2)) + (b*(((-1)*(2)*(m)*(u))+((2)*(v)))) );
+                if (!isnan(sqrtPart)) {
+                    if (movingUp) y = ((b)+((m)*(u))+((mPow2)*(v))+sqrt(sqrtPart)) / (1+mPow2);
+                        else y = ((b)+((m)*(u))+((mPow2)*(v))-sqrt(sqrtPart)) / (1+mPow2);
+                            
+                            x=(y-b)/m;
+                            }
+                if (!isnan(x) && !isnan(y)) {
+                    returnVal.x = x;
+                    returnVal.y = y;
+                } else {
+                    returnVal.x = p2.x;
+                    returnVal.y = p2.y;			
+                }
+            }
+	return returnVal;
+}
