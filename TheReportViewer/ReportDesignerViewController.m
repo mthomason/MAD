@@ -20,6 +20,7 @@
 
 @interface ReportDesignerViewController()
 
+@property (retain) NSMutableArray *scrollViewFrames;
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
 @property (assign) BOOL labelInformationViewIsVisable;
@@ -28,7 +29,11 @@
 
 @implementation ReportDesignerViewController
 
+@synthesize scrollViewFrames = _scrollViewFrames;
+
 @synthesize delegate = _delegate;
+
+@synthesize svSections = _svSections;
 
 @synthesize settingsPopoverController = _settingsPopoverController;
 
@@ -54,6 +59,7 @@
 @synthesize labelInformationViewIsVisable = _labelInformationViewIsVisable;
 
 - (void)dealloc {
+    [_svSections release];
     if (_toolbox) [_toolbox release];
     [_settingsPopoverController release];
     [_managedDocumentQuery release];
@@ -74,33 +80,45 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    RptqDocument *mainDocument = [RptqDocument getMainDocumentForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+    [super viewDidLoad];  
+
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
-    CGFloat sectionHeight = [[[mainDocument hasReportHeaderSection] height] floatValue];
-    CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, sectionHeight);
+    CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
     
     CGFloat halfHeight = self.view.frame.size.height / 2;
-
+    
     [self setToolboxOnScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height - halfHeight, self.view.bounds.size.width, halfHeight)];
     [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
     [self setDesignScrollViewNormal: [[self designScrollView] frame]];
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[self managedDocumentQuery]];
+    NSInteger ctr = 0;
     
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] init];
-    [enumerator setManagedDocumentQuery:[self managedDocumentQuery]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
+    [self setSvSections: dict];
+    [dict release];
+    
     for (RptqDocumentSection *sec in enumerator) {
+        NSLog(@"Ctr: %d, Type: %d", ctr, [[sec type] integerValue]);
+        if (ctr > 0) frame.origin.y += frame.size.height + 10.0000f;
+        frame.size.height = [[sec height] floatValue];
+        
+        [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
+        
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
         [scrollView setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
         [[self designScrollView] addSubview:scrollView];
-        [scrollView release];
         
-        frame.origin.y += frame.size.height + 10.0000f;
-        frame.size.height = [[sec height] floatValue];
+        [[self svSections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
+        
+        [scrollView release];
+        ctr++;
     }
+    
     [enumerator release];
-    [[self designScrollView] setContentSize:CGSizeMake(paperWidth, frame.origin.y)];    
+    [[self designScrollView] setContentSize:CGSizeMake(paperWidth, frame.origin.y + frame.size.height + 5.0000f)];
+    //NSLog(@"%@, Design Scroll View Size", NSStringFromCGSize( [[self designScrollView] contentSize] ));
 }
 
 - (void)viewDidUnload {

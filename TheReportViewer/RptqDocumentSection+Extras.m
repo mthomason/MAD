@@ -49,70 +49,84 @@
                                withNumberOfGroups:(NSInteger)numberOfGroups
                           andManagedObjectContext:(NSManagedObjectContext *)objectContext {
     
-    RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
-    
     RptqDocumentSection *resultSection = nil;
-    
-    switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
-        case MNSSectionTypeReportHeader:
-            resultSection = [[[document hasReportHeaderSection] retain] autorelease];
-            break;
-        case MNSSectionTypePageHeader:
-            resultSection = [[[document hasPageHeaderSection] retain] autorelease];
-            break;
-        case MNSSectionTypeBody:
-            resultSection = [[[document hasDetailSection] retain] autorelease];
-            break;
-        case MNSSectionTypePageFooter:
-            resultSection = [[[document hasPageFooterSection] retain] autorelease];
-            break;
-        case MNSSectionTypeReportFooter:
-            resultSection = [[[document hasReportFooterSection] retain] autorelease];
-            break;
-        case (MNSSectionTypeGroupHeader): {
-            NSInteger groupNumber = row - 2;
-            NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
-            for (RptqQueryGroup *group in groupsUnsorted) {
-                if ([[group weight] integerValue] == groupNumber) {
-                    NSSet *sections = [[group hasSection] retain];
-                    for (RptqDocumentSection *section in sections) {
-                        if ([[section type] integerValue] == MNSSectionTypeGroupHeader) {
+    if (row < (numberOfGroups * 2) + 5) {
+        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
+        NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
+        switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
+            case MNSSectionTypeReportHeader:
+                NSLog(@"Get RH, %d", row);
+                resultSection = [[[document hasReportHeaderSection] retain] autorelease];
+                break;
+            case MNSSectionTypePageHeader:
+                NSLog(@"Get PH, %d", row);
+                resultSection = [[[document hasPageHeaderSection] retain] autorelease];
+                break;
+            case MNSSectionTypeBody:
+                NSLog(@"Get DS, %d", row);
+                resultSection = [[[document hasDetailSection] retain] autorelease];
+                break;
+            case MNSSectionTypePageFooter:
+                NSLog(@"Get PF, %d", row);
+                resultSection = [[[document hasPageFooterSection] retain] autorelease];
+                break;
+            case MNSSectionTypeReportFooter:
+                NSLog(@"Get RF, %d", row);
+                resultSection = [[[document hasReportFooterSection] retain] autorelease];
+                break;
+            case (MNSSectionTypeGroupHeader): {
+                NSLog(@"Get GH, %d", row);
+                NSInteger groupNumber = row - 2;
+                NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
+                for (RptqQueryGroup *group in groupsUnsorted) {
+                    //NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
+                    if ([[group weight] integerValue] == groupNumber) {
+                        NSSet *sections = [[group hasSection] retain];
+                        for (RptqDocumentSection *section in sections) {
+                            if ([[section type] integerValue] == MNSSectionTypeGroupHeader) {
                                 resultSection = [[section retain] autorelease];
-                            break;
-                        }
-                    }                    
-                    [sections release];
-                    break;
+                                break;
+                            }
+                        }                    
+                        [sections release];
+                        break;
+                    }
                 }
+                break;
             }
-            break;
-        }
-        case MNSSectionTypeGroupFooter: {
-            NSInteger body              = 2 + numberOfGroups;
-            NSInteger indentLevel = body - (row - body);
-            NSInteger groupNumber = indentLevel - 1;
-            NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
-            for (RptqQueryGroup *group in groupsUnsorted) {
-                if ([[group weight] integerValue] == groupNumber) {
-                    NSSet *sections = [[group hasSection] retain];
-                    for (RptqDocumentSection *section in sections) {
-                        if ([[section type] integerValue] == MNSSectionTypeGroupFooter) {
-                            resultSection = [[section retain] autorelease];
-                            break;
-                        }
-                    }                    
-                    [sections release];
-                    break;
+            case MNSSectionTypeGroupFooter: {
+                NSLog(@"Get GF, %d", row);
+                NSInteger body              = 2 + numberOfGroups;
+                NSInteger indentLevel = body - (row - body);
+                NSInteger groupNumber = indentLevel - 2;
+                NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
+                for (RptqQueryGroup *group in groupsUnsorted) {
+                    //NSLog(@"Group Footer Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
+                    if ([[group weight] integerValue] == groupNumber) {
+                        NSSet *sections = [[group hasSection] retain];
+                        for (RptqDocumentSection *section in sections) {
+                            if ([[section type] integerValue] == MNSSectionTypeGroupFooter) {
+                                resultSection = [[section retain] autorelease];
+                                break;
+                            }
+                        }                    
+                        [sections release];
+                        break;
+                    }
                 }
+                break;
             }
-            break;
+            default:
+                NSLog(@"Get Default, %d", row);
+                
+                break;
         }
-        default:
-
-            break;
+        
+        //NSLog(@"Document Sections: %@", resultSection);
+        
+        [document autorelease];
     }
-    
-    [document autorelease];
+
     return resultSection;
 }
 

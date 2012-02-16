@@ -37,6 +37,10 @@
     return self;
 }
 
+- (NSInteger)count {
+    return [self total];
+}
+
 - (NSArray *)allObjects {
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {

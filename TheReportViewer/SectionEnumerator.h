@@ -18,5 +18,6 @@
 - (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument;
 - (NSArray *)allObjects;
 - (id)nextObject;
+- (NSInteger)count;
 
 @end

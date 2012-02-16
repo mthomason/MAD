@@ -50,6 +50,8 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemObjects;
 @property (retain, nonatomic) IBOutlet UINavigationItem *navBar;
 
+@property (retain) NSMutableDictionary *svSections;
+
 - (void)openReport:(NSURL *)url;
 - (void)openTemplate:(NSURL *)url;
 - (IBAction)done:(id)sender;

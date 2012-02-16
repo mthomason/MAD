@@ -14,6 +14,7 @@
 #import "RptqTable.h"
 #import "RptqQuery.h"
 #import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
 
 @implementation RptqDocument (Extras)
 
@@ -35,11 +36,22 @@
     
     NSEntityDescription *ed                     = [NSEntityDescription entityForName:NSStringFromClass([RptqDocument class]) inManagedObjectContext: objectContext];
     RptqDocument *document                      = [[RptqDocument alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
+
     [document setHasReportHeaderSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+    document.hasReportHeaderSection.type = [NSNumber numberWithInteger:MNSSectionTypeReportHeader];
+    
     [document setHasReportFooterSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+    document.hasReportFooterSection.type = [NSNumber numberWithInteger:MNSSectionTypeReportHeader];
+
     [document setHasPageHeaderSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+    document.hasPageHeaderSection.type = [NSNumber numberWithInteger:MNSSectionTypeReportHeader];
+    
     [document setHasPageFooterSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+    document.hasPageFooterSection.type = [NSNumber numberWithInteger:MNSSectionTypeReportHeader];
+
     [document setHasDetailSection:                [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+    document.hasDetailSection.type = [NSNumber numberWithInteger:MNSSectionTypeReportHeader];
+
     [document setHasDatabaseSchema:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
     [document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
     [[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
@@ -56,6 +68,7 @@
     [[document hasPageFooterSection] setVisibility:[NSNumber numberWithBool:YES]];
     [[document hasDetailSection] setVisibility:[NSNumber numberWithBool:YES]];
 
+    NSLog(@"Document, %@", document);
    return [document autorelease];
 }
 
