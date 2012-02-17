@@ -12,6 +12,7 @@
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
+#import "ElementView.h"
 
 @class ReportDesignerViewController;
 @class UIManagedDocumentQuery;
@@ -25,7 +26,8 @@
         UITableViewDelegate,
         UIPopoverControllerDelegate,
         UITableViewControllerSettingsDelegate,
-        LabelInformationViewControllerDelegate> {
+        LabelInformationViewControllerDelegate,
+        ElementViewDelegate> {
             CGRect toolboxOffScreen;
             CGRect toolboxOnScreen;
 }

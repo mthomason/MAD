@@ -133,3 +133,18 @@ CG_INLINE CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, long d) {
             }
 	return returnVal;
 }
+
+CG_INLINE CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2);
+CG_INLINE CGPoint
+CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
+
+    rateOfChange = rateOfChange;
+	if (rateOfChange <= 0) {
+        rateOfChange = 1;
+    }
+	CGPoint c = CGYInversePlusDistance(p1, p2, rateOfChange);
+	if (!isnan(c.x) && !isnan(c.y)) {
+		c.y = (-1) * (c.y);
+	}
+	return c;
+}

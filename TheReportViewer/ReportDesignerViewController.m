@@ -18,6 +18,8 @@
 #import "UIColor+EverydayApps.h"
 #import "SectionEnumerator.h"
 
+#import "ElementView.h"
+
 @interface ReportDesignerViewController()
 
 @property (retain) NSMutableArray *scrollViewFrames;
@@ -117,7 +119,20 @@
     }
     
     [enumerator release];
-    [[self designScrollView] setContentSize:CGSizeMake(paperWidth, frame.origin.y + frame.size.height + 5.0000f)];
+    
+    [[self designScrollView] setScrollEnabled:YES];
+
+    ElementView *newView = [[ElementView alloc] initWithFrame: CGRectMake(0.0000f, 0.0000f, 200.0000f, 44.0000f) inView:[self view]];
+    [[self designScrollView] addSubview:newView];
+    [newView setMultipleTouchEnabled:YES];
+    [newView setExclusiveTouch:YES];
+    [newView setCenter: [[self designScrollView] center]];
+    [newView setDelegate: self];
+    [newView setContainerView: [self designScrollView]];
+    [newView release];
+
+    [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
+    
     //NSLog(@"%@, Design Scroll View Size", NSStringFromCGSize( [[self designScrollView] contentSize] ));
 }
 
@@ -171,6 +186,8 @@
         }
     }
 }
+
+
 
 #pragma mark - Actions
 
@@ -250,8 +267,15 @@
     }
 }
 
-#pragma mark -
-#pragma mark Delegates
+#pragma mark - Delegates
+
+
+#pragma mark Element View Delegate
+
+- (BOOL)elementDidRequestRemoval:(ElementView *)view {
+#warning Fixme
+    return NO;
+}
 
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
         
@@ -274,7 +298,6 @@
     }
 }
 
-#pragma mark -
 #pragma mark Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
