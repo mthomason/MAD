@@ -33,6 +33,7 @@
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
 		4C0358FD14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
+		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
@@ -216,6 +217,8 @@
 		4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvAppData.xcdatamodel; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSectionLayoutSettings.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSectionLayoutSettings.m; sourceTree = "<group>"; };
+		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
+		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
@@ -777,6 +780,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4CDB624B14E38C8400A5389E /* Categories */,
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
 				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
@@ -840,7 +844,6 @@
 		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
 			isa = PBXGroup;
 			children = (
-				4CDB624B14E38C8400A5389E /* Categories */,
 				4CDB624A14E38C5600A5389E /* App Delegate */,
 				4C3F1F6914BD306600532FA4 /* APIs */,
 				4C5F02D914B9A42200C49BE9 /* Template Files */,
@@ -1722,6 +1725,8 @@
 				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
 				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
 				4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */,
+				4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */,
+				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1982,6 +1987,7 @@
 				4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */,
 				4C88A9B014ECDE560069A0AF /* ElementView.m in Sources */,
 				4C88A9C714EE23D00069A0AF /* UIViewResizeHandle.m in Sources */,
+				4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,13 +10,22 @@
 
 @implementation UIViewResizeHandle
 
-- (id)initWithFrame:(CGRect)frame {
+@synthesize delegate = _delegate;
+@synthesize type = _type;
+@synthesize initalPoint;
+@synthesize highlighted = _highlighted;
+
+- (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
     self = [super initWithFrame:frame];
     if (self) {
+        NSLog(@"Inital Point: %@", NSStringFromCGPoint( [self center] ));
+
+        [self setInitalPoint:[self center]];
+        [self setType: position];
+        [self setHighlighted: NO];
         // Initialization code
 		CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-		CGFloat colors[] =
-		{
+		CGFloat colors[] = {
 			204.0 / 255.0, 224.0 / 255.0, 244.0 / 255.0, 1.00,
             29.0 / 255.0, 156.0 / 255.0, 215.0 / 255.0, 1.00,
             0.0 / 255.0,  50.0 / 255.0, 126.0 / 255.0, 1.00,
@@ -30,36 +39,9 @@
 
 - (void)drawRect:(CGRect)rect {
 
-    //CGMutablePathRef path = CGPathCreateMutable();
-    //CGPathAddRect(path, NULL, rect);
-
-CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    //CGContextClearRect(currentContext, rect);
-    //CGContextAddArc (currentContext, .5, .5, .3, 0, 6.28318531, 0);
-
-    //CGContextClosePath (currentContext);  //6.28318531 corresponds to 2*pi which is a whole circle
-    //CGContextClip (currentContext);
-
-    //    CGContextDrawLinearGradient(currentContext, gradient, CGPointZero, CGPointMake(CGPointZero.x, rect.size.height), 0);
-    
-    //[[UIColor whiteColor] setFill];
-    //[[UIColor blackColor] setStroke];
-    //CGContextSetLineWidth(currentContext, 1.0000f);
-    //CGContextDrawPath(currentContext, kCGPathFillStroke);
-    //CGPathRelease(path);
-    
-    
-    // Use the clip bounding box, sans a generous border
-	
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
 	CGGradientDrawingOptions options = kCGGradientDrawsBeforeStartLocation;
 
-    
-			// A radial gradient requires a start & end point as well as a start & end radius.
-			// Logically a radial gradient is created by linearly interpolating the center, radius and color of each
-			// circle using the start and end point for the center, start and end radius for the radius, and the color ramp
-			// inherant to the gradient to create a set of stroked circles that fill the area completely.
-			// The gradient options specify if this interpolation continues past the start or end points as it does with
-			// linear gradients.
     CGPoint start, end;
     CGFloat startRadius, endRadius;
     start = end = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
@@ -71,12 +53,50 @@ CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextDrawPath(currentContext, kCGPathFillStroke);
 
     CGContextDrawRadialGradient(currentContext, gradient, start, startRadius, end, endRadius, options);
-//			CGContextRestoreGState(currentContext);
-	
-	// Show the clip rect
-	//CGContextSetRGBStrokeColor(currentContext, 1.0, 0.0, 0.0, 1.0);
-	//CGContextStrokeRectWithWidth(currentContext, rect, 2.0);
+}
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
+    NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));
+    [self setHighlighted: YES];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self setHighlighted: NO];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));    
+        
+    CGPoint pointAfterMove;
+    switch ([self type]) {
+        case west:
+            pointAfterMove = CGPointMake([[touches anyObject] locationInView: [self superview]].x, [self initalPoint].y);
+            break;
+        case northWest:
+            break;
+        case north:
+            break;
+        case northEast:
+            break;
+        case east:
+            break;
+        case southEast:
+            break;
+        case south:
+            break;
+        case southWest:
+            break;
+        default:
+            break;
+    }
+    [[self delegate] resizeHandle:self didMoveToPoint:pointAfterMove];
+
+    
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self setHighlighted: NO];
 }
 
 @end

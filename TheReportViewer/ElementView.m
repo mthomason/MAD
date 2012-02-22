@@ -16,21 +16,24 @@
 @synthesize delegate = _delegate;
 @synthesize containerView = _parentView;
 
-@synthesize originalSize;
-@synthesize stringElm;
-@synthesize originalPointCenter;
+@synthesize stringElm = _stringElm;
+@synthesize originalSize = _originalSize, originalPointCenter = _originalPointCenter;
+@synthesize currentTime = _currentTime, lastTime = _lastTime;
+
+@synthesize handleEdgeRight = _handleEdgeRight, handleEdgeLeft = _handleEdgeLeft, handleEdgeTop = _handleEdgeTop, handleEdgeBottom = _handleEdgeBottom, handleCornerTopLeft = _handleCornerTopLeft, handleCornerTopRight = _handleCornerTopRight, handleCornerBottomLeft = _handleCornerBottomLeft, handleCornerBottomRight = _handleCornerBottomRight;
 
 - (void)dealloc {
+    [_handleCornerBottomLeft release];
+    [_handleCornerBottomRight release];
+    [_handleCornerTopLeft release];
+    [_handleCornerTopRight release];
+    [_handleEdgeBottom release];
+    [_handleEdgeLeft release];
+    [_handleEdgeRight release];
+    [_handleEdgeTop release];
     [_parentView release];
-	if (stringElm != nil) {
-		[stringElm release];
-		stringElm = nil;
-	}
+    [_stringElm release];
 	[super dealloc];
-}
-
-- (id)initWithFrame:(CGRect)frame {
-    return [self initWithFrame:frame inView:[self superview]];
 }
 
 - (id)initWithFrame:(CGRect)frame inView:(UIScrollView *)pview {
@@ -40,22 +43,72 @@
         [self setExclusiveTouch: YES];
         [self setMultipleTouchEnabled:YES];
         [self setContainerView: pview];
-		originalSize = self.frame.size;
-		
-		largeSize.width = self.frame.size.width * 1.0000f;
-		largeSize.height = self.frame.size.height * 1.0000f;
+		self.originalSize = self.frame.size;
         
 		[self setOpaque: YES];
         
-        UIViewResizeHandle *resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(-15.0000f, -15.0000f, 30.0000f, 30.0000f)];
+        CGSize handleSize = CGSizeMake(30.0000f, 30.0000f);
+
+        UIViewResizeHandle *resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:northWest];
+        [resizeButton setCenter: CGCornerTopLeftPointInRect(frame)];
         [self addSubview:resizeButton];
+        [self setHandleCornerTopLeft: resizeButton];
         [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:northEast];
+        [resizeButton setCenter: CGCornerTopRightPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleCornerTopRight: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:southEast];
+        [resizeButton setCenter: CGCornerBottomRightPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleCornerBottomRight: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:southWest];
+        [resizeButton setCenter: CGCornerBottomLeftPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleCornerBottomLeft: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:north];
+        [resizeButton setCenter: CGEdgeTopPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleEdgeTop: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:south];
+        [resizeButton setCenter: CGEdgeBottomPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleEdgeBottom: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:east];
+        [resizeButton setCenter: CGEdgeRightPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleEdgeRight: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
+        resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:west];
+        [resizeButton setCenter: CGEdgeLeftPointInRect(frame)];
+        [self addSubview:resizeButton];
+        [self setHandleEdgeLeft: resizeButton];
+        [resizeButton release];
+        resizeButton = nil;
+
     }
     return self;
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
 
     CGMutablePathRef path = CGPathCreateMutable();
@@ -70,81 +123,88 @@
     
 }
 
-#pragma mark Points and Sizes
-
-- (CGPoint)topLeftPoint {
-	return CGPointMake(self.frame.origin.x,
-					   self.frame.origin.y);
-}
-
-- (CGPoint)topRightPoint {
-	return CGPointMake(self.frame.origin.x + self.frame.size.width,
-					   self.frame.origin.y);
-}
-
-- (CGPoint)bottomLeftPoint {
-	return CGPointMake(self.frame.origin.x, self.frame.origin.y + self.frame.size.height);	
-}
-
-- (CGPoint)bottomRightPoint {
-	return CGPointMake(self.frame.origin.x + self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+- (void)resizeHandle:(UIViewResizeHandle *)handle didMoveToPoint:(CGPoint)point {
+    switch ([handle type]) {
+        case west:
+            break;
+        case northWest:
+            break;
+        case north:
+            break;
+        case northEast:
+            break;
+        case east:
+            break;
+        case southEast:
+            break;
+        case south:
+            break;
+        case southWest:
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark Touch events
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
+    newCenter.x = roundf(newCenter.x);
+    newCenter.y = roundf(newCenter.y);
 
-    [self.containerView bringSubviewToFront:self];
+    [self setCurrentTime: [[touches anyObject] timestamp]];
+
+    [UIView animateWithDuration: 0.2000f
+                          delay: 0.0000f
+                        options: UIViewAnimationOptionCurveLinear
+                     animations: ^{
+                         [self setCenter:newCenter];
+                         [[self containerView] bringSubviewToFront: self];
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+
     [self.containerView setScrollEnabled:NO];
-
-    //[UIView beginAnimations:@"makeLarge" context:nil];
-    //[UIView setAnimationDuration:0.1000f];
-    //[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    //[self setBounds:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, largeSize.width, largeSize.height)];
-    //self.center = [[touches anyObject] locationInView: [self containerView]];
-    //[UIView commitAnimations];
-    //lastTime = [[touches anyObject] timestamp];
-    //lastPoint = [[touches anyObject] locationInView: [self containerView]];
-    //lastPoint.y *= -1;
-    //currentPoint = [[touches anyObject] locationInView: [self containerView]];
-    //currentPoint.y *= -1;
-    
     NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event { }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    self.lastTime = self.currentTime;
+    self.currentTime = [[touches anyObject] timestamp];
 
-    //lastTimePlusOne = lastTime;
-    //lastTime = currentTime;
-    //currentTime = [[touches anyObject] timestamp];
-    
-    //lastPointPlusOne = lastPoint;
-    //lastPoint = currentPoint;
-
-    //currentPoint = [[touches anyObject] locationInView: [self containerView]];
-    //currentPoint.y *= -1;
-    
-    self.center = [[touches anyObject] locationInView: [self containerView]];
-
-    NSLog(@"Touches Moved ([[touches anyObject] locationInView: delegate view]): %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self containerView]] ));
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-
-    //Make small
     CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
     newCenter.x = roundf(newCenter.x);
     newCenter.y = roundf(newCenter.y);
-    [UIView beginAnimations:@"touchesMoved" context:nil];
-    [UIView setAnimationDuration:0.1000f];
-	[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-	[self setBounds:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, originalSize.width, originalSize.height)];
-    [self setCenter:newCenter];
-	[UIView commitAnimations];
+    
+    [UIView animateWithDuration: (self.currentTime - self.lastTime)
+                          delay: 0.0000f
+                        options: UIViewAnimationOptionCurveLinear
+                     animations: ^{
+                         [self setCenter:newCenter];
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+}
 
-    [self.containerView setScrollEnabled:YES];
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    self.lastTime = self.currentTime;
+    self.currentTime = [[touches anyObject] timestamp];
+
+    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
+    newCenter.x = roundf(newCenter.x);
+    newCenter.y = roundf(newCenter.y);
+    
+    [UIView animateWithDuration: (self.currentTime - self.lastTime)
+                          delay: 0.0000f
+                        options: UIViewAnimationOptionCurveLinear
+                     animations: ^{
+                         [self setCenter:newCenter];
+                     } completion:^(BOOL finished) {
+                         [self.containerView setScrollEnabled:YES];
+                     }];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
+#import "UIViewControllerObjectSelector.h"
 #import "ElementView.h"
 
 @class ReportDesignerViewController;
@@ -25,6 +26,7 @@
     <UITableViewDataSource,
         UITableViewDelegate,
         UIPopoverControllerDelegate,
+        UIViewControllerObjectSelectorDelegate,
         UITableViewControllerSettingsDelegate,
         LabelInformationViewControllerDelegate,
         ElementViewDelegate> {

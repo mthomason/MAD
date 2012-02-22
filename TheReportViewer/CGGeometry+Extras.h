@@ -8,6 +8,58 @@
 
 /* Make a point from `(x, y)'. */
 
+CG_INLINE CGPoint CGCornerTopLeftPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGCornerTopLeftPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x,
+					   frame.origin.y);
+}
+
+CG_INLINE CGPoint CGCornerTopRightPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGCornerTopRightPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x + frame.size.width,
+					   frame.origin.y);
+}
+
+CG_INLINE CGPoint CGCornerBottomLeftPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGCornerBottomLeftPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x, frame.origin.y + frame.size.height);	
+}
+
+CG_INLINE CGPoint CGCornerBottomRightPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGCornerBottomRightPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height);
+}
+
+CG_INLINE CGPoint CGEdgeTopPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGEdgeTopPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x + (frame.size.width / 2.0000f),
+					   frame.origin.y);
+}
+
+CG_INLINE CGPoint CGEdgeRightPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGEdgeRightPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x + frame.size.width,
+					   frame.origin.y + (frame.size.height / 2.0000f));
+}
+
+CG_INLINE CGPoint CGEdgeBottomPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGEdgeBottomPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x + (frame.size.width / 2.0000f), frame.origin.y + frame.size.height);	
+}
+
+CG_INLINE CGPoint CGEdgeLeftPointInRect(CGRect frame);
+CG_INLINE CGPoint
+CGEdgeLeftPointInRect(CGRect frame) {
+	return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0000f));
+}
+
 CG_INLINE CGPoint CGPointMakeRandomOffscreen();
 
 CG_INLINE CGPoint

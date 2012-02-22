@@ -8,8 +8,33 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+	north = 1,
+	south,
+	east,
+	west,
+    northEast,
+    northWest,
+    southEast,
+    southWest
+} MNSCompusPosition;
+
+@class UIViewResizeHandle;
+
+@protocol UIViewResizeHandleDelegate
+@optional
+- (void)resizeHandle:(UIViewResizeHandle *)handle didMoveToPoint:(CGPoint)point;
+@end
+
 @interface UIViewResizeHandle : UIView {
     CGGradientRef gradient;
 }
+
+@property (assign) IBOutlet id <UIViewResizeHandleDelegate> delegate;
+@property (assign) MNSCompusPosition type;
+@property (assign) CGPoint initalPoint;
+@property (assign, getter = isHighlighted) BOOL highlighted;
+
+- (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position;
 
 @end

@@ -11,13 +11,20 @@
 #import "Constants.h"
 #import "NSFileManager+Common.h"
 #import "UIManagedDocumentQuery.h"
-#import "RptqDocumentSection.h"
+
 #import "RptqDocument.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObjectFormula.h"
+#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectLabelLink.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDocumentObject+Extras.h"
+
 #import "CGGeometry+Extras.h"
 #import "UIColor+EverydayApps.h"
 #import "SectionEnumerator.h"
-
 #import "ElementView.h"
 
 @interface ReportDesignerViewController()
@@ -114,6 +121,49 @@
         
         [[self svSections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
         
+        for (RptqDocumentObject *obj in [sec hasObjects]) {
+            switch ([obj getType]) {
+                case MNSObjectTypeLabel: {
+                    if ([obj isLabel] != nil) {
+                        
+                        
+                        
+                    }
+                    break;
+                }
+                case MNSObjectTypeLabelDataField: {
+                    if ([obj isLabelDataField] != nil) {
+
+                        ElementView *newView = [[ElementView alloc] initWithFrame: CGRectMake(0.0000f, 0.0000f, 200.0000f, 44.0000f) inView:[self designScrollView]];
+                        [[self designScrollView] addSubview:newView];
+                        [newView setMultipleTouchEnabled:YES];
+                        [newView setExclusiveTouch:YES];
+                        [newView setCenter: [[self designScrollView] center]];
+                        [newView setDelegate: self];
+                        [newView setContainerView: [self designScrollView]];
+                        [newView release];
+
+                    }
+                    break;
+                }
+                case MNSObjectTypeLabelFormula: {
+                    if ([obj isFormula] != nil) {
+                        
+                    }
+                    break;
+                }
+                case MNSObjectTypeLabelLabelLink: {
+                    if ([obj isLabelLink] != nil) {
+                        
+                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        
         [scrollView release];
         ctr++;
     }
@@ -122,18 +172,8 @@
     
     [[self designScrollView] setScrollEnabled:YES];
 
-    ElementView *newView = [[ElementView alloc] initWithFrame: CGRectMake(0.0000f, 0.0000f, 200.0000f, 44.0000f) inView:[self view]];
-    [[self designScrollView] addSubview:newView];
-    [newView setMultipleTouchEnabled:YES];
-    [newView setExclusiveTouch:YES];
-    [newView setCenter: [[self designScrollView] center]];
-    [newView setDelegate: self];
-    [newView setContainerView: [self designScrollView]];
-    [newView release];
-
     [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
     
-    //NSLog(@"%@, Design Scroll View Size", NSStringFromCGSize( [[self designScrollView] contentSize] ));
 }
 
 - (void)viewDidUnload {
@@ -184,6 +224,8 @@
             [self setSettingsPopoverController: popoverController];
             popoverController.delegate = self;
         }
+    } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
+        [[segue destinationViewController] setDelegate:self];
     }
 }
 
@@ -197,7 +239,6 @@
     [trvFile release];
 }
 
-//Copy template to application-user-documents-directory and open it
 - (void)openTemplate:(NSURL *)url {
     
     NSString *origionalFileName = [[url lastPathComponent] retain];
@@ -237,9 +278,13 @@
     [self.delegate reportDesignerViewControllerDidFinish:self];
 }
 
-- (IBAction)showObjects:(id)sender { }
+- (IBAction)showObjects:(id)sender {
+    [self performSegueWithIdentifier:@"showObjects" sender:sender];
+}
 
-- (IBAction)showSettings:(id)sender { }
+- (IBAction)showSettings:(id)sender {
+    [self performSegueWithIdentifier:@"showSettings" sender:sender];
+}
 
 - (IBAction)info:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -269,16 +314,16 @@
 
 #pragma mark - Delegates
 
+#pragma mark Object Selector (Inserter) Delegate
 
-#pragma mark Element View Delegate
+- (void)uIViewControllerObjectSelectorFinish:(UIViewControllerObjectSelector *)controller {
+    [self dismissViewControllerAnimated:YES completion:^{
 
-- (BOOL)elementDidRequestRemoval:(ElementView *)view {
-#warning Fixme
-    return NO;
+    }];
 }
 
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
-        
+    
     [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
                      animations: ^{
                          [[self designScrollView] setFrame:[self designScrollViewNormal]];
@@ -291,11 +336,21 @@
 
 - (void)uIViewControllerSettingsDidFinish:(UITableViewControllerSettings *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
     } else {
         [[self settingsPopoverController] dismissPopoverAnimated:YES];
         [self setSettingsPopoverController: nil];
     }
+}
+
+
+#pragma mark Element View Delegate
+
+- (BOOL)elementDidRequestRemoval:(ElementView *)view {
+#warning Fixme
+    return NO;
 }
 
 #pragma mark Table View Data Source Protocol

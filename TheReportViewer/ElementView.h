@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIViewResizeHandle.h"
 
 @class ElementView;
 
@@ -14,29 +15,29 @@
 - (BOOL)elementDidRequestRemoval:(ElementView *)view;
 @end
 
-@interface ElementView : UIView {
-	NSString *stringElm;
-	CGSize originalSize;
-	CGSize largeSize;
-	CGPoint originalPoint;					//Do not synthsize
-	CGPoint lastPointPlusOne;
-	CGPoint lastPoint;
-	CGPoint currentPoint;
-	NSTimeInterval lastTimePlusOne;
-	NSTimeInterval lastTime;
-	NSTimeInterval currentTime;
-}
+@interface ElementView : UIView
+    <UIViewResizeHandleDelegate>
 
 @property (retain) UIScrollView *containerView;
 
-@property (assign, nonatomic) IBOutlet id <ElementViewDelegate> delegate;
+@property (assign) IBOutlet id <ElementViewDelegate> delegate;
 
-@property (nonatomic, retain) NSString *stringElm;
-@property (nonatomic, assign) CGSize originalSize;
-@property (nonatomic, assign) CGPoint originalPointCenter;
+@property (retain) NSString *stringElm;
+@property (assign) CGSize originalSize;
+@property (assign) CGPoint originalPointCenter;
+
+@property (assign) NSTimeInterval lastTime;
+@property (assign) NSTimeInterval currentTime;
+
+@property (retain) UIViewResizeHandle *handleEdgeRight;
+@property (retain) UIViewResizeHandle *handleEdgeLeft;
+@property (retain) UIViewResizeHandle *handleEdgeTop;
+@property (retain) UIViewResizeHandle *handleEdgeBottom;
+@property (retain) UIViewResizeHandle *handleCornerTopRight;
+@property (retain) UIViewResizeHandle *handleCornerTopLeft;
+@property (retain) UIViewResizeHandle *handleCornerBottomRight;
+@property (retain) UIViewResizeHandle *handleCornerBottomLeft;
 
 - (id)initWithFrame:(CGRect)frame inView:(UIScrollView *)pview;
-
-- (CGPoint)slide:(float)rateOfChange;
 
 @end
