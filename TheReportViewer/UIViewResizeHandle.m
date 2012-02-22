@@ -12,7 +12,7 @@
 
 @synthesize delegate = _delegate;
 @synthesize type = _type;
-@synthesize initalPoint;
+@synthesize initalPoint = _initalPoint;
 @synthesize highlighted = _highlighted;
 
 - (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
@@ -68,7 +68,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));    
         
-    CGPoint pointAfterMove;
+    CGPoint pointAfterMove = [self center];
     switch ([self type]) {
         case west:
             pointAfterMove = CGPointMake([[touches anyObject] locationInView: [self superview]].x, [self initalPoint].y);

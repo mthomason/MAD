@@ -139,7 +139,11 @@
     }
     
     RptqFieldSelectorManager *table = (RptqFieldSelectorManager *)[self.sectionInfoArray objectAtIndex:indexPath.section];
-    [cell.textLabel setText: [[[table fields] objectAtIndex:indexPath.row] name]];
+    RptqField *field = [[table fields] objectAtIndex:indexPath.row];
+    if (field) {
+        [[cell textLabel] setText: [field name]];
+        [[cell detailTextLabel] setText: [[field datatype] lowercaseString]];
+    }
     
     return cell;
 }
@@ -153,7 +157,6 @@
         [sectionInfo setHeaderView: vsht];
         [vsht release];
     }
-    
     return sectionInfo.headerView;
 }
 

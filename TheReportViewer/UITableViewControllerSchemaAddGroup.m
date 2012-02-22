@@ -8,6 +8,8 @@
 
 #import "UITableViewControllerSchemaAddGroup.h"
 #import "RptqTable.h"
+#import "RptqQueryTables.h"
+#import "RptqQueryTables+Extras.h"
 
 @implementation UITableViewControllerSchemaAddGroup
 
@@ -89,9 +91,17 @@
     } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
             
+            NSArray *tableNames = [[RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+            
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
             request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            
+            if ([tableNames count] > 0) {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
+                [request setPredicate: predicate];
+            }
+            
             NSError *error = nil;
             NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
             if (!error) {
@@ -100,7 +110,9 @@
                 NSLog(@"Error %@", [error localizedDescription]);
             }
             
-            [[segue destinationViewController] setDelegate:self];            
+            [[segue destinationViewController] setDelegate:self];   
+            
+            [tableNames release];
         }
     }
 }

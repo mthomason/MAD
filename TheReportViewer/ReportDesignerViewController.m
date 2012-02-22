@@ -89,8 +89,8 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];  
-
+    [super viewDidLoad];
+    
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);

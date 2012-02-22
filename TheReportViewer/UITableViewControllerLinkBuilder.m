@@ -10,6 +10,7 @@
 #import "RptqTable.h"
 #import "RptqField.h"
 #import "RptqQueryTables.h"
+#import "RptqQueryTables+Extras.h"
 #import "RptqQueryFields.h"
 
 @implementation UITableViewControllerLinkBuilder
@@ -49,6 +50,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self setCurrentlyEditingPart: MNSLinkNone];
+        [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:NO];
     }
     return self;
 }
@@ -57,6 +59,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setCurrentlyEditingPart: MNSLinkNone];
+        [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:NO];
     }
     return self;
 }
@@ -189,16 +192,26 @@
             
             [self setCurrentlyEditingPart: MNSLinkLeft];
             if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+                                
+                NSArray *tableNames = [[RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
                 
                 NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                 request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+
+                if ([tableNames count] > 0) {
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
+                    [request setPredicate: predicate];
+                }
+
                 NSError *error = nil;
                 NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
                 
                 [[segue destinationViewController] setDelegate:self];            
                 
                 [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults]; 
+
+                [tableNames release];
             }
 
         } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldTwo"]) {
@@ -206,15 +219,27 @@
             [self setCurrentlyEditingPart: MNSLinkRight];
             if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
                 
+                NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray:[RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
+                
+                [tableNames removeObject: [self firstTableName]];
+
                 NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                 request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+
+                if ([tableNames count] > 0) {
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
+                    [request setPredicate: predicate];
+                }
+
                 NSError *error = nil;
                 NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
                 
                 [[segue destinationViewController] setDelegate:self];            
                 
-                [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults]; 
+                [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults];
+                
+                [tableNames release];
             }
             
         }
@@ -255,6 +280,12 @@
             [self setFirstTableName:tableName];
             [self setFirstFieldName:fieldName];
             [self setFirstTableFieldName:tableFieldName];
+
+            [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
+            [[[self tableViewCellTableFieldTwo] textLabel] setTextColor:[UIColor darkTextColor]];
+            NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];
+            [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: required];
+            [[self tableViewCellTableFieldTwo] setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
         case MNSLinkRight:
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
