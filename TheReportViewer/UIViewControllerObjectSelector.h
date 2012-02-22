@@ -7,6 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UITableViewControllerChooseField.h"
+
+typedef enum {
+	MNSSegmentedControlOptionsData = 0,
+	MNSSegmentedControlOptionsObjects = 1,
+	MNSSegmentedControlOptionsMedia = 2,
+} MNSSegmentedControlOptions;
 
 @class UIViewControllerObjectSelector;
 
@@ -17,7 +24,15 @@
 @interface UIViewControllerObjectSelector : UIViewController
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerObjectSelectorDelegate> delegate;
+@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 
+@property (retain) UITableViewControllerChooseField *viewControllerChooseField;
+@property (retain) UIViewController *viewControllerObjects;
+@property (retain) UITableViewControllerChooseField *viewControllerMedia;
+
+- (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender;
 - (IBAction)done:(id)sender;
+
+- (void)showObjectSelector;
 
 @end

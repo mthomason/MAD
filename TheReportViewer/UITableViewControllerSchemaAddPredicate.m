@@ -70,47 +70,23 @@
         [self setCurrentlyEditingPart: MNSPredicateLeft];
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
 
-            NSArray *tableNames = [[RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
-            
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            if ([tableNames count] > 0) {
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
-                [request setPredicate: predicate];
+            UITableViewControllerChooseField *dvc = [segue destinationViewController];
+            if (dvc != nil) {
+                [dvc setExcludeTables:[NSArray array]];
+                [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
+                [dvc setDelegate: self];
             }
-            NSError *error = nil;
-            NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
 
-            [[segue destinationViewController] setDelegate:self];            
-            
-            [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults];
-
-            [tableNames release];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFovRightSide"] ||
                [[segue identifier] isEqualToString:@"showAddPredicateFofRightSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateRight];
-        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
-            
-            NSArray *tableNames = [[RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
-
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            if ([tableNames count] > 0) {
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
-                [request setPredicate: predicate];
-            }
-            NSError *error = nil;
-            NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-            
-            [[segue destinationViewController] setDelegate:self];            
-            
-            [(UITableViewControllerChooseField *)[segue destinationViewController] setDataTables: tablesResults];
-            
-            [tableNames release];
-            
+        
+        UITableViewControllerChooseField *dvc = [segue destinationViewController];
+        if (dvc != nil) {
+            [dvc setExcludeTables:[NSArray array]];
+            [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
+            [dvc setDelegate: self];
         } else if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerEnterString class]]) {
             UITableViewControllerEnterString *tvcEnterString = [segue destinationViewController];
             [tvcEnterString setEnterStringDelegate: self];

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "UIManagedDocumentQuery.h"
 #import "RptqField.h"
 
 @class UITableViewControllerChooseField;
@@ -24,7 +25,9 @@
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerChooseFieldDelegate> delegate;
 
-@property (nonatomic, retain) NSArray* dataTables;
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+@property (retain) NSArray *excludeTables;
+
 @property (nonatomic, assign) IBOutlet UITableViewCell *fieldCells;
 
 @end

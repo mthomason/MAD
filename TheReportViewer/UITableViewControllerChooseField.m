@@ -13,6 +13,8 @@
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 
 #import "RptqTable.h"
+#import "RptqQueryTables.h"
+#import "RptqQueryTables+Extras.h"
 
 #pragma mark -
 #pragma mark TableViewController
@@ -26,6 +28,8 @@
 @property (nonatomic, assign) NSInteger openSectionIndex;
 @property (nonatomic, assign) CGFloat initialPinchHeight;
 
+@property (retain) NSArray* dataTables;
+
 // Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
 @property (nonatomic, assign) NSInteger uniformRowHeight;
 
@@ -36,11 +40,8 @@
 
 @end
 
-
-
 #define DEFAULT_ROW_HEIGHT 44
 #define HEADER_HEIGHT 45
-
 
 @implementation UITableViewControllerChooseField
 
@@ -48,33 +49,62 @@
 
 @synthesize delegate = _delegate;
 
+@synthesize managedDocumentQuery = _managedDocumentQuery;
+@synthesize excludeTables = _excludeTables;
+
+- (void)dealloc {
+    if (_managedDocumentQuery) [_managedDocumentQuery release];
+    [_excludeTables release];
+    [super dealloc];
+}
+
 #pragma mark Initialization and configuration
 
-
--(BOOL)canBecomeFirstResponder {
-    
+- (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
-
 - (void)viewDidLoad {
-	
     [super viewDidLoad];
 
     // Set up default values.
     self.tableView.sectionHeaderHeight = HEADER_HEIGHT;
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
-}
 
+    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    
+    [tableNames removeObjectsInArray:[self excludeTables]];
+    
+    if ([tableNames count] > 0) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
+        [request setPredicate: predicate];
+    }
+    
+    NSError *error = nil;
+    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+    if (!error) {
+        [self setDataTables: tablesResults]; 
+    } else {
+        NSArray *empty = [[NSArray alloc] init];
+        [self setDataTables: empty];
+        [empty release];
+    }
+    
+    [tableNames release];
+
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 	
 	[super viewWillAppear:animated]; 
 	
-	if ((self.sectionInfoArray == nil) || ([self.sectionInfoArray count] != [self numberOfSectionsInTableView:self.tableView])) {
+	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != [self numberOfSectionsInTableView:[self tableView]])) {
 		
-        // For each play, set up a corresponding SectionInfo object to contain the default height for each row.
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
 		for (RptqTable *table in self.dataTables) {
@@ -109,12 +139,12 @@
 
 #pragma mark Table view data source and delegate
 
--(NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
     return [self.dataTables count];
 }
 
 
--(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
     
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
 	NSInteger numStoriesInSection = [[sectionInfo.table hasFields] count];
@@ -123,7 +153,7 @@
 }
 
 
--(UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     
     static NSString *CellIdentifier = @"UITableViewCellFieldWithType";
     
@@ -149,7 +179,7 @@
 }
 
 
--(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
     if (!sectionInfo.headerView) {
 		NSString *playName = sectionInfo.table.name;
@@ -161,7 +191,7 @@
 }
 
 
--(CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
     
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:indexPath.section];
     return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
@@ -169,7 +199,7 @@
 }
 
 
--(void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:[indexPath section]];
     if ([[sectionInfo fields] count] > [indexPath row]) {
@@ -181,7 +211,7 @@
 
 #pragma mark Section header delegate
 
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
+- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
 	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:sectionOpened];
 	
@@ -238,7 +268,7 @@
 }
 
 
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
+- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)sectionClosed {
     
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.

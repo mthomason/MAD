@@ -11,6 +11,7 @@
 @implementation UIViewControllerObjectSelector
 
 @synthesize delegate;
+@synthesize segmentedControlSelectorType;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -34,7 +35,23 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    BOOL imagePickerAvailable = [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary];
+    
+    [[self segmentedControlSelectorType] setSelectedSegmentIndex: MNSSegmentedControlOptionsData];
+
+    [[self segmentedControlSelectorType] setEnabled: imagePickerAvailable
+                                  forSegmentAtIndex: MNSSegmentedControlOptionsMedia];
+    [[self segmentedControlSelectorType] setEnabled: YES
+                                  forSegmentAtIndex: MNSSegmentedControlOptionsData];
+    [[self segmentedControlSelectorType] setEnabled: YES
+                                  forSegmentAtIndex: MNSSegmentedControlOptionsObjects];
+    [self showObjectSelector];
+}
+
 - (void)viewDidUnload {
+    [self setSegmentedControlSelectorType:nil];
     [super viewDidUnload];
 }
 
@@ -44,8 +61,32 @@
 
 #pragma mark - Actions
 
+- (void)showObjectSelector {
+    switch ([[self segmentedControlSelectorType] selectedSegmentIndex]) {
+        case MNSSegmentedControlOptionsData:
+            
+            break;
+        case MNSSegmentedControlOptionsMedia:
+            
+            break;
+        case MNSSegmentedControlOptionsObjects:
+
+            break;
+        default:
+            break;
+    }
+}
+
+- (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender {
+    [self showObjectSelector];
+}
+
 - (IBAction)done:(id)sender {
     [[self delegate] uIViewControllerObjectSelectorFinish: self];
 }
 
+- (void)dealloc {
+    [segmentedControlSelectorType release];
+    [super dealloc];
+}
 @end

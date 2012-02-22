@@ -138,7 +138,6 @@
     [self setTextFieldPassword:nil];
     [self setTextFieldHost:nil];
     [self setTextFieldPort:nil];
-    [self setTest:nil];
     [super viewDidUnload];
 }
 
