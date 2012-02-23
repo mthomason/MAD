@@ -226,6 +226,7 @@
         }
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
         [[segue destinationViewController] setDelegate:self];
+        [[segue destinationViewController] setManagedDocumentQuery:[self managedDocumentQuery]];
     }
 }
 

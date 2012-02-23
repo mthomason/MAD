@@ -8,10 +8,28 @@
 
 #import "UIViewControllerObjectSelector.h"
 
+@interface UIViewControllerObjectSelector ()
+
+@property (retain) UIViewController *visableViewController;
+
+@end
+
 @implementation UIViewControllerObjectSelector
 
 @synthesize delegate;
 @synthesize segmentedControlSelectorType;
+@synthesize containerView;
+@synthesize visableViewController = _visableViewController;
+@synthesize managedDocumentQuery = _managedDocumentQuery;
+
+- (void)dealloc {
+    if (_managedDocumentQuery) [_managedDocumentQuery release];
+    if (_visableViewController) [_visableViewController release];
+    [segmentedControlSelectorType release];
+    [containerView release];
+    
+    [super dealloc];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -52,6 +70,7 @@
 
 - (void)viewDidUnload {
     [self setSegmentedControlSelectorType:nil];
+    [self setContainerView:nil];
     [super viewDidUnload];
 }
 
@@ -62,20 +81,58 @@
 #pragma mark - Actions
 
 - (void)showObjectSelector {
+    UIViewController *hidingView = nil;
+    if ([self visableViewController] != nil) {
+        hidingView = [[self visableViewController] retain];
+    }
+
     switch ([[self segmentedControlSelectorType] selectedSegmentIndex]) {
-        case MNSSegmentedControlOptionsData:
+        case MNSSegmentedControlOptionsData: {
+            
+            UIStoryboard *sb= [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
+            UITableViewControllerChooseField *tv = [[sb instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
+            [tv setManagedDocumentQuery:[self managedDocumentQuery]];
+            [tv setExcludeTables:[NSArray array]];
+            [tv setDelegate: self];
+            [self setVisableViewController: tv];
+            [tv release];
+            [sb release];
             
             break;
-        case MNSSegmentedControlOptionsMedia:
+        }
+        case MNSSegmentedControlOptionsMedia: {
             
+            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                [imagePicker setDelegate: self];
+                [self setVisableViewController: imagePicker];
+                [imagePicker release];
+            }
+
             break;
+        }
         case MNSSegmentedControlOptionsObjects:
 
             break;
         default:
             break;
     }
+    
+    
+    [[[self visableViewController] view] setFrame:[[self containerView] bounds]];
+    [UIView animateWithDuration:0.20000f animations:^{
+        if (hidingView) [[hidingView view] removeFromSuperview];
+        if ([self visableViewController]) {
+            [[self containerView] addSubview:[[self visableViewController] view]];
+        }
+    } completion:^(BOOL finished) {
+        if (hidingView) [hidingView release];
+    }];
+
 }
+
+#pragma mark - Actions
 
 - (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender {
     [self showObjectSelector];
@@ -85,8 +142,35 @@
     [[self delegate] uIViewControllerObjectSelectorFinish: self];
 }
 
-- (void)dealloc {
-    [segmentedControlSelectorType release];
-    [super dealloc];
+#pragma mark - Delegates
+
+#pragma mark UITableViewControllerChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
+    
 }
+
+#pragma mark UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *selectedImage = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (!selectedImage) {
+        selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    }
+    
+    if (selectedImage) {
+        [selectedImage retain];
+
+        
+        
+        [selectedImage release];
+    }
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+
+}
+
 @end

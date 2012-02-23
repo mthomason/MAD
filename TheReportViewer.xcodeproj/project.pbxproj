@@ -253,15 +253,6 @@
 		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
 		4C45742614E795CE00FF326C /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocument+Extras.h"; sourceTree = "<group>"; };
 		4C45742714E795CE00FF326C /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+Extras.m"; sourceTree = "<group>"; };
-		4C49C8AE14C56F35001B3298 /* libmysqlclient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libmysqlclient.framework; sourceTree = "<group>"; };
-		4C49C8B114C56F35001B3298 /* mysql_config */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = mysql_config; sourceTree = "<group>"; };
-		4C49C8B214C56F35001B3298 /* EXCEPTIONS-CLIENT */ = {isa = PBXFileReference; lastKnownFileType = text; path = "EXCEPTIONS-CLIENT"; sourceTree = "<group>"; };
-		4C49C8B714C56F35001B3298 /* libmysql.16.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysql.16.0.0.dylib; sourceTree = "<group>"; };
-		4C49C8B814C56F35001B3298 /* libmysql.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysql.16.dylib; sourceTree = "<group>"; };
-		4C49C8B914C56F35001B3298 /* libmysql.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysql.dylib; sourceTree = "<group>"; };
-		4C49C8BA14C56F35001B3298 /* libmysqlclient.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.dylib; sourceTree = "<group>"; };
-		4C49C8BB14C56F35001B3298 /* libmysqlclient_r.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient_r.dylib; sourceTree = "<group>"; };
-		4C49C8BC14C56F35001B3298 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkFirstField.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkFirstField.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkJoinType.h; sourceTree = "<group>"; };
@@ -811,8 +802,8 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C49C8AD14C56F35001B3298 /* APIs */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
+				4C49C8AD14C56F35001B3298 /* APIs */,
 				4C384E2E14B29789007B4F48 /* TheReportViewer */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
@@ -886,66 +877,9 @@
 		4C49C8AD14C56F35001B3298 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
-				4C49C8AE14C56F35001B3298 /* libmysqlclient.framework */,
-				4C49C8AF14C56F35001B3298 /* mysql-connector-c-6.0.2-osx10.5-x86-32bit */,
 			);
 			name = APIs;
 			path = TheReportViewer/APIs;
-			sourceTree = "<group>";
-		};
-		4C49C8AF14C56F35001B3298 /* mysql-connector-c-6.0.2-osx10.5-x86-32bit */ = {
-			isa = PBXGroup;
-			children = (
-				4C49C8B014C56F35001B3298 /* bin */,
-				4C49C8B214C56F35001B3298 /* EXCEPTIONS-CLIENT */,
-				4C49C8B314C56F35001B3298 /* include */,
-				4C49C8B614C56F35001B3298 /* lib */,
-				4C49C8BC14C56F35001B3298 /* README */,
-			);
-			path = "mysql-connector-c-6.0.2-osx10.5-x86-32bit";
-			sourceTree = "<group>";
-		};
-		4C49C8B014C56F35001B3298 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				4C49C8B114C56F35001B3298 /* mysql_config */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
-		4C49C8B314C56F35001B3298 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4C49C8B414C56F35001B3298 /* atomic */,
-				4C49C8B514C56F35001B3298 /* mysys */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		4C49C8B414C56F35001B3298 /* atomic */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = atomic;
-			sourceTree = "<group>";
-		};
-		4C49C8B514C56F35001B3298 /* mysys */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = mysys;
-			sourceTree = "<group>";
-		};
-		4C49C8B614C56F35001B3298 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				4C49C8B714C56F35001B3298 /* libmysql.16.0.0.dylib */,
-				4C49C8B814C56F35001B3298 /* libmysql.16.dylib */,
-				4C49C8B914C56F35001B3298 /* libmysql.dylib */,
-				4C49C8BA14C56F35001B3298 /* libmysqlclient.dylib */,
-				4C49C8BB14C56F35001B3298 /* libmysqlclient_r.dylib */,
-			);
-			path = lib;
 			sourceTree = "<group>";
 		};
 		4C507B0214D067EE00DE67E3 /* Query Builder */ = {

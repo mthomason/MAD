@@ -22,13 +22,16 @@ typedef enum {
 @end
 
 @interface UIViewControllerObjectSelector : UIViewController
+    <UITableViewControllerChooseFieldDelegate,
+        UINavigationControllerDelegate,
+        UIImagePickerControllerDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerObjectSelectorDelegate> delegate;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 
-@property (retain) UITableViewControllerChooseField *viewControllerChooseField;
-@property (retain) UIViewController *viewControllerObjects;
-@property (retain) UITableViewControllerChooseField *viewControllerMedia;
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+
+@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
+@property (retain, nonatomic) IBOutlet UIView *containerView;
 
 - (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender;
 - (IBAction)done:(id)sender;
