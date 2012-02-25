@@ -20,6 +20,7 @@
 
 @synthesize delegate = _delegate;
 @synthesize containerView = _parentView;
+@synthesize designerView = _designerView;
 
 @synthesize stringElm = _stringElm;
 @synthesize originalSize = _originalSize, originalPointCenter = _originalPointCenter;
@@ -36,15 +37,16 @@
     [_handleEdgeLeft release];
     [_handleEdgeRight release];
     [_handleEdgeTop release];
+    [_designerView release];
     [_parentView release];
     [_stringElm release];
 	[super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame inView:(UIScrollView *)pview {
+- (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        [self setDesignerView: dview];
         [self setExclusiveTouch: YES];
         [self setMultipleTouchEnabled:YES];
         [self setContainerView: pview];
@@ -165,7 +167,8 @@
 #pragma mark Touch events
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
+    [[self designerView] addSubview: self];
+    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
     newCenter.x = roundf(newCenter.x);
     newCenter.y = roundf(newCenter.y);
 
@@ -178,7 +181,7 @@
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
                      animations: ^{
-                         [self setCenter:newCenter];
+                         [self setCenter: newCenter];
                          [[self containerView] bringSubviewToFront: self];
                      } completion:^(BOOL finished) {
                          
@@ -188,6 +191,12 @@
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
+    if (newParent) {
+        [self setContainerView: newParent];
+        [newParent addSubview: self];
+    }
+    [newParent release];
     [self setParentScrollersEnabled: YES];
     [self stopWobble];
 }
@@ -196,7 +205,7 @@
     self.lastTime = self.currentTime;
     self.currentTime = [[touches anyObject] timestamp];
 
-    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
+    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
     newCenter.x = roundf(newCenter.x);
     newCenter.y = roundf(newCenter.y);
     
@@ -211,10 +220,25 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    UIScrollView *newParent = nil;
+    for (UIView *view in [[self designerView] subviews]) {
+        NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
+        if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
+            newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
+        }
+    }
+    //UIScrollView *newParent = (UIScrollView *)[[[self designerView] hitTest:[self center] withEvent: nil] retain];
+    if (newParent) {
+        [self setContainerView: newParent];
+        [newParent addSubview: self];
+    } else {
+        newParent = [[[self containerView] retain] autorelease];
+    }
+    //[newParent release];
     self.lastTime = self.currentTime;
     self.currentTime = [[touches anyObject] timestamp];
 
-    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
+    CGPoint newCenter = [[touches anyObject] locationInView: newParent];
     newCenter.x = roundf(newCenter.x);
     newCenter.y = roundf(newCenter.y);
     
@@ -228,6 +252,8 @@
                          [self stopWobble];
                      }];
 }
+
+#pragma mark - Animations
 
 - (void)startWobble:(NSInteger)count {
     NSInteger randomInt = arc4random()%500;

@@ -19,6 +19,7 @@
     <UIViewResizeHandleDelegate>
 
 @property (retain) UIScrollView *containerView;
+@property (retain) UIScrollView *designerView;
 
 @property (assign) IBOutlet id <ElementViewDelegate> delegate;
 
@@ -38,6 +39,6 @@
 @property (retain) UIViewResizeHandle *handleCornerBottomRight;
 @property (retain) UIViewResizeHandle *handleCornerBottomLeft;
 
-- (id)initWithFrame:(CGRect)frame inView:(UIScrollView *)pview;
+- (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview;
 
 @end

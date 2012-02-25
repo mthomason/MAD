@@ -138,8 +138,8 @@
                 }
                 case MNSObjectTypeLabelDataField: {
                     if ([obj isLabelDataField] != nil) {
-
-                        ElementView *newView = [[ElementView alloc] initWithFrame: CGRectMake(0.0000f, 0.0000f, 200.0000f, 44.0000f) inView:[self designScrollView]];
+/*
+                        ElementView *newView = [[ElementView alloc] initWithFrame: CGRectMake(0.0000f, 0.0000f, 200.0000f, 44.0000f) inSectionView: [self designScrollView]];
                         [[self designScrollView] addSubview:newView];
                         [newView setMultipleTouchEnabled:YES];
                         [newView setExclusiveTouch:YES];
@@ -147,7 +147,7 @@
                         [newView setDelegate: self];
                         [newView setContainerView: [self designScrollView]];
                         [newView release];
-
+*/
                     }
                     break;
                 }
@@ -268,7 +268,8 @@
                                                         NSLog(@"ScrollViewABS %@", objSec.objectID.URIRepresentation.absoluteString);
                                                         if (scrollView) {
                                                             ElementView *newView = [[ElementView alloc] initWithFrame: f
-                                                                                                               inView: scrollView];
+                                                                                                               inSectionView: scrollView
+                                                                                    ofDesignerView:[self designScrollView]];
                                                             [newView setBounds: f];
                                                             [scrollView addSubview: newView];
                                                             [newView setStringElm: parentObj.isLabelDataField.text];
@@ -426,8 +427,9 @@
                                     NSLog(@"ScrollViewABS %@", objSec.objectID.URIRepresentation.absoluteString);
                                     if (scrollView) {
                                         ElementView *newView = [[ElementView alloc] initWithFrame: f
-                                                                                           inView: scrollView];
-                                        [[self designScrollView] addSubview: newView];
+                                                                                    inSectionView: scrollView
+                                                                                   ofDesignerView: [self designScrollView]];
+                                        [scrollView addSubview: newView];
                                         [newView setStringElm: parentObj.isLabelDataField.text];
                                         [newView setMultipleTouchEnabled: YES];
                                         [newView setExclusiveTouch: YES];
