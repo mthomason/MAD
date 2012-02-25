@@ -19,6 +19,9 @@
 @synthesize delegate;
 @synthesize segmentedControlSelectorType;
 @synthesize containerView;
+@synthesize toolbarMain;
+@synthesize navigationBar;
+@synthesize navigationItemMain;
 @synthesize visableViewController = _visableViewController;
 @synthesize managedDocumentQuery = _managedDocumentQuery;
 
@@ -28,6 +31,9 @@
     [segmentedControlSelectorType release];
     [containerView release];
     
+    [toolbarMain release];
+    [navigationBar release];
+    [navigationItemMain release];
     [super dealloc];
 }
 
@@ -71,6 +77,9 @@
 - (void)viewDidUnload {
     [self setSegmentedControlSelectorType:nil];
     [self setContainerView:nil];
+    [self setToolbarMain:nil];
+    [self setNavigationBar:nil];
+    [self setNavigationItemMain:nil];
     [super viewDidUnload];
 }
 
@@ -88,7 +97,7 @@
 
     switch ([[self segmentedControlSelectorType] selectedSegmentIndex]) {
         case MNSSegmentedControlOptionsData: {
-            
+            [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
             UIStoryboard *sb= [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
             UITableViewControllerChooseField *tv = [[sb instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
             [tv setManagedDocumentQuery:[self managedDocumentQuery]];
@@ -101,7 +110,7 @@
             break;
         }
         case MNSSegmentedControlOptionsMedia: {
-            
+            [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an image to add to the report.", @"Prompt to choose an image.")];            
             if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                 [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -113,7 +122,7 @@
             break;
         }
         case MNSSegmentedControlOptionsObjects:
-
+            [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];            
             break;
         default:
             break;
@@ -147,7 +156,7 @@
 #pragma mark UITableViewControllerChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
-    
+    [[self delegate] didSelectDataField: field];
 }
 
 #pragma mark UIImagePickerControllerDelegate

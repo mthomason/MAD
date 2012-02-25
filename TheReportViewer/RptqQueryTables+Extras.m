@@ -10,6 +10,18 @@
 
 @implementation RptqQueryTables (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (NSArray *)namesForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *requestQt = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
     NSSortDescriptor *sortDescriptorQt = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];

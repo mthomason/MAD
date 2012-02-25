@@ -10,6 +10,18 @@
 
 @implementation RptqDocumentObject (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 - (MNSSectionType)getType {
     return [[self type] integerValue];
 }

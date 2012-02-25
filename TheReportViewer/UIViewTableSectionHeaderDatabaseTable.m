@@ -103,14 +103,17 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { 
     [self setHighlight: YES];
+    [[self titleLabel] setTextColor:[UIColor darkTextColor]];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setHighlight: NO];
+    [[self titleLabel] setTextColor:[UIColor whiteColor]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setHighlight: NO];
+    [[self titleLabel] setTextColor:[UIColor whiteColor]];
 }
 
 

@@ -82,7 +82,7 @@
     [backButton release];
     [a2 release];
     
-    UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:@"StoryboardToolbox" bundle:nil] retain];
+    UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
     
     UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
     [tb1 setDelegate: self];

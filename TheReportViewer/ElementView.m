@@ -146,6 +146,17 @@
     }
 }
 
+- (void)setParentScrollersEnabled:(BOOL)enabled {
+    [[self containerView] setScrollEnabled:enabled];
+    [[self containerView] flashScrollIndicators];
+    if ([[[self containerView] superview] respondsToSelector:@selector(setScrollEnabled:)]) {
+        if ([[[self containerView] superview] isKindOfClass:[UIScrollView class]]) {
+            [(UIScrollView *)self.containerView.superview setScrollEnabled:enabled];
+            [(UIScrollView *)self.containerView.superview flashScrollIndicators];
+        }
+    }
+}
+
 #pragma mark Touch events
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -154,6 +165,7 @@
     newCenter.y = roundf(newCenter.y);
 
     [self setCurrentTime: [[touches anyObject] timestamp]];
+    [self setParentScrollersEnabled: NO];
 
     [UIView animateWithDuration: 0.2000f
                           delay: 0.0000f
@@ -165,11 +177,12 @@
                          
                      }];
 
-    [self.containerView setScrollEnabled:NO];
     NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event { }
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self setParentScrollersEnabled: YES];
+}
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     self.lastTime = self.currentTime;
@@ -201,10 +214,12 @@
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
                      animations: ^{
-                         [self setCenter:newCenter];
+                         [self setCenter: newCenter];
                      } completion:^(BOOL finished) {
-                         [self.containerView setScrollEnabled:YES];
+                         [self setParentScrollersEnabled: YES];
                      }];
 }
+
+
 
 @end

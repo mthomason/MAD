@@ -7,6 +7,7 @@
 //
 
 #import "RptqDocumentSection.h"
+#import "UIManagedDocumentQuery.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef enum {
@@ -23,9 +24,10 @@ typedef enum {
 
 + (MNSSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
-                               withNumberOfGroups:(NSInteger)numberOfGroups
-                          andManagedObjectContext:(NSManagedObjectContext *)objectContext;
+                          forManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
++ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentQuery *)managedDocument;
 
 @end

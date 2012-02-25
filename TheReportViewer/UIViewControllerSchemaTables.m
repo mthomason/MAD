@@ -314,8 +314,7 @@ typedef enum {
                         [tvc setDelegate:self];
                         NSLog(@"Last selected row: %d", [self lastSelectedRowNumber]);
                         RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                                   withNumberOfGroups: [self getNumberOfGroups]
-                                                                              andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+                                                                              forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
                         NSLog(@"About to show section: %@", section);                        
                         NSLog(@"Inital height: %@", [section height]);
                         NSLog(@"Inital visibility: %@", [section visibility]);
@@ -375,16 +374,14 @@ typedef enum {
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                               withNumberOfGroups: [self getNumberOfGroups]
-                                                          andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+                                                          forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     [section setHeight: [NSNumber numberWithFloat:height]];
     [section release];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                               withNumberOfGroups: [self getNumberOfGroups]
-                                                          andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+                                                          forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     [section setVisibility: [NSNumber numberWithBool:isVisible]];
     [section release];    
 }
@@ -536,23 +533,6 @@ typedef enum {
 
         [[doc hasQuery] addHasQueryGroupsObject: rqg];
         [rqg release];
-        
-        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-        }];
-        
-    }
-    [doc release];
-}
-
-- (void)uITableViewControllerSchemaAddGroupDidAddGroup:(RptqQueryGroup *)group {
-    [self dismissModalViewControllerAnimated: YES];
-    
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
-    if (doc) {
-        
-        [[doc hasQuery] addHasQueryGroupsObject: group];
-        
-        [[self tableViewQueryBuilder] reloadData];
         
         [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
         }];

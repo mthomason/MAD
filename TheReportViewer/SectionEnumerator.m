@@ -45,16 +45,14 @@
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {
         [result addObject:[RptqDocumentSection getDocumentSectionForRow: [self current]
-                                                     withNumberOfGroups: [self total]
-                                                andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
+                                                forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
     }
     return [result autorelease];
 }
 
 - (id)nextObject {
     return [RptqDocumentSection getDocumentSectionForRow: self.current++
-                                      withNumberOfGroups: self.total
-                                 andManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
+                                 forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
 }
 
 @end

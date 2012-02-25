@@ -17,7 +17,6 @@
 
 @protocol UITableViewControllerSchemaAddGroupDelegate
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(UITableViewControllerSchemaAddGroup *)controller;
-- (void)uITableViewControllerSchemaAddGroupDidAddGroup:(RptqQueryGroup *)group;
 - (void)addGroupDidAddGroupWithField:(NSString *)field andSort:(MNSSortOrder)sortOrder;
 @end
 

@@ -8,6 +8,7 @@
 
 #import "ReportDesignerViewController.h"
 #import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
 #import "Constants.h"
 #import "NSFileManager+Common.h"
 #import "UIManagedDocumentQuery.h"
@@ -117,9 +118,13 @@
         
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
         [scrollView setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
+        [[scrollView layer] setCornerRadius: 5.0000f];
+        [scrollView setClipsToBounds: YES];
+
         [[self designScrollView] addSubview:scrollView];
-        
         [[self svSections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
+        
+        NSLog(@"ScrollView %@", [[[sec objectID] URIRepresentation] absoluteString]);
         
         for (RptqDocumentObject *obj in [sec hasObjects]) {
             switch ([obj getType]) {
@@ -193,10 +198,153 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    /*
+    [center addObserver: self
+               selector: @selector(contextChanged:)
+                   name: NSManagedObjectContextObjectsDidChangeNotification
+                 object: [[self managedDocumentQuery] managedObjectContext]];
+    
+    [center addObserver: self
+               selector: @selector(documentChanged:)
+                   name: UIDocumentStateChangedNotification
+                 object: [self managedDocumentQuery]];
+*/
+    
+#warning Does this work?  Core data managedObjectContext in a block?
+    [center addObserverForName: NSManagedObjectContextObjectsDidChangeNotification
+                        object: [[self managedDocumentQuery] managedObjectContext]
+                         queue: NSOperationQueuePriorityNormal
+                    usingBlock: ^(NSNotification *note) {
+                        
+                        
+                        
+                        NSLog(@"(contextChanged) Name:     %@", [note name]);
+                        NSLog(@"(contextChanged) Object:   %@", [note object]);
+                        NSLog(@"(contextChanged) UserInfo: %@", [note userInfo]);
+                        
+                        
+                        NSLog(@"Name:     %@", [note name]);
+                        NSLog(@"Object:   %@", [note object]);
+                        
+                        
+                        NSEnumerator *keys = [[note userInfo] keyEnumerator];
+                        id key = nil;
+                        
+                        while ((key = [keys nextObject]) != nil) {
+                            
+                            NSString *keyObjectOperation = key;
+                            if (keyObjectOperation) {
+                                
+                                if ([keyObjectOperation isEqualToString: NSInsertedObjectsKey]) {
+                                    
+                                    id obj = [[note userInfo] objectForKey: key];
+                                    
+                                    if ([obj isKindOfClass:[NSSet class]]) {
+                                        
+                                        
+                                        NSSet *objects = [obj retain];
+                                        NSEnumerator *objectsEnum = [objects objectEnumerator];
+                                        id object = nil;
+                                        while ((object = [objectsEnum nextObject]) != nil) {
+
+ 
+                                            if ([object isKindOfClass:[RptqDocumentObject class]]) {
+                                                RptqDocumentObject *parentObj = object;
+                                                NSLog(@"Adding document object");
+                                                
+                                                if (parentObj.isLabel) {
+                                                    
+                                                } else if (parentObj.isLabelDataField) {
+                                                    
+                                                    CGRect f = CGRectMake([[parentObj originx] floatValue], [[parentObj originy] floatValue], [[parentObj sizewidth] floatValue], [[parentObj sizeheight] floatValue]);
+                                                    
+                                                    RptqDocumentSection *objSec = [parentObj inSection];
+                                                    if (objSec) {
+                                                        UIScrollView *scrollView = [[self svSections] valueForKey: objSec.objectID.URIRepresentation.absoluteString];
+                                                        NSLog(@"Sections %@", [self svSections]);
+                                                        NSLog(@"ScrollViewABS %@", objSec.objectID.URIRepresentation.absoluteString);
+                                                        if (scrollView) {
+                                                            ElementView *newView = [[ElementView alloc] initWithFrame: f
+                                                                                                               inView: scrollView];
+                                                            [newView setBounds: f];
+                                                            [scrollView addSubview: newView];
+                                                            [newView setStringElm: parentObj.isLabelDataField.text];
+                                                            [newView setMultipleTouchEnabled: YES];
+                                                            [newView setExclusiveTouch: YES];
+                                                            [newView setDelegate: self];
+                                                            [newView setContainerView: scrollView];
+                                                            [newView release];
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                    
+                                                } else if (parentObj.isLabelLink) {
+                                                    
+                                                } else if (parentObj.isFormula) {
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                            
+                                        }
+                                        
+                                        [objects release];
+                                        
+                                    }
+                                    
+                                    
+                                    
+                                } else if ([keyObjectOperation isEqualToString: NSUpdatedObjectsKey]) {
+                                    
+                                    
+                                    
+                                } else if ([keyObjectOperation isEqualToString: NSDeletedObjectsKey]) {
+                                    
+                                } else if ([keyObjectOperation isEqualToString: NSRefreshedObjectsKey]) {
+                                    
+                                } else if ([keyObjectOperation isEqualToString: NSInvalidatedObjectsKey]) {
+                                    
+                                } else if ([keyObjectOperation isEqualToString: NSInvalidatedAllObjectsKey]) {
+                                    
+                                }
+                                
+                            }
+                        }
+                        
+                        
+                        
+                        
+                    }];
+                        
+    
+    [center addObserverForName: UIDocumentStateChangedNotification
+                        object: [self managedDocumentQuery]
+                         queue: NSOperationQueuePriorityNormal
+                    usingBlock: ^(NSNotification *note) {
+                        NSLog(@"Name:     %@", [note name]);
+                        NSLog(@"Object:   %@", [note object]);
+                        [[note userInfo] enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(id key, id obj, BOOL *stop) {
+                            NSLog(@"\n\nNSOperationQueuePriorityNormal\n\n\nkey: %@\nobj: %@\nstp: %@\n", key, obj, stop ? @"YES" : @"NO");
+                        }];
+                    }];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver: self
+                      name: NSManagedObjectContextObjectsDidChangeNotification
+                    object: [[self managedDocumentQuery] managedObjectContext]];
+    
+    [center removeObserver: self
+                      name: UIDocumentStateChangedNotification
+                    object: [self managedDocumentQuery]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -230,7 +378,109 @@
     }
 }
 
+#pragma mark - Notifications
 
+- (void)contextChanged:(NSNotification *)note {
+    NSLog(@"(contextChanged) Name:     %@", [note name]);
+    NSLog(@"(contextChanged) Object:   %@", [note object]);
+    NSLog(@"(contextChanged) UserInfo: %@", [note userInfo]);
+    
+    
+    NSLog(@"Name:     %@", [note name]);
+    NSLog(@"Object:   %@", [note object]);
+    
+    
+    NSEnumerator *keys = [[note userInfo] keyEnumerator];
+    id key = nil;
+    
+    while ((key = [keys nextObject]) != nil) {
+        
+        NSString *keyObjectOperation = key;
+        if (keyObjectOperation) {
+            
+            if ([keyObjectOperation isEqualToString: NSInsertedObjectsKey]) {
+                
+                id obj = [[note userInfo] objectForKey: key];
+                
+                if ([obj isKindOfClass:[NSSet class]]) {
+                    
+                    
+                    NSSet *objects = [obj retain];
+                    
+                    [objects enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                        
+                        if ([obj isKindOfClass:[RptqDocumentObject class]]) {
+                            RptqDocumentObject *parentObj = obj;
+                            NSLog(@"Adding document object");
+                            
+                            if (parentObj.isLabel) {
+                                
+                            } else if (parentObj.isLabelDataField) {
+                                
+                                CGRect f = CGRectMake([[parentObj originx] floatValue], [[parentObj originy] floatValue], [[parentObj sizewidth] floatValue], [[parentObj sizeheight] floatValue]);
+                                
+                                RptqDocumentSection *objSec = [parentObj inSection];
+                                if (objSec) {
+                                    UIScrollView *scrollView = [[self svSections] valueForKey: objSec.objectID.URIRepresentation.absoluteString];
+                                    NSLog(@"Sections %@", [self svSections]);
+                                    NSLog(@"ScrollViewABS %@", objSec.objectID.URIRepresentation.absoluteString);
+                                    if (scrollView) {
+                                        ElementView *newView = [[ElementView alloc] initWithFrame: f
+                                                                                           inView: scrollView];
+                                        [[self designScrollView] addSubview: newView];
+                                        [newView setStringElm: parentObj.isLabelDataField.text];
+                                        [newView setMultipleTouchEnabled: YES];
+                                        [newView setExclusiveTouch: YES];
+                                        [newView setDelegate: self];
+                                        [newView setContainerView: scrollView];
+                                        [newView release];
+                                        
+                                    }
+                                    
+                                }
+                                
+                            } else if (parentObj.isLabelLink) {
+                                
+                            } else if (parentObj.isFormula) {
+                                
+                            }
+                            
+                        }
+                        
+                        
+                        
+                        
+                    }];
+                    
+                    [objects release];
+                    
+                }
+                
+                
+                
+            } else if ([keyObjectOperation isEqualToString: NSUpdatedObjectsKey]) {
+                
+                
+                
+            } else if ([keyObjectOperation isEqualToString: NSDeletedObjectsKey]) {
+                
+            } else if ([keyObjectOperation isEqualToString: NSRefreshedObjectsKey]) {
+                
+            } else if ([keyObjectOperation isEqualToString: NSInvalidatedObjectsKey]) {
+                
+            } else if ([keyObjectOperation isEqualToString: NSInvalidatedAllObjectsKey]) {
+                
+            }
+            
+        }
+    }
+}
+
+- (void)documentChanged:(NSNotification *)notification {
+    NSLog(@"(documentChanged) Name:     %@", [notification name]);
+    NSLog(@"(documentChanged) Object:   %@", [notification object]);
+    NSLog(@"(documentChanged) UserInfo: %@", [notification userInfo]);
+}
 
 #pragma mark - Actions
 
@@ -292,7 +542,7 @@
         //Make sure there are no information views open
         [[self informationButton] setEnabled: NO];
         
-        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"StoryboardToolbox" bundle:nil] retain];
+        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
         UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
         [self setToolbox:lblControl];
         [lblControl release];
@@ -322,6 +572,56 @@
 
     }];
 }
+
+- (void)didSelectDataField:(RptqField *)field {
+    
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+    if (doc) {
+        
+        NSEntityDescription *rdoEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                 inManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
+
+        NSEntityDescription *roldfEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+                                                   inManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
+
+        RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: rdoEd
+                                                     insertIntoManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
+
+        
+        RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: roldfEd
+                                                                            insertIntoManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
+        dataObject.isLabelDataField = reportObject;
+        [reportObject release];
+        dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
+        
+        dataObject.isLabelDataField.referencesField = field;
+        dataObject.originx = [NSNumber numberWithFloat:CGPointZero.x];
+        dataObject.originy = [NSNumber numberWithFloat:CGPointZero.y];
+        dataObject.sizewidth = [NSNumber numberWithFloat:200.0000f];
+        dataObject.sizeheight = [NSNumber numberWithFloat:44.0000f];
+        dataObject.type = [NSNumber numberWithInteger: MNSObjectTypeLabelDataField];
+        //dataObject.isLabelDataField = dataField;
+        
+        [[doc hasDetailSection] addHasObjectsObject:dataObject];
+        
+        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                              forSaveOperation: UIDocumentSaveForOverwriting
+                             completionHandler: ^(BOOL success) {
+
+                                 [dataObject release];
+                                 [doc release];
+                             }];
+
+    } else {
+        [doc release];
+    }
+
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];    
+}
+
 
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
     

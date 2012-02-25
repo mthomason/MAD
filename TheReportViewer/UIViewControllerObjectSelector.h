@@ -19,6 +19,7 @@ typedef enum {
 
 @protocol UIViewControllerObjectSelectorDelegate
 - (void)uIViewControllerObjectSelectorFinish:(UIViewControllerObjectSelector *)controller;
+- (void)didSelectDataField:(RptqField *)field;
 @end
 
 @interface UIViewControllerObjectSelector : UIViewController
@@ -32,6 +33,9 @@ typedef enum {
 
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarMain;
+@property (retain, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemMain;
 
 - (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender;
 - (IBAction)done:(id)sender;

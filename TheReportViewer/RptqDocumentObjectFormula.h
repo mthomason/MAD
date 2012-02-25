@@ -2,7 +2,7 @@
 //  RptqDocumentObjectFormula.h
 //  TheReportViewer
 //
-//  Created by Michael Thomason on 2/12/12.
+//  Created by Michael Thomason on 2/24/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,6 +14,6 @@
 @interface RptqDocumentObjectFormula : NSManagedObject
 
 @property (nonatomic, retain) NSString * formulaSource;
-@property (nonatomic, retain) RptqDocumentObject *parentObject;
+@property (nonatomic, retain) RptqDocumentObject *parentObjectFormula;
 
 @end

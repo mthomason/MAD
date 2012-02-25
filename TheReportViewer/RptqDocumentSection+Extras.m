@@ -11,8 +11,22 @@
 #import "RptqDocument.h"
 #import "RptqQueryGroup.h"
 #import "RptqQuery.h"
+#import "SectionEnumerator.h"
+#import "UIManagedDocumentQuery.h"
 
 @implementation RptqDocumentSection (Extras)
+
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
 
 + (MNSSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger documentHeader    = 0;
@@ -46,9 +60,9 @@
 }
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
-                               withNumberOfGroups:(NSInteger)numberOfGroups
-                          andManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    
+                          forManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSInteger numberOfGroups = [RptqDocumentSection numberOfGroupsForManagedObjectContext:objectContext];
+
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
@@ -163,6 +177,34 @@
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger body = 2 + numberOfGroups;
     return (row <= body) ? row : body - (row - body);
+}
+
++ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSError *error = nil;
+    NSArray *groups = [[[objectContext executeFetchRequest:request error:&error] retain] autorelease];
+    return (error) ? 0 : [groups count];
+}
+
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentQuery *)managedDocument {
+    
+    NSInteger result = 0;
+    BOOL breakNow = NO;
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery: managedDocument];
+    NSURL *urlNeedle = [[[section objectID] URIRepresentation] retain];
+
+    for (RptqDocumentSection *sec in enumerator) {
+        NSURL *urlInHaystack = [[[sec objectID] URIRepresentation] retain];
+        breakNow = [urlNeedle isEqual:urlInHaystack];
+        [urlInHaystack release];
+        if (breakNow) break;
+        result++;
+    }
+    [enumerator release];
+    [urlNeedle release];
+    return result;
 }
 
 @end
