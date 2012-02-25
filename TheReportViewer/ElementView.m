@@ -11,6 +11,11 @@
 #import "CGGeometry+Extras.h"
 #import "UIViewResizeHandle.h"
 
+#define degreesToRadians(x) (M_PI * (x) / 180.0)
+#define kAnimationRotateDeg 1.0
+#define kAnimationTranslateX 2.0
+#define kAnimationTranslateY 2.0
+
 @implementation ElementView
 
 @synthesize delegate = _delegate;
@@ -167,6 +172,8 @@
     [self setCurrentTime: [[touches anyObject] timestamp]];
     [self setParentScrollersEnabled: NO];
 
+    [self startWobble:1];
+    
     [UIView animateWithDuration: 0.2000f
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
@@ -182,6 +189,7 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setParentScrollersEnabled: YES];
+    [self stopWobble];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -217,9 +225,34 @@
                          [self setCenter: newCenter];
                      } completion:^(BOOL finished) {
                          [self setParentScrollersEnabled: YES];
+                         [self stopWobble];
                      }];
 }
 
+- (void)startWobble:(NSInteger)count {
+    NSInteger randomInt = arc4random()%500;
+    float r = (randomInt/500.0)+0.5;
+    
+    CGAffineTransform leftWobble = CGAffineTransformMakeRotation(degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
+    CGAffineTransform rightWobble = CGAffineTransformMakeRotation(degreesToRadians( kAnimationRotateDeg + r ));
+    
+    self.transform = leftWobble;  // starting point
+    
+    [[self layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
+    
+    [UIView animateWithDuration:0.3500
+                          delay:0
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
+                     animations:^{ 
+                         [UIView setAnimationRepeatCount:NSNotFound];
+                         self.transform = rightWobble; }
+                     completion:nil];
 
+}
+
+- (void)stopWobble {
+    [self.layer removeAllAnimations];
+    self.transform = CGAffineTransformIdentity;
+}
 
 @end
