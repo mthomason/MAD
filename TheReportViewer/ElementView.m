@@ -167,16 +167,9 @@
 #pragma mark Touch events
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[self designerView] addSubview: self];
-    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
-    newCenter.x = roundf(newCenter.x);
-    newCenter.y = roundf(newCenter.y);
-
-    [self setCurrentTime: [[touches anyObject] timestamp]];
-    [self setParentScrollersEnabled: NO];
-
-    [self startWobble:1];
     
+    //Animate the move to the touch
+    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
     [UIView animateWithDuration: 0.2000f
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
@@ -185,9 +178,21 @@
                          [[self containerView] bringSubviewToFront: self];
                      } completion:^(BOOL finished) {
                          
+                         //Don't animate the move outside of the goal, because it will jump around.
+                         CGPoint outsideCenter = [[touches anyObject] locationInView: [self designerView]];
+                         outsideCenter.x = roundf(outsideCenter.x);
+                         outsideCenter.y = roundf(outsideCenter.y);
+
+                         [self setCurrentTime: [[touches anyObject] timestamp]];
+                         [self setParentScrollersEnabled: NO];
+                         
+                         [self startWobble: 1];
+
+                         [[self designerView] addSubview: self];
+                         [self setCenter: outsideCenter];
+                         [[self containerView] bringSubviewToFront: self];
                      }];
 
-    NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -204,11 +209,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     self.lastTime = self.currentTime;
     self.currentTime = [[touches anyObject] timestamp];
-
     CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
-    newCenter.x = roundf(newCenter.x);
-    newCenter.y = roundf(newCenter.y);
-    
     [UIView animateWithDuration: (self.currentTime - self.lastTime)
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
@@ -220,25 +221,10 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    UIScrollView *newParent = nil;
-    for (UIView *view in [[self designerView] subviews]) {
-        NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
-        if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
-            newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
-        }
-    }
-    //UIScrollView *newParent = (UIScrollView *)[[[self designerView] hitTest:[self center] withEvent: nil] retain];
-    if (newParent) {
-        [self setContainerView: newParent];
-        [newParent addSubview: self];
-    } else {
-        newParent = [[[self containerView] retain] autorelease];
-    }
-    //[newParent release];
     self.lastTime = self.currentTime;
     self.currentTime = [[touches anyObject] timestamp];
-
-    CGPoint newCenter = [[touches anyObject] locationInView: newParent];
+    
+    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
     newCenter.x = roundf(newCenter.x);
     newCenter.y = roundf(newCenter.y);
     
@@ -246,10 +232,35 @@
                           delay: 0.0000f
                         options: UIViewAnimationOptionCurveLinear
                      animations: ^{
-                         [self setCenter: newCenter];
+                         [self setCenter:newCenter];
                      } completion:^(BOOL finished) {
+                         UIScrollView *newParent = nil;
+                         for (UIView *view in [[self designerView] subviews]) {
+                             NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
+                             if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
+                                 newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
+                             }
+                         }
+                         
+                         if (newParent) {
+                             [self setContainerView: newParent];
+                             [newParent addSubview: self];
+                         } else {
+                             newParent = [[[self containerView] retain] autorelease];
+                         }
+                         
+                         self.lastTime = self.currentTime;
+                         self.currentTime = [[touches anyObject] timestamp];
+                         
+                         //Don't animate this, because of the change in views, the animation seems to jump.
+                         CGPoint newCenter = [[touches anyObject] locationInView: newParent];
+                         newCenter.x = roundf(newCenter.x);
+                         newCenter.y = roundf(newCenter.y);
+                         
+                         [self setCenter: newCenter];
                          [self setParentScrollersEnabled: YES];
                          [self stopWobble];
+ 
                      }];
 }
 
