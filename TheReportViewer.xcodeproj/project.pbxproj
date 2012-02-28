@@ -87,6 +87,7 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C86D28D14C53EB6008B58B5 /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
 		4C86D28E14C53EB6008B58B5 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
 		4C86D28F14C53EB6008B58B5 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
@@ -307,6 +308,8 @@
 		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
+		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C86D19614C5305A008B58B5 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C86D19714C5305A008B58B5 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4C86D19814C5305A008B58B5 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
@@ -708,6 +711,8 @@
 				4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */,
 				4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */,
 				4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */,
+				4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */,
+				4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1928,6 +1933,7 @@
 				4C9DE83414F7889E008613AB /* RptqDocument.m in Sources */,
 				4C9DE83714F788A0008613AB /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C9DE83A14F788A0008613AB /* RptqDocumentObjectLabel.m in Sources */,
+				4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

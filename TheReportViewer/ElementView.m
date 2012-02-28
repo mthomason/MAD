@@ -54,6 +54,26 @@
         
 		[self setOpaque: YES];
         
+        UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotatePiece:)];
+        [self addGestureRecognizer:rotationGesture];
+        [rotationGesture release];
+        
+        UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scalePiece:)];
+        [pinchGesture setDelegate:self];
+        [self addGestureRecognizer:pinchGesture];
+        [pinchGesture release];
+        
+        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+        [panGesture setMaximumNumberOfTouches:1];
+        [panGesture setDelegate:self];
+        [self addGestureRecognizer:panGesture];
+        [panGesture release];
+        
+        //UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showResetMenu:)];
+        //[self addGestureRecognizer:longPressGesture];
+        //[longPressGesture release];
+
+        
         CGSize handleSize = CGSizeMake(30.0000f, 30.0000f);
 
         UIViewResizeHandle *resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:northWest];
@@ -116,6 +136,10 @@
     return self;
 }
 
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
 - (void)drawRect:(CGRect)rect {
 
     CGMutablePathRef path = CGPathCreateMutable();
@@ -154,117 +178,213 @@
 }
 
 - (void)setParentScrollersEnabled:(BOOL)enabled {
-    [[self containerView] setScrollEnabled:enabled];
-    [[self containerView] flashScrollIndicators];
-    if ([[[self containerView] superview] respondsToSelector:@selector(setScrollEnabled:)]) {
-        if ([[[self containerView] superview] isKindOfClass:[UIScrollView class]]) {
-            [(UIScrollView *)self.containerView.superview setScrollEnabled:enabled];
-            [(UIScrollView *)self.containerView.superview flashScrollIndicators];
+    if ([self containerView] != nil) {
+        [[self containerView] setScrollEnabled:enabled];
+        [[self containerView] flashScrollIndicators];
+        if ([[[self containerView] superview] respondsToSelector:@selector(setScrollEnabled:)]) {
+            if ([[[self containerView] superview] isKindOfClass:[UIScrollView class]]) {
+                [(UIScrollView *)self.containerView.superview setScrollEnabled:enabled];
+                [(UIScrollView *)self.containerView.superview flashScrollIndicators];
+            }
         }
     }
 }
 
-#pragma mark Touch events
+#pragma mark - Gesture Recognizer Delegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return YES;
+}
+
+#pragma mark - Touch events
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    //Animate the move to the touch
-    CGPoint newCenter = [[touches anyObject] locationInView: [self containerView]];
-    [UIView animateWithDuration: 0.2000f
-                          delay: 0.0000f
-                        options: UIViewAnimationOptionCurveLinear
-                     animations: ^{
-                         [self setCenter: newCenter];
-                         [[self containerView] bringSubviewToFront: self];
-                     } completion:^(BOOL finished) {
-                         
-                         //Don't animate the move outside of the goal, because it will jump around.
-                         CGPoint outsideCenter = [[touches anyObject] locationInView: [self designerView]];
-                         outsideCenter.x = roundf(outsideCenter.x);
-                         outsideCenter.y = roundf(outsideCenter.y);
-
-                         [self setCurrentTime: [[touches anyObject] timestamp]];
-                         [self setParentScrollersEnabled: NO];
-                         
-                         [self startWobble: 1];
-
-                         [[self designerView] addSubview: self];
-                         [self setCenter: outsideCenter];
-                         [[self containerView] bringSubviewToFront: self];
-                     }];
-
+    [super touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
-    if (newParent) {
-        [self setContainerView: newParent];
-        [newParent addSubview: self];
-    }
-    [newParent release];
-    [self setParentScrollersEnabled: YES];
-    [self stopWobble];
+    [super touchesCancelled:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.lastTime = self.currentTime;
-    self.currentTime = [[touches anyObject] timestamp];
-    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
-    [UIView animateWithDuration: (self.currentTime - self.lastTime)
-                          delay: 0.0000f
-                        options: UIViewAnimationOptionCurveLinear
-                     animations: ^{
-                         [self setCenter:newCenter];
-                     } completion:^(BOOL finished) {
-                         
-                     }];
+    [super touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.lastTime = self.currentTime;
-    self.currentTime = [[touches anyObject] timestamp];
-    
-    CGPoint newCenter = [[touches anyObject] locationInView: [self designerView]];
-    newCenter.x = roundf(newCenter.x);
-    newCenter.y = roundf(newCenter.y);
-    
-    [UIView animateWithDuration: (self.currentTime - self.lastTime)
-                          delay: 0.0000f
-                        options: UIViewAnimationOptionCurveLinear
-                     animations: ^{
-                         [self setCenter:newCenter];
-                     } completion:^(BOOL finished) {
-                         UIScrollView *newParent = nil;
-                         for (UIView *view in [[self designerView] subviews]) {
-                             NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
-                             if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
-                                 newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
-                             }
-                         }
-                         
-                         if (newParent) {
-                             [self setContainerView: newParent];
-                             [newParent addSubview: self];
-                         } else {
-                             newParent = [[[self containerView] retain] autorelease];
-                         }
-                         
-                         self.lastTime = self.currentTime;
-                         self.currentTime = [[touches anyObject] timestamp];
-                         
-                         //Don't animate this, because of the change in views, the animation seems to jump.
-                         CGPoint newCenter = [[touches anyObject] locationInView: newParent];
-                         newCenter.x = roundf(newCenter.x);
-                         newCenter.y = roundf(newCenter.y);
-                         
-                         [self setCenter: newCenter];
-                         [self setParentScrollersEnabled: YES];
-                         [self stopWobble];
- 
-                     }];
+    [super touchesEnded:touches withEvent:event];
 }
 
-#pragma mark - Animations
+#pragma mark - Actions
+
+- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    UIView *piece = [gestureRecognizer view];
+    
+    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    
+    switch ([gestureRecognizer state]) {
+        case UIGestureRecognizerStateBegan: {
+            
+            CGPoint newCenter = [gestureRecognizer locationInView:[self containerView]];
+            [self setCenter: newCenter];
+            [[self containerView] bringSubviewToFront: self];
+            newCenter = [gestureRecognizer locationInView:[self designerView]];
+            
+            [self setParentScrollersEnabled: NO];
+            
+            [self startWobble: 1];
+            
+            if (![[self designerView] isEqual:self]) {
+                [[self designerView] addSubview: self];
+            }
+            [self setCenter: CGPointMake(roundf(newCenter.x), roundf(newCenter.y))];
+            [[self containerView] bringSubviewToFront: self];
+
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
+            [self setCenter: newCenter];
+            break;
+        }
+        case UIGestureRecognizerStateCancelled: {
+#warning FIXME - This should go back to origional postion
+            UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
+            if (newParent) {
+                if (![newParent isEqual: self]) {
+                    [self setContainerView: newParent];
+                    [newParent addSubview: self];
+                }
+            }
+            [newParent release];
+            [self setParentScrollersEnabled: YES];
+            [self stopWobble];
+            break;
+        }
+        case UIGestureRecognizerStateFailed: {
+#warning FIXME - This should go back to origional postion
+            UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
+            if (newParent) {
+                if (![newParent isEqual: self]) {
+                    [self setContainerView: newParent];
+                    [newParent addSubview: self];
+                }
+            }
+            [newParent release];
+            [self setParentScrollersEnabled: YES];
+            [self stopWobble];
+            break;
+        }
+        case UIGestureRecognizerStatePossible:
+#warning FIXME - Maybe do something here.
+            break;
+        case UIGestureRecognizerStateEnded: {
+            
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
+            newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
+            
+            [self setCenter:newCenter];
+            UIScrollView *newParent = nil;
+            for (UIView *view in [[self designerView] subviews]) {
+                NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
+                if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
+                    newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
+                }
+            }
+            
+            if (newParent) {
+                if (![newParent isEqual: self]) {
+                    [self setContainerView: newParent];
+                    [newParent addSubview: self];
+                }
+            } else {
+                newParent = [[[self containerView] retain] autorelease];
+            }
+            
+            self.lastTime = self.currentTime;
+            newCenter = [gestureRecognizer locationInView:newParent];
+            newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
+            
+            [self setCenter: newCenter];
+            [self setParentScrollersEnabled: YES];
+            [self stopWobble];
+            
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+// rotate the piece by the current rotation
+// reset the gesture recognizer's rotation to 0 after applying so the next callback is a delta from the current rotation
+- (void)rotatePiece:(UIRotationGestureRecognizer *)gestureRecognizer {
+    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
+        [gestureRecognizer view].transform = CGAffineTransformRotate([[gestureRecognizer view] transform], [gestureRecognizer rotation]);
+        [gestureRecognizer setRotation:0];
+    }
+}
+
+// scale the piece by the current scale
+// reset the gesture recognizer's rotation to 0 after applying so the next callback is a delta from the current scale
+- (void)scalePiece:(UIPinchGestureRecognizer *)gestureRecognizer {
+    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
+        [gestureRecognizer view].transform = CGAffineTransformScale([[gestureRecognizer view] transform], [gestureRecognizer scale], [gestureRecognizer scale]);
+        [gestureRecognizer setScale:1];
+    }
+}
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
+
+// display a menu with a single item to allow the piece's transform to be reset
+- (void)showResetMenu:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:@"Reset" action:@selector(resetPiece:)];
+        CGPoint location = [gestureRecognizer locationInView:[gestureRecognizer view]];
+        
+        [self becomeFirstResponder];
+        [menuController setMenuItems:[NSArray arrayWithObject:resetMenuItem]];
+        [menuController setTargetRect:CGRectMake(location.x, location.y, 0, 0) inView:[gestureRecognizer view]];
+        [menuController setMenuVisible:YES animated:YES];
+        
+        pieceForReset = [gestureRecognizer view];
+        
+        [resetMenuItem release];
+    }
+}
+- (void)resetPiece:(UIMenuController *)controller {
+    CGPoint locationInSuperview = [pieceForReset convertPoint:CGPointMake(CGRectGetMidX(pieceForReset.bounds), CGRectGetMidY(pieceForReset.bounds)) toView:[pieceForReset superview]];
+    
+    [[pieceForReset layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
+    [pieceForReset setCenter:locationInSuperview];
+    
+    [UIView beginAnimations:nil context:nil];
+    [pieceForReset setTransform:CGAffineTransformIdentity];
+    [UIView commitAnimations];
+}
+
+#pragma mark Animations
 
 - (void)startWobble:(NSInteger)count {
     NSInteger randomInt = arc4random()%500;

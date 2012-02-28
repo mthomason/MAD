@@ -16,7 +16,11 @@
 @end
 
 @interface ElementView : UIView
-    <UIViewResizeHandleDelegate>
+    <UIViewResizeHandleDelegate,
+        UIGestureRecognizerDelegate> {
+
+            UIView *pieceForReset;
+}
 
 @property (retain) UIScrollView *containerView;
 @property (retain) UIScrollView *designerView;
