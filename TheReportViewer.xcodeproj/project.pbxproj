@@ -77,7 +77,7 @@
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */; };
-		4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */; };
+		4C76F0BA14B5250F005DCE49 /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
 		4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
@@ -88,6 +88,7 @@
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
+		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C86D28D14C53EB6008B58B5 /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
 		4C86D28E14C53EB6008B58B5 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
 		4C86D28F14C53EB6008B58B5 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
@@ -295,8 +296,8 @@
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDesignerViewController.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDesignerViewController.h; sourceTree = "<group>"; };
-		4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewDashboard.h; sourceTree = "<group>"; };
-		4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewDashboard.m; sourceTree = "<group>"; };
+		4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = UIScrollViewSection.h; sourceTree = "<group>"; };
+		4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewSection.m; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageToolbarDatabase.png; sourceTree = "<group>"; };
 		4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageToolbarDatabase@2x.png"; sourceTree = "<group>"; };
 		4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePictureFrame.png; sourceTree = "<group>"; };
@@ -310,6 +311,8 @@
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
 		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
+		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
+		4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectLabelDataField+Extras.m"; sourceTree = "<group>"; };
 		4C86D19614C5305A008B58B5 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C86D19714C5305A008B58B5 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4C86D19814C5305A008B58B5 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
@@ -1473,8 +1476,8 @@
 				4C00818214B73884003DF437 /* Toolbox */,
 				4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */,
 				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
-				4C76F0B814B5250F005DCE49 /* UIScrollViewDashboard.h */,
-				4C76F0B914B5250F005DCE49 /* UIScrollViewDashboard.m */,
+				4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */,
+				4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */,
 			);
 			name = "Report Designer";
 			sourceTree = "<group>";
@@ -1671,6 +1674,8 @@
 				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
 				4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */,
 				4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */,
+				4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */,
+				4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1827,7 +1832,7 @@
 				4C384E4214B29789007B4F48 /* UIViewControllerReports.m in Sources */,
 				4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */,
 				4C76F0B114B4F132005DCE49 /* ReportDesignerViewController.m in Sources */,
-				4C76F0BA14B5250F005DCE49 /* UIScrollViewDashboard.m in Sources */,
+				4C76F0BA14B5250F005DCE49 /* UIScrollViewSection.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */,
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
@@ -1934,6 +1939,7 @@
 				4C9DE83714F788A0008613AB /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C9DE83A14F788A0008613AB /* RptqDocumentObjectLabel.m in Sources */,
 				4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */,
+				4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

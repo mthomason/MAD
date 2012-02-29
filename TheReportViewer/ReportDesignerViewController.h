@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIScrollViewDashboard.h"
+#import "UIScrollViewSection.h"
 #import "UIViewControllerToolbox.h"
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
@@ -47,7 +47,7 @@
 
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) UIViewControllerToolbox *toolbox;
-@property (retain, nonatomic) IBOutlet UIScrollViewDashboard *designScrollView;
+@property (retain, nonatomic) IBOutlet UIScrollViewSection *designScrollView;
 @property (retain, nonatomic) IBOutlet UIButton *informationButton;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemInfo;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSettings;

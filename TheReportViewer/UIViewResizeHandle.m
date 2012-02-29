@@ -18,7 +18,7 @@
 - (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
     self = [super initWithFrame:frame];
     if (self) {
-        NSLog(@"Inital Point: %@", NSStringFromCGPoint( [self center] ));
+        //NSLog(@"Inital Point: %@", NSStringFromCGPoint( [self center] ));
 
         [self setInitalPoint:[self center]];
         [self setType: position];

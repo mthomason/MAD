@@ -28,31 +28,51 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-+ (MNSSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
++ (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
+    RptqDocumentSection *result = nil;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSError *error = nil;
+    NSArray *results = [[objectContext executeFetchRequest:request error:&error] retain];
+    if ([results count] == 1) {
+        result = [[[results objectAtIndex: 0] retain] autorelease];
+    } else if ([results count] > 1) {
+        NSLog(@"Error: Why is it like this? %@ in %@!", objid, objectContext);
+        result = [[[results objectAtIndex: 0] retain] autorelease];
+    } else {
+        NSLog(@"Warning: Could not find %@ in %@.", objid, objectContext);
+    }
+    [results release];
+    return result;
+}
+
++ (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger documentHeader    = 0;
     NSInteger pageHeader        = 1;
     NSInteger body              = 2 + numberOfGroups;       //6
     NSInteger pageFooter        = 3 + (2 * numberOfGroups); //11
     NSInteger documentFooter    = 4 + (2 * numberOfGroups); //12
-    MNSSectionType result;
+    MNSDocumentSectionType result;
 
     if (row == documentHeader) {
-        result = MNSSectionTypeReportHeader;
+        result = MNSDocumentSectionTypeReportHeader;
     } else if (row == pageHeader) {
-        result = MNSSectionTypePageHeader;
+        result = MNSDocumentSectionTypePageHeader;
     } else if (row == body) {
-        result = MNSSectionTypeBody;
+        result = MNSDocumentSectionTypeBody;
     } else if (row == pageFooter) {
-        result = MNSSectionTypePageFooter;
+        result = MNSDocumentSectionTypePageFooter;
     } else if (row == documentFooter) {
-        result = MNSSectionTypeReportFooter;
+        result = MNSDocumentSectionTypeReportFooter;
     } else {
         NSInteger locationRelitaveToGroup = row - pageHeader;
         BOOL isGroupHeader = locationRelitaveToGroup <= numberOfGroups;
         if (isGroupHeader) {
-            result = MNSSectionTypeGroupHeader;
+            result = MNSDocumentSectionTypeGroupHeader;
         } else {
-            result = MNSSectionTypeGroupFooter;
+            result = MNSDocumentSectionTypeGroupFooter;
         }
     }
     
@@ -68,27 +88,27 @@
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
         NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
-            case MNSSectionTypeReportHeader:
+            case MNSDocumentSectionTypeReportHeader:
                 NSLog(@"Get RH, %d", row);
                 resultSection = [[[document hasReportHeaderSection] retain] autorelease];
                 break;
-            case MNSSectionTypePageHeader:
+            case MNSDocumentSectionTypePageHeader:
                 NSLog(@"Get PH, %d", row);
                 resultSection = [[[document hasPageHeaderSection] retain] autorelease];
                 break;
-            case MNSSectionTypeBody:
+            case MNSDocumentSectionTypeBody:
                 NSLog(@"Get DS, %d", row);
                 resultSection = [[[document hasDetailSection] retain] autorelease];
                 break;
-            case MNSSectionTypePageFooter:
+            case MNSDocumentSectionTypePageFooter:
                 NSLog(@"Get PF, %d", row);
                 resultSection = [[[document hasPageFooterSection] retain] autorelease];
                 break;
-            case MNSSectionTypeReportFooter:
+            case MNSDocumentSectionTypeReportFooter:
                 NSLog(@"Get RF, %d", row);
                 resultSection = [[[document hasReportFooterSection] retain] autorelease];
                 break;
-            case (MNSSectionTypeGroupHeader): {
+            case (MNSDocumentSectionTypeGroupHeader): {
                 NSLog(@"Get GH, %d", row);
                 NSInteger groupNumber = row - 2;
                 NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
@@ -97,7 +117,7 @@
                     if ([[group weight] integerValue] == groupNumber) {
                         NSSet *sections = [[group hasSection] retain];
                         for (RptqDocumentSection *section in sections) {
-                            if ([[section type] integerValue] == MNSSectionTypeGroupHeader) {
+                            if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
                                 resultSection = [[section retain] autorelease];
                                 break;
                             }
@@ -108,7 +128,7 @@
                 }
                 break;
             }
-            case MNSSectionTypeGroupFooter: {
+            case MNSDocumentSectionTypeGroupFooter: {
                 NSLog(@"Get GF, %d", row);
                 NSInteger body              = 2 + numberOfGroups;
                 NSInteger indentLevel = body - (row - body);
@@ -119,7 +139,7 @@
                     if ([[group weight] integerValue] == groupNumber) {
                         NSSet *sections = [[group hasSection] retain];
                         for (RptqDocumentSection *section in sections) {
-                            if ([[section type] integerValue] == MNSSectionTypeGroupFooter) {
+                            if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
                                 resultSection = [[section retain] autorelease];
                                 break;
                             }

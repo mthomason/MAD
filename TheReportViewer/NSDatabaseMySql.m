@@ -125,7 +125,7 @@
     NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
     char query[[q length] + [database length]];
     sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
-    NSLog(@"query %s", query);
+    //NSLog(@"query %s", query);
     mysql_query(conn, query);
     
     MYSQL_RES *result = mysql_store_result(conn);

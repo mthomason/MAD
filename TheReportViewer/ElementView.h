@@ -7,18 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "UIViewResizeHandle.h"
 
 @class ElementView;
 
 @protocol ElementViewDelegate
 - (BOOL)elementDidRequestRemoval:(ElementView *)view;
+- (void)elementDidFinishPan:(ElementView *)view;
 @end
 
 @interface ElementView : UIView
     <UIViewResizeHandleDelegate,
         UIGestureRecognizerDelegate> {
-
             UIView *pieceForReset;
 }
 
@@ -26,6 +27,8 @@
 @property (retain) UIScrollView *designerView;
 
 @property (assign) IBOutlet id <ElementViewDelegate> delegate;
+
+@property (retain) NSManagedObjectID * objectID;
 
 @property (retain) NSString *stringElm;
 @property (assign) CGSize originalSize;

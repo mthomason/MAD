@@ -522,12 +522,12 @@ typedef enum {
         [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
         
         RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
-        [dsHeader setType: [NSNumber numberWithInteger: MNSSectionTypeGroupHeader]];
+        [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
         [rqg addHasSectionObject:dsHeader];
         [dsHeader release];
 
         RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
-        [dsFooter setType: [NSNumber numberWithInteger:MNSSectionTypeGroupFooter]];
+        [dsFooter setType: [NSNumber numberWithInteger:MNSDocumentSectionTypeGroupFooter]];
         [rqg addHasSectionObject:dsFooter];
         [dsFooter release];
 

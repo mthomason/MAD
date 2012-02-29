@@ -16,19 +16,31 @@
 #define kAnimationTranslateX 2.0
 #define kAnimationTranslateY 2.0
 
+@interface ElementView ()
+
+@property (retain) UIScrollView *origionalSuperview;
+@property (assign) CGPoint origionalCenter;
+
+@end
+
 @implementation ElementView
 
 @synthesize delegate = _delegate;
 @synthesize containerView = _parentView;
 @synthesize designerView = _designerView;
+@synthesize objectID = _objectID;
 
 @synthesize stringElm = _stringElm;
 @synthesize originalSize = _originalSize, originalPointCenter = _originalPointCenter;
 @synthesize currentTime = _currentTime, lastTime = _lastTime;
 
+@synthesize origionalSuperview = _origionalSuperview, origionalCenter = _origionalCenter;
+
 @synthesize handleEdgeRight = _handleEdgeRight, handleEdgeLeft = _handleEdgeLeft, handleEdgeTop = _handleEdgeTop, handleEdgeBottom = _handleEdgeBottom, handleCornerTopLeft = _handleCornerTopLeft, handleCornerTopRight = _handleCornerTopRight, handleCornerBottomLeft = _handleCornerBottomLeft, handleCornerBottomRight = _handleCornerBottomRight;
 
 - (void)dealloc {
+    if (_origionalSuperview != nil) [_origionalSuperview release];
+    [_objectID release];
     [_handleCornerBottomLeft release];
     [_handleCornerBottomRight release];
     [_handleCornerTopLeft release];
@@ -225,13 +237,15 @@
 #pragma mark - Actions
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    UIView *piece = [gestureRecognizer view];
+    [self setOrigionalCenter: [self center]];
     
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStateBegan: {
             
+            [self setOrigionalSuperview: (UIScrollView *)[self superview]];
+
             CGPoint newCenter = [gestureRecognizer locationInView:[self containerView]];
             [self setCenter: newCenter];
             [[self containerView] bringSubviewToFront: self];
@@ -254,37 +268,35 @@
             [self setCenter: newCenter];
             break;
         }
+        case UIGestureRecognizerStatePossible: {
+            CGPoint newCenter = [gestureRecognizer locationInView:[self containerView]];
+            [self setCenter: newCenter];
+            break;
+        }
         case UIGestureRecognizerStateCancelled: {
 #warning FIXME - This should go back to origional postion
-            UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
-            if (newParent) {
-                if (![newParent isEqual: self]) {
-                    [self setContainerView: newParent];
-                    [newParent addSubview: self];
+            if ([self origionalSuperview]) {
+                if (![[self origionalSuperview] isEqual: self]) {
+                    [self setContainerView: [self origionalSuperview]];
+                    [[self origionalSuperview] addSubview: self];
                 }
             }
-            [newParent release];
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
             break;
         }
         case UIGestureRecognizerStateFailed: {
 #warning FIXME - This should go back to origional postion
-            UIScrollView *newParent = (UIScrollView *)[[self hitTest:[self center] withEvent: nil] retain];
-            if (newParent) {
-                if (![newParent isEqual: self]) {
-                    [self setContainerView: newParent];
-                    [newParent addSubview: self];
+            if ([self origionalSuperview]) {
+                if (![[self origionalSuperview] isEqual: self]) {
+                    [self setContainerView: [self origionalSuperview]];
+                    [[self origionalSuperview] addSubview: self];
                 }
             }
-            [newParent release];
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
             break;
         }
-        case UIGestureRecognizerStatePossible:
-#warning FIXME - Maybe do something here.
-            break;
         case UIGestureRecognizerStateEnded: {
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
@@ -315,7 +327,7 @@
             [self setCenter: newCenter];
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
-            
+            [[self delegate] elementDidFinishPan:self];
             break;
         }
         default:

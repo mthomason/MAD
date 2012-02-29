@@ -11,18 +11,19 @@
 
 //Do not change these enum values, as they are used in core data.
 typedef enum {
-	MNSSectionTypeReportHeader = 1,
-	MNSSectionTypeReportFooter = 2,
-	MNSSectionTypePageHeader = 3,
-	MNSSectionTypePageFooter = 4,
-    MNSSectionTypeBody = 5,
-    MNSSectionTypeGroupHeader = 6,
-    MNSSectionTypeGroupFooter = 7,
-} MNSSectionType;
+	MNSDocumentSectionTypeReportHeader = 1,
+	MNSDocumentSectionTypeReportFooter = 2,
+	MNSDocumentSectionTypePageHeader = 3,
+	MNSDocumentSectionTypePageFooter = 4,
+    MNSDocumentSectionTypeBody = 5,
+    MNSDocumentSectionTypeGroupHeader = 6,
+    MNSDocumentSectionTypeGroupFooter = 7,
+} MNSDocumentSectionType;
 
 @interface RptqDocumentSection (Extras)
 
-+ (MNSSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
++ (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid;
++ (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                           forManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
