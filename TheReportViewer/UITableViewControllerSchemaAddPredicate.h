@@ -44,8 +44,8 @@ typedef enum {
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellOperator;
 
 @property (assign) MNSPredicateOperator predicateOperator;
-@property (retain) NSString *leftValue;
-@property (retain) NSString *rightValue;
+@property (copy) NSString *leftValue;
+@property (copy) NSString *rightValue;
 
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;

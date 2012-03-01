@@ -25,14 +25,14 @@
         UITableViewControllerSortTypeDelegate,
         UITableViewControllerChooseFieldDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerSchemaAddGroupDelegate> delegate;
+@property (assign) IBOutlet id <UITableViewControllerSchemaAddGroupDelegate> delegate;
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellField;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellSort;
+@property (retain) IBOutlet UITableViewCell *tableViewCellField;
+@property (retain) IBOutlet UITableViewCell *tableViewCellSort;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
-@property (retain) NSString *field;
+@property (copy) NSString *field;
 @property (assign) MNSSortOrder sortOrder;
 
 - (IBAction)cancel:(id)sender;

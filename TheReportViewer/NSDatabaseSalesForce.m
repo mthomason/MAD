@@ -7,19 +7,13 @@
 //
 
 #import "NSDatabaseSalesForce.h"
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-
 #import "Constants.h"
-
 #import "UIManagedDocumentQuery.h"
-
 #import "NSFileManager+Common.h"
-
 #import "SFOAuthCredentials.h"
 #import "SFRestAPI.h"
-
 #import "RptqDatabase.h"
 #import "RptqTable.h"
 #import "RptqField.h"
@@ -29,29 +23,43 @@
 
 static NSString * const kSFMobileSDKVersion = @"1.0";
 
-@interface NSDatabaseSalesForce (Private)
+@interface NSDatabaseSalesForce ()
+
+@property (retain) SFOAuthCoordinator *coordinator;
+
+@property (copy) NSString *loginDomain;
+@property (copy) NSString *loginIdentifier;
+@property (copy) NSString *loginKey;
+@property (copy) NSString *loginRedirectUri;
+
+@property (copy) rsltBlk_complete resultBlockComplete;
+@property (copy) rsltBlk_tblNames resultBlockTableNames;
+@property (copy) rsltBlk_fldNames resultBlockFieldNames;
+
+@property (assign) NSDatabaseQueryType currentQueryType;
+@property (retain) NSString *schemaName;
+
+- (void)login: (void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
+
+- (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
+              completion: (void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
+- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
 
 @end
 
 @implementation NSDatabaseSalesForce
 
 @synthesize delegate = _delegate;
-
 @synthesize coordinator = _coordinator;
-
 @synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
-
 @synthesize schemaName = _schemaName;
-
-@synthesize currentQueryType;
-
-@synthesize resultBlockComplete, resultBlockTableNames;
-@synthesize resultBlockFieldNames;
+@synthesize currentQueryType = _currentQueryType;
+@synthesize resultBlockComplete = _resultBlockComplete, resultBlockTableNames = _resultBlockTableNames, resultBlockFieldNames = _resultBlockFieldNames;
 
 - (void)dealloc {
-    if (resultBlockComplete != nil) [resultBlockComplete release];
-    if (resultBlockTableNames != nil) [resultBlockTableNames release];
-    if (resultBlockFieldNames != nil) [resultBlockFieldNames release];
+    if (_resultBlockComplete != nil) [_resultBlockComplete release];
+    if (_resultBlockTableNames != nil) [_resultBlockTableNames release];
+    if (_resultBlockFieldNames != nil) [_resultBlockFieldNames release];
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;

@@ -22,10 +22,10 @@
     NSInteger port;
 }
 
-@property (retain, nonatomic) NSString *username;
-@property (retain, nonatomic) NSString *password;
-@property (retain, nonatomic) NSString *host;
-@property (assign, nonatomic) NSInteger port;
+@property (copy) NSString *username;
+@property (copy) NSString *password;
+@property (copy) NSString *host;
+@property (assign) NSInteger port;
 
 - (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password;
 - (id)initWithOptions:(NSDictionary *)optons;

@@ -12,7 +12,7 @@
 @interface UITableViewControllerCoreDataResults : UITableViewController
     <NSFetchedResultsControllerDelegate>
 
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (retain) NSFetchedResultsController *fetchedResultsController;
 
 - (void)performFetch;
 

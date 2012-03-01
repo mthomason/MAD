@@ -7,12 +7,9 @@
 //
 
 #import "NSDatabase.h"
-
 #import "UIManagedDocumentQuery.h"
-
 #import "SFOAuthCoordinator.h"
 #import "SFRestAPI.h"
-
 #import "RptqTable.h"
 
 @class NSDatabaseSalesForce;
@@ -26,55 +23,19 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 @end
 
 @interface NSDatabaseSalesForce : NSDatabase
-    <SFOAuthCoordinatorDelegate, SFRestDelegate> {    
-@public
-    NSArray *_tables;
-    NSArray *_fields;
-@private
-    SFOAuthCoordinator *_coordinator;
-    
-    NSString *_loginDomain;
-    NSString *_loginIdentifier;
-    NSString *_loginKey;
-    NSString *_loginRedirectUri;
-    
-    rsltBlk_tblNames resultBlockTableNames;     //Points to the return of the tables
-    rsltBlk_fldNames resultBlockFieldNames;     //Points to the return of the fields
-    rsltBlk_complete resultBlockComplete;       //Points to the ...
+    <SFOAuthCoordinatorDelegate,
+        SFRestDelegate>
 
-    NSDatabaseQueryType currentQueryType;
-}
+@property (assign) IBOutlet id <NSDatabaseSalesForceDelegate> delegate;
 
-@property (assign, nonatomic) IBOutlet id <NSDatabaseSalesForceDelegate> delegate;
+- (id)initNewFileWithName: (NSString *)name
+               completion: (void (^)(BOOL success))completion;
+- (id)initExistingFileWithUrl: (NSURL *)url;
 
-@property (retain, nonatomic) SFOAuthCoordinator *coordinator;
+- (void)tablesInDataseAsyc: (NSString *)database
+                completion: (void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
 
-@property (retain) NSString *loginDomain;
-@property (retain) NSString *loginIdentifier;
-@property (retain) NSString *loginKey;
-@property (retain) NSString *loginRedirectUri;
-
-@property (assign) NSDatabaseQueryType currentQueryType;
-
-@property (nonatomic, copy) rsltBlk_complete resultBlockComplete;
-@property (nonatomic, copy) rsltBlk_tblNames resultBlockTableNames;
-@property (nonatomic, copy) rsltBlk_fldNames resultBlockFieldNames;
-
-@property (retain) NSString *schemaName;
-
-- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
-- (id)initExistingFileWithUrl:(NSURL *)url;
-
-- (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
+//This is called internally.
 - (void)logout;
-
-- (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
-
-- (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
-
-- (BOOL)testConnection;
-
-- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
 
 @end

@@ -51,14 +51,14 @@ typedef enum {
 
 @property (assign) MNSLinkPart currentlyEditingPart;
 
-@property (retain) NSString *firstTableFieldName;
+@property (copy) NSString *firstTableFieldName;
 @property (assign) MNSLinkType linkType;
-@property (retain) NSString *secondTableFieldName;
+@property (copy) NSString *secondTableFieldName;
 
-@property (retain) NSString *firstTableName;
-@property (retain) NSString *secondTableName;
-@property (retain) NSString *firstFieldName;
-@property (retain) NSString *secondFieldName;
+@property (copy) NSString *firstTableName;
+@property (copy) NSString *secondTableName;
+@property (copy) NSString *firstFieldName;
+@property (copy) NSString *secondFieldName;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 

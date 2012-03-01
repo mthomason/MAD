@@ -30,7 +30,7 @@
 
 @property (retain) NSManagedObjectID * objectID;
 
-@property (retain) NSString *stringElm;
+@property (copy) NSString *stringElm;
 @property (assign) CGSize originalSize;
 @property (assign) CGPoint originalPointCenter;
 

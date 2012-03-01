@@ -20,10 +20,10 @@
 @interface UITableViewControllerSectionLayoutSettings : UITableViewController
     <UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <SectionLayoutSettingsDelegate> delegate;
-@property (retain, nonatomic) IBOutlet UILabel *labelHeight;
-@property (retain, nonatomic) IBOutlet UIStepper *heightStepper;
-@property (retain, nonatomic) IBOutlet UISwitch *visibilitySwitch;
+@property (assign) IBOutlet id <SectionLayoutSettingsDelegate> delegate;
+@property (retain) IBOutlet UILabel *labelHeight;
+@property (retain) IBOutlet UIStepper *heightStepper;
+@property (retain) IBOutlet UISwitch *visibilitySwitch;
 
 @property (assign) NSInteger initalStepperValue;
 @property (assign) BOOL initalSwitchValue;

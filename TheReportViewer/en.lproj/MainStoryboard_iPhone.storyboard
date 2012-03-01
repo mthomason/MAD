@@ -406,7 +406,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Wfx-yZ-FZK"/>
-                                    <barButtonItem systemItem="done" id="R0b-dh-gck">
+                                    <barButtonItem image="UIImageArrowDown.png" id="R0b-dh-gck">
                                         <connections>
                                             <action selector="done:" destination="yU8-vi-ajy" id="ZYC-cT-GOw"/>
                                         </connections>

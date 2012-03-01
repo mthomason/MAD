@@ -7,8 +7,6 @@
 //
 
 #import "UITableViewControllerChooseField.h"
-//#import "QuoteCell.h"
-//#import "HighlightingTextView.h"
 #import "RptqFieldSelectorManager.h"
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 
@@ -23,10 +21,10 @@
 // Private TableViewController properties and methods.
 @interface UITableViewControllerChooseField ()
 
-@property (nonatomic, retain) NSMutableArray* sectionInfoArray;
-@property (nonatomic, retain) NSIndexPath* pinchedIndexPath;
-@property (nonatomic, assign) NSInteger openSectionIndex;
-@property (nonatomic, assign) CGFloat initialPinchHeight;
+@property (retain) NSMutableArray* sectionInfoArray;
+@property (retain) NSIndexPath* pinchedIndexPath;
+@property (assign) NSInteger openSectionIndex;
+@property (assign) CGFloat initialPinchHeight;
 
 @property (retain) NSArray* dataTables;
 
