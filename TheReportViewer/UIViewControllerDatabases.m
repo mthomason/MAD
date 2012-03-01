@@ -162,8 +162,8 @@
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UIViewControllerSchemaTables class]]) {
-                    UIViewControllerSchemaTables *tvc = [(UIViewControllerSchemaTables *)[navControl topViewController] retain];
+                if ([[navControl topViewController] isKindOfClass:[MUIViewControllerQueryBuilder class]]) {
+                    MUIViewControllerQueryBuilder *tvc = [(MUIViewControllerQueryBuilder *)[navControl topViewController] retain];
                     if (tvc) {
                         [tvc setDelegate: self];
                         if (row < [[self availableFilesCache] count]) {
@@ -292,7 +292,7 @@
     }
 }
 
-- (void)uIViewControllerSchemaTablesDelegateDidFinish:(UIViewControllerSchemaTables *)controller {
+- (void)uIViewControllerSchemaTablesDelegateDidFinish:(MUIViewControllerQueryBuilder *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissModalViewControllerAnimated: YES];
     } else {

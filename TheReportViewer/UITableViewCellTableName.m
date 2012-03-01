@@ -11,6 +11,13 @@
 
 @implementation UITableViewCellTableName
 
+@synthesize tableID = _tableID;
+
+- (void)dealloc {
+    [super dealloc];
+    if (_tableID != nil) [_tableID release];
+}
+
 + (CGFloat)defaultHeight {
     return UITABLEVIEWCELLTABLENAME_HEIGHT_DEFAULT;
 }

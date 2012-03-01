@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerDataSourceTypes.h"
 #import "UITableViewCellDocument.h"
-#import "UIViewControllerSchemaTables.h"
+#import "MUIViewControllerQueryBuilder.h"
 #import "UIViewControllerTemplateSelector.h"
 
 @class UIViewControllerDatabases;
@@ -24,7 +24,7 @@
         UITableViewDelegate,
         UIViewControllerTemplateSelectorDelegate,
         UITableViewControllerDataSourceTypesDelegate,
-        UIViewControllerSchemaTablesDelegate>
+        MUIViewControllerQueryBuilderDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerDatabasesDelegate> delegate;
 @property (strong, nonatomic) UIPopoverController *tableViewControllerDataSourceTypes;

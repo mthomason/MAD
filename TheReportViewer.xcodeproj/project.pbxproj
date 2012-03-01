@@ -159,7 +159,7 @@
 		4CC8993714DAFAF80094E17E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
-		4CD0F7C514CC532A003DA079 /* UIViewControllerSchemaTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */; };
+		4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
 		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -619,8 +619,8 @@
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
 		4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Reports.h"; sourceTree = "<group>"; };
 		4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Reports.m"; sourceTree = "<group>"; };
-		4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaTables.h; sourceTree = "<group>"; };
-		4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaTables.m; sourceTree = "<group>"; };
+		4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MUIViewControllerQueryBuilder.h; sourceTree = "<group>"; };
+		4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerQueryBuilder.m; sourceTree = "<group>"; };
 		4CD0F7C714CD201E003DA079 /* UITableViewCellTableName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellTableName.h; sourceTree = "<group>"; };
 		4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellTableName.m; sourceTree = "<group>"; };
 		4CD0F7CC14CD2035003DA079 /* UITableViewCellLinkName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLinkName.h; sourceTree = "<group>"; };
@@ -896,8 +896,8 @@
 		4C507B0214D067EE00DE67E3 /* Query Builder */ = {
 			isa = PBXGroup;
 			children = (
-				4CD0F7C214CC532A003DA079 /* UIViewControllerSchemaTables.h */,
-				4CD0F7C314CC532A003DA079 /* UIViewControllerSchemaTables.m */,
+				4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */,
+				4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */,
 				4C0358FB14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.h */,
 				4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */,
 				4CD9CB0914DE0602000E5946 /* Add Predicate */,
@@ -1883,7 +1883,7 @@
 				4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */,
 				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
-				4CD0F7C514CC532A003DA079 /* UIViewControllerSchemaTables.m in Sources */,
+				4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */,
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
 				4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */,
 				4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */,

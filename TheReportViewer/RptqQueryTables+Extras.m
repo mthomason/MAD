@@ -37,4 +37,29 @@
     return [queryTablesName autorelease];
 }
 
++ (void)deleteTable:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc {
+    NSLog(@"Delete objid %@", objid);
+    RptqQueryTables *result = nil;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+    
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSError *error = nil;
+    NSArray *results = [[moc executeFetchRequest:request error:&error] retain];
+    if ([results count] == 1) {
+        result = [[results objectAtIndex: 0] retain];
+        [moc deleteObject:result];
+        [result release];
+    } else if ([results count] > 1) {
+        NSLog(@"Error: Why is it like this? %@ in %@!", objid, moc);
+        result = [[results objectAtIndex: 0] retain];
+        [moc deleteObject:result];
+        [result release];
+    } else {
+        NSLog(@"Warning: Could not find %@ in %@.", objid, moc);
+    }
+    [results release];
+}
+
 @end

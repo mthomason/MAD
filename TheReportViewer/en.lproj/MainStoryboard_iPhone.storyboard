@@ -390,7 +390,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1731" y="2848"/>
+            <point key="canvasLocation" x="1728" y="2849"/>
         </scene>
         <!--View Controller Report Viewer-->
         <scene sceneID="Ts3-uT-wQ7">
@@ -428,7 +428,7 @@
                     </view>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1817" y="3834"/>
+            <point key="canvasLocation" x="2012" y="4056"/>
         </scene>
         <!--View Controller Databases-->
         <scene sceneID="9">
@@ -561,11 +561,11 @@
             </objects>
             <point key="canvasLocation" x="807" y="624"/>
         </scene>
-        <!--View Controller Schema Tables - Designer-->
+        <!--View Controller Query Builder - Query-->
         <scene sceneID="m5M-pU-hVe">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xo2-Vl-j3b" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="6Ud-Rv-UQO" customClass="UIViewControllerSchemaTables" sceneMemberID="viewController">
+                <viewController id="6Ud-Rv-UQO" customClass="MUIViewControllerQueryBuilder" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KGO-Qx-zB3">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -828,7 +828,7 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Designer" id="fNz-nH-6xs">
+                    <navigationItem key="navigationItem" title="Query" id="fNz-nH-6xs">
                         <barButtonItem key="leftBarButtonItem" title="Reports" id="ZB9-dz-LPj">
                             <connections>
                                 <action selector="done:" destination="6Ud-Rv-UQO" id="0TF-cb-avV"/>
@@ -841,6 +841,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="navigationItem" destination="fNz-nH-6xs" id="3Cv-mB-kWA"/>
                         <outlet property="tableViewQueryBuilder" destination="0Le-GO-xmI" id="RhJ-CG-7zi"/>
                         <outlet property="toolbar" destination="xVO-9D-O7m" id="adZ-Yu-Uo2"/>
                         <segue destination="n4n-Sn-MmP" kind="modal" identifier="showAddTableViewController" id="Xja-Vb-I2h"/>
@@ -4510,6 +4511,24 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MUIViewControllerQueryBuilder" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerQueryBuilder.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="uITableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="uITableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="uITableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="uITableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="uITableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+            </relationships>
+        </class>
         <class className="MUIViewControllerReportViewer" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportViewer.h"/>
             <relationships>
@@ -4857,23 +4876,6 @@
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaTables" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaTables.h"/>
-            <relationships>
-                <relationship kind="action" name="addLink:"/>
-                <relationship kind="action" name="addTable:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="uITableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
-                <relationship kind="outlet" name="uITableViewCellOverride" candidateClass="UITableViewCellOverride"/>
-                <relationship kind="outlet" name="uITableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
-                <relationship kind="outlet" name="uITableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
-                <relationship kind="outlet" name="uITableViewCellTableName" candidateClass="UITableViewCellTableName"/>
             </relationships>
         </class>
         <class className="UIViewControllerStoreTemplates" superclassName="UIViewController">

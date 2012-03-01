@@ -11,5 +11,6 @@
 @interface RptqQueryTables (Extras)
 
 + (NSArray *)namesForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (void)deleteTable:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc;
 
 @end

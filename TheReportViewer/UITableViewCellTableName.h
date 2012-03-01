@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface UITableViewCellTableName : UITableViewCell
+
+@property (retain) NSManagedObjectID *tableID;
 
 + (CGFloat)defaultHeight;
 
