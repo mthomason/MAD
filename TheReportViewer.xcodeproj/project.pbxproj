@@ -89,6 +89,7 @@
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
+		4C85C6AA14FF72F3003785AC /* MUIViewControllerReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */; };
 		4C86D28D14C53EB6008B58B5 /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
 		4C86D28E14C53EB6008B58B5 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
 		4C86D28F14C53EB6008B58B5 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
@@ -296,7 +297,7 @@
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDesignerViewController.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* ReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDesignerViewController.h; sourceTree = "<group>"; };
-		4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = UIScrollViewSection.h; sourceTree = "<group>"; };
+		4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewSection.h; sourceTree = "<group>"; };
 		4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewSection.m; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageToolbarDatabase.png; sourceTree = "<group>"; };
 		4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageToolbarDatabase@2x.png"; sourceTree = "<group>"; };
@@ -313,6 +314,8 @@
 		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
 		4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectLabelDataField+Extras.m"; sourceTree = "<group>"; };
+		4C85C6A814FF72F3003785AC /* MUIViewControllerReportViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerReportViewer.h; sourceTree = "<group>"; };
+		4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerReportViewer.m; sourceTree = "<group>"; };
 		4C86D19614C5305A008B58B5 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C86D19714C5305A008B58B5 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4C86D19814C5305A008B58B5 /* nolock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nolock.h; sourceTree = "<group>"; };
@@ -1598,6 +1601,8 @@
 				4CA0637D14BAD1D20025009E /* Templates */,
 				4C1A586D14E2653600184445 /* Choose Field Table View Controller */,
 				4CDB624714E38BC100A5389E /* Main */,
+				4C85C6A814FF72F3003785AC /* MUIViewControllerReportViewer.h */,
+				4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1940,6 +1945,7 @@
 				4C9DE83A14F788A0008613AB /* RptqDocumentObjectLabel.m in Sources */,
 				4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */,
 				4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
+				4C85C6AA14FF72F3003785AC /* MUIViewControllerReportViewer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

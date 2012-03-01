@@ -364,6 +364,9 @@
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="5eh-EQ-ze3"/>
                                     <barButtonItem image="UIImageBolt20.png" style="plain" id="vKG-yA-osd">
                                         <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromDesign" id="amO-vq-5zB"/>
+                                        </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
                                 </items>
@@ -388,6 +391,44 @@
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1731" y="2848"/>
+        </scene>
+        <!--View Controller Report Viewer-->
+        <scene sceneID="Ts3-uT-wQ7">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZAZ-sk-cfa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="yU8-vi-ajy" customClass="MUIViewControllerReportViewer" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qss-v8-rBe">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="I43-IO-Vjh">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Wfx-yZ-FZK"/>
+                                    <barButtonItem systemItem="done" id="R0b-dh-gck">
+                                        <connections>
+                                            <action selector="done:" destination="yU8-vi-ajy" id="ZYC-cT-GOw"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="z6W-8h-kya">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items/>
+                            </toolbar>
+                            <view contentMode="scaleToFill" id="Osy-v2-DAi">
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1817" y="3834"/>
         </scene>
         <!--View Controller Databases-->
         <scene sceneID="9">
@@ -542,6 +583,9 @@
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="MQd-64-cNd"/>
                                     <barButtonItem image="UIImageBolt20.png" style="plain" id="y0T-IG-QST">
                                         <color key="tintColor" red="0.72549021244049072" green="0.87843137979507446" blue="0.9686274528503418" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromQuery" id="dOe-6a-PiX"/>
+                                        </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
                                 </items>
@@ -4466,6 +4510,13 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MUIViewControllerReportViewer" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportViewer.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
         <class className="ReportDesignerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ReportDesignerViewController.h"/>
             <relationships>
@@ -4854,6 +4905,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="dOe-6a-PiX"/>
         <segue reference="jCL-NW-r6y"/>
         <segue reference="CwB-f6-wTT"/>
         <segue reference="kPX-hH-DKi"/>

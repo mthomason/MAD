@@ -13,6 +13,7 @@
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
 #import "UIViewControllerObjectSelector.h"
+#import "MUIViewControllerReportViewer.h"
 #import "ElementView.h"
 
 @class ReportDesignerViewController;
@@ -29,6 +30,7 @@
         UIViewControllerObjectSelectorDelegate,
         UITableViewControllerSettingsDelegate,
         LabelInformationViewControllerDelegate,
+        MUIViewControllerReportViewerDelegate,
         ElementViewDelegate> {
             CGRect toolboxOffScreen;
             CGRect toolboxOnScreen;

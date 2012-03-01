@@ -366,6 +366,9 @@
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
         [[segue destinationViewController] setDelegate:self];
         [[segue destinationViewController] setManagedDocumentQuery:[self managedDocumentQuery]];
+    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
+        [[segue destinationViewController] setDelegate:self];
+        [[segue destinationViewController] setManagedDocumentQuery:[self managedDocumentQuery]];
     }
 }
 
@@ -451,6 +454,14 @@
 }
 
 #pragma mark - Delegates
+
+#pragma mark Report Viewer Delegate
+
+- (void)viewControllerReportViewerDidFinish:(MUIViewControllerReportViewer *)controller {
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
 
 #pragma mark Object Selector (Inserter) Delegate
 

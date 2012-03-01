@@ -326,9 +326,12 @@ typedef enum {
                 }
     } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
         if ([[segue destinationViewController] isKindOfClass: [ReportDesignerViewController class]]) {
-            [(ReportDesignerViewController *)[segue destinationViewController] setDelegate: self];
-            [(ReportDesignerViewController *)[segue destinationViewController] setManagedDocumentQuery: [self managedDocumentQuery]];
+            [[segue destinationViewController] setDelegate: self];
+            [[segue destinationViewController] setManagedDocumentQuery: [self managedDocumentQuery]];
         }
+    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromQuery"]) {
+        [[segue destinationViewController] setDelegate: self];
+        [[segue destinationViewController] setManagedDocumentQuery: [self managedDocumentQuery]];
     }
 }
 
@@ -387,6 +390,16 @@ typedef enum {
 }
 
 #pragma mark - Delegates
+
+#pragma mark Report Viewer Delegate
+
+- (void)viewControllerReportViewerDidFinish:(MUIViewControllerReportViewer *)controller {
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+#pragma mark Report Designer Delegate
 
 - (void)reportDesignerViewControllerDidFinish:(ReportDesignerViewController *)controller {
     [self dismissModalViewControllerAnimated: YES];
