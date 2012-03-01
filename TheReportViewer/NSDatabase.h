@@ -13,6 +13,7 @@ typedef enum {
 	NSDatabaseQueryTypeNone = 0,
 	NSDatabaseQueryTypeGetTables,
 	NSDatabaseQueryTypeGetFields,
+	NSDatabaseQueryTypeGetResults,
 	NSDatabaseQueryTypeVerify
 } NSDatabaseQueryType;
 

@@ -15,8 +15,6 @@
 @class NSDatabaseSalesForce;
 
 typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
-typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
-typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 @protocol NSDatabaseSalesForceDelegate
 - (void)showWebView:(UIWebView *)view;
@@ -30,12 +28,15 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 - (id)initNewFileWithName: (NSString *)name
                completion: (void (^)(BOOL success))completion;
+
 - (id)initExistingFileWithUrl: (NSURL *)url;
 
 - (void)tablesInDataseAsyc: (NSString *)database
                 completion: (void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion;
 
-//This is called internally.
+- (void)runQuery: (NSString *)query
+      completion: (void (^)(NSDatabaseSalesForce *database, NSArray *results))completion;
+
 - (void)logout;
 
 @end

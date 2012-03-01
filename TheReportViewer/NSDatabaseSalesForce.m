@@ -23,6 +23,10 @@
 
 static NSString * const kSFMobileSDKVersion = @"1.0";
 
+typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
+typedef void (^rsltBlk_results)(NSDatabaseSalesForce *database, NSArray *results);
+typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
+
 @interface NSDatabaseSalesForce ()
 
 @property (retain) SFOAuthCoordinator *coordinator;
@@ -34,6 +38,7 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 
 @property (copy) rsltBlk_complete resultBlockComplete;
 @property (copy) rsltBlk_tblNames resultBlockTableNames;
+@property (copy) rsltBlk_results resultBlockResults;
 @property (copy) rsltBlk_fldNames resultBlockFieldNames;
 
 @property (assign) NSDatabaseQueryType currentQueryType;
@@ -54,10 +59,11 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
 @synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
 @synthesize schemaName = _schemaName;
 @synthesize currentQueryType = _currentQueryType;
-@synthesize resultBlockComplete = _resultBlockComplete, resultBlockTableNames = _resultBlockTableNames, resultBlockFieldNames = _resultBlockFieldNames;
+@synthesize resultBlockComplete = _resultBlockComplete, resultBlockResults = _resultBlockResults, resultBlockTableNames = _resultBlockTableNames, resultBlockFieldNames = _resultBlockFieldNames;
 
 - (void)dealloc {
     if (_resultBlockComplete != nil) [_resultBlockComplete release];
+    if (_resultBlockResults != nil) [_resultBlockResults release];
     if (_resultBlockTableNames != nil) [_resultBlockTableNames release];
     if (_resultBlockFieldNames != nil) [_resultBlockFieldNames release];
     [_coordinator setDelegate: nil];
@@ -199,6 +205,19 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
     
 }
 
+- (void)runQuery: (NSString *)query
+      completion: (void (^)(NSDatabaseSalesForce *database, NSArray *results))completion {
+    
+    [self setCurrentQueryType: NSDatabaseQueryTypeGetResults];
+    
+    self.resultBlockResults = completion;
+    
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForQuery: query];    
+    [[SFRestAPI sharedInstance] send:request delegate:self];
+    
+    
+}
+
 - (void)newQueryFile {
     
 }
@@ -227,6 +246,14 @@ static NSString * const kSFMobileSDKVersion = @"1.0";
             }];
             [response release];
 
+            break;
+        }
+        case NSDatabaseQueryTypeGetResults: {
+            NSDictionary *response = [jsonResponse retain];
+            [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                NSLog(@"Keys '%@' and fields '%@.'", key, obj);
+#warning FIXME: Not yet implemented
+            }];
             break;
         }
         case NSDatabaseQueryTypeGetFields: {
