@@ -115,7 +115,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-200" y="-227"/>
+            <point key="canvasLocation" x="-751" y="2749"/>
         </scene>
         <!--View Controller Template Selector - Templates-->
         <scene sceneID="F6q-Ap-wl0">
@@ -309,6 +309,24 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="lma-we-TIM" customClass="UIScrollViewSection">
                                 <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="cSM-my-rda">
+                                        <rect key="frame" x="0.0" y="372" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                        <items>
+                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
+                                            <barButtonItem image="UIImageStacks20.png" style="plain" id="UFx-y1-7e8">
+                                                <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
+                                                <connections>
+                                                    <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem image="UIImageBolt20.png" style="plain" id="vKG-yA-osd">
+                                                <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
+                                            </barButtonItem>
+                                        </items>
+                                    </toolbar>
+                                </subviews>
                             </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="9VI-qP-p12">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -4460,7 +4478,7 @@
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewDashboard"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollViewSection"/>
                 <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="navBar" candidateClass="UINavigationItem"/>
             </relationships>
@@ -4478,8 +4496,8 @@
         <class className="UINavigationControllerQueryDesigner" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerQueryDesigner.h"/>
         </class>
-        <class className="UIScrollViewDashboard" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewDashboard.h"/>
+        <class className="UIScrollViewSection" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIScrollViewSection.h"/>
         </class>
         <class className="UITableViewCellDocument" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellDocument.h"/>
@@ -4836,7 +4854,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jCL-NW-r6y"/>
+        <segue reference="yUs-hV-cCl"/>
         <segue reference="CwB-f6-wTT"/>
         <segue reference="kPX-hH-DKi"/>
     </inferredMetricsTieBreakers>

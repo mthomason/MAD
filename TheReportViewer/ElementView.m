@@ -66,14 +66,14 @@
         
 		[self setOpaque: YES];
         
-        UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotatePiece:)];
-        [self addGestureRecognizer:rotationGesture];
-        [rotationGesture release];
+        //UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotatePiece:)];
+        //[self addGestureRecognizer:rotationGesture];
+        //[rotationGesture release];
         
-        UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scalePiece:)];
-        [pinchGesture setDelegate:self];
-        [self addGestureRecognizer:pinchGesture];
-        [pinchGesture release];
+        //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scalePiece:)];
+        //[pinchGesture setDelegate:self];
+        //[self addGestureRecognizer:pinchGesture];
+        //[pinchGesture release];
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
         [panGesture setMaximumNumberOfTouches:1];
@@ -81,12 +81,7 @@
         [self addGestureRecognizer:panGesture];
         [panGesture release];
         
-        //UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showResetMenu:)];
-        //[self addGestureRecognizer:longPressGesture];
-        //[longPressGesture release];
-
-        
-        CGSize handleSize = CGSizeMake(30.0000f, 30.0000f);
+        CGSize handleSize = CGSizeMake(10.0000f, 10.0000f);
 
         UIViewResizeHandle *resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:northWest];
         [resizeButton setCenter: CGCornerTopLeftPointInRect(frame)];
@@ -115,7 +110,7 @@
         [self setHandleCornerBottomLeft: resizeButton];
         [resizeButton release];
         resizeButton = nil;
-
+/*
         resizeButton = [[UIViewResizeHandle alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, handleSize.width, handleSize.height) andType:north];
         [resizeButton setCenter: CGEdgeTopPointInRect(frame)];
         [self addSubview:resizeButton];
@@ -143,6 +138,7 @@
         [self setHandleEdgeLeft: resizeButton];
         [resizeButton release];
         resizeButton = nil;
+ */
 
     }
     return self;
@@ -160,8 +156,21 @@
     CGContextAddPath(currentContext, path);
     [[UIColor whiteColor] setFill];
     [[UIColor blackColor] setStroke];
-    CGContextSetLineWidth(currentContext, 1.0000f);
+    float dashPhase = 0.0;
+    float dashLengths[] = { 7, 3, 7, 3, 7, 3 };
+    CGContextSetLineDash(currentContext,
+                         dashPhase, dashLengths,
+                         sizeof( dashLengths ) / sizeof( float ) );
+    CGContextSetLineWidth(currentContext, 5.0000f);
     CGContextDrawPath(currentContext, kCGPathFillStroke);
+    [[UIColor blackColor] set];
+
+    UIFont *font = [UIFont systemFontOfSize:([UIFont systemFontSize])];        
+    [[self stringElm] drawInRect: rect
+                        withFont: font
+                   lineBreakMode: UILineBreakModeClip
+                       alignment: UITextAlignmentLeft];
+    
     CGPathRelease(path);
     
 }
