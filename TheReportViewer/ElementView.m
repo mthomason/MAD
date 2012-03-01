@@ -30,6 +30,8 @@
 @synthesize designerView = _designerView;
 @synthesize objectID = _objectID;
 
+@synthesize highlight = _highlight;
+
 @synthesize stringElm = _stringElm;
 @synthesize originalSize = _originalSize, originalPointCenter = _originalPointCenter;
 @synthesize currentTime = _currentTime, lastTime = _lastTime;
@@ -65,6 +67,8 @@
 		self.originalSize = self.frame.size;
         
 		[self setOpaque: YES];
+        [self setHighlight: NO];
+        [[self layer] setCornerRadius: 5.0000f];
         
         //UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotatePiece:)];
         //[self addGestureRecognizer:rotationGesture];
@@ -156,6 +160,11 @@
     CGContextAddPath(currentContext, path);
     [[UIColor whiteColor] setFill];
     [[UIColor blackColor] setStroke];
+    if (![self isHighlighted]) {
+        [[UIColor blackColor] setStroke];
+    } else {
+        [[UIColor redColor] setStroke];
+    }
     float dashPhase = 0.0;
     float dashLengths[] = { 7, 3, 7, 3, 7, 3 };
     CGContextSetLineDash(currentContext,
@@ -163,7 +172,11 @@
                          sizeof( dashLengths ) / sizeof( float ) );
     CGContextSetLineWidth(currentContext, 5.0000f);
     CGContextDrawPath(currentContext, kCGPathFillStroke);
-    [[UIColor blackColor] set];
+    if (![self isHighlighted]) {
+        [[UIColor blackColor] set];
+    } else {
+        [[UIColor redColor] set];
+    }
 
     UIFont *font = [UIFont systemFontOfSize:([UIFont systemFontSize])];        
     [[self stringElm] drawInRect: rect
@@ -229,6 +242,10 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
+    
+    [[self containerView] bringSubviewToFront: self];
+    [self setHighlight: YES];
+    [self setNeedsDisplay];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -337,6 +354,8 @@
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
             [[self delegate] elementDidFinishPan:self];
+            [self setHighlight: NO];
+            [self setNeedsDisplay];
             break;
         }
         default:

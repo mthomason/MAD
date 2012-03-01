@@ -46,6 +46,8 @@
 @property (retain) UIViewResizeHandle *handleCornerBottomRight;
 @property (retain) UIViewResizeHandle *handleCornerBottomLeft;
 
+@property (assign, getter = isHighlighted) BOOL highlight;
+
 - (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview;
 
 @end

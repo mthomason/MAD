@@ -307,26 +307,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="lma-we-TIM" customClass="UIScrollViewSection">
-                                <rect key="frame" x="0.0" y="44" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="cSM-my-rda">
-                                        <rect key="frame" x="0.0" y="372" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <items>
-                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
-                                            <barButtonItem image="UIImageStacks20.png" style="plain" id="UFx-y1-7e8">
-                                                <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
-                                                <connections>
-                                                    <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem image="UIImageBolt20.png" style="plain" id="vKG-yA-osd">
-                                                <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
-                                            </barButtonItem>
-                                        </items>
-                                    </toolbar>
-                                </subviews>
                             </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="9VI-qP-p12">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -343,13 +325,13 @@
                                             <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="ZZ7-QR-mGR"/>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="ZZ7-QR-mGR"/>
                                     <barButtonItem image="UIImageWrench20.png" style="plain" id="Yli-Ut-BGk">
                                         <connections>
                                             <action selector="showSettings:" destination="d6e-CT-kmt" id="MHJ-Ns-7TL"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="JZr-dR-l00"/>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="JZr-dR-l00"/>
                                     <barButtonItem style="plain" id="x3P-pr-1zF">
                                         <button key="customView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="OjZ-K0-Nfy">
                                             <rect key="frame" x="290" y="13" width="18" height="19"/>
@@ -367,6 +349,23 @@
                                             </connections>
                                         </button>
                                     </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="cSM-my-rda">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem image="UIImageStacks20.png" style="plain" id="UFx-y1-7e8">
+                                        <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
+                                        <connections>
+                                            <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="5eh-EQ-ze3"/>
+                                    <barButtonItem image="UIImageBolt20.png" style="plain" id="vKG-yA-osd">
+                                        <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -534,16 +533,17 @@
                                 <rect key="frame" x="0.0" y="372" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
                                     <barButtonItem image="UIImageDocument20.png" style="plain" id="76r-VE-2fP">
                                         <color key="tintColor" red="0.72549021244049072" green="0.87843137979507446" blue="0.9686274528503418" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <segue destination="d6e-CT-kmt" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="jCL-NW-r6y"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="MQd-64-cNd"/>
                                     <barButtonItem image="UIImageBolt20.png" style="plain" id="y0T-IG-QST">
                                         <color key="tintColor" red="0.72549021244049072" green="0.87843137979507446" blue="0.9686274528503418" alpha="1" colorSpace="calibratedRGB"/>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
                                 </items>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="0Le-GO-xmI">
@@ -4854,7 +4854,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="yUs-hV-cCl"/>
+        <segue reference="jCL-NW-r6y"/>
         <segue reference="CwB-f6-wTT"/>
         <segue reference="kPX-hH-DKi"/>
     </inferredMetricsTieBreakers>
