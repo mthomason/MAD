@@ -574,6 +574,7 @@
     if (doc) {
 
         NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
+        NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
         
         NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
         RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
@@ -584,7 +585,6 @@
         [[self managedDocumentQuery] savePresentedItemChangesWithCompletionHandler:^(NSError *errorOrNil) {
             NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
             
-            NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
             NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
             
             if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
@@ -606,14 +606,19 @@
                                 }
                             }
                         } else {
+                            if (!startIndexSet) {
+                                startIndex = secctr;
+                                startIndexSet = YES;
+                            }
                             secctr++;
                         }
                     }
-                    [[self tableViewQueryBuilder] beginUpdates];
-                    [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
-                                                withRowAnimation: UITableViewRowAnimationAutomatic];
-                    [[self tableViewQueryBuilder] endUpdates];
-                    
+                    if (startIndexSet) {
+                        [[self tableViewQueryBuilder] beginUpdates];
+                        [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
+                                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+                        [[self tableViewQueryBuilder] endUpdates];
+                    }                    
                 }
             }
             [newLayoutSectionTypes release];
@@ -713,11 +718,17 @@
                                                                  }
                                                              }
                                                          } else {
+                                                             if (!startIndexSet) {
+                                                                 startIndex = secctr;
+                                                                 startIndexSet = YES;
+                                                             }
                                                              secctr++;
                                                          }
                                                      }
-                                                     [[self tableViewQueryBuilder] deleteSections:[NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
-                                                                                 withRowAnimation: UITableViewRowAnimationAutomatic];
+                                                     if (startIndex >= 0 && lengtho > 0) {
+                                                         [[self tableViewQueryBuilder] deleteSections:[NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
+                                                                                     withRowAnimation: UITableViewRowAnimationAutomatic];
+                                                     }
                                                      
                                                  }
                                                  

@@ -57,19 +57,18 @@
                              [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsInstructions],
                              [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsDatasource],
                              [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsTables],
-                             [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsSql], nil];
+                             nil];
         
         NSArray *countRowsForSection = [[NSArray alloc] initWithObjects:
                                         [NSNumber numberWithInteger: -1],
                                         [NSNumber numberWithInteger: 1],
                                         [NSNumber numberWithInteger: -1],
-                                        [NSNumber numberWithInteger: 2],
                                         nil];
         
         NSDictionary *countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
                                                                                     forKeys: sections];
         
-        NSArray *headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, h7, nil];
+        NSArray *headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, nil];
         NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                                forKeys: sections];
         
@@ -79,8 +78,7 @@
         NSArray *heightRowsForSection = [[NSArray alloc] initWithObjects:
                                          [NSNumber numberWithFloat: [UITableViewCellInstruction defaultHeight]],
                                          [NSNumber numberWithFloat: 44.0000f],
-                                         [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
-                                         [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
+                                         [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]], nil];
         NSDictionary *heightRowsForSectionDictionaryDictionary = [[NSDictionary alloc] initWithObjects: heightRowsForSection
                                                                                                forKeys: sections];
         
@@ -126,19 +124,16 @@
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsDatasource],
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsTables],
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsGroups],
-                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsPredicate],
-                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsSql], nil];
+                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsPredicate], nil];
         
         countRowsForSection = [[NSArray alloc] initWithObjects:
                                [NSNumber numberWithInteger: -1],
                                [NSNumber numberWithInteger: 1],
                                [NSNumber numberWithInteger: -1],
                                [NSNumber numberWithInteger: -1],
-                               [NSNumber numberWithInteger: -1],
-                               [NSNumber numberWithInteger: 2],
-                               nil];
+                               [NSNumber numberWithInteger: -1], nil];
         
-        headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, h5, h6, h7, nil];
+        headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, h5, h6, nil];
         headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                  forKeys: sections];
         
@@ -150,8 +145,7 @@
                                 [NSNumber numberWithFloat: 44.0000f],
                                 [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
                                 [NSNumber numberWithFloat: 44.0000f],
-                                [NSNumber numberWithFloat: 44.0000f],
-                                [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
+                                [NSNumber numberWithFloat: 44.0000f], nil];
         heightRowsForSectionDictionaryDictionary = [[NSDictionary alloc] initWithObjects: heightRowsForSection
                                                                                  forKeys: sections];
         
@@ -189,8 +183,7 @@
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsTables],
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsLinks],
                     [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsGroups],
-                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsPredicate],
-                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsSql], nil];
+                    [NSNumber numberWithInteger:UIViewControllerSchemaTablesSectionsPredicate], nil];
         
         countRowsForSection = [[NSArray alloc] initWithObjects:
                                [NSNumber numberWithInteger: -1],
@@ -199,10 +192,9 @@
                                [NSNumber numberWithInteger: -1],
                                [NSNumber numberWithInteger: -1],
                                [NSNumber numberWithInteger: -1],
-                               [NSNumber numberWithInteger: 2],
                                nil];
         
-        headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, h4, h5, h6, h7, nil];
+        headersSection = [[NSArray alloc] initWithObjects: h1, h2, h3, h4, h5, h6, nil];
         headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                  forKeys: sections];
         countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
@@ -217,8 +209,7 @@
                                 [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
                                 [NSNumber numberWithFloat: [UITableViewCellQueryLink defaultHeight]],
                                 [NSNumber numberWithFloat: 44.0000f],
-                                [NSNumber numberWithFloat: 44.0000f],
-                                [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
+                                [NSNumber numberWithFloat: 44.0000f], nil];
         heightRowsForSectionDictionaryDictionary = [[NSDictionary alloc] initWithObjects: heightRowsForSection
                                                                                  forKeys: sections];
         
