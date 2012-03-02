@@ -103,6 +103,7 @@
         <attribute name="fieldleft" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fieldright" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="jointype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jointypeenum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="tableleft" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tableright" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryLinks" inverseEntity="RptqQuery" syncable="YES"/>
@@ -165,7 +166,7 @@
         <element name="RptqQuery" positionX="-479" positionY="-396" width="128" height="165"/>
         <element name="RptqQueryFields" positionX="-875" positionY="-81" width="128" height="75"/>
         <element name="RptqQueryGroup" positionX="-666" positionY="-414" width="128" height="120"/>
-        <element name="RptqQueryLinks" positionX="-632" positionY="45" width="128" height="135"/>
+        <element name="RptqQueryLinks" positionX="-632" positionY="45" width="128" height="150"/>
         <element name="RptqQueryPredicate" positionX="-459" positionY="36" width="128" height="135"/>
         <element name="RptqQuerySort" positionX="-747" positionY="-234" width="128" height="90"/>
         <element name="RptqQueryTables" positionX="-711" positionY="-81" width="128" height="90"/>

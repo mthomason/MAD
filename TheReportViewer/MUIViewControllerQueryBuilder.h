@@ -27,8 +27,7 @@
 #import "Constants.h"
 #import "RptqDocumentSection.h"
 
-@class MUIViewControllerQueryBuilder;
-@class RptqDocument;
+@class MUIViewControllerQueryBuilder, RptqDocument;
 
 @protocol MUIViewControllerQueryBuilderDelegate
 - (void)uIViewControllerSchemaTablesDelegateDidFinish:(MUIViewControllerQueryBuilder *)controller;
@@ -54,10 +53,7 @@
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
-
-@property (retain) NSDictionary *tableMetaData;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;
 

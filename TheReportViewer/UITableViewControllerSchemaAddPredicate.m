@@ -82,14 +82,18 @@
                [[segue identifier] isEqualToString:@"showAddPredicateFofRightSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
-        UITableViewControllerChooseField *dvc = [segue destinationViewController];
-        if (dvc != nil) {
-            [dvc setExcludeTables:[NSArray array]];
-            [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
-            [dvc setDelegate: self];
+        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+            UITableViewControllerChooseField *dvc = [[segue destinationViewController] retain];
+            if (dvc != nil) {
+                [dvc setExcludeTables:[NSArray array]];
+                [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
+                [dvc setDelegate: self];
+            }
+            [dvc release];
         } else if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerEnterString class]]) {
-            UITableViewControllerEnterString *tvcEnterString = [segue destinationViewController];
+            UITableViewControllerEnterString *tvcEnterString = [[segue destinationViewController] retain];
             [tvcEnterString setEnterStringDelegate: self];
+            [tvcEnterString release];
         }
     }
 }

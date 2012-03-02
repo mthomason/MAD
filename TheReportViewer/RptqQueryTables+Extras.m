@@ -37,6 +37,13 @@
     return [queryTablesName autorelease];
 }
 
++ (NSInteger)countForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSFetchRequest *requestQt = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+    NSError *errorQt = nil;
+    NSInteger result = [objectContext countForFetchRequest:requestQt error:&errorQt];
+    return (!errorQt) ? result : 0;
+}
+
 + (void)deleteTable:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc {
     NSLog(@"Delete objid %@", objid);
     RptqQueryTables *result = nil;

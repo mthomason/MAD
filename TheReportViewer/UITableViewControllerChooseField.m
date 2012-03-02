@@ -71,28 +71,25 @@
     openSectionIndex_ = NSNotFound;
 
     NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    
     [tableNames removeObjectsInArray:[self excludeTables]];
-    
+
+
     if ([tableNames count] > 0) {
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
         [request setPredicate: predicate];
-    }
-    
-    NSError *error = nil;
-    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-    if (!error) {
-        [self setDataTables: tablesResults]; 
+        
+        NSError *error = nil;
+        NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+        [self setDataTables: (!error ? tablesResults : [NSArray array]) ]; 
+
     } else {
-        NSArray *empty = [[NSArray alloc] init];
-        [self setDataTables: empty];
-        [empty release];
+        [self setDataTables:[NSArray array]];
     }
-    
+        
     [tableNames release];
 
 }

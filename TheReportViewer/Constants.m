@@ -45,6 +45,7 @@ NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL  = @"eda://reports.everydayap
 NSString * const KEY_TBL_SEC_HEADERS                = @"tsh";
 NSString * const KEY_TBL_SEC_ROW_COUNT              = @"tsrc";
 NSString * const KEY_TBL_SEC_ROW_HEIGHT             = @"tsrh";
+NSString * const KEY_TBL_SEC_SECTIONS               = @"tsrs";
 
 CGFloat const UITABLEVIEWCELL_HEIGHT_DEFAULT = 44.0000f;
 

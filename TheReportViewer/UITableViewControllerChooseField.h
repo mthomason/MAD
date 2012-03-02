@@ -28,6 +28,6 @@
 @property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 @property (retain) NSArray *excludeTables;
 
-@property (nonatomic, assign) IBOutlet UITableViewCell *fieldCells;
+@property (assign) IBOutlet UITableViewCell *fieldCells;
 
 @end

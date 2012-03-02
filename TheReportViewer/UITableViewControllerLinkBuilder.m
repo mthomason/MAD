@@ -193,7 +193,7 @@
             
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables:[NSArray array]];
+                [dvc setExcludeTables: ([self secondTableName] ? [NSArray arrayWithObject:[self secondTableName]] : [NSArray array])];
                 [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
                 [dvc setDelegate: self];
             }
@@ -204,7 +204,7 @@
             
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables:[NSArray arrayWithObject:[self firstTableName]]];
+                [dvc setExcludeTables: ([self firstTableName] ? [NSArray arrayWithObject:[self firstTableName]] : [NSArray array])];
                 [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
                 [dvc setDelegate: self];
             }
