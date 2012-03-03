@@ -14,9 +14,11 @@
 
 @synthesize delegate = _delegate;
 @synthesize managedDocumentQuery = _managedDocumentQuery;
+@synthesize excludeResults = _excludeResults;
 
 - (void)dealloc {
     [_managedDocumentQuery release];
+    [_excludeResults release];
     [super dealloc];
 }
 
@@ -24,6 +26,7 @@
 
 - (void)viewDidUnload {
     [self setManagedDocumentQuery:nil];
+    [self setExcludeResults:nil];
     [super viewDidUnload];
 }
 

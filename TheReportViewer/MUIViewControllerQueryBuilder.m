@@ -249,23 +249,24 @@
                         [tvc setManagedDocumentQuery: [self managedDocumentQuery]];
                         [tvc setDelegate:self];
                     }
-                    
+
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSError *error = nil;
-                    NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
-                    if (!error) {
-                        //NSLog(@"TableResults %@", tablesResults);
+                    
+                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
+                    if ([tableNames count]) {
+                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
+                        [request setPredicate: predicate];
+                    }
+                    [tableNames release];
+                    
                         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                               managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
                                                                                                 sectionNameKeyPath: nil
                                                                                                          cacheName: nil];
                         [tvc setFetchedResultsController: frc];
                         [frc release];
-                    } else {
-                        //NSLog(@"ERROR: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-                    }
                 }
             }
             [navControl release];
