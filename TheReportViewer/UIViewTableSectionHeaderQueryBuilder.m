@@ -13,8 +13,8 @@
 
 @synthesize highlight = _hidden;
 
+/*
 - (void)drawRect:(CGRect)rect{
-    
     CGContextRef currentContext =  UIGraphicsGetCurrentContext();
     
     CGContextSaveGState(currentContext);
@@ -128,7 +128,7 @@
                              rect.origin.y);
     
     endPoint = CGPointMake(rect.origin.x + rect.size.width,
-                           rect.origin.y /* + rect.size.height */ );
+                           rect.origin.y + rect.size.height );
     
     CGContextDrawLinearGradient
     (currentContext, 
@@ -140,32 +140,32 @@
     
     CGGradientRelease(gradient);
     
-    /* Create the path */
+    // Create the path
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, rect.origin.x, rect.origin.y);
     CGPathAddLineToPoint(path, NULL, rect.size.width, rect.origin.y);
     CGPathMoveToPoint(path, NULL, rect.origin.x, rect.size.height);
     CGPathAddLineToPoint(path, NULL, rect.size.width, rect.size.height);
     
-    /* Add the path to the context so we can
-     draw it later */
+    // Add the path to the context so we can
+     draw it later
     CGContextAddPath(currentContext, path);
     
-    /* Set the blue color as the stroke color */
+    // Set the blue color as the stroke color
     if (![self highlight]) {
         [[UIColor edaYellow] setStroke];
     } else {
         [[UIColor edaOrange] setStroke];
     }
     
-    /* Draw the path with stroke color */
+    // Draw the path with stroke color
     CGContextDrawPath(currentContext, kCGPathStroke);
     
-    /* Finally release the path object */
+    // Finally release the path object
     CGPathRelease(path);
     
     CGContextRestoreGState(currentContext);
-    
 }
+ */    
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIViewTableSectionHeaderQueryBuilder.h"
+#import "UIViewGradient.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
 
@@ -19,7 +19,7 @@
 
 @end
 
-@interface UIViewTableSectionHeaderDatabaseTable : UIViewTableSectionHeaderQueryBuilder 
+@interface UIViewTableSectionHeaderDatabaseTable : UIViewGradient 
 
 @property (nonatomic, assign) UILabel *titleLabel;
 @property (nonatomic, assign) UIButton *disclosureButton;

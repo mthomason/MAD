@@ -153,10 +153,114 @@
 		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
 		4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
 		4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
+		4CC24AA51503E3AB00C4EE98 /* UIViewGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CC8993714DAFAF80094E17E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
+		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
+		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
+		4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
+		4CCD8CE015036DBB002B9E77 /* UIImagePatternStationary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CDA15036DBB002B9E77 /* UIImagePatternStationary@2x.png */; };
+		4CCD8D54150385DA002B9E77 /* UIImagePatternAqua.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF2150385DA002B9E77 /* UIImagePatternAqua.png */; };
+		4CCD8D55150385DA002B9E77 /* UIImagePatternAqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF3150385DA002B9E77 /* UIImagePatternAqua@2x.png */; };
+		4CCD8D56150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF4150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png */; };
+		4CCD8D57150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF5150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png */; };
+		4CCD8D58150385DA002B9E77 /* UIImagePatternBlackWeave.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF6150385DA002B9E77 /* UIImagePatternBlackWeave.png */; };
+		4CCD8D59150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF7150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png */; };
+		4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF8150385DA002B9E77 /* UIImagePatternBlueCrepe.png */; };
+		4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF9150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png */; };
+		4CCD8D5C150385DA002B9E77 /* UIImagePatternBlueSpecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFA150385DA002B9E77 /* UIImagePatternBlueSpecks.png */; };
+		4CCD8D5D150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFB150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png */; };
+		4CCD8D5E150385DA002B9E77 /* UIImagePatternBlueTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFC150385DA002B9E77 /* UIImagePatternBlueTextured.png */; };
+		4CCD8D5F150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFD150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png */; };
+		4CCD8D60150385DA002B9E77 /* UIImagePatternBlueVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFE150385DA002B9E77 /* UIImagePatternBlueVellum.png */; };
+		4CCD8D61150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFF150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png */; };
+		4CCD8D62150385DA002B9E77 /* UIImagePatternBuffTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D00150385DA002B9E77 /* UIImagePatternBuffTextured.png */; };
+		4CCD8D63150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D01150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png */; };
+		4CCD8D64150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D02150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png */; };
+		4CCD8D65150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D03150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png */; };
+		4CCD8D66150385DA002B9E77 /* UIImagePatternCrepe.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D04150385DA002B9E77 /* UIImagePatternCrepe.png */; };
+		4CCD8D67150385DA002B9E77 /* UIImagePatternCrepe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D05150385DA002B9E77 /* UIImagePatternCrepe@2x.png */; };
+		4CCD8D68150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D06150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png */; };
+		4CCD8D69150385DA002B9E77 /* UIImagePatternFibers1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D07150385DA002B9E77 /* UIImagePatternFibers1.png */; };
+		4CCD8D6A150385DA002B9E77 /* UIImagePatternFibers1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D08150385DA002B9E77 /* UIImagePatternFibers1@2x.png */; };
+		4CCD8D6B150385DA002B9E77 /* UIImagePatternFibers2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D09150385DA002B9E77 /* UIImagePatternFibers2.png */; };
+		4CCD8D6C150385DA002B9E77 /* UIImagePatternFibers2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0A150385DA002B9E77 /* UIImagePatternFibers2@2x.png */; };
+		4CCD8D6D150385DA002B9E77 /* UIImagePatternFibersDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0B150385DA002B9E77 /* UIImagePatternFibersDarkGray.png */; };
+		4CCD8D6E150385DA002B9E77 /* UIImagePatternGoldMetallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0C150385DA002B9E77 /* UIImagePatternGoldMetallic.png */; };
+		4CCD8D6F150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0D150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png */; };
+		4CCD8D70150385DA002B9E77 /* UIImagePatternGoldParchment.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0E150385DA002B9E77 /* UIImagePatternGoldParchment.png */; };
+		4CCD8D71150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0F150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png */; };
+		4CCD8D72150385DA002B9E77 /* UIImagePatternGoldVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D10150385DA002B9E77 /* UIImagePatternGoldVellum.png */; };
+		4CCD8D73150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D11150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png */; };
+		4CCD8D74150385DA002B9E77 /* UIImagePatternGraphPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D12150385DA002B9E77 /* UIImagePatternGraphPaper.png */; };
+		4CCD8D75150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D13150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png */; };
+		4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D14150385DA002B9E77 /* UIImagePatternGrayGranite.png */; };
+		4CCD8D77150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D15150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png */; };
+		4CCD8D78150385DA002B9E77 /* UIImagePatternGreenAndBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D16150385DA002B9E77 /* UIImagePatternGreenAndBlack.png */; };
+		4CCD8D79150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D17150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png */; };
+		4CCD8D7A150385DA002B9E77 /* UIImagePatternGreenWithFibers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D18150385DA002B9E77 /* UIImagePatternGreenWithFibers.png */; };
+		4CCD8D7B150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D19150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png */; };
+		4CCD8D7C150385DA002B9E77 /* UIImagePatternGreyVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1A150385DA002B9E77 /* UIImagePatternGreyVellum.png */; };
+		4CCD8D7D150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1B150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png */; };
+		4CCD8D7E150385DA002B9E77 /* UIImagePatternHomemadePaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1C150385DA002B9E77 /* UIImagePatternHomemadePaper.png */; };
+		4CCD8D7F150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1D150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png */; };
+		4CCD8D80150385DA002B9E77 /* UIImagePatternKraftPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1E150385DA002B9E77 /* UIImagePatternKraftPaper.png */; };
+		4CCD8D81150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1F150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png */; };
+		4CCD8D82150385DA002B9E77 /* UIImagePatternKraftPaper2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D20150385DA002B9E77 /* UIImagePatternKraftPaper2.png */; };
+		4CCD8D83150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D21150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png */; };
+		4CCD8D84150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D22150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png */; };
+		4CCD8D85150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D23150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png */; };
+		4CCD8D86150385DA002B9E77 /* UIImagePatternKraftWaffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D24150385DA002B9E77 /* UIImagePatternKraftWaffle.png */; };
+		4CCD8D87150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D25150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png */; };
+		4CCD8D88150385DA002B9E77 /* UIImagePatternLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D26150385DA002B9E77 /* UIImagePatternLeaf.png */; };
+		4CCD8D89150385DA002B9E77 /* UIImagePatternLeaf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D27150385DA002B9E77 /* UIImagePatternLeaf@2x.png */; };
+		4CCD8D8A150385DA002B9E77 /* UIImagePatternLined.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D28150385DA002B9E77 /* UIImagePatternLined.png */; };
+		4CCD8D8B150385DA002B9E77 /* UIImagePatternLined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D29150385DA002B9E77 /* UIImagePatternLined@2x.png */; };
+		4CCD8D8C150385DA002B9E77 /* UIImagePatternLinen.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2A150385DA002B9E77 /* UIImagePatternLinen.png */; };
+		4CCD8D8D150385DA002B9E77 /* UIImagePatternLinen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2B150385DA002B9E77 /* UIImagePatternLinen@2x.png */; };
+		4CCD8D8E150385DA002B9E77 /* UIImagePatternLinenWeave.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2C150385DA002B9E77 /* UIImagePatternLinenWeave.png */; };
+		4CCD8D8F150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2D150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png */; };
+		4CCD8D90150385DA002B9E77 /* UIImagePatternMarbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2E150385DA002B9E77 /* UIImagePatternMarbled.png */; };
+		4CCD8D91150385DA002B9E77 /* UIImagePatternMarbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2F150385DA002B9E77 /* UIImagePatternMarbled@2x.png */; };
+		4CCD8D92150385DA002B9E77 /* UIImagePatternMarbled2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D30150385DA002B9E77 /* UIImagePatternMarbled2.png */; };
+		4CCD8D93150385DA002B9E77 /* UIImagePatternMarbled2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D31150385DA002B9E77 /* UIImagePatternMarbled2@2x.png */; };
+		4CCD8D94150385DA002B9E77 /* UIImagePatternMetallicBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D32150385DA002B9E77 /* UIImagePatternMetallicBlack.png */; };
+		4CCD8D95150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D33150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png */; };
+		4CCD8D96150385DA002B9E77 /* UIImagePatternMetallicFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D34150385DA002B9E77 /* UIImagePatternMetallicFlecks.png */; };
+		4CCD8D97150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D35150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png */; };
+		4CCD8D98150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D36150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png */; };
+		4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D37150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png */; };
+		4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D38150385DA002B9E77 /* UIImagePatternNotebook.png */; };
+		4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D39150385DA002B9E77 /* UIImagePatternNotebook@2x.png */; };
+		4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3A150385DA002B9E77 /* UIImagePatternPeachPebbled.png */; };
+		4CCD8D9D150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3B150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png */; };
+		4CCD8D9E150385DA002B9E77 /* UIImagePatternPinkTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3C150385DA002B9E77 /* UIImagePatternPinkTextured.png */; };
+		4CCD8D9F150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3D150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png */; };
+		4CCD8DA0150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3E150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png */; };
+		4CCD8DA1150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3F150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png */; };
+		4CCD8DA2150385DA002B9E77 /* UIImagePatternRedTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D40150385DA002B9E77 /* UIImagePatternRedTextured.png */; };
+		4CCD8DA3150385DA002B9E77 /* UIImagePatternRedTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D41150385DA002B9E77 /* UIImagePatternRedTextured@2x.png */; };
+		4CCD8DA4150385DA002B9E77 /* UIImagePatternRedVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D42150385DA002B9E77 /* UIImagePatternRedVellum.png */; };
+		4CCD8DA5150385DA002B9E77 /* UIImagePatternRedVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D43150385DA002B9E77 /* UIImagePatternRedVellum@2x.png */; };
+		4CCD8DA6150385DA002B9E77 /* UIImagePatternSketchPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D44150385DA002B9E77 /* UIImagePatternSketchPaper.png */; };
+		4CCD8DA7150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D45150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png */; };
+		4CCD8DA8150385DA002B9E77 /* UIImagePatternTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D46150385DA002B9E77 /* UIImagePatternTextured.png */; };
+		4CCD8DA9150385DA002B9E77 /* UIImagePatternTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D47150385DA002B9E77 /* UIImagePatternTextured@2x.png */; };
+		4CCD8DAA150385DA002B9E77 /* UIImagePatternWhiteColumns.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D48150385DA002B9E77 /* UIImagePatternWhiteColumns.png */; };
+		4CCD8DAB150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D49150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png */; };
+		4CCD8DAC150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4A150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png */; };
+		4CCD8DAD150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4B150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png */; };
+		4CCD8DAE150385DA002B9E77 /* UIImagePatternWhiteStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4C150385DA002B9E77 /* UIImagePatternWhiteStationary.png */; };
+		4CCD8DAF150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4D150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png */; };
+		4CCD8DB0150385DA002B9E77 /* UIImagePatternWhiteTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4E150385DA002B9E77 /* UIImagePatternWhiteTextured.png */; };
+		4CCD8DB1150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4F150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png */; };
+		4CCD8DB2150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D50150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png */; };
+		4CCD8DB3150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D51150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png */; };
+		4CCD8DB4150385DA002B9E77 /* UIImagePatternYellowLined.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D52150385DA002B9E77 /* UIImagePatternYellowLined.png */; };
+		4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D53150385DA002B9E77 /* UIImagePatternYellowLined@2x.png */; };
+		4CCD8DB8150386CB002B9E77 /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
 		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
 		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
@@ -610,12 +714,118 @@
 		4CBFF2FA14C7E988000237D3 /* UIModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIModalViewController.h; sourceTree = "<group>"; };
 		4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIModalViewController.m; sourceTree = "<group>"; };
 		4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIModalViewController.xib; sourceTree = "<group>"; };
+		4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewGradient.h; sourceTree = "<group>"; };
+		4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewGradient.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryPredicate.m; sourceTree = "<group>"; };
 		4CC8993814DAFB430094E17E /* UITableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryPredicate.h; sourceTree = "<group>"; };
 		4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryGroup.h; sourceTree = "<group>"; };
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
+		4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPebbled.png; sourceTree = "<group>"; };
+		4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPebbled@2x.png"; sourceTree = "<group>"; };
+		4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternStationary.png; sourceTree = "<group>"; };
+		4CCD8CDA15036DBB002B9E77 /* UIImagePatternStationary@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternStationary@2x.png"; sourceTree = "<group>"; };
+		4CCD8CF2150385DA002B9E77 /* UIImagePatternAqua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternAqua.png; sourceTree = "<group>"; };
+		4CCD8CF3150385DA002B9E77 /* UIImagePatternAqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternAqua@2x.png"; sourceTree = "<group>"; };
+		4CCD8CF4150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBeigeWithWhiteFlecks.png; sourceTree = "<group>"; };
+		4CCD8CF5150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBeigeWithWhiteFlecks@2x.png"; sourceTree = "<group>"; };
+		4CCD8CF6150385DA002B9E77 /* UIImagePatternBlackWeave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBlackWeave.png; sourceTree = "<group>"; };
+		4CCD8CF7150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBlackWeave@2x.png"; sourceTree = "<group>"; };
+		4CCD8CF8150385DA002B9E77 /* UIImagePatternBlueCrepe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBlueCrepe.png; sourceTree = "<group>"; };
+		4CCD8CF9150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBlueCrepe@2x.png"; sourceTree = "<group>"; };
+		4CCD8CFA150385DA002B9E77 /* UIImagePatternBlueSpecks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBlueSpecks.png; sourceTree = "<group>"; };
+		4CCD8CFB150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBlueSpecks@2x.png"; sourceTree = "<group>"; };
+		4CCD8CFC150385DA002B9E77 /* UIImagePatternBlueTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBlueTextured.png; sourceTree = "<group>"; };
+		4CCD8CFD150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBlueTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8CFE150385DA002B9E77 /* UIImagePatternBlueVellum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBlueVellum.png; sourceTree = "<group>"; };
+		4CCD8CFF150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBlueVellum@2x.png"; sourceTree = "<group>"; };
+		4CCD8D00150385DA002B9E77 /* UIImagePatternBuffTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternBuffTextured.png; sourceTree = "<group>"; };
+		4CCD8D01150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternBuffTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8D02150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternCharcoalFlecks.png; sourceTree = "<group>"; };
+		4CCD8D03150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternCharcoalFlecks@2x.png"; sourceTree = "<group>"; };
+		4CCD8D04150385DA002B9E77 /* UIImagePatternCrepe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternCrepe.png; sourceTree = "<group>"; };
+		4CCD8D05150385DA002B9E77 /* UIImagePatternCrepe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternCrepe@2x.png"; sourceTree = "<group>"; };
+		4CCD8D06150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternFiberDarkGray@2x.png"; sourceTree = "<group>"; };
+		4CCD8D07150385DA002B9E77 /* UIImagePatternFibers1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternFibers1.png; sourceTree = "<group>"; };
+		4CCD8D08150385DA002B9E77 /* UIImagePatternFibers1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternFibers1@2x.png"; sourceTree = "<group>"; };
+		4CCD8D09150385DA002B9E77 /* UIImagePatternFibers2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternFibers2.png; sourceTree = "<group>"; };
+		4CCD8D0A150385DA002B9E77 /* UIImagePatternFibers2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternFibers2@2x.png"; sourceTree = "<group>"; };
+		4CCD8D0B150385DA002B9E77 /* UIImagePatternFibersDarkGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternFibersDarkGray.png; sourceTree = "<group>"; };
+		4CCD8D0C150385DA002B9E77 /* UIImagePatternGoldMetallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGoldMetallic.png; sourceTree = "<group>"; };
+		4CCD8D0D150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGoldMetallic@2x.png"; sourceTree = "<group>"; };
+		4CCD8D0E150385DA002B9E77 /* UIImagePatternGoldParchment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGoldParchment.png; sourceTree = "<group>"; };
+		4CCD8D0F150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGoldParchment@2x.png"; sourceTree = "<group>"; };
+		4CCD8D10150385DA002B9E77 /* UIImagePatternGoldVellum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGoldVellum.png; sourceTree = "<group>"; };
+		4CCD8D11150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGoldVellum@2x.png"; sourceTree = "<group>"; };
+		4CCD8D12150385DA002B9E77 /* UIImagePatternGraphPaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGraphPaper.png; sourceTree = "<group>"; };
+		4CCD8D13150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGraphPaper@2x.png"; sourceTree = "<group>"; };
+		4CCD8D14150385DA002B9E77 /* UIImagePatternGrayGranite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGrayGranite.png; sourceTree = "<group>"; };
+		4CCD8D15150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGrayGranite@2x.png"; sourceTree = "<group>"; };
+		4CCD8D16150385DA002B9E77 /* UIImagePatternGreenAndBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGreenAndBlack.png; sourceTree = "<group>"; };
+		4CCD8D17150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGreenAndBlack@2x.png"; sourceTree = "<group>"; };
+		4CCD8D18150385DA002B9E77 /* UIImagePatternGreenWithFibers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGreenWithFibers.png; sourceTree = "<group>"; };
+		4CCD8D19150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGreenWithFibers@2x.png"; sourceTree = "<group>"; };
+		4CCD8D1A150385DA002B9E77 /* UIImagePatternGreyVellum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternGreyVellum.png; sourceTree = "<group>"; };
+		4CCD8D1B150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternGreyVellum@2x.png"; sourceTree = "<group>"; };
+		4CCD8D1C150385DA002B9E77 /* UIImagePatternHomemadePaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternHomemadePaper.png; sourceTree = "<group>"; };
+		4CCD8D1D150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternHomemadePaper@2x.png"; sourceTree = "<group>"; };
+		4CCD8D1E150385DA002B9E77 /* UIImagePatternKraftPaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternKraftPaper.png; sourceTree = "<group>"; };
+		4CCD8D1F150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternKraftPaper@2x.png"; sourceTree = "<group>"; };
+		4CCD8D20150385DA002B9E77 /* UIImagePatternKraftPaper2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternKraftPaper2.png; sourceTree = "<group>"; };
+		4CCD8D21150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternKraftPaper2@2x.png"; sourceTree = "<group>"; };
+		4CCD8D22150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternKraftPaperWaffle.png; sourceTree = "<group>"; };
+		4CCD8D23150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternKraftPaperWaffle@2x.png"; sourceTree = "<group>"; };
+		4CCD8D24150385DA002B9E77 /* UIImagePatternKraftWaffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternKraftWaffle.png; sourceTree = "<group>"; };
+		4CCD8D25150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternKraftWaffle@2x.png"; sourceTree = "<group>"; };
+		4CCD8D26150385DA002B9E77 /* UIImagePatternLeaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternLeaf.png; sourceTree = "<group>"; };
+		4CCD8D27150385DA002B9E77 /* UIImagePatternLeaf@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternLeaf@2x.png"; sourceTree = "<group>"; };
+		4CCD8D28150385DA002B9E77 /* UIImagePatternLined.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternLined.png; sourceTree = "<group>"; };
+		4CCD8D29150385DA002B9E77 /* UIImagePatternLined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternLined@2x.png"; sourceTree = "<group>"; };
+		4CCD8D2A150385DA002B9E77 /* UIImagePatternLinen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternLinen.png; sourceTree = "<group>"; };
+		4CCD8D2B150385DA002B9E77 /* UIImagePatternLinen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternLinen@2x.png"; sourceTree = "<group>"; };
+		4CCD8D2C150385DA002B9E77 /* UIImagePatternLinenWeave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternLinenWeave.png; sourceTree = "<group>"; };
+		4CCD8D2D150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternLinenWeave@2x.png"; sourceTree = "<group>"; };
+		4CCD8D2E150385DA002B9E77 /* UIImagePatternMarbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternMarbled.png; sourceTree = "<group>"; };
+		4CCD8D2F150385DA002B9E77 /* UIImagePatternMarbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternMarbled@2x.png"; sourceTree = "<group>"; };
+		4CCD8D30150385DA002B9E77 /* UIImagePatternMarbled2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternMarbled2.png; sourceTree = "<group>"; };
+		4CCD8D31150385DA002B9E77 /* UIImagePatternMarbled2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternMarbled2@2x.png"; sourceTree = "<group>"; };
+		4CCD8D32150385DA002B9E77 /* UIImagePatternMetallicBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternMetallicBlack.png; sourceTree = "<group>"; };
+		4CCD8D33150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternMetallicBlack@2x.png"; sourceTree = "<group>"; };
+		4CCD8D34150385DA002B9E77 /* UIImagePatternMetallicFlecks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternMetallicFlecks.png; sourceTree = "<group>"; };
+		4CCD8D35150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternMetallicFlecks@2x.png"; sourceTree = "<group>"; };
+		4CCD8D36150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternMetallicFlecks2.png; sourceTree = "<group>"; };
+		4CCD8D37150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternMetallicFlecks2@2x.png"; sourceTree = "<group>"; };
+		4CCD8D38150385DA002B9E77 /* UIImagePatternNotebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternNotebook.png; sourceTree = "<group>"; };
+		4CCD8D39150385DA002B9E77 /* UIImagePatternNotebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternNotebook@2x.png"; sourceTree = "<group>"; };
+		4CCD8D3A150385DA002B9E77 /* UIImagePatternPeachPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPeachPebbled.png; sourceTree = "<group>"; };
+		4CCD8D3B150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPeachPebbled@2x.png"; sourceTree = "<group>"; };
+		4CCD8D3C150385DA002B9E77 /* UIImagePatternPinkTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPinkTextured.png; sourceTree = "<group>"; };
+		4CCD8D3D150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPinkTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8D3E150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPinkWithFlecks.png; sourceTree = "<group>"; };
+		4CCD8D3F150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPinkWithFlecks@2x.png"; sourceTree = "<group>"; };
+		4CCD8D40150385DA002B9E77 /* UIImagePatternRedTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternRedTextured.png; sourceTree = "<group>"; };
+		4CCD8D41150385DA002B9E77 /* UIImagePatternRedTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternRedTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8D42150385DA002B9E77 /* UIImagePatternRedVellum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternRedVellum.png; sourceTree = "<group>"; };
+		4CCD8D43150385DA002B9E77 /* UIImagePatternRedVellum@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternRedVellum@2x.png"; sourceTree = "<group>"; };
+		4CCD8D44150385DA002B9E77 /* UIImagePatternSketchPaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternSketchPaper.png; sourceTree = "<group>"; };
+		4CCD8D45150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternSketchPaper@2x.png"; sourceTree = "<group>"; };
+		4CCD8D46150385DA002B9E77 /* UIImagePatternTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternTextured.png; sourceTree = "<group>"; };
+		4CCD8D47150385DA002B9E77 /* UIImagePatternTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8D48150385DA002B9E77 /* UIImagePatternWhiteColumns.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternWhiteColumns.png; sourceTree = "<group>"; };
+		4CCD8D49150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternWhiteColumns@2x.png"; sourceTree = "<group>"; };
+		4CCD8D4A150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternWhiteDiagonal.png; sourceTree = "<group>"; };
+		4CCD8D4B150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternWhiteDiagonal@2x.png"; sourceTree = "<group>"; };
+		4CCD8D4C150385DA002B9E77 /* UIImagePatternWhiteStationary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternWhiteStationary.png; sourceTree = "<group>"; };
+		4CCD8D4D150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternWhiteStationary@2x.png"; sourceTree = "<group>"; };
+		4CCD8D4E150385DA002B9E77 /* UIImagePatternWhiteTextured.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternWhiteTextured.png; sourceTree = "<group>"; };
+		4CCD8D4F150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternWhiteTextured@2x.png"; sourceTree = "<group>"; };
+		4CCD8D50150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternWhiteWithWoodFibers.png; sourceTree = "<group>"; };
+		4CCD8D51150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternWhiteWithWoodFibers@2x.png"; sourceTree = "<group>"; };
+		4CCD8D52150385DA002B9E77 /* UIImagePatternYellowLined.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternYellowLined.png; sourceTree = "<group>"; };
+		4CCD8D53150385DA002B9E77 /* UIImagePatternYellowLined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternYellowLined@2x.png"; sourceTree = "<group>"; };
+		4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PaperPatterns.h"; sourceTree = "<group>"; };
+		4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PaperPatterns.m"; sourceTree = "<group>"; };
 		4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Reports.h"; sourceTree = "<group>"; };
 		4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Reports.m"; sourceTree = "<group>"; };
 		4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerQueryBuilder.h; sourceTree = "<group>"; };
@@ -707,6 +917,8 @@
 		4C00815914B6BDB6003DF437 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */,
+				4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */,
 				4C1A586214E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.h */,
 				4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */,
 				4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */,
@@ -729,6 +941,7 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CCD8CF1150385A5002B9E77 /* Patterns */,
 				4C63631414E65C16005DBBFF /* UIImageDocument20.png */,
 				4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */,
 				4CC8993114DAF87A0094E17E /* UIImageBolt20.png */,
@@ -1549,6 +1762,115 @@
 			name = Types;
 			sourceTree = "<group>";
 		};
+		4CCD8CF1150385A5002B9E77 /* Patterns */ = {
+			isa = PBXGroup;
+			children = (
+				4CCD8CF2150385DA002B9E77 /* UIImagePatternAqua.png */,
+				4CCD8CF3150385DA002B9E77 /* UIImagePatternAqua@2x.png */,
+				4CCD8CF4150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png */,
+				4CCD8CF5150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png */,
+				4CCD8CF6150385DA002B9E77 /* UIImagePatternBlackWeave.png */,
+				4CCD8CF7150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png */,
+				4CCD8CF8150385DA002B9E77 /* UIImagePatternBlueCrepe.png */,
+				4CCD8CF9150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png */,
+				4CCD8CFA150385DA002B9E77 /* UIImagePatternBlueSpecks.png */,
+				4CCD8CFB150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png */,
+				4CCD8CFC150385DA002B9E77 /* UIImagePatternBlueTextured.png */,
+				4CCD8CFD150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png */,
+				4CCD8CFE150385DA002B9E77 /* UIImagePatternBlueVellum.png */,
+				4CCD8CFF150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png */,
+				4CCD8D00150385DA002B9E77 /* UIImagePatternBuffTextured.png */,
+				4CCD8D01150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png */,
+				4CCD8D02150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png */,
+				4CCD8D03150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png */,
+				4CCD8D04150385DA002B9E77 /* UIImagePatternCrepe.png */,
+				4CCD8D05150385DA002B9E77 /* UIImagePatternCrepe@2x.png */,
+				4CCD8D06150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png */,
+				4CCD8D07150385DA002B9E77 /* UIImagePatternFibers1.png */,
+				4CCD8D08150385DA002B9E77 /* UIImagePatternFibers1@2x.png */,
+				4CCD8D09150385DA002B9E77 /* UIImagePatternFibers2.png */,
+				4CCD8D0A150385DA002B9E77 /* UIImagePatternFibers2@2x.png */,
+				4CCD8D0B150385DA002B9E77 /* UIImagePatternFibersDarkGray.png */,
+				4CCD8D0C150385DA002B9E77 /* UIImagePatternGoldMetallic.png */,
+				4CCD8D0D150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png */,
+				4CCD8D0E150385DA002B9E77 /* UIImagePatternGoldParchment.png */,
+				4CCD8D0F150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png */,
+				4CCD8D10150385DA002B9E77 /* UIImagePatternGoldVellum.png */,
+				4CCD8D11150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png */,
+				4CCD8D12150385DA002B9E77 /* UIImagePatternGraphPaper.png */,
+				4CCD8D13150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png */,
+				4CCD8D14150385DA002B9E77 /* UIImagePatternGrayGranite.png */,
+				4CCD8D15150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png */,
+				4CCD8D16150385DA002B9E77 /* UIImagePatternGreenAndBlack.png */,
+				4CCD8D17150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png */,
+				4CCD8D18150385DA002B9E77 /* UIImagePatternGreenWithFibers.png */,
+				4CCD8D19150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png */,
+				4CCD8D1A150385DA002B9E77 /* UIImagePatternGreyVellum.png */,
+				4CCD8D1B150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png */,
+				4CCD8D1C150385DA002B9E77 /* UIImagePatternHomemadePaper.png */,
+				4CCD8D1D150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png */,
+				4CCD8D1E150385DA002B9E77 /* UIImagePatternKraftPaper.png */,
+				4CCD8D1F150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png */,
+				4CCD8D20150385DA002B9E77 /* UIImagePatternKraftPaper2.png */,
+				4CCD8D21150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png */,
+				4CCD8D22150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png */,
+				4CCD8D23150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png */,
+				4CCD8D24150385DA002B9E77 /* UIImagePatternKraftWaffle.png */,
+				4CCD8D25150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png */,
+				4CCD8D26150385DA002B9E77 /* UIImagePatternLeaf.png */,
+				4CCD8D27150385DA002B9E77 /* UIImagePatternLeaf@2x.png */,
+				4CCD8D28150385DA002B9E77 /* UIImagePatternLined.png */,
+				4CCD8D29150385DA002B9E77 /* UIImagePatternLined@2x.png */,
+				4CCD8D2A150385DA002B9E77 /* UIImagePatternLinen.png */,
+				4CCD8D2B150385DA002B9E77 /* UIImagePatternLinen@2x.png */,
+				4CCD8D2C150385DA002B9E77 /* UIImagePatternLinenWeave.png */,
+				4CCD8D2D150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png */,
+				4CCD8D2E150385DA002B9E77 /* UIImagePatternMarbled.png */,
+				4CCD8D2F150385DA002B9E77 /* UIImagePatternMarbled@2x.png */,
+				4CCD8D30150385DA002B9E77 /* UIImagePatternMarbled2.png */,
+				4CCD8D31150385DA002B9E77 /* UIImagePatternMarbled2@2x.png */,
+				4CCD8D32150385DA002B9E77 /* UIImagePatternMetallicBlack.png */,
+				4CCD8D33150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png */,
+				4CCD8D34150385DA002B9E77 /* UIImagePatternMetallicFlecks.png */,
+				4CCD8D35150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png */,
+				4CCD8D36150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png */,
+				4CCD8D37150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png */,
+				4CCD8D38150385DA002B9E77 /* UIImagePatternNotebook.png */,
+				4CCD8D39150385DA002B9E77 /* UIImagePatternNotebook@2x.png */,
+				4CCD8D3A150385DA002B9E77 /* UIImagePatternPeachPebbled.png */,
+				4CCD8D3B150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png */,
+				4CCD8D3C150385DA002B9E77 /* UIImagePatternPinkTextured.png */,
+				4CCD8D3D150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png */,
+				4CCD8D3E150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png */,
+				4CCD8D3F150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png */,
+				4CCD8D40150385DA002B9E77 /* UIImagePatternRedTextured.png */,
+				4CCD8D41150385DA002B9E77 /* UIImagePatternRedTextured@2x.png */,
+				4CCD8D42150385DA002B9E77 /* UIImagePatternRedVellum.png */,
+				4CCD8D43150385DA002B9E77 /* UIImagePatternRedVellum@2x.png */,
+				4CCD8D44150385DA002B9E77 /* UIImagePatternSketchPaper.png */,
+				4CCD8D45150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png */,
+				4CCD8D46150385DA002B9E77 /* UIImagePatternTextured.png */,
+				4CCD8D47150385DA002B9E77 /* UIImagePatternTextured@2x.png */,
+				4CCD8D48150385DA002B9E77 /* UIImagePatternWhiteColumns.png */,
+				4CCD8D49150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png */,
+				4CCD8D4A150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png */,
+				4CCD8D4B150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png */,
+				4CCD8D4C150385DA002B9E77 /* UIImagePatternWhiteStationary.png */,
+				4CCD8D4D150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png */,
+				4CCD8D4E150385DA002B9E77 /* UIImagePatternWhiteTextured.png */,
+				4CCD8D4F150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png */,
+				4CCD8D50150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png */,
+				4CCD8D51150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png */,
+				4CCD8D52150385DA002B9E77 /* UIImagePatternYellowLined.png */,
+				4CCD8D53150385DA002B9E77 /* UIImagePatternYellowLined@2x.png */,
+				4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */,
+				4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */,
+				4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */,
+				4CCD8CDA15036DBB002B9E77 /* UIImagePatternStationary@2x.png */,
+			);
+			name = Patterns;
+			sourceTree = "<group>";
+		};
 		4CD0F7D514CD20E8003DA079 /* UITableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1674,8 +1996,6 @@
 				4C00818A14B745C9003DF437 /* NSFileManager+Common.m */,
 				4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */,
 				4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */,
-				4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */,
-				4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */,
 				4C45742614E795CE00FF326C /* RptqDocument+Extras.h */,
 				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
 				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
@@ -1686,6 +2006,10 @@
 				4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */,
 				4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */,
 				4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */,
+				4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */,
+				4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */,
+				4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */,
+				4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1827,6 +2151,108 @@
 				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 				4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */,
 				4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */,
+				4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */,
+				4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */,
+				4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */,
+				4CCD8CE015036DBB002B9E77 /* UIImagePatternStationary@2x.png in Resources */,
+				4CCD8D54150385DA002B9E77 /* UIImagePatternAqua.png in Resources */,
+				4CCD8D55150385DA002B9E77 /* UIImagePatternAqua@2x.png in Resources */,
+				4CCD8D56150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
+				4CCD8D57150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
+				4CCD8D58150385DA002B9E77 /* UIImagePatternBlackWeave.png in Resources */,
+				4CCD8D59150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png in Resources */,
+				4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */,
+				4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */,
+				4CCD8D5C150385DA002B9E77 /* UIImagePatternBlueSpecks.png in Resources */,
+				4CCD8D5D150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png in Resources */,
+				4CCD8D5E150385DA002B9E77 /* UIImagePatternBlueTextured.png in Resources */,
+				4CCD8D5F150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png in Resources */,
+				4CCD8D60150385DA002B9E77 /* UIImagePatternBlueVellum.png in Resources */,
+				4CCD8D61150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png in Resources */,
+				4CCD8D62150385DA002B9E77 /* UIImagePatternBuffTextured.png in Resources */,
+				4CCD8D63150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png in Resources */,
+				4CCD8D64150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png in Resources */,
+				4CCD8D65150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png in Resources */,
+				4CCD8D66150385DA002B9E77 /* UIImagePatternCrepe.png in Resources */,
+				4CCD8D67150385DA002B9E77 /* UIImagePatternCrepe@2x.png in Resources */,
+				4CCD8D68150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png in Resources */,
+				4CCD8D69150385DA002B9E77 /* UIImagePatternFibers1.png in Resources */,
+				4CCD8D6A150385DA002B9E77 /* UIImagePatternFibers1@2x.png in Resources */,
+				4CCD8D6B150385DA002B9E77 /* UIImagePatternFibers2.png in Resources */,
+				4CCD8D6C150385DA002B9E77 /* UIImagePatternFibers2@2x.png in Resources */,
+				4CCD8D6D150385DA002B9E77 /* UIImagePatternFibersDarkGray.png in Resources */,
+				4CCD8D6E150385DA002B9E77 /* UIImagePatternGoldMetallic.png in Resources */,
+				4CCD8D6F150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png in Resources */,
+				4CCD8D70150385DA002B9E77 /* UIImagePatternGoldParchment.png in Resources */,
+				4CCD8D71150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png in Resources */,
+				4CCD8D72150385DA002B9E77 /* UIImagePatternGoldVellum.png in Resources */,
+				4CCD8D73150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png in Resources */,
+				4CCD8D74150385DA002B9E77 /* UIImagePatternGraphPaper.png in Resources */,
+				4CCD8D75150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png in Resources */,
+				4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */,
+				4CCD8D77150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png in Resources */,
+				4CCD8D78150385DA002B9E77 /* UIImagePatternGreenAndBlack.png in Resources */,
+				4CCD8D79150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png in Resources */,
+				4CCD8D7A150385DA002B9E77 /* UIImagePatternGreenWithFibers.png in Resources */,
+				4CCD8D7B150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png in Resources */,
+				4CCD8D7C150385DA002B9E77 /* UIImagePatternGreyVellum.png in Resources */,
+				4CCD8D7D150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png in Resources */,
+				4CCD8D7E150385DA002B9E77 /* UIImagePatternHomemadePaper.png in Resources */,
+				4CCD8D7F150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png in Resources */,
+				4CCD8D80150385DA002B9E77 /* UIImagePatternKraftPaper.png in Resources */,
+				4CCD8D81150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png in Resources */,
+				4CCD8D82150385DA002B9E77 /* UIImagePatternKraftPaper2.png in Resources */,
+				4CCD8D83150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png in Resources */,
+				4CCD8D84150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png in Resources */,
+				4CCD8D85150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,
+				4CCD8D86150385DA002B9E77 /* UIImagePatternKraftWaffle.png in Resources */,
+				4CCD8D87150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png in Resources */,
+				4CCD8D88150385DA002B9E77 /* UIImagePatternLeaf.png in Resources */,
+				4CCD8D89150385DA002B9E77 /* UIImagePatternLeaf@2x.png in Resources */,
+				4CCD8D8A150385DA002B9E77 /* UIImagePatternLined.png in Resources */,
+				4CCD8D8B150385DA002B9E77 /* UIImagePatternLined@2x.png in Resources */,
+				4CCD8D8C150385DA002B9E77 /* UIImagePatternLinen.png in Resources */,
+				4CCD8D8D150385DA002B9E77 /* UIImagePatternLinen@2x.png in Resources */,
+				4CCD8D8E150385DA002B9E77 /* UIImagePatternLinenWeave.png in Resources */,
+				4CCD8D8F150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png in Resources */,
+				4CCD8D90150385DA002B9E77 /* UIImagePatternMarbled.png in Resources */,
+				4CCD8D91150385DA002B9E77 /* UIImagePatternMarbled@2x.png in Resources */,
+				4CCD8D92150385DA002B9E77 /* UIImagePatternMarbled2.png in Resources */,
+				4CCD8D93150385DA002B9E77 /* UIImagePatternMarbled2@2x.png in Resources */,
+				4CCD8D94150385DA002B9E77 /* UIImagePatternMetallicBlack.png in Resources */,
+				4CCD8D95150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png in Resources */,
+				4CCD8D96150385DA002B9E77 /* UIImagePatternMetallicFlecks.png in Resources */,
+				4CCD8D97150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png in Resources */,
+				4CCD8D98150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png in Resources */,
+				4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
+				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
+				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
+				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
+				4CCD8D9D150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png in Resources */,
+				4CCD8D9E150385DA002B9E77 /* UIImagePatternPinkTextured.png in Resources */,
+				4CCD8D9F150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png in Resources */,
+				4CCD8DA0150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png in Resources */,
+				4CCD8DA1150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png in Resources */,
+				4CCD8DA2150385DA002B9E77 /* UIImagePatternRedTextured.png in Resources */,
+				4CCD8DA3150385DA002B9E77 /* UIImagePatternRedTextured@2x.png in Resources */,
+				4CCD8DA4150385DA002B9E77 /* UIImagePatternRedVellum.png in Resources */,
+				4CCD8DA5150385DA002B9E77 /* UIImagePatternRedVellum@2x.png in Resources */,
+				4CCD8DA6150385DA002B9E77 /* UIImagePatternSketchPaper.png in Resources */,
+				4CCD8DA7150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png in Resources */,
+				4CCD8DA8150385DA002B9E77 /* UIImagePatternTextured.png in Resources */,
+				4CCD8DA9150385DA002B9E77 /* UIImagePatternTextured@2x.png in Resources */,
+				4CCD8DAA150385DA002B9E77 /* UIImagePatternWhiteColumns.png in Resources */,
+				4CCD8DAB150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png in Resources */,
+				4CCD8DAC150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png in Resources */,
+				4CCD8DAD150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png in Resources */,
+				4CCD8DAE150385DA002B9E77 /* UIImagePatternWhiteStationary.png in Resources */,
+				4CCD8DAF150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png in Resources */,
+				4CCD8DB0150385DA002B9E77 /* UIImagePatternWhiteTextured.png in Resources */,
+				4CCD8DB1150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png in Resources */,
+				4CCD8DB2150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png in Resources */,
+				4CCD8DB3150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
+				4CCD8DB4150385DA002B9E77 /* UIImagePatternYellowLined.png in Resources */,
+				4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1952,6 +2378,8 @@
 				4C85C6AA14FF72F3003785AC /* MUIViewControllerReportViewer.m in Sources */,
 				4CFF2E021500B869002770C1 /* RptqQueryLinks.m in Sources */,
 				4CFF2E061500C43E002770C1 /* QueryBuilderDataModal.m in Sources */,
+				4CCD8DB8150386CB002B9E77 /* UIColor+PaperPatterns.m in Sources */,
+				4CC24AA51503E3AB00C4EE98 /* UIViewGradient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

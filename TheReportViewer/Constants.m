@@ -56,8 +56,9 @@ CGFloat const UITABLEVIEWCELLLINKNAME_HEIGHT_DEFAULT = 0.0000f;
 CGFloat const UITABLEVIEWCELLOVERRIDE_HEIGHT_DEFAULT = 44.0000f;
 CGFloat const UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT = 100.0000f;
 
-NSString * const KEY_DB_TYPE_SF = @"sf";
-NSString * const KEY_DB_TYPE_MYSQL = @"my";
+NSString * const KEY_DB_TYPE_SF = @"Salesforce.com";
+NSString * const KEY_DB_TYPE_DB = @"Database.com";
+NSString * const KEY_DB_TYPE_MYSQL = @"MySQL";
 
 #pragma mark - Core Data Constants
 #pragma mark Do not change these.

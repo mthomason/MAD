@@ -29,11 +29,14 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSection+Extras.h"
 #import "QueryBuilderDataModal.h"
+#import "UIColor+PaperPatterns.h"
 
 #pragma mark - Private Category
 
 @interface MUIViewControllerQueryBuilder()
 
+@property (retain) UIFont *boldSystemFont;
+@property (retain) UIView *cellBackgroundView;
 @property (retain) QueryBuilderDataModal *queryBuilderDataModal;
 @property (retain) NSArray *tableSectionTitles;
 @property (nonatomic) BOOL beganUpdates;
@@ -44,6 +47,7 @@
 
 @implementation MUIViewControllerQueryBuilder
 
+@synthesize cellBackgroundView = _cellBackgroundView;
 @synthesize debug = _debug;
 @synthesize fetchedResultsControllerTables = _fetchedResultsControllerTables, fetchedResultsControllerLinks = _fetchedResultsControllerLinks, fetchedResultsControllerGroups = _fetchedResultsControllerGroups, fetchedResultsControllerPredicates = _fetchedResultsControllerPredicates;
 @synthesize queryBuilderDataModal = _queryBuilderDataModal;
@@ -66,8 +70,11 @@
 @synthesize lastSelectedRowNumber = _lastSelectedRowNumber;
 
 @synthesize managedDocumentQuery = _managedDocumentQuery;
+@synthesize boldSystemFont = _boldSystemFont;
 
 - (void)dealloc {
+    [_boldSystemFont release];
+    [_cellBackgroundView release];
     [_queryBuilderDataModal release];
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
@@ -85,86 +92,6 @@
     [super awakeFromNib];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-
-        /*
-        //These files define common attributes of the mostly static table.
-        NSArray *sections = [[NSArray alloc] initWithObjects:
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsInstructions],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsDatasource],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsTables],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsLinks],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsGroups],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsPredicate],
-                             [NSNumber numberWithInt:UIViewControllerSchemaTablesSectionsSql], nil];
-        
-        NSArray *countRowsForSection = [[NSArray alloc] initWithObjects:
-                                        [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: 1],
-                                        [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: -1],
-                                        [NSNumber numberWithInt: 2],
-                                        nil];
-
-        NSDictionary *countRowsForSectionDictionary = [[NSDictionary alloc] initWithObjects: countRowsForSection
-                                                                                    forKeys: sections];
-        [countRowsForSection release];
-        
-        NSString *h1 = NSLocalizedString(@"Layout", @"Layout");
-        NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
-        NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
-        NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
-        NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
-        NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
-        NSString *h7 = NSLocalizedString(@"Override the SQL", @"Override the SQL");
-        
-        NSArray *headersSection = [[NSArray alloc] initWithObjects:
-                                   h1,
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h2],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h3],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h4],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h5],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h6],
-                                   [NSString stringWithFormat:@"Step %d: %@", 1, h7],                                   
-                                   nil];
-        NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
-                                                                               forKeys: sections];
-        [headersSection release];
-        
-        NSArray *heightRowsForSection = [[NSArray alloc] initWithObjects:
-                                         [NSNumber numberWithFloat: [UITableViewCellInstruction defaultHeight]],
-                                         [NSNumber numberWithFloat: 44.0000f],
-                                         [NSNumber numberWithFloat: [UITableViewCellTableName defaultHeight]],
-                                         [NSNumber numberWithFloat: [UITableViewCellQueryLink defaultHeight]],
-                                         [NSNumber numberWithFloat: 44.0000f],
-                                         [NSNumber numberWithFloat: 44.0000f],
-                                         [NSNumber numberWithFloat: [UITableViewCellQueryInput defaultHeight]], nil];
-        NSDictionary *heightRowsForSectionDictionaryDictionary = [[NSDictionary alloc] initWithObjects: heightRowsForSection
-                                                                                               forKeys: sections];
-        [heightRowsForSection release];
-        
-        NSDictionary *tableOutline = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                      headersSectionDictionary, KEY_TBL_SEC_HEADERS,
-                                      countRowsForSectionDictionary, KEY_TBL_SEC_ROW_COUNT,
-                                      heightRowsForSectionDictionaryDictionary, KEY_TBL_SEC_ROW_HEIGHT, nil];
-        
-        
-        [self setTableMetaData: tableOutline];
-        
-        [tableOutline release];
-        [heightRowsForSectionDictionaryDictionary release];
-        [headersSectionDictionary release];
-        [countRowsForSectionDictionary release];
-        [sections release];
-         */
-    }
-    return self;
-}
-
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -176,15 +103,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
+    
+    UIView *bgView = [[UIView alloc] init];
+    [self setCellBackgroundView: bgView];
+    [bgView release];
+
+    [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperLinen]];
+    //[[self tableViewQueryBuilder] setBackgroundColor: [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPebbled"]]];
+    [[self tableViewQueryBuilder] setOpaque: YES];
     
     QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[self managedDocumentQuery]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
+    
    
     //NSLog(@"%@", [self queryBuilderDataModal]);
-[[[self queryBuilderDataModal] datamodel] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-    //NSLog(@"{{%@}, {%@}}", key, obj);
-}];
+    //[[[self queryBuilderDataModal] datamodel] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    //    NSLog(@"{{%@}, {%@}}", key, obj);
+    //}];
+    
     UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableViewQueryBuilder] frame]];
     [[self tableViewQueryBuilder] setBackgroundView: gradentView];
     [gradentView release];
@@ -627,18 +566,18 @@
             [oldLayout release];
             [newLayout release];
             
-            NSError *error = nil;
-            [[[self managedDocumentQuery] managedObjectContext] save: &error];
+            //NSError *error = nil;
+            //[[[self managedDocumentQuery] managedObjectContext] save: &error];
             [self.fetchedResultsControllerTables performFetch:nil];
             
-            if (!error) {
+            //if (!error) {
                 
                 [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
                                       forSaveOperation: UIDocumentSaveForOverwriting
                                      completionHandler: ^(BOOL success) {
                                          
                                      }];
-            }
+            //}
             
          [doc release];
         }];
@@ -666,14 +605,16 @@
  */
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
 	switch (editingStyle) {
         case UITableViewCellEditingStyleDelete: {
-            switch ([indexPath section]) {
+            switch (ts) {
                 case UIViewControllerSchemaTablesSectionsTables: {
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     [[self tableViewQueryBuilder] beginUpdates];
                     
                     NSInteger qtCtr = [RptqQueryTables countForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                    NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: qtCtr] retain];
+                    NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: (qtCtr)] retain];
 
                     
                     RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]] retain];
@@ -688,20 +629,92 @@
                     }
                     [doc release];
                     [tablea release];
-                                       
+                    
+                    [[self tableViewQueryBuilder] deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    
+                    
                     [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
                                           forSaveOperation: UIDocumentSaveForOverwriting
                                          completionHandler: ^(BOOL success) {
+                    
+                    NSInteger qtCtr = [RptqQueryTables countForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+                    NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: (qtCtr)] retain];
+                    
+                    NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
+                    NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
+                    
+                    if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
+                        
+                        if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) { //remove sections
+                            
+                            
+                            
+                            NSInteger secctr = 0;
+                            BOOL startIndexSet = NO;
+                            NSInteger startIndex = -1;
+                            NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
+                            for (NSNumber *typenum in oldLayoutSectionTypes) {
+                                UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                                if (secctr < [newLayoutSectionTypes count]) {
+                                    if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                                        secctr++;
+                                    } else {
+                                        if (!startIndexSet) {
+                                            startIndex = secctr;
+                                            startIndexSet = YES;
+                                        }
+                                    }
+                                } else {
+                                    if (!startIndexSet) {
+                                        startIndex = secctr;
+                                        startIndexSet = YES;
+                                    }
+                                    secctr++;
+                                }
+                            }
+                            if (startIndex >= 0 && lengtho > 0) {
+                                [[self tableViewQueryBuilder] deleteSections:[NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
+                                                            withRowAnimation: UITableViewRowAnimationAutomatic];
+                            }
+                            
+                            
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    [newLayoutSectionTypes release];
+                    [oldLayoutSectionTypes release];
+                    [oldLayout release];
+                    [newLayout release];
+                    
+                    
+                    
+                    [[self tableViewQueryBuilder] endUpdates];
+
+                    
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                                         }];
+
+                    //[[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                    //                      forSaveOperation: UIDocumentSaveForOverwriting
+                    //                     completionHandler: ^(BOOL success) {
                                              
+                                             /*
                                              NSInteger qtCtr = [RptqQueryTables countForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
-                                             NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: qtCtr] retain];
+                                             NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: (qtCtr)] retain];
                                              
                                              NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
                                              NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-
+                                             
                                              if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
                                                  
                                                  if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) { //remove sections
+                                                     
+                                                     [[self tableViewQueryBuilder] beginUpdates];
+                                                     
+                                                     
                                                      
                                                      NSInteger secctr = 0;
                                                      BOOL startIndexSet = NO;
@@ -731,6 +744,10 @@
                                                                                      withRowAnimation: UITableViewRowAnimationAutomatic];
                                                      }
                                                      
+                                                     [[self tableViewQueryBuilder] endUpdates];
+                                                     
+                                                     
+                                                     
                                                  }
                                                  
                                              }
@@ -739,9 +756,9 @@
                                              [oldLayoutSectionTypes release];
                                              [oldLayout release];
                                              [newLayout release];
+ */
                                              
-                                             [[self tableViewQueryBuilder] endUpdates];
-                                         }];
+                               //          }];
 
                     break;
                 }
@@ -771,11 +788,11 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return ([indexPath section] == UIViewControllerSchemaTablesSectionsTables || [indexPath section] == UIViewControllerSchemaTablesSectionsLinks);
+	return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsTables || [self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsLinks);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([indexPath section] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
+    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
 }
 
 - (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
@@ -808,8 +825,10 @@
             NSInteger numberOfGroups = [self getNumberOfGroups];
             NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
             NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
-            [[(UITableViewCellInstruction *) result labelGroupType] setText:sectionName];
-            [(UITableViewCellInstruction *) result setIndentationLevel: sectionIndentLevel];
+            [[(UITableViewCellInstruction *) result labelGroupType] setText:[NSString stringWithFormat:@"◦ %@", sectionName]];
+            [[(UITableViewCellInstruction *) result labelGroupType] setBackgroundColor:[UIColor clearColor]];
+            [[(UITableViewCellInstruction *) result labelGroupType] setFont:[self boldSystemFont]];
+            [(UITableViewCellInstruction *) result setIndentationLevel: (sectionIndentLevel+1)];
             [sectionName release];
             break;
         }
@@ -820,6 +839,7 @@
                 UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellDataSource" bundle:nil];
                 [resultCellNib instantiateWithOwner:self options:nil];
                 result = [self uITableViewCellTableName];
+                [result setIndentationLevel: 1];
                 [self setUITableViewCellTableName:nil];
             }
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
@@ -830,13 +850,17 @@
             if (!error) {
                 if ([connections count] >= 1) {
                     RptqUserCredentals *connection = [[connections objectAtIndex: 0] retain];
-                    [[result textLabel] setText:[connection database_driver_type]];
+                    [[result textLabel] setText:[NSString stringWithFormat:@"◦ %@", [connection database_driver_type]]];
+                    [[result textLabel] setFont:[self boldSystemFont]];
                     [[result detailTextLabel] setText:@""];
                     [connection release];
                 }
             } else {
                 //NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
             }
+            [[result textLabel] setBackgroundColor:[UIColor clearColor]];
+            [[result detailTextLabel] setBackgroundColor:[UIColor clearColor]];
+
             [request release];
             [connections release];
             break;
@@ -850,8 +874,13 @@
                 resultR = [self uITableViewCellTableName];
                 [self setUITableViewCellTableName:nil];
             }
+
             RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
-            [[resultR textLabel] setText: [tablea name]];
+            [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea name]]];
+            [[resultR textLabel] setFont: [self boldSystemFont]];
+            
+            [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
+            [resultR setIndentationLevel: 1];
             [tablea release];
             result = resultR;
             break;
@@ -959,6 +988,9 @@
         [[result textLabel] setText: @"Err"];
     }
     
+    [[self cellBackgroundView] setFrame:[result bounds]];
+    [result setBackgroundView: [self cellBackgroundView]];
+    
     return result;
 }
 
@@ -976,23 +1008,27 @@
                 //  body, group header, and group footer
                 NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
                 numberOfRows = (2 * numberOfGroups) + 5;
+                NSLog(@"Section Rows: %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsTables: {
                 numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Table Rows: %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsLinks: {
                 numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Link Rows: %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsPredicate: {
                 numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Number of rows: %d", numberOfRows);
+                NSLog(@"Predicate Rows: %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsGroups: {
                 numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Group Rows: %d", numberOfRows);
                 break;
             }
             default:
@@ -1299,27 +1335,28 @@
         if (path) {
             if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
                 switch(type) {
-                    case NSFetchedResultsChangeInsert:
+                    case NSFetchedResultsChangeInsert: {
                         [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
-                        
-                    case NSFetchedResultsChangeDelete:
+                    }
+                    case NSFetchedResultsChangeDelete: {
                         [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
-                        
-                    case NSFetchedResultsChangeUpdate:
+                    }
+                    case NSFetchedResultsChangeUpdate: {
                         [self.tableViewQueryBuilder reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
-                        
-                    case NSFetchedResultsChangeMove:
+                    }
+                    case NSFetchedResultsChangeMove: {
                         [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
+                    }
                 }
             }
         }
