@@ -110,7 +110,7 @@
     [self setCellBackgroundView: bgView];
     [bgView release];
 
-    [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperLinen]];
+    [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     //[[self tableViewQueryBuilder] setBackgroundColor: [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPebbled"]]];
     [[self tableViewQueryBuilder] setOpaque: YES];
     
@@ -124,9 +124,9 @@
     //    NSLog(@"{{%@}, {%@}}", key, obj);
     //}];
     
-    UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableViewQueryBuilder] frame]];
-    [[self tableViewQueryBuilder] setBackgroundView: gradentView];
-    [gradentView release];
+    //UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableViewQueryBuilder] frame]];
+    //[[self tableViewQueryBuilder] setBackgroundView: gradentView];
+    //[gradentView release];
 }
 
 - (void)viewDidUnload {
@@ -989,8 +989,7 @@
     }
     
     [[self cellBackgroundView] setFrame:[result bounds]];
-    [result setBackgroundView: [self cellBackgroundView]];
-    
+
     return result;
 }
 
@@ -1154,6 +1153,8 @@
             break;
         }
     }
+    
+    [result setBackgroundColor:[UIColor colorWithHue:0.5500f saturation:0.8000f brightness:0.8000f alpha:0.5000f]];
 
     return result;
 }

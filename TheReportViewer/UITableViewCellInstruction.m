@@ -13,6 +13,30 @@
 
 @synthesize labelGroupType = _labelGroupType, labelGroupTypeDetail = _labelGroupTypeDetail;
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        
+        [self setBackgroundView: nil];
+        [self setSelectedBackgroundView: nil];
+        
+    }
+    return self;
+}
+
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+        [self setBackgroundView: nil];
+        [self setSelectedBackgroundView: nil];
+        
+    }
+    return self;
+    
+}
+
 + (CGFloat)defaultHeight {
     return UITABLEVIEWCELL_HEIGHT_DEFAULT;
 }

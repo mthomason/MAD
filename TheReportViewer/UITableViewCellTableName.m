@@ -12,11 +12,49 @@
 @implementation UITableViewCellTableName
 
 @synthesize tableID = _tableID;
-
+/*
 - (void)dealloc {
     [super dealloc];
     if (_tableID != nil) [_tableID release];
 }
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+
+        //[self setBackgroundView: nil];
+        //[self setSelectedBackgroundView: nil];
+        
+    }
+    return self;
+}
+
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+        //[self setBackgroundView: nil];
+        //[self setSelectedBackgroundView: nil];
+        
+    }
+    return self;
+    
+}
+
+
+- (void)setBackgroundView:(UIView *)backgroundView {
+    [super setBackgroundView: nil];
+}
+
+- (void)setSelectedBackgroundView:(UIView *)selectedBackgroundView {
+    [super setSelectedBackgroundView: nil];
+}
+*/
+//- (void)viewDidLoad {
+//    [self setBackgroundView: nil];
+//    [self setSelectedBackgroundView: nil];    
+//}
 
 + (CGFloat)defaultHeight {
     return UITABLEVIEWCELLTABLENAME_HEIGHT_DEFAULT;
