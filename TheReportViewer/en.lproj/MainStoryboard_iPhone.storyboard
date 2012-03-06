@@ -594,7 +594,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="372"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="0Le-GO-xmI">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="0Le-GO-xmI">
                                         <rect key="frame" x="20" y="20" width="280" height="332"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -830,7 +830,7 @@
                                         </connections>
                                     </tableView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageClip.png" id="iMI-Ee-ffN">
-                                        <rect key="frame" x="92" y="2" width="136" height="44"/>
+                                        <rect key="frame" x="120" y="11" width="80" height="26"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
@@ -4504,7 +4504,7 @@
         <image name="UIImageArrowDown.png" width="20" height="20"/>
         <image name="UIImageBold20.png" width="20" height="20"/>
         <image name="UIImageBolt20.png" width="20" height="20"/>
-        <image name="UIImageClip.png" width="136" height="44"/>
+        <image name="UIImageClip.png" width="80" height="26"/>
         <image name="UIImageDocument20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageDocumentsAlt20.png" width="20" height="20"/>

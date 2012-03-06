@@ -25,7 +25,7 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        [self setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
+        //[self setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
     }
     return self;
 }
@@ -47,67 +47,49 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
     CGFloat _brightness = 0.8000f, _hue = 0.5500f, _saturation = 0.8000f;
 
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+        
     CGFloat actualBrightness = _brightness;
     if (NO) {
         actualBrightness -= 0.10;
     }   
     
     CGColorRef blackColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0].CGColor;
-    CGColorRef highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7].CGColor;
-    CGColorRef highlightStop = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0].CGColor;
     
 	CGColorRef outerTop = [UIColor colorWithHue:_hue saturation:_saturation brightness:1.0*actualBrightness alpha:1.0].CGColor;
     CGColorRef outerBottom = [UIColor colorWithHue:_hue saturation:_saturation brightness:0.80*actualBrightness alpha:1.0].CGColor;
     
-    CGFloat outerMargin = 7.5f;
-    CGRect outerRect = CGRectInset(self.bounds, outerMargin, outerMargin);            
+    CGRect outerRect = CGRectInset(self.bounds, 7.5f, 7.5f);            
     CGMutablePathRef outerPath = createRoundedRectForRect(outerRect, 6.0);
     
     // Draw gradient for outer path
 	CGContextSaveGState(context);
+
 	CGContextAddPath(context, outerPath);
 	CGContextClip(context);
 	drawLinearGradient(context, outerRect, outerTop, outerBottom);
     
 	CGContextRestoreGState(context);
     
-/*        
-		CGRect highlightRect = CGRectInset(outerRect, 1.0f, 1.0f);
-		CGMutablePathRef highlightPath = createRoundedRectForRect(highlightRect, 6.0);
-        
-		CGContextSaveGState(context);
-		CGContextAddPath(context, outerPath);
-		CGContextAddPath(context, highlightPath);
-		CGContextEOClip(context);
-        
-		drawLinearGradient(context, CGRectMake(outerRect.origin.x, outerRect.origin.y, outerRect.size.width, outerRect.size.height/3), highlightStart, highlightStop);
-		CGContextRestoreGState(context);
-        
-		drawCurvedGloss(context, outerRect, 180);
-		CFRelease(highlightPath);
-        */
-	    
-		//bottom highlight
-		CGRect highlightRect2 = CGRectInset(self.bounds, 6.5f, 6.5f);
-		CGMutablePathRef highlightPath2 = createRoundedRectForRect(highlightRect2, 6.0);
-        
-		CGContextSaveGState(context);
-		CGContextSetLineWidth(context, 0.5);
-		CGContextAddPath(context, highlightPath2);
-		CGContextAddPath(context, outerPath);
-		CGContextEOClip(context);
-		drawLinearGradient(context, CGRectMake(self.bounds.origin.x, self.bounds.size.height-self.bounds.size.height/3, self.bounds.size.width, self.bounds.size.height/3), highlightStop, highlightStart);
-        
-		CGContextRestoreGState(context);
-		CFRelease(highlightPath2);
-    
     // Stroke outer path
     CGContextSaveGState(context);
+
+    //CGContextSetShadowWithColor(context, CGSizeMake(5.0000f, 5.0000f), 0.0000f, [[UIColor colorWithRed:0.0000f green:0.0000f blue:1.0000f alpha:0.9000f] CGColor]);
+    
     CGContextSetLineWidth(context, 0.5);
     CGContextSetStrokeColorWithColor(context, blackColor);
     CGContextAddPath(context, outerPath);
+
+    //[[UIColor clearColor] set];
+    CGFloat zStrokeColour1[4]    = {0.0, 0.0, 1.0, 1.0};
+    CGContextSetStrokeColor(context,zStrokeColour1);
+    //CGContextDrawPath(context, kCGPathStroke);
+    //CGContextSetStrokeColorWithColor(context, [[UIColor clearColor] CGColor]);
     CGContextStrokePath(context);
+
+    //[[UIColor clearColor] setFill];
+    //[outerPath fill];
+    //CGContextStrokePath(context);
+
     CGContextRestoreGState(context);
     
     CFRelease(outerPath);
@@ -126,9 +108,13 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
     CGPoint endPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect));
     
     CGContextSaveGState(context);
+
     CGContextAddRect(context, rect);
     CGContextClip(context);
+
+    
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+    
     CGContextRestoreGState(context);
     
     CGColorSpaceRelease(colorSpace);
