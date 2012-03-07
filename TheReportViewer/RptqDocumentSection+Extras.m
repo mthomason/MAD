@@ -10,6 +10,7 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDocument.h"
 #import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
 #import "RptqQuery.h"
 #import "SectionEnumerator.h"
 #import "UIManagedDocumentQuery.h"
@@ -81,39 +82,33 @@
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                           forManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSInteger numberOfGroups = [RptqDocumentSection numberOfGroupsForManagedObjectContext:objectContext];
+    NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForManagedObjectContext:objectContext];
 
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
-        NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
+        //NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
             case MNSDocumentSectionTypeReportHeader:
-                NSLog(@"Get RH, %d", row);
                 resultSection = [[[document hasReportHeaderSection] retain] autorelease];
                 break;
             case MNSDocumentSectionTypePageHeader:
-                NSLog(@"Get PH, %d", row);
                 resultSection = [[[document hasPageHeaderSection] retain] autorelease];
                 break;
             case MNSDocumentSectionTypeBody:
-                NSLog(@"Get DS, %d", row);
                 resultSection = [[[document hasDetailSection] retain] autorelease];
                 break;
             case MNSDocumentSectionTypePageFooter:
-                NSLog(@"Get PF, %d", row);
                 resultSection = [[[document hasPageFooterSection] retain] autorelease];
                 break;
             case MNSDocumentSectionTypeReportFooter:
-                NSLog(@"Get RF, %d", row);
                 resultSection = [[[document hasReportFooterSection] retain] autorelease];
                 break;
             case (MNSDocumentSectionTypeGroupHeader): {
-                NSLog(@"Get GH, %d", row);
                 NSInteger groupNumber = row - 2;
                 NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
                 for (RptqQueryGroup *group in groupsUnsorted) {
-                    //NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
+                    NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
                     if ([[group weight] integerValue] == groupNumber) {
                         NSSet *sections = [[group hasSection] retain];
                         for (RptqDocumentSection *section in sections) {
@@ -197,15 +192,6 @@
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger body = 2 + numberOfGroups;
     return (row <= body) ? row : body - (row - body);
-}
-
-+ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSError *error = nil;
-    NSArray *groups = [[[objectContext executeFetchRequest:request error:&error] retain] autorelease];
-    return (error) ? 0 : [groups count];
 }
 
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentQuery *)managedDocument {

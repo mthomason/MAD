@@ -522,6 +522,8 @@
 		4C87407915052D3D007FC473 /* UIViewClipboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewClipboard.m; sourceTree = "<group>"; };
 		4C87407C15053927007FC473 /* UIImageClip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageClip@2x.png"; sourceTree = "<group>"; };
 		4C87407D15053927007FC473 /* UIImageClip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageClip.png; sourceTree = "<group>"; };
+		4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
+		4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryGroup+Extras.m"; sourceTree = "<group>"; };
 		4C8779DC14CA9D90005CBE6F /* UIManagedDocumentQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentQuery.h; sourceTree = "<group>"; };
 		4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentQuery.m; sourceTree = "<group>"; };
 		4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
@@ -2021,6 +2023,8 @@
 				4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */,
 				4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */,
 				4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */,
+				4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */,
+				4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";

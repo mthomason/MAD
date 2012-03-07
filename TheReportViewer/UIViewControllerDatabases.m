@@ -88,9 +88,7 @@
 
     NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
     [self setAvailableFilesCache: a];
-    [a release];
-    //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
-    
+    [a release];    
     [[self tableViewQueries] reloadData];
 }
 
@@ -351,6 +349,32 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+	switch (editingStyle) {
+        case UITableViewCellEditingStyleDelete: {
+            NSInteger row = [indexPath row];
+            [tableView beginUpdates];
+            NSError *error = nil;
+            [[NSFileManager defaultManager] removeItemAtURL:[[self availableFilesCache] objectAtIndex:[indexPath row]] error:&error];
+            if (!error) {
+                if (row < [[self availableFilesCache] count]) {
+                    [[self availableFilesCache] removeObjectAtIndex:row];
+                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            }
+            [tableView endUpdates];
+            break;
+        }
+        case UITableViewCellEditingStyleInsert: {
+            break;
+        }
+        case UITableViewCellEditingStyleNone: {
+            break;
+        }
+        default:
+            break;
+    }
+
 	
 }
 

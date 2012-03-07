@@ -1,5 +1,5 @@
 //
-//  CoreDataTableViewController.m
+//  MUIViewControllerQueryBuilder.m
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/22/12.
@@ -17,7 +17,6 @@
 #import "RptqTable.h"
 #import "RptqQueryTables.h"
 #import "RptqQueryLinks.h"
-#import "RptqQueryGroup.h"
 #import "RptqQueryPredicate.h"
 #import "RptqUserCredentals.h"
 #import "RptqDocumentSection.h"
@@ -30,6 +29,8 @@
 #import "RptqDocumentSection+Extras.h"
 #import "QueryBuilderDataModal.h"
 #import "UIColor+PaperPatterns.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
 
 #pragma mark - Private Category
 
@@ -324,6 +325,35 @@
     [barButtonItem release];
 }
 
+#pragma mark - Modal helper
+
+- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
+    UIViewControllerSchemaTablesSections result = sec;
+    NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
+    //NSLog(@"sectypes: %@", sectionTypes);
+    if ([sectionTypes count] >= sec) {
+        result = [[sectionTypes objectAtIndex:sec] integerValue];
+    }
+    [sectionTypes release];
+    return result;
+}
+
+- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec {
+    NSInteger result = 0;
+    NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
+    NSInteger secPos = 0;
+    for (NSNumber *num in sectionTypes) {
+        if ([num integerValue] == sec) {
+            result = secPos;
+            break;
+        }
+        secPos++;
+    }
+    [sectionTypes release];
+    return result;
+}
+
+
 #pragma mark - Delegates
 
 #pragma mark Layout Settings Delegate
@@ -332,14 +362,23 @@
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
                                                           forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     [section setHeight: [NSNumber numberWithFloat:height]];
+    
+    
     [section release];
+    
+    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    }];
+
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
                                                           forManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     [section setVisibility: [NSNumber numberWithBool:isVisible]];
-    [section release];    
+    [section release];
+    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    }];
+
 }
 
 #pragma mark - Delegates
@@ -449,8 +488,7 @@
         [[doc hasQuery] addHasQueryLinks:[NSSet setWithObject: queryLinks]];
         [queryLinks release];
         
-        [[self tableViewQueryBuilder] reloadData];
-        
+    
         [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
         }];
     }
@@ -488,6 +526,14 @@
         [rqg setField:field];
         [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
         
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+        NSError *error = nil;
+        NSInteger groupCount = [moc countForFetchRequest:request error:&error];
+        groupCount = (error) ? 0 : groupCount;
+                
+        [rqg setWeight:[NSNumber numberWithInteger: groupCount]];
+        
         RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
         [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
         [rqg addHasSectionObject:dsHeader];
@@ -499,6 +545,7 @@
         [dsFooter release];
 
         [[doc hasQuery] addHasQueryGroupsObject: rqg];
+
         [rqg release];
         
         [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
@@ -509,6 +556,28 @@
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
+    [self dismissModalViewControllerAnimated: YES];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+    if (doc) {
+        NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        [tab setName: [table name]];
+        [[doc hasQuery] addHasQueryTablesObject:tab];
+        [tab release];
+        
+        NSError *error = nil;
+        [[[self managedDocumentQuery] managedObjectContext] save: &error];
+        if (!error) {
+            NSLog(@"[[self managedDocumentQuery] fileURL]: %@", [[self managedDocumentQuery] fileURL]);
+            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                                  forSaveOperation: UIDocumentSaveForOverwriting
+                                 completionHandler: ^(BOOL success) {
+                                     
+                                 }];
+        }
+    }
+    [doc release];
+    /*
     [self dismissModalViewControllerAnimated: YES];
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
     if (doc) {
@@ -566,24 +635,19 @@
             [oldLayout release];
             [newLayout release];
             
-            //NSError *error = nil;
-            //[[[self managedDocumentQuery] managedObjectContext] save: &error];
             [self.fetchedResultsControllerTables performFetch:nil];
             
-            //if (!error) {
-                
-                [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
-                                      forSaveOperation: UIDocumentSaveForOverwriting
-                                     completionHandler: ^(BOOL success) {
-                                         
-                                     }];
-            //}
-            
+            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                                  forSaveOperation: UIDocumentSaveForOverwriting
+                                 completionHandler: ^(BOOL success) {
+                                     
+                                 }];
          [doc release];
         }];
     } else {
         [doc release];
     }
+     */
 }
 
 #pragma mark - Internal
@@ -793,17 +857,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
-}
-
-- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
-    UIViewControllerSchemaTablesSections result = sec;
-    NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
-    //NSLog(@"sectypes: %@", sectionTypes);
-    if ([sectionTypes count] >= sec) {
-        result = [[sectionTypes objectAtIndex:sec] integerValue];
-    }
-    [sectionTypes release];
-    return result;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1271,18 +1324,18 @@
 
 - (NSMutableArray *)sectionsUsedByFetchedResultsController: (NSFetchedResultsController *)controller {
 
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 2];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
     if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsTables]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsTables]]];
     } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsLinks]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsLinks]]];
     } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsInstructions]]; //Once for group header settings
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsInstructions]]; //Once for group footer settings
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsGroups]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions]]]; //Once for group header settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions]]]; //Once for group footer settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsGroups]]];
     } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
-        [result addObject: [NSNumber numberWithInteger: UIViewControllerSchemaTablesSectionsPredicate]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsPredicate]]];
     }
     
     return [result autorelease];

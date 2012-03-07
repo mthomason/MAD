@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QueryBuilderDataModal.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
@@ -76,5 +77,8 @@
 - (IBAction)edit:(id)sender;
 
 - (NSInteger)getNumberOfGroups;
+
+- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
+- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
 
 @end
