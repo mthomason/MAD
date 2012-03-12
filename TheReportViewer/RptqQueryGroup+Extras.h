@@ -7,9 +7,11 @@
 //
 
 #import "RptqQueryGroup.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @interface RptqQueryGroup (Extras)
 
-+ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (NSInteger)numberOfGroupsForManagedObjectContextJJJ:(NSManagedObjectContext *)objectContext;
 
 @end

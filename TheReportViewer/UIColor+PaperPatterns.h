@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface UIColor (PaperPatterns)
 
 + (id)paperAqua;

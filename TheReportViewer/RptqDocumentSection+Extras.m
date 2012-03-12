@@ -82,7 +82,12 @@
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                           forManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForManagedObjectContext:objectContext];
+    
+    //NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForManagedObjectContextJJJ:objectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSError *error = nil;
+    NSInteger result = [objectContext countForFetchRequest:request error:&error];
+    NSInteger numberOfGroups = (error) ? 0 : result;
 
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
@@ -104,9 +109,12 @@
             case MNSDocumentSectionTypeReportFooter:
                 resultSection = [[[document hasReportFooterSection] retain] autorelease];
                 break;
-            case (MNSDocumentSectionTypeGroupHeader): {
-                NSInteger groupNumber = row - 2;
-                NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
+            case MNSDocumentSectionTypeGroupHeader: {
+                NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
+                NSSet *groupsUnsorted = [[[document hasQuery] hasQueryGroups] retain];
+                //NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
+                //                                                               ascending: YES];
+                //NSArray *groupSorted = [[[groupsUnsorted allObjects] sortedArrayUsingDescriptors: [NSArray arrayWithObject:sortDescriptor]] retain];
                 for (RptqQueryGroup *group in groupsUnsorted) {
                     NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
                     if ([[group weight] integerValue] == groupNumber) {
@@ -121,6 +129,8 @@
                         break;
                     }
                 }
+                [groupsUnsorted release];
+                //[groupSorted release];
                 break;
             }
             case MNSDocumentSectionTypeGroupFooter: {
