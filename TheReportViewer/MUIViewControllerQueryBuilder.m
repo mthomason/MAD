@@ -30,7 +30,7 @@
 #import "QueryBuilderDataModal.h"
 #import "UIColor+PaperPatterns.h"
 #import "RptqQueryGroup.h"
-#import "RptqQueryGroup+Extras.h"
+//#import "RptqQueryGroup+Extras.h"
 
 #pragma mark - Private Category
 
@@ -534,10 +534,11 @@
         
         [rqg setField:field];
         [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
-        [rqg setWeight:[NSNumber numberWithInteger: groupCount]];
+        NSInteger weight = groupCount - 1;
+        [rqg setWeight:[NSNumber numberWithInteger: weight]];
         
         NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsGroups];
-        NSUInteger rowFirstTransaction = groupCount - 1;
+        NSUInteger rowFirstTransaction = weight;
         
         RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
         [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
@@ -687,12 +688,14 @@
                     
                     
                     RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]] retain];
-                    
                     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
                     [[doc hasQuery] removeHasQueryTablesObject: tablea];
                     [[[self managedDocumentQuery] managedObjectContext] deleteObject: tablea];
+                    
+                    
+                    
                     NSError *error = nil;
-                    [[[self managedDocumentQuery] managedObjectContext] save:&error];
+                    [[[self managedDocumentQuery] managedObjectContext] save: &error];
                     if (error) {
                         [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                         [[self tableViewQueryBuilder] endUpdates];
@@ -767,8 +770,84 @@
                     [[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
                     break;
                 }
-                default:
+                case UIViewControllerSchemaTablesSectionsGroups: {
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+                    [[self tableViewQueryBuilder] beginUpdates];
+                    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]] retain];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+                    NSError *error = nil;
+                    NSInteger result = [[[self managedDocumentQuery] managedObjectContext] countForFetchRequest:request error:&error];
+                    NSInteger ctrGroups = (error) ? 0 : result;
+
+                    if (doc) {
+                        RptqQuery *query = [[doc hasQuery] retain];
+                        
+                        NSSet *groups = [[query hasQueryGroups] retain];
+                        NSInteger weight = [indexPath row];
+                        RptqQueryGroup *groupToRemove = nil;
+                        
+                        for (RptqQueryGroup *group in groups) {
+                            NSLog(@"Group weight: %d", [[group weight] integerValue]);
+                            if ([[group weight] integerValue] == weight) {
+                                groupToRemove = [group retain];
+                                break;
+                            }
+                        }
+                                                
+                        if (groupToRemove) {
+                            NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
+                            NSArray *sections = [[sectionsToRemove allObjects] retain];
+                            if ([sections count] == 2) {
+                                [[[self managedDocumentQuery] managedObjectContext] deleteObject: [sections objectAtIndex: 0]];
+                                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
+                                [[[self managedDocumentQuery] managedObjectContext] deleteObject: [sections objectAtIndex: 1]];
+                                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+                            }
+                            [sections release];
+                            [sectionsToRemove release];
+                            [[[self managedDocumentQuery] managedObjectContext] deleteObject: groupToRemove];
+                            [query removeHasQueryGroupsObject: groupToRemove];
+
+                            NSError *error = nil;
+                            [[[self managedDocumentQuery] managedObjectContext] save: &error];
+                            if (!error) {
+                                
+                                //NSError *error = nil;
+                                //[[[self managedDocumentQuery] managedObjectContext] save: &error];
+                                NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
+                                NSInteger headerSectionRow = weight + 2;
+                                NSInteger footerSectionRow = 5 + (ctrGroups * 2) - 1 - 2 - weight;
+                                NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
+                                NSArray *indexPaths = [[NSArray alloc] initWithObjects:
+                                                       indexPath,
+                                                       [NSIndexPath indexPathForRow: headerSectionRow inSection: section],
+                                                       [NSIndexPath indexPathForRow: footerSectionRow inSection: section],
+                                                       nil];
+                                [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: indexPaths
+                                                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+                                [indexPaths release];
+                            }
+                            [groupToRemove release];
+                        }
+                        
+                        [groups release];
+                        
+                        [query release];
+                    }
+
+                    [doc release];
+                    
+                    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                                          forSaveOperation: UIDocumentSaveForOverwriting
+                                         completionHandler: ^(BOOL success) {
+                                             [[self tableViewQueryBuilder] endUpdates];
+                                             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                                         }];
                     break;
+                }
+                default: {
+                    break;
+                }
             }
             //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
@@ -789,7 +868,12 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsTables || [self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsLinks);
+    NSUInteger section = [indexPath section];
+    UIViewControllerSchemaTablesSections sectionType = [self tableSectionTypeForIndexPathSection: section];
+	return (sectionType == UIViewControllerSchemaTablesSectionsTables ||
+            sectionType == UIViewControllerSchemaTablesSectionsGroups ||
+            sectionType == UIViewControllerSchemaTablesSectionsPredicate ||
+            sectionType == UIViewControllerSchemaTablesSectionsLinks);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {

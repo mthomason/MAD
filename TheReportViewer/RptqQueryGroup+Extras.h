@@ -12,6 +12,6 @@
 
 @interface RptqQueryGroup (Extras)
 
-+ (NSInteger)numberOfGroupsForManagedObjectContextJJJ:(NSManagedObjectContext *)objectContext;
++ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 @end

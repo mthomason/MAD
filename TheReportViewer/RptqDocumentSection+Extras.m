@@ -83,7 +83,6 @@
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                           forManagedObjectContext:(NSManagedObjectContext *)objectContext {
     
-    //NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForManagedObjectContextJJJ:objectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;
     NSInteger result = [objectContext countForFetchRequest:request error:&error];

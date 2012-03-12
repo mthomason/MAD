@@ -14,7 +14,7 @@
 
 @implementation RptqQueryGroup (Extras)
 
-+ (NSInteger)numberOfGroupsForManagedObjectContextJJJ:(NSManagedObjectContext *)objectContext {
++ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;
     NSInteger result = [objectContext countForFetchRequest:request error:&error];

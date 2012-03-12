@@ -775,7 +775,7 @@
                                                     <outlet property="labelMain" destination="ZOV-P5-l2j" id="ugy-kb-yd7"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" id="4wJ-al-MrD" customClass="UITableViewCellQueryGroup">
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" id="4wJ-al-MrD" customClass="UITableViewCellQueryGroup">
                                                 <rect key="frame" x="0.0" y="342" width="280" height="44"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
