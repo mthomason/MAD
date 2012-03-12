@@ -65,6 +65,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setSortOrder:MNSSortOrderAccending];
+    [[[self tableViewCellSort] detailTextLabel] setText: [NSLocalizedString(@"Accending", @"Accending") lowercaseString]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
