@@ -259,6 +259,8 @@
         
         UIScrollViewSection *scrollView = [[UIScrollViewSection alloc] initWithFrame:frame];
         [scrollView setObjectID: [sec objectID]];
+        NSLog(@"Section name: %@\n%@", [sec objectID], [sec localizedDisplayName]);
+        [scrollView setLocalizedName:[sec localizedDisplayName]];
         [scrollView setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
         [[scrollView layer] setCornerRadius: 5.0000f];
         [scrollView setClipsToBounds: YES];

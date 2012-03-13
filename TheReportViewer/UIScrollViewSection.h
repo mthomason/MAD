@@ -10,5 +10,9 @@
 #import <CoreData/CoreData.h>
 
 @interface UIScrollViewSection : UIScrollView
+
 @property (retain) NSManagedObjectID *objectID;
+@property (retain) NSString *localizedName;
+@property (assign, getter = isHighlighted) BOOL highlighted;
+
 @end

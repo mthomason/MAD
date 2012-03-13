@@ -7,13 +7,35 @@
 //
 
 #import "UIScrollViewSection.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation UIScrollViewSection
 @synthesize objectID = _objectID;
+@synthesize localizedName = _localizedName;
+@synthesize highlighted = _highlighted;
 
 - (void)dealloc {
     [_objectID release];
+    [_localizedName release];
     [super dealloc];
+}
+
+- (void)drawRect:(CGRect)rect {
+    
+    //if ([self localizedName]) {
+        if (![self isHighlighted]) {
+            //[[UIColor blackColor] setStroke];
+            //[[UIColor blackColor] set];
+        } else {
+            //[[UIColor redColor] setStroke];
+            //[[UIColor redColor] set];
+        }
+        [[self localizedName] drawInRect: rect
+                      withFont: [UIFont systemFontOfSize:([UIFont systemFontSize])]
+                 lineBreakMode: UILineBreakModeClip
+                     alignment: UITextAlignmentLeft];
+    //}
+    
 }
 
 @end

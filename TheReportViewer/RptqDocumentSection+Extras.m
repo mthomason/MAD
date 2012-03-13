@@ -222,4 +222,34 @@
     return result;
 }
 
+- (NSString *)localizedDisplayName {
+    NSString *result = nil;
+    switch ([[self type] integerValue]) {
+        case MNSDocumentSectionTypeReportHeader:
+            result = [[NSLocalizedString(@"Report Header", @"Report Header") retain] autorelease];
+            break;
+        case MNSDocumentSectionTypePageHeader:
+            result = [[NSLocalizedString(@"Page Header", @"Page Header") retain] autorelease];
+            break;
+        case MNSDocumentSectionTypeBody:
+            result = [[NSLocalizedString(@"Report Detail", @" Report Detail") retain] autorelease];
+            break;
+        case MNSDocumentSectionTypePageFooter:
+            result = [[NSLocalizedString(@"Page Footer", @"Page Footer") retain] autorelease];
+            break;
+        case MNSDocumentSectionTypeReportFooter:
+            result = [[NSLocalizedString(@"Report Footer", @"Report Footer") retain] autorelease];
+            break;
+        case MNSDocumentSectionTypeGroupHeader:
+            result = [[[NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @""), [[[self inGroup] weight] integerValue]] retain] autorelease];
+            break;
+        case MNSDocumentSectionTypeGroupFooter:
+            result = [[[NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @""),  [[[self inGroup] weight] integerValue]] retain] autorelease];
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
 @end

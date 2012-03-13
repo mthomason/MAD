@@ -50,19 +50,16 @@
     RptqDocument *document                      = [[RptqDocument alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
 
     [document setHasReportHeaderSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
-    document.hasReportHeaderSection.type = [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
-    
     [document setHasReportFooterSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
-    document.hasReportFooterSection.type = [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
-
     [document setHasPageHeaderSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
-    document.hasPageHeaderSection.type = [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
-    
     [document setHasPageFooterSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
-    document.hasPageFooterSection.type = [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
-
     [document setHasDetailSection:                [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
-    document.hasDetailSection.type = [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
+    
+    document.hasReportHeaderSection.type =      [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
+    document.hasReportFooterSection.type =      [NSNumber numberWithInteger:MNSDocumentSectionTypeReportFooter];
+    document.hasPageHeaderSection.type =        [NSNumber numberWithInteger:MNSDocumentSectionTypePageHeader];
+    document.hasPageFooterSection.type =        [NSNumber numberWithInteger:MNSDocumentSectionTypePageFooter];
+    document.hasDetailSection.type =            [NSNumber numberWithInteger:MNSDocumentSectionTypeBody];
 
     [document setHasDatabaseSchema:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
     [document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
