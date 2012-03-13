@@ -31,6 +31,7 @@
 #import "UIColor+PaperPatterns.h"
 #import "RptqQueryGroup.h"
 //#import "RptqQueryGroup+Extras.h"
+#import "RptqQueryLinks+Extras.h"
 
 #pragma mark - Private Category
 
@@ -340,7 +341,7 @@
 
 - (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
+    NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodelForNumberOfTables:[[self tableViewQueryBuilder] numberOfRowsInSection: 1]] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {
@@ -365,9 +366,9 @@
     
     
     
-    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    //[[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
         [section release];
-    }];
+    //}];
 
 }
 
@@ -442,7 +443,7 @@
             
             NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
             NSError *error = nil;
-            NSArray *predicates = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
+            //NSArray *predicates = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
             //NSLog(@"Predicates %@", predicates);
             
             
@@ -477,15 +478,15 @@
     if (doc) {
         NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
         
-        RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+        RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
+                                             insertIntoManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]];
         [queryLinks setTableleft: firstTable];
         [queryLinks setFieldleft: firstFieldName];
         [queryLinks setTableright: secondTableName];
         [queryLinks setFieldright: secondFieldName];
         [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
-        [queryLinks setJointypeenum:[NSNumber numberWithInteger: joinType]];
-        
-        [[doc hasQuery] addHasQueryLinks:[NSSet setWithObject: queryLinks]];
+        [queryLinks setJointypeenum: [NSNumber numberWithInteger: joinType]];
+        [[doc hasQuery] addHasQueryLinks: [NSSet setWithObject: queryLinks]];
         [queryLinks release];
         
     
@@ -655,23 +656,70 @@
     [doc release];
 }
 
-#pragma mark - Internal
-
-- (NSInteger)getNumberOfGroups {
-    return [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-}
-
 #pragma mark - Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_HEADERS] count];
 }
 
-/*
- - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
- 
- }
- */
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection: section];
+    
+    NSDictionary *rowsDict = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_ROW_COUNT] retain];
+    NSInteger numberOfRows = 0;
+    numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
+    if (numberOfRows < 0) {
+        switch (ts) {
+            case UIViewControllerSchemaTablesSectionsInstructions: {
+                //The sections are report header, report footer, page header, page footer,
+                //  body, group header, and group footer
+                NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
+                numberOfRows = (2 * numberOfGroups) + 5;
+                NSLog(@"Section Rows: %d", numberOfRows);
+                break;
+            }
+            case UIViewControllerSchemaTablesSectionsTables: {
+                numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Table Rows: %d", numberOfRows);
+                break;
+            }
+            case UIViewControllerSchemaTablesSectionsLinks: {
+                numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Link Rows: %d", numberOfRows);
+                break;
+            }
+            case UIViewControllerSchemaTablesSectionsPredicate: {
+                numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Predicate Rows: %d", numberOfRows);
+                break;
+            }
+            case UIViewControllerSchemaTablesSectionsGroups: {
+                numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
+                NSLog(@"Group Rows: %d", numberOfRows);
+                break;
+            }
+            default:
+                numberOfRows = 0;
+                break;
+        }
+    }
+    [rowsDict release];
+	return numberOfRows;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger section = [indexPath section];
+    UIViewControllerSchemaTablesSections sectionType = [self tableSectionTypeForIndexPathSection: section];
+	return (sectionType == UIViewControllerSchemaTablesSectionsTables ||
+            sectionType == UIViewControllerSchemaTablesSectionsGroups ||
+            sectionType == UIViewControllerSchemaTablesSectionsPredicate ||
+            sectionType == UIViewControllerSchemaTablesSectionsLinks);
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
+}
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
@@ -767,7 +815,16 @@
                     break;
                 }
                 case UIViewControllerSchemaTablesSectionsLinks: {
-                    [[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+                    UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+                    if (tvcLink) {
+                        NSManagedObjectID *objid = [[tvcLink tableID] retain];
+                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[self managedDocumentQuery] managedObjectContext]];
+                        [objid release];
+                        
+                        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+                        }];
+                    }
+                    [tvcLink release];
                     break;
                 }
                 case UIViewControllerSchemaTablesSectionsGroups: {
@@ -783,14 +840,14 @@
                         RptqQuery *query = [[doc hasQuery] retain];
                         
                         NSSet *groups = [[query hasQueryGroups] retain];
-                        NSInteger weight = [indexPath row];
+                        NSInteger weightToRemove = [indexPath row];
                         RptqQueryGroup *groupToRemove = nil;
                         
                         for (RptqQueryGroup *group in groups) {
-                            NSLog(@"Group weight: %d", [[group weight] integerValue]);
-                            if ([[group weight] integerValue] == weight) {
+                            if ([[group weight] integerValue] > weightToRemove) {
+                                [group setWeight:[NSNumber numberWithInteger:([[group weight] integerValue] - 1)]];
+                            } else if ([[group weight] integerValue] == weightToRemove) {
                                 groupToRemove = [group retain];
-                                break;
                             }
                         }
                                                 
@@ -812,12 +869,10 @@
                             [[[self managedDocumentQuery] managedObjectContext] save: &error];
                             if (!error) {
                                 
-                                //NSError *error = nil;
-                                //[[[self managedDocumentQuery] managedObjectContext] save: &error];
                                 NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
-                                NSInteger headerSectionRow = weight + 2;
-                                NSInteger footerSectionRow = 5 + (ctrGroups * 2) - 1 - 2 - weight;
-                                NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
+                                NSInteger headerSectionRow = weightToRemove + 2;
+                                NSInteger footerSectionRow = 5 + (ctrGroups * 2) - 1 - 2 - weightToRemove;
+                                //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
                                 NSArray *indexPaths = [[NSArray alloc] initWithObjects:
                                                        indexPath,
                                                        [NSIndexPath indexPathForRow: headerSectionRow inSection: section],
@@ -849,7 +904,6 @@
                     break;
                 }
             }
-            //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
         }
         case UITableViewCellEditingStyleInsert: {
@@ -867,17 +921,8 @@
 	
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger section = [indexPath section];
-    UIViewControllerSchemaTablesSections sectionType = [self tableSectionTypeForIndexPathSection: section];
-	return (sectionType == UIViewControllerSchemaTablesSectionsTables ||
-            sectionType == UIViewControllerSchemaTablesSectionsGroups ||
-            sectionType == UIViewControllerSchemaTablesSectionsPredicate ||
-            sectionType == UIViewControllerSchemaTablesSectionsLinks);
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return [NSArray array];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -896,7 +941,7 @@
                 result = [self uITableViewCellInstruction];
                 [self setUITableViewCellInstruction:nil];
             }
-            NSInteger numberOfGroups = [self getNumberOfGroups];
+            NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
             NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
             NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
             [[(UITableViewCellInstruction *) result labelGroupType] setText:[NSString stringWithFormat:@"◦ %@", sectionName]];
@@ -977,6 +1022,7 @@
             [[(UITableViewCellQueryLink *)result labelFieldLeft] setText: @""];
             [[(UITableViewCellQueryLink *)result labelFieldRight] setText: @""];
             [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [NSString stringWithFormat:@"%@ (%@)", [MNSLinkTypeSymbols objectAtIndex: [[links jointypeenum] integerValue]], [MNSLinkTypeNames objectAtIndex: [[links jointypeenum] integerValue]]]];
+            [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
             [links release];
             break;
         }
@@ -1065,52 +1111,6 @@
     [[self cellBackgroundView] setFrame:[result bounds]];
 
     return result;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection: section];
-    
-    NSDictionary *rowsDict = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_ROW_COUNT] retain];
-    NSInteger numberOfRows = 0;
-    numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
-    if (numberOfRows < 0) {
-        switch (ts) {
-            case UIViewControllerSchemaTablesSectionsInstructions: {
-                //The sections are report header, report footer, page header, page footer,
-                //  body, group header, and group footer
-                NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-                numberOfRows = (2 * numberOfGroups) + 5;
-                NSLog(@"Section Rows: %d", numberOfRows);
-                break;
-            }
-            case UIViewControllerSchemaTablesSectionsTables: {
-                numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Table Rows: %d", numberOfRows);
-                break;
-            }
-            case UIViewControllerSchemaTablesSectionsLinks: {
-                numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Link Rows: %d", numberOfRows);
-                break;
-            }
-            case UIViewControllerSchemaTablesSectionsPredicate: {
-                numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Predicate Rows: %d", numberOfRows);
-                break;
-            }
-            case UIViewControllerSchemaTablesSectionsGroups: {
-                numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Group Rows: %d", numberOfRows);
-                break;
-            }
-            default:
-                numberOfRows = 0;
-                break;
-        }
-    }
-    [rowsDict release];
-	return numberOfRows;
 }
 
 /*

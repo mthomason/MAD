@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface UITableViewCellQueryLink : UITableViewCell
+
+@property (retain) NSManagedObjectID *tableID;
 
 @property (nonatomic, assign) IBOutlet UILabel *labelTableLeft;
 @property (nonatomic, assign) IBOutlet UILabel *labelTableRight;

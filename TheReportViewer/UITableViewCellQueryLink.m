@@ -11,7 +11,13 @@
 
 @implementation UITableViewCellQueryLink
 
-@synthesize labelFieldLeft, labelFieldRight, labelJoinArrow, labelJoinDesc, labelTableLeft, labelTableRight;
+@synthesize labelFieldLeft = _labelFieldLeft, labelFieldRight = _labelFieldRight, labelJoinArrow = _labelJoinArrow, labelJoinDesc = _labelJoinDesc, labelTableLeft = _labelTableLeft, labelTableRight = _labelTableRight;
+@synthesize tableID = _tableID;
+
+- (void)dealloc {
+    [_tableID release];
+    [super dealloc];
+}
 
 + (CGFloat)defaultHeight {
     return UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT;

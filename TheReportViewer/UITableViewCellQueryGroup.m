@@ -10,7 +10,13 @@
 
 @implementation UITableViewCellQueryGroup
 
-@synthesize labelDetail, labelMain;
+@synthesize labelDetail = _labelDetail, labelMain = _labelMain;
+@synthesize tableID = _tableID;
+
+- (void)dealloc {
+    [_tableID release];
+    [super dealloc];
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];

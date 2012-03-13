@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface UITableViewCellQueryGroup : UITableViewCell
+
+@property (retain) NSManagedObjectID *tableID;
 
 @property (nonatomic, assign) IBOutlet UILabel *labelDetail;
 @property (nonatomic, assign) IBOutlet UILabel *labelMain;

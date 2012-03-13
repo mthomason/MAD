@@ -251,6 +251,7 @@
 }
 
 - (NSMutableDictionary *)datamodel {
+    
     return [[[self datamodelForNumberOfTables:[RptqQueryTables countForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]]] retain] autorelease];
 }
 
