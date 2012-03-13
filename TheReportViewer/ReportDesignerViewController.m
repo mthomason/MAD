@@ -23,6 +23,7 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
 
 #import "CGGeometry+Extras.h"
 #import "UIColor+EverydayApps.h"
@@ -331,9 +332,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-#warning Does this work?  Core data managedObjectContext in a block?
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -449,8 +447,7 @@
                              [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
                              [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
                          } completion:^(BOOL finished) {
-                             NSLog(@"designScrollView: %@", NSStringFromCGRect( self.designScrollView.frame ));
-                             NSLog(@"toolbox: %@", NSStringFromCGRect( self.toolbox.view.frame ));
+
                          }];
     }
 }
@@ -503,15 +500,18 @@
         //dataObject.isLabelDataField = dataField;
         
         [[doc hasDetailSection] addHasObjectsObject:dataObject];
-        
-        [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
-                              forSaveOperation: UIDocumentSaveForOverwriting
-                             completionHandler: ^(BOOL success) {
 
-                                 [dataObject release];
-                                 [doc release];
-                             }];
-
+        NSError *error = nil;
+        [[[self managedDocumentQuery] managedObjectContext] save: &error];
+        if (!error) {
+            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                                  forSaveOperation: UIDocumentSaveForOverwriting
+                                 completionHandler: ^(BOOL success) {
+                                     
+                                     [dataObject release];
+                                     [doc release];
+                                 }];
+        }
     } else {
         [doc release];
     }
@@ -549,32 +549,42 @@
 
 #pragma mark Element View Delegate
 
-- (BOOL)elementDidRequestRemoval:(ElementView *)view {
-#warning Fixme
-    return NO;
-}
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-
 - (void)elementDidFinishPan:(ElementView *)view {
-    RptqDocumentObjectLabelDataField *dataField = [[RptqDocumentObjectLabelDataField labelDataFieldForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext] withObjectID: [view objectID]] retain];
-    
-    [[dataField parentObjectLabelDataField] setOriginx:[NSNumber numberWithFloat: view.frame.origin.x]];
-    [[dataField parentObjectLabelDataField] setOriginy:[NSNumber numberWithFloat: view.frame.origin.y]];
-    [[dataField parentObjectLabelDataField] setSizewidth:[NSNumber numberWithFloat: view.frame.size.width]];
-    [[dataField parentObjectLabelDataField] setSizeheight:[NSNumber numberWithFloat: view.frame.size.height]];
+    RptqDocumentObjectLabelDataField *datafield = [[RptqDocumentObjectLabelDataField labelDataFieldForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext] withObjectID:[view objectID]] retain];
+    if (datafield) {
+        datafield.parentObjectLabelDataField.originx = [NSNumber numberWithFloat: view.frame.origin.x];
+        datafield.parentObjectLabelDataField.originy = [NSNumber numberWithFloat: view.frame.origin.y];
+        datafield.parentObjectLabelDataField.sizewidth = [NSNumber numberWithFloat: view.frame.size.width];
+        datafield.parentObjectLabelDataField.sizeheight = [NSNumber numberWithFloat: view.frame.size.height];
 
-    NSManagedObjectID *objid = [[(UIScrollViewSection *)[view superview] objectID] retain];
-    
-    [[dataField parentObjectLabelDataField] setInSection: [RptqDocumentSection sectionForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext] withObjectID: objid]];
-    
-    [objid release];
-    [dataField release];
-    [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
-                          forSaveOperation: UIDocumentSaveForOverwriting
-                         completionHandler: ^(BOOL success) {
-                             
+        UIScrollViewSection *svSection = (UIScrollViewSection *)[[view containerView] retain];
+        if (svSection) {
+            RptqDocumentSection *documentSection = [[RptqDocumentSection sectionForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext] withObjectID: [svSection objectID]] retain];
+            NSLog(@"Document section: %@", [documentSection localizedDisplayName]);
+            datafield.parentObjectLabelDataField.inSection = documentSection;
+            [documentSection release];
+        }
+        [svSection release];
+        
 
-                         }];
+        NSError *error = nil;
+        [[[self managedDocumentQuery] managedObjectContext] save: &error];
+        if (error) {
+            NSLog(@"Error: %@", error);
+        } else {
+            [[self managedDocumentQuery] saveToURL: [[self managedDocumentQuery] fileURL]
+                                  forSaveOperation: UIDocumentSaveForOverwriting
+                                 completionHandler: ^(BOOL success) {
+                                     
+                                     
+                                 }];
+        }
+    }
+    [datafield release];
+}
+
+- (BOOL)elementDidRequestRemoval:(ElementView *)view {
+    return NO;
 }
 
 #pragma mark Table View Data Source Protocol

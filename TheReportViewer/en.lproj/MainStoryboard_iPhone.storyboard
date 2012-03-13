@@ -390,7 +390,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1728" y="2849"/>
+            <point key="canvasLocation" x="1845" y="2771"/>
         </scene>
         <!--View Controller Report Viewer-->
         <scene sceneID="Ts3-uT-wQ7">
@@ -4917,7 +4917,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="jCL-NW-r6y"/>
-        <segue reference="dOe-6a-PiX"/>
+        <segue reference="amO-vq-5zB"/>
         <segue reference="CwB-f6-wTT"/>
         <segue reference="giJ-oQ-sLB"/>
     </inferredMetricsTieBreakers>
