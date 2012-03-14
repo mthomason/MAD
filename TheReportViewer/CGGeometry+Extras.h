@@ -8,6 +8,12 @@
 
 /* Make a point from `(x, y)'. */
 
+CG_INLINE CGPoint CGPointRoundPointToGrid(CGPoint point);
+CG_INLINE CGPoint
+CGPointRoundPointToGrid(CGPoint point) {
+    return CGPointMake(roundf(point.x / 10.0000f) * 10.0000f, roundf(point.y / 10.0000f) * 10.0000f);
+}
+
 CG_INLINE CGPoint CGCornerTopLeftPointInRect(CGRect frame);
 CG_INLINE CGPoint
 CGCornerTopLeftPointInRect(CGRect frame) {

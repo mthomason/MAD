@@ -11,6 +11,9 @@
 
 @interface RptqDocument (Extras)
 
++ (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
+              completion: (void (^)(NSArray *results))completion;
+
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 

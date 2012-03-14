@@ -1,0 +1,30 @@
+//
+//  RptqDatabase+Extras.h
+//  TheReportViewer
+//
+//  Created by Michael Thomason on 3/14/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import "RptqDatabase.h"
+
+typedef enum {
+	MNSDatabaseTypeSalesforceCom        = 0,
+	MNSDatabaseTypeDatabaseCom          = 1,
+	MNSDatabaseTypeMySQL                = 2,
+    MNSDatabaseTypeMicrosoftSqlAzure    = 3,
+    MNSDatabaseTypeAmazonSimpleDb       = 4,
+    MNSDatabaseTypeMicrosoftSqlServer   = 5,
+    MNSDatabaseTypeOracle               = 6,
+    MNSDatabaseTypeODBC                 = 7,
+    MNSDatabaseTypeGooleAppEngine       = 8,
+    MNSDatabaseTypeNone                 = 9,
+} MNSDatabaseType;
+
+#define MNSDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MNSDatabaseTypeSalesforceCom", @"MNSDatabaseTypeDatabaseCom", @"MNSDatabaseTypeMySQL", @"MNSDatabaseTypeMicrosoftSqlAzure", @"MNSDatabaseTypeAmazonSimpleDb", @"MNSDatabaseTypeMicrosoftSqlServer", @"MNSDatabaseTypeOracle", @"MNSDatabaseTypeODBC", @"MNSDatabaseTypeGooleAppEngine", @"MNSDatabaseTypeNone", nil]
+
+#define MNSDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
+
+@interface RptqDatabase (Extras)
+
+@end

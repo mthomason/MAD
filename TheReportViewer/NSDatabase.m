@@ -75,6 +75,12 @@
     return self;
 }
 
+- (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
+                       withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion {
+
+    completion([NSArray array], YES);
+}
+
 #pragma mark - Public Actions
 
 - (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion {

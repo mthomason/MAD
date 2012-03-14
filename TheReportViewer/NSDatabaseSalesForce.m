@@ -131,7 +131,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     
     RptqDocument *doc = [[RptqDocument createMainDocumentForManagedObjectContext: moc] retain];
 [doc setName: [self schemaName]];
-    [[[doc hasDatabaseSchema] ownedByUser] setDatabase_driver_type:KEY_DB_TYPE_SF];
+    [[[doc hasDatabaseSchema] ownedByUser] setDatabase_driver_type: KEY_DB_TYPE_SF];
     [[doc hasDatabaseSchema] setDatabase_driver_type: KEY_DB_TYPE_SF];
     
     [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
@@ -218,8 +218,18 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     
 }
 
-- (void)newQueryFile {
+- (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
+                       withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion {
     
+    NSMutableString *query = [[NSMutableString alloc] initWithString: @"SELECT "];
+    
+    //for (NSManagedObjectID *objid in queryLinks) {
+    //    RptqQueryLinks *queryLink = [RptqQueryLinks queryLinkWithID:objid fromObjectContext:];
+    //}
+    
+    [query release];
+
+    completion([NSArray array], YES);
 }
 
 - (BOOL)testConnection {

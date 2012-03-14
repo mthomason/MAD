@@ -8,6 +8,7 @@
 
 #import "RptqDocument+Extras.h"
 #import <CoreData/CoreData.h>
+#import "Constants.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
@@ -28,6 +29,25 @@
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
+}
+
++ (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
+              completion: (void (^)(NSArray *results))completion {
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: objectContext] retain];
+    if (doc) {
+        if ([doc hasDatabaseSchema]) {
+            NSString *driverType = [[[doc hasDatabaseSchema] database_driver_type] retain];
+            if ([driverType isEqualToString: KEY_DB_TYPE_SF]) {
+
+            } else if ([driverType isEqualToString: KEY_DB_TYPE_DB]) {
+                
+            } else if ([driverType isEqualToString: KEY_DB_TYPE_MYSQL]) {
+                
+            }
+            [driverType release];
+        }
+    }
+    [doc release];
 }
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {

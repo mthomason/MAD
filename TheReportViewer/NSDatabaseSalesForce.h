@@ -37,6 +37,9 @@ typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables
 - (void)runQuery: (NSString *)query
       completion: (void (^)(NSDatabaseSalesForce *database, NSArray *results))completion;
 
+- (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
+                       withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion;
+
 - (void)logout;
 
 @end

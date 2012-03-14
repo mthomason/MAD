@@ -287,9 +287,9 @@
             [self startWobble: 1];
             
             if (![[self designerView] isEqual:self]) {
+                [self setCenter: newCenter];
                 [[self designerView] addSubview: self];
             }
-            [self setCenter: CGPointMake(roundf(newCenter.x), roundf(newCenter.y))];
             [[self containerView] bringSubviewToFront: self];
 
             break;
@@ -332,8 +332,7 @@
             
             BOOL addedToNewParent = NO;
             
-            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
-            newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];//CGPointRoundPointToGrid([gestureRecognizer locationInView:[self designerView]]);
             
             UIScrollView *newParent = nil;
             for (UIScrollView *view in [[self designerView] subviews]) {
@@ -342,7 +341,7 @@
                         newParent = [[view retain] autorelease];
                         addedToNewParent = YES;
                         newCenter = [gestureRecognizer locationInView:newParent];
-                        [self setCenter:newCenter];
+                        [self setCenter: newCenter];
                         break;
                     }
                 }
@@ -353,7 +352,7 @@
                         newParent = [[view retain] autorelease];
                         addedToNewParent = YES;
                         newCenter = CGPointMake(self.frame.size.width / 2.0000f, self.frame.size.height / 2.0000f);
-                        [self setCenter:newCenter];
+                        [self setCenter: newCenter];
                         break;
                     }
                 }
@@ -380,7 +379,7 @@
             }
             
             self.lastTime = self.currentTime;
-            newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
+            newCenter = CGPointRoundPointToGrid(newCenter);
             
             [self setCenter: newCenter];
             [self setParentScrollersEnabled: YES];
