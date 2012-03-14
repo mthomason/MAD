@@ -7,7 +7,6 @@
 //
 
 #import "UIScrollViewSection.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation UIScrollViewSection
 @synthesize objectID = _objectID;
@@ -20,22 +19,28 @@
     [super dealloc];
 }
 
+- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setObjectID: objid];
+        [self setLocalizedName: name];
+
+        [self setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
+        [[self layer] setCornerRadius: 5.0000f];
+        //[self setOpaque: NO];
+        [self setClipsToBounds: YES];
+
+    }
+    return self;
+}
+
 - (void)drawRect:(CGRect)rect {
-    
-    //if ([self localizedName]) {
-        if (![self isHighlighted]) {
-            //[[UIColor blackColor] setStroke];
-            //[[UIColor blackColor] set];
-        } else {
-            //[[UIColor redColor] setStroke];
-            //[[UIColor redColor] set];
-        }
-        [[self localizedName] drawInRect: rect
-                      withFont: [UIFont systemFontOfSize:([UIFont systemFontSize])]
-                 lineBreakMode: UILineBreakModeClip
-                     alignment: UITextAlignmentLeft];
-    //}
-    
+    [super drawRect: rect];
+    [[UIColor blueColor] set];
+    [[self localizedName] drawInRect: rect
+                            withFont: [UIFont systemFontOfSize:([UIFont systemFontSize])]
+                       lineBreakMode: UILineBreakModeClip
+                           alignment: UITextAlignmentLeft];
 }
 
 @end

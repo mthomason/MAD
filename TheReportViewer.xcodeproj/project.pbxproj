@@ -154,6 +154,7 @@
 		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
+		4CAB1791150FE38400BA0A9B /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4CB12C9E14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
 		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
 		4CBFF2FD14C7E989000237D3 /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
@@ -720,6 +721,8 @@
 		4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIViewEntityRelationshipTable.xib; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
+		4CAB178F150FE38400BA0A9B /* UIViewRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewRuler.h; sourceTree = "<group>"; };
+		4CAB1790150FE38400BA0A9B /* UIViewRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewRuler.m; sourceTree = "<group>"; };
 		4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerLinkBuilder.h; sourceTree = "<group>"; };
 		4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerLinkBuilder.m; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupSalesforce.h; sourceTree = "<group>"; };
@@ -1716,6 +1719,8 @@
 				4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */,
 				4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */,
 				4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */,
+				4CAB178F150FE38400BA0A9B /* UIViewRuler.h */,
+				4CAB1790150FE38400BA0A9B /* UIViewRuler.m */,
 			);
 			name = "Report Designer";
 			sourceTree = "<group>";
@@ -2406,6 +2411,7 @@
 				4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */,
 				4C2AF68E150DE3F200E3D0DA /* RptqQueryGroup.m in Sources */,
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
+				4CAB1791150FE38400BA0A9B /* UIViewRuler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

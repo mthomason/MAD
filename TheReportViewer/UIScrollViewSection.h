@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import <CoreData/CoreData.h>
+#import "UIColor+EverydayApps.h"
 
 @interface UIScrollViewSection : UIScrollView
 
 @property (retain) NSManagedObjectID *objectID;
 @property (retain) NSString *localizedName;
 @property (assign, getter = isHighlighted) BOOL highlighted;
+
+- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid;
 
 @end

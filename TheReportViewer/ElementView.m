@@ -212,13 +212,19 @@
 }
 
 - (void)setParentScrollersEnabled:(BOOL)enabled {
-    if ([self containerView] != nil) {
-        [[self containerView] setScrollEnabled:enabled];
-        [[self containerView] flashScrollIndicators];
-        if ([[[self containerView] superview] respondsToSelector:@selector(setScrollEnabled:)]) {
-            if ([[[self containerView] superview] isKindOfClass:[UIScrollView class]]) {
-                [(UIScrollView *)self.containerView.superview setScrollEnabled:enabled];
-                [(UIScrollView *)self.containerView.superview flashScrollIndicators];
+    @synchronized([self containerView]) {
+        if ([self containerView] != nil) {
+            if ([[self containerView] respondsToSelector:@selector(setScrollEnabled:)]) {
+                [[self containerView] setScrollEnabled:enabled];
+                [[self containerView] flashScrollIndicators];
+                @synchronized([[self containerView] superview]) {
+                    if ([[[self containerView] superview] respondsToSelector:@selector(setScrollEnabled:)]) {
+                        if ([[[self containerView] superview] isKindOfClass:[UIScrollView class]]) {
+                            [(UIScrollView *)self.containerView.superview setScrollEnabled:enabled];
+                            [(UIScrollView *)self.containerView.superview flashScrollIndicators];
+                        }
+                    }
+                }
             }
         }
     }
@@ -324,29 +330,56 @@
         }
         case UIGestureRecognizerStateEnded: {
             
+            BOOL addedToNewParent = NO;
+            
             CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
             newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
             
-            [self setCenter:newCenter];
             UIScrollView *newParent = nil;
-            for (UIView *view in [[self designerView] subviews]) {
-                NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
+            for (UIScrollView *view in [[self designerView] subviews]) {
                 if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
-                    newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
+                    if ([view isKindOfClass:[UIScrollView class]]) {
+                        newParent = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        newCenter = [gestureRecognizer locationInView:newParent];
+                        [self setCenter:newCenter];
+                        break;
+                    }
                 }
             }
-            
-            if (newParent) {
-                if (![newParent isEqual: self]) {
-                    [self setContainerView: newParent];
-                    [newParent addSubview: self];
+            if (!addedToNewParent) {                                            //OK, lets be less choosie, and get the first one, yo
+                for (UIScrollView *view in [[self designerView] subviews]) {
+                    if ([view isKindOfClass: [UIScrollView class]]) {
+                        newParent = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        newCenter = CGPointMake(self.frame.size.width / 2.0000f, self.frame.size.height / 2.0000f);
+                        [self setCenter:newCenter];
+                        break;
+                    }
+                }
+            }
+            if (addedToNewParent) {
+                if (newParent) {
+                    if (![newParent isEqual: self]) {
+                        [self setContainerView: newParent];
+                        [newParent addSubview: self];
+                    }
+                } else {
+                    newParent = [[[self origionalSuperview] retain] autorelease];
+                    [self setContainerView: [self origionalSuperview]];
+                    [[self origionalSuperview] addSubview: self];
+                    [self setCenter: [self origionalCenter]];
+                    newCenter = [self origionalCenter];
                 }
             } else {
-                newParent = [[[self containerView] retain] autorelease];
+                newParent = [[[self origionalSuperview] retain] autorelease];
+                [self setContainerView: [self origionalSuperview]];
+                [[self origionalSuperview] addSubview: self];
+                [self setCenter: [self origionalCenter]];
+                newCenter = [self origionalCenter];
             }
             
             self.lastTime = self.currentTime;
-            newCenter = [gestureRecognizer locationInView:newParent];
             newCenter = CGPointMake(roundf(newCenter.x), roundf(newCenter.y));
             
             [self setCenter: newCenter];

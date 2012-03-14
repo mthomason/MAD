@@ -12,7 +12,7 @@
 #import "Constants.h"
 #import "NSFileManager+Common.h"
 #import "UIManagedDocumentQuery.h"
-
+#import "UIViewRuler.h"
 #import "RptqDocument.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentObject.h"
@@ -246,10 +246,18 @@
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[self managedDocumentQuery]];
     NSInteger ctr = 0;
-    
+
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
     [self setSvSections: dict];
     [dict release];
+    
+    frame.size.height = 22.0000f;
+    
+    UIViewRuler *ruler = [[UIViewRuler alloc] initWithFrame: frame];
+    [[self designScrollView] addSubview:ruler];
+    [ruler release];
+    
+    frame.origin.y += frame.size.height + 10.0000f;
     
     for (RptqDocumentSection *sec in enumerator) {
         //NSLog(@"Ctr: %d, Type: %d", ctr, [[sec type] integerValue]);
@@ -258,14 +266,9 @@
         
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
         
-        UIScrollViewSection *scrollView = [[UIScrollViewSection alloc] initWithFrame:frame];
-        [scrollView setObjectID: [sec objectID]];
-        NSLog(@"Section name: %@\n%@", [sec objectID], [sec localizedDisplayName]);
-        [scrollView setLocalizedName:[sec localizedDisplayName]];
-        [scrollView setBackgroundColor: [UIColor edaBlackTwentyFivePercent]];
-        [[scrollView layer] setCornerRadius: 5.0000f];
-        [scrollView setClipsToBounds: YES];
-
+        UIScrollViewSection *scrollView = [[UIScrollViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID]];
+        
+        
         [[self designScrollView] addSubview:scrollView];
         [[self svSections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
         
@@ -308,10 +311,11 @@
     }
     
     [enumerator release];
-    
+
     [[self designScrollView] setScrollEnabled:YES];
 
     [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
+    [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
     
 }
 
