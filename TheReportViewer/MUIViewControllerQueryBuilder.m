@@ -119,8 +119,18 @@
     QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[self managedDocumentQuery]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
-    
-   
+
+    /*
+     //Add a header to the table cell.
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    UIViewController *tableHeaderViewController = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderQueryTool"] retain];
+    CGRect tableHeaderFrame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableViewQueryBuilder.frame.size.width, 44.0000f);
+    [[tableHeaderViewController view] setFrame: tableHeaderFrame];
+    [[tableHeaderViewController view] setBackgroundColor: [UIColor edaTableHeaderBackground]];
+    [[self tableViewQueryBuilder] setTableHeaderView: [tableHeaderViewController view]];
+    [tableHeaderViewController release];
+    */
+
     //NSLog(@"%@", [self queryBuilderDataModal]);
     //[[[self queryBuilderDataModal] datamodel] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
     //    NSLog(@"{{%@}, {%@}}", key, obj);
@@ -1148,7 +1158,6 @@
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
     
-    
     section = [self tableSectionTypeForIndexPathSection: section];
 
     switch (section) {
@@ -1228,7 +1237,7 @@
         }
     }
     
-    [result setBackgroundColor:[UIColor colorWithHue:0.5500f saturation:0.8000f brightness:0.8000f alpha:0.5000f]];
+    [result setBackgroundColor: [UIColor edaTableHeaderBackground]];
 
     return result;
 }

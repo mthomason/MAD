@@ -18,4 +18,6 @@
 + (id)edaGreenDark;
 + (id)edaGreenLight;
 
++ (id)edaTableHeaderBackground;
+
 @end

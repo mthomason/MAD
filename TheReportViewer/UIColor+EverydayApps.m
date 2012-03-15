@@ -21,5 +21,6 @@
 + (id)edaYellow                         {vendColor(255.0000f, 227.0000f, 99.0000f);}
 + (id)edaGreenDark                      {vendColor(94.0000f, 151.0000f, 50.0000f);}
 + (id)edaGreenLight                     {vendColor(180.0000f, 216.0000f, 139.0000f);}
++ (id)edaTableHeaderBackground          {return [UIColor colorWithHue:0.5500f saturation:0.8000f brightness:0.8000f alpha:0.5000f];}
 
 @end

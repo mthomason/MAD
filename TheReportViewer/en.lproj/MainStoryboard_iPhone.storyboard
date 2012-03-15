@@ -588,6 +588,16 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
+                                    <barButtonItem style="plain" id="h7K-BX-Chp">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="aXL-Ux-ed8">
+                                            <rect key="frame" x="158" y="8" width="156" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="Direct"/>
+                                                <segment title="Advanced"/>
+                                            </segments>
+                                        </segmentedControl>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" id="TYp-rG-qRH" customClass="UIViewClipboard">
@@ -2264,7 +2274,7 @@
                                 <size key="shadowOffset" width="1" height="1"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -2429,6 +2439,7 @@
                                 <size key="shadowOffset" width="1" height="1"/>
                             </label>
                         </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -4496,6 +4507,34 @@
             </objects>
             <point key="canvasLocation" x="2652" y="3291"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="oej-do-xy5">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dTu-qt-0Nd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="UIViewControllerTableHeaderQueryTool" id="jAG-op-4FF" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cbK-LE-STM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bezeled" selectedSegmentIndex="0" id="76V-pw-dgD">
+                                <rect key="frame" x="51" y="0.0" width="219" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Direct"/>
+                                    <segment title="Assisted"/>
+                                </segments>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1300" y="1464"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIImageAlignCenter20.png" width="20" height="20"/>
@@ -4917,8 +4956,8 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="jCL-NW-r6y"/>
-        <segue reference="amO-vq-5zB"/>
-        <segue reference="CwB-f6-wTT"/>
+        <segue reference="dOe-6a-PiX"/>
         <segue reference="giJ-oQ-sLB"/>
+        <segue reference="CwB-f6-wTT"/>
     </inferredMetricsTieBreakers>
 </document>
