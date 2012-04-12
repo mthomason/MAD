@@ -347,10 +347,10 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
         NSString *fullKeychainIdentifier = [NSString stringWithFormat:@"%@-%@-%@", appName, accountIdentifier, loginDomain];
         
         
-        SFOAuthCredentials *creds = [[SFOAuthCredentials alloc] 
-                                     initWithIdentifier: fullKeychainIdentifier  
-                                     clientId: NSDATABASE_SF_OAUTH_KEY ];
-                
+        SFOAuthCredentials *creds = [[SFOAuthCredentials alloc] initWithIdentifier: fullKeychainIdentifier  
+                                                                          clientId: NSDATABASE_SF_OAUTH_KEY
+                                                                         encrypted: YES];
+        
         
         creds.domain = @"login.salesforce.com";
         creds.redirectUri = @"eda://reports.everydayapps.com/user/login";
