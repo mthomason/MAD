@@ -473,7 +473,8 @@
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
                      animations:^{ 
                          [UIView setAnimationRepeatCount:NSNotFound];
-                         self.transform = rightWobble; }
+                         self.transform = rightWobble;
+                     }
                      completion:nil];
 
 }
