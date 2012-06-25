@@ -312,6 +312,7 @@
 		4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */; };
 		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
+		4CE9F53D1598B03B007717CB /* libwatoolkitios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE9F52A1598B03B007717CB /* libwatoolkitios.a */; };
 		4CEEA0D814C559B000BB9ABC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
 		4CFF2E021500B869002770C1 /* RptqQueryLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E011500B869002770C1 /* RptqQueryLinks.m */; };
 		4CFF2E061500C43E002770C1 /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
@@ -916,6 +917,24 @@
 		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
+		4CE9F52A1598B03B007717CB /* libwatoolkitios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwatoolkitios.a; sourceTree = "<group>"; };
+		4CE9F52C1598B03B007717CB /* WAAuthenticationCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAAuthenticationCredential.h; sourceTree = "<group>"; };
+		4CE9F52D1598B03B007717CB /* WABlob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABlob.h; sourceTree = "<group>"; };
+		4CE9F52E1598B03B007717CB /* WABlobContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABlobContainer.h; sourceTree = "<group>"; };
+		4CE9F52F1598B03B007717CB /* WABlobContainerFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABlobContainerFetchRequest.h; sourceTree = "<group>"; };
+		4CE9F5301598B03B007717CB /* WABlobFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABlobFetchRequest.h; sourceTree = "<group>"; };
+		4CE9F5311598B03B007717CB /* WACloudAccessControlClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WACloudAccessControlClient.h; sourceTree = "<group>"; };
+		4CE9F5321598B03B007717CB /* WACloudAccessToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WACloudAccessToken.h; sourceTree = "<group>"; };
+		4CE9F5331598B03B007717CB /* WACloudStorageClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WACloudStorageClient.h; sourceTree = "<group>"; };
+		4CE9F5341598B03B007717CB /* WACloudStorageClientDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WACloudStorageClientDelegate.h; sourceTree = "<group>"; };
+		4CE9F5351598B03B007717CB /* WAQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAQueue.h; sourceTree = "<group>"; };
+		4CE9F5361598B03B007717CB /* WAQueueFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAQueueFetchRequest.h; sourceTree = "<group>"; };
+		4CE9F5371598B03B007717CB /* WAQueueMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAQueueMessage.h; sourceTree = "<group>"; };
+		4CE9F5381598B03B007717CB /* WAQueueMessageFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAQueueMessageFetchRequest.h; sourceTree = "<group>"; };
+		4CE9F5391598B03B007717CB /* WAResultContinuation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAResultContinuation.h; sourceTree = "<group>"; };
+		4CE9F53A1598B03B007717CB /* WATableEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableEntity.h; sourceTree = "<group>"; };
+		4CE9F53B1598B03B007717CB /* WATableFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableFetchRequest.h; sourceTree = "<group>"; };
+		4CE9F53C1598B03B007717CB /* WAToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAToolkit.h; sourceTree = "<group>"; };
 		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = TheReportViewer/README.txt; sourceTree = "<group>"; };
 		4CFF2E001500B869002770C1 /* RptqQueryLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryLinks.h; sourceTree = "<group>"; };
 		4CFF2E011500B869002770C1 /* RptqQueryLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryLinks.m; sourceTree = "<group>"; };
@@ -943,6 +962,7 @@
 				4C9514EA15107F83004AF941 /* libRestKit.a in Frameworks */,
 				4C9514EB15107F83004AF941 /* libSalesforceOAuth.a in Frameworks */,
 				4C9514EC15107F83004AF941 /* libSalesforceSDK.a in Frameworks */,
+				4CE9F53D1598B03B007717CB /* libwatoolkitios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1088,7 +1108,6 @@
 				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
-				4C49C8AD14C56F35001B3298 /* APIs */,
 				4C384E2E14B29789007B4F48 /* TheReportViewer */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
@@ -1149,19 +1168,12 @@
 		4C3F1F6914BD306600532FA4 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
+				4CE9F5291598B03B007717CB /* Windows-Azure */,
 				4C95147615107F83004AF941 /* salesforce */,
 				4C86D1E214C53EB6008B58B5 /* Objc_Mysql_iPhone_OSX */,
 				4C86D19314C53025008B58B5 /* MySQL Client */,
 			);
 			name = APIs;
-			sourceTree = "<group>";
-		};
-		4C49C8AD14C56F35001B3298 /* APIs */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = APIs;
-			path = TheReportViewer/APIs;
 			sourceTree = "<group>";
 		};
 		4C507B0214D067EE00DE67E3 /* Query Builder */ = {
@@ -2017,6 +2029,40 @@
 			name = "Managed Documents";
 			sourceTree = "<group>";
 		};
+		4CE9F5291598B03B007717CB /* Windows-Azure */ = {
+			isa = PBXGroup;
+			children = (
+				4CE9F52A1598B03B007717CB /* libwatoolkitios.a */,
+				4CE9F52B1598B03B007717CB /* watoolkitios-lib */,
+			);
+			name = "Windows-Azure";
+			path = "APIs/Windows-Azure";
+			sourceTree = "<group>";
+		};
+		4CE9F52B1598B03B007717CB /* watoolkitios-lib */ = {
+			isa = PBXGroup;
+			children = (
+				4CE9F52C1598B03B007717CB /* WAAuthenticationCredential.h */,
+				4CE9F52D1598B03B007717CB /* WABlob.h */,
+				4CE9F52E1598B03B007717CB /* WABlobContainer.h */,
+				4CE9F52F1598B03B007717CB /* WABlobContainerFetchRequest.h */,
+				4CE9F5301598B03B007717CB /* WABlobFetchRequest.h */,
+				4CE9F5311598B03B007717CB /* WACloudAccessControlClient.h */,
+				4CE9F5321598B03B007717CB /* WACloudAccessToken.h */,
+				4CE9F5331598B03B007717CB /* WACloudStorageClient.h */,
+				4CE9F5341598B03B007717CB /* WACloudStorageClientDelegate.h */,
+				4CE9F5351598B03B007717CB /* WAQueue.h */,
+				4CE9F5361598B03B007717CB /* WAQueueFetchRequest.h */,
+				4CE9F5371598B03B007717CB /* WAQueueMessage.h */,
+				4CE9F5381598B03B007717CB /* WAQueueMessageFetchRequest.h */,
+				4CE9F5391598B03B007717CB /* WAResultContinuation.h */,
+				4CE9F53A1598B03B007717CB /* WATableEntity.h */,
+				4CE9F53B1598B03B007717CB /* WATableFetchRequest.h */,
+				4CE9F53C1598B03B007717CB /* WAToolkit.h */,
+			);
+			path = "watoolkitios-lib";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2474,6 +2520,7 @@
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/Windows-Azure\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2503,6 +2550,7 @@
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/TheReportViewer/APIs/Windows-Azure\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
