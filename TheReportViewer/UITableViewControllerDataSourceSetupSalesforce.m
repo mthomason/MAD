@@ -135,15 +135,6 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidUnload {
-    [self setTableViewCellNickname:nil];
-    [self setTableViewCellConnectionCreate:nil];
-    [self setActivityIndicatorTestConnection:nil];
-    [self setTextFieldNickname:nil];
-    [self setSaveButton:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }

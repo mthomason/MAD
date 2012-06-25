@@ -125,13 +125,6 @@
 	
 }
 
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-	self.sectionInfoArray = nil;
-}
-
-
 #pragma mark Table view data source and delegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {

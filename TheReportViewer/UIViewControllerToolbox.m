@@ -98,16 +98,6 @@
 
 }
 
-- (void)viewDidUnload {
-    [self setMainScrollView:nil];
-    [self setToolbar:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-
-    self.fontSettingsTableViewController = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     

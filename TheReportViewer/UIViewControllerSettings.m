@@ -43,11 +43,6 @@
 
 }
 
-- (void)viewDidUnload {
-    [self setTableViewControllerSettings: nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[self view] addSubview: [[self tableViewControllerSettings] tableView]];

@@ -46,13 +46,6 @@
 
 }
 
-- (void)viewDidUnload {
-    [self setLabelHeight:nil];
-    [self setHeightStepper:nil];
-    [self setVisibilitySwitch:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), [self stepperValueNormalized]]];

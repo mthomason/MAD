@@ -45,11 +45,6 @@
     [super viewDidLoad];
 }
 
-- (void)viewDidUnload {
-    [self setTableViewDocuments:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 

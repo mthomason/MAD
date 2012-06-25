@@ -73,19 +73,6 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidUnload {
-    [self setTableViewCellJoinType:nil];
-    [self setTableViewCellTableOne:nil];
-    [self setTableViewCellFieldOne:nil];
-    [self setTableViewCellTableTwo:nil];
-    [self setTableViewCellFieldTwo:nil];
-    [self setTableViewCellTableFieldOne:nil];
-    [self setTableViewCellTableFieldTwo:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);

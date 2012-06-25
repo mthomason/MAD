@@ -127,20 +127,6 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidUnload {
-    [self setTableViewCellUsername:nil];
-    [self setTableViewCellPassword:nil];
-    [self setTableViewCellHost:nil];
-    [self setTableViewCellPort:nil];
-    [self setTableViewCellTestConnection:nil];
-    [self setActivityIndicatorTestConnection:nil];
-    [self setTextFieldUsername:nil];
-    [self setTextFieldPassword:nil];
-    [self setTextFieldHost:nil];
-    [self setTextFieldPort:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }

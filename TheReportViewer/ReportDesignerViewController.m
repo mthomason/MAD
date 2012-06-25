@@ -319,17 +319,6 @@
     
 }
 
-- (void)viewDidUnload {
-    [self setDesignScrollView:nil];
-    [self setContainerView:nil];
-    [self setInformationButton:nil];
-    [self setBarButtonItemInfo:nil];
-    [self setBarButtonItemSettings:nil];
-    [self setBarButtonItemObjects:nil];
-    [self setNavBar:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }

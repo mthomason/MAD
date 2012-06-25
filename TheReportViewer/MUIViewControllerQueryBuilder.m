@@ -141,15 +141,6 @@
     //[gradentView release];
 }
 
-- (void)viewDidUnload {
-    [self setTableViewQueryBuilder:nil];
-    [self setToolbar:nil];
-    [self setNavigationItemMain:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     //[[self tableViewQueryBuilder] setBackgroundView:nil];
@@ -297,11 +288,33 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Toolbar Actions
 
+#pragma mark Top Toolbar Actions
+
+//Labeled as "Reports"
 - (IBAction)done:(id)sender {
     [[self delegate] uIViewControllerSchemaTablesDelegateDidFinish: self];
 }
+
+- (IBAction)edit:(id)sender {
+    BOOL editing = ![tableViewQueryBuilder isEditing];
+    UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                   target: self
+                                                                                   action: @selector(edit:)];
+    [[self navigationItem] setRightBarButtonItem:barButtonItem];
+    /*
+     NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbar] items]];
+     [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
+     [[self toolbar] setItems: tbItems];
+     [tbItems release];
+     */
+    [[self tableViewQueryBuilder] setEditing: editing];
+    [barButtonItem release];
+}
+
+#pragma mark Table Header Actions
 
 - (void)addTable:(id)sender {
     [self performSegueWithIdentifier: @"showAddTableViewController" sender: sender];
@@ -319,29 +332,11 @@
     [self performSegueWithIdentifier: @"showAddGroupViewController" sender: sender];
 }
 
-- (IBAction)edit:(id)sender {
-    BOOL editing = ![tableViewQueryBuilder isEditing];
-    UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                   target: self
-                                                                                   action: @selector(edit:)];
-    [[self navigationItem] setRightBarButtonItem:barButtonItem];
-    /*
-    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbar] items]];
-    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
-    [[self toolbar] setItems: tbItems];
-    [tbItems release];
-     */
-    [[self tableViewQueryBuilder] setEditing: editing];
-    [barButtonItem release];
-}
-
 #pragma mark - Modal helper
 
 - (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
     UIViewControllerSchemaTablesSections result = sec;
     NSArray *sectionTypes = [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
-    //NSLog(@"sectypes: %@", sectionTypes);
     if ([sectionTypes count] >= sec) {
         result = [[sectionTypes objectAtIndex:sec] integerValue];
     }
@@ -737,7 +732,7 @@
         case UITableViewCellEditingStyleDelete: {
             switch (ts) {
                 case UIViewControllerSchemaTablesSectionsTables: {
-
+#warning Only allow table to be deleted if it's not linked or otherwise used in the query.
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     [[self tableViewQueryBuilder] beginUpdates];
                     

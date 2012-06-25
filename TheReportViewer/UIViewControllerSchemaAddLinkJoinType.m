@@ -22,11 +22,6 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidUnload {
-    [self setManagedDocumentQuery:nil];
-    [super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }

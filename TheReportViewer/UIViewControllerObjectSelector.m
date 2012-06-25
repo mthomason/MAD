@@ -74,15 +74,6 @@
     [self showObjectSelector];
 }
 
-- (void)viewDidUnload {
-    [self setSegmentedControlSelectorType:nil];
-    [self setContainerView:nil];
-    [self setToolbarMain:nil];
-    [self setNavigationBar:nil];
-    [self setNavigationItemMain:nil];
-    [super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }

@@ -42,6 +42,22 @@
 		4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C1A586F14E2658500184445 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
+		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
+		4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
+		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
+		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
+		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
+		4C2AC30315358DA600738091 /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
+		4C2AC30615358F0200738091 /* UIImageExportTypeSalesforce@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */; };
+		4C2AC30715358F0200738091 /* UIImageExportTypeSalesforce.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */; };
+		4C2AC30A15358FBA00738091 /* UIImageExportTypeFacebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */; };
+		4C2AC30B15358FBA00738091 /* UIImageExportTypeFacebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */; };
+		4C2AC30E1535910900738091 /* UIImageExportTypeTwitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */; };
+		4C2AC30F1535910900738091 /* UIImageExportTypeTwitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */; };
+		4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
+		4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
+		4C2AC3161535926100738091 /* UIImageExportTypeRSS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */; };
+		4C2AC3171535926100738091 /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
 		4C2AF68E150DE3F200E3D0DA /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2AF68D150DE3F200E3D0DA /* RptqQueryGroup.m */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
@@ -349,6 +365,22 @@
 		4C1A586814E240BF00184445 /* UITableViewControllerChooseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerChooseField.h; sourceTree = "<group>"; };
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerChooseField.m; sourceTree = "<group>"; };
+		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "TheReportViewer/icon@2x.png"; sourceTree = "<group>"; };
+		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
+		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
+		4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeCSV.png; sourceTree = "<group>"; };
+		4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeCSV@2x.png"; sourceTree = "<group>"; };
+		4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeSalesforce@2x.png"; sourceTree = "<group>"; };
+		4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeSalesforce.png; sourceTree = "<group>"; };
+		4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeFacebook.png; sourceTree = "<group>"; };
+		4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeFacebook@2x.png"; sourceTree = "<group>"; };
+		4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeTwitter.png; sourceTree = "<group>"; };
+		4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeTwitter@2x.png"; sourceTree = "<group>"; };
+		4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeAppEngine.png; sourceTree = "<group>"; };
+		4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeAppEngine@2x.png"; sourceTree = "<group>"; };
+		4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeRSS.png; sourceTree = "<group>"; };
+		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
 		4C2AF68C150DE3F200E3D0DA /* RptqQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryGroup.h; sourceTree = "<group>"; };
 		4C2AF68D150DE3F200E3D0DA /* RptqQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryGroup.m; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* Reports.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reports.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -664,6 +696,7 @@
 		4C9514F415112473004AF941 /* MNSVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSVertex.m; sourceTree = "<group>"; };
 		4C9514F615112487004AF941 /* MNSEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSEdge.h; sourceTree = "<group>"; };
 		4C9514F715112488004AF941 /* MNSEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSEdge.m; sourceTree = "<group>"; };
+		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C9DE7C914F63B8F008613AB /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuerySort.h; sourceTree = "<group>"; };
@@ -945,6 +978,20 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */,
+				4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */,
+				4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */,
+				4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */,
+				4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */,
+				4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */,
+				4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */,
+				4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */,
+				4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */,
+				4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */,
+				4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */,
+				4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */,
+				4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */,
+				4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */,
 				4C87407C15053927007FC473 /* UIImageClip@2x.png */,
 				4C87407D15053927007FC473 /* UIImageClip.png */,
 				4CCD8CF1150385A5002B9E77 /* Patterns */,
@@ -1036,6 +1083,9 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C2AC2FA153573FB00738091 /* icon@2x.png */,
+				4C2AC2F71535736200738091 /* icon.png */,
+				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
 				4C49C8AD14C56F35001B3298 /* APIs */,
@@ -2170,6 +2220,22 @@
 				4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */,
 				4C87407E15053927007FC473 /* UIImageClip@2x.png in Resources */,
 				4C87407F15053927007FC473 /* UIImageClip.png in Resources */,
+				4C2AC2F81535736200738091 /* icon.png in Resources */,
+				4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */,
+				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
+				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
+				4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */,
+				4C2AC30315358DA600738091 /* UIImageExportTypeCSV@2x.png in Resources */,
+				4C2AC30615358F0200738091 /* UIImageExportTypeSalesforce@2x.png in Resources */,
+				4C2AC30715358F0200738091 /* UIImageExportTypeSalesforce.png in Resources */,
+				4C2AC30A15358FBA00738091 /* UIImageExportTypeFacebook.png in Resources */,
+				4C2AC30B15358FBA00738091 /* UIImageExportTypeFacebook@2x.png in Resources */,
+				4C2AC30E1535910900738091 /* UIImageExportTypeTwitter.png in Resources */,
+				4C2AC30F1535910900738091 /* UIImageExportTypeTwitter@2x.png in Resources */,
+				4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */,
+				4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */,
+				4C2AC3161535926100738091 /* UIImageExportTypeRSS.png in Resources */,
+				4C2AC3171535926100738091 /* UIImageExportTypeRSS@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2390,6 +2456,7 @@
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer/APIs\"",
@@ -2418,6 +2485,7 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer/APIs\"",

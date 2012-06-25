@@ -61,21 +61,6 @@
     
 }
 
-- (void)viewDidUnload {
-    [self setTableCellPrint:nil];
-    [self setTableCellExport:nil];
-    [self setTableCellFind:nil];
-    [self setTableCellReportSetup:nil];
-    [self setTableCellRuler:nil];
-    [self setTableCellFind:nil];
-    [self setTableCellSettings:nil];
-    [self setTableCellHelp:nil];
-    [self setTableCellStore:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
