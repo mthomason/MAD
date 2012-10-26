@@ -388,10 +388,10 @@
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		4C384E3014B29789007B4F48 /* TheReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TheReportViewer-Info.plist"; sourceTree = "<group>"; };
+		4C384E3014B29789007B4F48 /* Reports-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Reports-Info.plist"; sourceTree = "<group>"; };
 		4C384E3214B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C384E3414B29789007B4F48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C384E3614B29789007B4F48 /* TheReportViewer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TheReportViewer-Prefix.pch"; sourceTree = "<group>"; };
+		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
 		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
@@ -1157,10 +1157,10 @@
 		4C384E2F14B29789007B4F48 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3014B29789007B4F48 /* TheReportViewer-Info.plist */,
+				4C384E3014B29789007B4F48 /* Reports-Info.plist */,
 				4C384E3114B29789007B4F48 /* InfoPlist.strings */,
 				4C384E3414B29789007B4F48 /* main.m */,
-				4C384E3614B29789007B4F48 /* TheReportViewer-Prefix.pch */,
+				4C384E3614B29789007B4F48 /* Reports-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2092,7 +2092,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 			};
-			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "TheReportViewer" */;
+			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "Reports" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -2509,9 +2509,9 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
+				GCC_PREFIX_HEADER = "TheReportViewer/Reports-Prefix.pch";
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
+				INFOPLIST_FILE = "TheReportViewer/Reports-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer\"",
@@ -2539,9 +2539,9 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheReportViewer/TheReportViewer-Prefix.pch";
+				GCC_PREFIX_HEADER = "TheReportViewer/Reports-Prefix.pch";
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "TheReportViewer/TheReportViewer-Info.plist";
+				INFOPLIST_FILE = "TheReportViewer/Reports-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TheReportViewer\"",
@@ -2562,7 +2562,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "TheReportViewer" */ = {
+		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "Reports" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C384E4614B29789007B4F48 /* Debug */,
