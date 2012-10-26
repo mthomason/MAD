@@ -367,7 +367,7 @@
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerChooseField.m; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "TheReportViewer/icon@2x.png"; sourceTree = "<group>"; };
+		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
 		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeCSV.png; sourceTree = "<group>"; };
@@ -935,7 +935,7 @@
 		4CE9F53A1598B03B007717CB /* WATableEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableEntity.h; sourceTree = "<group>"; };
 		4CE9F53B1598B03B007717CB /* WATableFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableFetchRequest.h; sourceTree = "<group>"; };
 		4CE9F53C1598B03B007717CB /* WAToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAToolkit.h; sourceTree = "<group>"; };
-		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = TheReportViewer/README.txt; sourceTree = "<group>"; };
+		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Reports/README.txt; sourceTree = "<group>"; };
 		4CFF2E001500B869002770C1 /* RptqQueryLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryLinks.h; sourceTree = "<group>"; };
 		4CFF2E011500B869002770C1 /* RptqQueryLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryLinks.m; sourceTree = "<group>"; };
 		4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryBuilderDataModal.h; sourceTree = "<group>"; };
@@ -1151,7 +1151,8 @@
 				4CE8A04A14C027B2007C8345 /* Managed Documents */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 			);
-			path = TheReportViewer;
+			name = TheReportViewer;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C384E2F14B29789007B4F48 /* Supporting Files */ = {
@@ -2505,22 +2506,22 @@
 				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TheReportViewer/APIs\"",
+					"\"$(SRCROOT)/Reports/APIs\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheReportViewer/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "TheReportViewer/Reports-Info.plist";
+				INFOPLIST_FILE = "Reports/Reports-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TheReportViewer\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/RestKit\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceSDK\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)/Reports\"",
+					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2535,22 +2536,22 @@
 				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TheReportViewer/APIs\"",
+					"\"$(SRCROOT)/Reports/APIs\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheReportViewer/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
-				INFOPLIST_FILE = "TheReportViewer/Reports-Info.plist";
+				INFOPLIST_FILE = "Reports/Reports-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TheReportViewer\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/libmysqlclient.framework\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/RestKit\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/salesforce/dependencies/SalesforceSDK\"",
-					"\"$(SRCROOT)/TheReportViewer/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)/Reports\"",
+					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
