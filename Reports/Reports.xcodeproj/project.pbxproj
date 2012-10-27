@@ -33,6 +33,315 @@
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
 		4C0358FD14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
+		4C0E7721163B5AEC003B951E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
+		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
+		4C0E7723163B5AEC003B951E /* UIViewControllerReports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* UIViewControllerReports.m */; };
+		4C0E7724163B5AEC003B951E /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C0E7725163B5AEC003B951E /* ReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* ReportDesignerViewController.m */; };
+		4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
+		4C0E7727163B5AEC003B951E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
+		4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
+		4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
+		4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
+		4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
+		4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
+		4C0E772E163B5AEC003B951E /* UIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */; };
+		4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
+		4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
+		4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
+		4C0E7732163B5AEC003B951E /* Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* Templates.m */; };
+		4C0E7733163B5AEC003B951E /* UIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* UIViewControllerStoreTemplates.m */; };
+		4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
+		4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
+		4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
+		4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
+		4C0E7738163B5AEC003B951E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
+		4C0E7739163B5AEC003B951E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
+		4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
+		4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
+		4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
+		4C0E773D163B5AEC003B951E /* UIViewControllerDatabases.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* UIViewControllerDatabases.m */; };
+		4C0E773E163B5AEC003B951E /* UITableViewControllerDataSourceTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */; };
+		4C0E773F163B5AEC003B951E /* UITableViewControllerDataSourceSetupMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */; };
+		4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
+		4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
+		4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
+		4C0E7743163B5AEC003B951E /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
+		4C0E7744163B5AEC003B951E /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
+		4C0E7745163B5AEC003B951E /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
+		4C0E7746163B5AEC003B951E /* MysqlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27D14C53EB6008B58B5 /* MysqlConnection.m */; };
+		4C0E7747163B5AEC003B951E /* MysqlDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27F14C53EB6008B58B5 /* MysqlDelete.m */; };
+		4C0E7748163B5AEC003B951E /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28114C53EB6008B58B5 /* MysqlFetch.m */; };
+		4C0E7749163B5AEC003B951E /* MysqlFetchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28314C53EB6008B58B5 /* MysqlFetchField.m */; };
+		4C0E774A163B5AEC003B951E /* MysqlInsert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28514C53EB6008B58B5 /* MysqlInsert.m */; };
+		4C0E774B163B5AEC003B951E /* MysqlLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28714C53EB6008B58B5 /* MysqlLiteral.m */; };
+		4C0E774C163B5AEC003B951E /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28914C53EB6008B58B5 /* MysqlUpdate.m */; };
+		4C0E774D163B5AEC003B951E /* NSString_MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */; };
+		4C0E774E163B5AEC003B951E /* MNSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D29E14C5426D008B58B5 /* MNSConnection.m */; };
+		4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8C97B914C5C636007FB629 /* NSDatabaseSalesForce.m */; };
+		4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
+		4C0E7751163B5AEC003B951E /* UIModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FB14C7E988000237D3 /* UIModalViewController.m */; };
+		4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
+		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
+		4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
+		4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
+		4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
+		4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; };
+		4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
+		4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
+		4C0E775B163B5AEC003B951E /* UIViewControllerSchemaAddTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* UIViewControllerSchemaAddTable.m */; };
+		4C0E775C163B5AEC003B951E /* UIViewControllerSchemaAddLinkFirstTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m */; };
+		4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
+		4C0E775E163B5AEC003B951E /* UIViewControllerSchemaAddLinkFirstField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */; };
+		4C0E775F163B5AEC003B951E /* UIViewControllerSchemaAddLinkJoinType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */; };
+		4C0E7760163B5AEC003B951E /* UIViewControllerSchemaAddLinkSecondField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */; };
+		4C0E7761163B5AEC003B951E /* UIViewControllerSchemaAddLinkSecondTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */; };
+		4C0E7762163B5AEC003B951E /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
+		4C0E7763163B5AEC003B951E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
+		4C0E7765163B5AEC003B951E /* UITableViewControllerSchemaAddPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0B14DE0A29000E5946 /* UITableViewControllerSchemaAddPredicate.m */; };
+		4C0E7766163B5AEC003B951E /* UITableViewControllerSchemaAddGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* UITableViewControllerSchemaAddGroup.m */; };
+		4C0E7767163B5AEC003B951E /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
+		4C0E7768163B5AEC003B951E /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
+		4C0E7769163B5AEC003B951E /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
+		4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
+		4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
+		4C0E776C163B5AEC003B951E /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
+		4C0E776D163B5AEC003B951E /* UIModalTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61E714E3114B00A5389E /* UIModalTableViewController.m */; };
+		4C0E776E163B5AEC003B951E /* UITableViewControllerPredicateFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* UITableViewControllerPredicateFormat.m */; };
+		4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
+		4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
+		4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
+		4C0E7772163B5AEC003B951E /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
+		4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
+		4C0E7774163B5AEC003B951E /* UINavigationControllerQueryDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* UINavigationControllerQueryDesigner.m */; };
+		4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
+		4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
+		4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
+		4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
+		4C0E7779163B5AEC003B951E /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4C0E777A163B5AEC003B951E /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
+		4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
+		4C0E777C163B5AEC003B951E /* RptqQueryTables+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */; };
+		4C0E777D163B5AEC003B951E /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7CA14F63B91008613AB /* RptqQuerySort.m */; };
+		4C0E777E163B5AEC003B951E /* RptqQueryTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7D014F63B98008613AB /* RptqQueryTables.m */; };
+		4C0E777F163B5AEC003B951E /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7D314F63B9E008613AB /* RptqUserCredentals.m */; };
+		4C0E7780163B5AEC003B951E /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7D614F63BA0008613AB /* RptqRelationship.m */; };
+		4C0E7781163B5AEC003B951E /* RptqQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7DF14F63BB0008613AB /* RptqQueryPredicate.m */; };
+		4C0E7782163B5AEC003B951E /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7F414F63BD1008613AB /* RptqQuery.m */; };
+		4C0E7783163B5AEC003B951E /* RptqTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE80314F63F6F008613AB /* RptqTable.m */; };
+		4C0E7784163B5AEC003B951E /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE81E14F78898008613AB /* RptqDatabase.m */; };
+		4C0E7785163B5AEC003B951E /* RptqField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE82114F7889A008613AB /* RptqField.m */; };
+		4C0E7786163B5AEC003B951E /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE82414F7889B008613AB /* RptqDocumentObject.m */; };
+		4C0E7787163B5AEC003B951E /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE82714F7889B008613AB /* RptqDocumentObjectFormula.m */; };
+		4C0E7788163B5AEC003B951E /* RptqQueryFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE82A14F7889D008613AB /* RptqQueryFields.m */; };
+		4C0E7789163B5AEC003B951E /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE82D14F7889D008613AB /* RptqDocumentSection.m */; };
+		4C0E778A163B5AEC003B951E /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83014F7889E008613AB /* RptqDocumentObjectLabelLink.m */; };
+		4C0E778B163B5AEC003B951E /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83314F7889E008613AB /* RptqDocument.m */; };
+		4C0E778C163B5AEC003B951E /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83614F7889F008613AB /* RptqDocumentObjectLabelDataField.m */; };
+		4C0E778D163B5AEC003B951E /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83914F788A0008613AB /* RptqDocumentObjectLabel.m */; };
+		4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
+		4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
+		4C0E7790163B5AEC003B951E /* MUIViewControllerReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */; };
+		4C0E7791163B5AEC003B951E /* RptqQueryLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E011500B869002770C1 /* RptqQueryLinks.m */; };
+		4C0E7792163B5AEC003B951E /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
+		4C0E7793163B5AEC003B951E /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
+		4C0E7794163B5AEC003B951E /* UIViewGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */; };
+		4C0E7795163B5AEC003B951E /* UIViewClipboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* UIViewClipboard.m */; };
+		4C0E7796163B5AEC003B951E /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
+		4C0E7797163B5AEC003B951E /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2AF68D150DE3F200E3D0DA /* RptqQueryGroup.m */; };
+		4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
+		4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
+		4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F115112434004AF941 /* MNSGraph.m */; };
+		4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F415112473004AF941 /* MNSVertex.m */; };
+		4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F715112488004AF941 /* MNSEdge.m */; };
+		4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
+		4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
+		4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
+		4C0E77A2163B5AEC003B951E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
+		4C0E77A3163B5AEC003B951E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
+		4C0E77A4163B5AEC003B951E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
+		4C0E77A5163B5AEC003B951E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
+		4C0E77A6163B5AEC003B951E /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C970F14C5B881007FB629 /* libmysqlclient.a */; };
+		4C0E77A7163B5AEC003B951E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
+		4C0E77A8163B5AEC003B951E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
+		4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
+		4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
+		4C0E77AB163B5AEC003B951E /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514D115107F83004AF941 /* libRestKit.a */; };
+		4C0E77AC163B5AEC003B951E /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514D815107F83004AF941 /* libSalesforceOAuth.a */; };
+		4C0E77AD163B5AEC003B951E /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514E915107F83004AF941 /* libSalesforceSDK.a */; };
+		4C0E77AE163B5AEC003B951E /* libwatoolkitios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE9F52A1598B03B007717CB /* libwatoolkitios.a */; };
+		4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
+		4C0E77B1163B5AEC003B951E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */; };
+		4C0E77B2163B5AEC003B951E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
+		4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
+		4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
+		4C0E77B5163B5AEC003B951E /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
+		4C0E77B6163B5AEC003B951E /* UIImagePictureFrame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */; };
+		4C0E77B7163B5AEC003B951E /* UIImageLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C314B52ABE005DCE49 /* UIImageLandscape.png */; };
+		4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
+		4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
+		4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
+		4C0E77BB163B5AEC003B951E /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
+		4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
+		4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
+		4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
+		4C0E77BF163B5AEC003B951E /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
+		4C0E77C0163B5AEC003B951E /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
+		4C0E77C1163B5AEC003B951E /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
+		4C0E77C2163B5AEC003B951E /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
+		4C0E77C3163B5AEC003B951E /* UIImageJustified20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816914B6C4EF003DF437 /* UIImageJustified20@2x.png */; };
+		4C0E77C4163B5AEC003B951E /* UIImageBold20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816F14B6CAAF003DF437 /* UIImageBold20.png */; };
+		4C0E77C5163B5AEC003B951E /* UIImageBold20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817014B6CAAF003DF437 /* UIImageBold20@2x.png */; };
+		4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
+		4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
+		4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
+		4C0E77C9163B5AEC003B951E /* UIImageStrikethrough20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817414B6CAAF003DF437 /* UIImageStrikethrough20@2x.png */; };
+		4C0E77CA163B5AEC003B951E /* UIImageUnderline20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817514B6CAAF003DF437 /* UIImageUnderline20.png */; };
+		4C0E77CB163B5AEC003B951E /* UIImageUnderline20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817614B6CAAF003DF437 /* UIImageUnderline20@2x.png */; };
+		4C0E77CC163B5AEC003B951E /* UIImageStacks20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818C14B83E92003DF437 /* UIImageStacks20.png */; };
+		4C0E77CD163B5AEC003B951E /* UIImageStacks20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */; };
+		4C0E77CE163B5AEC003B951E /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
+		4C0E77CF163B5AEC003B951E /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
+		4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
+		4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
+		4C0E77D2163B5AEC003B951E /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
+		4C0E77D3163B5AEC003B951E /* Blank.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DC14B9A48900C49BE9 /* Blank.trvt */; };
+		4C0E77D4163B5AEC003B951E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
+		4C0E77D5163B5AEC003B951E /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
+		4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
+		4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
+		4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
+		4C0E77D9163B5AEC003B951E /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C86D28A14C53EB6008B58B5 /* notes.txt */; };
+		4C0E77DA163B5AEC003B951E /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
+		4C0E77DB163B5AEC003B951E /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
+		4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
+		4C0E77DD163B5AEC003B951E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
+		4C0E77DE163B5AEC003B951E /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
+		4C0E77DF163B5AEC003B951E /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
+		4C0E77E0163B5AEC003B951E /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
+		4C0E77E1163B5AEC003B951E /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
+		4C0E77E2163B5AEC003B951E /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
+		4C0E77E3163B5AEC003B951E /* UIImagePatternStationary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CDA15036DBB002B9E77 /* UIImagePatternStationary@2x.png */; };
+		4C0E77E4163B5AEC003B951E /* UIImagePatternAqua.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF2150385DA002B9E77 /* UIImagePatternAqua.png */; };
+		4C0E77E5163B5AEC003B951E /* UIImagePatternAqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF3150385DA002B9E77 /* UIImagePatternAqua@2x.png */; };
+		4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF4150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png */; };
+		4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF5150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png */; };
+		4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF6150385DA002B9E77 /* UIImagePatternBlackWeave.png */; };
+		4C0E77E9163B5AEC003B951E /* UIImagePatternBlackWeave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF7150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png */; };
+		4C0E77EA163B5AEC003B951E /* UIImagePatternBlueCrepe.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF8150385DA002B9E77 /* UIImagePatternBlueCrepe.png */; };
+		4C0E77EB163B5AEC003B951E /* UIImagePatternBlueCrepe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CF9150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png */; };
+		4C0E77EC163B5AEC003B951E /* UIImagePatternBlueSpecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFA150385DA002B9E77 /* UIImagePatternBlueSpecks.png */; };
+		4C0E77ED163B5AEC003B951E /* UIImagePatternBlueSpecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFB150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png */; };
+		4C0E77EE163B5AEC003B951E /* UIImagePatternBlueTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFC150385DA002B9E77 /* UIImagePatternBlueTextured.png */; };
+		4C0E77EF163B5AEC003B951E /* UIImagePatternBlueTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFD150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png */; };
+		4C0E77F0163B5AEC003B951E /* UIImagePatternBlueVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFE150385DA002B9E77 /* UIImagePatternBlueVellum.png */; };
+		4C0E77F1163B5AEC003B951E /* UIImagePatternBlueVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CFF150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png */; };
+		4C0E77F2163B5AEC003B951E /* UIImagePatternBuffTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D00150385DA002B9E77 /* UIImagePatternBuffTextured.png */; };
+		4C0E77F3163B5AEC003B951E /* UIImagePatternBuffTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D01150385DA002B9E77 /* UIImagePatternBuffTextured@2x.png */; };
+		4C0E77F4163B5AEC003B951E /* UIImagePatternCharcoalFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D02150385DA002B9E77 /* UIImagePatternCharcoalFlecks.png */; };
+		4C0E77F5163B5AEC003B951E /* UIImagePatternCharcoalFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D03150385DA002B9E77 /* UIImagePatternCharcoalFlecks@2x.png */; };
+		4C0E77F6163B5AEC003B951E /* UIImagePatternCrepe.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D04150385DA002B9E77 /* UIImagePatternCrepe.png */; };
+		4C0E77F7163B5AEC003B951E /* UIImagePatternCrepe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D05150385DA002B9E77 /* UIImagePatternCrepe@2x.png */; };
+		4C0E77F8163B5AEC003B951E /* UIImagePatternFiberDarkGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D06150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png */; };
+		4C0E77F9163B5AEC003B951E /* UIImagePatternFibers1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D07150385DA002B9E77 /* UIImagePatternFibers1.png */; };
+		4C0E77FA163B5AEC003B951E /* UIImagePatternFibers1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D08150385DA002B9E77 /* UIImagePatternFibers1@2x.png */; };
+		4C0E77FB163B5AEC003B951E /* UIImagePatternFibers2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D09150385DA002B9E77 /* UIImagePatternFibers2.png */; };
+		4C0E77FC163B5AEC003B951E /* UIImagePatternFibers2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0A150385DA002B9E77 /* UIImagePatternFibers2@2x.png */; };
+		4C0E77FD163B5AEC003B951E /* UIImagePatternFibersDarkGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0B150385DA002B9E77 /* UIImagePatternFibersDarkGray.png */; };
+		4C0E77FE163B5AEC003B951E /* UIImagePatternGoldMetallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0C150385DA002B9E77 /* UIImagePatternGoldMetallic.png */; };
+		4C0E77FF163B5AEC003B951E /* UIImagePatternGoldMetallic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0D150385DA002B9E77 /* UIImagePatternGoldMetallic@2x.png */; };
+		4C0E7800163B5AEC003B951E /* UIImagePatternGoldParchment.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0E150385DA002B9E77 /* UIImagePatternGoldParchment.png */; };
+		4C0E7801163B5AEC003B951E /* UIImagePatternGoldParchment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D0F150385DA002B9E77 /* UIImagePatternGoldParchment@2x.png */; };
+		4C0E7802163B5AEC003B951E /* UIImagePatternGoldVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D10150385DA002B9E77 /* UIImagePatternGoldVellum.png */; };
+		4C0E7803163B5AEC003B951E /* UIImagePatternGoldVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D11150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png */; };
+		4C0E7804163B5AEC003B951E /* UIImagePatternGraphPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D12150385DA002B9E77 /* UIImagePatternGraphPaper.png */; };
+		4C0E7805163B5AEC003B951E /* UIImagePatternGraphPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D13150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png */; };
+		4C0E7806163B5AEC003B951E /* UIImagePatternGrayGranite.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D14150385DA002B9E77 /* UIImagePatternGrayGranite.png */; };
+		4C0E7807163B5AEC003B951E /* UIImagePatternGrayGranite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D15150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png */; };
+		4C0E7808163B5AEC003B951E /* UIImagePatternGreenAndBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D16150385DA002B9E77 /* UIImagePatternGreenAndBlack.png */; };
+		4C0E7809163B5AEC003B951E /* UIImagePatternGreenAndBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D17150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png */; };
+		4C0E780A163B5AEC003B951E /* UIImagePatternGreenWithFibers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D18150385DA002B9E77 /* UIImagePatternGreenWithFibers.png */; };
+		4C0E780B163B5AEC003B951E /* UIImagePatternGreenWithFibers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D19150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png */; };
+		4C0E780C163B5AEC003B951E /* UIImagePatternGreyVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1A150385DA002B9E77 /* UIImagePatternGreyVellum.png */; };
+		4C0E780D163B5AEC003B951E /* UIImagePatternGreyVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1B150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png */; };
+		4C0E780E163B5AEC003B951E /* UIImagePatternHomemadePaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1C150385DA002B9E77 /* UIImagePatternHomemadePaper.png */; };
+		4C0E780F163B5AEC003B951E /* UIImagePatternHomemadePaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1D150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png */; };
+		4C0E7810163B5AEC003B951E /* UIImagePatternKraftPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1E150385DA002B9E77 /* UIImagePatternKraftPaper.png */; };
+		4C0E7811163B5AEC003B951E /* UIImagePatternKraftPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D1F150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png */; };
+		4C0E7812163B5AEC003B951E /* UIImagePatternKraftPaper2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D20150385DA002B9E77 /* UIImagePatternKraftPaper2.png */; };
+		4C0E7813163B5AEC003B951E /* UIImagePatternKraftPaper2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D21150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png */; };
+		4C0E7814163B5AEC003B951E /* UIImagePatternKraftPaperWaffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D22150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png */; };
+		4C0E7815163B5AEC003B951E /* UIImagePatternKraftPaperWaffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D23150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png */; };
+		4C0E7816163B5AEC003B951E /* UIImagePatternKraftWaffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D24150385DA002B9E77 /* UIImagePatternKraftWaffle.png */; };
+		4C0E7817163B5AEC003B951E /* UIImagePatternKraftWaffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D25150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png */; };
+		4C0E7818163B5AEC003B951E /* UIImagePatternLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D26150385DA002B9E77 /* UIImagePatternLeaf.png */; };
+		4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D27150385DA002B9E77 /* UIImagePatternLeaf@2x.png */; };
+		4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D28150385DA002B9E77 /* UIImagePatternLined.png */; };
+		4C0E781B163B5AEC003B951E /* UIImagePatternLined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D29150385DA002B9E77 /* UIImagePatternLined@2x.png */; };
+		4C0E781C163B5AEC003B951E /* UIImagePatternLinen.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2A150385DA002B9E77 /* UIImagePatternLinen.png */; };
+		4C0E781D163B5AEC003B951E /* UIImagePatternLinen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2B150385DA002B9E77 /* UIImagePatternLinen@2x.png */; };
+		4C0E781E163B5AEC003B951E /* UIImagePatternLinenWeave.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2C150385DA002B9E77 /* UIImagePatternLinenWeave.png */; };
+		4C0E781F163B5AEC003B951E /* UIImagePatternLinenWeave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2D150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png */; };
+		4C0E7820163B5AEC003B951E /* UIImagePatternMarbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2E150385DA002B9E77 /* UIImagePatternMarbled.png */; };
+		4C0E7821163B5AEC003B951E /* UIImagePatternMarbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D2F150385DA002B9E77 /* UIImagePatternMarbled@2x.png */; };
+		4C0E7822163B5AEC003B951E /* UIImagePatternMarbled2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D30150385DA002B9E77 /* UIImagePatternMarbled2.png */; };
+		4C0E7823163B5AEC003B951E /* UIImagePatternMarbled2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D31150385DA002B9E77 /* UIImagePatternMarbled2@2x.png */; };
+		4C0E7824163B5AEC003B951E /* UIImagePatternMetallicBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D32150385DA002B9E77 /* UIImagePatternMetallicBlack.png */; };
+		4C0E7825163B5AEC003B951E /* UIImagePatternMetallicBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D33150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png */; };
+		4C0E7826163B5AEC003B951E /* UIImagePatternMetallicFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D34150385DA002B9E77 /* UIImagePatternMetallicFlecks.png */; };
+		4C0E7827163B5AEC003B951E /* UIImagePatternMetallicFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D35150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png */; };
+		4C0E7828163B5AEC003B951E /* UIImagePatternMetallicFlecks2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D36150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png */; };
+		4C0E7829163B5AEC003B951E /* UIImagePatternMetallicFlecks2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D37150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png */; };
+		4C0E782A163B5AEC003B951E /* UIImagePatternNotebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D38150385DA002B9E77 /* UIImagePatternNotebook.png */; };
+		4C0E782B163B5AEC003B951E /* UIImagePatternNotebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D39150385DA002B9E77 /* UIImagePatternNotebook@2x.png */; };
+		4C0E782C163B5AEC003B951E /* UIImagePatternPeachPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3A150385DA002B9E77 /* UIImagePatternPeachPebbled.png */; };
+		4C0E782D163B5AEC003B951E /* UIImagePatternPeachPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3B150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png */; };
+		4C0E782E163B5AEC003B951E /* UIImagePatternPinkTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3C150385DA002B9E77 /* UIImagePatternPinkTextured.png */; };
+		4C0E782F163B5AEC003B951E /* UIImagePatternPinkTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3D150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png */; };
+		4C0E7830163B5AEC003B951E /* UIImagePatternPinkWithFlecks.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3E150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png */; };
+		4C0E7831163B5AEC003B951E /* UIImagePatternPinkWithFlecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D3F150385DA002B9E77 /* UIImagePatternPinkWithFlecks@2x.png */; };
+		4C0E7832163B5AEC003B951E /* UIImagePatternRedTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D40150385DA002B9E77 /* UIImagePatternRedTextured.png */; };
+		4C0E7833163B5AEC003B951E /* UIImagePatternRedTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D41150385DA002B9E77 /* UIImagePatternRedTextured@2x.png */; };
+		4C0E7834163B5AEC003B951E /* UIImagePatternRedVellum.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D42150385DA002B9E77 /* UIImagePatternRedVellum.png */; };
+		4C0E7835163B5AEC003B951E /* UIImagePatternRedVellum@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D43150385DA002B9E77 /* UIImagePatternRedVellum@2x.png */; };
+		4C0E7836163B5AEC003B951E /* UIImagePatternSketchPaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D44150385DA002B9E77 /* UIImagePatternSketchPaper.png */; };
+		4C0E7837163B5AEC003B951E /* UIImagePatternSketchPaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D45150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png */; };
+		4C0E7838163B5AEC003B951E /* UIImagePatternTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D46150385DA002B9E77 /* UIImagePatternTextured.png */; };
+		4C0E7839163B5AEC003B951E /* UIImagePatternTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D47150385DA002B9E77 /* UIImagePatternTextured@2x.png */; };
+		4C0E783A163B5AEC003B951E /* UIImagePatternWhiteColumns.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D48150385DA002B9E77 /* UIImagePatternWhiteColumns.png */; };
+		4C0E783B163B5AEC003B951E /* UIImagePatternWhiteColumns@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D49150385DA002B9E77 /* UIImagePatternWhiteColumns@2x.png */; };
+		4C0E783C163B5AEC003B951E /* UIImagePatternWhiteDiagonal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4A150385DA002B9E77 /* UIImagePatternWhiteDiagonal.png */; };
+		4C0E783D163B5AEC003B951E /* UIImagePatternWhiteDiagonal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4B150385DA002B9E77 /* UIImagePatternWhiteDiagonal@2x.png */; };
+		4C0E783E163B5AEC003B951E /* UIImagePatternWhiteStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4C150385DA002B9E77 /* UIImagePatternWhiteStationary.png */; };
+		4C0E783F163B5AEC003B951E /* UIImagePatternWhiteStationary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4D150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png */; };
+		4C0E7840163B5AEC003B951E /* UIImagePatternWhiteTextured.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4E150385DA002B9E77 /* UIImagePatternWhiteTextured.png */; };
+		4C0E7841163B5AEC003B951E /* UIImagePatternWhiteTextured@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D4F150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png */; };
+		4C0E7842163B5AEC003B951E /* UIImagePatternWhiteWithWoodFibers.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D50150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png */; };
+		4C0E7843163B5AEC003B951E /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D51150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png */; };
+		4C0E7844163B5AEC003B951E /* UIImagePatternYellowLined.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D52150385DA002B9E77 /* UIImagePatternYellowLined.png */; };
+		4C0E7845163B5AEC003B951E /* UIImagePatternYellowLined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D53150385DA002B9E77 /* UIImagePatternYellowLined@2x.png */; };
+		4C0E7846163B5AEC003B951E /* UIImageClip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407C15053927007FC473 /* UIImageClip@2x.png */; };
+		4C0E7847163B5AEC003B951E /* UIImageClip.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407D15053927007FC473 /* UIImageClip.png */; };
+		4C0E7848163B5AEC003B951E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
+		4C0E7849163B5AEC003B951E /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
+		4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
+		4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
+		4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
+		4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
+		4C0E784E163B5AEC003B951E /* UIImageExportTypeSalesforce@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */; };
+		4C0E784F163B5AEC003B951E /* UIImageExportTypeSalesforce.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */; };
+		4C0E7850163B5AEC003B951E /* UIImageExportTypeFacebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */; };
+		4C0E7851163B5AEC003B951E /* UIImageExportTypeFacebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */; };
+		4C0E7852163B5AEC003B951E /* UIImageExportTypeTwitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */; };
+		4C0E7853163B5AEC003B951E /* UIImageExportTypeTwitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */; };
+		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
+		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
+		4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */; };
+		4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C101DB014F4E58E00AAF676 /* RptqQueryTables+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
@@ -349,6 +658,8 @@
 		4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvAppData.xcdatamodel; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSectionLayoutSettings.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSectionLayoutSettings.m; sourceTree = "<group>"; };
+		4C0E785B163B5AEC003B951E /* ReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C0E785D163B5AEC003B951E /* ReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReportViewer-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/ReportViewer-Info.plist"; sourceTree = "<absolute>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
 		4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTables+Extras.h"; sourceTree = "<group>"; };
@@ -943,6 +1254,29 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4C0E779E163B5AEC003B951E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */,
+				4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */,
+				4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */,
+				4C0E77A2163B5AEC003B951E /* Security.framework in Frameworks */,
+				4C0E77A3163B5AEC003B951E /* SystemConfiguration.framework in Frameworks */,
+				4C0E77A4163B5AEC003B951E /* MobileCoreServices.framework in Frameworks */,
+				4C0E77A5163B5AEC003B951E /* CFNetwork.framework in Frameworks */,
+				4C0E77A6163B5AEC003B951E /* libmysqlclient.a in Frameworks */,
+				4C0E77A7163B5AEC003B951E /* CoreData.framework in Frameworks */,
+				4C0E77A8163B5AEC003B951E /* UIKit.framework in Frameworks */,
+				4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */,
+				4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */,
+				4C0E77AB163B5AEC003B951E /* libRestKit.a in Frameworks */,
+				4C0E77AC163B5AEC003B951E /* libSalesforceOAuth.a in Frameworks */,
+				4C0E77AD163B5AEC003B951E /* libSalesforceSDK.a in Frameworks */,
+				4C0E77AE163B5AEC003B951E /* libwatoolkitios.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2114B29789007B4F48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -993,6 +1327,7 @@
 				4C87407915052D3D007FC473 /* UIViewClipboard.m */,
 			);
 			name = UI;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C00816E14B6C4F8003DF437 /* Images */ = {
@@ -1087,6 +1422,38 @@
 				4C86D29E14C5426D008B58B5 /* MNSConnection.m */,
 			);
 			name = Model;
+			path = Reports;
+			sourceTree = "<group>";
+		};
+		4C0E785E163B5C32003B951E /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4CE8A04A14C027B2007C8345 /* Managed Documents */,
+				4C00815914B6BDB6003DF437 /* UI */,
+				4CDB624614E38B9600A5389E /* Controllers */,
+				4C00818414B738E9003DF437 /* Model */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		4C0E785F163B5C51003B951E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C9514F915126311004AF941 /* Reports.entitlements */,
+				4C0E7860163B5C8D003B951E /* Images */,
+				4C5F02D914B9A42200C49BE9 /* Template Files */,
+				4C3F1F6914BD306600532FA4 /* APIs */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4C0E7860163B5C8D003B951E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4C2AC2FA153573FB00738091 /* icon@2x.png */,
+				4C2AC2F71535736200738091 /* icon.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		4C1A586D14E2653600184445 /* Choose Field Table View Controller */ = {
@@ -1103,12 +1470,11 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C2AC2FA153573FB00738091 /* icon@2x.png */,
-				4C2AC2F71535736200738091 /* icon.png */,
-				4C9514F915126311004AF941 /* Reports.entitlements */,
-				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
-				4C384E2E14B29789007B4F48 /* TheReportViewer */,
+				4C0E785F163B5C51003B951E /* Resources */,
+				4CDB624A14E38C5600A5389E /* App Delegate */,
+				4C0E785E163B5C32003B951E /* Classes */,
+				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -1118,6 +1484,7 @@
 			isa = PBXGroup;
 			children = (
 				4C384E2414B29789007B4F48 /* Reports.app */,
+				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1125,6 +1492,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
 				4C1A586B14E247C700184445 /* QuartzCore.framework */,
 				4C8C97B414C5C50B007FB629 /* Security.framework */,
@@ -1139,31 +1507,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4C384E2E14B29789007B4F48 /* TheReportViewer */ = {
-			isa = PBXGroup;
-			children = (
-				4CDB624A14E38C5600A5389E /* App Delegate */,
-				4C3F1F6914BD306600532FA4 /* APIs */,
-				4C5F02D914B9A42200C49BE9 /* Template Files */,
-				4C00818414B738E9003DF437 /* Model */,
-				4CDB624614E38B9600A5389E /* Controllers */,
-				4C00815914B6BDB6003DF437 /* UI */,
-				4CE8A04A14C027B2007C8345 /* Managed Documents */,
-				4C384E2F14B29789007B4F48 /* Supporting Files */,
-			);
-			name = TheReportViewer;
-			path = Reports;
-			sourceTree = "<group>";
-		};
 		4C384E2F14B29789007B4F48 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				4C384E3014B29789007B4F48 /* Reports-Info.plist */,
+				4C0E785D163B5AEC003B951E /* ReportViewer-Info.plist */,
 				4C384E3114B29789007B4F48 /* InfoPlist.strings */,
 				4C384E3414B29789007B4F48 /* main.m */,
 				4C384E3614B29789007B4F48 /* Reports-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C3F1F6914BD306600532FA4 /* APIs */ = {
@@ -1175,6 +1529,7 @@
 				4C86D19314C53025008B58B5 /* MySQL Client */,
 			);
 			name = APIs;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C507B0214D067EE00DE67E3 /* Query Builder */ = {
@@ -1229,6 +1584,7 @@
 				4C5F02DC14B9A48900C49BE9 /* Blank.trvt */,
 			);
 			name = "Template Files";
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C6362BB14E62738005DBBFF /* Navigation Controller */ = {
@@ -1904,6 +2260,7 @@
 				4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */,
 			);
 			name = Controllers;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4CDB624714E38BC100A5389E /* Main */ = {
@@ -1957,6 +2314,7 @@
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 			);
 			name = "App Delegate";
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4CDB624B14E38C8400A5389E /* Categories */ = {
@@ -2028,6 +2386,7 @@
 				4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */,
 			);
 			name = "Managed Documents";
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4CE9F5291598B03B007717CB /* Windows-Azure */ = {
@@ -2067,9 +2426,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4C384E2314B29789007B4F48 /* Reports */ = {
+		4C0E771F163B5AEC003B951E /* ReportViewer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Reports" */;
+			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "ReportViewer" */;
+			buildPhases = (
+				4C0E7720163B5AEC003B951E /* Sources */,
+				4C0E779E163B5AEC003B951E /* Frameworks */,
+				4C0E77AF163B5AEC003B951E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReportViewer;
+			productName = TheReportViewer;
+			productReference = 4C0E785B163B5AEC003B951E /* ReportViewer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C384E2314B29789007B4F48 /* ReportDesigner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "ReportDesigner" */;
 			buildPhases = (
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
@@ -2079,7 +2455,7 @@
 			);
 			dependencies = (
 			);
-			name = Reports;
+			name = ReportDesigner;
 			productName = TheReportViewer;
 			productReference = 4C384E2414B29789007B4F48 /* Reports.app */;
 			productType = "com.apple.product-type.application";
@@ -2105,12 +2481,188 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4C384E2314B29789007B4F48 /* Reports */,
+				4C384E2314B29789007B4F48 /* ReportDesigner */,
+				4C0E771F163B5AEC003B951E /* ReportViewer */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4C0E77AF163B5AEC003B951E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */,
+				4C0E77B1163B5AEC003B951E /* MainStoryboard_iPhone.storyboard in Resources */,
+				4C0E77B2163B5AEC003B951E /* MainStoryboard_iPad.storyboard in Resources */,
+				4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */,
+				4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */,
+				4C0E77B5163B5AEC003B951E /* UIImagePictureFrame.png in Resources */,
+				4C0E77B6163B5AEC003B951E /* UIImagePictureFrame@2x.png in Resources */,
+				4C0E77B7163B5AEC003B951E /* UIImageLandscape.png in Resources */,
+				4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */,
+				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
+				4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */,
+				4C0E77BB163B5AEC003B951E /* StoryboardToolbox.storyboard in Resources */,
+				4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */,
+				4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */,
+				4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */,
+				4C0E77BF163B5AEC003B951E /* UIImageJustified20.png in Resources */,
+				4C0E77C0163B5AEC003B951E /* UIImageAlignCenter20@2x.png in Resources */,
+				4C0E77C1163B5AEC003B951E /* UIImageAlignLeft20@2x.png in Resources */,
+				4C0E77C2163B5AEC003B951E /* UIImageAlignRight20@2x.png in Resources */,
+				4C0E77C3163B5AEC003B951E /* UIImageJustified20@2x.png in Resources */,
+				4C0E77C4163B5AEC003B951E /* UIImageBold20.png in Resources */,
+				4C0E77C5163B5AEC003B951E /* UIImageBold20@2x.png in Resources */,
+				4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */,
+				4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */,
+				4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */,
+				4C0E77C9163B5AEC003B951E /* UIImageStrikethrough20@2x.png in Resources */,
+				4C0E77CA163B5AEC003B951E /* UIImageUnderline20.png in Resources */,
+				4C0E77CB163B5AEC003B951E /* UIImageUnderline20@2x.png in Resources */,
+				4C0E77CC163B5AEC003B951E /* UIImageStacks20.png in Resources */,
+				4C0E77CD163B5AEC003B951E /* UIImageStacks20@2x.png in Resources */,
+				4C0E77CE163B5AEC003B951E /* UIImageWrench20.png in Resources */,
+				4C0E77CF163B5AEC003B951E /* UIImageWrench20@2x.png in Resources */,
+				4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */,
+				4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */,
+				4C0E77D2163B5AEC003B951E /* Invoice.trvt in Resources */,
+				4C0E77D3163B5AEC003B951E /* Blank.trvt in Resources */,
+				4C0E77D4163B5AEC003B951E /* UIViewEntityRelationshipTable.xib in Resources */,
+				4C0E77D5163B5AEC003B951E /* UIImageDocuments20.png in Resources */,
+				4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */,
+				4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */,
+				4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */,
+				4C0E77D9163B5AEC003B951E /* notes.txt in Resources */,
+				4C0E77DA163B5AEC003B951E /* README.txt in Resources */,
+				4C0E77DB163B5AEC003B951E /* UIModalViewController.xib in Resources */,
+				4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */,
+				4C0E77DD163B5AEC003B951E /* UIImageBolt20@2x.png in Resources */,
+				4C0E77DE163B5AEC003B951E /* UIImageDocument20.png in Resources */,
+				4C0E77DF163B5AEC003B951E /* UIImageDocument20@2x.png in Resources */,
+				4C0E77E0163B5AEC003B951E /* UIImagePatternPebbled.png in Resources */,
+				4C0E77E1163B5AEC003B951E /* UIImagePatternPebbled@2x.png in Resources */,
+				4C0E77E2163B5AEC003B951E /* UIImagePatternStationary.png in Resources */,
+				4C0E77E3163B5AEC003B951E /* UIImagePatternStationary@2x.png in Resources */,
+				4C0E77E4163B5AEC003B951E /* UIImagePatternAqua.png in Resources */,
+				4C0E77E5163B5AEC003B951E /* UIImagePatternAqua@2x.png in Resources */,
+				4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
+				4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
+				4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */,
+				4C0E77E9163B5AEC003B951E /* UIImagePatternBlackWeave@2x.png in Resources */,
+				4C0E77EA163B5AEC003B951E /* UIImagePatternBlueCrepe.png in Resources */,
+				4C0E77EB163B5AEC003B951E /* UIImagePatternBlueCrepe@2x.png in Resources */,
+				4C0E77EC163B5AEC003B951E /* UIImagePatternBlueSpecks.png in Resources */,
+				4C0E77ED163B5AEC003B951E /* UIImagePatternBlueSpecks@2x.png in Resources */,
+				4C0E77EE163B5AEC003B951E /* UIImagePatternBlueTextured.png in Resources */,
+				4C0E77EF163B5AEC003B951E /* UIImagePatternBlueTextured@2x.png in Resources */,
+				4C0E77F0163B5AEC003B951E /* UIImagePatternBlueVellum.png in Resources */,
+				4C0E77F1163B5AEC003B951E /* UIImagePatternBlueVellum@2x.png in Resources */,
+				4C0E77F2163B5AEC003B951E /* UIImagePatternBuffTextured.png in Resources */,
+				4C0E77F3163B5AEC003B951E /* UIImagePatternBuffTextured@2x.png in Resources */,
+				4C0E77F4163B5AEC003B951E /* UIImagePatternCharcoalFlecks.png in Resources */,
+				4C0E77F5163B5AEC003B951E /* UIImagePatternCharcoalFlecks@2x.png in Resources */,
+				4C0E77F6163B5AEC003B951E /* UIImagePatternCrepe.png in Resources */,
+				4C0E77F7163B5AEC003B951E /* UIImagePatternCrepe@2x.png in Resources */,
+				4C0E77F8163B5AEC003B951E /* UIImagePatternFiberDarkGray@2x.png in Resources */,
+				4C0E77F9163B5AEC003B951E /* UIImagePatternFibers1.png in Resources */,
+				4C0E77FA163B5AEC003B951E /* UIImagePatternFibers1@2x.png in Resources */,
+				4C0E77FB163B5AEC003B951E /* UIImagePatternFibers2.png in Resources */,
+				4C0E77FC163B5AEC003B951E /* UIImagePatternFibers2@2x.png in Resources */,
+				4C0E77FD163B5AEC003B951E /* UIImagePatternFibersDarkGray.png in Resources */,
+				4C0E77FE163B5AEC003B951E /* UIImagePatternGoldMetallic.png in Resources */,
+				4C0E77FF163B5AEC003B951E /* UIImagePatternGoldMetallic@2x.png in Resources */,
+				4C0E7800163B5AEC003B951E /* UIImagePatternGoldParchment.png in Resources */,
+				4C0E7801163B5AEC003B951E /* UIImagePatternGoldParchment@2x.png in Resources */,
+				4C0E7802163B5AEC003B951E /* UIImagePatternGoldVellum.png in Resources */,
+				4C0E7803163B5AEC003B951E /* UIImagePatternGoldVellum@2x.png in Resources */,
+				4C0E7804163B5AEC003B951E /* UIImagePatternGraphPaper.png in Resources */,
+				4C0E7805163B5AEC003B951E /* UIImagePatternGraphPaper@2x.png in Resources */,
+				4C0E7806163B5AEC003B951E /* UIImagePatternGrayGranite.png in Resources */,
+				4C0E7807163B5AEC003B951E /* UIImagePatternGrayGranite@2x.png in Resources */,
+				4C0E7808163B5AEC003B951E /* UIImagePatternGreenAndBlack.png in Resources */,
+				4C0E7809163B5AEC003B951E /* UIImagePatternGreenAndBlack@2x.png in Resources */,
+				4C0E780A163B5AEC003B951E /* UIImagePatternGreenWithFibers.png in Resources */,
+				4C0E780B163B5AEC003B951E /* UIImagePatternGreenWithFibers@2x.png in Resources */,
+				4C0E780C163B5AEC003B951E /* UIImagePatternGreyVellum.png in Resources */,
+				4C0E780D163B5AEC003B951E /* UIImagePatternGreyVellum@2x.png in Resources */,
+				4C0E780E163B5AEC003B951E /* UIImagePatternHomemadePaper.png in Resources */,
+				4C0E780F163B5AEC003B951E /* UIImagePatternHomemadePaper@2x.png in Resources */,
+				4C0E7810163B5AEC003B951E /* UIImagePatternKraftPaper.png in Resources */,
+				4C0E7811163B5AEC003B951E /* UIImagePatternKraftPaper@2x.png in Resources */,
+				4C0E7812163B5AEC003B951E /* UIImagePatternKraftPaper2.png in Resources */,
+				4C0E7813163B5AEC003B951E /* UIImagePatternKraftPaper2@2x.png in Resources */,
+				4C0E7814163B5AEC003B951E /* UIImagePatternKraftPaperWaffle.png in Resources */,
+				4C0E7815163B5AEC003B951E /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,
+				4C0E7816163B5AEC003B951E /* UIImagePatternKraftWaffle.png in Resources */,
+				4C0E7817163B5AEC003B951E /* UIImagePatternKraftWaffle@2x.png in Resources */,
+				4C0E7818163B5AEC003B951E /* UIImagePatternLeaf.png in Resources */,
+				4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */,
+				4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */,
+				4C0E781B163B5AEC003B951E /* UIImagePatternLined@2x.png in Resources */,
+				4C0E781C163B5AEC003B951E /* UIImagePatternLinen.png in Resources */,
+				4C0E781D163B5AEC003B951E /* UIImagePatternLinen@2x.png in Resources */,
+				4C0E781E163B5AEC003B951E /* UIImagePatternLinenWeave.png in Resources */,
+				4C0E781F163B5AEC003B951E /* UIImagePatternLinenWeave@2x.png in Resources */,
+				4C0E7820163B5AEC003B951E /* UIImagePatternMarbled.png in Resources */,
+				4C0E7821163B5AEC003B951E /* UIImagePatternMarbled@2x.png in Resources */,
+				4C0E7822163B5AEC003B951E /* UIImagePatternMarbled2.png in Resources */,
+				4C0E7823163B5AEC003B951E /* UIImagePatternMarbled2@2x.png in Resources */,
+				4C0E7824163B5AEC003B951E /* UIImagePatternMetallicBlack.png in Resources */,
+				4C0E7825163B5AEC003B951E /* UIImagePatternMetallicBlack@2x.png in Resources */,
+				4C0E7826163B5AEC003B951E /* UIImagePatternMetallicFlecks.png in Resources */,
+				4C0E7827163B5AEC003B951E /* UIImagePatternMetallicFlecks@2x.png in Resources */,
+				4C0E7828163B5AEC003B951E /* UIImagePatternMetallicFlecks2.png in Resources */,
+				4C0E7829163B5AEC003B951E /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
+				4C0E782A163B5AEC003B951E /* UIImagePatternNotebook.png in Resources */,
+				4C0E782B163B5AEC003B951E /* UIImagePatternNotebook@2x.png in Resources */,
+				4C0E782C163B5AEC003B951E /* UIImagePatternPeachPebbled.png in Resources */,
+				4C0E782D163B5AEC003B951E /* UIImagePatternPeachPebbled@2x.png in Resources */,
+				4C0E782E163B5AEC003B951E /* UIImagePatternPinkTextured.png in Resources */,
+				4C0E782F163B5AEC003B951E /* UIImagePatternPinkTextured@2x.png in Resources */,
+				4C0E7830163B5AEC003B951E /* UIImagePatternPinkWithFlecks.png in Resources */,
+				4C0E7831163B5AEC003B951E /* UIImagePatternPinkWithFlecks@2x.png in Resources */,
+				4C0E7832163B5AEC003B951E /* UIImagePatternRedTextured.png in Resources */,
+				4C0E7833163B5AEC003B951E /* UIImagePatternRedTextured@2x.png in Resources */,
+				4C0E7834163B5AEC003B951E /* UIImagePatternRedVellum.png in Resources */,
+				4C0E7835163B5AEC003B951E /* UIImagePatternRedVellum@2x.png in Resources */,
+				4C0E7836163B5AEC003B951E /* UIImagePatternSketchPaper.png in Resources */,
+				4C0E7837163B5AEC003B951E /* UIImagePatternSketchPaper@2x.png in Resources */,
+				4C0E7838163B5AEC003B951E /* UIImagePatternTextured.png in Resources */,
+				4C0E7839163B5AEC003B951E /* UIImagePatternTextured@2x.png in Resources */,
+				4C0E783A163B5AEC003B951E /* UIImagePatternWhiteColumns.png in Resources */,
+				4C0E783B163B5AEC003B951E /* UIImagePatternWhiteColumns@2x.png in Resources */,
+				4C0E783C163B5AEC003B951E /* UIImagePatternWhiteDiagonal.png in Resources */,
+				4C0E783D163B5AEC003B951E /* UIImagePatternWhiteDiagonal@2x.png in Resources */,
+				4C0E783E163B5AEC003B951E /* UIImagePatternWhiteStationary.png in Resources */,
+				4C0E783F163B5AEC003B951E /* UIImagePatternWhiteStationary@2x.png in Resources */,
+				4C0E7840163B5AEC003B951E /* UIImagePatternWhiteTextured.png in Resources */,
+				4C0E7841163B5AEC003B951E /* UIImagePatternWhiteTextured@2x.png in Resources */,
+				4C0E7842163B5AEC003B951E /* UIImagePatternWhiteWithWoodFibers.png in Resources */,
+				4C0E7843163B5AEC003B951E /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
+				4C0E7844163B5AEC003B951E /* UIImagePatternYellowLined.png in Resources */,
+				4C0E7845163B5AEC003B951E /* UIImagePatternYellowLined@2x.png in Resources */,
+				4C0E7846163B5AEC003B951E /* UIImageClip@2x.png in Resources */,
+				4C0E7847163B5AEC003B951E /* UIImageClip.png in Resources */,
+				4C0E7848163B5AEC003B951E /* icon.png in Resources */,
+				4C0E7849163B5AEC003B951E /* icon@2x.png in Resources */,
+				4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */,
+				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
+				4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */,
+				4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */,
+				4C0E784E163B5AEC003B951E /* UIImageExportTypeSalesforce@2x.png in Resources */,
+				4C0E784F163B5AEC003B951E /* UIImageExportTypeSalesforce.png in Resources */,
+				4C0E7850163B5AEC003B951E /* UIImageExportTypeFacebook.png in Resources */,
+				4C0E7851163B5AEC003B951E /* UIImageExportTypeFacebook@2x.png in Resources */,
+				4C0E7852163B5AEC003B951E /* UIImageExportTypeTwitter.png in Resources */,
+				4C0E7853163B5AEC003B951E /* UIImageExportTypeTwitter@2x.png in Resources */,
+				4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */,
+				4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */,
+				4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */,
+				4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2214B29789007B4F48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2289,6 +2841,138 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4C0E7720163B5AEC003B951E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C0E7721163B5AEC003B951E /* main.m in Sources */,
+				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
+				4C0E7723163B5AEC003B951E /* UIViewControllerReports.m in Sources */,
+				4C0E7724163B5AEC003B951E /* TrvFileType.xcdatamodeld in Sources */,
+				4C0E7725163B5AEC003B951E /* ReportDesignerViewController.m in Sources */,
+				4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */,
+				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
+				4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */,
+				4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */,
+				4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */,
+				4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */,
+				4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */,
+				4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */,
+				4C0E772E163B5AEC003B951E /* UIVewControllerTemplateSelector.m in Sources */,
+				4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */,
+				4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */,
+				4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */,
+				4C0E7732163B5AEC003B951E /* Templates.m in Sources */,
+				4C0E7733163B5AEC003B951E /* UIViewControllerStoreTemplates.m in Sources */,
+				4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */,
+				4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */,
+				4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */,
+				4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */,
+				4C0E7738163B5AEC003B951E /* UIViewControllerDatabaseSchema.m in Sources */,
+				4C0E7739163B5AEC003B951E /* UIViewControllerDatabaseSources.m in Sources */,
+				4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */,
+				4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */,
+				4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
+				4C0E773D163B5AEC003B951E /* UIViewControllerDatabases.m in Sources */,
+				4C0E773E163B5AEC003B951E /* UITableViewControllerDataSourceTypes.m in Sources */,
+				4C0E773F163B5AEC003B951E /* UITableViewControllerDataSourceSetupMySql.m in Sources */,
+				4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */,
+				4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */,
+				4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */,
+				4C0E7743163B5AEC003B951E /* MysqlCommitException.m in Sources */,
+				4C0E7744163B5AEC003B951E /* MysqlException.m in Sources */,
+				4C0E7745163B5AEC003B951E /* MysqlRollbackException.m in Sources */,
+				4C0E7746163B5AEC003B951E /* MysqlConnection.m in Sources */,
+				4C0E7747163B5AEC003B951E /* MysqlDelete.m in Sources */,
+				4C0E7748163B5AEC003B951E /* MysqlFetch.m in Sources */,
+				4C0E7749163B5AEC003B951E /* MysqlFetchField.m in Sources */,
+				4C0E774A163B5AEC003B951E /* MysqlInsert.m in Sources */,
+				4C0E774B163B5AEC003B951E /* MysqlLiteral.m in Sources */,
+				4C0E774C163B5AEC003B951E /* MysqlUpdate.m in Sources */,
+				4C0E774D163B5AEC003B951E /* NSString_MysqlEscape.m in Sources */,
+				4C0E774E163B5AEC003B951E /* MNSConnection.m in Sources */,
+				4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */,
+				4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
+				4C0E7751163B5AEC003B951E /* UIModalViewController.m in Sources */,
+				4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */,
+				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
+				4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */,
+				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
+				4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */,
+				4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */,
+				4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */,
+				4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */,
+				4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */,
+				4C0E775B163B5AEC003B951E /* UIViewControllerSchemaAddTable.m in Sources */,
+				4C0E775C163B5AEC003B951E /* UIViewControllerSchemaAddLinkFirstTable.m in Sources */,
+				4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */,
+				4C0E775E163B5AEC003B951E /* UIViewControllerSchemaAddLinkFirstField.m in Sources */,
+				4C0E775F163B5AEC003B951E /* UIViewControllerSchemaAddLinkJoinType.m in Sources */,
+				4C0E7760163B5AEC003B951E /* UIViewControllerSchemaAddLinkSecondField.m in Sources */,
+				4C0E7761163B5AEC003B951E /* UIViewControllerSchemaAddLinkSecondTable.m in Sources */,
+				4C0E7762163B5AEC003B951E /* UITableViewControllerLinkBuilder.m in Sources */,
+				4C0E7763163B5AEC003B951E /* UITableViewCellQueryPredicate.m in Sources */,
+				4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */,
+				4C0E7765163B5AEC003B951E /* UITableViewControllerSchemaAddPredicate.m in Sources */,
+				4C0E7766163B5AEC003B951E /* UITableViewControllerSchemaAddGroup.m in Sources */,
+				4C0E7767163B5AEC003B951E /* UITableViewControllerFieldOrCustomValue.m in Sources */,
+				4C0E7768163B5AEC003B951E /* UITableViewControllerOpperators.m in Sources */,
+				4C0E7769163B5AEC003B951E /* UITableViewControllerSortType.m in Sources */,
+				4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
+				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
+				4C0E776C163B5AEC003B951E /* UITableViewControllerChooseField.m in Sources */,
+				4C0E776D163B5AEC003B951E /* UIModalTableViewController.m in Sources */,
+				4C0E776E163B5AEC003B951E /* UITableViewControllerPredicateFormat.m in Sources */,
+				4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */,
+				4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */,
+				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
+				4C0E7772163B5AEC003B951E /* UITableViewControllerSectionLayoutSettings.m in Sources */,
+				4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */,
+				4C0E7774163B5AEC003B951E /* UINavigationControllerQueryDesigner.m in Sources */,
+				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
+				4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */,
+				4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */,
+				4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */,
+				4C0E7779163B5AEC003B951E /* ElementView.m in Sources */,
+				4C0E777A163B5AEC003B951E /* UIViewResizeHandle.m in Sources */,
+				4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */,
+				4C0E777C163B5AEC003B951E /* RptqQueryTables+Extras.m in Sources */,
+				4C0E777D163B5AEC003B951E /* RptqQuerySort.m in Sources */,
+				4C0E777E163B5AEC003B951E /* RptqQueryTables.m in Sources */,
+				4C0E777F163B5AEC003B951E /* RptqUserCredentals.m in Sources */,
+				4C0E7780163B5AEC003B951E /* RptqRelationship.m in Sources */,
+				4C0E7781163B5AEC003B951E /* RptqQueryPredicate.m in Sources */,
+				4C0E7782163B5AEC003B951E /* RptqQuery.m in Sources */,
+				4C0E7783163B5AEC003B951E /* RptqTable.m in Sources */,
+				4C0E7784163B5AEC003B951E /* RptqDatabase.m in Sources */,
+				4C0E7785163B5AEC003B951E /* RptqField.m in Sources */,
+				4C0E7786163B5AEC003B951E /* RptqDocumentObject.m in Sources */,
+				4C0E7787163B5AEC003B951E /* RptqDocumentObjectFormula.m in Sources */,
+				4C0E7788163B5AEC003B951E /* RptqQueryFields.m in Sources */,
+				4C0E7789163B5AEC003B951E /* RptqDocumentSection.m in Sources */,
+				4C0E778A163B5AEC003B951E /* RptqDocumentObjectLabelLink.m in Sources */,
+				4C0E778B163B5AEC003B951E /* RptqDocument.m in Sources */,
+				4C0E778C163B5AEC003B951E /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0E778D163B5AEC003B951E /* RptqDocumentObjectLabel.m in Sources */,
+				4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */,
+				4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
+				4C0E7790163B5AEC003B951E /* MUIViewControllerReportViewer.m in Sources */,
+				4C0E7791163B5AEC003B951E /* RptqQueryLinks.m in Sources */,
+				4C0E7792163B5AEC003B951E /* QueryBuilderDataModal.m in Sources */,
+				4C0E7793163B5AEC003B951E /* UIColor+PaperPatterns.m in Sources */,
+				4C0E7794163B5AEC003B951E /* UIViewGradient.m in Sources */,
+				4C0E7795163B5AEC003B951E /* UIViewClipboard.m in Sources */,
+				4C0E7796163B5AEC003B951E /* RptqQueryGroup+Extras.m in Sources */,
+				4C0E7797163B5AEC003B951E /* RptqQueryGroup.m in Sources */,
+				4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */,
+				4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */,
+				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
+				4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */,
+				4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */,
+				4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2014B29789007B4F48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2451,6 +3135,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4C0E7859163B5AEC003B951E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Reports/APIs\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "ReportViewer-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Reports\"",
+					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+				);
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = ReportViewer;
+				VALID_ARCHS = "armv6 armv7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4C0E785A163B5AEC003B951E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Reports/APIs\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "ReportViewer-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Reports\"",
+					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
+					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
+					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
+					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+				);
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = ReportViewer;
+				VALID_ARCHS = "armv6 armv7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		4C384E4614B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2563,6 +3307,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "ReportViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C0E7859163B5AEC003B951E /* Debug */,
+				4C0E785A163B5AEC003B951E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "Reports" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2572,7 +3325,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Reports" */ = {
+		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "ReportDesigner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C384E4914B29789007B4F48 /* Debug */,
