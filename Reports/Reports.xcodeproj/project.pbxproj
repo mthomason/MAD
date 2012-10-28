@@ -67,17 +67,6 @@
 		4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
 		4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
-		4C0E7743163B5AEC003B951E /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
-		4C0E7744163B5AEC003B951E /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
-		4C0E7745163B5AEC003B951E /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
-		4C0E7746163B5AEC003B951E /* MysqlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27D14C53EB6008B58B5 /* MysqlConnection.m */; };
-		4C0E7747163B5AEC003B951E /* MysqlDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27F14C53EB6008B58B5 /* MysqlDelete.m */; };
-		4C0E7748163B5AEC003B951E /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28114C53EB6008B58B5 /* MysqlFetch.m */; };
-		4C0E7749163B5AEC003B951E /* MysqlFetchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28314C53EB6008B58B5 /* MysqlFetchField.m */; };
-		4C0E774A163B5AEC003B951E /* MysqlInsert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28514C53EB6008B58B5 /* MysqlInsert.m */; };
-		4C0E774B163B5AEC003B951E /* MysqlLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28714C53EB6008B58B5 /* MysqlLiteral.m */; };
-		4C0E774C163B5AEC003B951E /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28914C53EB6008B58B5 /* MysqlUpdate.m */; };
-		4C0E774D163B5AEC003B951E /* NSString_MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */; };
 		4C0E774E163B5AEC003B951E /* MNSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D29E14C5426D008B58B5 /* MNSConnection.m */; };
 		4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8C97B914C5C636007FB629 /* NSDatabaseSalesForce.m */; };
 		4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
@@ -165,7 +154,6 @@
 		4C0E77A3163B5AEC003B951E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
 		4C0E77A4163B5AEC003B951E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
 		4C0E77A5163B5AEC003B951E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
-		4C0E77A6163B5AEC003B951E /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C970F14C5B881007FB629 /* libmysqlclient.a */; };
 		4C0E77A7163B5AEC003B951E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C0E77A8163B5AEC003B951E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
@@ -215,7 +203,6 @@
 		4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
 		4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
 		4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
-		4C0E77D9163B5AEC003B951E /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C86D28A14C53EB6008B58B5 /* notes.txt */; };
 		4C0E77DA163B5AEC003B951E /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
 		4C0E77DB163B5AEC003B951E /* UIModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBFF2FC14C7E989000237D3 /* UIModalViewController.xib */; };
 		4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
@@ -351,6 +338,14 @@
 		4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C1A586F14E2658500184445 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
+		4C1CDC8C163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */; };
+		4C1CDC8D163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */; };
+		4C2020A1163D0F440058F869 /* libpthread.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020A0163D0F440058F869 /* libpthread.dylib */; };
+		4C2020A2163D0F4F0058F869 /* libpthread.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020A0163D0F440058F869 /* libpthread.dylib */; };
+		4C2020C6163D1C540058F869 /* libmysqlclient_device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020C4163D1C540058F869 /* libmysqlclient_device.a */; };
+		4C2020C7163D1C540058F869 /* libmysqlclient_device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020C4163D1C540058F869 /* libmysqlclient_device.a */; };
+		4C2020C8163D1C540058F869 /* libmysqlclient_simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020C5163D1C540058F869 /* libmysqlclient_simulator.a */; };
+		4C2020C9163D1C540058F869 /* libmysqlclient_simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020C5163D1C540058F869 /* libmysqlclient_simulator.a */; };
 		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
 		4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
@@ -417,18 +412,6 @@
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C85C6AA14FF72F3003785AC /* MUIViewControllerReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */; };
-		4C86D28D14C53EB6008B58B5 /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */; };
-		4C86D28E14C53EB6008B58B5 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E714C53EB6008B58B5 /* MysqlException.m */; };
-		4C86D28F14C53EB6008B58B5 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */; };
-		4C86D29414C53EB6008B58B5 /* MysqlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27D14C53EB6008B58B5 /* MysqlConnection.m */; };
-		4C86D29514C53EB6008B58B5 /* MysqlDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D27F14C53EB6008B58B5 /* MysqlDelete.m */; };
-		4C86D29614C53EB6008B58B5 /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28114C53EB6008B58B5 /* MysqlFetch.m */; };
-		4C86D29714C53EB6008B58B5 /* MysqlFetchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28314C53EB6008B58B5 /* MysqlFetchField.m */; };
-		4C86D29814C53EB6008B58B5 /* MysqlInsert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28514C53EB6008B58B5 /* MysqlInsert.m */; };
-		4C86D29914C53EB6008B58B5 /* MysqlLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28714C53EB6008B58B5 /* MysqlLiteral.m */; };
-		4C86D29A14C53EB6008B58B5 /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28914C53EB6008B58B5 /* MysqlUpdate.m */; };
-		4C86D29B14C53EB6008B58B5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C86D28A14C53EB6008B58B5 /* notes.txt */; };
-		4C86D29C14C53EB6008B58B5 /* NSString_MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */; };
 		4C86D29F14C5426D008B58B5 /* MNSConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86D29E14C5426D008B58B5 /* MNSConnection.m */; };
 		4C87407A15052D3D007FC473 /* UIViewClipboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* UIViewClipboard.m */; };
 		4C87407E15053927007FC473 /* UIImageClip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407C15053927007FC473 /* UIImageClip@2x.png */; };
@@ -438,7 +421,6 @@
 		4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
 		4C88A9B014ECDE560069A0AF /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
 		4C88A9C714EE23D00069A0AF /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
-		4C8C971114C5B93D007FB629 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C970F14C5B881007FB629 /* libmysqlclient.a */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
@@ -677,6 +659,12 @@
 		4C1A586814E240BF00184445 /* UITableViewControllerChooseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerChooseField.h; sourceTree = "<group>"; };
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerChooseField.m; sourceTree = "<group>"; };
+		4C1CDC8A163B7C9E00D3655B /* MUIViewControllerMySqlTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerMySqlTest.h; sourceTree = "<group>"; };
+		4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerMySqlTest.m; sourceTree = "<group>"; };
+		4C2020A0163D0F440058F869 /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
+		4C2020C4163D1C540058F869 /* libmysqlclient_device.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient_device.a; path = ../StaticLibraries/libmysqlclient_device.a; sourceTree = "<group>"; };
+		4C2020C5163D1C540058F869 /* libmysqlclient_simulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient_simulator.a; path = ../StaticLibraries/libmysqlclient_simulator.a; sourceTree = "<group>"; };
+		4C2020CA163D264D0058F869 /* MySQL Client Setup */ = {isa = PBXFileReference; lastKnownFileType = text; name = "MySQL Client Setup"; path = "APIs/libmysqlclient.framework/MySQL Client Setup"; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -695,7 +683,7 @@
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
 		4C2AF68C150DE3F200E3D0DA /* RptqQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryGroup.h; sourceTree = "<group>"; };
 		4C2AF68D150DE3F200E3D0DA /* RptqQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryGroup.m; sourceTree = "<group>"; };
-		4C384E2414B29789007B4F48 /* Reports.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reports.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C384E2414B29789007B4F48 /* ReportDesigner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportDesigner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -841,30 +829,6 @@
 		4C86D1D914C5305A008B58B5 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4C86D1DA14C5305A008B58B5 /* waiting_threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = waiting_threads.h; sourceTree = "<group>"; };
 		4C86D1DB14C5305A008B58B5 /* wqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wqueue.h; sourceTree = "<group>"; };
-		4C86D1E114C536A7008B58B5 /* GC_MYSQL_BIND.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GC_MYSQL_BIND.h; path = ../../../Objc_Mysql_iPhone_OSX/GC_MYSQL_BIND.h; sourceTree = "<group>"; };
-		4C86D1E414C53EB6008B58B5 /* MysqlCommitException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlCommitException.h; sourceTree = "<group>"; };
-		4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlCommitException.m; sourceTree = "<group>"; };
-		4C86D1E614C53EB6008B58B5 /* MysqlException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlException.h; sourceTree = "<group>"; };
-		4C86D1E714C53EB6008B58B5 /* MysqlException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlException.m; sourceTree = "<group>"; };
-		4C86D1E814C53EB6008B58B5 /* MysqlRollbackException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlRollbackException.h; sourceTree = "<group>"; };
-		4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlRollbackException.m; sourceTree = "<group>"; };
-		4C86D27C14C53EB6008B58B5 /* MysqlConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlConnection.h; sourceTree = "<group>"; };
-		4C86D27D14C53EB6008B58B5 /* MysqlConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlConnection.m; sourceTree = "<group>"; };
-		4C86D27E14C53EB6008B58B5 /* MysqlDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlDelete.h; sourceTree = "<group>"; };
-		4C86D27F14C53EB6008B58B5 /* MysqlDelete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlDelete.m; sourceTree = "<group>"; };
-		4C86D28014C53EB6008B58B5 /* MysqlFetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlFetch.h; sourceTree = "<group>"; };
-		4C86D28114C53EB6008B58B5 /* MysqlFetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlFetch.m; sourceTree = "<group>"; };
-		4C86D28214C53EB6008B58B5 /* MysqlFetchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlFetchField.h; sourceTree = "<group>"; };
-		4C86D28314C53EB6008B58B5 /* MysqlFetchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlFetchField.m; sourceTree = "<group>"; };
-		4C86D28414C53EB6008B58B5 /* MysqlInsert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlInsert.h; sourceTree = "<group>"; };
-		4C86D28514C53EB6008B58B5 /* MysqlInsert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlInsert.m; sourceTree = "<group>"; };
-		4C86D28614C53EB6008B58B5 /* MysqlLiteral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlLiteral.h; sourceTree = "<group>"; };
-		4C86D28714C53EB6008B58B5 /* MysqlLiteral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlLiteral.m; sourceTree = "<group>"; };
-		4C86D28814C53EB6008B58B5 /* MysqlUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlUpdate.h; sourceTree = "<group>"; };
-		4C86D28914C53EB6008B58B5 /* MysqlUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlUpdate.m; sourceTree = "<group>"; };
-		4C86D28A14C53EB6008B58B5 /* notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
-		4C86D28B14C53EB6008B58B5 /* NSString_MysqlEscape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_MysqlEscape.h; sourceTree = "<group>"; };
-		4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_MysqlEscape.m; sourceTree = "<group>"; };
 		4C86D29D14C5426D008B58B5 /* MNSConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSConnection.h; sourceTree = "<group>"; };
 		4C86D29E14C5426D008B58B5 /* MNSConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSConnection.m; sourceTree = "<group>"; };
 		4C87407815052D3D007FC473 /* UIViewClipboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewClipboard.h; sourceTree = "<group>"; };
@@ -883,7 +847,6 @@
 		4C88A9AF14ECDE560069A0AF /* ElementView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ElementView.m; sourceTree = "<group>"; };
 		4C88A9C514EE23CF0069A0AF /* UIViewResizeHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewResizeHandle.h; sourceTree = "<group>"; };
 		4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewResizeHandle.m; sourceTree = "<group>"; };
-		4C8C970F14C5B881007FB629 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = APIs/libmysqlclient.framework/libmysqlclient.a; sourceTree = "<group>"; };
 		4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1258,6 +1221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C2020A2163D0F4F0058F869 /* libpthread.dylib in Frameworks */,
 				4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */,
 				4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */,
 				4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */,
@@ -1265,7 +1229,6 @@
 				4C0E77A3163B5AEC003B951E /* SystemConfiguration.framework in Frameworks */,
 				4C0E77A4163B5AEC003B951E /* MobileCoreServices.framework in Frameworks */,
 				4C0E77A5163B5AEC003B951E /* CFNetwork.framework in Frameworks */,
-				4C0E77A6163B5AEC003B951E /* libmysqlclient.a in Frameworks */,
 				4C0E77A7163B5AEC003B951E /* CoreData.framework in Frameworks */,
 				4C0E77A8163B5AEC003B951E /* UIKit.framework in Frameworks */,
 				4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */,
@@ -1274,6 +1237,8 @@
 				4C0E77AC163B5AEC003B951E /* libSalesforceOAuth.a in Frameworks */,
 				4C0E77AD163B5AEC003B951E /* libSalesforceSDK.a in Frameworks */,
 				4C0E77AE163B5AEC003B951E /* libwatoolkitios.a in Frameworks */,
+				4C2020C7163D1C540058F869 /* libmysqlclient_device.a in Frameworks */,
+				4C2020C9163D1C540058F869 /* libmysqlclient_simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,6 +1246,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C2020A1163D0F440058F869 /* libpthread.dylib in Frameworks */,
 				4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */,
 				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
@@ -1288,7 +1254,6 @@
 				4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */,
-				4C8C971114C5B93D007FB629 /* libmysqlclient.a in Frameworks */,
 				4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */,
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
@@ -1297,6 +1262,8 @@
 				4C9514EB15107F83004AF941 /* libSalesforceOAuth.a in Frameworks */,
 				4C9514EC15107F83004AF941 /* libSalesforceSDK.a in Frameworks */,
 				4CE9F53D1598B03B007717CB /* libwatoolkitios.a in Frameworks */,
+				4C2020C6163D1C540058F869 /* libmysqlclient_device.a in Frameworks */,
+				4C2020C8163D1C540058F869 /* libmysqlclient_simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1470,6 +1437,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C2020A0163D0F440058F869 /* libpthread.dylib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4CDB624A14E38C5600A5389E /* App Delegate */,
@@ -1483,7 +1451,7 @@
 		4C384E2514B29789007B4F48 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E2414B29789007B4F48 /* Reports.app */,
+				4C384E2414B29789007B4F48 /* ReportDesigner.app */,
 				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
 			);
 			name = Products;
@@ -1525,7 +1493,6 @@
 			children = (
 				4CE9F5291598B03B007717CB /* Windows-Azure */,
 				4C95147615107F83004AF941 /* salesforce */,
-				4C86D1E214C53EB6008B58B5 /* Objc_Mysql_iPhone_OSX */,
 				4C86D19314C53025008B58B5 /* MySQL Client */,
 			);
 			name = APIs;
@@ -1601,8 +1568,10 @@
 		4C86D19314C53025008B58B5 /* MySQL Client */ = {
 			isa = PBXGroup;
 			children = (
-				4C8C970F14C5B881007FB629 /* libmysqlclient.a */,
+				4C2020C4163D1C540058F869 /* libmysqlclient_device.a */,
+				4C2020C5163D1C540058F869 /* libmysqlclient_simulator.a */,
 				4C86D19414C5305A008B58B5 /* Headers */,
+				4C2020CA163D264D0058F869 /* MySQL Client Setup */,
 			);
 			name = "MySQL Client";
 			sourceTree = "<group>";
@@ -1610,7 +1579,6 @@
 		4C86D19414C5305A008B58B5 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				4C86D1E114C536A7008B58B5 /* GC_MYSQL_BIND.h */,
 				4C86D19514C5305A008B58B5 /* atomic */,
 				4C86D19B14C5305A008B58B5 /* base64.h */,
 				4C86D19C14C5305A008B58B5 /* config-win.h */,
@@ -1698,44 +1666,6 @@
 				4C86D1CB14C5305A008B58B5 /* rijndael.h */,
 			);
 			path = mysys;
-			sourceTree = "<group>";
-		};
-		4C86D1E214C53EB6008B58B5 /* Objc_Mysql_iPhone_OSX */ = {
-			isa = PBXGroup;
-			children = (
-				4C86D1E314C53EB6008B58B5 /* Exceptions */,
-				4C86D27C14C53EB6008B58B5 /* MysqlConnection.h */,
-				4C86D27D14C53EB6008B58B5 /* MysqlConnection.m */,
-				4C86D27E14C53EB6008B58B5 /* MysqlDelete.h */,
-				4C86D27F14C53EB6008B58B5 /* MysqlDelete.m */,
-				4C86D28014C53EB6008B58B5 /* MysqlFetch.h */,
-				4C86D28114C53EB6008B58B5 /* MysqlFetch.m */,
-				4C86D28214C53EB6008B58B5 /* MysqlFetchField.h */,
-				4C86D28314C53EB6008B58B5 /* MysqlFetchField.m */,
-				4C86D28414C53EB6008B58B5 /* MysqlInsert.h */,
-				4C86D28514C53EB6008B58B5 /* MysqlInsert.m */,
-				4C86D28614C53EB6008B58B5 /* MysqlLiteral.h */,
-				4C86D28714C53EB6008B58B5 /* MysqlLiteral.m */,
-				4C86D28814C53EB6008B58B5 /* MysqlUpdate.h */,
-				4C86D28914C53EB6008B58B5 /* MysqlUpdate.m */,
-				4C86D28A14C53EB6008B58B5 /* notes.txt */,
-				4C86D28B14C53EB6008B58B5 /* NSString_MysqlEscape.h */,
-				4C86D28C14C53EB6008B58B5 /* NSString_MysqlEscape.m */,
-			);
-			path = Objc_Mysql_iPhone_OSX;
-			sourceTree = "<group>";
-		};
-		4C86D1E314C53EB6008B58B5 /* Exceptions */ = {
-			isa = PBXGroup;
-			children = (
-				4C86D1E414C53EB6008B58B5 /* MysqlCommitException.h */,
-				4C86D1E514C53EB6008B58B5 /* MysqlCommitException.m */,
-				4C86D1E614C53EB6008B58B5 /* MysqlException.h */,
-				4C86D1E714C53EB6008B58B5 /* MysqlException.m */,
-				4C86D1E814C53EB6008B58B5 /* MysqlRollbackException.h */,
-				4C86D1E914C53EB6008B58B5 /* MysqlRollbackException.m */,
-			);
-			path = Exceptions;
 			sourceTree = "<group>";
 		};
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
@@ -2250,6 +2180,8 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C1CDC8A163B7C9E00D3655B /* MUIViewControllerMySqlTest.h */,
+				4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */,
 				4C6362BB14E62738005DBBFF /* Navigation Controller */,
 				4CDB624914E38C2C00A5389E /* View Controllers */,
 				4CDB624814E38C1400A5389E /* Table View Controllers */,
@@ -2457,7 +2389,7 @@
 			);
 			name = ReportDesigner;
 			productName = TheReportViewer;
-			productReference = 4C384E2414B29789007B4F48 /* Reports.app */;
+			productReference = 4C384E2414B29789007B4F48 /* ReportDesigner.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2533,7 +2465,6 @@
 				4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */,
 				4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */,
 				4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */,
-				4C0E77D9163B5AEC003B951E /* notes.txt in Resources */,
 				4C0E77DA163B5AEC003B951E /* README.txt in Resources */,
 				4C0E77DB163B5AEC003B951E /* UIModalViewController.xib in Resources */,
 				4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */,
@@ -2708,7 +2639,6 @@
 				4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */,
 				4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */,
 				4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */,
-				4C86D29B14C53EB6008B58B5 /* notes.txt in Resources */,
 				4CEEA0D814C559B000BB9ABC /* README.txt in Resources */,
 				4CBFF2FE14C7E989000237D3 /* UIModalViewController.xib in Resources */,
 				4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */,
@@ -2879,17 +2809,6 @@
 				4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */,
 				4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */,
 				4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */,
-				4C0E7743163B5AEC003B951E /* MysqlCommitException.m in Sources */,
-				4C0E7744163B5AEC003B951E /* MysqlException.m in Sources */,
-				4C0E7745163B5AEC003B951E /* MysqlRollbackException.m in Sources */,
-				4C0E7746163B5AEC003B951E /* MysqlConnection.m in Sources */,
-				4C0E7747163B5AEC003B951E /* MysqlDelete.m in Sources */,
-				4C0E7748163B5AEC003B951E /* MysqlFetch.m in Sources */,
-				4C0E7749163B5AEC003B951E /* MysqlFetchField.m in Sources */,
-				4C0E774A163B5AEC003B951E /* MysqlInsert.m in Sources */,
-				4C0E774B163B5AEC003B951E /* MysqlLiteral.m in Sources */,
-				4C0E774C163B5AEC003B951E /* MysqlUpdate.m in Sources */,
-				4C0E774D163B5AEC003B951E /* NSString_MysqlEscape.m in Sources */,
 				4C0E774E163B5AEC003B951E /* MNSConnection.m in Sources */,
 				4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */,
 				4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
@@ -2970,6 +2889,7 @@
 				4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */,
 				4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */,
 				4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */,
+				4C1CDC8D163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3011,17 +2931,6 @@
 				4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */,
 				4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */,
 				4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */,
-				4C86D28D14C53EB6008B58B5 /* MysqlCommitException.m in Sources */,
-				4C86D28E14C53EB6008B58B5 /* MysqlException.m in Sources */,
-				4C86D28F14C53EB6008B58B5 /* MysqlRollbackException.m in Sources */,
-				4C86D29414C53EB6008B58B5 /* MysqlConnection.m in Sources */,
-				4C86D29514C53EB6008B58B5 /* MysqlDelete.m in Sources */,
-				4C86D29614C53EB6008B58B5 /* MysqlFetch.m in Sources */,
-				4C86D29714C53EB6008B58B5 /* MysqlFetchField.m in Sources */,
-				4C86D29814C53EB6008B58B5 /* MysqlInsert.m in Sources */,
-				4C86D29914C53EB6008B58B5 /* MysqlLiteral.m in Sources */,
-				4C86D29A14C53EB6008B58B5 /* MysqlUpdate.m in Sources */,
-				4C86D29C14C53EB6008B58B5 /* NSString_MysqlEscape.m in Sources */,
 				4C86D29F14C5426D008B58B5 /* MNSConnection.m in Sources */,
 				4C8C97BA14C5C636007FB629 /* NSDatabaseSalesForce.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
@@ -3102,6 +3011,7 @@
 				4C9514F215112434004AF941 /* MNSGraph.m in Sources */,
 				4C9514F515112473004AF941 /* MNSVertex.m in Sources */,
 				4C9514F815112488004AF941 /* MNSEdge.m in Sources */,
+				4C1CDC8C163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3139,6 +3049,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports/APIs\"",
@@ -3151,15 +3063,19 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
 					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/StaticLibraries\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = ReportViewer;
+				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				SDKROOT = iphoneos6.0;
 				VALID_ARCHS = "armv6 armv7";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3169,6 +3085,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports/APIs\"",
@@ -3181,15 +3099,19 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
 					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/StaticLibraries\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = ReportViewer;
+				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				SDKROOT = iphoneos6.0;
 				VALID_ARCHS = "armv6 armv7";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3217,7 +3139,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -3238,7 +3160,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3247,7 +3169,9 @@
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports/APIs\"",
@@ -3260,16 +3184,21 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
 					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/../..\"",
+					"\"$(SRCROOT)/StaticLibraries\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "armv6 armv7";
+				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				SDKROOT = iphoneos6.0;
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3277,7 +3206,9 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports/APIs\"",
@@ -3290,16 +3221,21 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/mysql-connector-c-6.0.2-osx10.5-x86-32bit/lib\"",
-					"\"$(SRCROOT)/Reports/APIs/libmysqlclient.framework\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/RestKit\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceOAuth/Libraries\"",
 					"\"$(SRCROOT)/Reports/APIs/salesforce/dependencies/SalesforceSDK\"",
 					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/../..\"",
+					"\"$(SRCROOT)/StaticLibraries\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "armv6 armv7";
+				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				SDKROOT = iphoneos6.0;
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
