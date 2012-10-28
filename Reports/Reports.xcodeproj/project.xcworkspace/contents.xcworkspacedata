@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:TheReportViewer.xcodeproj">
+      location = "self:Reports.xcodeproj">
    </FileRef>
 </Workspace>

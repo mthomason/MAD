@@ -7,16 +7,18 @@
 //
 
 #import "MUIViewControllerMySqlTest.h"
-/*
+
 #import "MysqlConnection.h"
 #import "MysqlServer.h"
 #import "MysqlFetch.h"
 #import "MysqlFetchField.h"
-*/
+
+
+/*
 #include "my_global.h"
 #include "my_sys.h"
 #include "mysql.h"
-
+*/
 @interface MUIViewControllerMySqlTest ()
 
 @end
@@ -42,12 +44,6 @@
     [super viewDidAppear:animated];
     
     
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        //dispatch_async(dispatch_get_main_queue(), ^{
-
-           // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-            
             MYSQL *_connection = mysql_init(NULL);
             unsigned int timeout = 30;
             mysql_options(_connection, MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
@@ -66,20 +62,12 @@
             } else {
                 NSLog(@"Connected to server");
             }
-            //if (!mysql_set_character_set(&_connection, "utf8")) {
-            //    NSLog(@"Client character set: %s\n", mysql_character_set_name(&_connection));
-            //}
-            
-            //[pool release];
-
-            
-        //});
-    //});
     
-    //MysqlServer *serv = [[MysqlServer alloc] init];
+    mysql_close(_connection);
+    
+    MysqlServer *serv = [[MysqlServer alloc] init];
 
-    //MysqlConnection *conn = [MysqlConnection connectToServer: serv];
-    /*
+    MysqlConnection *conn = [MysqlConnection connectToServer: serv];
     
     NSMutableArray *results = nil;
     if (conn) {
@@ -175,9 +163,9 @@
                 [results release];
             }
         }
-    }*/
+    }
     
-    //[serv release];
+    [serv release];
     
     NSLog(@"Finished test.");
     
