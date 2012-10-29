@@ -338,8 +338,11 @@
 		4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C1A586F14E2658500184445 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
-		4C1CDC8C163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */; };
-		4C1CDC8D163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */; };
+		4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
+		4C1B7A56163E0D9400E331AA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
+		4C1B7A57163E0D9400E331AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
+		4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */; };
+		4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */; };
 		4C2020CC163D2EF00058F869 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020CB163D2EF00058F869 /* libmysqlclient.a */; };
 		4C2020CD163D2EF00058F869 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2020CB163D2EF00058F869 /* libmysqlclient.a */; };
 		4C2020FD163D388D0058F869 /* NSString_MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2020E9163D38890058F869 /* NSString_MysqlEscape.m */; };
@@ -368,6 +371,11 @@
 		4C202121163D38BE0058F869 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C202115163D38BC0058F869 /* MysqlException.m */; };
 		4C202122163D38BE0058F869 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C202117163D38BC0058F869 /* MysqlRollbackException.m */; };
 		4C202123163D38BE0058F869 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C202117163D38BC0058F869 /* MysqlRollbackException.m */; };
+		4C202131163DD4090058F869 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
+		4C202132163DD4090058F869 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
+		4C202133163DD4090058F869 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
+		4C202139163DD40A0058F869 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C202137163DD4090058F869 /* InfoPlist.strings */; };
+		4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */; };
 		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
 		4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
@@ -681,9 +689,12 @@
 		4C1A586814E240BF00184445 /* UITableViewControllerChooseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerChooseField.h; sourceTree = "<group>"; };
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerChooseField.m; sourceTree = "<group>"; };
-		4C1CDC8A163B7C9E00D3655B /* MUIViewControllerMySqlTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerMySqlTest.h; sourceTree = "<group>"; };
-		4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerMySqlTest.m; sourceTree = "<group>"; };
-		4C2020A0163D0F440058F869 /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
+		4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MySqlClientTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1B7A5A163E0D9400E331AA /* MySqlClientTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MySqlClientTest-Info.plist"; sourceTree = "<group>"; };
+		4C1B7A5C163E0D9400E331AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C1B7A5E163E0D9400E331AA /* MySqlClientTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySqlClientTest.h; sourceTree = "<group>"; };
+		4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySqlClientTest.m; sourceTree = "<group>"; };
+		4C1B7A61163E0D9400E331AA /* MySqlClientTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MySqlClientTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C2020C4163D1C540058F869 /* libmysqlclient_device.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient_device.a; path = ../StaticLibraries/libmysqlclient_device.a; sourceTree = "<group>"; };
 		4C2020C5163D1C540058F869 /* libmysqlclient_simulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient_simulator.a; path = ../StaticLibraries/libmysqlclient_simulator.a; sourceTree = "<group>"; };
 		4C2020CA163D264D0058F869 /* MySQL Client Setup */ = {isa = PBXFileReference; lastKnownFileType = text; name = "MySQL Client Setup"; path = "APIs/libmysqlclient.framework/MySQL Client Setup"; sourceTree = "<group>"; };
@@ -714,6 +725,13 @@
 		4C202115163D38BC0058F869 /* MysqlException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlException.m; sourceTree = "<group>"; };
 		4C202116163D38BC0058F869 /* MysqlRollbackException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MysqlRollbackException.h; sourceTree = "<group>"; };
 		4C202117163D38BC0058F869 /* MysqlRollbackException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MysqlRollbackException.m; sourceTree = "<group>"; };
+		4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReportsGeneralTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReportsGeneralTest-Info.plist"; sourceTree = "<group>"; };
+		4C202138163DD4090058F869 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReportsGeneralTest.h; sourceTree = "<group>"; };
+		4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReportsGeneralTest.m; sourceTree = "<group>"; };
+		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -1289,6 +1307,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C1B7A50163E0D9400E331AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */,
+				4C1B7A56163E0D9400E331AA /* UIKit.framework in Frameworks */,
+				4C1B7A57163E0D9400E331AA /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C20212B163DD4090058F869 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C202131163DD4090058F869 /* SenTestingKit.framework in Frameworks */,
+				4C202132163DD4090058F869 /* UIKit.framework in Frameworks */,
+				4C202133163DD4090058F869 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2114B29789007B4F48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1479,6 +1517,26 @@
 			name = "Choose Field Table View Controller";
 			sourceTree = "<group>";
 		};
+		4C1B7A58163E0D9400E331AA /* MySqlClientTest */ = {
+			isa = PBXGroup;
+			children = (
+				4C1B7A5E163E0D9400E331AA /* MySqlClientTest.h */,
+				4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */,
+				4C1B7A59163E0D9400E331AA /* Supporting Files */,
+			);
+			path = MySqlClientTest;
+			sourceTree = "<group>";
+		};
+		4C1B7A59163E0D9400E331AA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C1B7A5A163E0D9400E331AA /* MySqlClientTest-Info.plist */,
+				4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */,
+				4C1B7A61163E0D9400E331AA /* MySqlClientTest-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4C202111163D38BC0058F869 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1493,15 +1551,36 @@
 			path = Objc_Mysql_iPhone_OSX/Exceptions;
 			sourceTree = "<group>";
 		};
+		4C202134163DD4090058F869 /* ReportsGeneralTest */ = {
+			isa = PBXGroup;
+			children = (
+				4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */,
+				4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */,
+				4C202135163DD4090058F869 /* Supporting Files */,
+			);
+			path = ReportsGeneralTest;
+			sourceTree = "<group>";
+		};
+		4C202135163DD4090058F869 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */,
+				4C202137163DD4090058F869 /* InfoPlist.strings */,
+				4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C2020A0163D0F440058F869 /* libpthread.dylib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4CDB624A14E38C5600A5389E /* App Delegate */,
 				4C0E785E163B5C32003B951E /* Classes */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
+				4C202134163DD4090058F869 /* ReportsGeneralTest */,
+				4C1B7A58163E0D9400E331AA /* MySqlClientTest */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -1512,6 +1591,8 @@
 			children = (
 				4C384E2414B29789007B4F48 /* ReportDesigner.app */,
 				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
+				4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */,
+				4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1530,6 +1611,7 @@
 				4C384E2814B29789007B4F48 /* UIKit.framework */,
 				4C384E2A14B29789007B4F48 /* Foundation.framework */,
 				4C384E2C14B29789007B4F48 /* CoreGraphics.framework */,
+				4C202130163DD4090058F869 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2261,8 +2343,6 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4C1CDC8A163B7C9E00D3655B /* MUIViewControllerMySqlTest.h */,
-				4C1CDC8B163B7C9E00D3655B /* MUIViewControllerMySqlTest.m */,
 				4C6362BB14E62738005DBBFF /* Navigation Controller */,
 				4CDB624914E38C2C00A5389E /* View Controllers */,
 				4CDB624814E38C1400A5389E /* Table View Controllers */,
@@ -2456,6 +2536,42 @@
 			productReference = 4C0E785B163B5AEC003B951E /* ReportViewer.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4C1B7A53163E0D9400E331AA /* MySqlClientTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C1B7A62163E0D9400E331AA /* Build configuration list for PBXNativeTarget "MySqlClientTest" */;
+			buildPhases = (
+				4C1B7A4F163E0D9400E331AA /* Sources */,
+				4C1B7A50163E0D9400E331AA /* Frameworks */,
+				4C1B7A51163E0D9400E331AA /* Resources */,
+				4C1B7A52163E0D9400E331AA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MySqlClientTest;
+			productName = MySqlClientTest;
+			productReference = 4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4C20212E163DD4090058F869 /* ReportsGeneralTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C20213E163DD40A0058F869 /* Build configuration list for PBXNativeTarget "ReportsGeneralTest" */;
+			buildPhases = (
+				4C20212A163DD4090058F869 /* Sources */,
+				4C20212B163DD4090058F869 /* Frameworks */,
+				4C20212C163DD4090058F869 /* Resources */,
+				4C20212D163DD4090058F869 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReportsGeneralTest;
+			productName = ReportsGeneralTest;
+			productReference = 4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		4C384E2314B29789007B4F48 /* ReportDesigner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "ReportDesigner" */;
@@ -2496,6 +2612,8 @@
 			targets = (
 				4C384E2314B29789007B4F48 /* ReportDesigner */,
 				4C0E771F163B5AEC003B951E /* ReportViewer */,
+				4C20212E163DD4090058F869 /* ReportsGeneralTest */,
+				4C1B7A53163E0D9400E331AA /* MySqlClientTest */,
 			);
 		};
 /* End PBXProject section */
@@ -2676,6 +2794,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C1B7A51163E0D9400E331AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C20212C163DD4090058F869 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C202139163DD40A0058F869 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2214B29789007B4F48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2853,6 +2987,35 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4C1B7A52163E0D9400E331AA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4C20212D163DD4090058F869 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4C0E7720163B5AEC003B951E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -2972,7 +3135,6 @@
 				4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */,
 				4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */,
 				4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */,
-				4C1CDC8D163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */,
 				4C2020FE163D388D0058F869 /* NSString_MysqlEscape.m in Sources */,
 				4C202102163D388D0058F869 /* MysqlUpdate.m in Sources */,
 				4C202104163D388D0058F869 /* MysqlServer.m in Sources */,
@@ -2985,6 +3147,22 @@
 				4C20211F163D38BE0058F869 /* MysqlCommitException.m in Sources */,
 				4C202121163D38BE0058F869 /* MysqlException.m in Sources */,
 				4C202123163D38BE0058F869 /* MysqlRollbackException.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1B7A4F163E0D9400E331AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C20212A163DD4090058F869 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3106,7 +3284,6 @@
 				4C9514F215112434004AF941 /* MNSGraph.m in Sources */,
 				4C9514F515112473004AF941 /* MNSVertex.m in Sources */,
 				4C9514F815112488004AF941 /* MNSEdge.m in Sources */,
-				4C1CDC8C163B7C9E00D3655B /* MUIViewControllerMySqlTest.m in Sources */,
 				4C2020FD163D388D0058F869 /* NSString_MysqlEscape.m in Sources */,
 				4C202101163D388D0058F869 /* MysqlUpdate.m in Sources */,
 				4C202103163D388D0058F869 /* MysqlServer.m in Sources */,
@@ -3125,6 +3302,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C1B7A5C163E0D9400E331AA /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4C202137163DD4090058F869 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C202138163DD4090058F869 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		4C384E3114B29789007B4F48 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3221,6 +3414,92 @@
 				SDKROOT = iphoneos6.0;
 				VALID_ARCHS = "armv6 armv7";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4C1B7A63163E0D9400E331AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MySqlClientTest/MySqlClientTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MySqlClientTest/MySqlClientTest-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4C1B7A64163E0D9400E331AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MySqlClientTest/MySqlClientTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MySqlClientTest/MySqlClientTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4C20213F163DD40A0058F869 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ReportsGeneralTest/ReportsGeneralTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "ReportsGeneralTest/ReportsGeneralTest-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4C202140163DD40A0058F869 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ReportsGeneralTest/ReportsGeneralTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "ReportsGeneralTest/ReportsGeneralTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -3355,6 +3634,23 @@
 			buildConfigurations = (
 				4C0E7859163B5AEC003B951E /* Debug */,
 				4C0E785A163B5AEC003B951E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C1B7A62163E0D9400E331AA /* Build configuration list for PBXNativeTarget "MySqlClientTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C1B7A63163E0D9400E331AA /* Debug */,
+				4C1B7A64163E0D9400E331AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C20213E163DD40A0058F869 /* Build configuration list for PBXNativeTarget "ReportsGeneralTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C20213F163DD40A0058F869 /* Debug */,
+				4C202140163DD40A0058F869 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
