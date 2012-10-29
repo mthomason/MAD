@@ -163,8 +163,8 @@
 		4C0E77AD163B5AEC003B951E /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514E915107F83004AF941 /* libSalesforceSDK.a */; };
 		4C0E77AE163B5AEC003B951E /* libwatoolkitios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE9F52A1598B03B007717CB /* libwatoolkitios.a */; };
 		4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
-		4C0E77B1163B5AEC003B951E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */; };
-		4C0E77B2163B5AEC003B951E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
+		4C0E77B1163B5AEC003B951E /* ReportDesignerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */; };
+		4C0E77B2163B5AEC003B951E /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
 		4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
 		4C0E77B5163B5AEC003B951E /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
@@ -400,8 +400,8 @@
 		4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
 		4C384E3514B29789007B4F48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
-		4C384E3C14B29789007B4F48 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */; };
-		4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */; };
+		4C384E3C14B29789007B4F48 /* ReportDesignerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */; };
+		4C384E3F14B29789007B4F48 /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
 		4C384E4214B29789007B4F48 /* UIViewControllerReports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E4114B29789007B4F48 /* UIViewControllerReports.m */; };
 		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
@@ -467,6 +467,8 @@
 		4C9514F215112434004AF941 /* MNSGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F115112434004AF941 /* MNSGraph.m */; };
 		4C9514F515112473004AF941 /* MNSVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F415112473004AF941 /* MNSVertex.m */; };
 		4C9514F815112488004AF941 /* MNSEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F715112488004AF941 /* MNSEdge.m */; };
+		4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */; };
+		4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
 		4C9DE7CB14F63B92008613AB /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7CA14F63B91008613AB /* RptqQuerySort.m */; };
 		4C9DE7D114F63B99008613AB /* RptqQueryTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE7D014F63B98008613AB /* RptqQueryTables.m */; };
@@ -760,8 +762,8 @@
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
 		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPhone.storyboard; sourceTree = "<group>"; };
+		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4014B29789007B4F48 /* UIViewControllerReports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIViewControllerReports.h; sourceTree = "<group>"; };
 		4C384E4114B29789007B4F48 /* UIViewControllerReports.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerReports.m; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* UIViewControllerDatabases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabases.h; sourceTree = "<group>"; };
@@ -1039,6 +1041,8 @@
 		4C9514F615112487004AF941 /* MNSEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSEdge.h; sourceTree = "<group>"; };
 		4C9514F715112488004AF941 /* MNSEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSEdge.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
+		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPad.storyboard; sourceTree = "<group>"; };
+		4C97F0FD163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPhone.storyboard; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C9DE7C914F63B8F008613AB /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuerySort.h; sourceTree = "<group>"; };
@@ -1363,8 +1367,6 @@
 				4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */,
 				4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */,
 				4CD0F7D514CD20E8003DA079 /* UITableViewCell */,
-				4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */,
-				4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */,
 				4CA0638214BAD3D40025009E /* Views */,
 				4C00816E14B6C4F8003DF437 /* Images */,
 				4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */,
@@ -1475,24 +1477,12 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
-		4C0E785E163B5C32003B951E /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				4CE8A04A14C027B2007C8345 /* Managed Documents */,
-				4C00815914B6BDB6003DF437 /* UI */,
-				4CDB624614E38B9600A5389E /* Controllers */,
-				4C00818414B738E9003DF437 /* Model */,
-			);
-			name = Classes;
-			sourceTree = "<group>";
-		};
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C5F02D914B9A42200C49BE9 /* Template Files */,
-				4C3F1F6914BD306600532FA4 /* APIs */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1537,6 +1527,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4C1B7A65163E123200E331AA /* ReportDesigner */ = {
+			isa = PBXGroup;
+			children = (
+				4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */,
+				4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */,
+			);
+			name = ReportDesigner;
+			sourceTree = "<group>";
+		};
+		4C1B7A66163E123D00E331AA /* ReportViewer */ = {
+			isa = PBXGroup;
+			children = (
+				4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */,
+				4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */,
+			);
+			name = ReportViewer;
+			sourceTree = "<group>";
+		};
 		4C202111163D38BC0058F869 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1575,9 +1583,14 @@
 			isa = PBXGroup;
 			children = (
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
-				4C0E785F163B5C51003B951E /* Resources */,
 				4CDB624A14E38C5600A5389E /* App Delegate */,
-				4C0E785E163B5C32003B951E /* Classes */,
+				4C1B7A65163E123200E331AA /* ReportDesigner */,
+				4C1B7A66163E123D00E331AA /* ReportViewer */,
+				4C0E785F163B5C51003B951E /* Resources */,
+				4CE8A04A14C027B2007C8345 /* Managed Documents */,
+				4C00815914B6BDB6003DF437 /* UI */,
+				4CDB624614E38B9600A5389E /* Controllers */,
+				4C00818414B738E9003DF437 /* Model */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C202134163DD4090058F869 /* ReportsGeneralTest */,
 				4C1B7A58163E0D9400E331AA /* MySqlClientTest */,
@@ -1600,6 +1613,9 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CE9F5291598B03B007717CB /* Windows-Azure */,
+				4C95147615107F83004AF941 /* salesforce */,
+				4C86D19314C53025008B58B5 /* MySQL Client */,
 				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
 				4C1A586B14E247C700184445 /* QuartzCore.framework */,
@@ -1626,17 +1642,6 @@
 				4C384E3614B29789007B4F48 /* Reports-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			path = Reports;
-			sourceTree = "<group>";
-		};
-		4C3F1F6914BD306600532FA4 /* APIs */ = {
-			isa = PBXGroup;
-			children = (
-				4CE9F5291598B03B007717CB /* Windows-Azure */,
-				4C95147615107F83004AF941 /* salesforce */,
-				4C86D19314C53025008B58B5 /* MySQL Client */,
-			);
-			name = APIs;
 			path = Reports;
 			sourceTree = "<group>";
 		};
@@ -1737,6 +1742,7 @@
 				4C2020CA163D264D0058F869 /* MySQL Client Setup */,
 			);
 			name = "MySQL Client";
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C86D19414C5305A008B58B5 /* Headers */ = {
@@ -1892,7 +1898,7 @@
 				4C95147715107F83004AF941 /* dependencies */,
 			);
 			name = salesforce;
-			path = APIs/salesforce;
+			path = Reports/APIs/salesforce;
 			sourceTree = "<group>";
 		};
 		4C95147715107F83004AF941 /* dependencies */ = {
@@ -2489,7 +2495,7 @@
 				4CE9F52B1598B03B007717CB /* watoolkitios-lib */,
 			);
 			name = "Windows-Azure";
-			path = "APIs/Windows-Azure";
+			path = "Reports/APIs/Windows-Azure";
 			sourceTree = "<group>";
 		};
 		4CE9F52B1598B03B007717CB /* watoolkitios-lib */ = {
@@ -2624,8 +2630,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */,
-				4C0E77B1163B5AEC003B951E /* MainStoryboard_iPhone.storyboard in Resources */,
-				4C0E77B2163B5AEC003B951E /* MainStoryboard_iPad.storyboard in Resources */,
+				4C0E77B1163B5AEC003B951E /* ReportDesignerPhone.storyboard in Resources */,
+				4C0E77B2163B5AEC003B951E /* ReportDesignerPad.storyboard in Resources */,
 				4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */,
 				4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */,
 				4C0E77B5163B5AEC003B951E /* UIImagePictureFrame.png in Resources */,
@@ -2791,6 +2797,8 @@
 				4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */,
 				4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */,
 				4C202100163D388D0058F869 /* notes.txt in Resources */,
+				4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */,
+				4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2815,8 +2823,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */,
-				4C384E3C14B29789007B4F48 /* MainStoryboard_iPhone.storyboard in Resources */,
-				4C384E3F14B29789007B4F48 /* MainStoryboard_iPad.storyboard in Resources */,
+				4C384E3C14B29789007B4F48 /* ReportDesignerPhone.storyboard in Resources */,
+				4C384E3F14B29789007B4F48 /* ReportDesignerPad.storyboard in Resources */,
 				4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */,
 				4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */,
 				4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */,
@@ -3326,20 +3334,38 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4C384E3A14B29789007B4F48 /* MainStoryboard_iPhone.storyboard */ = {
+		4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C384E3B14B29789007B4F48 /* en */,
 			);
-			name = MainStoryboard_iPhone.storyboard;
+			name = ReportDesignerPhone.storyboard;
+			path = Reports;
 			sourceTree = "<group>";
 		};
-		4C384E3D14B29789007B4F48 /* MainStoryboard_iPad.storyboard */ = {
+		4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C384E3E14B29789007B4F48 /* en */,
 			);
-			name = MainStoryboard_iPad.storyboard;
+			name = ReportDesignerPad.storyboard;
+			path = Reports;
+			sourceTree = "<group>";
+		};
+		4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C97F0FB163E1D8B006ABD35 /* en */,
+			);
+			name = ReportViewerPad.storyboard;
+			sourceTree = "<group>";
+		};
+		4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C97F0FD163E1D8B006ABD35 /* en */,
+			);
+			name = ReportViewerPhone.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -3360,6 +3386,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "ReportViewer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -3376,7 +3403,7 @@
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				SDKROOT = iphoneos6.0;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7, armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3396,6 +3423,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "ReportViewer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -3412,7 +3440,7 @@
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				SDKROOT = iphoneos6.0;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7, armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -3527,6 +3555,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -3549,12 +3578,14 @@
 				SDKROOT = iphoneos6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
@@ -3567,6 +3598,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/Reports-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -3584,7 +3616,7 @@
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				SDKROOT = iphoneos6.0;
-				VALID_ARCHS = "armv7, armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3592,6 +3624,7 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
@@ -3604,6 +3637,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/Reports-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -3621,7 +3655,7 @@
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				SDKROOT = iphoneos6.0;
-				VALID_ARCHS = "armv7, armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -3645,6 +3679,7 @@
 				4C1B7A64163E0D9400E331AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C20213E163DD40A0058F869 /* Build configuration list for PBXNativeTarget "ReportsGeneralTest" */ = {
 			isa = XCConfigurationList;

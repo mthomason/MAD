@@ -20,9 +20,11 @@
         UITableViewDataSource,
         UITableViewDelegate>
 
-@property (strong, nonatomic) UIPopoverController *flipsidePopoverController;
-@property (strong, nonatomic) UIPopoverController *reportDesignerPopoverController;
-@property (strong, nonatomic) UIPopoverController *templateSelectorPopoverController;
+@property (nonatomic, retain) NSMutableArray *availableFilesCache;
+
+@property (retain, nonatomic) UIPopoverController *flipsidePopoverController;
+@property (retain, nonatomic) UIPopoverController *reportDesignerPopoverController;
+@property (retain, nonatomic) UIPopoverController *templateSelectorPopoverController;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewDocuments;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;

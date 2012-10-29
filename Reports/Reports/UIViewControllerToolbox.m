@@ -12,8 +12,8 @@
 
 @interface  UIViewControllerToolbox()
 
-@property (copy) NSArray *toolbarItemsPrimary;
-@property (copy) NSArray *toolbarItemsSecondary;
+@property (nonatomic, retain) NSArray *toolbarItemsPrimary;
+@property (nonatomic, retain) NSArray *toolbarItemsSecondary;
 
 @end
 

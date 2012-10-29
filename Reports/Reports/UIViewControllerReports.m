@@ -13,8 +13,6 @@
 
 @interface UIViewControllerReports()
 
-@property (retain) NSMutableArray *availableFilesCache;
-
 @end
 
 @implementation UIViewControllerReports

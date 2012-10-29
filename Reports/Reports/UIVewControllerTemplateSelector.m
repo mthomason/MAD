@@ -14,7 +14,7 @@
 
 @interface UIViewControllerTemplateSelector()
 
-@property (retain) NSMutableArray *availableFilesCache;
+@property (nonatomic, retain) NSMutableArray *availableFilesCache;
 
 @end
 

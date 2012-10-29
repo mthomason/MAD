@@ -1,1 +1,1 @@
-Copyright Everyday Apps LLC 2011.  All rights reserved.
+Copyright Everyday Apps LLC 2012.  All rights reserved.
