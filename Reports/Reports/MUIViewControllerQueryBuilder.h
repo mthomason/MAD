@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "QueryBuilderDataModal.h"
+#import "UIViewControllerSchemaAddTable.h"
+#import "UIViewControllerSchemaAddLinkFirstTable.h"
+#import "UITableViewControllerSchemaAddGroup.h"
+#import "UITableViewControllerPredicateFormat.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
@@ -27,6 +31,26 @@
 #import "ReportDesignerViewController.h"
 #import "Constants.h"
 #import "RptqDocumentSection.h"
+#import "Constants.h"
+#import "RptqDocument.h"
+#import "RptqTable.h"
+#import "RptqQueryTables.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryPredicate.h"
+#import "RptqUserCredentals.h"
+#import "RptqDocumentSection.h"
+#import "RptqQuery.h"
+#import "RptqQueryTables+Extras.h"
+#import "UIColor+EverydayApps.h"
+#import "UIViewTableSectionHeaderQueryBuilder.h"
+#import "UITableViewControllerSectionLayoutSettings.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDocumentSection+Extras.h"
+#import "QueryBuilderDataModal.h"
+#import "UIColor+PaperPatterns.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryLinks+Extras.h"
+
 
 @class MUIViewControllerQueryBuilder, RptqDocument;
 
@@ -53,7 +77,7 @@
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+//@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;

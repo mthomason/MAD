@@ -7,18 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UITableViewControllerDataSourceTypes.h"
-#import "UITableViewCellDocument.h"
 #import "MUIViewControllerQueryBuilder.h"
 #import "UIViewControllerTemplateSelector.h"
+#import "NSFileManager+Reports.h"
+#import "RptqQueryTables.h"
 
-@class UIViewControllerDatabases;
+extern NSString * const SEGUE_SHOWADDDOCUMENT;
+extern NSString * const SEGUE_OPENDOCUMENT;
 
-@protocol UIViewControllerDatabasesDelegate
-- (void)flipsideViewControllerDidFinish:(UIViewControllerDatabases *)controller;
+@protocol MUIViewControllerOpenDocumentDelegate
+- (void)openDocumentWithUrl:(NSURL *)url insideViewController:(UIViewController *)viewController;
 @end
 
-@interface UIViewControllerDatabases : UIViewController
+@interface MUIViewControllerOpenDocument : UIViewController
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
@@ -26,12 +27,14 @@
         UITableViewControllerDataSourceTypesDelegate,
         MUIViewControllerQueryBuilderDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UIViewControllerDatabasesDelegate> delegate;
+@property (assign) IBOutlet id <MUIViewControllerOpenDocumentDelegate> delegate;
+
 @property (strong, nonatomic) UIPopoverController *tableViewControllerDataSourceTypes;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 
+- (IBAction)add:(id)sender;
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
 

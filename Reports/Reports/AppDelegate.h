@@ -7,14 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewControllerOpenDocument.h"
 #import "UIManagedDocumentTrvApplicationData.h"
 #import "UIManagedDocumentTrvFileData.h"
+#import <CoreData/CoreData.h>
+#import "NSFileManager+Common.h"
+#import "UIColor+EverydayApps.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#import "UINavigationControllerQueryDesigner.h"
+#import "UINavigationControllerModelControllers.h"
+
+@class MUIViewControllerOpenDocumentDelegate;
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, MUIViewControllerOpenDocumentDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) UIManagedDocumentTrvApplicationData *applicationPreferences;
+@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+
+@property (retain, nonatomic) UIManagedDocumentTrvApplicationData *applicationPreferences;
 @property (retain, nonatomic) UIManagedDocumentTrvFileData *openReport;
 
 @end

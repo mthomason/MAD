@@ -24,7 +24,7 @@
     <UITableViewDataSource, UITableViewDelegate,
         UITableViewControllerDataSourceTypesDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UIViewControllerTemplateSelectorDelegate> delegate;
+@property (assign) IBOutlet id <UIViewControllerTemplateSelectorDelegate> delegate;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewTemplates;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;

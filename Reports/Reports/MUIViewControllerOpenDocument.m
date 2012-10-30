@@ -6,22 +6,19 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerDatabases.h"
-#import "UITableViewCellDocument.h"
-#import "NSFileManager+Reports.h"
-#import "RptqQueryTables.h"
-#import "RptqQueryLinks.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryPredicate.h"
-#import "UIColor+EverydayApps.h"
+#import "MUIViewControllerOpenDocument.h"
+#import "AppDelegate.h"
 
-@interface UIViewControllerDatabases()
+NSString * const SEGUE_SHOWADDDOCUMENT = @"showAddDocument";
+NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
+
+@interface MUIViewControllerOpenDocument()
 
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 
 @end
 
-@implementation UIViewControllerDatabases
+@implementation MUIViewControllerOpenDocument
 
 @synthesize delegate = _delegate;
 @synthesize tableViewControllerDataSourceTypes = _tableViewControllerDataSourceTypes;
@@ -110,7 +107,8 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showCreateNewReport"]) {
+    
+    if ([[segue identifier] isEqualToString:SEGUE_SHOWADDDOCUMENT]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -132,130 +130,59 @@
             [self setTableViewControllerDataSourceTypes: popoverController];
             [popoverController setDelegate: self];
         }
-    } else if ([[segue identifier] isEqualToString:@"showQueryDetails"]) {
-        [[segue destinationViewController] setDelegate:self];
-        
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [self setTableViewControllerDataSourceTypes: popoverController];
-            [popoverController setDelegate: self];
-        }
-    } else if ([[segue identifier] isEqualToString:@"showQueryBuilder"]) {
+
+    } else if ([[segue identifier] isEqualToString:SEGUE_OPENDOCUMENT]) {
         
         NSUInteger row = 0;
         if ([sender isKindOfClass:[UITableViewCellDocument class]]) {
             UITableViewCellDocument *senderCell = sender;
             row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
-        }
-        
-        
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MUIViewControllerQueryBuilder class]]) {
-                    MUIViewControllerQueryBuilder *tvc = [(MUIViewControllerQueryBuilder *)[navControl topViewController] retain];
-                    if (tvc) {
-                        [tvc setDelegate: self];
-                        if (row < [[self availableFilesCache] count]) {
-                            
-                            NSURL *url = [[[self availableFilesCache] objectAtIndex: row] retain];
-                            
-                            UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
-                            [tvc setManagedDocumentQuery: mdq];
-                            [mdq release];
+            
+            if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+                UINavigationController *navControl = [[segue destinationViewController] retain];
+                if ([navControl topViewController]) {
+                    if ([[navControl topViewController] isKindOfClass:[MUIViewControllerQueryBuilder class]]) {
+                        MUIViewControllerQueryBuilder *tvc = [(MUIViewControllerQueryBuilder *)[navControl topViewController] retain];
+                        if (tvc) {
+                            [tvc setDelegate: self];
+                            if (row < [[self availableFilesCache] count]) {
+                                
+                                NSURL *url = [[[self availableFilesCache] objectAtIndex: row] retain];
+                                
+                                [[self delegate] openDocumentWithUrl:url insideViewController:tvc];
 
-                            if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-                                [[tvc managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
-                                    
-                                    {
-                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
-                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                                sectionNameKeyPath: nil
-                                                                                                                         cacheName: nil];
-                                        [tvc setFetchedResultsControllerTables: frc];
-                                        
-                                        [frc release];
-                                        frc = nil;
-                                    }
-                                    
-                                    {
-                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                                sectionNameKeyPath: nil
-                                                                                                                         cacheName: nil];
-                                        [tvc setFetchedResultsControllerLinks: frc];
-                                        
-                                        [frc release];
-                                        frc = nil;
-                                    }
-                                    
-                                    {
-                                        
-                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                                sectionNameKeyPath: nil
-                                                                                                                         cacheName: nil];
-                                        [tvc setFetchedResultsControllerGroups: frc];
-                                        [frc release];
-                                        frc = nil;
-                                        
-                                    }
-                                    
-                                    {
-                                        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-                                        
-                                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
-                                        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                                        
-                                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                                              managedObjectContext: [[tvc managedDocumentQuery] managedObjectContext]
-                                                                                                                sectionNameKeyPath: nil
-                                                                                                                         cacheName: nil];
-                                        
-                                        [tvc setFetchedResultsControllerPredicates: frc];
+                                [url release];
 
-                                        [frc release];
-                                        
-                                        frc = nil;
-                                    }
-                                    
-                                    [tvc release];
-                                    
-                                }];
+
                             }
-                            [url release];
+                            
+                            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                                UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+                                [self setTableViewControllerDataSourceTypes: popoverController];
+                                [popoverController setDelegate: self];
+                            }
+                            
                         }
-                        
-                        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-                            [self setTableViewControllerDataSourceTypes: popoverController];
-                            [popoverController setDelegate: self];
-                        }
-
                     }
                 }
+                [navControl release];
             }
-            [navControl release];
+            
+            
+            
         }
-                
+        
+        
+        
         
     }
 }
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-    [[self delegate] flipsideViewControllerDidFinish: self];
-}
+- (IBAction)add:(id)sender { }
+
+- (IBAction)done:(id)sender { }
 
 - (IBAction)edit:(id)sender {
     BOOL editing = ![[self tableViewQueries] isEditing];
