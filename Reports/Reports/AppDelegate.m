@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
-#import "MNSConnection.h"
 #import "UIColor+EverydayApps.h"
 
 #import "UINavigationControllerQueryDesigner.h"

@@ -7,8 +7,7 @@
 //
 
 #import "NSDatabaseMySql.h"
-#import "mysql.h"
-#import "MNSConnection.h"
+//#import "mysql.h"
 #import "Constants.h"
 #import <stdio.h>
 
@@ -64,9 +63,9 @@
 }
 
 - (NSArray *)tablesFor:(NSString *)database {
-    
+#warning Incomplete
     NSMutableArray *resultArray = [[NSMutableArray alloc] init];
-    
+    /*
     MNSConnection *connection = [[MNSConnection alloc] init];
 
        
@@ -116,7 +115,7 @@
 
     [connection release];
 
-    
+    */
     
     /*
     MYSQL *conn = mysql_init(NULL);
@@ -161,7 +160,6 @@
     mysql_close(conn);
      */
     return [resultArray autorelease];
-    //return allObjects;
 }
 
 - (NSSet *)fieldsFor:(NSString *)database andTable:(NSString *)table {

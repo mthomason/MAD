@@ -7,11 +7,8 @@
 //
 
 #import "UITableViewControllerDataSourceSetupMySql.h"
-#import "NSDatabaseMySql.h"
 #import "Constants.h"
-#import "mysql.h"
-//#import <libmysqlclient/my_global.h>
-//#import <libmysqlclient/mysql.h>
+//#import "mysql.h"
 
 @interface UITableViewControllerDataSourceSetupMySql() {
 @private
@@ -162,7 +159,9 @@
 }
 
 - (void)test:(id)sender {
+#warning Commenting this shit out
     
+    /*
     //NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithHost:@"everydayapps.com" port:3363 username:@"root" andPassword:@"1noniceguy"];
 
     //NSArray *s = [[db tablesFor:@"quotationary"] retain];
@@ -250,7 +249,7 @@
         
         //mysql_close(conn); 
     //}
-    
+    */
     /*
 
     MYSQL *conn = mysql_init(NULL);
@@ -340,6 +339,8 @@
 
 - (IBAction)save:(id)sender {
     //Create UIManaged Document that Stores the Database Schema
+#warning What is this trash!?!
+/*
     MYSQL conn;
     mysql_init(&conn);
     //long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
@@ -382,6 +383,7 @@
     }    
     mysql_close(&conn);
     mysql_server_end();
+ */
     [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
 }
 

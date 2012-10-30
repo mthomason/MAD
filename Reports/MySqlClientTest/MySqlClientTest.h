@@ -7,10 +7,10 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "MysqlConnection.h"
-#import "MysqlServer.h"
-#import "MysqlFetch.h"
-#import "MysqlFetchField.h"
+#import <MySqlClientObjectC/MysqlConnection.h>
+#import <MySqlClientObjectC/MysqlServer.h>
+#import <MySqlClientObjectC/MysqlFetch.h>
+#import <MySqlClientObjectC/MysqlFetchField.h>
 
 @interface MySqlClientTest : SenTestCase
 
