@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 #import "UIScrollViewSection.h"
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
@@ -21,14 +22,9 @@
 #import "CGGeometry+Extras.h"
 #import "SectionEnumerator.h"
 
-@class ReportDesignerViewController;
 @class UIManagedDocumentQuery;
 
-@protocol ReportDesignerViewControllerDelegate
-- (void)reportDesignerViewControllerDidFinish:(ReportDesignerViewController *)controller;
-@end
-
-@interface ReportDesignerViewController : UIViewController
+@interface ReportDesignerViewController : MUIViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         UIPopoverControllerDelegate,
@@ -37,8 +33,6 @@
         LabelInformationViewControllerDelegate,
         MUIViewControllerReportViewerDelegate,
         ElementViewDelegate>
-
-@property (assign, nonatomic) IBOutlet id <ReportDesignerViewControllerDelegate> delegate;
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 

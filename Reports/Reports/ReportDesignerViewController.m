@@ -358,7 +358,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    [self.delegate reportDesignerViewControllerDidFinish:self];
+    [self.delegate viewControllerDidFinish:self];
 }
 
 - (IBAction)showObjects:(id)sender {

@@ -33,7 +33,7 @@
         MUIViewControllerDelegate,
         UITableViewControllerLinkBuilderDelegate,
         UIModalTableViewControllerDelegate,
-        ReportDesignerViewControllerDelegate,
+        MUIViewControllerDelegate,
         SectionLayoutSettingsDelegate,
         AddPredicateDelegate>
 

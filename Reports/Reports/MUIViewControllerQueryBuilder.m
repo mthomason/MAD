@@ -337,12 +337,20 @@
 
 #pragma mark Report Designer Delegate
 
-- (void)reportDesignerViewControllerDidFinish:(ReportDesignerViewController *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+- (void)viewControllerDidFinish:(id)sender {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated: YES];
+    } else {
+        [self dismissModalViewControllerAnimated: YES];
+    }
 }
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [self dismissModalViewControllerAnimated: YES];
+    } else {
+        [self dismissModalViewControllerAnimated: YES];
+    }
 }
 
 - (void)addPredicate:(RptqQueryPredicate *)predicate {
@@ -397,13 +405,6 @@
 
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
     [self dismissModalViewControllerAnimated: YES];
-}
-- (void)viewControllerDidFinish:(id)sender {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated: YES];
-    } else {
-        [self dismissModalViewControllerAnimated: YES];
-    }
 }
 
 - (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable
