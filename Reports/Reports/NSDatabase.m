@@ -75,7 +75,6 @@
 
 - (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
                        withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion {
-
     completion([NSArray array], YES);
 }
 

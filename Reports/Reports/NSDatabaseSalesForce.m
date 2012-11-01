@@ -209,7 +209,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
                        withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion {
     
     NSMutableString *query = [[NSMutableString alloc] initWithString: @"SELECT "];
-    
+#warning Not implemented.
     //for (NSManagedObjectID *objid in queryLinks) {
     //    RptqQueryLinks *queryLink = [RptqQueryLinks queryLinkWithID:objid fromObjectContext:];
     //}
