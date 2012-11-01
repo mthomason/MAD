@@ -11,11 +11,8 @@
 
 @implementation UITableViewControllerEnterString
 
-@synthesize textField;
-@synthesize enterStringDelegate = _enterStringDelegate;
-
 - (void)dealloc {
-    [textField release];
+    [_textField release];
     [super dealloc];
 }
 

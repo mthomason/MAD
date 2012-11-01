@@ -12,19 +12,14 @@
 
 @implementation NSDatabaseMySql
 
-@synthesize username;
-@synthesize password;
-@synthesize host;
-@synthesize port;
-
 - (void)dealloc {
-    [username release];
-    [password release];
-    [host release];
+    [_username release];
+    [_password release];
+    [_host release];
     [super dealloc];
 }
 
-- (id)initWithHost:(NSString *)_host port:(NSInteger)_port username:(NSString *)_username andPassword:(NSString *)_password {
+- (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password {
     self = [super init];
     if (self) {
         [self setUsername: _username];
@@ -41,22 +36,24 @@
 - (id)initWithOptions:(NSDictionary *)optons {
     self = [super init];
     if (self) {
-        NSString *_user = [[optons objectForKey:NSDATABASE_USERNAME] retain];
-        NSString *_pass = [[optons objectForKey:NSDATABASE_PASSWORD] retain];
-        NSString *_host = [[optons objectForKey:NSDATABASE_HOST] retain];
+        /*
+        NSString *user = [[optons objectForKey:NSDATABASE_USERNAME] retain];
+        NSString *pass = [[optons objectForKey:NSDATABASE_PASSWORD] retain];
+        NSString *host = [[optons objectForKey:NSDATABASE_HOST] retain];
         
-        h = [_host UTF8String];
-        u = [_user UTF8String];
-        p = [_pass UTF8String];
+        h = [host UTF8String];
+        u = [user UTF8String];
+        p = [pass UTF8String];
         
-        [self setUsername: _user];
-        [self setPassword: _pass];
-        [self setHost: _host];
+        [self setUsername: user];
+        [self setPassword: pass];
+        [self setHost: host];
         [self setPort: [[optons objectForKey:NSDATABASE_PORT] integerValue]];
         
-        [_pass release];
-        [_host release];
-        [_user release];
+        [pass release];
+        [host release];
+        [user release];
+         */
     }
     return self;
 }
@@ -204,7 +201,7 @@
 }
 
 - (BOOL)testConnection {
-    __block BOOL result = NO;
+    BOOL result = NO;
     /*
     //@autoreleasepool {
     MYSQL *conn = mysql_init(NULL);

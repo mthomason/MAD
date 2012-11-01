@@ -7,7 +7,6 @@
 //
 
 #import "UIViewTableSectionHeaderQueryBuilder.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation UIViewTableSectionHeaderQueryBuilder
 

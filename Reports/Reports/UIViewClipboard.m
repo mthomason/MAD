@@ -7,7 +7,6 @@
 //
 
 #import "UIViewClipboard.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation UIViewClipboard
 

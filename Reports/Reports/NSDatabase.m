@@ -9,7 +9,6 @@
 #import "NSDatabase.h"
 
 @implementation NSDatabase
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
     [_managedDocumentQuery release];

@@ -8,12 +8,6 @@
 
 #import "MUIViewController.h"
 
-@interface MUIViewController ()
-
-@end
-
 @implementation MUIViewController
-
-@synthesize delegate = _delegate;
 
 @end

@@ -16,7 +16,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 @interface NSDatabaseSalesForce ()
 
-@property (retain) SFOAuthCoordinator *coordinator;
+@property (nonatomic, retain) SFOAuthCoordinator *coordinator;
 
 @property (copy) NSString *loginDomain;
 @property (copy) NSString *loginIdentifier;
@@ -40,13 +40,6 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 @end
 
 @implementation NSDatabaseSalesForce
-
-@synthesize delegate = _delegate;
-@synthesize coordinator = _coordinator;
-@synthesize loginDomain = _loginDomain, loginIdentifier = _loginIdentifier, loginKey = _loginKey, loginRedirectUri = _loginRedirectUri;
-@synthesize schemaName = _schemaName;
-@synthesize currentQueryType = _currentQueryType;
-@synthesize resultBlockComplete = _resultBlockComplete, resultBlockResults = _resultBlockResults, resultBlockTableNames = _resultBlockTableNames, resultBlockFieldNames = _resultBlockFieldNames;
 
 - (void)dealloc {
     if (_resultBlockComplete != nil) [_resultBlockComplete release];

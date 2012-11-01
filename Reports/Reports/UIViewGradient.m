@@ -7,7 +7,6 @@
 //
 
 #import "UIViewGradient.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation UIViewGradient
 

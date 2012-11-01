@@ -10,8 +10,6 @@
 
 @implementation UIViewControllerDatabaseSources
 
-@synthesize delegate = _delegate;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {

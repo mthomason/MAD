@@ -7,8 +7,6 @@
 //
 
 #import "UIViewTableSectionHeaderDatabaseTable.h"
-#import "UIColor+EverydayApps.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation UIViewTableSectionHeaderDatabaseTable
 

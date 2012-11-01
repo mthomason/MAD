@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 #import "UIViewGradient.h"
+#import "UIColor+EverydayApps.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
 
 @protocol SectionHeaderViewDelegate <NSObject>
-
 @optional
 -(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable*)sectionHeaderView sectionOpened:(NSInteger)section;
 -(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable*)sectionHeaderView sectionClosed:(NSInteger)section;
-
 @end
 
 @interface UIViewTableSectionHeaderDatabaseTable : UIViewGradient 

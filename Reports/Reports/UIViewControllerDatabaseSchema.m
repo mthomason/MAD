@@ -10,9 +10,6 @@
 
 @implementation UIViewControllerDatabaseSchema
 
-@synthesize delegate = _delegate;
-@synthesize scrollViewMain = _scrollViewMain;
-
 - (void)dealloc {
     [_scrollViewMain release];
     [super dealloc];

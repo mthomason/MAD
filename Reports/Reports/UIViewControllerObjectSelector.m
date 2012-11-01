@@ -16,22 +16,15 @@
 
 @implementation UIViewControllerObjectSelector
 
-@synthesize delegate;
-@synthesize segmentedControlSelectorType;
-@synthesize containerView;
-@synthesize toolbarMain;
-@synthesize navigationBar;
-@synthesize navigationItemMain;
 @synthesize visableViewController = _visableViewController;
 
 - (void)dealloc {
     if (_visableViewController) [_visableViewController release];
-    [segmentedControlSelectorType release];
-    [containerView release];
-    
-    [toolbarMain release];
-    [navigationBar release];
-    [navigationItemMain release];
+    [_segmentedControlSelectorType release];
+    [_containerView release];
+    [_toolbarMain release];
+    [_navigationBar release];
+    [_navigationItemMain release];
     [super dealloc];
 }
 

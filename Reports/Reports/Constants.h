@@ -6,6 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#define STORYBOARD_NAME() \
+            (([[UIDevice currentDevice] userInterfaceIdiom] == \
+            UIUserInterfaceIdiomPhone) ? REPORTDESIGNER_PHONE : REPORTDESIGNER_PAD)
+
+extern NSString * const REPORTDESIGNER_PHONE;
+extern NSString * const REPORTDESIGNER_PAD;
+
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM;
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF;
 extern CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE;

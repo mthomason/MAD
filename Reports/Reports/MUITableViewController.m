@@ -8,12 +8,6 @@
 
 #import "MUITableViewController.h"
 
-@interface MUITableViewController ()
-
-@end
-
 @implementation MUITableViewController
-
-@synthesize delegate = _delegate;
 
 @end

@@ -16,14 +16,9 @@
 
 @implementation UIViewControllerTemplateSelector
 
-@synthesize templateSelectorDelegate = _templateSelectorDelegate;
-@synthesize tableViewTemplates;
-@synthesize uITableViewCellDocument;
-@synthesize availableFilesCache = _availableFilesCache;
-
 - (void)dealloc {
     [_availableFilesCache release];
-    [tableViewTemplates release];
+    [_tableViewTemplates release];
     [super dealloc];
 }
 

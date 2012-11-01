@@ -19,13 +19,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 @implementation MUIViewControllerOpenDocument
 
-@synthesize delegate = _delegate;
-@synthesize tableViewControllerDataSourceTypes = _tableViewControllerDataSourceTypes;
-@synthesize uITableViewCellDocument;
-@synthesize toolbar = _toolbar;
-@synthesize tableViewQueries = _tableViewQueries;
-@synthesize availableFilesCache = _availableFilesCache;
-
 - (void)dealloc {
     [_availableFilesCache release];
     [_tableViewControllerDataSourceTypes release];

@@ -15,11 +15,6 @@
     const char *h;
     const char *u;
     const char *p;
-
-    NSString *username;
-    NSString *password;
-    NSString *host;
-    NSInteger port;
 }
 
 @property (copy) NSString *username;

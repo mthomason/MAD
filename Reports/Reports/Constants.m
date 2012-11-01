@@ -10,6 +10,9 @@
 
 #pragma mark - Customizable Constants
 
+NSString * const REPORTDESIGNER_PHONE = @"ReportDesignerPhone";
+NSString * const REPORTDESIGNER_PAD = @"ReportDesignerPad";
+
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM = 0.7000f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF = 0.3500f;
 CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE = 0.4870f;
