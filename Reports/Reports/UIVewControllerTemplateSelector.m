@@ -16,7 +16,7 @@
 
 @implementation UIViewControllerTemplateSelector
 
-@synthesize delegate;
+@synthesize templateSelectorDelegate = _templateSelectorDelegate;
 @synthesize tableViewTemplates;
 @synthesize uITableViewCellDocument;
 @synthesize availableFilesCache = _availableFilesCache;
@@ -88,17 +88,17 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self delegate] uIViewControllerTemplateSelectorDidFinish: self];
+    [[self templateSelectorDelegate] viewControllerDidFinish:self];
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] uIViewControllerTemplateSelectorDidCancel: self];
+    [[self templateSelectorDelegate] viewControllerDidCancel:self];
 }
 
 #pragma mark - Table View Controller Data Source Delegate
 
-- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
-    [[self delegate] uIViewControllerTemplateSelectorDidCancel: self];
+- (void)viewControllerDidFinish:(id)sender {
+    [[self templateSelectorDelegate] viewControllerDidCancel:self];
 }
 
 #pragma mark - Table View Data Source Protocol
@@ -205,7 +205,7 @@
 
     NSUInteger row = [indexPath row];
     if (row < [[self availableFilesCache] count]) {
-        [delegate uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl: [[self availableFilesCache] objectAtIndex: row]];
+        [[self templateSelectorDelegate] uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl: [[self availableFilesCache] objectAtIndex: row]];
     }
     
 }

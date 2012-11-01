@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 
-@interface UIViewControllerStoreTemplates : UIViewController
+@interface UIViewControllerStoreTemplates : MUIViewController
+
+- (IBAction)done:(id)sender;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation UITableViewControllerDataSourceTypes
 
-@synthesize delegate = _delegate;
+//@synthesize delegate = _delegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,11 +21,11 @@
 
 
 - (IBAction)done:(id)sender {
-    [[self delegate] uITableViewControllerDataSourceTypesDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self];
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] uITableViewControllerDataSourceTypesDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self];
 }
 
 - (void)dealloc {

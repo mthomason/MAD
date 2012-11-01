@@ -30,10 +30,12 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
     UIViewController *rvc = [[[application windows] lastObject] rootViewController];
     if ([rvc isKindOfClass:[MUIViewControllerOpenDocument class]]) {
         [(MUIViewControllerOpenDocument *)rvc setDelegate:self];
     }
+    
     return YES;
 }
 			

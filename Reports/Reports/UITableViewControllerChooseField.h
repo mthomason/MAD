@@ -27,9 +27,7 @@
         SectionHeaderViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerChooseFieldDelegate> delegate;
-
 @property (retain) NSArray *excludeTables;
-
 @property (assign) IBOutlet UITableViewCell *fieldCells;
 
 @end

@@ -26,16 +26,13 @@
 
 @implementation UITableViewControllerDataSourceSetupSalesforce
 
-@synthesize delegate;
 @synthesize tableViewCellNickname;
 @synthesize tableViewCellConnectionCreate;
 @synthesize saveButton;
 @synthesize activityIndicatorTestConnection;
 @synthesize textFieldNickname;
 @synthesize db;
-
 @synthesize inputNickname;
-
 
 typedef void (^loginComplete)(NSDatabaseSalesForce *database, BOOL complete);
 typedef void (^tablesComplete)(NSDatabaseSalesForce *database, NSArray *tables);
@@ -212,7 +209,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] uITableViewControllerDataSourceSetupSalesforceDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 - (IBAction)nicknameDidEndOnExit:(id)sender {

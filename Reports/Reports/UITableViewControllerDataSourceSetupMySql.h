@@ -7,18 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUITableViewController.h"
 #import "Constants.h"
 
-@class UITableViewControllerDataSourceSetupMySql;
-
-@protocol UITableViewControllerDataSourceSetupMySqlDelegate
-- (void)uITableViewControllerDataSourceSetupMySqlDidFinish:(UITableViewControllerDataSourceSetupMySql *)controller;
-@end
-
-@interface UITableViewControllerDataSourceSetupMySql : UITableViewController
+@interface UITableViewControllerDataSourceSetupMySql : MUITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerDataSourceSetupMySqlDelegate> delegate;
+
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellUsername;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPassword;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellHost;

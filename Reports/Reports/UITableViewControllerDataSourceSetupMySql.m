@@ -386,7 +386,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] uITableViewControllerDataSourceSetupMySqlDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 - (IBAction)usernameDidEndOnExit:(id)sender {

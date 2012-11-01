@@ -7,21 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUITableViewController.h"
 #import "NSDatabaseSalesForce.h"
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 
-@class UITableViewControllerDataSourceSetupSalesforce;
-
-@protocol UITableViewControllerDataSourceSetupSalesforceDelegate
-- (void)uITableViewControllerDataSourceSetupSalesforceDidFinish:(UITableViewControllerDataSourceSetupSalesforce *)controller;
-@end
-
-@interface UITableViewControllerDataSourceSetupSalesforce : UITableViewController
+@interface UITableViewControllerDataSourceSetupSalesforce : MUITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate,
         NSDatabaseSalesForceDelegate>
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerDataSourceSetupSalesforceDelegate> delegate;
+
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellNickname;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellConnectionCreate;
 

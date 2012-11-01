@@ -455,6 +455,10 @@
 		4C9DE83414F7889E008613AB /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83314F7889E008613AB /* RptqDocument.m */; };
 		4C9DE83714F788A0008613AB /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83614F7889F008613AB /* RptqDocumentObjectLabelDataField.m */; };
 		4C9DE83A14F788A0008613AB /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9DE83914F788A0008613AB /* RptqDocumentObjectLabel.m */; };
+		4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
+		4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
 		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
@@ -1238,6 +1242,11 @@
 		4C9DE83614F7889F008613AB /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
 		4C9DE83814F788A0008613AB /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
 		4C9DE83914F788A0008613AB /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
+		4C9F94BB1642280500A562B9 /* MUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewController.h; sourceTree = "<group>"; };
+		4C9F94BC1642280500A562B9 /* MUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewController.m; sourceTree = "<group>"; };
+		4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDelegate.h; sourceTree = "<group>"; };
+		4C9F94C016423D7300A562B9 /* MUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewController.h; sourceTree = "<group>"; };
+		4C9F94C116423D7300A562B9 /* MUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewController.m; sourceTree = "<group>"; };
 		4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipLink.m; sourceTree = "<group>"; };
 		4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSchema.h; sourceTree = "<group>"; };
 		4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
@@ -2566,6 +2575,11 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
+				4C9F94BB1642280500A562B9 /* MUIViewController.h */,
+				4C9F94BC1642280500A562B9 /* MUIViewController.m */,
+				4C9F94C016423D7300A562B9 /* MUITableViewController.h */,
+				4C9F94C116423D7300A562B9 /* MUITableViewController.m */,
 				4CF61D02163FA3E70065A16C /* OpenDocument */,
 				4C6362BB14E62738005DBBFF /* Navigation Controller */,
 				4CDB624914E38C2C00A5389E /* View Controllers */,
@@ -3658,6 +3672,8 @@
 				4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */,
 				4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */,
 				4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */,
+				4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */,
+				4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3793,6 +3809,8 @@
 				4C9514F215112434004AF941 /* MNSGraph.m in Sources */,
 				4C9514F515112473004AF941 /* MNSVertex.m in Sources */,
 				4C9514F815112488004AF941 /* MNSEdge.m in Sources */,
+				4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */,
+				4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

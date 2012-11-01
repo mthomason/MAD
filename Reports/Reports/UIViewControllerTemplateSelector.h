@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 #import "UITableViewCellDocument.h"
 #import "UITableViewControllerDataSourceTypes.h"
 #import "NSFileManager+Common.h"
@@ -14,18 +15,16 @@
 
 @class UIViewControllerTemplateSelector;
 
-@protocol UIViewControllerTemplateSelectorDelegate
+@protocol UIViewControllerTemplateSelectorDelegate <MUIViewControllerDelegate>
 @optional
-- (void)uIViewControllerTemplateSelectorDidCancel:(UIViewControllerTemplateSelector *)controller;
-- (void)uIViewControllerTemplateSelectorDidFinish:(UIViewControllerTemplateSelector *)controller;
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
 @end
 
-@interface UIViewControllerTemplateSelector : UIViewController
+@interface UIViewControllerTemplateSelector : MUIViewController
     <UITableViewDataSource, UITableViewDelegate,
-        UITableViewControllerDataSourceTypesDelegate>
+        MUIViewControllerDelegate>
 
-@property (assign) IBOutlet id <UIViewControllerTemplateSelectorDelegate> delegate;
+@property (assign) IBOutlet id <UIViewControllerTemplateSelectorDelegate> templateSelectorDelegate;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewTemplates;
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;

@@ -35,7 +35,6 @@
 
 @synthesize beganUpdates = _beganUpdates, tableSectionTitles = _tableSectionTitles;
 
-@synthesize delegate = _delegate;
 @synthesize tableViewQueryBuilder;
 
 @synthesize uITableViewCellInstruction;
@@ -239,7 +238,7 @@
 
 //Labeled as "Reports"
 - (IBAction)done:(id)sender {
-    [[self delegate] uIViewControllerSchemaTablesDelegateDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 - (IBAction)edit:(id)sender {
@@ -399,14 +398,11 @@
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
     [self dismissModalViewControllerAnimated: YES];
 }
-
-- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+- (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissModalViewControllerAnimated: YES];
     } else {
         [self dismissModalViewControllerAnimated: YES];
-        //[[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
-        //[self setTableViewControllerDataSourceTypes: nil];
     }
 }
 

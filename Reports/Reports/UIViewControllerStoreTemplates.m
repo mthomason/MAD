@@ -29,4 +29,10 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - Actions
+
+- (IBAction)done:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
 @end

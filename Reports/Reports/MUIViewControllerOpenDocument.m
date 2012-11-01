@@ -114,7 +114,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                 if ([[navControl topViewController] isKindOfClass:[UIViewControllerTemplateSelector class]]) {
                     UIViewControllerTemplateSelector *tvc = (UIViewControllerTemplateSelector *)[[navControl topViewController] retain];
                     if (tvc) {
-                        [tvc setDelegate:self];
+                        [tvc setTemplateSelectorDelegate:self];
                     }
                     [tvc release];
                 }
@@ -192,7 +192,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 #pragma mark - Delegates
 
-- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller {
+- (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissModalViewControllerAnimated: YES];
     } else {
@@ -201,16 +201,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
     }
 }
 
-- (void)uIViewControllerSchemaTablesDelegateDidFinish:(UIViewController *)controller {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated: YES];
-    } else {
-        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
-        [self setTableViewControllerDataSourceTypes: nil];
-    }
-}
-
-- (void)uIViewControllerTemplateSelectorDidCancel:(UIViewControllerTemplateSelector *)controller {
+- (void)viewControllerDidCancel:(id)sender {
     [self dismissModalViewControllerAnimated: YES];
 }
 

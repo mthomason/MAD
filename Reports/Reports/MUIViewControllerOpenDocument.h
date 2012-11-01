@@ -24,8 +24,8 @@ extern NSString * const SEGUE_OPENDOCUMENT;
         UITableViewDataSource,
         UITableViewDelegate,
         UIViewControllerTemplateSelectorDelegate,
-        UITableViewControllerDataSourceTypesDelegate,
-        MUIViewControllerQueryBuilderDelegate>
+        MUIViewControllerDelegate,
+        MUIViewControllerDelegate>
 
 @property (assign) IBOutlet id <MUIViewControllerOpenDocumentDelegate> delegate;
 

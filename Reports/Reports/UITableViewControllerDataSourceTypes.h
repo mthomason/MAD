@@ -7,16 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUITableViewController.h"
 
 @class UITableViewControllerDataSourceTypes;
 
-@protocol UITableViewControllerDataSourceTypesDelegate
-- (void)uITableViewControllerDataSourceTypesDidFinish:(UITableViewControllerDataSourceTypes *)controller;
-@end
-
-@interface UITableViewControllerDataSourceTypes : UITableViewController
-
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerDataSourceTypesDelegate> delegate;
+@interface UITableViewControllerDataSourceTypes : MUITableViewController
 
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;
