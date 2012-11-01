@@ -7,7 +7,6 @@
 //
 
 #import "UINavigationControllerQueryDesigner.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation UINavigationControllerQueryDesigner
 

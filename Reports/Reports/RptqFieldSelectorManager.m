@@ -7,9 +7,6 @@
 //
 
 #import "RptqFieldSelectorManager.h"
-#import "UIViewTableSectionHeaderDatabaseTable.h"
-#import "RptqTable.h"
-
 
 @implementation RptqFieldSelectorManager
 

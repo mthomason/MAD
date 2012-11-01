@@ -17,7 +17,6 @@
 
 @synthesize delegate = _delegate;
 @synthesize tableViewCellLeftSide = _tableViewCellLeftSide, tableViewCellRightSide = _tableViewCellRightSide, tableViewCellOperator = _tableViewCellOperator;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 @synthesize leftValue = _leftValue, rightValue = _rightValue, predicateOperator = _predicateOperator;
 @synthesize currentlyEditingPart = _currentlyEditingPart;
@@ -26,7 +25,6 @@
     [_tableViewCellLeftSide release];
     [_tableViewCellRightSide release];
     [_tableViewCellOperator release];
-    [_managedDocumentQuery release];
     [_leftValue release];
     [_rightValue release];
     [super dealloc];
@@ -73,7 +71,6 @@
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
-                [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
                 [dvc setDelegate: self];
             }
 
@@ -86,7 +83,6 @@
             UITableViewControllerChooseField *dvc = [[segue destinationViewController] retain];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
-                [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
                 [dvc setDelegate: self];
             }
             [dvc release];

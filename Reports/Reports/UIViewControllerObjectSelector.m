@@ -23,10 +23,8 @@
 @synthesize navigationBar;
 @synthesize navigationItemMain;
 @synthesize visableViewController = _visableViewController;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
-    if (_managedDocumentQuery) [_managedDocumentQuery release];
     if (_visableViewController) [_visableViewController release];
     [segmentedControlSelectorType release];
     [containerView release];
@@ -91,7 +89,6 @@
             [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
             UIStoryboard *sb= [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
             UITableViewControllerChooseField *tv = [[sb instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
-            [tv setManagedDocumentQuery:[self managedDocumentQuery]];
             [tv setExcludeTables:[NSArray array]];
             [tv setDelegate: self];
             [self setVisableViewController: tv];

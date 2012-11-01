@@ -7,15 +7,6 @@
 //
 
 #import "RptqDocument+Extras.h"
-#import <CoreData/CoreData.h>
-#import "Constants.h"
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqUserCredentals.h"
-#import "RptqTable.h"
-#import "RptqQuery.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
 
 @implementation RptqDocument (Extras)
 

@@ -7,10 +7,6 @@
 //
 
 #import "RptqQueryGroup+Extras.h"
-#import "RptqQueryGroup.h"
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
 
 @implementation RptqQueryGroup (Extras)
 

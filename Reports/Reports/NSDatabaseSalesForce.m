@@ -7,19 +7,6 @@
 //
 
 #import "NSDatabaseSalesForce.h"
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-#import "Constants.h"
-#import "UIManagedDocumentQuery.h"
-#import "NSFileManager+Common.h"
-#import "SFOAuthCredentials.h"
-#import "SFRestAPI.h"
-#import "RptqDatabase.h"
-#import "RptqTable.h"
-#import "RptqField.h"
-#import "RptqQuery.h"
-#import "RptqUserCredentals.h"
-#import "RptqRelationship.h"
 
 static NSString * const kSFMobileSDKVersion = @"1.0";
 

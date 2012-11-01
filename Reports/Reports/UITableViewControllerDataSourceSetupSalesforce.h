@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "NSDatabaseSalesForce.h"
+#import "Constants.h"
+#import "UIColor+EverydayApps.h"
 
 @class UITableViewControllerDataSourceSetupSalesforce;
 

@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import "Constants.h"
 
 @interface UIManagedDocumentQuery : UIManagedDocument
+
++ (UIManagedDocumentQuery *)activeDocument;
++ (void)setActiveDocument:(UIManagedDocumentQuery *)activeDocument;
 
 @end

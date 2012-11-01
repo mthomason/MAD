@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "UIManagedDocumentQuery.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqQueryGroup.h"
+#import "UIManagedDocumentQuery.h"
 
 @interface SectionEnumerator : NSEnumerator
 
-@property (retain, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
 @property (assign) NSInteger current;
 @property (assign) NSInteger total;
 

@@ -19,8 +19,6 @@
 
 @property (assign) IBOutlet id <MUIViewControllerReportViewerDelegate> delegate;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 - (IBAction)done:(id)sender;
 
 @end

@@ -47,9 +47,6 @@ typedef enum {
 @property (copy) NSString *leftValue;
 @property (copy) NSString *rightValue;
 
-
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;
 

@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#import "Constants.h"
+
 @interface NSFileManager (Common)
 
 + (NSMutableArray *)contentsOfDocumentsDirectory;

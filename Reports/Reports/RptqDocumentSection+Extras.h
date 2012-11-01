@@ -7,7 +7,8 @@
 //
 
 #import "RptqDocumentSection.h"
-#import "UIManagedDocumentQuery.h"
+#import "RptqDocument+Extras.h"
+#import "SectionEnumerator.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef enum {

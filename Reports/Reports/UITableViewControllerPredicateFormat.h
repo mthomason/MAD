@@ -23,6 +23,5 @@
     <UITableViewControllerSchemaAddPredicateDelegate>
 
 @property (assign, nonatomic) IBOutlet id <AddPredicateDelegate> addPredicateDelegate;
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 
 @end

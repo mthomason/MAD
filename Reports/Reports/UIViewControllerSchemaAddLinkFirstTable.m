@@ -15,10 +15,8 @@
 @implementation UIViewControllerSchemaAddLinkFirstTable
 
 @synthesize delegate = _delegate;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
-    [_managedDocumentQuery release];
     [super dealloc];
 }
 
@@ -92,7 +90,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[self delegate] viewControllerSchemaAddLinkDidFinishWith:[tablea name] from:[self managedDocumentQuery]];
+    [[self delegate] viewControllerSchemaAddLinkDidFinishWith:[tablea name] from:[UIManagedDocumentQuery activeDocument]];
     [tablea release];
 }
 

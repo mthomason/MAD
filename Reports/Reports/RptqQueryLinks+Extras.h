@@ -8,6 +8,7 @@
 
 #import "RptqQueryLinks.h"
 #import <CoreData/CoreData.h>
+#import "RptqDocument+Extras.h"
 
 typedef enum {
 	MNSLinkTypeInnerJoin = 0,

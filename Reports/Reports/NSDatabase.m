@@ -7,9 +7,6 @@
 //
 
 #import "NSDatabase.h"
-#import "Constants.h"
-#import "UIManagedDocumentQuery.h"
-#import "NSFileManager+Common.h"
 
 @implementation NSDatabase
 @synthesize managedDocumentQuery = _managedDocumentQuery;
@@ -60,6 +57,7 @@
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
             [[self managedDocumentQuery] saveToURL:applicationFileUrlWithExtention forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+                NSLog(@"File saved, or not?");
                 completion(success);
             }];
         } else if ([[self managedDocumentQuery] documentState] == UIDocumentStateClosed) {

@@ -60,8 +60,6 @@ typedef enum {
 @property (copy) NSString *firstFieldName;
 @property (copy) NSString *secondFieldName;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 - (IBAction)done:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

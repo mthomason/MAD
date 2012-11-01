@@ -7,10 +7,6 @@
 //
 
 #import "UIViewControllerTemplateSelector.h"
-#import "NSFileManager+Common.h"
-#import "UITableViewCellDocument.h"
-#import "UITableViewControllerDataSourceTypes.h"
-#import "Constants.h"
 
 @interface UIViewControllerTemplateSelector()
 

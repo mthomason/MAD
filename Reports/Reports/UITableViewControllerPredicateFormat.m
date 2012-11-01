@@ -11,11 +11,9 @@
 
 @implementation UITableViewControllerPredicateFormat
 
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize addPredicateDelegate = _addPredicateDelegate;
 
 - (void)dealloc {
-    [_managedDocumentQuery release];
     [super dealloc];
 }
 
@@ -36,14 +34,12 @@
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerSchemaAddPredicate class]]) {
             UITableViewControllerSchemaAddPredicate *tvcSC = [[segue destinationViewController] retain];
             [tvcSC setDelegate:self];
-            [tvcSC setManagedDocumentQuery: [self managedDocumentQuery]];
             [tvcSC release];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
         if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerSchemaAddPredicate class]]) {
             UITableViewControllerSchemaAddPredicate *tvcSC = [[segue destinationViewController] retain];
             [tvcSC setDelegate:self];
-            [tvcSC setManagedDocumentQuery: [self managedDocumentQuery]];
             [tvcSC release];        }
     }
 }

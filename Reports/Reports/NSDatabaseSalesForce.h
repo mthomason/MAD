@@ -7,14 +7,10 @@
 //
 
 #import "NSDatabase.h"
-#import "UIManagedDocumentQuery.h"
 #import "SFOAuthCoordinator.h"
 #import "SFRestAPI.h"
 #import "RptqTable.h"
-
-@class NSDatabaseSalesForce;
-
-typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
+#import "RptqField.h"
 
 @protocol NSDatabaseSalesForceDelegate
 - (void)showWebView:(UIWebView *)view;
@@ -23,6 +19,8 @@ typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables
 @interface NSDatabaseSalesForce : NSDatabase
     <SFOAuthCoordinatorDelegate,
         SFRestDelegate>
+
+typedef void (^rsltBlk_tblNames)(NSDatabaseSalesForce *database, NSArray *tables);
 
 @property (assign) IBOutlet id <NSDatabaseSalesForceDelegate> delegate;
 

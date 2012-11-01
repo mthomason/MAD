@@ -17,8 +17,6 @@
 
 @interface QueryBuilderDataModal ()
 
-@property (retain, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
-
 @property (retain) NSMutableDictionary *modelWithZeroTables;
 @property (retain) NSMutableDictionary *modelWithOneTable;
 @property (retain) NSMutableDictionary *modelWithTwoOrMoreTables;
@@ -27,11 +25,9 @@
 
 @implementation QueryBuilderDataModal
 
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize modelWithZeroTables = _modelWithZeroTables, modelWithOneTable = _modelWithOneTable, modelWithTwoOrMoreTables = _modelWithTwoOrMoreTables;
 
 - (void)dealloc {
-    [_managedDocumentQuery release];
     [_modelWithZeroTables release];
     [_modelWithOneTable release];
     [_modelWithTwoOrMoreTables release];
@@ -41,8 +37,6 @@
 - (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument {
     self = [super init];
     if (self) {
-        
-        [self setManagedDocumentQuery: managedDocument];        
         
         NSString *h1 = NSLocalizedString(@"Layout", @"Layout");
         NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
@@ -251,8 +245,7 @@
 }
 
 - (NSMutableDictionary *)datamodel {
-    
-    return [[[self datamodelForNumberOfTables:[RptqQueryTables countForManagedObjectContext:[[self managedDocumentQuery] managedObjectContext]]] retain] autorelease];
+    return [self datamodelForNumberOfTables:[RptqQueryTables countForManagedObjectContext:[[UIManagedDocumentQuery activeDocument] managedObjectContext]]];
 }
 
 - (NSMutableDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {

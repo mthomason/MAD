@@ -21,8 +21,6 @@
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerSchemaAddLinkDelegate> delegate;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 - (IBAction)done:(id)sender;
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "UIManagedDocumentMySqlDatabase.h"
-#import "Constants.h"
 
 @implementation UIManagedDocumentMySqlDatabase
 

@@ -7,8 +7,6 @@
 //
 
 #import "UITableViewControllerDataSourceSetupMySql.h"
-#import "Constants.h"
-//#import "mysql.h"
 
 @interface UITableViewControllerDataSourceSetupMySql() {
 @private

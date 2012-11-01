@@ -7,13 +7,6 @@
 //
 
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDocument.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryGroup+Extras.h"
-#import "RptqQuery.h"
-#import "SectionEnumerator.h"
-#import "UIManagedDocumentQuery.h"
 
 @implementation RptqDocumentSection (Extras)
 

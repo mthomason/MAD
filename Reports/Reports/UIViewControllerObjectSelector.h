@@ -28,9 +28,6 @@ typedef enum {
         UIImagePickerControllerDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerObjectSelectorDelegate> delegate;
-
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarMain;

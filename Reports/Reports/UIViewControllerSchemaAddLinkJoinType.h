@@ -21,6 +21,4 @@
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerSchemaAddLinkJoinTypeDelegate> delegate;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 @end

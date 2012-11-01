@@ -7,12 +7,6 @@
 //
 
 #import "UITableViewControllerChooseField.h"
-#import "RptqFieldSelectorManager.h"
-#import "UIViewTableSectionHeaderDatabaseTable.h"
-
-#import "RptqTable.h"
-#import "RptqQueryTables.h"
-#import "RptqQueryTables+Extras.h"
 
 #pragma mark -
 #pragma mark TableViewController
@@ -44,14 +38,10 @@
 @implementation UITableViewControllerChooseField
 
 @synthesize dataTables=plays_, sectionInfoArray=sectionInfoArray_, fieldCells=newsCell_, pinchedIndexPath=pinchedIndexPath_, uniformRowHeight=rowHeight_, openSectionIndex=openSectionIndex_, initialPinchHeight=initialPinchHeight_;
-
 @synthesize delegate = _delegate;
-
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize excludeTables = _excludeTables;
 
 - (void)dealloc {
-    if (_managedDocumentQuery) [_managedDocumentQuery release];
     [_excludeTables release];
     [super dealloc];
 }
@@ -70,7 +60,7 @@
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
 
-    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self managedDocumentQuery] managedObjectContext]]];
+    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]]];
     [tableNames removeObjectsInArray:[self excludeTables]];
 
 
@@ -83,7 +73,7 @@
         [request setPredicate: predicate];
         
         NSError *error = nil;
-        NSArray *tablesResults = [[[self managedDocumentQuery] managedObjectContext] executeFetchRequest:request error:&error];
+        NSArray *tablesResults = [[[UIManagedDocumentQuery activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
         [self setDataTables: (!error ? tablesResults : [NSArray array]) ]; 
 
     } else {

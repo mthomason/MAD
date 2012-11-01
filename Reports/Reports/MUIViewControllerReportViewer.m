@@ -15,7 +15,6 @@
 @implementation MUIViewControllerReportViewer
 
 @synthesize delegate = _delegate;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

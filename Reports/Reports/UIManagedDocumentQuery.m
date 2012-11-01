@@ -7,10 +7,21 @@
 //
 
 #import "UIManagedDocumentQuery.h"
-#import <CoreData/CoreData.h>
-#import "Constants.h"
+#import "AppDelegate.h"
 
 @implementation UIManagedDocumentQuery
+
++ (UIManagedDocumentQuery *)activeDocument {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedDocumentQuery];
+}
+
++ (void)setActiveDocument:(UIManagedDocumentQuery *)activeDocument {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate setManagedDocumentQuery:activeDocument];
+}
+
+#pragma mark - Managed Document Override
 
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
     NSLog(@"Auto-Saving Document");

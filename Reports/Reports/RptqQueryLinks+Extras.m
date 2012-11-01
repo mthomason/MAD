@@ -7,7 +7,6 @@
 //
 
 #import "RptqQueryLinks+Extras.h"
-#import "RptqDocument+Extras.h"
 
 @implementation RptqQueryLinks (Extras)
 

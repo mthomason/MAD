@@ -7,7 +7,6 @@
 //
 
 #import "MUIViewControllerOpenDocument.h"
-#import "AppDelegate.h"
 
 NSString * const SEGUE_SHOWADDDOCUMENT = @"showAddDocument";
 NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
@@ -167,14 +166,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                 }
                 [navControl release];
             }
-            
-            
-            
         }
-        
-        
-        
-        
     }
 }
 
@@ -209,7 +201,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
     }
 }
 
-- (void)uIViewControllerSchemaTablesDelegateDidFinish:(MUIViewControllerQueryBuilder *)controller {
+- (void)uIViewControllerSchemaTablesDelegateDidFinish:(UIViewController *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissModalViewControllerAnimated: YES];
     } else {

@@ -13,11 +13,9 @@
 @implementation UIViewControllerSchemaAddTable
 
 @synthesize delegate = _delegate;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize excludeResults = _excludeResults;
 
 - (void)dealloc {
-    [_managedDocumentQuery release];
     [_excludeResults release];
     [super dealloc];
 }

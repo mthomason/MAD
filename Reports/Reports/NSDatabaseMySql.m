@@ -7,9 +7,8 @@
 //
 
 #import "NSDatabaseMySql.h"
-//#import "mysql.h"
-#import "Constants.h"
 #import <stdio.h>
+#import "Constants.h"
 
 @implementation NSDatabaseMySql
 

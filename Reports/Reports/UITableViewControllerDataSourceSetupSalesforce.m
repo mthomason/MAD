@@ -7,9 +7,6 @@
 //
 
 #import "UITableViewControllerDataSourceSetupSalesforce.h"
-#import "NSDatabaseSalesForce.h"
-#import "Constants.h"
-#import "UIColor+EverydayApps.h"
 
 @interface UITableViewControllerDataSourceSetupSalesforce() {
 @private

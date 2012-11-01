@@ -40,8 +40,6 @@
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
-
 @property (assign) CGRect designScrollViewNormal;
 @property (assign) CGRect designScrollViewWithToolbox;
 @property (assign) CGRect toolboxOffScreen;

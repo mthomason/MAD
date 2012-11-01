@@ -16,10 +16,8 @@
 @implementation UIViewControllerSchemaAddLinkFirstField
 
 @synthesize delegate = _delegate;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 
 - (void)dealloc {
-    [_managedDocumentQuery release];
     [super dealloc];
 }
 
@@ -61,7 +59,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[self delegate] viewControllerSchemaAddLinkFirstFieldDidFinishWith: [field name] from:[self managedDocumentQuery]];
+    [[self delegate] viewControllerSchemaAddLinkFirstFieldDidFinishWith: [field name] from:[UIManagedDocumentQuery activeDocument]];
     [field release];
 }
 

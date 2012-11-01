@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "UITableViewCellDocument.h"
 #import "UITableViewControllerDataSourceTypes.h"
+#import "NSFileManager+Common.h"
+#import "Constants.h"
 
 @class UIViewControllerTemplateSelector;
 
@@ -17,7 +19,6 @@
 - (void)uIViewControllerTemplateSelectorDidCancel:(UIViewControllerTemplateSelector *)controller;
 - (void)uIViewControllerTemplateSelectorDidFinish:(UIViewControllerTemplateSelector *)controller;
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
-- (void)uIViewControllerTemplateSelectorRequestOpenOfFileAtUrl:(NSURL *)url;        //Just open it
 @end
 
 @interface UIViewControllerTemplateSelector : UIViewController

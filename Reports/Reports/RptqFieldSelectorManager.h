@@ -7,10 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class UIViewTableSectionHeaderDatabaseTable;
-@class RptqTable;
-
+#import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "RptqTable.h"
 
 @interface RptqFieldSelectorManager : NSObject 
 
@@ -18,7 +16,6 @@
 @property (retain) RptqTable *table;
 @property (retain) NSArray *fields;
 @property (retain) UIViewTableSectionHeaderDatabaseTable* headerView;
-
 @property (nonatomic, retain) NSMutableArray *rowHeights;
 
 - (id)initWithTable:(RptqTable *)sectionTable;

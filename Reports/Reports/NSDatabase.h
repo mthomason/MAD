@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 #import "UIManagedDocumentQuery.h"
 #import "RptqQueryLinks+Extras.h"
+#import "NSFileManager+Common.h"
 
 typedef enum {
 	NSDatabaseQueryTypeNone = 0,

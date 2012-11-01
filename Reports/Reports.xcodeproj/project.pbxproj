@@ -892,6 +892,16 @@
 		4CFF2E061500C43E002770C1 /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4C9962F416401CF800B7BACC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CD98B9B163F7CDD0096D7BC;
+			remoteInfo = MySqlClientObjectiveC;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
 		4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelStrikethrough.m; sourceTree = "<group>"; };
@@ -1500,11 +1510,11 @@
 		4CE9F53B1598B03B007717CB /* WATableFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableFetchRequest.h; sourceTree = "<group>"; };
 		4CE9F53C1598B03B007717CB /* WAToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAToolkit.h; sourceTree = "<group>"; };
 		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Reports/README.txt; sourceTree = "<group>"; };
-		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
-		4CF61CFA163F83110065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
-		4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
-		4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
-		4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
+		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
+		4CF61CFA163F83110065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
+		4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
+		4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
+		4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
 		4CFF2E001500B869002770C1 /* RptqQueryLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryLinks.h; sourceTree = "<group>"; };
 		4CFF2E011500B869002770C1 /* RptqQueryLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryLinks.m; sourceTree = "<group>"; };
 		4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryBuilderDataModal.h; sourceTree = "<group>"; };
@@ -2204,6 +2214,14 @@
 			name = Generics;
 			sourceTree = "<group>";
 		};
+		4C9962F116401CF800B7BACC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C9962F516401CF800B7BACC /* liblibMySqlClientObjectiveC.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4CA0637F14BAD1E60025009E /* Report Designer */ = {
 			isa = PBXGroup;
 			children = (
@@ -2822,6 +2840,12 @@
 			mainGroup = 4C384E1914B29789007B4F48;
 			productRefGroup = 4C384E2514B29789007B4F48 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4C9962F116401CF800B7BACC /* Products */;
+					ProjectRef = 4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4C384E2314B29789007B4F48 /* ReportDesigner */,
@@ -2831,6 +2855,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4C9962F516401CF800B7BACC /* liblibMySqlClientObjectiveC.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			name = liblibMySqlClientObjectiveC.a;
+			path = libMySqlClientObjectiveC.a;
+			remoteRef = 4C9962F416401CF800B7BACC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4C0E77AF163B5AEC003B951E /* Resources */ = {

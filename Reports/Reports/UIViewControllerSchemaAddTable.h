@@ -22,8 +22,6 @@
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <UIViewControllerSchemaAddTableDelegate> delegate;
-
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
 @property (copy) NSArray *excludeResults;
 
 - (IBAction)done:(id)sender;

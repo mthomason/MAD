@@ -13,11 +13,8 @@
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
 #import "UIColor+EverydayApps.h"
-
 #import "UINavigationControllerQueryDesigner.h"
 #import "UINavigationControllerModelControllers.h"
-
-@class MUIViewControllerOpenDocumentDelegate;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, MUIViewControllerOpenDocumentDelegate>
 

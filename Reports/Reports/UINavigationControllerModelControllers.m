@@ -7,7 +7,6 @@
 //
 
 #import "UINavigationControllerModelControllers.h"
-#import "UIColor+EverydayApps.h"
 
 @implementation UINavigationControllerModelControllers
 
