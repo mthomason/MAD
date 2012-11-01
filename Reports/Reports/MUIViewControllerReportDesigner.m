@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "ReportDesignerViewController.h"
+#import "MUIViewControllerReportDesigner.h"
 
-@interface ReportDesignerViewController()
+@interface MUIViewControllerReportDesigner()
 
 @property (retain) NSMutableArray *scrollViewFrames;
 @property (assign) BOOL formualInformationViewIsVisable;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation ReportDesignerViewController
+@implementation MUIViewControllerReportDesigner
 
 - (void)dealloc {
     [_scrollViewFrames release];

@@ -22,9 +22,7 @@
 #import "CGGeometry+Extras.h"
 #import "SectionEnumerator.h"
 
-@class UIManagedDocumentQuery;
-
-@interface ReportDesignerViewController : MUIViewController
+@interface MUIViewControllerReportDesigner : MUIViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         UIPopoverControllerDelegate,

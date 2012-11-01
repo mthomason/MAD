@@ -222,7 +222,7 @@
                     }
                 }
     } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
-        if ([[segue destinationViewController] isKindOfClass: [ReportDesignerViewController class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MUIViewControllerReportDesigner class]]) {
             [[segue destinationViewController] setDelegate: self];
             [[segue destinationViewController] setManagedDocumentQuery: [UIManagedDocumentQuery activeDocument]];
         }

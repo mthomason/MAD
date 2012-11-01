@@ -22,7 +22,7 @@
 #import "UITableViewControllerDataSourceTypes.h"
 #import "UITableViewControllerLinkBuilder.h"
 #import "UITableViewControllerSectionLayoutSettings.h"
-#import "ReportDesignerViewController.h"
+#import "MUIViewControllerReportDesigner.h"
 #import "UIColor+PaperPatterns.h"
 
 @interface MUIViewControllerQueryBuilder : MUIViewController
