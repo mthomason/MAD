@@ -11,9 +11,6 @@
 
 @implementation UIViewControllerSettings
 
-@synthesize delegate;
-@synthesize tableViewControllerSettings = _tableViewControllerSettings;
-
 - (void)dealloc {
     [_tableViewControllerSettings release];
     [super dealloc];

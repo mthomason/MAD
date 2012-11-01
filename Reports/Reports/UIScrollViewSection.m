@@ -9,9 +9,6 @@
 #import "UIScrollViewSection.h"
 
 @implementation UIScrollViewSection
-@synthesize objectID = _objectID;
-@synthesize localizedName = _localizedName;
-@synthesize highlighted = _highlighted;
 
 - (void)dealloc {
     [_objectID release];

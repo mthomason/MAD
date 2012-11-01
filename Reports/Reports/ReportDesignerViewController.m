@@ -7,28 +7,6 @@
 //
 
 #import "ReportDesignerViewController.h"
-#import <CoreData/CoreData.h>
-#import <QuartzCore/QuartzCore.h>
-#import "Constants.h"
-#import "NSFileManager+Common.h"
-#import "UIManagedDocumentQuery.h"
-#import "UIViewRuler.h"
-#import "RptqDocument.h"
-#import "RptqDocumentSection.h"
-#import "RptqDocumentObject.h"
-#import "RptqDocumentObjectFormula.h"
-#import "RptqDocumentObjectLabel.h"
-#import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDocumentObjectLabelLink.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-
-#import "CGGeometry+Extras.h"
-#import "UIColor+EverydayApps.h"
-#import "SectionEnumerator.h"
-#import "ElementView.h"
 
 @interface ReportDesignerViewController()
 
@@ -41,27 +19,8 @@
 
 @implementation ReportDesignerViewController
 
-@synthesize delegate = _delegate;
-@synthesize scrollViewFrames = _scrollViewFrames;
-@synthesize svSections = _svSections;
-@synthesize settingsPopoverController = _settingsPopoverController;
-@synthesize toolbox = _toolbox;
-@synthesize containerView = _containerView;
-@synthesize designScrollView = _designScrollView;
-@synthesize informationButton = _informationButton;
-@synthesize barButtonItemInfo = _barButtonItemInfo;
-@synthesize barButtonItemSettings = _barButtonItemSettings;
-@synthesize barButtonItemObjects = _barButtonItemObjects;
-@synthesize navBar = _navBar;
-@synthesize toolboxOffScreen = _toolboxOffScreen;
-@synthesize toolboxOnScreen = _toolboxOnScreen;
-@synthesize designScrollViewNormal = _designScrollViewNormal;
-@synthesize designScrollViewWithToolbox = _designScrollViewWithToolbox;
-@synthesize formualInformationViewIsVisable = _formualInformationViewIsVisable;
-@synthesize imageInformationViewIsVisable = _imageInformationViewIsVisable;
-@synthesize labelInformationViewIsVisable = _labelInformationViewIsVisable;
-
 - (void)dealloc {
+    [_scrollViewFrames release];
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
                                                   object: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];

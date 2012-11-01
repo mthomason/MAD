@@ -11,26 +11,16 @@
 
 @implementation UITableViewControllerSettings
 
-@synthesize delegate;
-@synthesize tableCellPrint;
-@synthesize tableCellExport;
-@synthesize tableCellFind;
-@synthesize tableCellSettings;
-@synthesize tableCellHelp;
-@synthesize tableCellStore;
-@synthesize tableCellReportSetup;
-@synthesize tableCellRuler;
-
 - (void)dealloc {
-    [tableCellPrint release];
-    [tableCellExport release];
-    [tableCellFind release];
-    [tableCellReportSetup release];
-    [tableCellRuler release];
-    [tableCellFind release];
-    [tableCellSettings release];
-    [tableCellHelp release];
-    [tableCellStore release];
+    [_tableCellPrint release];
+    [_tableCellExport release];
+    [_tableCellFind release];
+    [_tableCellReportSetup release];
+    [_tableCellRuler release];
+    [_tableCellFind release];
+    [_tableCellSettings release];
+    [_tableCellHelp release];
+    [_tableCellStore release];
     [super dealloc];
 }
 

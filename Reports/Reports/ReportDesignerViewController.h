@@ -8,13 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "UIScrollViewSection.h"
-#import "UIViewControllerToolbox.h"
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
 #import "UIViewControllerObjectSelector.h"
 #import "MUIViewControllerReportViewer.h"
 #import "ElementView.h"
+#import "NSFileManager+Common.h"
+#import "UIViewRuler.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "CGGeometry+Extras.h"
+#import "SectionEnumerator.h"
 
 @class ReportDesignerViewController;
 @class UIManagedDocumentQuery;
@@ -31,10 +36,7 @@
         UITableViewControllerSettingsDelegate,
         LabelInformationViewControllerDelegate,
         MUIViewControllerReportViewerDelegate,
-        ElementViewDelegate> {
-            CGRect toolboxOffScreen;
-            CGRect toolboxOnScreen;
-}
+        ElementViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <ReportDesignerViewControllerDelegate> delegate;
 
