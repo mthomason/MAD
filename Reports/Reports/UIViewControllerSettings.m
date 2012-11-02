@@ -7,7 +7,6 @@
 //
 
 #import "UIViewControllerSettings.h"
-#import "UITableViewControllerSettings.h"
 
 @implementation UIViewControllerSettings
 
@@ -57,7 +56,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [self.delegate uIViewControllerSettingsDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self];
 }
 
 @end

@@ -75,7 +75,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [self.delegate uIViewControllerSettingsDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self];
 }
 
 #pragma mark -

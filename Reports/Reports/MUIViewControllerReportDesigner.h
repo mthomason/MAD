@@ -27,7 +27,7 @@
         UITableViewDelegate,
         UIPopoverControllerDelegate,
         UIViewControllerObjectSelectorDelegate,
-        UITableViewControllerSettingsDelegate,
+        MUIViewControllerDelegate,
         LabelInformationViewControllerDelegate,
         MUIViewControllerReportViewerDelegate,
         ElementViewDelegate>

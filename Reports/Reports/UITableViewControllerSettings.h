@@ -7,17 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUITableViewController.h"
 
-@class UITableViewControllerSettings;
-
-@protocol UITableViewControllerSettingsDelegate
-- (void)uIViewControllerSettingsDidFinish:(UITableViewControllerSettings *)controller;
-@end
-
-@interface UITableViewControllerSettings : UITableViewController
+@interface UITableViewControllerSettings : MUITableViewController
     <UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerSettingsDelegate> delegate;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableCellPrint;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableCellExport;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableCellFind;

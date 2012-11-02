@@ -7,17 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 #import "UITableViewControllerSettings.h"
 
-@class UIViewControllerSettings;
-
-@protocol UIViewControllerSettingsDelegate
-- (void)uIViewControllerSettingsDidFinish:(UIViewControllerSettings *)controller;
-@end
-
-@interface UIViewControllerSettings : UIViewController
-
-@property (assign, nonatomic) IBOutlet id <UIViewControllerSettingsDelegate> delegate;
+@interface UIViewControllerSettings : MUIViewController
 
 @property (retain, nonatomic) UITableViewControllerSettings *tableViewControllerSettings;
 

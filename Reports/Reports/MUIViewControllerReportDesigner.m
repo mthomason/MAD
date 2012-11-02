@@ -477,7 +477,7 @@
                      }];
 }
 
-- (void)uIViewControllerSettingsDidFinish:(UITableViewControllerSettings *)controller {
+- (void)viewControllerDidFinish:(UITableViewControllerSettings *)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissViewControllerAnimated:YES completion:^{
             
