@@ -7,7 +7,7 @@
         <!--View Controller Template Selector - Templates-->
         <scene sceneID="F6q-Ap-wl0">
             <objects>
-                <viewController id="GWk-3f-Lwl" customClass="UIViewControllerTemplateSelector" sceneMemberID="viewController">
+                <viewController id="GWk-3f-Lwl" customClass="MUIViewControllerTemplateSelector" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GHA-i9-F1a">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -85,7 +85,7 @@
         <!--View Controller Store Templates-->
         <scene sceneID="fdY-w9-c9p">
             <objects>
-                <viewController id="Tp5-tt-BCK" customClass="UIViewControllerStoreTemplates" sceneMemberID="viewController">
+                <viewController id="Tp5-tt-BCK" customClass="MUIViewControllerStoreTemplates" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ivs-je-CID">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2112,7 +2112,7 @@
         <!--View Controller Store Templates-->
         <scene sceneID="m9r-9A-so2">
             <objects>
-                <viewController id="Qur-9m-XpM" customClass="UIViewControllerStoreTemplates" sceneMemberID="viewController">
+                <viewController id="Qur-9m-XpM" customClass="MUIViewControllerStoreTemplates" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Wg-8m-B5g">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask"/>

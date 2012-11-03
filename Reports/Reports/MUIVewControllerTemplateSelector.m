@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerTemplateSelector.h"
+#import "MUIViewControllerTemplateSelector.h"
 
-@interface UIViewControllerTemplateSelector()
+@interface MUIViewControllerTemplateSelector()
 
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 
 @end
 
-@implementation UIViewControllerTemplateSelector
+@implementation MUIViewControllerTemplateSelector
 
 - (void)dealloc {
     [_availableFilesCache release];

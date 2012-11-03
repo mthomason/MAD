@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerQueryBuilder.h"
-#import "UIViewControllerTemplateSelector.h"
+#import "MUIViewControllerTemplateSelector.h"
 #import "NSFileManager+Reports.h"
 #import "RptqQueryTables.h"
 

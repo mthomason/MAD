@@ -13,14 +13,14 @@
 #import "NSFileManager+Common.h"
 #import "Constants.h"
 
-@class UIViewControllerTemplateSelector;
+@class MUIViewControllerTemplateSelector;
 
 @protocol UIViewControllerTemplateSelectorDelegate <MUIViewControllerDelegate>
 @optional
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
 @end
 
-@interface UIViewControllerTemplateSelector : MUIViewController
+@interface MUIViewControllerTemplateSelector : MUIViewController
     <UITableViewDataSource, UITableViewDelegate,
         MUIViewControllerDelegate>
 

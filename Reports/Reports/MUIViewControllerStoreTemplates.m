@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerStoreTemplates.h"
+#import "MUIViewControllerStoreTemplates.h"
 
-@implementation UIViewControllerStoreTemplates
+@implementation MUIViewControllerStoreTemplates
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

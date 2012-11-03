@@ -104,8 +104,8 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UIViewControllerTemplateSelector class]]) {
-                    UIViewControllerTemplateSelector *tvc = (UIViewControllerTemplateSelector *)[[navControl topViewController] retain];
+                if ([[navControl topViewController] isKindOfClass:[MUIViewControllerTemplateSelector class]]) {
+                    MUIViewControllerTemplateSelector *tvc = (MUIViewControllerTemplateSelector *)[[navControl topViewController] retain];
                     if (tvc) {
                         [tvc setTemplateSelectorDelegate:self];
                     }

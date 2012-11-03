@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewController.h"
 
-@interface UIViewControllerStoreTemplates : MUIViewController
+@interface MUIViewControllerStoreTemplates : MUIViewController
 
 - (IBAction)done:(id)sender;
 

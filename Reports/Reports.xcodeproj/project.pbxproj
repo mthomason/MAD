@@ -45,12 +45,11 @@
 		4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
 		4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
-		4C0E772E163B5AEC003B951E /* UIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */; };
 		4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
 		4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
 		4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
 		4C0E7732163B5AEC003B951E /* Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* Templates.m */; };
-		4C0E7733163B5AEC003B951E /* UIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* UIViewControllerStoreTemplates.m */; };
+		4C0E7733163B5AEC003B951E /* MUIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */; };
 		4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
 		4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
@@ -376,7 +375,7 @@
 		4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
 		4C5F02DD14B9A48900C49BE9 /* Blank.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DC14B9A48900C49BE9 /* Blank.trvt */; };
 		4C5F02E014B9A91500C49BE9 /* Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* Templates.m */; };
-		4C5F02E314BA382A00C49BE9 /* UIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* UIViewControllerStoreTemplates.m */; };
+		4C5F02E314BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */; };
 		4C5F02E614BA3A6700C49BE9 /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
 		4C5F02E914BA477200C49BE9 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C5F02EC14BA480400C49BE9 /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
@@ -385,7 +384,6 @@
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
 		4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
-		4C6CDFB414B84BA700DABF86 /* UIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */; };
 		4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
@@ -444,6 +442,10 @@
 		4C9514F215112434004AF941 /* MNSGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F115112434004AF941 /* MNSGraph.m */; };
 		4C9514F515112473004AF941 /* MNSVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F415112473004AF941 /* MNSVertex.m */; };
 		4C9514F815112488004AF941 /* MNSEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F715112488004AF941 /* MNSEdge.m */; };
+		4C955D771644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
+		4C955D781644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
+		4C955D791644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
+		4C955D7A1644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
 		4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */; };
 		4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -1023,8 +1025,8 @@
 		4C5F02DC14B9A48900C49BE9 /* Blank.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Blank.trvt; sourceTree = "<group>"; };
 		4C5F02DE14B9A91500C49BE9 /* Templates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Templates.h; sourceTree = "<group>"; };
 		4C5F02DF14B9A91500C49BE9 /* Templates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Templates.m; sourceTree = "<group>"; };
-		4C5F02E114BA382A00C49BE9 /* UIViewControllerStoreTemplates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerStoreTemplates.h; sourceTree = "<group>"; };
-		4C5F02E214BA382A00C49BE9 /* UIViewControllerStoreTemplates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerStoreTemplates.m; sourceTree = "<group>"; };
+		4C5F02E114BA382A00C49BE9 /* MUIViewControllerStoreTemplates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerStoreTemplates.h; sourceTree = "<group>"; };
+		4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerStoreTemplates.m; sourceTree = "<group>"; };
 		4C5F02E414BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellStoreItemReportTemplate.h; sourceTree = "<group>"; };
 		4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellStoreItemReportTemplate.m; sourceTree = "<group>"; };
 		4C5F02E714BA477200C49BE9 /* UIViewControllerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSettings.h; sourceTree = "<group>"; };
@@ -1039,8 +1041,7 @@
 		4C6362C214E6436C005DBBFF /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocument20@2x.png"; sourceTree = "<group>"; };
-		4C6CDFB214B84BA700DABF86 /* UIViewControllerTemplateSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerTemplateSelector.h; sourceTree = "<group>"; };
-		4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIVewControllerTemplateSelector.m; sourceTree = "<group>"; };
+		4C6CDFB214B84BA700DABF86 /* MUIViewControllerTemplateSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerTemplateSelector.h; sourceTree = "<group>"; };
 		4C6CDFC214B85BFC00DABF86 /* UITableViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellDocument.h; sourceTree = "<group>"; };
 		4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellDocument.m; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentBlank.png; sourceTree = "<group>"; };
@@ -1240,6 +1241,7 @@
 		4C9514F615112487004AF941 /* MNSEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSEdge.h; sourceTree = "<group>"; };
 		4C9514F715112488004AF941 /* MNSEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSEdge.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
+		4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIVewControllerTemplateSelector.m; sourceTree = "<group>"; };
 		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPad.storyboard; sourceTree = "<group>"; };
 		4C97F0FD163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPhone.storyboard; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
@@ -2780,10 +2782,10 @@
 			children = (
 				4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */,
 				4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */,
-				4C6CDFB214B84BA700DABF86 /* UIViewControllerTemplateSelector.h */,
-				4C6CDFB314B84BA700DABF86 /* UIVewControllerTemplateSelector.m */,
-				4C5F02E114BA382A00C49BE9 /* UIViewControllerStoreTemplates.h */,
-				4C5F02E214BA382A00C49BE9 /* UIViewControllerStoreTemplates.m */,
+				4C6CDFB214B84BA700DABF86 /* MUIViewControllerTemplateSelector.h */,
+				4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */,
+				4C5F02E114BA382A00C49BE9 /* MUIViewControllerStoreTemplates.h */,
+				4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */,
 			);
 			name = OpenDocument;
 			sourceTree = "<group>";
@@ -3595,12 +3597,11 @@
 				4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */,
 				4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */,
 				4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */,
-				4C0E772E163B5AEC003B951E /* UIVewControllerTemplateSelector.m in Sources */,
 				4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */,
 				4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */,
 				4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */,
 				4C0E7732163B5AEC003B951E /* Templates.m in Sources */,
-				4C0E7733163B5AEC003B951E /* UIViewControllerStoreTemplates.m in Sources */,
+				4C0E7733163B5AEC003B951E /* MUIViewControllerStoreTemplates.m in Sources */,
 				4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */,
 				4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */,
 				4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */,
@@ -3696,6 +3697,7 @@
 				4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */,
 				4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC871644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
+				4C955D781644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3704,6 +3706,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */,
+				4C955D7A1644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3712,6 +3715,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */,
+				4C955D791644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3731,12 +3735,11 @@
 				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
 				4C00818B14B745C9003DF437 /* NSFileManager+Common.m in Sources */,
 				4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */,
-				4C6CDFB414B84BA700DABF86 /* UIVewControllerTemplateSelector.m in Sources */,
 				4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */,
 				4C5F02D414B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m in Sources */,
 				4C5F02D814B9755400C49BE9 /* UIManagedDocumentTrvFileData.m in Sources */,
 				4C5F02E014B9A91500C49BE9 /* Templates.m in Sources */,
-				4C5F02E314BA382A00C49BE9 /* UIViewControllerStoreTemplates.m in Sources */,
+				4C5F02E314BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m in Sources */,
 				4C5F02E614BA3A6700C49BE9 /* UITableViewCellStoreItemReportTemplate.m in Sources */,
 				4C5F02E914BA477200C49BE9 /* UIViewControllerSettings.m in Sources */,
 				4C5F02EC14BA480400C49BE9 /* UITableViewControllerSettings.m in Sources */,
@@ -3832,6 +3835,7 @@
 				4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */,
 				4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC861644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
+				4C955D771644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
