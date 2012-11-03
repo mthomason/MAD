@@ -24,7 +24,7 @@ typedef void (^rsltBlk_filePath)(BOOL success);
 
 @interface NSDatabase : NSObject
 
-@property (strong, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
+@property (retain, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
 
 - (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
 - (id)initExistingFileWithUrl:(NSURL *)url;

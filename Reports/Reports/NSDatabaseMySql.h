@@ -7,15 +7,13 @@
 //
 
 #import "NSDatabase.h"
+#import <MySqlClientObjectiveC/MysqlConnection.h>
+#import <MySqlClientObjectiveC/MysqlServer.h>
+#import <MySqlClientObjectiveC/MysqlFetch.h>
+#import <MySqlClientObjectiveC/MysqlFetchField.h>
 
-//FIXME: MySQL Currently does not work.  Takes too much time/too little value to fix.  Maybe find
-//          third party distribution.
 
-@interface NSDatabaseMySql : NSDatabase {
-    const char *h;
-    const char *u;
-    const char *p;
-}
+@interface NSDatabaseMySql : NSDatabase
 
 @property (copy) NSString *username;
 @property (copy) NSString *password;
