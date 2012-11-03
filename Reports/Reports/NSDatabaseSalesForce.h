@@ -11,6 +11,7 @@
 #import "SFRestAPI.h"
 #import "RptqTable.h"
 #import "RptqField.h"
+#import "UIAlertView+Blocks.h"
 
 @protocol NSDatabaseSalesForceDelegate
 - (void)showWebView:(UIWebView *)view;

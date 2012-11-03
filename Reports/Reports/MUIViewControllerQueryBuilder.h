@@ -32,7 +32,6 @@
         UITableViewControllerSchemaAddGroupDelegate,
         MUIViewControllerDelegate,
         UITableViewControllerLinkBuilderDelegate,
-        UIModalTableViewControllerDelegate,
         MUIViewControllerDelegate,
         SectionLayoutSettingsDelegate,
         AddPredicateDelegate>

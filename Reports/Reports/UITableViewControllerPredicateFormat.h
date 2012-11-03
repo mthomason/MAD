@@ -6,21 +6,21 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIModalTableViewController.h"
+#import "MUITableViewController.h"
 #import "UITableViewControllerSchemaAddPredicate.h"
 #import "UIManagedDocumentQuery.h"
 #import "RptqQueryPredicate.h"
 
 @class UITableViewControllerPredicateFormat;
 
-@protocol AddPredicateDelegate
+@protocol AddPredicateDelegate <MUIViewControllerDelegate>
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller;
 - (void)addPredicate:(RptqQueryPredicate *)predicate;
 - (void)addPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 
-@interface UITableViewControllerPredicateFormat : UIModalTableViewController
-    <UITableViewControllerSchemaAddPredicateDelegate>
+@interface UITableViewControllerPredicateFormat : MUITableViewController
+    <MUIViewControllerDelegate>
 
 @property (assign, nonatomic) IBOutlet id <AddPredicateDelegate> addPredicateDelegate;
 

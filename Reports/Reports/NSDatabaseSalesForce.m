@@ -8,7 +8,7 @@
 
 #import "NSDatabaseSalesForce.h"
 
-static NSString * const kSFMobileSDKVersion = @"1.0";
+//static NSString * const kSFMobileSDKVersion = @"1.0";
 
 typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
 typedef void (^rsltBlk_results)(NSDatabaseSalesForce *database, NSArray *results);
@@ -410,25 +410,16 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     }
     else {
         // show alert and retry
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Salesforce Error" 
-                                                        message:[NSString stringWithFormat:@"Can't connect to salesforce: %@", error]
-                                                       delegate:self
-                                              cancelButtonTitle:@"Retry"
-                                              otherButtonTitles: nil];
-        [alert show];
-        [alert release];
-    }
+        [UIAlertView showAlertViewWithTitle:@"Salesforce Error" message:[NSString stringWithFormat:@"Can't connect to salesforce: %@", error] cancelButtonTitle:@"Retry" otherButtonTitle:nil onDismiss:^(int buttonIndex) {
 
+        } onCancel:^{
+            [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
+                
+            }];
+        }];
+    }
     self.resultBlockComplete(self, NO);
 
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
-        
-    }];
 }
 
 @end
