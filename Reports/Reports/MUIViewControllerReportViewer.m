@@ -33,7 +33,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerReportViewerDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 @end

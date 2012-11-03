@@ -31,7 +31,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDatabaseSourcesDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 @end

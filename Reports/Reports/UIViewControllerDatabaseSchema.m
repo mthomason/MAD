@@ -40,7 +40,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDatabaseSchemaDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 @end

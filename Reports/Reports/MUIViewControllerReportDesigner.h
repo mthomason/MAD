@@ -29,7 +29,6 @@
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
         LabelInformationViewControllerDelegate,
-        MUIViewControllerReportViewerDelegate,
         ElementViewDelegate>
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;

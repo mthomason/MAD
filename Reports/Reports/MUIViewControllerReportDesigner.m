@@ -306,11 +306,11 @@
             popoverController.delegate = self;
         }
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
-        [[segue destinationViewController] setDelegate:self];
-        [[segue destinationViewController] setManagedDocumentQuery:[UIManagedDocumentQuery activeDocument]];
+        UIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
+        [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
-        [[segue destinationViewController] setDelegate:self];
-        [[segue destinationViewController] setManagedDocumentQuery:[UIManagedDocumentQuery activeDocument]];
+        MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
+        [viewControllerReportViewer setDelegate:self];
     }
 }
 
@@ -374,7 +374,7 @@
         //Make sure there are no information views open
         [[self informationButton] setEnabled: NO];
         
-        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil] retain];
+        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
         UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
         [self setToolbox:lblControl];
         [lblControl release];
@@ -396,20 +396,23 @@
 
 #pragma mark - Delegates
 
-#pragma mark Report Viewer Delegate
+#pragma mark MUIViewControllerDelegate
 
-- (void)viewControllerReportViewerDidFinish:(MUIViewControllerReportViewer *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-}
-
-#pragma mark Object Selector (Inserter) Delegate
-
-- (void)uIViewControllerObjectSelectorFinish:(UIViewControllerObjectSelector *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-
-    }];
+- (void)viewControllerDidFinish:(id)sender {
+    if ([sender isKindOfClass:[UITableViewControllerSettings class]]) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        } else {
+            [[self settingsPopoverController] dismissPopoverAnimated:YES];
+            [self setSettingsPopoverController: nil];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
 }
 
 - (void)didSelectDataField:(RptqField *)field {
@@ -476,18 +479,6 @@
                          [[self informationButton] setEnabled: YES];
                      }];
 }
-
-- (void)viewControllerDidFinish:(UITableViewControllerSettings *)controller {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    } else {
-        [[self settingsPopoverController] dismissPopoverAnimated:YES];
-        [self setSettingsPopoverController: nil];
-    }
-}
-
 
 #pragma mark Element View Delegate
 

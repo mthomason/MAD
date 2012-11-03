@@ -327,15 +327,7 @@
 
 #pragma mark - Delegates
 
-#pragma mark Report Viewer Delegate
-
-- (void)viewControllerReportViewerDidFinish:(MUIViewControllerReportViewer *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-}
-
-#pragma mark Report Designer Delegate
+#pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewController.h"
+#import "Constants.h"
 #import "UITableViewControllerSettings.h"
 
 @interface UIViewControllerSettings : MUIViewController

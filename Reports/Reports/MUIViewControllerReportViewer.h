@@ -7,17 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 
-@class MUIViewControllerReportViewer, UIManagedDocumentQuery;
-
-@protocol MUIViewControllerReportViewerDelegate
-- (void)viewControllerReportViewerDidFinish:(MUIViewControllerReportViewer *)controller;
-@end
-
-@interface MUIViewControllerReportViewer : UIViewController
+@interface MUIViewControllerReportViewer : MUIViewController
     <UIPageViewControllerDelegate>
-
-@property (assign) IBOutlet id <MUIViewControllerReportViewerDelegate> delegate;
 
 - (IBAction)done:(id)sender;
 

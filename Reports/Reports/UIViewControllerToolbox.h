@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 #import "UITableViewControllerFontSettings.h"
 #import "UITableViewControllerFontSelector.h"
 

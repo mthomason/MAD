@@ -7,16 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 
-@class UIViewControllerDatabaseSources;
-
-@protocol UIViewControllerDatabaseSourcesDelegate
-- (void)viewControllerDatabaseSourcesDidFinish:(UIViewControllerDatabaseSources *)controller;
-@end
-
-@interface UIViewControllerDatabaseSources : UIViewController
-
-@property (assign, nonatomic) IBOutlet id <UIViewControllerDatabaseSourcesDelegate> delegate;
+@interface UIViewControllerDatabaseSources : MUIViewController
 
 - (IBAction)done:(id)sender;
 

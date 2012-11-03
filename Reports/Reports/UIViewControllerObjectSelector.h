@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MUIViewController.h"
 #import "UITableViewControllerChooseField.h"
 
 typedef enum {
@@ -15,19 +16,16 @@ typedef enum {
 	MNSSegmentedControlOptionsMedia = 2,
 } MNSSegmentedControlOptions;
 
-@class UIViewControllerObjectSelector;
-
-@protocol UIViewControllerObjectSelectorDelegate
-- (void)uIViewControllerObjectSelectorFinish:(UIViewControllerObjectSelector *)controller;
+@protocol UIViewControllerObjectSelectorDelegate <MUIViewControllerDelegate>
 - (void)didSelectDataField:(RptqField *)field;
 @end
 
-@interface UIViewControllerObjectSelector : UIViewController
+@interface UIViewControllerObjectSelector : MUIViewController
     <UITableViewControllerChooseFieldDelegate,
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UIViewControllerObjectSelectorDelegate> delegate;
+@property (assign, nonatomic) IBOutlet id <UIViewControllerObjectSelectorDelegate> objectSelectorDelegate;
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarMain;
