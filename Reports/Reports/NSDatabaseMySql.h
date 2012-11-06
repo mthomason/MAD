@@ -15,16 +15,34 @@
 
 @interface NSDatabaseMySql : NSDatabase
 
-@property (copy) NSString *username;
-@property (copy) NSString *password;
-@property (copy) NSString *host;
-@property (assign) NSInteger port;
+//@property (copy) NSString *username;
+//@property (copy) NSString *password;
+//@property (copy) NSString *host;
+//@property (assign) NSInteger port;
 
+/*
 - (id)initWithHost:(NSString *)host port:(NSInteger)port username:(NSString *)username andPassword:(NSString *)password;
 - (id)initWithOptions:(NSDictionary *)optons;
 
 - (NSArray *)tablesFor:(NSString *)database;
 - (NSSet *)fieldsFor:(NSString *)database andTable:(NSString *)table;
 - (BOOL)testConnection;
+*/
+- (id)initNewFileWithName: (NSString *)name
+               completion: (void (^)(BOOL success))completion;
+
+- (id)initExistingFileWithUrl: (NSURL *)url;
+
+- (void)tablesInDataseAsyc: (NSString *)database
+                completion: (void (^)(NSDatabaseMySql *database, NSArray *tables))completion;
+
+- (void)runQuery: (NSString *)query
+      completion: (void (^)(NSDatabaseMySql *database, NSArray *results))completion;
+
+- (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
+                       withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion;
+
+- (void)logout;
+
 
 @end
