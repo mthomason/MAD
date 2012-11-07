@@ -20,7 +20,7 @@ typedef enum {
 - (void)didSelectDataField:(RptqField *)field;
 @end
 
-@interface UIViewControllerObjectSelector : MUIViewController
+@interface MUIViewControllerObjectSelector : MUIViewController
     <UITableViewControllerChooseFieldDelegate,
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate>

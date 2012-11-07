@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerObjectSelector.h"
+#import "MUIViewControllerObjectSelector.h"
 
-@interface UIViewControllerObjectSelector ()
+@interface MUIViewControllerObjectSelector ()
 
 @property (retain) UIViewController *visableViewController;
 
 @end
 
-@implementation UIViewControllerObjectSelector
+@implementation MUIViewControllerObjectSelector
 
 @synthesize visableViewController = _visableViewController;
 

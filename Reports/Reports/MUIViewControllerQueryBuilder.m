@@ -114,8 +114,8 @@
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerDataSourceTypes class]]) {
-                    UITableViewControllerDataSourceTypes *tvc = (UITableViewControllerDataSourceTypes *)[[navControl topViewController] retain];
+                if ([[navControl topViewController] isKindOfClass:[MUITableViewControllerDatabaseDriverSelector class]]) {
+                    MUITableViewControllerDatabaseDriverSelector *tvc = (MUITableViewControllerDatabaseDriverSelector *)[[navControl topViewController] retain];
                     if (tvc) [tvc setDelegate:self];
                     [tvc release];
                 }
@@ -181,7 +181,6 @@
                     UITableViewControllerPredicateFormat *tvc = (UITableViewControllerPredicateFormat *)[navControl topViewController];
                     if (tvc) {
                         //NSLog(@"Setting add predicate log");
-                        [tvc setManagedDocumentQuery: [UIManagedDocumentQuery activeDocument]];
                         [tvc setAddPredicateDelegate: self];
                         [tvc setDelegate: self];
                         
@@ -197,7 +196,6 @@
                 if ([[navControl topViewController] isKindOfClass:[UITableViewControllerSchemaAddGroup class]]) {
                     UITableViewControllerSchemaAddGroup *tvc = (UITableViewControllerSchemaAddGroup *)[navControl topViewController];
                     if (tvc) {
-                        [tvc setManagedDocumentQuery: [UIManagedDocumentQuery activeDocument]];
                         [tvc setDelegate:self];
                     }
                 }
@@ -224,11 +222,9 @@
     } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
         if ([[segue destinationViewController] isKindOfClass: [MUIViewControllerReportDesigner class]]) {
             [[segue destinationViewController] setDelegate: self];
-            [[segue destinationViewController] setManagedDocumentQuery: [UIManagedDocumentQuery activeDocument]];
         }
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromQuery"]) {
         [[segue destinationViewController] setDelegate: self];
-        [[segue destinationViewController] setManagedDocumentQuery: [UIManagedDocumentQuery activeDocument]];
     }
 }
 

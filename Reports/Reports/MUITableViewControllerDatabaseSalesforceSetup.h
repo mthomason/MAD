@@ -12,7 +12,7 @@
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 
-@interface UITableViewControllerDataSourceSetupSalesforce : MUITableViewController
+@interface MUITableViewControllerDatabaseSalesforceSetup : MUITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate,
         NSDatabaseSalesForceDelegate>

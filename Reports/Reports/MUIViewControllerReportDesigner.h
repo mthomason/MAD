@@ -12,7 +12,7 @@
 #import "UIManagedDocumentTrvFileData.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
-#import "UIViewControllerObjectSelector.h"
+#import "MUIViewControllerObjectSelector.h"
 #import "MUIViewControllerReportViewer.h"
 #import "ElementView.h"
 #import "NSFileManager+Common.h"

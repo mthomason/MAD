@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewControllerDataSourceTypes.h"
+#import "MUITableViewControllerDatabaseDriverSelector.h"
 
-@implementation UITableViewControllerDataSourceTypes
+@implementation MUITableViewControllerDatabaseDriverSelector
 
 //@synthesize delegate = _delegate;
 

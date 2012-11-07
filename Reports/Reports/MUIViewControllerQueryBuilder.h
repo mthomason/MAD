@@ -19,7 +19,7 @@
 #import "UITableViewCellQueryInput.h"
 #import "UITableViewCellQueryGroup.h"
 #import "UITableViewCellQueryPredicate.h"
-#import "UITableViewControllerDataSourceTypes.h"
+#import "MUITableViewControllerDatabaseDriverSelector.h"
 #import "UITableViewControllerLinkBuilder.h"
 #import "UITableViewControllerSectionLayoutSettings.h"
 #import "MUIViewControllerReportDesigner.h"

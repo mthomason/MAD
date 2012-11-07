@@ -1212,7 +1212,7 @@
         <!--View Controller Database Sources - Sources-->
         <scene sceneID="ELZ-ha-gxf">
             <objects>
-                <viewController id="3HW-mI-pSH" customClass="UIViewControllerDatabaseSources" sceneMemberID="viewController">
+                <viewController id="3HW-mI-pSH" customClass="MUIViewControllerDatabaseSources" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vbl-4l-p0o">
                         <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1233,7 +1233,7 @@
         <!--View Controller Database Schema - Schema-->
         <scene sceneID="k9Z-Sa-A6A">
             <objects>
-                <viewController id="eOS-wu-iX4" customClass="UIViewControllerDatabaseSchema" sceneMemberID="viewController">
+                <viewController id="eOS-wu-iX4" customClass="MUIViewControllerDatabaseSchema" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dyV-Kh-4N9">
                         <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1352,7 +1352,7 @@
         <!--View Controller Object Selector-->
         <scene sceneID="G1f-va-kdB">
             <objects>
-                <viewController id="xa7-Xt-Nbi" customClass="UIViewControllerObjectSelector" sceneMemberID="viewController">
+                <viewController id="xa7-Xt-Nbi" customClass="MUIViewControllerObjectSelector" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jBj-td-YC7">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1403,10 +1403,10 @@
             </objects>
             <point key="canvasLocation" x="2652" y="4536"/>
         </scene>
-        <!--Table View Controller Data Source Setup My Sql - MySQL Setup-->
+        <!--Table View Controller Database My Sql Setup - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
             <objects>
-                <tableViewController id="OZq-ny-MYn" customClass="UITableViewControllerDataSourceSetupMySql" sceneMemberID="viewController">
+                <tableViewController id="OZq-ny-MYn" customClass="MUITableViewControllerDatabaseMySqlSetup" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="WtT-L0-6MH">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1857,10 +1857,10 @@
             </objects>
             <point key="canvasLocation" x="2652" y="3584"/>
         </scene>
-        <!--Table View Controller Data Source Types - New Report-->
+        <!--Table View Controller Database Driver Selector - New Report-->
         <scene sceneID="fhe-9S-gQo">
             <objects>
-                <tableViewController id="ZV6-4A-f9x" customClass="UITableViewControllerDataSourceTypes" sceneMemberID="viewController">
+                <tableViewController id="ZV6-4A-f9x" customClass="MUITableViewControllerDatabaseDriverSelector" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="jCv-5o-GGd">
                         <rect key="frame" x="0.0" y="94" width="320" height="386"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2252,10 +2252,10 @@
             </objects>
             <point key="canvasLocation" x="958" y="1292"/>
         </scene>
-        <!--Table View Controller Data Source Setup Salesforce - New Report-->
+        <!--Table View Controller Database Salesforce Setup - New Report-->
         <scene sceneID="xoV-Fn-aBA">
             <objects>
-                <tableViewController id="kBv-k8-rjV" customClass="UITableViewControllerDataSourceSetupSalesforce" sceneMemberID="viewController">
+                <tableViewController id="kBv-k8-rjV" customClass="MUITableViewControllerDatabaseSalesforceSetup" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="McJ-nn-a7d">
                         <rect key="frame" x="0.0" y="94" width="320" height="348"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

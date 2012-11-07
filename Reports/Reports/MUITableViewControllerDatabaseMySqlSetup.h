@@ -10,7 +10,7 @@
 #import "MUITableViewController.h"
 #import "Constants.h"
 
-@interface UITableViewControllerDataSourceSetupMySql : MUITableViewController
+@interface MUITableViewControllerDatabaseMySqlSetup : MUITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
 

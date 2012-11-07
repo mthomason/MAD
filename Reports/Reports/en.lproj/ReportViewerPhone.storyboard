@@ -1211,7 +1211,7 @@
         <!--View Controller Database Sources - Sources-->
         <scene sceneID="ELZ-ha-gxf">
             <objects>
-                <viewController id="3HW-mI-pSH" customClass="UIViewControllerDatabaseSources" sceneMemberID="viewController">
+                <viewController id="3HW-mI-pSH" customClass="MUIViewControllerDatabaseSources" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vbl-4l-p0o">
                         <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1232,7 +1232,7 @@
         <!--View Controller Database Schema - Schema-->
         <scene sceneID="k9Z-Sa-A6A">
             <objects>
-                <viewController id="eOS-wu-iX4" customClass="UIViewControllerDatabaseSchema" sceneMemberID="viewController">
+                <viewController id="eOS-wu-iX4" customClass="MUIViewControllerDatabaseSchema" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dyV-Kh-4N9">
                         <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1351,7 +1351,7 @@
         <!--View Controller Object Selector-->
         <scene sceneID="G1f-va-kdB">
             <objects>
-                <viewController id="xa7-Xt-Nbi" customClass="UIViewControllerObjectSelector" sceneMemberID="viewController">
+                <viewController id="xa7-Xt-Nbi" customClass="MUIViewControllerObjectSelector" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jBj-td-YC7">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1402,10 +1402,10 @@
             </objects>
             <point key="canvasLocation" x="2652" y="4536"/>
         </scene>
-        <!--Table View Controller Data Source Setup My Sql - MySQL Setup-->
+        <!--Table View Controller Database My Sql Setup - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
             <objects>
-                <tableViewController id="OZq-ny-MYn" customClass="UITableViewControllerDataSourceSetupMySql" sceneMemberID="viewController">
+                <tableViewController id="OZq-ny-MYn" customClass="MUITableViewControllerDatabaseMySqlSetup" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="WtT-L0-6MH">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1856,10 +1856,10 @@
             </objects>
             <point key="canvasLocation" x="2652" y="3584"/>
         </scene>
-        <!--Table View Controller Data Source Types - New Report-->
+        <!--Table View Controller Database Driver Selector - New Report-->
         <scene sceneID="fhe-9S-gQo">
             <objects>
-                <tableViewController id="ZV6-4A-f9x" customClass="UITableViewControllerDataSourceTypes" sceneMemberID="viewController">
+                <tableViewController id="ZV6-4A-f9x" customClass="MUITableViewControllerDatabaseDriverSelector" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="jCv-5o-GGd">
                         <rect key="frame" x="0.0" y="94" width="320" height="386"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2251,10 +2251,10 @@
             </objects>
             <point key="canvasLocation" x="958" y="1292"/>
         </scene>
-        <!--Table View Controller Data Source Setup Salesforce - New Report-->
+        <!--Table View Controller Database Salesforce Setup - New Report-->
         <scene sceneID="xoV-Fn-aBA">
             <objects>
-                <tableViewController id="kBv-k8-rjV" customClass="UITableViewControllerDataSourceSetupSalesforce" sceneMemberID="viewController">
+                <tableViewController id="kBv-k8-rjV" customClass="MUITableViewControllerDatabaseSalesforceSetup" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="McJ-nn-a7d">
                         <rect key="frame" x="0.0" y="94" width="320" height="348"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4636,50 +4636,6 @@
         <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
         </class>
-        <class className="UITableViewControllerDataSourceSetupMySql" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupMySql.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="hostDidEndOnExit:"/>
-                <relationship kind="action" name="passwordDidEndOnExit:"/>
-                <relationship kind="action" name="portDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="action" name="usernameDidEndOnExit:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTestConnection" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerDataSourceSetupSalesforce" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceSetupSalesforce.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="nicknameDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerDataSourceTypes" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerDataSourceTypes.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
         <class className="UITableViewControllerEnterString" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
             <relationships>
@@ -4798,34 +4754,6 @@
         </class>
         <class className="UIViewClipboard" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewClipboard.h"/>
-        </class>
-        <class className="UIViewControllerDatabaseSchema" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSchema.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerDatabaseSources" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerDatabaseSources.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerObjectSelector" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerObjectSelector.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="segmentedControlSelectorTypeValueChanged:"/>
-                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="segmentedControlSelectorType" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="toolbarMain" candidateClass="UIToolbar"/>
-            </relationships>
         </class>
         <class className="UIViewControllerSchemaAddLinkFirstField" superclassName="UITableViewControllerCoreDataResults">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstField.h"/>

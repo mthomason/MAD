@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerDatabaseSources.h"
+#import "MUIViewControllerDatabaseSources.h"
 
-@implementation UIViewControllerDatabaseSources
+@implementation MUIViewControllerDatabaseSources
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

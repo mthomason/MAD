@@ -54,19 +54,18 @@
 		4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
 		4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
-		4C0E7738163B5AEC003B951E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
-		4C0E7739163B5AEC003B951E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
+		4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */; };
 		4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
 		4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
 		4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
-		4C0E773E163B5AEC003B951E /* UITableViewControllerDataSourceTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */; };
-		4C0E773F163B5AEC003B951E /* UITableViewControllerDataSourceSetupMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */; };
+		4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
+		4C0E773F163B5AEC003B951E /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
-		4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
+		4C0E7742163B5AEC003B951E /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
 		4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8C97B914C5C636007FB629 /* NSDatabaseSalesForce.m */; };
-		4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
+		4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
 		4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
@@ -463,8 +462,7 @@
 		4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
-		4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */; };
-		4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */; };
+		4CA0638B14BAE35B0025009E /* MUIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */; };
 		4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA0639314BAF14F0025009E /* UIViewEntityRelationshipTable.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0639214BAF14E0025009E /* UIViewEntityRelationshipTable.xib */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
@@ -478,7 +476,9 @@
 		4CB653581648D6F30050CD03 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
 		4CB653DB1648D6F30050CD03 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB653561648D6F30050CD03 /* libSalesforceSDK.a */; };
 		4CB653DC1648D6F30050CD03 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB653561648D6F30050CD03 /* libSalesforceSDK.a */; };
-		4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */; };
+		4CB653E0164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
+		4CB653E1164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
+		4CBFF2ED14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
 		4CC24AA51503E3AB00C4EE98 /* UIViewGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
@@ -881,7 +881,7 @@
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* NSDatabase.m */; };
 		4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */; };
-		4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */; };
+		4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
 		4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
 		4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
 		4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
@@ -889,8 +889,8 @@
 		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
 		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
 		4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
-		4CE8A04614C01C7B007C8345 /* UITableViewControllerDataSourceTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */; };
-		4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */; };
+		4CE8A04614C01C7B007C8345 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
+		4CE8A04914C01EA1007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CEEA0D814C559B000BB9ABC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
@@ -1263,10 +1263,9 @@
 		4C9F94C016423D7300A562B9 /* MUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewController.h; sourceTree = "<group>"; };
 		4C9F94C116423D7300A562B9 /* MUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewController.m; sourceTree = "<group>"; };
 		4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipLink.m; sourceTree = "<group>"; };
-		4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSchema.h; sourceTree = "<group>"; };
-		4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
-		4CA0638914BAE35B0025009E /* UIViewControllerDatabaseSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerDatabaseSources.h; sourceTree = "<group>"; };
-		4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerDatabaseSources.m; sourceTree = "<group>"; };
+		4CA0638614BAE32C0025009E /* MUIViewControllerDatabaseSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDatabaseSchema.h; sourceTree = "<group>"; };
+		4CA0638914BAE35B0025009E /* MUIViewControllerDatabaseSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDatabaseSources.h; sourceTree = "<group>"; };
+		4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerDatabaseSources.m; sourceTree = "<group>"; };
 		4CA0638C14BAEC000025009E /* UIViewEntityRelationshipTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipTable.h; sourceTree = "<group>"; };
 		4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewEntityRelationshipTable.m; sourceTree = "<group>"; };
 		4CA0638F14BAEC2F0025009E /* UIViewEntityRelationshipLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewEntityRelationshipLink.h; sourceTree = "<group>"; };
@@ -1323,8 +1322,9 @@
 		4CB653541648D6F30050CD03 /* SFSoupIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFSoupIndex.h; sourceTree = "<group>"; };
 		4CB653551648D6F30050CD03 /* SFSoupQuerySpec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFSoupQuerySpec.h; sourceTree = "<group>"; };
 		4CB653561648D6F30050CD03 /* libSalesforceSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSalesforceSDK.a; sourceTree = "<group>"; };
-		4CBFF2EB14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupSalesforce.h; sourceTree = "<group>"; };
-		4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceSetupSalesforce.m; sourceTree = "<group>"; };
+		4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
+		4CBFF2EB14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewControllerDatabaseSalesforceSetup.h; sourceTree = "<group>"; };
+		4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseSalesforceSetup.m; sourceTree = "<group>"; };
 		4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewGradient.h; sourceTree = "<group>"; };
 		4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewGradient.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
@@ -1539,8 +1539,8 @@
 		4CE7B76914C038AF007D0148 /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabase.m; sourceTree = "<group>"; };
 		4CE7B76C14C03956007D0148 /* NSDatabaseMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDatabaseMySql.h; sourceTree = "<group>"; };
 		4CE7B76D14C03956007D0148 /* NSDatabaseMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDatabaseMySql.m; sourceTree = "<group>"; };
-		4CE7B77314C2D168007D0148 /* UIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerObjectSelector.h; sourceTree = "<group>"; };
-		4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerObjectSelector.m; sourceTree = "<group>"; };
+		4CE7B77314C2D168007D0148 /* MUIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerObjectSelector.h; sourceTree = "<group>"; };
+		4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerObjectSelector.m; sourceTree = "<group>"; };
 		4CE8A03414BFF6AC007C8345 /* UIManagedDocumentMySqlDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentMySqlDatabase.h; sourceTree = "<group>"; };
 		4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentMySqlDatabase.m; sourceTree = "<group>"; };
 		4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DatabaseDefinationFileType.xcdatamodel; sourceTree = "<group>"; };
@@ -1549,10 +1549,10 @@
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
 		4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerOpenDocument.m; sourceTree = "<group>"; };
-		4CE8A04414C01C7A007C8345 /* UITableViewControllerDataSourceTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceTypes.h; sourceTree = "<group>"; };
-		4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceTypes.m; sourceTree = "<group>"; };
-		4CE8A04714C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerDataSourceSetupMySql.h; sourceTree = "<group>"; };
-		4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerDataSourceSetupMySql.m; sourceTree = "<group>"; };
+		4CE8A04414C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewControllerDatabaseDriverSelector.h; sourceTree = "<group>"; };
+		4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseDriverSelector.m; sourceTree = "<group>"; };
+		4CE8A04714C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewControllerDatabaseMySqlSetup.h; sourceTree = "<group>"; };
+		4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseMySqlSetup.m; sourceTree = "<group>"; };
 		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
@@ -2473,6 +2473,31 @@
 			path = SalesforceSDK;
 			sourceTree = "<group>";
 		};
+		4CB653DD164A42850050CD03 /* Generics */ = {
+			isa = PBXGroup;
+			children = (
+				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
+				4C9F94BB1642280500A562B9 /* MUIViewController.h */,
+				4C9F94BC1642280500A562B9 /* MUIViewController.m */,
+				4C9F94C016423D7300A562B9 /* MUITableViewController.h */,
+				4C9F94C116423D7300A562B9 /* MUITableViewController.m */,
+			);
+			name = Generics;
+			sourceTree = "<group>";
+		};
+		4CB653DE164A43140050CD03 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4CE8A04414C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.h */,
+				4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */,
+				4CE8A04714C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.h */,
+				4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */,
+				4CBFF2EB14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.h */,
+				4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
 		4CBFF2F414C7C7C5000237D3 /* Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -2765,15 +2790,11 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
-				4C9F94BB1642280500A562B9 /* MUIViewController.h */,
-				4C9F94BC1642280500A562B9 /* MUIViewController.m */,
-				4C9F94C016423D7300A562B9 /* MUITableViewController.h */,
-				4C9F94C116423D7300A562B9 /* MUITableViewController.m */,
+				4CB653DE164A43140050CD03 /* Database */,
+				4CB653DD164A42850050CD03 /* Generics */,
 				4CF61D02163FA3E70065A16C /* OpenDocument */,
 				4C6362BB14E62738005DBBFF /* Navigation Controller */,
 				4CDB624914E38C2C00A5389E /* View Controllers */,
-				4CDB624814E38C1400A5389E /* Table View Controllers */,
 				4C1A586D14E2653600184445 /* Choose Field Table View Controller */,
 				4C507B0214D067EE00DE67E3 /* Query Builder */,
 				4CDB624514E38B4700A5389E /* Report Designer */,
@@ -2784,28 +2805,15 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
-		4CDB624814E38C1400A5389E /* Table View Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				4CE8A04414C01C7A007C8345 /* UITableViewControllerDataSourceTypes.h */,
-				4CE8A04514C01C7A007C8345 /* UITableViewControllerDataSourceTypes.m */,
-				4CE8A04714C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.h */,
-				4CE8A04814C01EA0007C8345 /* UITableViewControllerDataSourceSetupMySql.m */,
-				4CBFF2EB14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.h */,
-				4CBFF2EC14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m */,
-			);
-			name = "Table View Controllers";
-			sourceTree = "<group>";
-		};
 		4CDB624914E38C2C00A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4CA0638614BAE32C0025009E /* UIViewControllerDatabaseSchema.h */,
-				4CA0638714BAE32C0025009E /* UIViewControllerDatabaseSchema.m */,
-				4CA0638914BAE35B0025009E /* UIViewControllerDatabaseSources.h */,
-				4CA0638A14BAE35B0025009E /* UIViewControllerDatabaseSources.m */,
-				4CE7B77314C2D168007D0148 /* UIViewControllerObjectSelector.h */,
-				4CE7B77414C2D168007D0148 /* UIViewControllerObjectSelector.m */,
+				4CA0638614BAE32C0025009E /* MUIViewControllerDatabaseSchema.h */,
+				4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */,
+				4CA0638914BAE35B0025009E /* MUIViewControllerDatabaseSources.h */,
+				4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */,
+				4CE7B77314C2D168007D0148 /* MUIViewControllerObjectSelector.h */,
+				4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -3724,19 +3732,18 @@
 				4C0E7735163B5AEC003B951E /* UIViewControllerSettings.m in Sources */,
 				4C0E7736163B5AEC003B951E /* UITableViewControllerSettings.m in Sources */,
 				4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */,
-				4C0E7738163B5AEC003B951E /* UIViewControllerDatabaseSchema.m in Sources */,
-				4C0E7739163B5AEC003B951E /* UIViewControllerDatabaseSources.m in Sources */,
+				4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */,
 				4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */,
 				4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
 				4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */,
-				4C0E773E163B5AEC003B951E /* UITableViewControllerDataSourceTypes.m in Sources */,
-				4C0E773F163B5AEC003B951E /* UITableViewControllerDataSourceSetupMySql.m in Sources */,
+				4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
+				4C0E773F163B5AEC003B951E /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
 				4C0E7740163B5AEC003B951E /* NSDatabase.m in Sources */,
 				4C0E7741163B5AEC003B951E /* NSDatabaseMySql.m in Sources */,
-				4C0E7742163B5AEC003B951E /* UIViewControllerObjectSelector.m in Sources */,
+				4C0E7742163B5AEC003B951E /* MUIViewControllerObjectSelector.m in Sources */,
 				4C0E774F163B5AEC003B951E /* NSDatabaseSalesForce.m in Sources */,
-				4C0E7750163B5AEC003B951E /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
+				4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
 				4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */,
@@ -3816,6 +3823,7 @@
 				4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC871644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D781644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
+				4CB653E1164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3862,19 +3870,18 @@
 				4C5F02E914BA477200C49BE9 /* UIViewControllerSettings.m in Sources */,
 				4C5F02EC14BA480400C49BE9 /* UITableViewControllerSettings.m in Sources */,
 				4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */,
-				4CA0638814BAE32C0025009E /* UIViewControllerDatabaseSchema.m in Sources */,
-				4CA0638B14BAE35B0025009E /* UIViewControllerDatabaseSources.m in Sources */,
+				4CA0638B14BAE35B0025009E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
 				4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */,
 				4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
 				4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */,
-				4CE8A04614C01C7B007C8345 /* UITableViewControllerDataSourceTypes.m in Sources */,
-				4CE8A04914C01EA1007C8345 /* UITableViewControllerDataSourceSetupMySql.m in Sources */,
+				4CE8A04614C01C7B007C8345 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
+				4CE8A04914C01EA1007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
 				4CE7B76A14C038AF007D0148 /* NSDatabase.m in Sources */,
 				4CE7B76E14C03956007D0148 /* NSDatabaseMySql.m in Sources */,
-				4CE7B77514C2D168007D0148 /* UIViewControllerObjectSelector.m in Sources */,
+				4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */,
 				4C8C97BA14C5C636007FB629 /* NSDatabaseSalesForce.m in Sources */,
-				4CBFF2ED14C71370000237D3 /* UITableViewControllerDataSourceSetupSalesforce.m in Sources */,
+				4CBFF2ED14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
 				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */,
@@ -3954,6 +3961,7 @@
 				4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC861644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D771644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
+				4CB653E0164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4040,7 +4048,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/..\"",
 					"\"$(SRCROOT)/StaticLibraries\"",
@@ -4087,7 +4094,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)/Reports/APIs/Windows-Azure\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/..\"",
 					"\"$(SRCROOT)/StaticLibraries\"",

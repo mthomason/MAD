@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewControllerDatabaseSchema.h"
+#import "MUIViewControllerDatabaseSchema.h"
 
-@implementation UIViewControllerDatabaseSchema
+@implementation MUIViewControllerDatabaseSchema
 
 - (void)dealloc {
     [_scrollViewMain release];

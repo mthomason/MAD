@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewControllerDataSourceSetupMySql.h"
+#import "MUITableViewControllerDatabaseMySqlSetup.h"
 
-@interface UITableViewControllerDataSourceSetupMySql() {
+@interface MUITableViewControllerDatabaseMySqlSetup() {
 @private
     //MYSQL* conn;
     
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation UITableViewControllerDataSourceSetupMySql
+@implementation MUITableViewControllerDatabaseMySqlSetup
 
 @synthesize delegate;
 @synthesize tableViewCellUsername;

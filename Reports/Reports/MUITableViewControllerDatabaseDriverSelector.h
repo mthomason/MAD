@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MUITableViewController.h"
 
-@class UITableViewControllerDataSourceTypes;
-
-@interface UITableViewControllerDataSourceTypes : MUITableViewController
+@interface MUITableViewControllerDatabaseDriverSelector : MUITableViewController
 
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;

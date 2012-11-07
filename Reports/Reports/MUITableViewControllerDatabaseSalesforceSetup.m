@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewControllerDataSourceSetupSalesforce.h"
+#import "MUITableViewControllerDatabaseSalesforceSetup.h"
 
-@interface UITableViewControllerDataSourceSetupSalesforce() {
+@interface MUITableViewControllerDatabaseSalesforceSetup() {
 @private
     NSMutableString *inputNickname;
     
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation UITableViewControllerDataSourceSetupSalesforce
+@implementation MUITableViewControllerDatabaseSalesforceSetup
 
 @synthesize tableViewCellNickname;
 @synthesize tableViewCellConnectionCreate;

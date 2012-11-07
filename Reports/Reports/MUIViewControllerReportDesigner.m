@@ -306,7 +306,7 @@
             popoverController.delegate = self;
         }
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
-        UIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
+        MUIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
         MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
