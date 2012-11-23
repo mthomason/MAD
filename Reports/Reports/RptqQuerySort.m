@@ -1,8 +1,8 @@
 //
 //  RptqQuerySort.m
-//  TheReportViewer
+//  Reports
 //
-//  Created by Michael Thomason on 2/23/12.
+//  Created by Michael Thomason on 11/9/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  RptqDatabase.m
-//  TheReportViewer
+//  Reports
 //
-//  Created by Michael Thomason on 2/24/12.
+//  Created by Michael Thomason on 11/17/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,6 +15,7 @@
 
 @implementation RptqDatabase
 
+@dynamic connection_id;
 @dynamic database_driver_type;
 @dynamic hasRelationships;
 @dynamic hasTables;

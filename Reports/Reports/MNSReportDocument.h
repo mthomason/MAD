@@ -22,9 +22,10 @@ typedef enum {
 
 typedef void (^rsltBlk_filePath)(BOOL success);
 
-@interface NSDatabase : NSObject
+@interface MNSReportDocument : NSObject
 
 @property (retain, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
+@property (copy) NSString *schemaName;
 
 - (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;
 - (id)initExistingFileWithUrl:(NSURL *)url;

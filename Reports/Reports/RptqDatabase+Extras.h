@@ -7,6 +7,7 @@
 //
 
 #import "RptqDatabase.h"
+#import "RptqDocument+Extras.h"
 
 typedef enum {
 	MNSDatabaseTypeSalesforceCom        = 0,
@@ -26,5 +27,12 @@ typedef enum {
 #define MNSDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
 
 @interface RptqDatabase (Extras)
+
++ (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
+                         withConnecitonId:(NSNumber *)connectionId;
+
++ (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                driverType:(NSString *)label
+                                              connectionId:(NSNumber *)connectionId;
 
 @end

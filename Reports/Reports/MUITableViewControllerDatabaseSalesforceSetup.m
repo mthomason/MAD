@@ -15,12 +15,12 @@
     //rsltBlk_loginComplete blockCompleteLogin;
     rsltBlk_tblNames blockCompleteTable;
     
-    NSDatabaseSalesForce *db;
+    MNSReportDocumentSalesForce *db;
 
 }
 
 @property (retain) NSMutableString *inputNickname;
-@property (retain) NSDatabaseSalesForce *db;
+@property (retain) MNSReportDocumentSalesForce *db;
 
 @end
 
@@ -34,39 +34,8 @@
 @synthesize db;
 @synthesize inputNickname;
 
-typedef void (^loginComplete)(NSDatabaseSalesForce *database, BOOL complete);
-typedef void (^tablesComplete)(NSDatabaseSalesForce *database, NSArray *tables);
-
-/*
-tablesComplete tablesCompleteBlock = ^(NSDatabaseSalesForce *database, NSArray *tables) {
-    NSLog(@"results: %@", tables);
-    [database logout];
-    [database release];
-    database = nil;
-    NSLog(@"Credentals released");
-};
-
-loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL complete) {
-    if (complete) {
-        NSLog(@"Login good");
-        [database tablesInDataseAsyc:nil completion: tablesCompleteBlock];
-    }
-};
-
-loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL complete) {
-    if (complete) {
-        NSLog(@"Login good");
-        [database tablesInDataseAsyc:nil completion: tablesCompleteBlock];
-    }
-};
-
-loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL complete) {
-    if (complete) {
-        NSLog(@"Login good");
-        [database tablesInDataseAsyc:nil completion: tablesCompleteBlock];
-    }
-};
-*/
+typedef void (^loginComplete)(MNSReportDocumentSalesForce *database, BOOL complete);
+typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *tables);
 
 - (void)dealloc {
 
@@ -170,7 +139,7 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
 // schema.
 - (void)test:(id)sender {
         if ([[[self textFieldNickname] text] length] > 0) {
-            NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
+            MNSReportDocumentSalesForce *d = [[MNSReportDocumentSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
 
             }];
             [d setDelegate: self];
@@ -184,13 +153,16 @@ loginComplete loginCompleteBlock = ^(NSDatabaseSalesForce *database, BOOL comple
     //Create UIManaged Document that Stores the Database Schema
     if ([[[self textFieldNickname] text] length] > 0) {
         [[self saveButton] setEnabled: NO];
-        NSDatabaseSalesForce *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
-            if (success) {
-                [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
-            } else {
+
+        //Call static function to create database with a given name.
+        
+        MNSReportDocumentSalesForce *d = [[MNSReportDocumentSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
+            success ?
+                [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES] :
                 [[self saveButton] setEnabled: YES];
-            }
         }];
+        
+        
         [d setDelegate: self];
         [self setDb:d];
         [d release];

@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSDatabase.h"
+#import "MNSReportDocument.h"
 #import <MySqlClientObjectiveC/MysqlConnection.h>
 #import <MySqlClientObjectiveC/MysqlServer.h>
 #import <MySqlClientObjectiveC/MysqlFetch.h>
 #import <MySqlClientObjectiveC/MysqlFetchField.h>
 
 
-@interface NSDatabaseMySql : NSDatabase
+@interface MNSReportDocumentMySql : MNSReportDocument
 
 //@property (copy) NSString *username;
 //@property (copy) NSString *password;
@@ -31,13 +31,11 @@
 - (id)initNewFileWithName: (NSString *)name
                completion: (void (^)(BOOL success))completion;
 
-- (id)initExistingFileWithUrl: (NSURL *)url;
-
 - (void)tablesInDataseAsyc: (NSString *)database
-                completion: (void (^)(NSDatabaseMySql *database, NSArray *tables))completion;
+                completion: (void (^)(MNSReportDocumentMySql *database, NSArray *tables))completion;
 
 - (void)runQuery: (NSString *)query
-      completion: (void (^)(NSDatabaseMySql *database, NSArray *results))completion;
+      completion: (void (^)(MNSReportDocumentMySql *database, NSArray *results))completion;
 
 - (void)queryDatabaseForManagedObjectContext: (NSManagedObjectContext *)moc
                        withCompletionHandler: (void (^)(NSArray *results, BOOL success))completion;

@@ -8,55 +8,23 @@
 
 #import "MUITableViewControllerDatabaseMySqlSetup.h"
 
-@interface MUITableViewControllerDatabaseMySqlSetup() {
-@private
-    //MYSQL* conn;
-    
-    NSMutableString *inputUsername;
-    NSMutableString *inputPassword;
-    NSMutableString *inputHost;
-    NSMutableString *inputPort;
-}
-
-//@property (assign) MYSQL* conn;
-@property (retain) NSMutableString *inputUsername;
-@property (retain) NSMutableString *inputPassword;
-@property (retain) NSMutableString *inputHost;
-@property (retain) NSMutableString *inputPort;
+@interface MUITableViewControllerDatabaseMySqlSetup()
 
 @end
 
 @implementation MUITableViewControllerDatabaseMySqlSetup
 
-@synthesize delegate;
-@synthesize tableViewCellUsername;
-@synthesize tableViewCellPassword;
-@synthesize tableViewCellHost;
-@synthesize tableViewCellPort;
-@synthesize tableViewCellTestConnection;
-@synthesize activityIndicatorTestConnection;
-@synthesize textFieldUsername;
-@synthesize textFieldPassword;
-@synthesize textFieldHost;
-@synthesize textFieldPort;
-
-@synthesize inputUsername, inputPassword, inputHost, inputPort;
-
 - (void)dealloc {
-    [inputUsername release];
-    [inputPassword release];
-    [inputHost release];
-    [inputPort release];
-    [tableViewCellUsername release];
-    [tableViewCellPassword release];
-    [tableViewCellHost release];
-    [tableViewCellPort release];
-    [tableViewCellTestConnection release];
-    [activityIndicatorTestConnection release];
-    [textFieldUsername release];
-    [textFieldPassword release];
-    [textFieldHost release];
-    [textFieldPort release];
+    [_tableViewCellUsername release];
+    [_tableViewCellPassword release];
+    [_tableViewCellHost release];
+    [_tableViewCellPort release];
+    [_tableViewCellTestConnection release];
+    [_activityIndicatorTestConnection release];
+    [_textFieldUsername release];
+    [_textFieldPassword release];
+    [_textFieldHost release];
+    [_textFieldPort release];
     [super dealloc];
 }
 
@@ -64,18 +32,6 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         // Custom initialization
-        NSMutableString *blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputUsername: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputPassword: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputHost: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputPort: blank];
-        [blank release];
     }
     return self;
 }
@@ -84,18 +40,6 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        NSMutableString *blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputUsername: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputPassword: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputHost: blank];
-        [blank release];
-        blank = [[NSMutableString alloc] initWithString:@""];
-        [self setInputPort: blank];
-        [blank release];
     }
     return self;
 }
@@ -336,53 +280,33 @@
 }
 
 - (IBAction)save:(id)sender {
+    /*
     //Create UIManaged Document that Stores the Database Schema
 #warning What is this trash!?!
-/*
-    MYSQL conn;
-    mysql_init(&conn);
-    //long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
-    //mysql_options(&(connection->conn), MYSQL_READ_DEFAULT_GROUP, "libmysqlclient.a");
-    mysql_real_connect(&conn, "everydayapps.com", "root", "1noniceguy", "quotationary", 3306, NULL, 0);
-    
-    //NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
-    char query[1024];
-    sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
-    NSLog(@"query %s", query);
-    mysql_query(&conn, query);
-    
-    MYSQL_RES *result = mysql_store_result(&conn);
-    NSMutableSet *mutableResult = nil;
-    
-    if (result != NULL) {
-        //int num_rows = mysql_num_rows(result);
-        mutableResult = [[NSMutableSet alloc] initWithCapacity:300];
+    //Create UIManaged Document that Stores the Database Schema
+    if ([[[self textFieldNickname] text] length] > 0) {
+        [[self saveButton] setEnabled: NO];
+        NSDatabaseMySql *d = [[NSDatabaseSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
+            success ?
+            [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES] :
+            [[self saveButton] setEnabled: YES];
+        }];
+        [d setDelegate: self];
+        [self setDb:d];
+        [d release];
         
-        //@autoreleasepool {
-        MYSQL_ROW row;
-        //@autoreleasepool {
-        //mysql_fetch_row(result);
-        //printf("row %s", row[0]);
-        //@autoreleasepool {
-        while ((row = mysql_fetch_row(result))) {
-            //NSLog(@"Got row");
-            if (row[0]) {
-                NSLog(@"N: %@, K: %@", [NSString stringWithUTF8String:row[0]], [NSString stringWithUTF8String:row[0]]);                    
-            } else {
-                //NSLog(@"Not got row!!!");
-            }
-            //}
-        }
-        
-        [mutableResult autorelease];
-        
-        
-        mysql_free_result(result);
-    }    
-    mysql_close(&conn);
-    mysql_server_end();
- */
-    [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
+    } else {
+        [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+            [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor edaOrange]];
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+                [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor clearColor]];
+            } completion:^(BOOL finished) {
+                
+            }];
+        }];
+    }    [[[self navigationController] presentingViewController] dismissModalViewControllerAnimated: YES];
+     */
 }
 
 - (IBAction)done:(id)sender {
@@ -390,36 +314,27 @@
 }
 
 - (IBAction)usernameDidEndOnExit:(id)sender {
-    if ([sender isKindOfClass: [UITextField class]]) {
-        [[self inputUsername] setString: [(UITextField *)sender text]];
+/*    if ([sender isKindOfClass: [UITextField class]]) {
+        [self setInputUsername:[(UITextField *)sender text]];
     }
     if ([[self textFieldPassword] canBecomeFirstResponder]) {
         [[self textFieldPassword] becomeFirstResponder];
-    }
+    }*/
 }
 
 - (IBAction)passwordDidEndOnExit:(id)sender {
-    if ([sender isKindOfClass: [UITextField class]]) {
-        [[self inputPassword] setString: [(UITextField *)sender text]];
-    }
     if ([[self textFieldHost] canBecomeFirstResponder]) {
         [[self textFieldHost] becomeFirstResponder];
     }
 }
 
 - (IBAction)hostDidEndOnExit:(id)sender {
-    if ([sender isKindOfClass: [UITextField class]]) {
-        [[self inputHost] setString: [(UITextField *)sender text]];
-    }
     if ([[self textFieldPort] canBecomeFirstResponder]) {
         [[self textFieldPort] becomeFirstResponder];
     }
 }
 
 - (IBAction)portDidEndOnExit:(id)sender {
-    if ([sender isKindOfClass: [UITextField class]]) {
-        [[self inputPort] setString: [(UITextField *)sender text]];
-    }
     [[self textFieldPort] resignFirstResponder];
 }
 
@@ -427,13 +342,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
-    
     if ([[tableView cellForRowAtIndexPath: indexPath] isEqual: [self tableViewCellTestConnection]]) {
         NSLog(@"Test connection!!!");
         [self test:nil];
         NSLog(@"Did finish test connection");
     }
-    
 }
 
 @end

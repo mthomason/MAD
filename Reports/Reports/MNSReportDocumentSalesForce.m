@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSDatabaseSalesForce.h"
+#import "MNSReportDocumentSalesForce.h"
 
 //static NSString * const kSFMobileSDKVersion = @"1.0";
 
-typedef void (^rsltBlk_fldNames)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
-typedef void (^rsltBlk_results)(NSDatabaseSalesForce *database, NSArray *results);
-typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
+typedef void (^rsltBlk_fldNames)(MNSReportDocumentSalesForce *database, RptqTable *originTable, NSArray *fields);
+typedef void (^rsltBlk_results)(MNSReportDocumentSalesForce *database, NSArray *results);
+typedef void (^rsltBlk_complete)(MNSReportDocumentSalesForce *database, BOOL complete);
 
-@interface NSDatabaseSalesForce ()
+@interface MNSReportDocumentSalesForce ()
 
 @property (nonatomic, retain) SFOAuthCoordinator *coordinator;
 
@@ -29,17 +29,16 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 @property (copy) rsltBlk_fldNames resultBlockFieldNames;
 
 @property (assign) NSDatabaseQueryType currentQueryType;
-@property (retain) NSString *schemaName;
 
-- (void)login: (void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
+- (void)login: (void (^)(MNSReportDocumentSalesForce *database, BOOL complete))completion;
 
 - (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
-              completion: (void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
-- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion;
+              completion: (void (^)(MNSReportDocumentSalesForce *database, RptqTable *originTable, NSArray *fields))completion;
+- (void)resetDataWithCompletionHandler:(void (^)(MNSReportDocumentSalesForce *database, BOOL complete))completion;
 
 @end
 
-@implementation NSDatabaseSalesForce
+@implementation MNSReportDocumentSalesForce
 
 - (void)dealloc {
     if (_resultBlockComplete != nil) [_resultBlockComplete release];
@@ -49,26 +48,15 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     [_coordinator setDelegate: nil];
     [_coordinator release];
     _coordinator = nil;
-    [_schemaName release];
     [_loginDomain release];
     [_loginIdentifier release];
     [_loginKey release];
     [_loginRedirectUri release];
-
     [super dealloc];
 }
 
 - (id)init {
     self = [super init];
-    if (self) {
-
-    }
-    return self;
-}
-
-//Init with url. Open the file at that url.
-- (id)initExistingFileWithUrl:(NSURL *)url {
-    self = [super initExistingFileWithUrl:url];
     if (self) {
 
     }
@@ -83,9 +71,9 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
             [self setSchemaName: name];
             switch ([[self managedDocumentQuery] documentState]) {
                 case UIDocumentStateNormal: {
-                    [self login: ^(NSDatabaseSalesForce *database, BOOL complete) {
+                    [self login: ^(MNSReportDocumentSalesForce *database, BOOL complete) {
                         if (complete) {
-                            [self resetDataWithCompletionHandler:^(NSDatabaseSalesForce *database, BOOL complete) {
+                            [self resetDataWithCompletionHandler:^(MNSReportDocumentSalesForce *database, BOOL complete) {
                                 completion(YES);
                             }];
                         } else {
@@ -104,17 +92,31 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 
 #pragma mark - Public Actions
 
-- (void)resetDataWithCompletionHandler:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
+/*
+ This is being moved to MNSDatabase
+ */
+
+- (void)resetDataWithCompletionHandler:(void (^)(MNSReportDocumentSalesForce *database, BOOL complete))completion {
     
     //Fetch the existing object model.
     NSManagedObjectContext *moc = [[[self managedDocumentQuery] managedObjectContext] retain];
     
     RptqDocument *doc = [[RptqDocument createMainDocumentForManagedObjectContext: moc] retain];
-[doc setName: [self schemaName]];
-    [[[doc hasDatabaseSchema] ownedByUser] setDatabase_driver_type: KEY_DB_TYPE_SF];
-    [[doc hasDatabaseSchema] setDatabase_driver_type: KEY_DB_TYPE_SF];
+    [doc setName: [self schemaName]];
     
-    [self tablesInDataseAsyc: nil completion: ^(NSDatabaseSalesForce *database, NSArray *tables) {
+    NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabase class])
+                                                   inManagedObjectContext: moc];
+    RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity insertIntoManagedObjectContext:moc];
+    [database setDatabase_driver_type: KEY_DB_TYPE_SF];
+    __block NSNumber *connectionId = @([[doc hasDatabaseSchemas] count] + 1);
+    [database setConnection_id:connectionId];
+    NSEntityDescription *entityDescriptionCredentals = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: moc];
+    RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:entityDescriptionCredentals insertIntoManagedObjectContext:moc];
+    [database setOwnedByUser: userCredentals];
+    NSSet *connectionSet = [[doc hasDatabaseSchemas] setByAddingObject:database];
+    [doc setHasDatabaseSchemas: connectionSet];
+    
+    [self tablesInDataseAsyc: nil completion: ^(MNSReportDocumentSalesForce *database, NSArray *tables) {
         
         [tables enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
             
@@ -129,9 +131,16 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
             [rptqTable setLabel_plural: [tableDictionary objectForKey: @"labelPlural"]];
             [tableDictionary release];
             
-            [[doc hasDatabaseSchema] addHasTablesObject: rptqTable];
+            RptqDatabase *currentDatabase = nil;
+            for (RptqDatabase *db in [doc hasDatabaseSchemas]) {
+                if (db.connection_id == connectionId) {
+                    currentDatabase = db;
+                    break;
+                }
+            }
+            [currentDatabase addHasTablesObject: rptqTable];
             
-            [database fieldsInDatabase:nil andTable:rptqTable completion:^(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields) {
+            [database fieldsInDatabase:nil andTable:rptqTable completion:^(MNSReportDocumentSalesForce *database, RptqTable *originTable, NSArray *fields) {
 
                 [fields retain];
                 [fields enumerateObjectsUsingBlock:^(id objField, NSUInteger idx, BOOL *stop) {
@@ -163,7 +172,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     [moc release];
 }
 
-- (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(NSDatabaseSalesForce *database, NSArray *tables))completion {
+- (void)tablesInDataseAsyc:(NSString *)database completion:(void (^)(MNSReportDocumentSalesForce *database, NSArray *tables))completion {
 
     [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
 
@@ -174,7 +183,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 }
 
 - (void)fieldsInDatabase:(NSString *)database andTable:(RptqTable *)table
-              completion:(void (^)(NSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields))completion {
+              completion:(void (^)(MNSReportDocumentSalesForce *database, RptqTable *originTable, NSArray *fields))completion {
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetFields];
     
@@ -186,7 +195,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
 }
 
 - (void)runQuery: (NSString *)query
-      completion: (void (^)(NSDatabaseSalesForce *database, NSArray *results))completion {
+      completion: (void (^)(MNSReportDocumentSalesForce *database, NSArray *results))completion {
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetResults];
     
@@ -210,6 +219,18 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     [query release];
 
     completion([NSArray array], YES);
+}
+
+- (void)login:(void (^)(MNSReportDocumentSalesForce *database, BOOL complete))completion {
+    //kickoff authentication
+    self.resultBlockComplete = completion;
+    //NSLog(@"self->resultBlockLoginComplete: %@", resultBlockLoginComplete);
+    [[self coordinator] authenticate];
+}
+
+
+- (void)logout {
+    [[self coordinator] revokeAuthentication];
 }
 
 - (BOOL)testConnection {
@@ -347,21 +368,9 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
     return _coordinator;
 }
 
-- (void)login:(void (^)(NSDatabaseSalesForce *database, BOOL complete))completion {
-    //kickoff authentication
-    self.resultBlockComplete = completion;
-    //NSLog(@"self->resultBlockLoginComplete: %@", resultBlockLoginComplete);
-    [[self coordinator] authenticate];
-}
-
-
-- (void)logout {
-    [[self coordinator] revokeAuthentication];
-}
-
 - (void)reAuthenticate {
     [[self coordinator] revokeAuthentication];
-    [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
+    [self login:^(MNSReportDocumentSalesForce *database, BOOL complete) {
 
     }];
 }
@@ -413,7 +422,7 @@ typedef void (^rsltBlk_complete)(NSDatabaseSalesForce *database, BOOL complete);
         [UIAlertView showAlertViewWithTitle:@"Salesforce Error" message:[NSString stringWithFormat:@"Can't connect to salesforce: %@", error] cancelButtonTitle:@"Retry" otherButtonTitle:nil onDismiss:^(int buttonIndex) {
 
         } onCancel:^{
-            [self login:^(NSDatabaseSalesForce *database, BOOL complete) {
+            [self login:^(MNSReportDocumentSalesForce *database, BOOL complete) {
                 
             }];
         }];

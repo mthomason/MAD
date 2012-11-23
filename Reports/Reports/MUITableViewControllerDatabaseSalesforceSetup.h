@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUITableViewController.h"
-#import "NSDatabaseSalesForce.h"
+#import "MNSReportDocumentSalesForce.h"
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 

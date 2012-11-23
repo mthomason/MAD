@@ -26,8 +26,9 @@
               completion: (void (^)(NSArray *results))completion {
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: objectContext] retain];
     if (doc) {
-        if ([doc hasDatabaseSchema]) {
-            NSString *driverType = [[[doc hasDatabaseSchema] database_driver_type] retain];
+        RptqDatabase *db = [[doc hasDatabaseSchemas] anyObject];
+        if (db) {
+            NSString *driverType = [[db database_driver_type] retain];
             if ([driverType isEqualToString: KEY_DB_TYPE_SF]) {
 
             } else if ([driverType isEqualToString: KEY_DB_TYPE_DB]) {
@@ -72,9 +73,10 @@
     document.hasPageFooterSection.type =        [NSNumber numberWithInteger:MNSDocumentSectionTypePageFooter];
     document.hasDetailSection.type =            [NSNumber numberWithInteger:MNSDocumentSectionTypeBody];
 
-    [document setHasDatabaseSchema:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
+    //[document setHasDatabaseSchemas:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
     [document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
-    [[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
+#warning Added Owned by User when creating the schemas.
+    //[[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
 
     [[document hasReportHeaderSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
     [[document hasReportFooterSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
@@ -93,28 +95,22 @@
 }
 
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    
     RptqDocument *doc = nil;
-    if (objectContext) {
-        NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
-        NSError *error = nil;
-        NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-        if (!error) {
-            if ([documents count] > 0) {
-                doc = [documents objectAtIndex: 0];
-                if (doc) {
-                    [[doc retain] autorelease];
-                }
-            } else {
-                NSLog(@"Document doesn't exist");
-            }
-        } else {
-            NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
-        }
+    NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+    NSError *error = nil;
+    NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
+    if (!error) {
+        doc = [documents lastObject];
+    } else {
+        NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
     }
+
     //Create the document if it does not exist.
     if (!doc) {
         doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
     }
+
     return doc;
 }
 

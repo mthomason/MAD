@@ -6,11 +6,16 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSDatabase.h"
+#import "MNSReportDocument.h"
 
-@implementation NSDatabase
+@interface MNSReportDocument ()
+
+@end
+
+@implementation MNSReportDocument
 
 - (void)dealloc {
+    [_schemaName release];
     [_managedDocumentQuery release];
     [super dealloc];
 }

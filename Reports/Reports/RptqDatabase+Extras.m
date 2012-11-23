@@ -10,4 +10,33 @@
 
 @implementation RptqDatabase (Extras)
 
++ (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
+                         withConnecitonId:(NSNumber *)connectionId {
+    
+    RptqDatabase *currentDatabase = nil;
+    for (RptqDatabase *db in [document hasDatabaseSchemas]) {
+        if ([[db connection_id] integerValue] == [connectionId integerValue]) {
+            currentDatabase = db;
+            break;
+        }
+    }
+
+    return currentDatabase;
+}
+
++ (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                driverType:(NSString *)label
+                                              connectionId:(NSNumber *)connectionId {
+
+    NSString *entityName = NSStringFromClass([RptqDatabase class]);
+    NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: entityName
+                                                      inManagedObjectContext: objectContext];
+
+    RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
+                                   insertIntoManagedObjectContext:objectContext];
+    [database setDatabase_driver_type: KEY_DB_TYPE_SF];
+    [database setConnection_id:connectionId];
+    return [database autorelease];
+}
+
 @end

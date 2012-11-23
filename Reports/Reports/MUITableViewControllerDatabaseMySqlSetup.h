@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUITableViewController.h"
+#import "MNSReportDocumentMySql.h"
 #import "Constants.h"
 
 @interface MUITableViewControllerDatabaseMySqlSetup : MUITableViewController

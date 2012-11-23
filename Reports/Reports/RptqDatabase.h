@@ -1,8 +1,8 @@
 //
 //  RptqDatabase.h
-//  TheReportViewer
+//  Reports
 //
-//  Created by Michael Thomason on 2/24/12.
+//  Created by Michael Thomason on 11/17/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 
 @interface RptqDatabase : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * connection_id;
 @property (nonatomic, retain) NSString * database_driver_type;
 @property (nonatomic, retain) NSSet *hasRelationships;
 @property (nonatomic, retain) NSSet *hasTables;

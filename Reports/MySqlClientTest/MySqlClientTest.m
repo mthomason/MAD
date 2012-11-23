@@ -49,6 +49,7 @@
 }
 
 - (void)testMySqlApiObjC {
+
     MysqlServer *serv = [[MysqlServer alloc] init];
     
     MysqlConnection *conn = [MysqlConnection connectToServer: serv];
@@ -56,6 +57,7 @@
     NSInteger colctr = 0;
     
     NSMutableArray *results = nil;
+    
     if (conn) {
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
         if (fetch) {
