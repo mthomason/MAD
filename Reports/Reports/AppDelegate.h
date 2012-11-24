@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ApplicationSettings.h"
 #import "MUIViewControllerOpenDocument.h"
 #import "UIManagedDocumentTrvApplicationData.h"
 #import "UIManagedDocumentTrvFileData.h"

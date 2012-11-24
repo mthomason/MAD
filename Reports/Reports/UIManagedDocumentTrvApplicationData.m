@@ -10,8 +10,8 @@
 
 @implementation UIManagedDocumentTrvApplicationData
 
-//+ (NSString *)persistentStoreName {
-//    return APPLICATIONDATA_FILENAME;
-//}
++ (NSString *)persistentStoreName {
+    return APPLICATIONDATA_FILENAME;
+}
 
 @end

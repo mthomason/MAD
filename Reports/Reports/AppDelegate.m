@@ -21,6 +21,11 @@
 @synthesize applicationPreferences = _applicationPreferences;
 @synthesize openReport = _openReport;
 
+void uncaughtExceptionHandler(NSException *exception);
+void uncaughtExceptionHandler(NSException *exception) {
+    NSLog(@"%@", exception);
+}
+
 - (void)dealloc {
     [_applicationPreferences release];
     [_managedDocumentQuery release];
@@ -30,6 +35,10 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    NSLog(@"Application settings: %@", [ApplicationSettings sharedSettings]);
 
     UIViewController *rvc = [[[application windows] lastObject] rootViewController];
     if ([rvc isKindOfClass:[MUIViewControllerOpenDocument class]]) {
@@ -170,26 +179,6 @@
 
 #pragma mark - Actions
 
-- (void)openReport:(NSURL *)url {
-    UIManagedDocumentTrvApplicationData *document = [[UIManagedDocumentTrvApplicationData alloc] initWithFileURL:url];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-        [document openWithCompletionHandler:^(BOOL success) {
-            if (success) {
-                //[self documentIsReady];
-            } else {
-                NSLog(@"couldn’t open document at %@", url);
-            }
-        }];
-    } else {
-        [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating
-          completionHandler:^(BOOL success) {
-              if (success) NSLog(@"New file created"); //[self documentIsReady];
-              else NSLog(@"couldn’t create document at %@", url);
-          }];
-    }
-    [document release];
-    // can’t do anything with the document yet (do it in do
-}
 
 - (NSURL *)createAndOpenNewDocumentNamed:(NSString *)name withPathExtention:(NSString *)extention {
     
@@ -244,9 +233,7 @@
                                    }
                                }];
     }
-
-    [applicationFileUrlWithExtention autorelease];
-    return applicationFileUrlWithExtention;
+    return [applicationFileUrlWithExtention autorelease];
 }
 
 @end

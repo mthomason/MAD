@@ -12,9 +12,13 @@
 #import <MySqlClientObjectiveC/MysqlFetch.h>
 #import <MySqlClientObjectiveC/MysqlFetchField.h>
 
+#import "MNSDatabaseConnection.h"
+#import "MNSDatabaseTable.h"
+#import "MNSDatabaseField.h"
+
 @interface MNSDatabaseMySql : MNSDatabase
 
-- (id)initWithConnectionSettings: (NSDictionary *)connectionSettings
+- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
                       completion: (void (^)(BOOL success))completion;
 
 - (void)getTables: (void (^)(NSArray *tables))completion;

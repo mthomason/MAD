@@ -25,6 +25,9 @@
     [_textFieldPassword release];
     [_textFieldHost release];
     [_textFieldPort release];
+    [_tableViewCellDatabase release];
+    [_textFieldDatabase release];
+    [_textFieldReportName release];
     [super dealloc];
 }
 
@@ -103,6 +106,27 @@
 - (void)test:(id)sender {
 #warning Commenting this shit out
     
+    __block MNSDatabaseConnection *databaseConnection = [[MNSDatabaseConnection alloc] init];
+    [databaseConnection setUsername:    [[self textFieldUsername] text]];
+    [databaseConnection setPassword:    [[self textFieldPassword] text]];
+    [databaseConnection setServer:      [[self textFieldHost] text]];
+    [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
+    [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
+    
+    MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
+        if (success) {
+            MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection completion:^(BOOL success) {
+                if (success) {
+                    [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
+                        
+                    }];
+                }
+            }];
+        }
+    }];
+
+    [databaseConnection release];
+
     /*
     //NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithHost:@"everydayapps.com" port:3363 username:@"root" andPassword:@"1noniceguy"];
 
@@ -349,4 +373,10 @@
     }
 }
 
+- (void)viewDidUnload {
+    [self setTableViewCellDatabase:nil];
+    [self setTextFieldDatabase:nil];
+    [self setTextFieldReportName:nil];
+    [super viewDidUnload];
+}
 @end

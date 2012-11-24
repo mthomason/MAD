@@ -56,7 +56,6 @@
 		4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */; };
 		4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
-		4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
 		4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
 		4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
@@ -363,6 +362,8 @@
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
 		4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
+		4C68B71416600245002682CB /* MNSDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MNSDatabaseConnection.m */; };
+		4C68B71516600245002682CB /* MNSDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MNSDatabaseConnection.m */; };
 		4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
@@ -378,6 +379,20 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4C7C8AF31660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
+		4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
+		4C7C8AF716603D3D00F2B88B /* ApplicationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */; };
+		4C7C8AF816603D3D00F2B88B /* ApplicationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */; };
+		4C7C8AF916606EEC00F2B88B /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C7C8AFA16606EED00F2B88B /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C7C8AFB16606F3D00F2B88B /* MUIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */; };
+		4C7C8AFC16606F3E00F2B88B /* MUIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */; };
+		4C7C8AFD16606F4100F2B88B /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
+		4C7C8AFE16606F4200F2B88B /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
+		4C7C8AFF16606F6600F2B88B /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
+		4C7C8B0016606F6700F2B88B /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
+		4C7C8B0116606F8400F2B88B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4C7C8B0216606F8400F2B88B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C85C6AA14FF72F3003785AC /* MUIViewControllerReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */; };
@@ -859,7 +874,6 @@
 		4CE7B76A14C038AF007D0148 /* MNSReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* MNSReportDocument.m */; };
 		4CE7B76E14C03956007D0148 /* MNSReportDocumentMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* MNSReportDocumentMySql.m */; };
 		4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
-		4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */; };
 		4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
 		4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
 		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
@@ -1061,6 +1075,8 @@
 		4C6362C214E6436C005DBBFF /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocument20@2x.png"; sourceTree = "<group>"; };
+		4C68B71216600245002682CB /* MNSDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSDatabaseConnection.h; sourceTree = "<group>"; };
+		4C68B71316600245002682CB /* MNSDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSDatabaseConnection.m; sourceTree = "<group>"; };
 		4C6CDFB214B84BA700DABF86 /* MUIViewControllerTemplateSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerTemplateSelector.h; sourceTree = "<group>"; };
 		4C6CDFC214B85BFC00DABF86 /* UITableViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellDocument.h; sourceTree = "<group>"; };
 		4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellDocument.m; sourceTree = "<group>"; };
@@ -1082,6 +1098,10 @@
 		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = "<group>"; };
+		4C7C8AF11660348D00F2B88B /* UIManagedDocument+FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIManagedDocument+FileOperations.h"; sourceTree = "<group>"; };
+		4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIManagedDocument+FileOperations.m"; sourceTree = "<group>"; };
+		4C7C8AF516603D3B00F2B88B /* ApplicationSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationSettings.h; path = Reports/ApplicationSettings.h; sourceTree = "<group>"; };
+		4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationSettings.m; path = Reports/ApplicationSettings.m; sourceTree = "<group>"; };
 		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
 		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -1540,8 +1560,6 @@
 		4CE7B76D14C03956007D0148 /* MNSReportDocumentMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSReportDocumentMySql.m; sourceTree = "<group>"; };
 		4CE7B77314C2D168007D0148 /* MUIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerObjectSelector.h; sourceTree = "<group>"; };
 		4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerObjectSelector.m; sourceTree = "<group>"; };
-		4CE8A03414BFF6AC007C8345 /* UIManagedDocumentMySqlDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentMySqlDatabase.h; sourceTree = "<group>"; };
-		4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentMySqlDatabase.m; sourceTree = "<group>"; };
 		4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DatabaseDefinationFileType.xcdatamodel; sourceTree = "<group>"; };
 		4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocuments20.png; sourceTree = "<group>"; };
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
@@ -1813,6 +1831,8 @@
 				4CE17E371658F0A00002F8EA /* MNSDatabaseTable.m */,
 				4CE17E3A1658F10E0002F8EA /* MNSDatabaseField.h */,
 				4CE17E3B1658F10F0002F8EA /* MNSDatabaseField.m */,
+				4C68B71216600245002682CB /* MNSDatabaseConnection.h */,
+				4C68B71316600245002682CB /* MNSDatabaseConnection.m */,
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
 				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
@@ -2104,6 +2124,8 @@
 		4C8EEC881644E6C000FAB2F3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4C7C8AF516603D3B00F2B88B /* ApplicationSettings.h */,
+				4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */,
 				4CE8A04A14C027B2007C8345 /* Managed Documents */,
 				4CDB624614E38B9600A5389E /* Controllers */,
 				4C00815914B6BDB6003DF437 /* Views */,
@@ -2889,42 +2911,44 @@
 		4CDB624B14E38C8400A5389E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				4CE17E231650B7F20002F8EA /* RptqTable+Extras.h */,
-				4CE17E241650B7F20002F8EA /* RptqTable+Extras.m */,
-				4CE17E271650C6B40002F8EA /* RptqUserCredentals+Extras.h */,
-				4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */,
-				4CE17E1F16501A800002F8EA /* RptqField+Extras.h */,
-				4CE17E2016501A800002F8EA /* RptqField+Extras.m */,
-				4CFF3F1F164D76270070E880 /* NSURL+Document.h */,
-				4CFF3F20164D76270070E880 /* NSURL+Document.m */,
-				4C45742614E795CE00FF326C /* RptqDocument+Extras.h */,
-				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
-				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
-				4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */,
-				4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */,
-				4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */,
 				4C6362C214E6436C005DBBFF /* CGGeometry+Extras.h */,
 				4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */,
 				4C00818914B745C9003DF437 /* NSFileManager+Common.h */,
 				4C00818A14B745C9003DF437 /* NSFileManager+Common.m */,
 				4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */,
 				4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */,
-				4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */,
-				4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */,
-				4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */,
-				4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */,
-				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
-				4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */,
+				4CFF3F1F164D76270070E880 /* NSURL+Document.h */,
+				4CFF3F20164D76270070E880 /* NSURL+Document.m */,
+				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
+				4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */,
+				4C45742614E795CE00FF326C /* RptqDocument+Extras.h */,
+				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
 				4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */,
 				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
 				4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */,
 				4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */,
+				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
+				4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */,
+				4CE17E1F16501A800002F8EA /* RptqField+Extras.h */,
+				4CE17E2016501A800002F8EA /* RptqField+Extras.m */,
+				4CE17E231650B7F20002F8EA /* RptqTable+Extras.h */,
+				4CE17E241650B7F20002F8EA /* RptqTable+Extras.m */,
+				4CE17E271650C6B40002F8EA /* RptqUserCredentals+Extras.h */,
+				4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */,
+				4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */,
+				4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */,
+				4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */,
+				4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */,
+				4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */,
+				4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */,
+				4C8EEC841644E06700FAB2F3 /* UIAlertView+Blocks.h */,
+				4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */,
 				4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */,
 				4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */,
 				4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */,
 				4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */,
-				4C8EEC841644E06700FAB2F3 /* UIAlertView+Blocks.h */,
-				4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */,
+				4C7C8AF11660348D00F2B88B /* UIManagedDocument+FileOperations.h */,
+				4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -2962,8 +2986,6 @@
 				4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */,
 				4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */,
 				4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */,
-				4CE8A03414BFF6AC007C8345 /* UIManagedDocumentMySqlDatabase.h */,
-				4CE8A03514BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m */,
 			);
 			name = "Managed Documents";
 			path = Reports;
@@ -3800,7 +3822,6 @@
 				4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */,
 				4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */,
-				4C0E773B163B5AEC003B951E /* UIManagedDocumentMySqlDatabase.m in Sources */,
 				4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
 				4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */,
 				4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
@@ -3901,6 +3922,9 @@
 				4CE17E2E16578A330002F8EA /* RptqDatabase.m in Sources */,
 				4CE17E391658F0A10002F8EA /* MNSDatabaseTable.m in Sources */,
 				4CE17E3D1658F1100002F8EA /* MNSDatabaseField.m in Sources */,
+				4C68B71516600245002682CB /* MNSDatabaseConnection.m in Sources */,
+				4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
+				4C7C8AF816603D3D00F2B88B /* ApplicationSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3910,6 +3934,11 @@
 			files = (
 				4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */,
 				4C955D7A1644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
+				4C7C8AFA16606EED00F2B88B /* MUIViewController.m in Sources */,
+				4C7C8AFB16606F3D00F2B88B /* MUIViewControllerStoreTemplates.m in Sources */,
+				4C7C8AFD16606F4100F2B88B /* UITableViewCellStoreItemReportTemplate.m in Sources */,
+				4C7C8B0016606F6700F2B88B /* UITableViewCellDocument.m in Sources */,
+				4C7C8B0216606F8400F2B88B /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3919,6 +3948,11 @@
 			files = (
 				4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */,
 				4C955D791644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
+				4C7C8AF916606EEC00F2B88B /* MUIViewController.m in Sources */,
+				4C7C8AFC16606F3E00F2B88B /* MUIViewControllerStoreTemplates.m in Sources */,
+				4C7C8AFE16606F4200F2B88B /* UITableViewCellStoreItemReportTemplate.m in Sources */,
+				4C7C8AFF16606F6600F2B88B /* UITableViewCellDocument.m in Sources */,
+				4C7C8B0116606F8400F2B88B /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3949,7 +3983,6 @@
 				4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */,
 				4CA0638B14BAE35B0025009E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
-				4CE8A03614BFF6AD007C8345 /* UIManagedDocumentMySqlDatabase.m in Sources */,
 				4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
 				4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */,
 				4CE8A04614C01C7B007C8345 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
@@ -4050,6 +4083,9 @@
 				4CE17E2D16578A330002F8EA /* RptqDatabase.m in Sources */,
 				4CE17E381658F0A10002F8EA /* MNSDatabaseTable.m in Sources */,
 				4CE17E3C1658F1100002F8EA /* MNSDatabaseField.m in Sources */,
+				4C68B71416600245002682CB /* MNSDatabaseConnection.m in Sources */,
+				4C7C8AF31660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
+				4C7C8AF716603D3D00F2B88B /* ApplicationSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4417,7 +4453,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				SDKROOT = iphoneos6.0;
+				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -4460,7 +4496,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				SDKROOT = iphoneos6.0;
+				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

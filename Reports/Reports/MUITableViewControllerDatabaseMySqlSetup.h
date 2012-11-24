@@ -11,6 +11,10 @@
 #import "MNSReportDocumentMySql.h"
 #import "Constants.h"
 
+#import "MNSDatabaseConnection.h"
+#import "MNSDocumentReport.h"
+#import "MNSDatabaseMySql.h"
+
 @interface MUITableViewControllerDatabaseMySqlSetup : MUITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
@@ -20,12 +24,15 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellHost;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPort;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTestConnection;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDatabase;
 
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldUsername;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPassword;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldHost;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPort;
+@property (retain, nonatomic) IBOutlet UITextField *textFieldDatabase;
+@property (retain, nonatomic) IBOutlet UITextField *textFieldReportName;
 
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;

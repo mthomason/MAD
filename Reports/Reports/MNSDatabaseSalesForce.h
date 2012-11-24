@@ -20,9 +20,6 @@
 @interface MNSDatabaseSalesForce : MNSDatabase
     <SFOAuthCoordinatorDelegate, SFRestDelegate>
 
-- (id)initWithConnectionSettings: (NSDictionary *)connectionSettings
-                      completion: (void (^)(BOOL success))completion;
-
 - (void)getTables: (void (^)(NSArray *tables))completion;
 - (void)getFieldsForTable: (RptqTable *)table
                completion: (void (^)(NSArray *fields))completion;

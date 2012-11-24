@@ -10,11 +10,11 @@
 
 @implementation MNSDatabaseMySql
 
-- (id)initWithConnectionSettings: (NSDictionary *)connectionSettings
+- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
                       completion: (void (^)(BOOL success))completion {
     self = [super init];
     if (self) {
-
+        
     }
     return self;
 }

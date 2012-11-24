@@ -25,7 +25,8 @@
 
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
     NSLog(@"Auto-Saving Document");
-    return [super contentsForType:typeName error:outError];
+    id result = [super contentsForType:typeName error:outError];
+    return result;
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {   

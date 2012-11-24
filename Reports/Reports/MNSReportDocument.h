@@ -11,14 +11,7 @@
 #import "UIManagedDocumentQuery.h"
 #import "RptqQueryLinks+Extras.h"
 #import "NSFileManager+Common.h"
-
-typedef enum {
-	NSDatabaseQueryTypeNone = 0,
-	NSDatabaseQueryTypeGetTables,
-	NSDatabaseQueryTypeGetFields,
-	NSDatabaseQueryTypeGetResults,
-	NSDatabaseQueryTypeVerify
-} NSDatabaseQueryType;
+#import "MNSDatabase.h"
 
 typedef void (^rsltBlk_filePath)(BOOL success);
 

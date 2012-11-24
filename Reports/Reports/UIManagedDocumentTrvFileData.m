@@ -11,7 +11,7 @@
 @implementation UIManagedDocumentTrvFileData
 
 + (NSString *)persistentStoreName {
-    return APPLICATIONDATA_FILENAME;
+    return TRVDATA_FILENAME;
 }
 
 @end
