@@ -23,7 +23,7 @@
 //Create a new file
 - (id)initFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
     self = [super initFileWithName:name extension:SCHEMA_PATH_EXTENSION
-                 managedObjectType:[UIManagedDocumentQuery class] completion:^(BOOL success) {
+                 managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success) {
                      if (self) {
                          RptqDocument *doc = [RptqDocument createMainDocumentForManagedObjectContext: [[self managedDocument] managedObjectContext]];
                          [doc setName: name];

@@ -6,17 +6,17 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "AppDelegate.h"
 
-@implementation UIManagedDocumentQuery
+@implementation UIManagedDocumentReport
 
-+ (UIManagedDocumentQuery *)activeDocument {
++ (UIManagedDocumentReport *)activeDocument {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     return [appDelegate managedDocumentQuery];
 }
 
-+ (void)setActiveDocument:(UIManagedDocumentQuery *)activeDocument {
++ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     return [appDelegate setManagedDocumentQuery:activeDocument];
 }

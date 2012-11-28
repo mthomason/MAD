@@ -12,30 +12,30 @@ NSString * const FILENAME = @"appsettings.asd";
 
 @interface ApplicationSettings()
 
-@property (nonatomic, retain) UIManagedDocumentTrvApplicationData *managedDocumentTrvApplicationData;
+@property (nonatomic, retain) UIManagedDocumentPreferencesApplication *managedDocumentTrvApplicationData;
 
 @end
 
 @implementation ApplicationSettings
 
-static ApplicationSettings *sharedApplicationSettings = nil;
+static ApplicationSettings *_sharedApplicationSettings = nil;
 
 + (void)initialize {
-    sharedApplicationSettings = [[super allocWithZone:NULL] init];
+    _sharedApplicationSettings = [[super allocWithZone:NULL] init];
 
     NSURL *applicationSupportDirectory = [NSFileManager applicationSupportDirectoryUrl];
     NSURL *applicationDataFile = [applicationSupportDirectory URLByAppendingPathComponent: FILENAME];
 
     [UIManagedDocument openManagedDocumentAtUrl:applicationDataFile withCompletionHandler:^(id managedDocument, BOOL success) {
         if (success) {
-            [sharedApplicationSettings setManagedDocumentTrvApplicationData: managedDocument];
+            [_sharedApplicationSettings setManagedDocumentTrvApplicationData: managedDocument];
         }
     }];
     
 }
 
 + (ApplicationSettings *)sharedSettings {
-    return sharedApplicationSettings;
+    return _sharedApplicationSettings;
 }
 
 + (id)allocWithZone:(NSZone *)zone {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "RptqQueryLinks+Extras.h"
 #import "NSFileManager+Common.h"
 #import "MNSDatabase.h"
@@ -17,7 +17,7 @@ typedef void (^rsltBlk_filePath)(BOOL success);
 
 @interface MNSReportDocument : NSObject
 
-@property (retain, nonatomic) UIManagedDocumentQuery *managedDocumentQuery;
+@property (retain, nonatomic) UIManagedDocumentReport *managedDocumentQuery;
 @property (copy) NSString *schemaName;
 
 - (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion;

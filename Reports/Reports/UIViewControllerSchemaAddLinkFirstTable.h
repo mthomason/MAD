@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class UIViewControllerSchemaAddLinkFirstTable;
 
 @protocol UIViewControllerSchemaAddLinkDelegate
-- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document;
+- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
 @end
 
 @interface UIViewControllerSchemaAddLinkFirstTable : UITableViewControllerCoreDataResults

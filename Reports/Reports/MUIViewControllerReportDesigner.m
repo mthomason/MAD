@@ -23,10 +23,10 @@
     [_scrollViewFrames release];
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                  object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                  object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
     [_svSections release];
     if (_toolbox) [_toolbox release];
     [_settingsPopoverController release];
@@ -50,12 +50,12 @@
     [[NSNotificationCenter defaultCenter] addObserver: self 
                                              selector: @selector(objectsDidChange:) 
                                                  name: NSManagedObjectContextObjectsDidChangeNotification 
-                                               object: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                               object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
     
     [[NSNotificationCenter defaultCenter] addObserver: self 
                                              selector: @selector(objectsDidSave:) 
                                                  name: NSManagedObjectContextDidSaveNotification 
-                                               object: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                               object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
     
 }
 
@@ -193,7 +193,7 @@
     [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
     [self setDesignScrollViewNormal: [[self designScrollView] frame]];
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[UIManagedDocumentQuery activeDocument]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[UIManagedDocumentReport activeDocument]];
     NSInteger ctr = 0;
 
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
@@ -317,7 +317,7 @@
 #pragma mark - Actions
 
 - (void)openReport:(NSURL *)url {
-    UIManagedDocumentTrvFileData *trvFile = [[UIManagedDocumentTrvFileData alloc] initWithFileURL:url];
+    UIManagedDocumentPreferencesUser *trvFile = [[UIManagedDocumentPreferencesUser alloc] initWithFileURL:url];
     
     [trvFile release];
 }
@@ -417,21 +417,21 @@
 
 - (void)didSelectDataField:(RptqField *)field {
     
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]] retain];
+    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
     if (doc) {
         
         NSEntityDescription *rdoEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                 inManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                 inManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
 
         NSEntityDescription *roldfEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
-                                                   inManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                   inManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
 
         RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: rdoEd
-                                                     insertIntoManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                     insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
 
         
         RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: roldfEd
-                                                                            insertIntoManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                                                            insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
         dataObject.isLabelDataField = reportObject;
         [reportObject release];
         dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
@@ -447,9 +447,9 @@
         [[doc hasDetailSection] addHasObjectsObject:dataObject];
 
         NSError *error = nil;
-        [[[UIManagedDocumentQuery activeDocument] managedObjectContext] save: &error];
+        [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
         if (!error) {
-            [[UIManagedDocumentQuery activeDocument] saveToURL: [[UIManagedDocumentQuery activeDocument] fileURL]
+            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
                                   forSaveOperation: UIDocumentSaveForOverwriting
                                  completionHandler: ^(BOOL success) {
                                      
@@ -483,7 +483,7 @@
 #pragma mark Element View Delegate
 
 - (void)elementDidFinishPan:(ElementView *)view {
-    RptqDocumentObjectLabelDataField *datafield = [[RptqDocumentObjectLabelDataField labelDataFieldForManagedObjectContext:[[UIManagedDocumentQuery activeDocument] managedObjectContext] withObjectID:[view objectID]] retain];
+    RptqDocumentObjectLabelDataField *datafield = [[RptqDocumentObjectLabelDataField labelDataFieldForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext] withObjectID:[view objectID]] retain];
     if (datafield) {
         datafield.parentObjectLabelDataField.originx = [NSNumber numberWithFloat: view.frame.origin.x];
         datafield.parentObjectLabelDataField.originy = [NSNumber numberWithFloat: view.frame.origin.y];
@@ -492,7 +492,7 @@
 
         UIScrollViewSection *svSection = (UIScrollViewSection *)[[view containerView] retain];
         if (svSection) {
-            RptqDocumentSection *documentSection = [[RptqDocumentSection sectionForManagedObjectContext:[[UIManagedDocumentQuery activeDocument] managedObjectContext] withObjectID: [svSection objectID]] retain];
+            RptqDocumentSection *documentSection = [[RptqDocumentSection sectionForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext] withObjectID: [svSection objectID]] retain];
             NSLog(@"Document section: %@", [documentSection localizedDisplayName]);
             datafield.parentObjectLabelDataField.inSection = documentSection;
             [documentSection release];
@@ -501,11 +501,11 @@
         
 
         NSError *error = nil;
-        [[[UIManagedDocumentQuery activeDocument] managedObjectContext] save: &error];
+        [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
-            [[UIManagedDocumentQuery activeDocument] saveToURL: [[UIManagedDocumentQuery activeDocument] fileURL]
+            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
                                   forSaveOperation: UIDocumentSaveForOverwriting
                                  completionHandler: ^(BOOL success) {
                                      

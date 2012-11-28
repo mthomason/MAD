@@ -97,7 +97,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 #pragma mark - Open Document Delegate
 
 - (void)openDocumentWithUrl:(NSURL *)url insideViewController:(UIViewController *)viewController {
-    UIManagedDocumentQuery *mdq = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
+    UIManagedDocumentReport *mdq = [[UIManagedDocumentReport alloc] initWithFileURL:url];
     [self setManagedDocumentQuery: mdq];
     [mdq release];
     

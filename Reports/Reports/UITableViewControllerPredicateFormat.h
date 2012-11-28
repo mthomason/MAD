@@ -8,7 +8,7 @@
 
 #import "MUITableViewController.h"
 #import "UITableViewControllerSchemaAddPredicate.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "RptqQueryPredicate.h"
 
 @class UITableViewControllerPredicateFormat;

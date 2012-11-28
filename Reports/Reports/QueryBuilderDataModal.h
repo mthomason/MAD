@@ -18,11 +18,11 @@ typedef enum {
     UIViewControllerSchemaTablesSectionsSql = 6
 } UIViewControllerSchemaTablesSections;
 
-@class UIManagedDocumentQuery;
+@class UIManagedDocumentReport;
 
 @interface QueryBuilderDataModal : NSObject
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument;
+- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument;
 
 - (NSMutableDictionary *)datamodel;
 - (NSMutableDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables;

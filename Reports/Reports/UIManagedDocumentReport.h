@@ -10,9 +10,9 @@
 #import <CoreData/CoreData.h>
 #import "Constants.h"
 
-@interface UIManagedDocumentQuery : UIManagedDocument
+@interface UIManagedDocumentReport : UIManagedDocument
 
-+ (UIManagedDocumentQuery *)activeDocument;
-+ (void)setActiveDocument:(UIManagedDocumentQuery *)activeDocument;
++ (UIManagedDocumentReport *)activeDocument;
++ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument;
 
 @end

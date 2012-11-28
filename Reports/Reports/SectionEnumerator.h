@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 
 @interface SectionEnumerator : NSEnumerator
 
 @property (assign) NSInteger current;
 @property (assign) NSInteger total;
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument;
+- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument;
 - (NSArray *)allObjects;
 - (id)nextObject;
 - (NSInteger)count;

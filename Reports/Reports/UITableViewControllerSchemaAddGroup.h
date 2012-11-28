@@ -11,7 +11,7 @@
 #import "UITableViewControllerChooseField.h"
 #import "RptqQueryGroup.h"
 #import "RptqField.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 
 @class UITableViewControllerSchemaAddGroup;
 
@@ -30,7 +30,7 @@
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+@property (retain) UIManagedDocumentReport *managedDocumentQuery;
 
 @property (copy) NSString *field;
 @property (assign) MNSSortOrder sortOrder;

@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class UIViewControllerSchemaAddLinkSecondTable;
 
 @protocol UIViewControllerSchemaAddLinkSecondTableDelegate
-- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document;
+- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
 @end
 
 @interface UIViewControllerSchemaAddLinkSecondTable : UITableViewControllerCoreDataResults

@@ -196,7 +196,7 @@
     return (row <= body) ? row : body - (row - body);
 }
 
-+ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentQuery *)managedDocument {
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentReport *)managedDocument {
     
     NSInteger result = 0;
     BOOL breakNow = NO;

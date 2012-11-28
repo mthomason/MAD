@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewController.h"
 #import "UIScrollViewSection.h"
-#import "UIManagedDocumentTrvFileData.h"
+#import "UIManagedDocumentPreferencesUser.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
 #import "MUIViewControllerObjectSelector.h"

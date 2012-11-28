@@ -16,7 +16,7 @@
     [super dealloc];
 }
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument {
+- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument {
     self = [super init];
     if (self) {
         [self setCurrent: 0];
@@ -24,7 +24,7 @@
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
         request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
         NSError *error = nil;
-        NSArray *groups = [[[[UIManagedDocumentQuery activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
+        NSArray *groups = [[[[UIManagedDocumentReport activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
         [self setTotal: (error) ? 0 : [groups count]];
         [groups release];
     }
@@ -39,14 +39,14 @@
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {
         [result addObject:[RptqDocumentSection getDocumentSectionForRow: [self current]
-                                                forManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]]];
+                                                forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
     }
     return [result autorelease];
 }
 
 - (id)nextObject {
     return [RptqDocumentSection getDocumentSectionForRow: self.current++
-                                 forManagedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]];
+                                 forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "UIViewControllerSchemaAddLinkJoinType.h"
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
 #import "UIViewControllerSchemaAddLinkSecondTable.h"

@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApplicationSettings.h"
 #import "MUIViewControllerOpenDocument.h"
-#import "UIManagedDocumentTrvApplicationData.h"
-#import "UIManagedDocumentTrvFileData.h"
+#import "UIManagedDocumentPreferencesApplication.h"
+#import "UIManagedDocumentPreferencesUser.h"
 #import <CoreData/CoreData.h>
 #import "NSFileManager+Common.h"
 #import "UIColor+EverydayApps.h"
@@ -21,9 +21,9 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (retain) UIManagedDocumentQuery *managedDocumentQuery;
+@property (retain) UIManagedDocumentReport *managedDocumentQuery;
 
-@property (retain, nonatomic) UIManagedDocumentTrvApplicationData *applicationPreferences;
-@property (retain, nonatomic) UIManagedDocumentTrvFileData *openReport;
+@property (retain, nonatomic) UIManagedDocumentPreferencesApplication *applicationPreferences;
+@property (retain, nonatomic) UIManagedDocumentPreferencesUser *openReport;
 
 @end

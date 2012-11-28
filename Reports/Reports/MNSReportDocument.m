@@ -55,7 +55,7 @@
             NSLog(@"While file exist %@", applicationFileUrlWithExtention);
         }
         
-        UIManagedDocumentQuery *document = [[UIManagedDocumentQuery alloc] initWithFileURL:applicationFileUrlWithExtention];
+        UIManagedDocumentReport *document = [[UIManagedDocumentReport alloc] initWithFileURL:applicationFileUrlWithExtention];
         [self setManagedDocumentQuery: document];
         [document release];
         
@@ -85,7 +85,7 @@
 #pragma mark - Public Actions
 
 - (void)openFile:(NSURL *)url completion:(void (^)(BOOL success))completion {
-    UIManagedDocumentQuery *document = [[UIManagedDocumentQuery alloc] initWithFileURL:url];
+    UIManagedDocumentReport *document = [[UIManagedDocumentReport alloc] initWithFileURL:url];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         [document openWithCompletionHandler:^(BOOL success) {
             completion(success);

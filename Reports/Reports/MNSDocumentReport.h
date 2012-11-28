@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "MNSDocument.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 
 #import "MNSDatabase.h"
 #import "MNSDatabaseTable.h"

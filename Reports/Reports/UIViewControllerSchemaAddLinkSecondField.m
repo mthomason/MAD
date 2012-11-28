@@ -58,7 +58,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: [field name] from:[UIManagedDocumentQuery activeDocument]];
+    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: [field name] from:[UIManagedDocumentReport activeDocument]];
     [field release];
 }
 

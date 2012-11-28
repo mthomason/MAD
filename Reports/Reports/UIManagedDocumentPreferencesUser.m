@@ -1,17 +1,17 @@
 //
-//  UIManagedDocumentTrvApplicationData.m
+//  UIManagedDocumentTrvFileData.m
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 1/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIManagedDocumentTrvApplicationData.h"
+#import "UIManagedDocumentPreferencesUser.h"
 
-@implementation UIManagedDocumentTrvApplicationData
+@implementation UIManagedDocumentPreferencesUser
 
 + (NSString *)persistentStoreName {
-    return APPLICATIONDATA_FILENAME;
+    return TRVDATA_FILENAME;
 }
 
 @end

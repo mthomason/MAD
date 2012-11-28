@@ -31,11 +31,11 @@
 		4C00819114B83E92003DF437 /* UIImageStacks20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */; };
 		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
-		4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
+		4C00819614B84293003DF437 /* PreferencesApplication.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */; };
 		4C0358FD14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
 		4C0E7721163B5AEC003B951E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
-		4C0E7724163B5AEC003B951E /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
 		4C0E7725163B5AEC003B951E /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
 		4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4C0E7727163B5AEC003B951E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
@@ -44,10 +44,10 @@
 		4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
-		4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */; };
+		4C0E772D163B5AEC003B951E /* PreferencesApplication.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */; };
 		4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* UITableViewCellDocument.m */; };
-		4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
-		4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
+		4C0E7730163B5AEC003B951E /* UIManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m */; };
+		4C0E7731163B5AEC003B951E /* UIManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m */; };
 		4C0E7732163B5AEC003B951E /* Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* Templates.m */; };
 		4C0E7733163B5AEC003B951E /* MUIViewControllerStoreTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m */; };
 		4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
@@ -56,7 +56,7 @@
 		4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638A14BAE35B0025009E /* MUIViewControllerDatabaseSources.m */; };
 		4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
-		4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
+		4C0E773C163B5AEC003B951E /* Report.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */; };
 		4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
 		4C0E773F163B5AEC003B951E /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
@@ -65,7 +65,7 @@
 		4C0E7742163B5AEC003B951E /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
 		4C0E774F163B5AEC003B951E /* MNSReportDocumentSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8C97B914C5C636007FB629 /* MNSReportDocumentSalesForce.m */; };
 		4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
-		4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
+		4C0E7752163B5AEC003B951E /* UIManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
 		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
@@ -300,6 +300,8 @@
 		4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C101DB014F4E58E00AAF676 /* RptqQueryTables+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */; };
+		4C10C5BE1665F50A003E9F02 /* PreferencesUser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */; };
+		4C10C5BF1665F50F003E9F02 /* PreferencesUser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
@@ -342,14 +344,14 @@
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C384E3C14B29789007B4F48 /* ReportDesignerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */; };
 		4C384E3F14B29789007B4F48 /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
-		4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */; };
+		4C384E5214B36980007B4F48 /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
 		4C507B1114D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */; };
 		4C507B1214D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */; };
 		4C507B1314D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */; };
 		4C507B1414D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */; };
-		4C5F02D414B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */; };
-		4C5F02D814B9755400C49BE9 /* UIManagedDocumentTrvFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */; };
+		4C5F02D414B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m */; };
+		4C5F02D814B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m */; };
 		4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
 		4C5F02DD14B9A48900C49BE9 /* Blank.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DC14B9A48900C49BE9 /* Blank.trvt */; };
 		4C5F02E014B9A91500C49BE9 /* Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* Templates.m */; };
@@ -399,7 +401,7 @@
 		4C87407A15052D3D007FC473 /* UIViewClipboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* UIViewClipboard.m */; };
 		4C87407E15053927007FC473 /* UIImageClip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407C15053927007FC473 /* UIImageClip@2x.png */; };
 		4C87407F15053927007FC473 /* UIImageClip.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407D15053927007FC473 /* UIImageClip.png */; };
-		4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */; };
+		4C8779DE14CA9D90005CBE6F /* UIManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */; };
 		4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
 		4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
 		4C88A9B014ECDE560069A0AF /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
@@ -874,7 +876,7 @@
 		4CE7B76A14C038AF007D0148 /* MNSReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76914C038AF007D0148 /* MNSReportDocument.m */; };
 		4CE7B76E14C03956007D0148 /* MNSReportDocumentMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B76D14C03956007D0148 /* MNSReportDocumentMySql.m */; };
 		4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
-		4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */; };
+		4CE8A03914BFF744007C8345 /* Report.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */; };
 		4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
 		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
 		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
@@ -976,7 +978,7 @@
 		4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageStacks20@2x.png"; sourceTree = "<group>"; };
 		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageWrench20.png; sourceTree = "<group>"; };
 		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageWrench20@2x.png"; sourceTree = "<group>"; };
-		4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvAppData.xcdatamodel; sourceTree = "<group>"; };
+		4C00819514B84293003DF437 /* PreferencesApplication.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PreferencesApplication.xcdatamodel; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerSectionLayoutSettings.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerSectionLayoutSettings.m; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* ReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -985,6 +987,7 @@
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
 		4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTables+Extras.h"; sourceTree = "<group>"; };
 		4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryTables+Extras.m"; sourceTree = "<group>"; };
+		4C10C5BD1665F50A003E9F02 /* PreferencesUser.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PreferencesUser.xcdatamodel; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
@@ -1040,7 +1043,7 @@
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPhone.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerOpenDocument.h; sourceTree = "<group>"; };
-		4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrvFileType.xcdatamodel; sourceTree = "<group>"; };
+		4C384E5114B36980007B4F48 /* ReportOld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReportOld.xcdatamodel; sourceTree = "<group>"; };
 		4C45742614E795CE00FF326C /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocument+Extras.h"; sourceTree = "<group>"; };
 		4C45742714E795CE00FF326C /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+Extras.m"; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkFirstField.h; sourceTree = "<group>"; };
@@ -1051,10 +1054,10 @@
 		4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkSecondField.m; sourceTree = "<group>"; };
 		4C507B0F14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkSecondTable.h; sourceTree = "<group>"; };
 		4C507B1014D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkSecondTable.m; sourceTree = "<group>"; };
-		4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvApplicationData.h; sourceTree = "<group>"; };
-		4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentTrvApplicationData.m; sourceTree = "<group>"; };
-		4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentTrvFileData.h; sourceTree = "<group>"; };
-		4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentTrvFileData.m; sourceTree = "<group>"; };
+		4C5F02D214B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentPreferencesApplication.h; sourceTree = "<group>"; };
+		4C5F02D314B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentPreferencesApplication.m; sourceTree = "<group>"; };
+		4C5F02D614B9755400C49BE9 /* UIManagedDocumentPreferencesUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentPreferencesUser.h; sourceTree = "<group>"; };
+		4C5F02D714B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentPreferencesUser.m; sourceTree = "<group>"; };
 		4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Invoice.trvt; sourceTree = "<group>"; };
 		4C5F02DC14B9A48900C49BE9 /* Blank.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Blank.trvt; sourceTree = "<group>"; };
 		4C5F02DE14B9A91500C49BE9 /* Templates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Templates.h; sourceTree = "<group>"; };
@@ -1114,8 +1117,8 @@
 		4C87407D15053927007FC473 /* UIImageClip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageClip.png; sourceTree = "<group>"; };
 		4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
 		4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryGroup+Extras.m"; sourceTree = "<group>"; };
-		4C8779DC14CA9D90005CBE6F /* UIManagedDocumentQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentQuery.h; sourceTree = "<group>"; };
-		4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentQuery.m; sourceTree = "<group>"; };
+		4C8779DC14CA9D90005CBE6F /* UIManagedDocumentReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIManagedDocumentReport.h; sourceTree = "<group>"; };
+		4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIManagedDocumentReport.m; sourceTree = "<group>"; };
 		4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
 		4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4C88A99714EA22F80069A0AF /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
@@ -1560,7 +1563,7 @@
 		4CE7B76D14C03956007D0148 /* MNSReportDocumentMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSReportDocumentMySql.m; sourceTree = "<group>"; };
 		4CE7B77314C2D168007D0148 /* MUIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerObjectSelector.h; sourceTree = "<group>"; };
 		4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerObjectSelector.m; sourceTree = "<group>"; };
-		4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DatabaseDefinationFileType.xcdatamodel; sourceTree = "<group>"; };
+		4CE8A03814BFF744007C8345 /* Report.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Report.xcdatamodel; sourceTree = "<group>"; };
 		4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocuments20.png; sourceTree = "<group>"; };
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
@@ -1835,9 +1838,10 @@
 				4C68B71316600245002682CB /* MNSDatabaseConnection.m */,
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
-				4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */,
-				4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */,
-				4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */,
+				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
+				4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */,
+				4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */,
+				4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */,
 				4C5F02DE14B9A91500C49BE9 /* Templates.h */,
 				4C5F02DF14B9A91500C49BE9 /* Templates.m */,
 			);
@@ -2980,12 +2984,12 @@
 		4CE8A04A14C027B2007C8345 /* Managed Documents */ = {
 			isa = PBXGroup;
 			children = (
-				4C8779DC14CA9D90005CBE6F /* UIManagedDocumentQuery.h */,
-				4C8779DD14CA9D90005CBE6F /* UIManagedDocumentQuery.m */,
-				4C5F02D214B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.h */,
-				4C5F02D314B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m */,
-				4C5F02D614B9755400C49BE9 /* UIManagedDocumentTrvFileData.h */,
-				4C5F02D714B9755400C49BE9 /* UIManagedDocumentTrvFileData.m */,
+				4C8779DC14CA9D90005CBE6F /* UIManagedDocumentReport.h */,
+				4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */,
+				4C5F02D214B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.h */,
+				4C5F02D314B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m */,
+				4C5F02D614B9755400C49BE9 /* UIManagedDocumentPreferencesUser.h */,
+				4C5F02D714B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m */,
 			);
 			name = "Managed Documents";
 			path = Reports;
@@ -3801,7 +3805,7 @@
 			files = (
 				4C0E7721163B5AEC003B951E /* main.m in Sources */,
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
-				4C0E7724163B5AEC003B951E /* TrvFileType.xcdatamodeld in Sources */,
+				4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */,
 				4C0E7725163B5AEC003B951E /* MUIViewControllerReportDesigner.m in Sources */,
 				4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */,
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
@@ -3810,10 +3814,10 @@
 				4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */,
 				4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */,
 				4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */,
-				4C0E772D163B5AEC003B951E /* TrvAppData.xcdatamodeld in Sources */,
+				4C0E772D163B5AEC003B951E /* PreferencesApplication.xcdatamodeld in Sources */,
 				4C0E772F163B5AEC003B951E /* UITableViewCellDocument.m in Sources */,
-				4C0E7730163B5AEC003B951E /* UIManagedDocumentTrvApplicationData.m in Sources */,
-				4C0E7731163B5AEC003B951E /* UIManagedDocumentTrvFileData.m in Sources */,
+				4C0E7730163B5AEC003B951E /* UIManagedDocumentPreferencesApplication.m in Sources */,
+				4C0E7731163B5AEC003B951E /* UIManagedDocumentPreferencesUser.m in Sources */,
 				4C0E7732163B5AEC003B951E /* Templates.m in Sources */,
 				4C0E7733163B5AEC003B951E /* MUIViewControllerStoreTemplates.m in Sources */,
 				4C0E7734163B5AEC003B951E /* UITableViewCellStoreItemReportTemplate.m in Sources */,
@@ -3822,7 +3826,7 @@
 				4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */,
 				4C0E7739163B5AEC003B951E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */,
-				4C0E773C163B5AEC003B951E /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
+				4C0E773C163B5AEC003B951E /* Report.xcdatamodeld in Sources */,
 				4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */,
 				4C0E773E163B5AEC003B951E /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
@@ -3831,7 +3835,7 @@
 				4C0E7742163B5AEC003B951E /* MUIViewControllerObjectSelector.m in Sources */,
 				4C0E774F163B5AEC003B951E /* MNSReportDocumentSalesForce.m in Sources */,
 				4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
-				4C0E7752163B5AEC003B951E /* UIManagedDocumentQuery.m in Sources */,
+				4C0E7752163B5AEC003B951E /* UIManagedDocumentReport.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */,
 				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
@@ -3925,6 +3929,7 @@
 				4C68B71516600245002682CB /* MNSDatabaseConnection.m in Sources */,
 				4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4C7C8AF816603D3D00F2B88B /* ApplicationSettings.m in Sources */,
+				4C10C5BF1665F50F003E9F02 /* PreferencesUser.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3962,7 +3967,7 @@
 			files = (
 				4C384E3514B29789007B4F48 /* main.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
-				4C384E5214B36980007B4F48 /* TrvFileType.xcdatamodeld in Sources */,
+				4C384E5214B36980007B4F48 /* ReportOld.xcdatamodeld in Sources */,
 				4C76F0B114B4F132005DCE49 /* MUIViewControllerReportDesigner.m in Sources */,
 				4C76F0BA14B5250F005DCE49 /* UIScrollViewSection.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
@@ -3971,10 +3976,10 @@
 				4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */,
 				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
 				4C00818B14B745C9003DF437 /* NSFileManager+Common.m in Sources */,
-				4C00819614B84293003DF437 /* TrvAppData.xcdatamodeld in Sources */,
+				4C00819614B84293003DF437 /* PreferencesApplication.xcdatamodeld in Sources */,
 				4C6CDFC414B85BFD00DABF86 /* UITableViewCellDocument.m in Sources */,
-				4C5F02D414B9753700C49BE9 /* UIManagedDocumentTrvApplicationData.m in Sources */,
-				4C5F02D814B9755400C49BE9 /* UIManagedDocumentTrvFileData.m in Sources */,
+				4C5F02D414B9753700C49BE9 /* UIManagedDocumentPreferencesApplication.m in Sources */,
+				4C5F02D814B9755400C49BE9 /* UIManagedDocumentPreferencesUser.m in Sources */,
 				4C5F02E014B9A91500C49BE9 /* Templates.m in Sources */,
 				4C5F02E314BA382A00C49BE9 /* MUIViewControllerStoreTemplates.m in Sources */,
 				4C5F02E614BA3A6700C49BE9 /* UITableViewCellStoreItemReportTemplate.m in Sources */,
@@ -3983,7 +3988,7 @@
 				4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */,
 				4CA0638B14BAE35B0025009E /* MUIViewControllerDatabaseSources.m in Sources */,
 				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
-				4CE8A03914BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld in Sources */,
+				4CE8A03914BFF744007C8345 /* Report.xcdatamodeld in Sources */,
 				4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */,
 				4CE8A04614C01C7B007C8345 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
@@ -3992,7 +3997,7 @@
 				4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */,
 				4C8C97BA14C5C636007FB629 /* MNSReportDocumentSalesForce.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
-				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentQuery.m in Sources */,
+				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentReport.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */,
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
@@ -4086,6 +4091,7 @@
 				4C68B71416600245002682CB /* MNSDatabaseConnection.m in Sources */,
 				4C7C8AF31660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4C7C8AF716603D3D00F2B88B /* ApplicationSettings.m in Sources */,
+				4C10C5BE1665F50A003E9F02 /* PreferencesUser.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4553,33 +4559,43 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		4C00819414B84293003DF437 /* TrvAppData.xcdatamodeld */ = {
+		4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */,
+				4C00819514B84293003DF437 /* PreferencesApplication.xcdatamodel */,
 			);
-			currentVersion = 4C00819514B84293003DF437 /* TrvAppData.xcdatamodel */;
-			path = TrvAppData.xcdatamodeld;
+			currentVersion = 4C00819514B84293003DF437 /* PreferencesApplication.xcdatamodel */;
+			path = PreferencesApplication.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
-		4C384E5014B36980007B4F48 /* TrvFileType.xcdatamodeld */ = {
+		4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */,
+				4C10C5BD1665F50A003E9F02 /* PreferencesUser.xcdatamodel */,
 			);
-			currentVersion = 4C384E5114B36980007B4F48 /* TrvFileType.xcdatamodel */;
-			path = TrvFileType.xcdatamodeld;
+			currentVersion = 4C10C5BD1665F50A003E9F02 /* PreferencesUser.xcdatamodel */;
+			path = PreferencesUser.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
-		4CE8A03714BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodeld */ = {
+		4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */,
+				4C384E5114B36980007B4F48 /* ReportOld.xcdatamodel */,
 			);
-			currentVersion = 4CE8A03814BFF744007C8345 /* DatabaseDefinationFileType.xcdatamodel */;
-			path = DatabaseDefinationFileType.xcdatamodeld;
+			currentVersion = 4C384E5114B36980007B4F48 /* ReportOld.xcdatamodel */;
+			path = ReportOld.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4CE8A03814BFF744007C8345 /* Report.xcdatamodel */,
+			);
+			currentVersion = 4CE8A03814BFF744007C8345 /* Report.xcdatamodel */;
+			path = Report.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

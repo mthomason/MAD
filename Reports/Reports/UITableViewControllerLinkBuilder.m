@@ -98,9 +98,9 @@
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[UIManagedDocumentQuery activeDocument] managedObjectContext]);
+                    NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[UIManagedDocumentReport activeDocument] managedObjectContext]);
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -118,7 +118,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self firstTableName]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -137,7 +137,7 @@
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [self firstTableName]];
                     [request setPredicate: predicate];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -157,7 +157,7 @@
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[UIManagedDocumentQuery activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -241,35 +241,35 @@
     [tableFieldName release];
 }
 
-- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {
+- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellTableOne] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentQuery setActiveDocument: document];
+    [UIManagedDocumentReport setActiveDocument: document];
     [self setFirstTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellFieldOne] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentQuery setActiveDocument: document];
+    [UIManagedDocumentReport setActiveDocument: document];
     [self setFirstFieldName: result];
 }
 
-- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {
+- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellTableTwo] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentQuery setActiveDocument: document];
+    [UIManagedDocumentReport setActiveDocument: document];
     [self setSecondTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(NSString *)result from:(UIManagedDocumentQuery *)document {
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellFieldTwo] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentQuery setActiveDocument: document];
+    [UIManagedDocumentReport setActiveDocument: document];
     [self setSecondFieldName: result];
 }
 
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(UIManagedDocumentQuery *)document {
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(UIManagedDocumentReport *)document {
     switch (result) {
         case MNSLinkTypeEquiJoin:
             [[[self tableViewCellJoinType] detailTextLabel] setText:[[MNSLinkTypeNames objectAtIndex:MNSLinkTypeEquiJoin] lowercaseString]];
@@ -296,7 +296,7 @@
             break;
     }
     [[self navigationController] popToViewController: self animated: YES];
-    [UIManagedDocumentQuery setActiveDocument: document];
+    [UIManagedDocumentReport setActiveDocument: document];
     [self setLinkType: result];
 }
 

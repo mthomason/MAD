@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "RptqQueryLinks+Extras.h"
 
 @class UIViewControllerSchemaAddLinkJoinType;
 
 @protocol UIViewControllerSchemaAddLinkJoinTypeDelegate
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(UIManagedDocumentQuery *)document;
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(UIManagedDocumentReport *)document;
 @end
 
 @interface UIViewControllerSchemaAddLinkJoinType : UITableViewController

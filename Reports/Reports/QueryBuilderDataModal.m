@@ -7,7 +7,7 @@
 //
 
 #import "QueryBuilderDataModal.h"
-#import "UIManagedDocumentQuery.h"
+#import "UIManagedDocumentReport.h"
 #import "Constants.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
@@ -34,7 +34,7 @@
     [super dealloc];
 }
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentQuery *)managedDocument {
+- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument {
     self = [super init];
     if (self) {
         
@@ -245,7 +245,7 @@
 }
 
 - (NSMutableDictionary *)datamodel {
-    return [self datamodelForNumberOfTables:[RptqQueryTables countForManagedObjectContext:[[UIManagedDocumentQuery activeDocument] managedObjectContext]]];
+    return [self datamodelForNumberOfTables:[RptqQueryTables countForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]]];
 }
 
 - (NSMutableDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
