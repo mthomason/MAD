@@ -14,10 +14,33 @@
 
     id managedDocumentAtUrl = [[UIManagedDocument alloc] initWithFileURL:url];
 
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES};
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                NSInferMappingModelAutomaticallyOption : @YES};
 
     [managedDocumentAtUrl setPersistentStoreOptions: options];
 
+    BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+    if (fileExist) {
+        [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
+            completionHandler(managedDocumentAtUrl, success);
+        }];
+    } else {
+        [managedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            completionHandler(managedDocumentAtUrl, success);
+        }];
+    }
+    [managedDocumentAtUrl release];
+}
+
++ (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id, BOOL))completionHandler {
+    
+    id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
+    
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
+    NSInferMappingModelAutomaticallyOption : @YES};
+    
+    [managedDocumentAtUrl setPersistentStoreOptions: options];
+    
     BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
     if (fileExist) {
         [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {

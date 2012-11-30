@@ -106,15 +106,17 @@
 - (void)test:(id)sender {
 #warning Commenting this shit out
     
-    __block MNSDatabaseConnection *databaseConnection = [[MNSDatabaseConnection alloc] init];
-    [databaseConnection setUsername:    [[self textFieldUsername] text]];
-    [databaseConnection setPassword:    [[self textFieldPassword] text]];
-    [databaseConnection setServer:      [[self textFieldHost] text]];
-    [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
-    [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
     
     MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
         if (success) {
+            NSLog(@"That's a bingo!");
+            MNSDatabaseConnection *databaseConnection = [[MNSDatabaseConnection alloc] init];
+            [databaseConnection setUsername:    [[self textFieldUsername] text]];
+            [databaseConnection setPassword:    [[self textFieldPassword] text]];
+            [databaseConnection setServer:      [[self textFieldHost] text]];
+            [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
+            [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
+            
             MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection completion:^(BOOL success) {
                 if (success) {
                     [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
@@ -122,185 +124,12 @@
                     }];
                 }
             }];
+            
+            [databaseConnection release];
+
         }
     }];
 
-    [databaseConnection release];
-
-    /*
-    //NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithHost:@"everydayapps.com" port:3363 username:@"root" andPassword:@"1noniceguy"];
-
-    //NSArray *s = [[db tablesFor:@"quotationary"] retain];
-    //NSLog(@"Tables %@", s);
-    //[s release];
-    
-    //[db release];
-
-    MYSQL conn;
-    mysql_init(&conn);
-    //long flags = MYSQL_DEFAULT_CONNECTION_FLAGS;
-    //mysql_options(&(connection->conn), MYSQL_READ_DEFAULT_GROUP, "libmysqlclient.a");
-    mysql_real_connect(&conn, "everydayapps.com", "root", "1noniceguy", "quotationary", 3306, NULL, 0);
-    
-    //NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
-    char query[1024];
-    sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
-    NSLog(@"query %s", query);
-    mysql_query(&conn, query);
-    
-    MYSQL_RES *result = mysql_store_result(&conn);
-    NSMutableSet *mutableResult = nil;
-    
-    if (result != NULL) {
-        //int num_rows = mysql_num_rows(result);
-        mutableResult = [[NSMutableSet alloc] initWithCapacity:300];
-        
-        //@autoreleasepool {
-        MYSQL_ROW row;
-        //@autoreleasepool {
-        //mysql_fetch_row(result);
-        //printf("row %s", row[0]);
-        //@autoreleasepool {
-        while ((row = mysql_fetch_row(result))) {
-            //NSLog(@"Got row");
-            if (row[0]) {
-                NSLog(@"N: %@, K: %@", [NSString stringWithUTF8String:row[0]], [NSString stringWithUTF8String:row[0]]);                    
-            } else {
-                //NSLog(@"Not got row!!!");
-            }
-            //}
-        }
-        
-        [mutableResult autorelease];
-        
-        
-        mysql_free_result(result);
-    }    
-    mysql_close(&conn);
-    mysql_server_end();
-    
-    
-    
-    //NSString *username = [[NSString alloc] initWithString: [[self textFieldUsername] text]];
-    //NSString *password = [[NSString alloc] initWithString: [[self textFieldPassword] text]];
-    //NSString *host = [[NSString alloc] initWithString: [[self textFieldHost] text]];
-    //NSString *port = [[[self textFieldPort] text] retain];
-    //NSDictionary *credentals = [[NSDictionary alloc] initWithObjectsAndKeys:
-    //                            username, NSDATABASE_USERNAME,
-    //                            password, NSDATABASE_PASSWORD,
-    //                            host, NSDATABASE_HOST,
-    //                            [NSNumber numberWithInteger: [port integerValue]], NSDATABASE_PORT, nil];
-
-    
-    //NSMutableSet *mutableResult = [[NSMutableSet alloc] init];
-    //@autoreleasepool {
-    //const char * theSocket = MYSQL_UNIX_ADDR;
-    
-    //[[self inputHost] setString: [[self textFieldHost] text]];
-    //[[self inputUsername] setString: [[self textFieldUsername] text]];
-    //[[self inputPassword] setString: [[self textFieldPassword] text]];
-    //[[self inputPort] setString: [[self textFieldPort] text]];
-    
-    //const char * ho = [self cStringFromString: [self inputHost]];
-    //const char * un = [self cStringFromString: [self inputUsername]];
-    //const char * pw = [self cStringFromString: [self inputPassword]];
-    //int po = [[self inputPort] intValue];
-        
-    //self.conn = mysql_init(NULL); 
-    
-    //my_bool reconnect = YES;
-    //mysql_options(self.conn, MYSQL_OPT_RECONNECT, &reconnect);
-    //mysql_real_connect(self.conn, ho, un, pw, NULL, po, NULL, CLIENT_COMPRESS);
-        
-        
-        //mysql_close(conn); 
-    //}
-    */
-    /*
-
-    MYSQL *conn = mysql_init(NULL);
-    //const char *h = [[self host] UTF8String];
-    
-
-    mysql_real_connect(conn, [[[self textFieldHost] text] UTF8String], [[[self textFieldUsername] text] UTF8String], [[[self textFieldPassword] text] UTF8String], NULL, [[[self textFieldPort] text] intValue], NULL, 0);
-    
-    
-    NSString *q = @"SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ";
-    char query[[q length] + 12];
-    sprintf(query, "SELECT table_name FROM information_schema.tables WHERE table_schema = '%s'; ", "quotationary");// (const char *)[database UTF8String]);
-    NSLog(@"query %s", query);
-
-    mysql_query(conn, query);
-    
-
-     MYSQL_RES *result = mysql_store_result(conn);
-
-    
-    if (result) {
-        //mutableResult = [[NSMutableSet alloc] initWithCapacity:mysql_num_rows(result)];
-        
-        //@autoreleasepool {
-        MYSQL_ROW row;
-        //@autoreleasepool {
-        //mysql_fetch_row(result);
-        //printf("row %s", row[0]);
-        while ((row = mysql_fetch_row(result))) {
-            NSLog(@"Got row");
-            if (row[0]) {
-                NSString *name = [[NSString alloc] initWithUTF8String:row[0]];
-                if (name) {
-                    //[mutableResult addObject: name];
-                } else {
-                    NSLog(@"Not got name");
-                }
-                NSLog(@"row %s", row[0]);
-                NSLog(@"name %@", name);
-                [name release];
-                
-            } else {
-                NSLog(@"Not got row!!!");
-            }
-             
-        }
-        //}
-        mysql_free_result(result);
-    }
-    mysql_close(conn);
-    
-    */
-    //NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithOptions: credentals];
-
-    
-    /*
-    NSDatabaseMySql *db = [[NSDatabaseMySql alloc] initWithHost:host port:[port integerValue] username:username andPassword:password];
-
-    
-    
-
-    
-    //BOOL result = [db testConnection];
-    //NSLog(@"result: %@", result ? @"YES" : @"NO");
-    
-    [UIView animateWithDuration:ANIMATION_DURATION_SLOW delay:ANIMATION_DURATION_NONE options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [[self tableViewCellTestConnection] setBackgroundColor: result ? [UIColor greenColor] : [UIColor redColor]];
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:ANIMATION_DURATION_SLOW delay:ANIMATION_DURATION_NONE options:UIViewAnimationOptionCurveEaseIn animations:^{
-            if (finished) [[self tableViewCellTestConnection] setBackgroundColor: [UIColor whiteColor]];
-        } completion:^(BOOL finished) { }];
-    }];
-    
-    [username release];
-    [password release];
-    [host release];
-    [port release];
-
-    [db release];
-    
-    */
-    
-    NSLog(@"Database released");
-    //[credentals release];
-    NSLog(@"Credentals released");
 }
 
 - (IBAction)save:(id)sender {

@@ -46,4 +46,12 @@
                                  userInfo: nil];
 }
 
+- (NSString *)identifier {
+    return [MNSDatabase identifier];
+}
+
++ (NSString *)identifier {
+    return @"NONE";
+}
+
 @end

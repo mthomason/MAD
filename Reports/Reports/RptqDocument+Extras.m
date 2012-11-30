@@ -29,11 +29,9 @@
         RptqDatabase *db = [[doc hasDatabaseSchemas] anyObject];
         if (db) {
             NSString *driverType = [[db database_driver_type] retain];
-            if ([driverType isEqualToString: KEY_DB_TYPE_SF]) {
+            if ([driverType isEqualToString: [MNSDatabaseMySql identifier]]) {
 
-            } else if ([driverType isEqualToString: KEY_DB_TYPE_DB]) {
-                
-            } else if ([driverType isEqualToString: KEY_DB_TYPE_MYSQL]) {
+            } else if ([driverType isEqualToString: [MNSDatabaseSalesForce identifier]]) {
                 
             }
             [driverType release];

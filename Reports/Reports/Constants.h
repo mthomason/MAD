@@ -59,4 +59,3 @@ extern NSString * const KEY_TBL_SEC_SECTIONS;
 
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
-extern NSString * const KEY_DB_TYPE_MYSQL;

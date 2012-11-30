@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "UIManagedDocumentReport.h"
 
 @interface UIManagedDocument (FileOperations)
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler;
+
++ (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler;
+
 
 @end

@@ -11,8 +11,10 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "UIManagedDocumentReport.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
+#import "UIManagedDocument+FileOperations.h"
 
 @interface MNSDocument : NSObject
 

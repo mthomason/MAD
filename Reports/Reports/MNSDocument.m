@@ -39,25 +39,20 @@
         
         NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:name withExtension:extension];
         
+        [UIManagedDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withWrapper:managedObjectType andCompletionHandler:^(id managedDocument, BOOL success) {
+            if (success) {
+                [self setManagedDocument:managedDocument];
+            }
+            completion(success);
+        }];
+/*
         id document = [[managedObjectType alloc] initWithFileURL:applicationFileUrlWithExtention];
         [self setManagedDocument:document];
         [document release];
         
         [self saveToUrl:applicationFileUrlWithExtention completion:^(BOOL success) {
             completion(success);
-        }];
-        /*
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
-            [[self managedDocument] saveToURL:applicationFileUrlWithExtention forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-                completion(success);
-            }];
-        } else if ([[self managedDocument] documentState] == UIDocumentStateClosed) {
-            [[self managedDocument] openWithCompletionHandler: ^(BOOL success) {
-                completion(success);
-            }];
-        } else if ([[self managedDocument] documentState] == UIDocumentStateNormal) {
-            completion(YES);
-        }*/
+        }];*/
     }
     return self;
 }

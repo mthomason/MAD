@@ -27,4 +27,6 @@
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion;
 
+- (NSString *)identifier;
+
 @end

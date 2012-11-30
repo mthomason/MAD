@@ -38,8 +38,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
-    NSLog(@"Application settings: %@", [ApplicationSettings sharedSettings]);
-
     UIViewController *rvc = [[[application windows] lastObject] rootViewController];
     if ([rvc isKindOfClass:[MUIViewControllerOpenDocument class]]) {
         [(MUIViewControllerOpenDocument *)rvc setDelegate:self];

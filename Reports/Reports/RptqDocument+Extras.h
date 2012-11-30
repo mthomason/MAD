@@ -14,6 +14,8 @@
 #import "RptqUserCredentals.h"
 #import "RptqQuery.h"
 #import "RptqDocumentSection+Extras.h"
+#import "MNSDatabaseSalesForce.h"
+#import "MNSDatabaseMySql.h"
 
 @interface RptqDocument (Extras)
 

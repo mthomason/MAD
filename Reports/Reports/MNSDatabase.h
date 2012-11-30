@@ -18,6 +18,8 @@ typedef enum {
 	NSDatabaseQueryTypeVerify
 } NSDatabaseQueryType;
 
+//extern NSString * const KEY_DB_TYPE_NONE;
+
 @interface MNSDatabase : NSObject
 
 - (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
@@ -30,5 +32,8 @@ typedef enum {
 
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion;
+
+- (NSString *)identifier;
++ (NSString *)identifier;
 
 @end

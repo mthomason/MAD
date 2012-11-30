@@ -276,4 +276,12 @@ typedef void (^rsltBlk_complete)(MNSDatabaseSalesForce *database, BOOL complete)
     
 }
 
+- (NSString *)identifier {
+    return [MNSDatabaseSalesForce identifier];
+}
+
++ (NSString *)identifier {
+    return @"Salesforce.com";
+}
+
 @end

@@ -300,6 +300,10 @@
 		4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C101DB014F4E58E00AAF676 /* RptqQueryTables+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */; };
+		4C1098531666850300C2D3B1 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098521666850300C2D3B1 /* User.m */; };
+		4C1098541666850300C2D3B1 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098521666850300C2D3B1 /* User.m */; };
+		4C1098571666855300C2D3B1 /* ApplicationPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098561666855300C2D3B1 /* ApplicationPreferences.m */; };
+		4C1098581666855300C2D3B1 /* ApplicationPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098561666855300C2D3B1 /* ApplicationPreferences.m */; };
 		4C10C5BE1665F50A003E9F02 /* PreferencesUser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */; };
 		4C10C5BF1665F50F003E9F02 /* PreferencesUser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
@@ -987,6 +991,10 @@
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
 		4C101DAE14F4E58E00AAF676 /* RptqQueryTables+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTables+Extras.h"; sourceTree = "<group>"; };
 		4C101DAF14F4E58E00AAF676 /* RptqQueryTables+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryTables+Extras.m"; sourceTree = "<group>"; };
+		4C1098511666850300C2D3B1 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4C1098521666850300C2D3B1 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		4C1098551666855300C2D3B1 /* ApplicationPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationPreferences.h; sourceTree = "<group>"; };
+		4C1098561666855300C2D3B1 /* ApplicationPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationPreferences.m; sourceTree = "<group>"; };
 		4C10C5BD1665F50A003E9F02 /* PreferencesUser.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PreferencesUser.xcdatamodel; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
@@ -1820,6 +1828,8 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C10984E1666849500C2D3B1 /* PreferencesUser */,
+				4C10984D1666848400C2D3B1 /* PreferencesApplication */,
 				4CFF3F23164DFF1F0070E880 /* MNSDocument.h */,
 				4CFF3F24164DFF1F0070E880 /* MNSDocument.m */,
 				4CFF3E7B164CD75D0070E880 /* MNSDocumentReport.h */,
@@ -1838,10 +1848,7 @@
 				4C68B71316600245002682CB /* MNSDatabaseConnection.m */,
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CBFF2F414C7C7C5000237D3 /* Database */,
-				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */,
-				4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */,
-				4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */,
 				4C5F02DE14B9A91500C49BE9 /* Templates.h */,
 				4C5F02DF14B9A91500C49BE9 /* Templates.m */,
 			);
@@ -1869,6 +1876,42 @@
 				4C2AC2F71535736200738091 /* icon.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		4C10984D1666848400C2D3B1 /* PreferencesApplication */ = {
+			isa = PBXGroup;
+			children = (
+				4C109850166684D200C2D3B1 /* Auto Generated */,
+				4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */,
+			);
+			name = PreferencesApplication;
+			sourceTree = "<group>";
+		};
+		4C10984E1666849500C2D3B1 /* PreferencesUser */ = {
+			isa = PBXGroup;
+			children = (
+				4C10984F166684BC00C2D3B1 /* Auto Generated */,
+				4C10C5BC1665F50A003E9F02 /* PreferencesUser.xcdatamodeld */,
+			);
+			name = PreferencesUser;
+			sourceTree = "<group>";
+		};
+		4C10984F166684BC00C2D3B1 /* Auto Generated */ = {
+			isa = PBXGroup;
+			children = (
+				4C1098511666850300C2D3B1 /* User.h */,
+				4C1098521666850300C2D3B1 /* User.m */,
+			);
+			name = "Auto Generated";
+			sourceTree = "<group>";
+		};
+		4C109850166684D200C2D3B1 /* Auto Generated */ = {
+			isa = PBXGroup;
+			children = (
+				4C1098551666855300C2D3B1 /* ApplicationPreferences.h */,
+				4C1098561666855300C2D3B1 /* ApplicationPreferences.m */,
+			);
+			name = "Auto Generated";
 			sourceTree = "<group>";
 		};
 		4C1A586D14E2653600184445 /* Choose Field Table View Controller */ = {
@@ -2322,6 +2365,7 @@
 		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
 			isa = PBXGroup;
 			children = (
+				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4C88A99714EA22F80069A0AF /* SectionEnumerator.h */,
 				4C88A99814EA22F90069A0AF /* SectionEnumerator.m */,
@@ -3930,6 +3974,8 @@
 				4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4C7C8AF816603D3D00F2B88B /* ApplicationSettings.m in Sources */,
 				4C10C5BF1665F50F003E9F02 /* PreferencesUser.xcdatamodeld in Sources */,
+				4C1098541666850300C2D3B1 /* User.m in Sources */,
+				4C1098581666855300C2D3B1 /* ApplicationPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4092,6 +4138,8 @@
 				4C7C8AF31660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4C7C8AF716603D3D00F2B88B /* ApplicationSettings.m in Sources */,
 				4C10C5BE1665F50A003E9F02 /* PreferencesUser.xcdatamodeld in Sources */,
+				4C1098531666850300C2D3B1 /* User.m in Sources */,
+				4C1098571666855300C2D3B1 /* ApplicationPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

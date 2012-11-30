@@ -14,14 +14,13 @@
                       completion: (void (^)(BOOL success))completion {
     self = [super init];
     if (self) {
-        
+#warning Finishme off
     }
     return self;
 }
 
 - (void)getTables: (void (^)(NSArray *tables))completion {
     
-
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_queue_t queuePriorityMain = dispatch_get_main_queue();
     
@@ -68,6 +67,14 @@
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion {
     
+}
+
+- (NSString *)identifier {
+    return [MNSDatabaseMySql identifier];
+}
+
++ (NSString *)identifier {
+    return @"MySQL";
 }
 
 @end
