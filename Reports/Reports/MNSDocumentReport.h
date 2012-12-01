@@ -42,7 +42,7 @@
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MNSDatabase *)database
-                           completion: (void (^)(BOOL success))completion;
+                   completion: (void (^)(BOOL success))completion;
 
 //Refresh the data inside the currently opened managed document
 - (void)refresh;

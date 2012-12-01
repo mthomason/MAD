@@ -10,6 +10,8 @@
 
 @interface MNSDatabaseField : NSObject
 
+- (id)initWithName:(NSString *)name;
+
 @property (copy) NSString *label;
 @property (copy) NSString *name;
 @property (copy) NSString *datatype;

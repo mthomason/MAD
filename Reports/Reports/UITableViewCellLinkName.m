@@ -12,7 +12,7 @@
 @implementation UITableViewCellLinkName
 
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELLLINKNAME_HEIGHT_DEFAULT;
+    return MNSTableViewCellInkNameHeightDefault;
 }
 
 @end

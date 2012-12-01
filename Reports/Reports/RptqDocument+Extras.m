@@ -112,4 +112,61 @@
     return doc;
 }
 
++ (void)addDatabase: (MNSDatabase *)database ToMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext
+         completion: (void (^)(BOOL success))completion {
+    
+    RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
+    
+    
+    NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
+    
+    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: objectContext
+                                                                             driverType: [database identifier]
+                                                                           connectionId: connectionId];
+    
+    RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
+    [rptqDatabase setOwnedByUser: userCredentals];
+    
+    [rptqDocument setHasDatabaseSchemas: [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase]];
+    
+    [database getTables:^(NSArray *tables) {
+        
+        [tables enumerateObjectsUsingBlock: ^(MNSDatabaseTable *databaseTable, NSUInteger idx, BOOL *stop) {
+            
+            RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
+                                                                           andTable: databaseTable];
+            
+            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                 withConnecitonId: connectionId];
+            
+            if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+            
+            [database getFieldsForTable:rptqTable completion:^(NSArray *fields) {
+                
+                [fields enumerateObjectsUsingBlock:^(MNSDatabaseField *objField, NSUInteger idx, BOOL *stop) {
+                    
+                    RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                         withConnecitonId: connectionId];
+                    
+                    RptqTable *rptqTableOrigional = [RptqTable getTableForManagedObjectContext: objectContext
+                                                                                      database: currentDatabase
+                                                                                  andTableName: [databaseTable name]];
+                    
+                    RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
+                                                                                   andField: objField];
+                    [rptqTableOrigional addHasFieldsObject: rptqField];
+                    
+                }];
+                
+            }];
+            
+            [rptqTable release];
+        }];
+        
+        completion(YES);
+        
+    }];
+    
+}
+
 @end

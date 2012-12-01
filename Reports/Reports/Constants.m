@@ -10,18 +10,24 @@
 
 #pragma mark - Customizable Constants
 
-NSString * const REPORTDESIGNER_PHONE = @"ReportDesignerPhone";
-NSString * const REPORTDESIGNER_PAD = @"ReportDesignerPad";
+NSString * const MNSReportDesigner_Phone = @"ReportDesignerPhone";
+NSString * const MNSReportDesigner_Pad = @"ReportDesignerPad";
 
-CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM = 0.7000f;
-CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF = 0.3500f;
-CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE = 0.4870f;
-CGFloat const ANIMATION_DURATION_SLOW = 0.12000f;
-CGFloat const ANIMATION_DURATION_NORMAL = 0.7000f;
-CGFloat const ANIMATION_DURATION_FAST = 0.3000f;
-CGFloat const ANIMATION_DURATION_NONE = 0.0000f;
+CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
+CGFloat const MNSAnimationDurationShowFromBottomHalf = 0.3500f;
+CGFloat const MNSAnimationDurationShowFromSide = 0.4870f;
+CGFloat const MNSAnimationDurationSlow = 0.12000f;
+CGFloat const MNSAnimationDurationNormal = 0.7000f;
+CGFloat const MNSAnimationDurationFast = 0.3000f;
+CGFloat const MNSAnimationDurationNone = 0.0000f;
 
-CGFloat const TVC_DOCUMENT_HEIGHT = 73.0000f;
+CGFloat const MNSDocumentHeight = 73.0000f;
+
+NSString * const MNSInterfaceButtonDismiss                          = @"Dismiss";
+NSString * const MNSInterfaceTitleProblem                           = @"Problem";
+NSString * const MNSInterfaceTitleError                             = @"error";
+NSString * const MNSInterfaceMessageErrorDataSourceCreation         = @"Datasource creation failed.";
+NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
 
 NSString * const UIIMAGEDOCUMENTBLANK               = @"UIImageDocumentBlank";
 NSString * const APPLICATIONDATA_FILENAME           = @"appdata";
@@ -50,14 +56,14 @@ NSString * const KEY_TBL_SEC_ROW_COUNT              = @"tsrc";
 NSString * const KEY_TBL_SEC_ROW_HEIGHT             = @"tsrh";
 NSString * const KEY_TBL_SEC_SECTIONS               = @"tsrs";
 
-CGFloat const UITABLEVIEWCELL_HEIGHT_DEFAULT = 44.0000f;
+CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 
-CGFloat const UITABLEVIEWCELLTABLENAME_HEIGHT_DEFAULT = 44.0000f;
-CGFloat const UITABLEVIEWCELLQUERYINPUT_HEIGHT_DEFAULT = 100.0000f;
-CGFloat const UITABLEVIEWCELLINSTRUCTION_HEIGHT_DEFAULT = 100.0000f;
-CGFloat const UITABLEVIEWCELLLINKNAME_HEIGHT_DEFAULT = 0.0000f;
-CGFloat const UITABLEVIEWCELLOVERRIDE_HEIGHT_DEFAULT = 44.0000f;
-CGFloat const UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT = 100.0000f;
+CGFloat const MNSTableViewCellTableNameHeightDefault = 44.0000f;
+CGFloat const MNSTableViewCellQueryInputHeightDefault = 100.0000f;
+CGFloat const MNSTableViewCellInstructionHeightDefault = 100.0000f;
+CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
+CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
+CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
 NSString * const KEY_DB_TYPE_SF     = @"Salesforce.com";
 NSString * const KEY_DB_TYPE_DB     = @"Database.com";

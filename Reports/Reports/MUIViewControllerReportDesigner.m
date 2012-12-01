@@ -384,7 +384,7 @@
         [[[self toolbox] view] setFrame:[self toolboxOffScreen]];
         [[self view] addSubview:[[self toolbox] view]];
         
-        [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                          animations: ^{
                              [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
                              [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
@@ -470,7 +470,7 @@
 
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
     
-    [UIView animateWithDuration: ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                      animations: ^{
                          [[self designScrollView] setFrame:[self designScrollViewNormal]];
                          [[[self toolbox] view] setFrame: [self toolboxOffScreen]];

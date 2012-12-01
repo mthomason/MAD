@@ -38,7 +38,7 @@
 }
 
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELL_HEIGHT_DEFAULT;
+    return MNSTableViewCellHeightDefault;
 }
 
 @end

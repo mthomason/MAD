@@ -12,7 +12,7 @@
 @implementation UITableViewCellOverride
 
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELLOVERRIDE_HEIGHT_DEFAULT;
+    return MNSTableViewCellOverrideHeightDefault;
 }
 
 @end

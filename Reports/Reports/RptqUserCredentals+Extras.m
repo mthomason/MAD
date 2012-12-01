@@ -11,8 +11,9 @@
 @implementation RptqUserCredentals (Extras)
 
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    NSEntityDescription *entityDescriptionCredentals = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
-    RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:entityDescriptionCredentals insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
+    RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
+    NSLog(@"User Credentals, %@", userCredentals);
     return [userCredentals autorelease];
 }
 

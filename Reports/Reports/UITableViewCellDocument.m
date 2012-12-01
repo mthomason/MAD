@@ -18,7 +18,7 @@
 }
 
 + (CGFloat)defaultHeight {
-    return TVC_DOCUMENT_HEIGHT;
+    return MNSDocumentHeight;
 }
 
 @end

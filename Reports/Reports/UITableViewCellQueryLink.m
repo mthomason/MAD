@@ -20,7 +20,7 @@
 }
 
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT;
+    return MNSTableViewCellQueryLinkHeightDefault;
 }
 
 @end

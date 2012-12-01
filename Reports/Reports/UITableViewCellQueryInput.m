@@ -12,7 +12,7 @@
 @implementation UITableViewCellQueryInput
 
 + (CGFloat)defaultHeight {
-    return UITABLEVIEWCELLQUERYINPUT_HEIGHT_DEFAULT;
+    return MNSTableViewCellQueryInputHeightDefault;
 }
 
 @end

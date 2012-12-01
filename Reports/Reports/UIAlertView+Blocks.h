@@ -16,7 +16,7 @@ typedef void (^CancelBlock)();
 + (UIAlertView *)showAlertViewWithTitle:(NSString *)title
                                 message:(NSString *)message
                       cancelButtonTitle:(NSString *)cancelButtonTitle
-                       otherButtonTitle:(NSString *)otherButtons
+                       otherButtonTitle:(NSArray *)otherButtons
                               onDismiss:(DismissBlock)dismissed
                                onCancel:(CancelBlock)canceled;
 

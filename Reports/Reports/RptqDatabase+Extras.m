@@ -34,6 +34,7 @@
 
     RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
                                    insertIntoManagedObjectContext:objectContext];
+#warning FIXME
     [database setDatabase_driver_type: KEY_DB_TYPE_SF];
     [database setConnection_id:connectionId];
     return [database autorelease];

@@ -17,4 +17,14 @@
     [super dealloc];
 }
 
+- (id)initWithTableName:(NSString *)tableName {
+    self = [super init];
+    if (self) {
+        [self setName: tableName];
+        [self setLabel: tableName];
+        [self setLabelPlural: tableName];   // TODO: Add porter steamer.
+    }
+    return self;
+}
+
 @end

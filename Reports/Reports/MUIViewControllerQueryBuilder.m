@@ -1192,7 +1192,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat result = UITABLEVIEWCELL_HEIGHT_DEFAULT;
+    CGFloat result = MNSTableViewCellHeightDefault;
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
     if (section == UIViewControllerSchemaTablesSectionsSql) {
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];

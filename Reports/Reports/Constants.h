@@ -8,28 +8,34 @@
 
 #define STORYBOARD_NAME() \
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
-            UIUserInterfaceIdiomPhone) ? REPORTDESIGNER_PHONE : REPORTDESIGNER_PAD)
+            UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
 
-extern NSString * const REPORTDESIGNER_PHONE;
-extern NSString * const REPORTDESIGNER_PAD;
+extern NSString * const MNSReportDesigner_Phone;
+extern NSString * const MNSReportDesigner_Pad;
 
-extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM;
-extern CGFloat const ANIMATION_DURATION_SHOW_FROM_BOTTOM_HALF;
-extern CGFloat const ANIMATION_DURATION_SHOW_FROM_SIDE;
-extern CGFloat const ANIMATION_DURATION_SLOW;
-extern CGFloat const ANIMATION_DURATION_FAST;
-extern CGFloat const ANIMATION_DURATION_NORMAL;
-extern CGFloat const ANIMATION_DURATION_NONE;
+extern CGFloat const MNSAnimationDurationShowFromBottom;
+extern CGFloat const MNSAnimationDurationShowFromBottomHalf;
+extern CGFloat const MNSAnimationDurationShowFromSide;
+extern CGFloat const MNSAnimationDurationSlow;
+extern CGFloat const MNSAnimationDurationFast;
+extern CGFloat const MNSAnimationDurationNormal;
+extern CGFloat const MNSAnimationDurationNone;
 
-extern CGFloat const UITABLEVIEWCELL_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLTABLENAME_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLQUERYINPUT_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLINSTRUCTION_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLLINKNAME_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLOVERRIDE_HEIGHT_DEFAULT;
-extern CGFloat const UITABLEVIEWCELLQUERYLINK_HEIGHT_DEFAULT;
+extern CGFloat const MNSTableViewCellHeightDefault;
+extern CGFloat const MNSTableViewCellTableNameHeightDefault;
+extern CGFloat const MNSTableViewCellQueryInputHeightDefault;
+extern CGFloat const MNSTableViewCellInstructionHeightDefault;
+extern CGFloat const MNSTableViewCellInkNameHeightDefault;
+extern CGFloat const MNSTableViewCellOverrideHeightDefault;
+extern CGFloat const MNSTableViewCellQueryLinkHeightDefault;
 
-extern CGFloat const TVC_DOCUMENT_HEIGHT;
+extern CGFloat const MNSDocumentHeight;
+
+extern NSString * const MNSInterfaceButtonDismiss;
+extern NSString * const MNSInterfaceTitleProblem;
+extern NSString * const MNSInterfaceTitleError;
+extern NSString * const MNSInterfaceMessageErrorDataSourceCreation;
+extern NSString * const MNSInterfaceMessageErrorFailedToCreateReport;
 
 extern NSString * const UIIMAGEDOCUMENTBLANK;
 extern NSString * const APPLICATIONDATA_FILENAME;

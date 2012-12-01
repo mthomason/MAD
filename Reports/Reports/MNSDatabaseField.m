@@ -17,4 +17,14 @@
     [super dealloc];
 }
 
+- (id)initWithName:(NSString *)name {
+    self = [super init];
+    if (self) {
+        [self setLabel: name];
+        [self setName: name];
+        [self setDatatype: name];
+    }
+    return self;
+}
+
 @end

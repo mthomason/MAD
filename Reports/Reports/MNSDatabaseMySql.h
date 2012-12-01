@@ -19,14 +19,16 @@
 @interface MNSDatabaseMySql : MNSDatabase
 
 - (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
-                      completion: (void (^)(BOOL success))completion;
+                      completion: (void (^)(BOOL success, MNSDatabaseMySql *object))completion;
 
 - (void)getTables: (void (^)(NSArray *tables))completion;
-- (void)getFields: (void (^)(NSArray *fields))completion;
+- (void)getFieldsForTable: (RptqTable *)table
+               completion: (void (^)(NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion;
 
 - (NSString *)identifier;
++ (NSString *)identifier;
 
 @end

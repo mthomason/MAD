@@ -10,6 +10,8 @@
 
 @interface MNSDatabaseTable : NSObject
 
+- (id)initWithTableName:(NSString *)tableName;
+
 @property (copy) NSString *name;
 @property (copy) NSString *label;
 @property (copy) NSString *labelPlural;

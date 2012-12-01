@@ -8,13 +8,25 @@
 
 #import "MNSDatabaseMySql.h"
 
+@interface MNSDatabaseMySql ()
+
+@property (nonatomic, retain) MNSDatabaseConnection *databaseConnection;
+
+@end
+
 @implementation MNSDatabaseMySql
 
+- (void)dealloc {
+    [_databaseConnection release];
+    [super dealloc];
+}
+
 - (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
-                      completion: (void (^)(BOOL success))completion {
+                      completion: (void (^)(BOOL success, MNSDatabaseMySql *object))completion {
     self = [super init];
     if (self) {
-#warning Finishme off
+        [self setDatabaseConnection:connectionSettings];
+        completion(YES, self);
     }
     return self;
 }
@@ -22,16 +34,20 @@
 - (void)getTables: (void (^)(NSArray *tables))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_queue_t queuePriorityMain = dispatch_get_main_queue();
     
     dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(queuePriorityMain, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             
             MysqlServer *serv = [[MysqlServer alloc] init];
+
+            [serv setHost:      [[self databaseConnection] server]];
+            [serv setUser:      [[self databaseConnection] username]];
+            [serv setPassword:  [[self databaseConnection] password]];
+            [serv setSchema:    [[self databaseConnection] database]];
             
             MysqlConnection *conn = [MysqlConnection connectToServer: serv];
             
-            NSInteger colctr = 0;
+            //NSInteger colctr = 0;
             
             NSMutableArray *results = nil;
             
@@ -45,9 +61,9 @@
                         
                         for (NSDictionary *tableName in [fetch results]) {
                             NSString *tn = [tableName objectForKey:[resultsTableName name]];
-                            [results addObject: tn];
-                            
-                            
+                            MNSDatabaseTable *databaseTable = [[MNSDatabaseTable alloc] initWithTableName: tn];
+                            [results addObject: databaseTable];
+                            [databaseTable release];
                         }
                     }
                 }
@@ -62,6 +78,46 @@
 - (void)getFieldsForTable: (RptqTable *)table
                completion: (void (^)(NSArray *fields))completion {
     
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            MysqlServer *serv = [[MysqlServer alloc] init];
+            
+            [serv setHost:      [[self databaseConnection] server]];
+            [serv setUser:      [[self databaseConnection] username]];
+            [serv setPassword:  [[self databaseConnection] password]];
+            [serv setSchema:    [[self databaseConnection] database]];
+            
+            MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+                        
+            NSMutableArray *results = nil;
+            
+            if (conn) {
+                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [table name]];
+                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
+                if (fetch) {
+                    if ([[fetch fields] count] > 0) {
+                        
+                        MysqlFetchField *fieldMetaData = [[fetch fields] objectAtIndex:0];
+                        results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
+                        
+                        for (NSDictionary *field in [fetch results]) {
+                            NSString *fn = [field objectForKey:[fieldMetaData name]];
+                            MNSDatabaseField *databaseField = [[MNSDatabaseField alloc] initWithName: fn];
+                            [results addObject: databaseField];
+                            [databaseField release];
+                        }
+                    }
+                }
+            }
+            
+            completion(results);
+        });
+    });
+    
+
 }
 
 - (void)runQuery: (NSString *)query

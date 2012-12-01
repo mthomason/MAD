@@ -58,55 +58,8 @@
 - (void)addDatasourceToReport: (MNSDatabase *)database
                    completion: (void (^)(BOOL success))completion {
     
-    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
-    
-    RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-
-
-    NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
-
-    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
-                                                                             driverType: KEY_DB_TYPE_SF
-                                                                           connectionId: connectionId];
-    
-    [rptqDatabase setOwnedByUser: [RptqUserCredentals createNewUserCredentalsForManagedObjectContext:managedObjectContext]];
-    
-    [rptqDocument setHasDatabaseSchemas: [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase]];
-    
-    [database getTables:^(NSArray *tables) {
-        
-        [tables enumerateObjectsUsingBlock: ^(MNSDatabaseTable *obj, NSUInteger idx, BOOL *stop) {
-            
-            RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: managedObjectContext
-                                                                           andTable: obj];
-            
-            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                 withConnecitonId: connectionId];
-            
-            if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
-            
-            [database getFieldsForTable:rptqTable completion:^(NSArray *fields) {
-                
-                [fields enumerateObjectsUsingBlock:^(MNSDatabaseField *objField, NSUInteger idx, BOOL *stop) {
-                    
-                    RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                         withConnecitonId: connectionId];
-
-                    RptqTable *rptqTableOrigional = [RptqTable getTableForManagedObjectContext: managedObjectContext
-                                                                                      database: currentDatabase
-                                                                                  andTableName: [obj name]];
-                    
-                    [rptqTableOrigional addHasFieldsObject: [RptqField createNewFieldForManagedObjectContext: managedObjectContext
-                                                                                                    andField: objField]];
-                }];
-                
-            }];
-            
-            [rptqTable release];
-        }];
-        
-        completion(YES);
-        
+    [RptqDocument addDatabase:database ToMainDocumentForManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success) {
+        completion(success);
     }];
     
 }

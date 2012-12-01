@@ -10,12 +10,15 @@
 #import "RptqDocument.h"
 #import <CoreData/CoreData.h>
 #import "Constants.h"
-#import "RptqDatabase.h"
-#import "RptqUserCredentals.h"
 #import "RptqQuery.h"
 #import "RptqDocumentSection+Extras.h"
 #import "MNSDatabaseSalesForce.h"
 #import "MNSDatabaseMySql.h"
+
+#import "RptqDatabase+Extras.h"
+#import "RptqUserCredentals+Extras.h"
+#import "RptqTable+Extras.h"
+#import "RptqField+Extras.h"
 
 @interface RptqDocument (Extras)
 
@@ -24,5 +27,8 @@
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+
++ (void)addDatabase: (MNSDatabase *)database ToMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext
+         completion: (void (^)(BOOL success))completion;
 
 @end

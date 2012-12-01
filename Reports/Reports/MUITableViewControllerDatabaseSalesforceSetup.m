@@ -121,18 +121,6 @@ typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *t
 
 #pragma mark - Actions
 
-- (const char *)cStringFromString:(NSString *)theString {       
-    NSMutableData *theData;
-    NSLog(@"theString, %@", theString);
-    if (! theString) {
-        return (const char *)NULL;
-    }
-    
-    theData = [NSMutableData dataWithData:[theString dataUsingEncoding:NSISOLatin1StringEncoding allowLossyConversion:YES]];
-    [theData increaseLengthBy:1];
-    return (const char *)[theData bytes];
-}
-
 //Create new file using core data with
 // the table names and fields inside it.
 // This will be used as the program
@@ -168,10 +156,10 @@ typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *t
         [d release];
         
     } else {
-        [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+        [UIView animateWithDuration:MNSAnimationDurationFast animations:^{
             [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor edaOrange]];
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:ANIMATION_DURATION_FAST animations:^{
+            [UIView animateWithDuration:MNSAnimationDurationFast animations:^{
                 [[[self tableViewCellNickname] contentView] setBackgroundColor:[UIColor clearColor]];
             } completion:^(BOOL finished) {
 
