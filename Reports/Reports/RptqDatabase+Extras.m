@@ -25,7 +25,7 @@
 }
 
 + (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                driverType:(NSString *)label
+                                                driverType:(NSString *)driverIdentifier
                                               connectionId:(NSNumber *)connectionId {
 
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
@@ -34,8 +34,7 @@
 
     RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
                                    insertIntoManagedObjectContext:objectContext];
-#warning FIXME
-    [database setDatabase_driver_type: KEY_DB_TYPE_SF];
+    [database setDatabase_driver_type: driverIdentifier];
     [database setConnection_id:connectionId];
     return [database autorelease];
 }
