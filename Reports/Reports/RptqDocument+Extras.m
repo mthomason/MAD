@@ -65,28 +65,28 @@
     [document setHasPageFooterSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
     [document setHasDetailSection:                [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
     
-    document.hasReportHeaderSection.type =      [NSNumber numberWithInteger:MNSDocumentSectionTypeReportHeader];
-    document.hasReportFooterSection.type =      [NSNumber numberWithInteger:MNSDocumentSectionTypeReportFooter];
-    document.hasPageHeaderSection.type =        [NSNumber numberWithInteger:MNSDocumentSectionTypePageHeader];
-    document.hasPageFooterSection.type =        [NSNumber numberWithInteger:MNSDocumentSectionTypePageFooter];
-    document.hasDetailSection.type =            [NSNumber numberWithInteger:MNSDocumentSectionTypeBody];
+    [[document hasReportHeaderSection] setType:      @(MNSDocumentSectionTypeReportHeader)];
+    [[document hasReportFooterSection] setType:      @(MNSDocumentSectionTypeReportFooter)];
+    [[document hasPageHeaderSection] setType:        @(MNSDocumentSectionTypePageHeader)];
+    [[document hasPageFooterSection] setType:        @(MNSDocumentSectionTypePageFooter)];
+    [[document hasDetailSection] setType:            @(MNSDocumentSectionTypeBody)];
 
     //[document setHasDatabaseSchemas:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
     [document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
 #warning Added Owned by User when creating the schemas.
     //[[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
 
-    [[document hasReportHeaderSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
-    [[document hasReportFooterSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
-    [[document hasPageHeaderSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
-    [[document hasPageFooterSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
-    [[document hasDetailSection] setHeight:[NSNumber numberWithFloat:44.0000f]];
+    [[document hasReportHeaderSection] setHeight:@44.0000f];
+    [[document hasReportFooterSection] setHeight:@44.0000f];
+    [[document hasPageHeaderSection] setHeight:@44.0000f];
+    [[document hasPageFooterSection] setHeight:@44.0000f];
+    [[document hasDetailSection] setHeight:@44.0000f];
 
-    [[document hasReportHeaderSection] setVisibility:[NSNumber numberWithBool:YES]];
-    [[document hasReportFooterSection] setVisibility:[NSNumber numberWithBool:YES]];
-    [[document hasPageHeaderSection] setVisibility:[NSNumber numberWithBool:YES]];
-    [[document hasPageFooterSection] setVisibility:[NSNumber numberWithBool:YES]];
-    [[document hasDetailSection] setVisibility:[NSNumber numberWithBool:YES]];
+    [[document hasReportHeaderSection] setVisibility:@YES];
+    [[document hasReportFooterSection] setVisibility:@YES];
+    [[document hasPageHeaderSection] setVisibility:@YES];
+    [[document hasPageFooterSection] setVisibility:@YES];
+    [[document hasDetailSection] setVisibility:@YES];
 
     NSLog(@"Document, %@", document);
    return [document autorelease];

@@ -32,7 +32,7 @@ typedef enum {
                          withConnecitonId:(NSNumber *)connectionId;
 
 + (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                driverType:(NSString *)label
+                                                driverType:(NSString *)driverIdentifier
                                               connectionId:(NSNumber *)connectionId;
 
 @end
