@@ -13,14 +13,14 @@
     NSMutableString *inputNickname;
     
     //rsltBlk_loginComplete blockCompleteLogin;
-    rsltBlk_tblNames blockCompleteTable;
+    //rsltBlk_tblNames blockCompleteTable;
     
-    MNSReportDocumentSalesForce *db;
+    //MNSReportDocumentSalesForce *db;
 
 }
 
 @property (retain) NSMutableString *inputNickname;
-@property (retain) MNSReportDocumentSalesForce *db;
+//@property (retain) MNSReportDocumentSalesForce *db;
 
 @end
 
@@ -31,19 +31,19 @@
 @synthesize saveButton;
 @synthesize activityIndicatorTestConnection;
 @synthesize textFieldNickname;
-@synthesize db;
+//@synthesize db;
 @synthesize inputNickname;
 
-typedef void (^loginComplete)(MNSReportDocumentSalesForce *database, BOOL complete);
-typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *tables);
+typedef void (^loginComplete)(id *database, BOOL complete);
+typedef void (^tablesComplete)(id *database, NSArray *tables);
 
 - (void)dealloc {
 
-    if (db != nil) {
-        [db logout];
-        [db release];
-        db = nil;
-    }
+    //if (db != nil) {
+    //    [db logout];
+    //    [db release];
+    //    db = nil;
+    //}
     
     [inputNickname release];
     [activityIndicatorTestConnection release];
@@ -126,6 +126,7 @@ typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *t
 // This will be used as the program
 // schema.
 - (void)test:(id)sender {
+    /*
         if ([[[self textFieldNickname] text] length] > 0) {
             MNSReportDocumentSalesForce *d = [[MNSReportDocumentSalesForce alloc] initNewFileWithName: [[self textFieldNickname] text] completion: ^(BOOL success) {
 
@@ -135,9 +136,11 @@ typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *t
             [d release];
 
         }
+     */
 }
 
 - (IBAction)save:(id)sender {
+    /*
     //Create UIManaged Document that Stores the Database Schema
     if ([[[self textFieldNickname] text] length] > 0) {
         [[self saveButton] setEnabled: NO];
@@ -166,6 +169,7 @@ typedef void (^tablesComplete)(MNSReportDocumentSalesForce *database, NSArray *t
             }];
         }];
     }
+     */
 }
 
 - (IBAction)done:(id)sender {

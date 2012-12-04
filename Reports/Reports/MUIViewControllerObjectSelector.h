@@ -18,6 +18,7 @@ typedef enum {
 
 @protocol UIViewControllerObjectSelectorDelegate <MUIViewControllerDelegate>
 - (void)didSelectDataField:(RptqField *)field;
+- (void)viewControllerDidFinish:(id)sender;
 @end
 
 @interface MUIViewControllerObjectSelector : MUIViewController

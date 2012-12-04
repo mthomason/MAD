@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "MUITableViewController.h"
-#import "MNSReportDocumentSalesForce.h"
+//#import "MNSReportDocumentSalesForce.h"
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 
 @interface MUITableViewControllerDatabaseSalesforceSetup : MUITableViewController
     <UITableViewDelegate,
-        UITextFieldDelegate,
-        NSDatabaseSalesForceDelegate>
+        UITextFieldDelegate/*,
+        NSDatabaseSalesForceDelegate*/>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellNickname;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellConnectionCreate;

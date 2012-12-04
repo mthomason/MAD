@@ -109,7 +109,6 @@
             break;
     }
     
-    
     [[[self visableViewController] view] setFrame:[[self containerView] bounds]];
     [UIView animateWithDuration:0.20000f animations:^{
         if (hidingView) [[hidingView view] removeFromSuperview];
@@ -129,7 +128,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish: self];
+    [[self objectSelectorDelegate] viewControllerDidFinish: self];
 }
 
 #pragma mark - Delegates
@@ -137,7 +136,7 @@
 #pragma mark UITableViewControllerChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
-    [[self delegate] didSelectDataField: field];
+    [[self objectSelectorDelegate] didSelectDataField: field];
 }
 
 #pragma mark UIImagePickerControllerDelegate
