@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
 #import "QueryBuilderDataModal.h"
 #import "UIViewControllerSchemaAddTable.h"
 #import "UITableViewControllerSchemaAddGroup.h"
@@ -26,7 +25,9 @@
 #import "UIColor+PaperPatterns.h"
 
 @interface MUIViewControllerQueryBuilder : MUIViewController
-    <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate,
+    <UITableViewDataSource,
+        UITableViewDelegate,
+        NSFetchedResultsControllerDelegate,
         UIViewControllerSchemaAddLinkDelegate,
         UIViewControllerSchemaAddTableDelegate,
         UITableViewControllerSchemaAddGroupDelegate,
@@ -45,11 +46,11 @@
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;
 
-@property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *uITableViewCellInstruction;
-@property (assign, nonatomic) IBOutlet UITableViewCellTableName     *uITableViewCellTableName;
-@property (assign, nonatomic) IBOutlet UITableViewCellQueryLink     *uITableViewCellQueryLink;
-@property (assign, nonatomic) IBOutlet UITableViewCellOverride      *uITableViewCellOverride;
-@property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *uITableViewCellQueryInput;
+@property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;
+@property (assign, nonatomic) IBOutlet UITableViewCellTableName     *tableViewCellTableName;
+@property (assign, nonatomic) IBOutlet UITableViewCellQueryLink     *tableViewCellQueryLink;
+@property (assign, nonatomic) IBOutlet UITableViewCellOverride      *tableViewCellOverride;
+@property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *tableViewCellQueryInput;
 
 @property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemMain;
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;

@@ -125,8 +125,8 @@
                                                                            connectionId: connectionId];
     
     RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
+    [userCredentals setDatabase_driver_type: [database identifier]];
     [rptqDatabase setOwnedByUser: userCredentals];
-    
     [rptqDocument setHasDatabaseSchemas: [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase]];
     
     [database getTables:^(NSArray *tables) {
