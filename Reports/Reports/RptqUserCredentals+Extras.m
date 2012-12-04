@@ -13,8 +13,17 @@
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
     RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
-    NSLog(@"User Credentals, %@", userCredentals);
     return [userCredentals autorelease];
+}
+
++ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject: sortDescriptor];
+    NSError *error = nil;
+    NSArray *results = [[NSArray alloc] initWithArray:[objectContext executeFetchRequest:request error:&error]];
+    if (error) [error presentErrorToUser];
+    return results;
 }
 
 @end

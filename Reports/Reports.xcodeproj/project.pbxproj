@@ -436,6 +436,8 @@
 		4C955D7A1644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
 		4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */; };
 		4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */; };
+		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
+		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
 		4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
 		4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
@@ -1266,6 +1268,8 @@
 		4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIVewControllerTemplateSelector.m; sourceTree = "<group>"; };
 		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPad.storyboard; sourceTree = "<group>"; };
 		4C97F0FD163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPhone.storyboard; sourceTree = "<group>"; };
+		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
+		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C9F94BB1642280500A562B9 /* MUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewController.h; sourceTree = "<group>"; };
@@ -2969,6 +2973,8 @@
 				4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */,
 				4CB42DC6166A339300CE1876 /* NSString+Extras.h */,
 				4CB42DC7166A339300CE1876 /* NSString+Extras.m */,
+				4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */,
+				4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -3946,6 +3952,7 @@
 				4C1098541666850300C2D3B1 /* User.m in Sources */,
 				4C1098581666855300C2D3B1 /* ApplicationPreferences.m in Sources */,
 				4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */,
+				4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4108,6 +4115,7 @@
 				4C1098531666850300C2D3B1 /* User.m in Sources */,
 				4C1098571666855300C2D3B1 /* ApplicationPreferences.m in Sources */,
 				4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */,
+				4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

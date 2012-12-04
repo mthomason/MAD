@@ -10,6 +10,13 @@
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
             UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
 
+extern NSString * const MNSStringInterfaceButtonTitleContinue;
+extern NSString * const MNSStringInterfaceButtonTitleContinueDesc;
+extern NSString * const MNSStringInterfaceButtonTitleTryAgain;
+extern NSString * const MNSStringInterfaceButtonTitleTryAgainDesc;
+extern NSString * const MNSStringInterfaceButtonTitleAbort;
+extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
+
 extern NSString * const MNSReportDesigner_Phone;
 extern NSString * const MNSReportDesigner_Pad;
 

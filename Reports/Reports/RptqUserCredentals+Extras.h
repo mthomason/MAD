@@ -7,9 +7,11 @@
 //
 
 #import "RptqUserCredentals.h"
+#import "NSError+UserInterface.h"
 
 @interface RptqUserCredentals (Extras)
 
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 @end

@@ -627,8 +627,12 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
 	switch (editingStyle) {
+
+        // MARK: UITableViewCellEditingStyleDelete
         case UITableViewCellEditingStyleDelete: {
             switch (ts) {
+                    
+                // MARK: Delete UIViewControllerSchemaTablesSectionsTables
                 case UIViewControllerSchemaTablesSectionsTables: {
 #warning Only allow table to be deleted if it's not linked or otherwise used in the query.
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
@@ -639,14 +643,13 @@
                     
                     
                     RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]] retain];
+                    
                     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
                     [[doc hasQuery] removeHasQueryTablesObject: tablea];
                     [[[UIManagedDocumentReport activeDocument] managedObjectContext] deleteObject: tablea];
-                    
-                    
-                    
                     NSError *error = nil;
                     [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
+                    
                     if (error) {
                         [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                         [[self tableViewQueryBuilder] endUpdates];
@@ -664,9 +667,6 @@
                             if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
                                 
                                 if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) { //remove sections
-                                    
-                                    
-                                    
                                     NSInteger secctr = 0;
                                     BOOL startIndexSet = NO;
                                     NSInteger startIndex = -1;
@@ -710,11 +710,10 @@
                     [oldLayout release];
                     [doc release];
                     [tablea release];
-                    
-                    
-                    
                     break;
                 }
+
+                // MARK: Delete UIViewControllerSchemaTablesSectionsLinks
                 case UIViewControllerSchemaTablesSectionsLinks: {
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
@@ -728,6 +727,8 @@
                     [tvcLink release];
                     break;
                 }
+                    
+                // MARK: Delete UIViewControllerSchemaTablesSectionsLinks
                 case UIViewControllerSchemaTablesSectionsGroups: {
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
                     [[self tableViewQueryBuilder] beginUpdates];
@@ -801,15 +802,19 @@
                                          }];
                     break;
                 }
+                
                 default: {
                     break;
                 }
+                
             }
             break;
         }
+        // MARK: UITableViewCellEditingStyleInsert
         case UITableViewCellEditingStyleInsert: {
             break;
         }
+        // MARK: UITableViewCellEditingStyleNone
         case UITableViewCellEditingStyleNone: {
             break;
         }
@@ -834,6 +839,7 @@
 
     switch (section) {
 
+        // MARK: Display optional instructions about query builder.
         case UIViewControllerSchemaTablesSectionsInstructions: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
@@ -854,6 +860,7 @@
             break;
         }
 
+        // MARK: Display and identify the data source and data sources
         case UIViewControllerSchemaTablesSectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
@@ -864,31 +871,24 @@
                 [result setIndentationLevel: 1];
                 [self setTableViewCellTableName:nil];
             }
-            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
-            request.sortDescriptors = [NSArray arrayWithObject: sortDescriptor];
-            NSError *error = nil;
-            NSArray *connections = [[[[UIManagedDocumentReport activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
-            if (!error) {
+            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+            if (connections) {
+                [connections retain];
                 if ([connections count] >= 1) {
                     RptqUserCredentals *connection = [[connections objectAtIndex: 0] retain];
-                    NSLog(@"%@", [connection database_driver_type]);
                     [[result textLabel] setText:[NSString stringWithFormat:@"◦ %@", [connection database_driver_type]]];
                     [[result textLabel] setFont:[self boldSystemFont]];
                     [[result detailTextLabel] setText:@""];
                     [connection release];
                 }
-            } else {
-                NSLog(@"ERROR: %@, %@", [error localizedDescription], [error userInfo]);
+                [connections release];
             }
             [[result textLabel] setBackgroundColor:[UIColor clearColor]];
             [[result detailTextLabel] setBackgroundColor:[UIColor clearColor]];
-
-            [request release];
-            [connections release];
             break;
         }
 
+        // MARK: Display the table names that are used in the query
         case UIViewControllerSchemaTablesSectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
@@ -898,7 +898,6 @@
                 resultR = [self tableViewCellTableName];
                 [self setTableViewCellTableName:nil];
             }
-
             RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea name]]];
             [[resultR textLabel] setFont: [self boldSystemFont]];
@@ -910,6 +909,7 @@
             break;
         }
         
+        // MARK: Display the table links or joins that are used in the query.
         case UIViewControllerSchemaTablesSectionsLinks: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
@@ -933,6 +933,7 @@
             break;
         }
 
+        // MARK: Display the groupings used in the query.
         case UIViewControllerSchemaTablesSectionsGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
@@ -963,6 +964,7 @@
             break;
         }
         
+        // MARK: Display the predicates or conditions on the query.
         case UIViewControllerSchemaTablesSectionsPredicate: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];

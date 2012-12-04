@@ -9,6 +9,15 @@
 #import "Constants.h"
 
 #pragma mark - Customizable Constants
+#pragma mark Common UI Strings
+NSString * const MNSStringInterfaceButtonTitleContinue      = @"Continue";
+NSString * const MNSStringInterfaceButtonTitleContinueDesc  = @"Continue Button Title";
+
+NSString * const MNSStringInterfaceButtonTitleTryAgain      = @"Try Again";
+NSString * const MNSStringInterfaceButtonTitleTryAgainDesc  = @"Try Again Button Title";
+
+NSString * const MNSStringInterfaceButtonTitleAbort         = @"Abort";
+NSString * const MNSStringInterfaceButtonTitleAbortDesc     = @"Abort Button Title";
 
 NSString * const MNSReportDesigner_Phone = @"ReportDesignerPhone";
 NSString * const MNSReportDesigner_Pad = @"ReportDesignerPad";
