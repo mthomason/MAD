@@ -65,6 +65,28 @@ CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
 CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
+//Storyboard Identifiers
+NSString * const MNSIdentifierStoryboardReportDesignerPhone         = @"ReportDesignerPhone";
+
+//View Controller Identifiers
+NSString * const MNSIdentifierUIViewControllerTableHeaderTables     = @"UIViewControllerTableHeaderTables";
+NSString * const MNSIdentifierUIViewControllerTableHeaderLayout     = @"UIViewControllerTableHeaderLayout";
+NSString * const MNSIdentifierUIViewControllerTableHeaderDatasource = @"UIViewControllerTableHeaderDatasource";
+NSString * const MNSIdentifierUIViewControllerTableHeaderLinks      = @"UIViewControllerTableHeaderLinks";
+NSString * const MNSIdentifierUIViewControllerTableHeaderGroups     = @"UIViewControllerTableHeaderGroups";
+NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate  = @"UIViewControllerTableHeaderPredicate";
+NSString * const MNSIdentifierUIViewControllerTableHeaderQuery      = @"UIViewControllerTableHeaderQuery";
+
+//Segue Identifiers
+NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
+NSString * const MNSIdentifierSegueShowDatabasesDrivers             = @"showDatabasesDrivers";
+NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
+NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddLinkViewController";
+NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
+NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
+NSString * const MNSIdentifierSegueShowReportLayout                 = @"showReportLayout";
+NSString * const MNSIdentifierSegueShowReportViewerFromQuery        = @"showReportViewerFromQuery";
+
 NSString * const KEY_DB_TYPE_SF     = @"Salesforce.com";
 NSString * const KEY_DB_TYPE_DB     = @"Database.com";
 

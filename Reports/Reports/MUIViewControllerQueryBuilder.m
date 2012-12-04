@@ -110,7 +110,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([[segue identifier] isEqualToString:@"showDatabasesDrivers"]) {
+    if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -125,7 +125,7 @@
         }
         [[segue destinationViewController] setDelegate:self];
         
-    } else if ([[segue identifier] isEqualToString: @"showAddTableViewController"]) {
+    } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
@@ -158,7 +158,7 @@
             }
             [navControl release];
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddLinkViewController"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -172,7 +172,7 @@
             }
             [navControl release];
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddPredicateViewController"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
@@ -189,7 +189,7 @@
             }
             [navControl release];
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddGroupViewController"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -202,7 +202,7 @@
             }
             [navControl release];
         }
-    } else if ([[segue identifier] isEqualToString:@"showLayoutSettings"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
                 if ([[segue destinationViewController] isKindOfClass:[UITableViewControllerSectionLayoutSettings class]]) {
                     UITableViewControllerSectionLayoutSettings *tvc = (UITableViewControllerSectionLayoutSettings *)[segue destinationViewController];
                     if (tvc) {
@@ -219,11 +219,11 @@
 
                     }
                 }
-    } else if ([[segue identifier] isEqualToString:@"showReportLayout"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportLayout]) {
         if ([[segue destinationViewController] isKindOfClass: [MUIViewControllerReportDesigner class]]) {
             [[segue destinationViewController] setDelegate: self];
         }
-    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromQuery"]) {
+    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
         [[segue destinationViewController] setDelegate: self];
     }
 }
@@ -257,19 +257,19 @@
 #pragma mark Table Header Actions
 
 - (void)addTable:(id)sender {
-    [self performSegueWithIdentifier: @"showAddTableViewController" sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
 }
 
 - (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: @"showAddLinkViewController" sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
 }
 
 - (void)showAddPredicateModalView:(id)sender {
-    [self performSegueWithIdentifier: @"showAddPredicateViewController" sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
 }
 
 - (void)addGroup:(id)sender {
-    [self performSegueWithIdentifier: @"showAddGroupViewController" sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
 }
 
 #pragma mark - Modal helper
@@ -1075,21 +1075,21 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *result = nil;
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"ReportDesignerPhone" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:MNSIdentifierStoryboardReportDesignerPhone bundle:nil];
     
     section = [self tableSectionTypeForIndexPathSection: section];
 
     switch (section) {
         case UIViewControllerSchemaTablesSectionsInstructions: {
-            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLayout"] view];
+            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderLayout] view];
             break;
         }
         case UIViewControllerSchemaTablesSectionsDatasource: {
-            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderDatasource"] view];
+            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderDatasource] view];
             break;
         }
         case UIViewControllerSchemaTablesSectionsTables: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderTables"];
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderTables];
             for (id subview in [[vc view] subviews]) {
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
@@ -1103,7 +1103,7 @@
         }
         case UIViewControllerSchemaTablesSectionsLinks: {
 
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderLinks"];
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderLinks];
             for (id subview in [[vc view] subviews]) {
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
@@ -1118,7 +1118,7 @@
 
         case UIViewControllerSchemaTablesSectionsGroups: {
             
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderGroups"];
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderGroups];
             for (id subview in [[vc view] subviews]) {
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
@@ -1133,7 +1133,7 @@
 
         case UIViewControllerSchemaTablesSectionsPredicate: {
             
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderPredicate"];
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderPredicate];
             for (id subview in [[vc view] subviews]) {
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
@@ -1148,7 +1148,7 @@
 
         
         case UIViewControllerSchemaTablesSectionsSql: {
-            result = [[sb instantiateViewControllerWithIdentifier:@"UIViewControllerTableHeaderQuery"] view];
+            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderQuery] view];
             break;
         }
         default: {
@@ -1171,7 +1171,7 @@
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
     if (section == UIViewControllerSchemaTablesSectionsInstructions) {
         [self setLastSelectedRowNumber: [indexPath row]];
-        [self performSegueWithIdentifier:@"showLayoutSettings" sender:self];
+        [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
     }
 }
 
