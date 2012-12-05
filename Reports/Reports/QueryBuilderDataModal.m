@@ -252,13 +252,13 @@
     NSMutableDictionary *result;
     switch (numberOfTables) {
         case 0:
-            result = [[[self modelWithZeroTables] retain] autorelease];
+            result = [self modelWithZeroTables];
             break;
         case 1:
-            result = [[[self modelWithOneTable] retain] autorelease];
+            result = [self modelWithOneTable];
             break;
         default:
-            result = [[[self modelWithTwoOrMoreTables] retain] autorelease];
+            result = [self modelWithTwoOrMoreTables];
             break;
     }
     return result;

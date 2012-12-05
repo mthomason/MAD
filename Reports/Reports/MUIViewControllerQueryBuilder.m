@@ -626,6 +626,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
+
 	switch (editingStyle) {
 
         // MARK: UITableViewCellEditingStyleDelete
@@ -634,82 +635,82 @@
                     
                 // MARK: Delete UIViewControllerSchemaTablesSectionsTables
                 case UIViewControllerSchemaTablesSectionsTables: {
-#warning Only allow table to be deleted if it's not linked or otherwise used in the query.
+                    
+                    NSError *error = nil;
+                    __block UIManagedDocumentReport *activateDocument = [UIManagedDocumentReport activeDocument];
+                    __block NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
+                    
+                    // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     [[self tableViewQueryBuilder] beginUpdates];
                     
-                    NSInteger qtCtr = [RptqQueryTables countForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-                    NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: (qtCtr)] retain];
+                    NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
+                    NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
+
+                    RptqQueryTables *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+
+                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    [[document hasQuery] removeHasQueryTablesObject: table];
+                    [managedObjectContext deleteObject: table];
+                    [managedObjectContext save: &error];
                     
-                    
-                    RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]] retain];
-                    
-                    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-                    [[doc hasQuery] removeHasQueryTablesObject: tablea];
-                    [[[UIManagedDocumentReport activeDocument] managedObjectContext] deleteObject: tablea];
-                    NSError *error = nil;
-                    [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
-                    
-                    if (error) {
-                        [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                        [[self tableViewQueryBuilder] endUpdates];
-                        NSLog(@"Error: %@", error);
-                    } else {
+                    if (!error) {
+
                         [[self tableViewQueryBuilder] deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+
+                        [activateDocument saveToURL: [activateDocument fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                             
-                            NSInteger qtCtr = [RptqQueryTables countForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-                            NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodelForNumberOfTables: (qtCtr)] retain];
+                            NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
+                            NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
+                            NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
+                            NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
                             
-                            NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-                            NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-                            
-                            if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
+                            if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
                                 
-                                if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) { //remove sections
-                                    NSInteger secctr = 0;
-                                    BOOL startIndexSet = NO;
-                                    NSInteger startIndex = -1;
-                                    NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
-                                    for (NSNumber *typenum in oldLayoutSectionTypes) {
-                                        UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
-                                        if (secctr < [newLayoutSectionTypes count]) {
-                                            if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
-                                                secctr++;
-                                            } else {
-                                                if (!startIndexSet) {
-                                                    startIndex = secctr;
-                                                    startIndexSet = YES;
-                                                }
-                                            }
+                                NSInteger secctr = 0;
+                                BOOL startIndexSet = NO;
+                                NSInteger startIndex = -1;
+                                NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
+                                
+                                for (NSNumber *typenum in oldLayoutSectionTypes) {
+                                    UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                                    if (secctr < [newLayoutSectionTypes count]) {
+                                        if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                                            secctr++;
                                         } else {
                                             if (!startIndexSet) {
                                                 startIndex = secctr;
                                                 startIndexSet = YES;
                                             }
-                                            secctr++;
                                         }
-                                    }
-                                    if (startIndex >= 0 && lengtho > 0) {
-                                        [[self tableViewQueryBuilder] deleteSections:[NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
-                                                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+                                    } else {
+                                        if (!startIndexSet) {
+                                            startIndex = secctr;
+                                            startIndexSet = YES;
+                                        }
+                                        secctr++;
                                     }
                                 }
+                                
+                                if (startIndex >= 0 && lengtho > 0) {
+                                    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)];
+                                    [[self tableViewQueryBuilder] deleteSections: indexSet
+                                                                withRowAnimation: UITableViewRowAnimationAutomatic];
+                                }
                             }
-                            
-                            [newLayoutSectionTypes release];
-                            [oldLayoutSectionTypes release];
-                            [newLayout release];
-                            
+                                                        
                             [[self tableViewQueryBuilder] endUpdates];
                             
                             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                         }];
-
+                        
+                    } else {
+                        [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                        [[self tableViewQueryBuilder] endUpdates];
+                        [error presentErrorToUser];
                     }
-                    [oldLayout release];
-                    [doc release];
-                    [tablea release];
+
+                    [oldTableLayout release];
                     break;
                 }
 
@@ -736,7 +737,7 @@
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
                     NSError *error = nil;
                     NSInteger result = [[[UIManagedDocumentReport activeDocument] managedObjectContext] countForFetchRequest:request error:&error];
-                    NSInteger ctrGroups = (error) ? 0 : result;
+                    NSInteger numberOfGroups = error ? 0 : result;
 
                     if (doc) {
                         RptqQuery *query = [[doc hasQuery] retain];
@@ -773,7 +774,7 @@
                                 
                                 NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
                                 NSInteger headerSectionRow = weightToRemove + 2;
-                                NSInteger footerSectionRow = 5 + (ctrGroups * 2) - 1 - 2 - weightToRemove;
+                                NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
                                 //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
                                 NSArray *indexPaths = [[NSArray alloc] initWithObjects:
                                                        indexPath,
@@ -795,11 +796,11 @@
                     [doc release];
                     
                     [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
-                                          forSaveOperation: UIDocumentSaveForOverwriting
-                                         completionHandler: ^(BOOL success) {
-                                             [[self tableViewQueryBuilder] endUpdates];
-                                             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                                         }];
+                                                       forSaveOperation: UIDocumentSaveForOverwriting
+                                                      completionHandler: ^(BOOL success) {
+                                                          [[self tableViewQueryBuilder] endUpdates];
+                                                          [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                                                      }];
                     break;
                 }
                 
@@ -834,6 +835,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *result = nil;
+
     NSInteger row = [indexPath row];
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
 

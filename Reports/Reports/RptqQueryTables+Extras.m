@@ -44,7 +44,7 @@
     return (!errorQt) ? result : 0;
 }
 
-+ (void)deleteTable:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc {
++ (void)deleteTableWithObjectId:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc {
     NSLog(@"Delete objid %@", objid);
     RptqQueryTables *result = nil;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
@@ -67,6 +67,10 @@
         NSLog(@"Warning: Could not find %@ in %@.", objid, moc);
     }
     [results release];
+}
+
++ (void)deleteTable:(RptqQueryTables *)table fromManagedObjectContext:(NSManagedObjectContext *)moc {
+
 }
 
 @end
