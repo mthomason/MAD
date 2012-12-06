@@ -1052,7 +1052,8 @@
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
                     if (button) {
-                        [button addTarget:self action:@selector(addConnection:) forControlEvents:UIControlEventTouchUpInside];
+                        [button setHidden:YES];
+                        /*[button addTarget:self action:@selector(addConnection:) forControlEvents:UIControlEventTouchUpInside];*/
                     }
                 }
             }

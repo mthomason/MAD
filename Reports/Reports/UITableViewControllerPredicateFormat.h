@@ -24,4 +24,6 @@
 
 @property (assign, nonatomic) IBOutlet id <AddPredicateDelegate> addPredicateDelegate;
 
+- (IBAction)done:(id)sender;
+
 @end

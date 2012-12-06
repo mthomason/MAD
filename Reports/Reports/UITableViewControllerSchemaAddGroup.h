@@ -30,8 +30,6 @@
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;
 
-@property (retain) UIManagedDocumentReport *managedDocumentQuery;
-
 @property (copy) NSString *field;
 @property (assign) MNSSortOrder sortOrder;
 

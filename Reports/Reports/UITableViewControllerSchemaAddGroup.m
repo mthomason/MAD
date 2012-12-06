@@ -15,14 +15,12 @@
 @implementation UITableViewControllerSchemaAddGroup
 
 @synthesize delegate = _delegate;
-@synthesize managedDocumentQuery = _managedDocumentQuery;
 @synthesize tableViewCellField = _tableViewCellField;
 @synthesize tableViewCellSort = _tableViewCellSort;
 @synthesize field = _field, sortOrder = _sortOrder;
 
 - (void)dealloc {
     [_field release];
-    [_managedDocumentQuery release];
     [_tableViewCellField release];
     [_tableViewCellSort release];
     [super dealloc];
@@ -89,7 +87,7 @@
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
-                [dvc setManagedDocumentQuery:[self managedDocumentQuery]];
+                //[dvc setManagedDocumentQuery:[self managedDocumentQuery]];
                 [dvc setDelegate: self];
             }
         }
