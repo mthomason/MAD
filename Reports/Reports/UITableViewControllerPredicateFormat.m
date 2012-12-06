@@ -49,7 +49,7 @@
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
-    [[self addPredicateDelegate] addPredicate: predicate];
+    [[self addPredicateDelegate] addRptqPredicate: predicate];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue {

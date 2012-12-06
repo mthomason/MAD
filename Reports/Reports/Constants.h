@@ -88,6 +88,7 @@ extern NSString * const MNSIdentifierUIViewControllerTableHeaderQuery;
 //Segue Identifiers
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;
 extern NSString * const MNSIdentifierSegueShowDatabasesDrivers;
+extern NSString * const MNSIdentifierSegueShowAddDatabaseDrivers;
 extern NSString * const MNSIdentifierSegueShowAddTableViewController;
 extern NSString * const MNSIdentifierSegueShowAddLinkViewController;
 extern NSString * const MNSIdentifierSegueShowAddPredicateViewController;

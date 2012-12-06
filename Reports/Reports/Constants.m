@@ -87,6 +87,7 @@ NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate  = @"UIViewCo
 NSString * const MNSIdentifierUIViewControllerTableHeaderQuery      = @"UIViewControllerTableHeaderQuery";
 
 //Segue Identifiers
+NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 NSString * const MNSIdentifierSegueShowDatabasesDrivers             = @"showDatabasesDrivers";
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";

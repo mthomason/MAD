@@ -230,6 +230,10 @@
 
 #pragma mark Table Header Actions
 
+- (void)addConnection:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
+}
+
 - (void)addTable:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
 }
@@ -238,7 +242,7 @@
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
 }
 
-- (void)showAddPredicateModalView:(id)sender {
+- (void)addPredicate:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
 }
 
@@ -315,7 +319,7 @@
     }
 }
 
-- (void)addPredicate:(RptqQueryPredicate *)predicate {
+- (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
     [self dismissModalViewControllerAnimated: YES];
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
     if (doc) {
@@ -1043,7 +1047,16 @@
         }
 
         case UIViewControllerSchemaTablesSectionsDatasource: {
-            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderDatasource] view];
+            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderDatasource];
+            for (id subview in [[vc view] subviews]) {
+                if ([subview isKindOfClass: [UIButton class]]) {
+                    UIButton *button = subview;
+                    if (button) {
+                        [button addTarget:self action:@selector(addConnection:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }
+            }
+            result = [vc view];
             break;
         }
 
@@ -1095,7 +1108,7 @@
                 if ([subview isKindOfClass: [UIButton class]]) {
                     UIButton *button = subview;
                     if (button) {
-                        [button addTarget:self action:@selector(showAddPredicateModalView:) forControlEvents:UIControlEventTouchUpInside];
+                        [button addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
                     }
                 }
             }

@@ -15,12 +15,12 @@
 
 @protocol AddPredicateDelegate <MUIViewControllerDelegate>
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller;
-- (void)addPredicate:(RptqQueryPredicate *)predicate;
+- (void)addRptqPredicate:(RptqQueryPredicate *)predicate;
 - (void)addPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 
 @interface UITableViewControllerPredicateFormat : MUITableViewController
-    <MUIViewControllerDelegate>
+    <MUIViewControllerDelegate, UITableViewControllerSchemaAddPredicateDelegate>
 
 @property (assign, nonatomic) IBOutlet id <AddPredicateDelegate> addPredicateDelegate;
 

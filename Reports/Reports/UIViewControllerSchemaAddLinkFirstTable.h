@@ -13,6 +13,7 @@
 @class UIViewControllerSchemaAddLinkFirstTable;
 
 @protocol UIViewControllerSchemaAddLinkDelegate
+@optional
 - (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
 @end
 

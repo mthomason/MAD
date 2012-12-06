@@ -108,6 +108,9 @@
                 
                 if (success) {
                     [documentReport addDatasourceToReport: object completion: ^(BOOL success) {
+                        if (success) {
+                            [[self delegate] viewControllerDidFinish: self];
+                        }
                         
                     }];
                 } else {
