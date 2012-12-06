@@ -2,14 +2,14 @@
 //  RptqDatabase.h
 //  Reports
 //
-//  Created by Michael Thomason on 11/17/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocument, RptqRelationship, RptqTable, RptqUserCredentals;
+@class RptqDocument, RptqQuery, RptqRelationship, RptqTable, RptqUserCredentals;
 
 @interface RptqDatabase : NSManagedObject
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSSet *hasTables;
 @property (nonatomic, retain) RptqDocument *ownedByQueryAsStaticResource;
 @property (nonatomic, retain) RptqUserCredentals *ownedByUser;
+@property (nonatomic, retain) NSSet *hasQueries;
 @end
 
 @interface RptqDatabase (CoreDataGeneratedAccessors)
@@ -32,5 +33,10 @@
 - (void)removeHasTablesObject:(RptqTable *)value;
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
+
+- (void)addHasQueriesObject:(RptqQuery *)value;
+- (void)removeHasQueriesObject:(RptqQuery *)value;
+- (void)addHasQueries:(NSSet *)values;
+- (void)removeHasQueries:(NSSet *)values;
 
 @end

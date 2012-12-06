@@ -2,14 +2,14 @@
 //  RptqDocument.h
 //  Reports
 //
-//  Created by Michael Thomason on 11/9/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqDocumentSection, RptqQuery;
+@class RptqDatabase, RptqDocumentSection;
 
 @interface RptqDocument : NSManagedObject
 
@@ -27,7 +27,6 @@
 @property (nonatomic, retain) RptqDocumentSection *hasDetailSection;
 @property (nonatomic, retain) RptqDocumentSection *hasPageFooterSection;
 @property (nonatomic, retain) RptqDocumentSection *hasPageHeaderSection;
-@property (nonatomic, retain) RptqQuery *hasQuery;
 @property (nonatomic, retain) RptqDocumentSection *hasReportFooterSection;
 @property (nonatomic, retain) RptqDocumentSection *hasReportHeaderSection;
 @end

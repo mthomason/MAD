@@ -2,14 +2,14 @@
 //  RptqQuery.h
 //  Reports
 //
-//  Created by Michael Thomason on 11/9/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocument, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
+@class RptqDatabase, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
 
 @interface RptqQuery : NSManagedObject
 
@@ -20,7 +20,7 @@
 @property (nonatomic, retain) NSSet *hasQueryPredicate;
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nonatomic, retain) NSSet *hasQueryTables;
-@property (nonatomic, retain) RptqDocument *inQueryBuilderDocument;
+@property (nonatomic, retain) RptqDatabase *inDatabase;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)

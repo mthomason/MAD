@@ -2,7 +2,7 @@
 //  RptqQuerySort.h
 //  Reports
 //
-//  Created by Michael Thomason on 11/9/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 

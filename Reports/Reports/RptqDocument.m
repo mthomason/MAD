@@ -2,14 +2,13 @@
 //  RptqDocument.m
 //  Reports
 //
-//  Created by Michael Thomason on 11/9/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqDocumentSection.h"
-#import "RptqQuery.h"
 
 
 @implementation RptqDocument
@@ -28,7 +27,6 @@
 @dynamic hasDetailSection;
 @dynamic hasPageFooterSection;
 @dynamic hasPageHeaderSection;
-@dynamic hasQuery;
 @dynamic hasReportFooterSection;
 @dynamic hasReportHeaderSection;
 

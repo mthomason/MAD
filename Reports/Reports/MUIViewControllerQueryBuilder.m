@@ -323,8 +323,8 @@
     [self dismissModalViewControllerAnimated: YES];
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
     if (doc) {
-        NSLog(@"About to save it yo!  %@", [doc hasQuery]);
-        [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: predicate]];
+        NSLog(@"About to save it yo!  %@", [[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject]);
+        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: predicate]];
         
         [[self tableViewQueryBuilder] reloadData];
         
@@ -349,7 +349,7 @@
         [queryPredicate setFieldrightpred: rightValue];
         
         //NSLog(@"Here");
-        [[doc hasQuery] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
+        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
         
         [queryPredicate autorelease];
         
@@ -392,7 +392,7 @@
         [queryLinks setFieldright: secondFieldName];
         [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
         [queryLinks setJointypeenum: [NSNumber numberWithInteger: joinType]];
-        [[doc hasQuery] addHasQueryLinks: [NSSet setWithObject: queryLinks]];
+        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: [NSSet setWithObject: queryLinks]];
         [queryLinks release];
         
     
@@ -462,7 +462,7 @@
 
         NSUInteger rowThirdTransaction = groupCount + 3;
         
-        [[doc hasQuery] addHasQueryGroupsObject: rqg];
+        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryGroupsObject: rqg];
 
         [rqg release];
         
@@ -507,7 +507,7 @@
 
         RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
         [tab setName: [table name]];
-        [[doc hasQuery] addHasQueryTablesObject:tab];
+        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryTablesObject:tab];
         [tab release];
         
         NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
@@ -654,7 +654,7 @@
                     RptqQueryTables *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
 
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-                    [[document hasQuery] removeHasQueryTablesObject: table];
+                    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] removeHasQueryTablesObject: table];
                     [managedObjectContext deleteObject: table];
                     [managedObjectContext save: &error];
                     
@@ -744,7 +744,7 @@
                     NSInteger numberOfGroups = error ? 0 : result;
 
                     if (doc) {
-                        RptqQuery *query = [[doc hasQuery] retain];
+                        RptqQuery *query = [[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                         
                         NSSet *groups = [[query hasQueryGroups] retain];
                         NSInteger weightToRemove = [indexPath row];
@@ -794,7 +794,6 @@
                         
                         [groups release];
                         
-                        [query release];
                     }
 
                     [doc release];

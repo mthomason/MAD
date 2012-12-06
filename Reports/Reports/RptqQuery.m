@@ -2,12 +2,12 @@
 //  RptqQuery.m
 //  Reports
 //
-//  Created by Michael Thomason on 11/9/12.
+//  Created by Michael Thomason on 12/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqQuery.h"
-#import "RptqDocument.h"
+#import "RptqDatabase.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryPredicate.h"
@@ -24,6 +24,6 @@
 @dynamic hasQueryPredicate;
 @dynamic hasQuerySort;
 @dynamic hasQueryTables;
-@dynamic inQueryBuilderDocument;
+@dynamic inDatabase;
 
 @end

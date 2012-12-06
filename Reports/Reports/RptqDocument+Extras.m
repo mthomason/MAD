@@ -72,7 +72,7 @@
     [[document hasDetailSection] setType:            @(MNSDocumentSectionTypeBody)];
 
     //[document setHasDatabaseSchemas:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
-    [document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
+    //[document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
 #warning Added Owned by User when creating the schemas.
     //[[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
 
@@ -127,6 +127,9 @@
     RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     [rptqDatabase setOwnedByUser: userCredentals];
+
+    [rptqDatabase addHasQueriesObject:[NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
+    
     [rptqDocument setHasDatabaseSchemas: [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase]];
     
     [database getTables:^(NSArray *tables) {

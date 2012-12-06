@@ -103,7 +103,7 @@
                 break;
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                NSSet *groupsUnsorted = [[[document hasQuery] hasQueryGroups] retain];
+                NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
                 //NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
                 //                                                               ascending: YES];
                 //NSArray *groupSorted = [[[groupsUnsorted allObjects] sortedArrayUsingDescriptors: [NSArray arrayWithObject:sortDescriptor]] retain];
@@ -130,7 +130,7 @@
                 NSInteger body              = 2 + numberOfGroups;
                 NSInteger indentLevel = body - (row - body);
                 NSInteger groupNumber = indentLevel - 2;
-                NSSet *groupsUnsorted = [[document hasQuery] hasQueryGroups];
+                NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
                 for (RptqQueryGroup *group in groupsUnsorted) {
                     //NSLog(@"Group Footer Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
                     if ([[group weight] integerValue] == groupNumber) {
