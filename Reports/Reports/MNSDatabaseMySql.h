@@ -22,6 +22,7 @@
                       completion: (void (^)(BOOL success, MNSDatabaseMySql *object))completion;
 
 - (void)getTables: (void (^)(NSArray *tables))completion;
+
 - (void)getFieldsForTable: (RptqTable *)table
                completion: (void (^)(NSArray *fields))completion;
 
