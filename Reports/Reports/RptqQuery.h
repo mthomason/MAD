@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
+@class RptqDatabase, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTables;
 
 @interface RptqQuery : NSManagedObject
 
@@ -21,6 +21,7 @@
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nonatomic, retain) NSSet *hasQueryTables;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, retain) RptqQueryCache *hasQueryCache;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)

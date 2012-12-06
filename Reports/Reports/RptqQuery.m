@@ -8,6 +8,7 @@
 
 #import "RptqQuery.h"
 #import "RptqDatabase.h"
+#import "RptqQueryCache.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryPredicate.h"
@@ -25,5 +26,6 @@
 @dynamic hasQuerySort;
 @dynamic hasQueryTables;
 @dynamic inDatabase;
+@dynamic hasQueryCache;
 
 @end
