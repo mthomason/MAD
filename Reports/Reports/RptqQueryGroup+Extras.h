@@ -9,9 +9,13 @@
 #import "RptqQueryGroup.h"
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "Constants.h"
+#import "RptqField.h"
+#import "RptqDocument+Extras.h"
 
 @interface RptqQueryGroup (Extras)
 
 + (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (RptqQueryGroup *)createAndInsertQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

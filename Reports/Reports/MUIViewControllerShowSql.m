@@ -24,16 +24,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    [[self textView] setText:[RptqQuery getSqlForQuery:[[database hasQueries] anyObject]]];    
+    RptqQuery *query = [[database hasQueries] anyObject];
+    [[self textView] setText:[RptqQuery getSqlForQuery:query]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)done:(id)sender {

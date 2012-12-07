@@ -164,25 +164,25 @@
     </entity>
     <fetchRequest name="getRptqTableByName" entity="RptqTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
-        <element name="RptqDatabase" positionX="-279" positionY="-792" width="128" height="148"/>
-        <element name="RptqDocument" positionX="-479" positionY="-849" width="128" height="283"/>
-        <element name="RptqDocumentObject" positionX="-1062" positionY="-612" width="128" height="225"/>
-        <element name="RptqDocumentObjectFormula" positionX="-1242" positionY="-522" width="128" height="75"/>
-        <element name="RptqDocumentObjectLabel" positionX="-1251" positionY="-246" width="128" height="75"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="-1053" positionY="-3" width="128" height="120"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="-1269" positionY="-396" width="128" height="90"/>
-        <element name="RptqDocumentSection" positionX="-891" positionY="-747" width="128" height="135"/>
-        <element name="RptqField" positionX="241" positionY="-765" width="128" height="135"/>
-        <element name="RptqQuery" positionX="-335" positionY="-531" width="128" height="208"/>
-        <element name="RptqQueryCache" positionX="-371" positionY="-297" width="128" height="88"/>
-        <element name="RptqQueryFields" positionX="-81" positionY="-45" width="128" height="75"/>
-        <element name="RptqQueryGroup" positionX="-659" positionY="-522" width="128" height="120"/>
-        <element name="RptqQueryLinks" positionX="-830" positionY="-357" width="128" height="150"/>
-        <element name="RptqQueryPredicate" positionX="-776" positionY="-198" width="128" height="135"/>
-        <element name="RptqQuerySort" positionX="-621" positionY="-81" width="128" height="90"/>
-        <element name="RptqQueryTables" positionX="-252" positionY="-45" width="128" height="90"/>
-        <element name="RptqRelationship" positionX="18" positionY="-801" width="128" height="90"/>
-        <element name="RptqTable" positionX="16" positionY="-684" width="128" height="133"/>
-        <element name="RptqUserCredentals" positionX="34" positionY="-504" width="128" height="240"/>
+        <element name="RptqDatabase" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocument" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObject" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqDocumentSection" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQuery" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryCache" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryFields" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryGroup" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryLinks" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryPredicate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQuerySort" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqQueryTables" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqRelationship" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqTable" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RptqUserCredentals" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

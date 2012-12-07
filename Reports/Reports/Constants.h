@@ -10,6 +10,21 @@
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
             UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
 
+typedef enum {
+	MNSSortOrderAccending = 0,
+	MNSSortOrderDecending
+} MNSSortOrder;
+
+typedef enum {
+	UIViewControllerSchemaTablesSectionsInstructions = 0,
+    UIViewControllerSchemaTablesSectionsDatasource = 1,
+	UIViewControllerSchemaTablesSectionsTables = 2,
+	UIViewControllerSchemaTablesSectionsLinks = 3,
+	UIViewControllerSchemaTablesSectionsGroups = 4,
+	UIViewControllerSchemaTablesSectionsPredicate = 5,
+    UIViewControllerSchemaTablesSectionsSql = 6
+} UIViewControllerSchemaTablesSections;
+
 extern NSString * const MNSStringInterfaceButtonTitleContinue;
 extern NSString * const MNSStringInterfaceButtonTitleContinueDesc;
 extern NSString * const MNSStringInterfaceButtonTitleTryAgain;
@@ -84,6 +99,7 @@ extern NSString * const MNSIdentifierUIViewControllerTableHeaderLinks;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderGroups;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderQuery;
+extern NSString * const MUIViewControllerActivitySpinner;
 
 // MARK: Segue Identifiers
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;

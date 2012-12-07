@@ -342,33 +342,29 @@
     [self dismissModalViewControllerAnimated: YES];
 
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    if (doc) {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    [queryPredicate setFieldleftpred: leftField];
+    [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
+    [queryPredicate setFieldrightpred: rightValue];
+    
+    //NSLog(@"Here");
+    [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
+    
+    [queryPredicate autorelease];
+    
+    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
         
-        NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        [queryPredicate setFieldleftpred: leftField];
-        [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
-        [queryPredicate setFieldrightpred: rightValue];
         
-        //NSLog(@"Here");
-        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
         
-        [queryPredicate autorelease];
+        NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
+        NSError *error = nil;
+        //NSArray *predicates = [[[UIManagedDocumentQuery activeDocument] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
+        //NSLog(@"Predicates %@", predicates);
         
-        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-            
-            
-            
-            NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-            NSError *error = nil;
-            //NSArray *predicates = [[[UIManagedDocumentQuery activeDocument] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
-            //NSLog(@"Predicates %@", predicates);
-            
-            
-            [[self tableViewQueryBuilder] reloadData];
-        }];
-    }
-    [doc release];
+        
+        [[self tableViewQueryBuilder] reloadData];
+    }];
 }
 
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
@@ -420,77 +416,46 @@
     [self dismissModalViewControllerAnimated: YES];
 }
 
-- (void)addGroupDidAddGroupWithField:(NSString *)field andSort:(MNSSortOrder)sortOrder {
+- (void)addGroupDidAddGroupWithField:(RptqField *)field andSort:(MNSSortOrder)sortOrder {
 
     [self dismissModalViewControllerAnimated: YES];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     [[self tableViewQueryBuilder] beginUpdates];
 
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    if (doc) {
-        NSManagedObjectContext *moc = [[UIManagedDocumentReport activeDocument] managedObjectContext];
-        NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:moc];
-        
-        NSEntityDescription *eds = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext:moc];
-        
-        RptqQueryGroup *rqg = [[RptqQueryGroup alloc] initWithEntity:ed insertIntoManagedObjectContext:moc];
-        
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-        NSError *error = nil;
-        NSInteger groupCount = [moc countForFetchRequest:request error:&error];
-        groupCount = (error) ? 0 : groupCount;
-        
-        [rqg setField:field];
-        [rqg setSort:[NSNumber numberWithInteger:sortOrder]];
-        NSInteger weight = groupCount - 1;
-        [rqg setWeight:[NSNumber numberWithInteger: weight]];
-        
-        NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsGroups];
-        NSUInteger rowFirstTransaction = weight;
-        
-        RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
-        [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
-        [rqg addHasSectionObject:dsHeader];
-        [dsHeader release];
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
 
-        NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsInstructions];
-        NSUInteger rowSecondTransaction = groupCount + 1;
+    [RptqQueryGroup createAndInsertQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
+    
+    NSError *error = nil;
+    NSInteger groupCount = [RptqQueryGroup numberOfGroupsForManagedObjectContext:managedObjectContext];
+    NSInteger weight = groupCount - 1;
+    NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsGroups];
+    NSUInteger rowFirstTransaction = weight;
+    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsInstructions];
+    NSUInteger rowSecondTransaction = groupCount + 1;
+    NSUInteger rowThirdTransaction = groupCount + 3;
+    
+    [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
+    if (!error) {
+        NSArray *indexPaths = [[NSArray alloc] initWithObjects:
+                               [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
+                               [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
+                               [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
+                               nil];
         
-        RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:eds insertIntoManagedObjectContext:moc];
-        [dsFooter setType: [NSNumber numberWithInteger:MNSDocumentSectionTypeGroupFooter]];
-        [rqg addHasSectionObject:dsFooter];
-        [dsFooter release];
-
-        NSUInteger rowThirdTransaction = groupCount + 3;
+        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
+                                            withRowAnimation: UITableViewRowAnimationAutomatic];
         
-        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryGroupsObject: rqg];
-
-        [rqg release];
-        
-        [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
-        if (!error) {
-            NSArray *indexPaths = [[NSArray alloc] initWithObjects:
-                                   [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
-                                   [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
-                                   [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
-                                   nil];
-            
-            [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
-                                                withRowAnimation: UITableViewRowAnimationAutomatic];
-            
-            [indexPaths release];
-        }
-
-        [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-
-        [[self tableViewQueryBuilder] endUpdates];
-
-        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-        }];
-        
+        [indexPaths release];
     }
-    [doc release];
+    
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    
+    [[self tableViewQueryBuilder] endUpdates];
+    
+    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    }];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
@@ -500,69 +465,64 @@
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     [[self tableViewQueryBuilder] beginUpdates];
+    NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
+    NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    if (doc) {
-        NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
-        NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-        NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    UIManagedDocumentReport *report = [UIManagedDocumentReport activeDocument];
+    NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
+    
+    [RptqQueryTables createAndInsertQueryTableFor:table inManagedObjectContext:managedObjectContext];
+    
+    NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
+    NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-        RptqQueryTables *tab = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        [tab setName: [table name]];
-        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryTablesObject:tab];
-        [tab release];
-        
-        NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
-        
-        NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-        
-        if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
-            if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
-                //Constrained that it only will work when sections being added in an index set, or next to each other.
-                NSInteger secctr = 0;
-                BOOL startIndexSet = NO;
-                NSInteger startIndex = -1;
-                NSInteger lengtho = [newLayoutSectionTypes count] - [oldLayoutSectionTypes count];
-                for (NSNumber *typenum in newLayoutSectionTypes) {
-                    UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
-                    if (secctr < [oldLayoutSectionTypes count]) {
-                        if (stsection == [[oldLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
-                            secctr++;
-                        } else {
-                            if (!startIndexSet) {
-                                startIndex = secctr;
-                                startIndexSet = YES;
-                            }
-                        }
+    if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
+        if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
+            //Constrained that it only will work when sections being added in an index set, or next to each other.
+            NSInteger secctr = 0;
+            BOOL startIndexSet = NO;
+            NSInteger startIndex = -1;
+            NSInteger lengtho = [newLayoutSectionTypes count] - [oldLayoutSectionTypes count];
+            for (NSNumber *typenum in newLayoutSectionTypes) {
+                UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                if (secctr < [oldLayoutSectionTypes count]) {
+                    if (stsection == [[oldLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                        secctr++;
                     } else {
                         if (!startIndexSet) {
                             startIndex = secctr;
                             startIndexSet = YES;
                         }
-                        secctr++;
                     }
+                } else {
+                    if (!startIndexSet) {
+                        startIndex = secctr;
+                        startIndexSet = YES;
+                    }
+                    secctr++;
                 }
-                if (startIndexSet) {
-                    [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
-                                                withRowAnimation: UITableViewRowAnimationAutomatic];
-                }                    
+            }
+            if (startIndexSet) {
+                [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
+                                            withRowAnimation: UITableViewRowAnimationAutomatic];
             }
         }
-        [[self tableViewQueryBuilder] endUpdates];
-        [newLayoutSectionTypes release];
-        [oldLayoutSectionTypes release];
-        [oldLayout release];
-        [newLayout release];
-        
-        //[self.fetchedResultsControllerTables performFetch:nil];
-        [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-        
-        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
-                              forSaveOperation: UIDocumentSaveForOverwriting
-                             completionHandler: ^(BOOL success) {
-                             }];
     }
-    [doc release];
+    
+    [[self tableViewQueryBuilder] endUpdates];
+    
+    [newLayoutSectionTypes release];
+    [oldLayoutSectionTypes release];
+    [oldLayout release];
+    [newLayout release];
+    
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    
+    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
+                                       forSaveOperation: UIDocumentSaveForOverwriting
+                                      completionHandler: ^(BOOL success) {
+
+                                      }];
 }
 
 #pragma mark - Table View Data Source Protocol

@@ -92,6 +92,10 @@
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:MNSIdentifierStoryboardReportDesignerPhone bundle:nil];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
+    [[self view] addSubview: [vc view]];
 
     __block MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
         
@@ -107,6 +111,7 @@
             MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
             [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
                 if (success) {
+                    [[vc view] removeFromSuperview];
                     [[self delegate] viewControllerDidFinish: self];
                 }
             }];

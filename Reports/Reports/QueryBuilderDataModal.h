@@ -8,16 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-	UIViewControllerSchemaTablesSectionsInstructions = 0,
-    UIViewControllerSchemaTablesSectionsDatasource = 1,
-	UIViewControllerSchemaTablesSectionsTables = 2,
-	UIViewControllerSchemaTablesSectionsLinks = 3,
-	UIViewControllerSchemaTablesSectionsGroups = 4,
-	UIViewControllerSchemaTablesSectionsPredicate = 5,
-    UIViewControllerSchemaTablesSectionsSql = 6
-} UIViewControllerSchemaTablesSections;
-
 @class UIManagedDocumentReport;
 
 @interface QueryBuilderDataModal : NSObject

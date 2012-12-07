@@ -7,11 +7,15 @@
 //
 
 #import "RptqQueryTables.h"
+#import "RptqTable.h"
+#import "UIManagedDocumentReport.h"
+#import "RptqDocument+Extras.h"
 
 @interface RptqQueryTables (Extras)
 
 + (NSArray *)namesForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (NSInteger)countForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (void)deleteTable:(NSManagedObjectID *)objid fromManagedObjectContext:(NSManagedObjectContext *)moc;
++ (RptqQueryTables *)createAndInsertQueryTableFor:(RptqTable *)table inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

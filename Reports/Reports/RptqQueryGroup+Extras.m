@@ -17,4 +17,37 @@
     return (error) ? 0 : result;
 }
 
+// MARK: Creating group shoud update document sections to reflect new group.
++ (RptqQueryGroup *)createAndInsertQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext:managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSError *error = nil;
+    NSInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
+    groupCount = (error) ? 0 : groupCount;
+    
+    [queryGroup setField:[field name]];
+    [queryGroup setSort:[NSNumber numberWithInteger:sortOrder]];
+    [queryGroup setWeight:[NSNumber numberWithInteger: (groupCount - 1)]];
+    
+    RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
+    [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
+    [queryGroup addHasSectionObject:dsHeader];
+    [dsHeader release];
+  
+    RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
+    [dsFooter setType: [NSNumber numberWithInteger:MNSDocumentSectionTypeGroupFooter]];
+    [queryGroup addHasSectionObject:dsFooter];
+    [dsFooter release];
+    
+    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryGroupsObject: queryGroup];
+    
+    return [queryGroup autorelease];
+
+}
+
 @end

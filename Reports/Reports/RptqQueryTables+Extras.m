@@ -69,6 +69,28 @@
     [results release];
 }
 
++ (RptqQueryTables *)createAndInsertQueryTableFor:(RptqTable *)table inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *doc = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTables class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    
+    RptqQueryTables *queryTable = [[RptqQueryTables alloc] initWithEntity:rqtEd insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    [queryTable setName: [table name]];
+    RptqDatabase *database = [[doc hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    BOOL alreadyInserted = NO;
+    
+    for (RptqQueryTables *hasQueryTable in [query hasQueryTables]) {
+        if ([[hasQueryTable name] isEqualToString:[queryTable name]]) {
+            alreadyInserted = YES;
+            break;
+        }
+    }
+    if (!alreadyInserted) {
+        [query addHasQueryTablesObject:queryTable];
+    }
+    return [queryTable autorelease];
+}
+
 + (void)deleteTable:(RptqQueryTables *)table fromManagedObjectContext:(NSManagedObjectContext *)moc {
 
 }

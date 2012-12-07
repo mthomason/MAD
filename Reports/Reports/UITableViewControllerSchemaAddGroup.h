@@ -17,7 +17,7 @@
 
 @protocol UITableViewControllerSchemaAddGroupDelegate
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(UITableViewControllerSchemaAddGroup *)controller;
-- (void)addGroupDidAddGroupWithField:(NSString *)field andSort:(MNSSortOrder)sortOrder;
+- (void)addGroupDidAddGroupWithField:(RptqField *)fieldName andSort:(MNSSortOrder)sortOrder;
 @end
 
 @interface UITableViewControllerSchemaAddGroup : UITableViewController
@@ -30,7 +30,7 @@
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;
 
-@property (copy) NSString *field;
+@property (copy) NSString *fieldName;
 @property (assign) MNSSortOrder sortOrder;
 
 - (IBAction)cancel:(id)sender;

@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef enum {
-	MNSSortOrderAccending = 0,
-	MNSSortOrderDecending
-} MNSSortOrder;
+#import "Constants.h"
 
 @class UITableViewControllerSortType;
 

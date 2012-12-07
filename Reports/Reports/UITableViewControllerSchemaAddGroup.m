@@ -12,15 +12,17 @@
 #import "RptqQueryTables.h"
 #import "RptqQueryTables+Extras.h"
 
-@implementation UITableViewControllerSchemaAddGroup
+@interface UITableViewControllerSchemaAddGroup ()
 
-@synthesize delegate = _delegate;
-@synthesize tableViewCellField = _tableViewCellField;
-@synthesize tableViewCellSort = _tableViewCellSort;
-@synthesize field = _field, sortOrder = _sortOrder;
+@property (nonatomic, retain) RptqField *field;
+
+@end
+
+@implementation UITableViewControllerSchemaAddGroup
 
 - (void)dealloc {
     [_field release];
+    [_fieldName release];
     [_tableViewCellField release];
     [_tableViewCellSort release];
     [super dealloc];
@@ -29,28 +31,19 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -101,7 +94,8 @@
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
-    [self setField:fieldName];
+    [self setField:field];
+    [self setFieldName:fieldName];
     [[[self tableViewCellField] detailTextLabel] setText: [fieldName lowercaseString]];
     [fieldName release];
 }

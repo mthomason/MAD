@@ -74,10 +74,10 @@ CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
 CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
-//Storyboard Identifiers
+// MARK: Storyboard Identifiers
 NSString * const MNSIdentifierStoryboardReportDesignerPhone         = @"ReportDesignerPhone";
 
-//View Controller Identifiers
+// MARK: View Controller Identifiers
 NSString * const MNSIdentifierUIViewControllerTableHeaderTables     = @"UIViewControllerTableHeaderTables";
 NSString * const MNSIdentifierUIViewControllerTableHeaderLayout     = @"UIViewControllerTableHeaderLayout";
 NSString * const MNSIdentifierUIViewControllerTableHeaderDatasource = @"UIViewControllerTableHeaderDatasource";
@@ -85,8 +85,9 @@ NSString * const MNSIdentifierUIViewControllerTableHeaderLinks      = @"UIViewCo
 NSString * const MNSIdentifierUIViewControllerTableHeaderGroups     = @"UIViewControllerTableHeaderGroups";
 NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate  = @"UIViewControllerTableHeaderPredicate";
 NSString * const MNSIdentifierUIViewControllerTableHeaderQuery      = @"UIViewControllerTableHeaderQuery";
+NSString * const MUIViewControllerActivitySpinner                   = @"MUIViewControllerActivitySpinner";
 
-//Segue Identifiers
+// MARK: Segue Identifiers
 NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 NSString * const MNSIdentifierSegueShowDatabasesDrivers             = @"showDatabasesDrivers";
