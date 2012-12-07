@@ -104,24 +104,11 @@
             [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
             [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
             
-            MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection completion:^(BOOL success, MNSDatabaseMySql *object) {
-                
+            MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+            [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
                 if (success) {
-                    [documentReport addDatasourceToReport: object completion: ^(BOOL success) {
-                        if (success) {
-                            [[self delegate] viewControllerDidFinish: self];
-                        }
-                        
-                    }];
-                } else {
-                    [UIAlertView showAlertViewWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
-                                                message: NSLocalizedString(MNSInterfaceMessageErrorDataSourceCreation, MNSInterfaceMessageErrorDataSourceCreation)
-                                      cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
-                                       otherButtonTitle: nil
-                                              onDismiss: ^(int buttonIndex) { }
-                                               onCancel: ^{ }];
+                    [[self delegate] viewControllerDidFinish: self];
                 }
-
             }];
             
             [databaseMySql release];

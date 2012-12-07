@@ -16,10 +16,12 @@
 #import "MNSDatabaseTable.h"
 #import "MNSDatabaseField.h"
 
+#import "RptqQueryFields.h"
+#import "RptqQueryTables.h"
+
 @interface MNSDatabaseMySql : MNSDatabase
 
-- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
-                      completion: (void (^)(BOOL success, MNSDatabaseMySql *object))completion;
+- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings;
 
 - (void)getTables: (void (^)(NSArray *tables))completion;
 

@@ -21,14 +21,66 @@
     [super dealloc];
 }
 
-- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings
-                      completion: (void (^)(BOOL success, MNSDatabaseMySql *object))completion {
+- (id)initWithConnectionSettings: (MNSDatabaseConnection *)connectionSettings {
     self = [super init];
     if (self) {
         [self setDatabaseConnection:connectionSettings];
-        completion(YES, self);
     }
     return self;
+}
+
+- (NSString *)getSqlForQuery:(RptqQuery *)query {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
+
+    NSInteger tableCounter = 0;
+    
+    NSMutableArray *queryTablesOrdered = [[NSMutableArray alloc] initWithCapacity:[[query hasQueryTables] count]];
+    
+    for (RptqQueryTables *table in [query hasQueryTables]) {
+        NSSet *fields = [table hasFields];  // FIXME: Find out why fields are not stored here... guess they are only stored as labels.
+        if ([fields count] > 0) {
+            [queryTablesOrdered addObject:table];
+        }
+    }
+    
+    if ([queryTablesOrdered count] > 0) {
+        
+        [result appendString: @""];
+
+        for (RptqQueryTables *table in queryTablesOrdered) {
+            
+            if (tableCounter != 0) [result appendString:@","];
+            
+            NSString *tableAlias = [NSString stringWithFormat:@"T%d.", tableCounter];
+            
+            for (RptqQueryFields *field in [table hasFields]) {
+                NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+                [result appendString: fieldAlias];
+            }
+            tableCounter++;
+        }
+        
+        [result appendString:@" FROM "];
+        
+        tableCounter = 0;
+        for (RptqQueryTables *table in queryTablesOrdered) {
+            
+            if (tableCounter != 0) [result appendString:@","];
+            
+            [result appendString:[table name]];
+            [result appendString:@" AS "];
+            [result appendString:[NSString stringWithFormat:@"T%d", tableCounter]];
+            
+            tableCounter++;
+            
+        }
+
+    }
+    
+    NSLog(@"result: %@", result);
+    
+    [queryTablesOrdered release];
+    return [result autorelease];
 }
 
 - (void)getTables: (void (^)(NSArray *tables))completion {

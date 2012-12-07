@@ -37,6 +37,10 @@ typedef void (^rsltBlk_complete)(MNSDatabaseSalesForce *database, BOOL complete)
 
 #pragma mark - Public Actions
 
+- (NSString *)getSqlForQuery:(RptqQuery *)query {
+#warning Not implemented.
+}
+
 - (void)getTables: (void (^)(NSArray *tables))completion {
     [self setCurrentQueryType: NSDatabaseQueryTypeGetTables];
     

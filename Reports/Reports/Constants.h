@@ -73,10 +73,10 @@ extern NSString * const KEY_TBL_SEC_SECTIONS;
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
 
-//Storyboard References
+// MARK: Storyboard References
 extern NSString * const MNSIdentifierStoryboardReportDesignerPhone;
 
-//View Controller Identifiers
+// MARK: View Controller Identifiers
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderTables;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderLayout;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderDatasource;
@@ -85,7 +85,7 @@ extern NSString * const MNSIdentifierUIViewControllerTableHeaderGroups;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate;
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderQuery;
 
-//Segue Identifiers
+// MARK: Segue Identifiers
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;
 extern NSString * const MNSIdentifierSegueShowDatabasesDrivers;
 extern NSString * const MNSIdentifierSegueShowAddDatabaseDrivers;
@@ -95,3 +95,4 @@ extern NSString * const MNSIdentifierSegueShowAddPredicateViewController;
 extern NSString * const MNSIdentifierSegueShowAddGroupViewController;
 extern NSString * const MNSIdentifierSegueShowReportLayout;
 extern NSString * const MNSIdentifierSegueShowReportViewerFromQuery;
+extern NSString * const MNSSegueShowSql;

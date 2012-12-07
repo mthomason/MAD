@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RptqTable.h"
+#import "RptqQuery+Extras.h"
 #import "MNSDatabaseTable.h"
 
 typedef enum {
@@ -22,6 +23,8 @@ typedef enum {
 
 @interface MNSDatabase : NSObject
 
++ (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
+
 - (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
               completion: (void (^)(MNSDatabase *database, RptqTable *originTable, NSArray *fields))completion;
 
@@ -32,6 +35,8 @@ typedef enum {
 
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion;
+
+- (NSString *)getSqlForQuery:(RptqQuery *)query;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

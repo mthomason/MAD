@@ -98,7 +98,8 @@
             [navControl release];
         }
         [[segue destinationViewController] setDelegate:self];
-        
+    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {
+        [[segue destinationViewController] setDelegate: self];
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -132,6 +133,7 @@
             }
             [navControl release];
         }
+
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];

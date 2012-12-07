@@ -20,6 +20,8 @@
 @interface MNSDatabaseSalesForce : MNSDatabase
     <SFOAuthCoordinatorDelegate, SFRestDelegate>
 
+- (NSString *)getSqlForQuery:(RptqQuery *)query;
+
 - (void)getTables: (void (^)(NSArray *tables))completion;
 - (void)getFieldsForTable: (RptqTable *)table
                completion: (void (^)(NSArray *fields))completion;

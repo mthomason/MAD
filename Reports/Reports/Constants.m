@@ -96,6 +96,7 @@ NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddP
 NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
 NSString * const MNSIdentifierSegueShowReportLayout                 = @"showReportLayout";
 NSString * const MNSIdentifierSegueShowReportViewerFromQuery        = @"showReportViewerFromQuery";
+NSString * const MNSSegueShowSql                                    = @"MNSSegueShowSql";
 
 NSString * const KEY_DB_TYPE_SF     = @"Salesforce.com";
 NSString * const KEY_DB_TYPE_DB     = @"Database.com";

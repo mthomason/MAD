@@ -80,6 +80,8 @@
         <relationship name="referenceedByDataObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabelDataField" inverseName="referencesField" inverseEntity="RptqDocumentObjectLabelDataField" syncable="YES"/>
     </entity>
     <entity name="RptqQuery" representedClassName="RptqQuery" syncable="YES">
+        <attribute name="cachedText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="override" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasQueryCache" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryCache" inverseName="hasQuery" inverseEntity="RptqQueryCache" syncable="YES"/>
@@ -171,16 +173,16 @@
         <element name="RptqDocumentObjectLabelLink" positionX="-1269" positionY="-396" width="128" height="90"/>
         <element name="RptqDocumentSection" positionX="-891" positionY="-747" width="128" height="135"/>
         <element name="RptqField" positionX="241" positionY="-765" width="128" height="135"/>
-        <element name="RptqQuery" positionX="-344" positionY="-415" width="128" height="178"/>
+        <element name="RptqQuery" positionX="-335" positionY="-531" width="128" height="208"/>
+        <element name="RptqQueryCache" positionX="-371" positionY="-297" width="128" height="88"/>
         <element name="RptqQueryFields" positionX="-81" positionY="-45" width="128" height="75"/>
-        <element name="RptqQueryGroup" positionX="-668" positionY="-495" width="128" height="120"/>
+        <element name="RptqQueryGroup" positionX="-659" positionY="-522" width="128" height="120"/>
         <element name="RptqQueryLinks" positionX="-830" positionY="-357" width="128" height="150"/>
-        <element name="RptqQueryPredicate" positionX="-450" positionY="-189" width="128" height="135"/>
-        <element name="RptqQuerySort" positionX="-729" positionY="-189" width="128" height="90"/>
+        <element name="RptqQueryPredicate" positionX="-776" positionY="-198" width="128" height="135"/>
+        <element name="RptqQuerySort" positionX="-621" positionY="-81" width="128" height="90"/>
         <element name="RptqQueryTables" positionX="-252" positionY="-45" width="128" height="90"/>
         <element name="RptqRelationship" positionX="18" positionY="-801" width="128" height="90"/>
         <element name="RptqTable" positionX="16" positionY="-684" width="128" height="133"/>
         <element name="RptqUserCredentals" positionX="34" positionY="-504" width="128" height="240"/>
-        <element name="RptqQueryCache" positionX="-423" positionY="-216" width="128" height="88"/>
     </elements>
 </model>
