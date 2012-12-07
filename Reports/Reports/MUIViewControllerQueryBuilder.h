@@ -25,6 +25,8 @@
 #import "UIColor+PaperPatterns.h"
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryGroup+Extras.h"
+#import "RptqQueryPredicate+Extras.h"
+#import "RptqQueryLinks+Extras.h"
 
 @interface MUIViewControllerQueryBuilder : MUIViewController
     <UITableViewDataSource,

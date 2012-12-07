@@ -2,7 +2,7 @@
 //  RptqQueryGroup.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/6/12.
+//  Created by Michael Thomason on 12/7/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,11 +13,13 @@
 
 @interface RptqQueryGroup : NSManagedObject
 
-@property (nonatomic, retain) NSString * field;
-@property (nonatomic, retain) NSNumber * sort;
-@property (nonatomic, retain) NSNumber * weight;
+@property (nonatomic, retain) NSString *field;
+@property (nonatomic, retain) NSNumber *sort;
+@property (nonatomic, retain) NSNumber *weight;
+@property (nonatomic, retain) NSString *table;
 @property (nonatomic, retain) NSSet *hasSection;
 @property (nonatomic, retain) RptqQuery *inQuery;
+
 @end
 
 @interface RptqQueryGroup (CoreDataGeneratedAccessors)

@@ -196,11 +196,8 @@
 }
 
 - (IBAction)save:(id)sender {
-    [[self delegate] viewControllerSchemaAddLinkDidSelectFirstTableName:[self firstTableName]
-                                                         firstFieldName:[self firstFieldName]
-                                                        secondTableName:[self secondTableName]
-                                                        secondFieldName:[self secondFieldName]
-                                                           withJoinType:[self linkType]];
+    RptqQueryLinks *queryLink = [RptqQueryLinks createQueryLinkWithFirstTableName:[self firstTableName] firstFieldName:[self firstFieldName] secondTableName:[self secondTableName] secondFieldName:[self secondFieldName] withJoinType:[self linkType]];
+    [[self delegate] viewControllerSchemaAddLinkDidAdd:queryLink];
 }
 
 - (IBAction)cancel:(id)sender {

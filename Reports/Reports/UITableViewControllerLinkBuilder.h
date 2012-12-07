@@ -14,6 +14,7 @@
 #import "UIViewControllerSchemaAddLinkFirstField.h"
 #import "UIViewControllerSchemaAddLinkSecondField.h"
 #import "UITableViewControllerChooseField.h"
+#import "RptqQueryLinks+Extras.h"
 
 @class UITableViewControllerLinkBuilder;
 
@@ -26,7 +27,7 @@ typedef enum {
 
 @protocol UITableViewControllerLinkBuilderDelegate
 - (void)viewControllerSchemaAddLinkDidFinish:(UITableViewControllerLinkBuilder *)controller;
-- (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable firstFieldName:(NSString *)firstFieldName secondTableName:(NSString *)secondTableName secondFieldName:(NSString *)secondFieldName withJoinType:(MNSLinkType)joinType;
+- (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)queryLink;
 @end
 
 @interface UITableViewControllerLinkBuilder : UITableViewController

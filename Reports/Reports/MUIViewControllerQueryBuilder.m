@@ -323,17 +323,12 @@
 
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
     [self dismissModalViewControllerAnimated: YES];
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    if (doc) {
-        NSLog(@"About to save it yo!  %@", [[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject]);
-        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: predicate]];
-        
-        [[self tableViewQueryBuilder] reloadData];
-        
-        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-        }];
-    }
-    [doc release];
+
+    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+
+    [[self tableViewQueryBuilder] reloadData];
+    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    }];
 }
 
 - (void)addPredicateWithLeft:(NSString *)leftField
@@ -371,33 +366,11 @@
     [self dismissModalViewControllerAnimated: YES];
 }
 
-- (void)viewControllerSchemaAddLinkDidSelectFirstTableName:(NSString *)firstTable
-                                            firstFieldName:(NSString *)firstFieldName
-                                           secondTableName:(NSString *)secondTableName
-                                           secondFieldName:(NSString *)secondFieldName
-                                              withJoinType:(MNSLinkType)joinType {
+- (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissModalViewControllerAnimated: YES];
-
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    if (doc) {
-        NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        
-        RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
-                                             insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        [queryLinks setTableleft: firstTable];
-        [queryLinks setFieldleft: firstFieldName];
-        [queryLinks setTableright: secondTableName];
-        [queryLinks setFieldright: secondFieldName];
-        [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
-        [queryLinks setJointypeenum: [NSNumber numberWithInteger: joinType]];
-        [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: [NSSet setWithObject: queryLinks]];
-        [queryLinks release];
-        
-    
-        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-        }];
-    }
-    [doc release];
+    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];    
+    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    }];    
 }
 
 - (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLinkFirstTable *)controller {
@@ -910,24 +883,9 @@
                 result = [self tableViewCellQueryLink];
                 [self setTableViewCellQueryLink:nil];
             }
-            RptqQueryGroup *group = [[[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
-            
-            [[(UITableViewCellQueryGroup *)result labelMain] setText: [group field]];
-            NSString *sort;
-            MNSSortOrder sortOrder = [[group sort] integerValue];
-            switch (sortOrder) {
-                case MNSSortOrderAccending:
-                    sort = @"accending";
-                    break;
-                case MNSSortOrderDecending:
-                    sort = @"decending";
-                    break;
-                default:
-                    sort = @"";
-                    break;
-            }
-            [[(UITableViewCellQueryGroup *)result labelDetail] setText: [sort lowercaseString]];
-            [group release];
+            RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
+            [[(UITableViewCellQueryGroup *)result labelMain] setText: [group fieldNameNice]];
+            [[(UITableViewCellQueryGroup *)result labelDetail] setText: [group sortDisplayNice]];
             break;
         }
         

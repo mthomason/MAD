@@ -63,4 +63,28 @@
     }
     [doc release];
 }
+
++ (id)createQueryLinkWithFirstTableName:(NSString *)firstTable
+                         firstFieldName:(NSString *)firstFieldName
+                        secondTableName:(NSString *)secondTableName
+                        secondFieldName:(NSString *)secondFieldName
+                           withJoinType:(MNSLinkType)joinType {
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    
+    RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
+                                         insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    [queryLinks setTableleft: firstTable];
+    [queryLinks setFieldleft: firstFieldName];
+    [queryLinks setTableright: secondTableName];
+    [queryLinks setFieldright: secondFieldName];
+    [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
+    [queryLinks setJointypeenum: [NSNumber numberWithInteger: joinType]];
+    return [queryLinks autorelease];
+}
+
++ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: [NSSet setWithObject: queryLink]];
+}
+
 @end

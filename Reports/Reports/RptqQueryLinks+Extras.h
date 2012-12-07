@@ -31,4 +31,11 @@ typedef enum {
 + (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 
++ (id)createQueryLinkWithFirstTableName:(NSString *)firstTable
+                         firstFieldName:(NSString *)firstFieldName
+                        secondTableName:(NSString *)secondTableName
+                        secondFieldName:(NSString *)secondFieldName
+                           withJoinType:(MNSLinkType)joinType;
++ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 @end

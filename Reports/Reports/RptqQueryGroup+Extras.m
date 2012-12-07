@@ -31,6 +31,7 @@
     groupCount = (error) ? 0 : groupCount;
     
     [queryGroup setField:[field name]];
+    [queryGroup setTable:[[field inTable] name]];
     [queryGroup setSort:[NSNumber numberWithInteger:sortOrder]];
     [queryGroup setWeight:[NSNumber numberWithInteger: (groupCount - 1)]];
     
@@ -48,6 +49,27 @@
     
     return [queryGroup autorelease];
 
+}
+
+- (NSString *)fieldNameNice {
+    return [[NSString stringWithFormat:@"%@.%@", [self table], [self field]] lowercaseString];
+}
+
+- (NSString *)sortDisplayNice {
+    NSString *sort;
+    MNSSortOrder sortOrder = [[self sort] integerValue];
+    switch (sortOrder) {
+        case MNSSortOrderAccending:
+            sort = @"accending";
+            break;
+        case MNSSortOrderDecending:
+            sort = @"decending";
+            break;
+        default:
+            sort = @"";
+            break;
+    }
+    return [sort lowercaseString];
 }
 
 @end
