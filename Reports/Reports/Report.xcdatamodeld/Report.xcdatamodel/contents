@@ -165,25 +165,25 @@
     </entity>
     <fetchRequest name="getRptqTableByName" entity="RptqTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
-        <element name="RptqDatabase" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqDocument" positionX="0" positionY="0" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="225"/>
-        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqDocumentSection" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqField" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqQuery" positionX="0" positionY="0" width="128" height="210"/>
-        <element name="RptqQueryCache" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqQueryFields" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="RptqQueryGroup" positionX="0" positionY="0" width="128" height="133"/>
-        <element name="RptqQueryLinks" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqQueryPredicate" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="RptqQuerySort" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqQueryTables" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqRelationship" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqTable" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="RptqUserCredentals" positionX="0" positionY="0" width="128" height="255"/>
+        <element name="RptqDatabase" positionX="774" positionY="-1170" width="128" height="150"/>
+        <element name="RptqDocument" positionX="63" positionY="-1332" width="128" height="285"/>
+        <element name="RptqDocumentObject" positionX="-360" positionY="-1170" width="128" height="225"/>
+        <element name="RptqDocumentObjectFormula" positionX="-747" positionY="-1080" width="128" height="75"/>
+        <element name="RptqDocumentObjectLabel" positionX="-747" positionY="-990" width="128" height="75"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="-747" positionY="-801" width="128" height="120"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="-747" positionY="-909" width="128" height="90"/>
+        <element name="RptqDocumentSection" positionX="-153" positionY="-1041" width="128" height="150"/>
+        <element name="RptqField" positionX="738" positionY="-753" width="128" height="150"/>
+        <element name="RptqQuery" positionX="-216" positionY="-534" width="128" height="210"/>
+        <element name="RptqQueryCache" positionX="-0" positionY="-576" width="128" height="90"/>
+        <element name="RptqQueryFields" positionX="43" positionY="-264" width="128" height="75"/>
+        <element name="RptqQueryGroup" positionX="-585" positionY="-657" width="128" height="133"/>
+        <element name="RptqQueryLinks" positionX="-630" positionY="-477" width="128" height="150"/>
+        <element name="RptqQueryPredicate" positionX="72" positionY="-468" width="128" height="105"/>
+        <element name="RptqQuerySort" positionX="-504" positionY="-279" width="128" height="90"/>
+        <element name="RptqQueryTables" positionX="-126" positionY="-279" width="128" height="90"/>
+        <element name="RptqRelationship" positionX="592" positionY="-1017" width="128" height="90"/>
+        <element name="RptqTable" positionX="765" positionY="-954" width="128" height="135"/>
+        <element name="RptqUserCredentals" positionX="1051" positionY="-1107" width="128" height="255"/>
     </elements>
 </model>

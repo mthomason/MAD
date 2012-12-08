@@ -84,7 +84,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {
+    if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
@@ -98,9 +98,10 @@
             [navControl release];
         }
         [[segue destinationViewController] setDelegate:self];
-    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {
+
+    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK: Prepair to show sql.
         [[segue destinationViewController] setDelegate: self];
-    } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
+    } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
