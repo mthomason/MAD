@@ -10,9 +10,18 @@
 
 @implementation RptqQueryPredicate (Extras)
 
++ (id)createPredicateWithLeftField:(NSString *)leftField comparsonOperator:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+    [queryPredicate setFieldleftpred: leftField];
+    [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
+    [queryPredicate setFieldrightpred: rightValue];
+    return [queryPredicate autorelease];
+}
+
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
  
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: predicate]];
 
 }

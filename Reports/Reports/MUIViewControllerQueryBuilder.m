@@ -336,29 +336,13 @@
                andRightValue:(NSString *)rightValue {
     [self dismissModalViewControllerAnimated: YES];
 
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    [queryPredicate setFieldleftpred: leftField];
-    [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
-    [queryPredicate setFieldrightpred: rightValue];
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
     
-    //NSLog(@"Here");
-    [[[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: queryPredicate]];
+    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:leftField comparsonOperator:comparsonOperator andRightValue:rightValue forManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    [RptqQueryPredicate addPredicate:queryPredicate forManagedObjectContext:managedObjectContext];
     
-    [queryPredicate autorelease];
-    
+    [[self tableViewQueryBuilder] reloadData];
     [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-        
-        
-        
-        NSFetchRequest *predFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-        NSError *error = nil;
-        //NSArray *predicates = [[[UIManagedDocumentQuery activeDocument] managedObjectContext] executeFetchRequest:predFetchRequest error:&error];
-        //NSLog(@"Predicates %@", predicates);
-        
-        
-        [[self tableViewQueryBuilder] reloadData];
     }];
 }
 
@@ -368,6 +352,7 @@
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissModalViewControllerAnimated: YES];
+    
     [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];    
     [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];    

@@ -8,9 +8,11 @@
 
 #import "RptqQueryPredicate.h"
 #import "RptqDocument+Extras.h"
+#import "UITableViewControllerOpperators.h"
 
 @interface RptqQueryPredicate (Extras)
 
++ (id)createPredicateWithLeftField:(NSString *)leftField comparsonOperator:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
