@@ -68,8 +68,6 @@
 - (IBAction)addLink:(id)sender;
 - (IBAction)edit:(id)sender;
 
-- (NSInteger)getNumberOfGroups;
-
 - (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
 
