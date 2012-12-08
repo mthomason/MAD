@@ -8,7 +8,6 @@
 
 #import "UIViewControllerSchemaAddLinkSecondTable.h"
 #import "RptqTable.h"
-#import "RptqQueryTables.h"
 #import "UIViewControllerSchemaAddLinkSecondField.h"
 
 @implementation UIViewControllerSchemaAddLinkSecondTable

@@ -105,12 +105,21 @@ void uncaughtExceptionHandler(NSException *exception) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
             [[self managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
                 
+                NSManagedObjectContext *managedObjectContext = [[self managedDocumentQuery] managedObjectContext];
+                
                 {
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+
+                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                    RptqQuery *query = [[database hasQueries] anyObject];
+
+                    NSString *entityName = NSStringFromClass([RptqTable class]);
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsControllerTables: frc];
@@ -120,11 +129,12 @@ void uncaughtExceptionHandler(NSException *exception) {
                 }
                 
                 {
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
+                    NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsControllerLinks: frc];
@@ -134,12 +144,12 @@ void uncaughtExceptionHandler(NSException *exception) {
                 }
                 
                 {
-                    
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+                    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsControllerGroups: frc];
@@ -149,18 +159,15 @@ void uncaughtExceptionHandler(NSException *exception) {
                 }
                 
                 {
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
-                    
+                    NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self managedDocumentQuery] managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
-                    
                     [tvc setFetchedResultsControllerPredicates: frc];
-                    
                     [frc release];
                     
                     frc = nil;

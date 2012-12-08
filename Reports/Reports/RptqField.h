@@ -2,14 +2,14 @@
 //  RptqField.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/6/12.
+//  Created by Michael Thomason on 12/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObjectLabelDataField, RptqRelationship, RptqTable;
+@class RptqDocumentObjectLabelDataField, RptqQuery, RptqRelationship, RptqTable;
 
 @interface RptqField : NSManagedObject
 
@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSSet *inRelationships;
 @property (nonatomic, retain) RptqTable *inTable;
 @property (nonatomic, retain) NSSet *referenceedByDataObject;
+@property (nonatomic, retain) NSSet *inQuery;
 @end
 
 @interface RptqField (CoreDataGeneratedAccessors)
@@ -33,5 +34,10 @@
 - (void)removeReferenceedByDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
 - (void)addReferenceedByDataObject:(NSSet *)values;
 - (void)removeReferenceedByDataObject:(NSSet *)values;
+
+- (void)addInQueryObject:(RptqQuery *)value;
+- (void)removeInQueryObject:(RptqQuery *)value;
+- (void)addInQuery:(NSSet *)values;
+- (void)removeInQuery:(NSSet *)values;
 
 @end

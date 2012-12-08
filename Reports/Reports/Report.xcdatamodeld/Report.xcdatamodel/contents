@@ -75,6 +75,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="inQuery" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasFields" inverseEntity="RptqQuery" syncable="YES"/>
         <relationship name="inRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqRelationship" inverseName="hasFields" inverseEntity="RptqRelationship" syncable="YES"/>
         <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqTable" inverseName="hasFields" inverseEntity="RptqTable" syncable="YES"/>
         <relationship name="referenceedByDataObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabelDataField" inverseName="referencesField" inverseEntity="RptqDocumentObjectLabelDataField" syncable="YES"/>
@@ -84,22 +85,19 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="override" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqField" inverseName="inQuery" inverseEntity="RptqField" syncable="YES"/>
         <relationship name="hasQueryCache" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryCache" inverseName="hasQuery" inverseEntity="RptqQueryCache" syncable="YES"/>
         <relationship name="hasQueryGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="inQuery" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="hasQueryLinks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="inQuery" inverseEntity="RptqQueryLinks" syncable="YES"/>
         <relationship name="hasQueryPredicate" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="inQuery" inverseEntity="RptqQueryPredicate" syncable="YES"/>
         <relationship name="hasQuerySort" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuerySort" inverseName="inQuery" inverseEntity="RptqQuerySort" syncable="YES"/>
-        <relationship name="hasQueryTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryTables" inverseName="inQuery" inverseEntity="RptqQueryTables" syncable="YES"/>
+        <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqTable" inverseName="inQuery" inverseEntity="RptqTable" syncable="YES"/>
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasQueries" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <entity name="RptqQueryCache" representedClassName="RptqQueryCache" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" minValueString="0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <relationship name="hasQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryCache" inverseEntity="RptqQuery" syncable="YES"/>
-    </entity>
-    <entity name="RptqQueryFields" representedClassName="RptqQueryFields" syncable="YES">
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryTables" inverseName="hasFields" inverseEntity="RptqQueryTables" syncable="YES"/>
     </entity>
     <entity name="RptqQueryGroup" representedClassName="RptqQueryGroup" syncable="YES">
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
@@ -129,11 +127,6 @@
         <attribute name="fields" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQuerySort" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
-    <entity name="RptqQueryTables" representedClassName="RptqQueryTables" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryFields" inverseName="inTable" inverseEntity="RptqQueryFields" syncable="YES"/>
-        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryTables" inverseEntity="RptqQuery" syncable="YES"/>
-    </entity>
     <entity name="RptqRelationship" representedClassName="RptqRelationship" syncable="YES">
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasFields" optional="YES" toMany="YES" minCount="2" maxCount="2" deletionRule="Nullify" destinationEntity="RptqField" inverseName="inRelationships" inverseEntity="RptqField" syncable="YES"/>
@@ -146,6 +139,7 @@
         <attribute name="queryable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqField" inverseName="inTable" inverseEntity="RptqField" syncable="YES"/>
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasTables" inverseEntity="RptqDatabase" syncable="YES"/>
+        <relationship name="inQuery" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasTables" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
     <entity name="RptqUserCredentals" representedClassName="RptqUserCredentals" syncable="YES">
         <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
@@ -173,17 +167,15 @@
         <element name="RptqDocumentObjectLabelDataField" positionX="-747" positionY="-801" width="128" height="120"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-747" positionY="-909" width="128" height="90"/>
         <element name="RptqDocumentSection" positionX="-153" positionY="-1041" width="128" height="150"/>
-        <element name="RptqField" positionX="738" positionY="-753" width="128" height="150"/>
-        <element name="RptqQuery" positionX="-216" positionY="-534" width="128" height="210"/>
-        <element name="RptqQueryCache" positionX="-0" positionY="-576" width="128" height="90"/>
-        <element name="RptqQueryFields" positionX="43" positionY="-264" width="128" height="75"/>
-        <element name="RptqQueryGroup" positionX="-585" positionY="-657" width="128" height="133"/>
-        <element name="RptqQueryLinks" positionX="-630" positionY="-477" width="128" height="150"/>
-        <element name="RptqQueryPredicate" positionX="72" positionY="-468" width="128" height="105"/>
-        <element name="RptqQuerySort" positionX="-504" positionY="-279" width="128" height="90"/>
-        <element name="RptqQueryTables" positionX="-126" positionY="-279" width="128" height="90"/>
-        <element name="RptqRelationship" positionX="592" positionY="-1017" width="128" height="90"/>
-        <element name="RptqTable" positionX="765" positionY="-954" width="128" height="135"/>
+        <element name="RptqField" positionX="747" positionY="-774" width="128" height="163"/>
+        <element name="RptqQuery" positionX="1078" positionY="-612" width="128" height="223"/>
+        <element name="RptqQueryCache" positionX="700" positionY="-567" width="128" height="90"/>
+        <element name="RptqQueryGroup" positionX="691" positionY="-459" width="128" height="133"/>
+        <element name="RptqQueryLinks" positionX="700" positionY="-312" width="128" height="150"/>
+        <element name="RptqQueryPredicate" positionX="718" positionY="-141" width="128" height="105"/>
+        <element name="RptqQuerySort" positionX="727" positionY="-27" width="128" height="90"/>
+        <element name="RptqRelationship" positionX="441" positionY="-945" width="128" height="90"/>
+        <element name="RptqTable" positionX="756" positionY="-954" width="128" height="148"/>
         <element name="RptqUserCredentals" positionX="1051" positionY="-1107" width="128" height="255"/>
     </elements>
 </model>

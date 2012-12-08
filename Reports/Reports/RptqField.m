@@ -2,12 +2,13 @@
 //  RptqField.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/6/12.
+//  Created by Michael Thomason on 12/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqField.h"
 #import "RptqDocumentObjectLabelDataField.h"
+#import "RptqQuery.h"
 #import "RptqRelationship.h"
 #import "RptqTable.h"
 
@@ -21,5 +22,6 @@
 @dynamic inRelationships;
 @dynamic inTable;
 @dynamic referenceedByDataObject;
+@dynamic inQuery;
 
 @end

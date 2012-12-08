@@ -10,6 +10,18 @@
 
 @implementation RptqUserCredentals (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
     RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];

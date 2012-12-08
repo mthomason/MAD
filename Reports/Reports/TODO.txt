@@ -1,0 +1,5 @@
+RptqQuery should reference RptqField instead of hard coded strings of type NSString.
+    * add table to query
+    * add field to group
+    * add field to query
+    * add field to predicate

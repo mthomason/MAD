@@ -10,6 +10,18 @@
 
 @implementation RptqTable (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label
                                          labelPlural:(NSString *)labelPlural
@@ -17,8 +29,7 @@
                                          andQueryable:(BOOL)queryable {
 
     NSString *entityName = NSStringFromClass([RptqTable class]);
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
-                                                   inManagedObjectContext: objectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity
                               insertIntoManagedObjectContext:objectContext];
     [rptqTable setLabel: label];
@@ -31,10 +42,8 @@
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andTable:(MNSDatabaseTable *)table {
     NSString *entityName = NSStringFromClass([RptqTable class]);
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
-                                                   inManagedObjectContext: objectContext];
-    RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity
-                              insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
+    RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
     [rptqTable setLabel: [table label]];
     [rptqTable setLabel_plural: [table labelPlural]];
     [rptqTable setName: [table name]];
@@ -55,6 +64,42 @@
         }
     }
     return result;
+}
+
++ (void)addTableToQuery:(RptqTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    
+    NSSet *tablesInQuery = [query hasTables];
+    BOOL isTableAlreadyInQuery = NO;
+    for (RptqTable *tableInQuery in tablesInQuery) {
+        if ([[tableInQuery name] isEqualToString:[table name]]) {
+            isTableAlreadyInQuery = YES;
+            break;
+        }
+    }
+    if (!isTableAlreadyInQuery) {
+        [query addHasTablesObject:table];
+    }
+}
+
++ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    return [[query hasTables] count];
+}
+
++ (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[[query hasTables] count]];
+    for (RptqTable *table in [query hasTables]) {
+        [results addObject:[table name]];
+    }
+    return [results autorelease];
 }
 
 @end

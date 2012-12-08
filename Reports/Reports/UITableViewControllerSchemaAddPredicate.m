@@ -10,8 +10,6 @@
 #import "UITableViewControllerChooseField.h"
 #import "UITableViewControllerEnterString.h"
 #import "RptqTable.h"
-#import "RptqQueryTables.h"
-#import "RptqQueryTables+Extras.h"
 
 @implementation UITableViewControllerSchemaAddPredicate
 

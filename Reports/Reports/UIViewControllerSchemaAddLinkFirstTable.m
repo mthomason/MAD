@@ -9,7 +9,6 @@
 #import "UIViewControllerSchemaAddLinkFirstTable.h"
 #import "RptqTable.h"
 #import "RptqField.h"
-#import "RptqQueryTables.h"
 #import "UIViewControllerSchemaAddLinkFirstField.h"
 
 @implementation UIViewControllerSchemaAddLinkFirstTable

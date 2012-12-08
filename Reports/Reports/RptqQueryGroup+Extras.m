@@ -10,6 +10,18 @@
 
 @implementation RptqQueryGroup (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;

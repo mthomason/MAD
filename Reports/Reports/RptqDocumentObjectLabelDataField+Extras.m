@@ -10,6 +10,18 @@
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (RptqDocumentObjectLabelDataField *)labelDataFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
     RptqDocumentObjectLabelDataField *result = nil;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelDataField class])];

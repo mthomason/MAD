@@ -10,6 +10,18 @@
 
 @implementation RptqDatabase (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
                          withConnecitonId:(NSNumber *)connectionId {
     

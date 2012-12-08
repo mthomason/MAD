@@ -7,6 +7,7 @@
 //
 
 #import "RptqTable.h"
+#import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "MNSDatabaseTable.h"
 
@@ -24,5 +25,8 @@
 + (RptqTable *)getTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                       database:(RptqDatabase *)database
                                   andTableName:(NSString *)name;
++ (void)addTableToQuery:(RptqTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

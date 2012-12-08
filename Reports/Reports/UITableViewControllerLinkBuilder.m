@@ -9,9 +9,6 @@
 #import "UITableViewControllerLinkBuilder.h"
 #import "RptqTable.h"
 #import "RptqField.h"
-#import "RptqQueryTables.h"
-#import "RptqQueryTables+Extras.h"
-#import "RptqQueryFields.h"
 
 @implementation UITableViewControllerLinkBuilder
 
@@ -95,7 +92,14 @@
                 UIViewControllerSchemaAddLinkFirstTable *tvc = [segue destinationViewController];
                 if (tvc) {
                     [tvc setDelegate:self];
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+                    
+                    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                    RptqQuery *query = [[database hasQueries] anyObject];
+                    
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[UIManagedDocumentReport activeDocument] managedObjectContext]);
@@ -131,7 +135,14 @@
                 UIViewControllerSchemaAddLinkSecondTable *vcFf = [segue destinationViewController];
                 if (vcFf) {                
                     [vcFf setDelegate:self];                    
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTables class])];
+
+                    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                    RptqQuery *query = [[database hasQueries] anyObject];
+
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", query];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [self firstTableName]];

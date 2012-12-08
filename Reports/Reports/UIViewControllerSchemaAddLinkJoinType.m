@@ -8,7 +8,6 @@
 
 #import "UIViewControllerSchemaAddLinkJoinType.h"
 #import "RptqTable.h"
-#import "RptqQueryTables.h"
 
 @implementation UIViewControllerSchemaAddLinkJoinType
 

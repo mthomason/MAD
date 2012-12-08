@@ -10,6 +10,18 @@
 
 @implementation RptqQueryPredicate (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (id)createPredicateWithLeftField:(NSString *)leftField comparsonOperator:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];

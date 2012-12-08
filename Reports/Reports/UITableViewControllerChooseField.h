@@ -12,8 +12,7 @@
 #import "UIManagedDocumentReport.h"
 #import "RptqField.h"
 #import "RptqFieldSelectorManager.h"
-#import "RptqTable.h"
-#import "RptqQueryTables+Extras.h"
+#import "RptqTable+Extras.h"
 
 @class UITableViewControllerChooseField;
 

@@ -1,5 +1,5 @@
 //
-//  CoreDataTableViewController.m
+//  UITableViewControllerChooseField.h
 //  TheReportViewer
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -24,11 +24,6 @@
 
 // Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
 @property (nonatomic, assign) NSInteger uniformRowHeight;
-
--(void)updateForPinchScale:(CGFloat)scale atIndexPath:(NSIndexPath*)indexPath;
-
--(void)emailMenuButtonPressed:(UIMenuController*)menuController;
--(void)sendEmailForEntryAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
@@ -60,9 +55,11 @@
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
 
-    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSArray *rptqQueryTables = [RptqTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
+    //NSArray *rptqQueryTables = [RptqQueryTables namesForManagedObjectContext: managedObjectContext];
+    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: rptqQueryTables];
     [tableNames removeObjectsInArray:[self excludeTables]];
-
 
     if ([tableNames count] > 0) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];

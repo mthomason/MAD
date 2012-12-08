@@ -2,13 +2,14 @@
 //  RptqTable.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/6/12.
+//  Created by Michael Thomason on 12/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqTable.h"
 #import "RptqDatabase.h"
 #import "RptqField.h"
+#import "RptqQuery.h"
 
 
 @implementation RptqTable
@@ -19,5 +20,6 @@
 @dynamic queryable;
 @dynamic hasFields;
 @dynamic inDatabase;
+@dynamic inQuery;
 
 @end

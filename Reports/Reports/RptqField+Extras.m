@@ -10,6 +10,18 @@
 
 @implementation RptqField (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label name:(NSString *)name
                                          andDatatype:(NSString *)dataType {
@@ -32,5 +44,15 @@
     [rptqField setDatatype: [field datatype]];
     return [rptqField autorelease];
 }
+
+/*
++ (void)addFieldToQueryForManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    
+}
+
++ (void)removeFieldFromQueryInManagedObjectContext:(NSManagedObjectContext *)objectContext {
+    
+}
+*/
 
 @end

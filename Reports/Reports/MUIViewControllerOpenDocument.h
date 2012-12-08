@@ -10,7 +10,6 @@
 #import "MUIViewControllerQueryBuilder.h"
 #import "MUIViewControllerTemplateSelector.h"
 #import "NSFileManager+Reports.h"
-#import "RptqQueryTables.h"
 
 extern NSString * const SEGUE_SHOWADDDOCUMENT;
 extern NSString * const SEGUE_OPENDOCUMENT;

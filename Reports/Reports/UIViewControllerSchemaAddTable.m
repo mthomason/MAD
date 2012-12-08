@@ -8,7 +8,6 @@
 
 #import "UIViewControllerSchemaAddTable.h"
 #import "RptqTable.h"
-#import "RptqQueryTables.h"
 
 @implementation UIViewControllerSchemaAddTable
 

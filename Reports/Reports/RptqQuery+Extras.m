@@ -10,6 +10,18 @@
 
 @implementation RptqQuery (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (NSString *)getSqlForQuery:(RptqQuery *)query {
     MNSDatabase *databaseHandler = [MNSDatabase databaseObjectForRptqDatabase:[query inDatabase]];
     return [databaseHandler getSqlForQuery: query];

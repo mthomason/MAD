@@ -10,6 +10,18 @@
 
 @implementation RptqQueryLinks (Extras)
 
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+}
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+}
+
+- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
+    [super awakeFromSnapshotEvents:flag];
+}
+
 + (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
     RptqQueryLinks *result = nil;
     RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: moc] retain];

@@ -16,8 +16,8 @@
 #import "MNSDatabaseTable.h"
 #import "MNSDatabaseField.h"
 
-#import "RptqQueryFields.h"
-#import "RptqQueryTables.h"
+//#import "RptqQueryFields.h"
+//#import "RptqQueryTables.h"
 
 @interface MNSDatabaseMySql : MNSDatabase
 

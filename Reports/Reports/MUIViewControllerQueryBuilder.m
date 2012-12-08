@@ -116,8 +116,10 @@
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    
-                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+
+                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqTable namesForTablesInQueryForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+
+                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
                     if ([tableNames count]) {
                         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
                         [request setPredicate: predicate];
@@ -430,7 +432,8 @@
     UIManagedDocumentReport *report = [UIManagedDocumentReport activeDocument];
     NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
     
-    [RptqQueryTables createAndInsertQueryTableFor:table inManagedObjectContext:managedObjectContext];
+    [RptqTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
+    //[RptqQueryTables createAndInsertQueryTableFor:table inManagedObjectContext:managedObjectContext];   // FIXME: Depreciated
     
     NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
@@ -569,14 +572,16 @@
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     [[self tableViewQueryBuilder] beginUpdates];
                     
-                    NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
+                    NSInteger numberOfTables = [RptqTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
+                    //NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
 
-                    RptqQueryTables *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+                    RptqTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
 
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-                    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] removeHasQueryTablesObject: table];
-                    [managedObjectContext deleteObject: table];
+                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                    RptqQuery *query = [[database hasQueries] anyObject];
+                    [query removeHasTablesObject:table];
                     [managedObjectContext save: &error];
                     
                     if (!error) {
@@ -585,7 +590,7 @@
 
                         [activateDocument saveToURL: [activateDocument fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                             
-                            NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
+                            NSInteger numberOfTables = [RptqTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
                             NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
                             NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
                             NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
@@ -824,7 +829,7 @@
                 resultR = [self tableViewCellTableName];
                 [self setTableViewCellTableName:nil];
             }
-            RptqQueryTables *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            RptqTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea name]]];
             [[resultR textLabel] setFont: [self boldSystemFont]];
             

@@ -9,8 +9,6 @@
 
 #import "UITableViewControllerSchemaAddGroup.h"
 #import "RptqTable.h"
-#import "RptqQueryTables.h"
-#import "RptqQueryTables+Extras.h"
 
 @interface UITableViewControllerSchemaAddGroup ()
 
