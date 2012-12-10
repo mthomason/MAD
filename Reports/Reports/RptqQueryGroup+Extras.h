@@ -16,7 +16,7 @@
 @interface RptqQueryGroup (Extras)
 
 + (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
-+ (RptqQueryGroup *)createAndInsertQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (RptqQueryGroup *)createQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 - (NSString *)fieldNameNice;
 - (NSString *)sortDisplayNice;
 @end

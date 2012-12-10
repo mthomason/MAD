@@ -30,11 +30,8 @@
 }
 
 // MARK: Creating group. Updates document sections to reflect new group.
-+ (RptqQueryGroup *)createAndInsertQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqQueryGroup *)createQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-
     NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
                                                                    inManagedObjectContext:managedObjectContext];
     NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class])
@@ -51,8 +48,8 @@
     [queryGroup setHasField:field];
     [queryGroup setField:[field name]];
     [queryGroup setTable:[[field inTable] name]];
-    [queryGroup setSort:[NSNumber numberWithInteger:sortOrder]];
-    [queryGroup setWeight:[NSNumber numberWithInteger: (groupCount - 1)]];
+    [queryGroup setSort:@(sortOrder)];
+    [queryGroup setWeight:@(groupCount - 1)];
     
     RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
@@ -64,9 +61,6 @@
     [queryGroup addHasSectionObject:dsFooter];
     [dsFooter release];
     
-    //RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    //RptqQuery *query = [[database hasQueries] anyObject];
-    //[query addHasQueryGroupsObject: queryGroup];
     NSLog(@"QueryGroup: %@", queryGroup);
     return [queryGroup autorelease];
 

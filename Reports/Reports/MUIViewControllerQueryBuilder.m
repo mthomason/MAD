@@ -371,7 +371,7 @@
 
     NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
 
-    RptqQueryGroup *queryGroup = [RptqQueryGroup createAndInsertQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
+    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
