@@ -7,8 +7,6 @@
 //
 
 #import "UIViewControllerSchemaAddLinkSecondField.h"
-#import "RptqTable.h"
-#import "RptqField.h"
 #import "UIViewControllerSchemaAddLinkJoinType.h"
 
 @implementation UIViewControllerSchemaAddLinkSecondField
@@ -56,9 +54,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: [field name] from:[UIManagedDocumentReport activeDocument]];
-    [field release];
+    RptqField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: field];
 }
 
 @end

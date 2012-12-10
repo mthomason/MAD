@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "UIManagedDocumentReport.h"
+#import "RptqTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class UIViewControllerSchemaAddLinkFirstTable;
 
 @protocol UIViewControllerSchemaAddLinkDelegate
 @optional
-- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
+- (void)viewControllerDidFinishWithTable:(RptqTable *)result;
 @end
 
 @interface UIViewControllerSchemaAddLinkFirstTable : UITableViewControllerCoreDataResults

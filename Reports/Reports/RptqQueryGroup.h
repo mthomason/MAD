@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentSection, RptqQuery;
+@class RptqDocumentSection, RptqField, RptqQuery;
 
 @interface RptqQueryGroup : NSManagedObject
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSNumber * weight;
 @property (nonatomic, retain) NSSet *hasSection;
 @property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, retain) RptqField *hasField;
 @end
 
 @interface RptqQueryGroup (CoreDataGeneratedAccessors)

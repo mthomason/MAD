@@ -12,7 +12,26 @@
 
 @interface RptqQueryPredicate (Extras)
 
-+ (id)createPredicateWithLeftField:(NSString *)leftField comparsonOperator:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (id)createPredicateWithLeftField:(RptqField *)leftField
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightField:(RptqField *)rightField
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
++ (id)createPredicateWithLeftField:(RptqField *)leftField
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightValue:(NSString *)rightUserValue
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
++ (id)createPredicateWithLeftValue:(NSString *)leftUserValue
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightValue:(NSString *)rightUserValue
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
++ (id)createPredicateWithLeftValue:(NSString *)leftUserValue
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightField:(RptqField *)rightField
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

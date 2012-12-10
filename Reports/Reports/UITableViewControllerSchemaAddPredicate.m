@@ -13,18 +13,17 @@
 
 @implementation UITableViewControllerSchemaAddPredicate
 
-@synthesize delegate = _delegate;
 @synthesize tableViewCellLeftSide = _tableViewCellLeftSide, tableViewCellRightSide = _tableViewCellRightSide, tableViewCellOperator = _tableViewCellOperator;
-
-@synthesize leftValue = _leftValue, rightValue = _rightValue, predicateOperator = _predicateOperator;
 @synthesize currentlyEditingPart = _currentlyEditingPart;
 
 - (void)dealloc {
+    if (_fieldLeft != nil) [_fieldLeft release];
+    if (_fieldRight != nil) [_fieldRight release];
+    if (_leftValue != nil) [_leftValue release];
+    if (_rightValue != nil) [_rightValue release];
     [_tableViewCellLeftSide release];
     [_tableViewCellRightSide release];
     [_tableViewCellOperator release];
-    [_leftValue release];
-    [_rightValue release];
     [super dealloc];
 }
 
@@ -95,7 +94,25 @@
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
-    [[self delegate] uITableViewControllerSchemaAddPredicateWithLeft:[self leftValue] comparson:[self predicateOperator] andRightValue:[self rightValue]];
+    
+    RptqQueryPredicate *queryPredicate = nil;
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    
+    if ([self leftValue] == nil) {
+        if ([self rightValue] == nil) {
+            queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+        }
+    } else {
+        if ([self rightValue] == nil) {
+            queryPredicate = [RptqQueryPredicate createPredicateWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate createPredicateWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+        }
+    }
+    [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+    
 }
 
 - (IBAction)cancel:(id)sender {
@@ -107,9 +124,11 @@
 - (void)enterStringDidFinishWithString:(NSString *)userInput {
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: userInput];
+        [self setFieldLeft: nil];
         [[[self tableViewCellLeftSide] detailTextLabel] setText:[userInput lowercaseString]];
     } else if ([self currentlyEditingPart] == MNSPredicateRight) {
         [self setRightValue: userInput];
+        [self setFieldRight: nil];
         [[[self tableViewCellRightSide] detailTextLabel] setText:[userInput lowercaseString]];
     }
     [[self navigationController] popToViewController:self animated:YES];
@@ -117,15 +136,15 @@
 
 - (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
-    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
-        [self setLeftValue: fieldName];
-        [[[self tableViewCellLeftSide] detailTextLabel] setText: [fieldName lowercaseString]];
+        [self setLeftValue: nil];
+        [self setFieldLeft: field];
+        [[[self tableViewCellLeftSide] detailTextLabel] setText: [field display]];
     } else if ([self currentlyEditingPart] == MNSPredicateRight) {
-        [self setRightValue: fieldName];
-        [[[self tableViewCellRightSide] detailTextLabel] setText: [fieldName lowercaseString]];
+        [self setRightValue: nil];
+        [self setFieldRight: field];
+        [[[self tableViewCellRightSide] detailTextLabel] setText: [field display]];
     }
-    [fieldName release];
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType {

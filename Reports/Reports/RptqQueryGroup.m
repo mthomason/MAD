@@ -8,6 +8,7 @@
 
 #import "RptqQueryGroup.h"
 #import "RptqDocumentSection.h"
+#import "RptqField.h"
 #import "RptqQuery.h"
 
 
@@ -19,5 +20,6 @@
 @dynamic weight;
 @dynamic hasSection;
 @dynamic inQuery;
+@dynamic hasField;
 
 @end

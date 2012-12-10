@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObjectLabelDataField, RptqQuery, RptqRelationship, RptqTable;
+@class RptqDocumentObjectLabelDataField, RptqQuery, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqRelationship, RptqTable;
 
 @interface RptqField : NSManagedObject
 
@@ -21,6 +21,12 @@
 @property (nonatomic, retain) RptqTable *inTable;
 @property (nonatomic, retain) NSSet *referenceedByDataObject;
 @property (nonatomic, retain) NSSet *inQuery;
+@property (nonatomic, retain) RptqQueryGroup *inQueryGroup;
+@property (nonatomic, retain) RptqQueryLinks *inQueryLinkLeft;
+@property (nonatomic, retain) RptqQueryLinks *inQueryLinkRight;
+@property (nonatomic, retain) RptqQueryPredicate *inQueryPredicateLeft;
+@property (nonatomic, retain) RptqQueryPredicate *inQueryPredicateRight;
+@property (nonatomic, retain) RptqQuerySort *inQuerySort;
 @end
 
 @interface RptqField (CoreDataGeneratedAccessors)

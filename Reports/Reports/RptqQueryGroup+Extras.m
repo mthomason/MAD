@@ -29,19 +29,26 @@
     return (error) ? 0 : result;
 }
 
-// MARK: Creating group shoud update document sections to reflect new group.
+// MARK: Creating group. Updates document sections to reflect new group.
 + (RptqQueryGroup *)createAndInsertQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class]) inManagedObjectContext:managedObjectContext];
-    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext:managedObjectContext];
-    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup insertIntoManagedObjectContext:managedObjectContext];
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+
+    NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
+                                                                   inManagedObjectContext:managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentSection = [NSEntityDescription entityForName:NSStringFromClass([RptqDocumentSection class])
+                                                                        inManagedObjectContext:managedObjectContext];
+
+    RptqQueryGroup *queryGroup = [[RptqQueryGroup alloc] initWithEntity:entityDescriptionQueryGroup
+                                         insertIntoManagedObjectContext:managedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSError *error = nil;
     NSInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
     groupCount = (error) ? 0 : groupCount;
     
+    [queryGroup setHasField:field];
     [queryGroup setField:[field name]];
     [queryGroup setTable:[[field inTable] name]];
     [queryGroup setSort:[NSNumber numberWithInteger:sortOrder]];
@@ -57,8 +64,10 @@
     [queryGroup addHasSectionObject:dsFooter];
     [dsFooter release];
     
-    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryGroupsObject: queryGroup];
-    
+    //RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    //RptqQuery *query = [[database hasQueries] anyObject];
+    //[query addHasQueryGroupsObject: queryGroup];
+    NSLog(@"QueryGroup: %@", queryGroup);
     return [queryGroup autorelease];
 
 }

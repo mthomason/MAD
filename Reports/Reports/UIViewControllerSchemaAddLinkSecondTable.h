@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "UIManagedDocumentReport.h"
+#import "RptqTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class UIViewControllerSchemaAddLinkSecondTable;
 
 @protocol UIViewControllerSchemaAddLinkSecondTableDelegate
-- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
+- (void)viewControllerDidFinishWithSecondTable:(RptqTable *)result;
 @end
 
 @interface UIViewControllerSchemaAddLinkSecondTable : UITableViewControllerCoreDataResults

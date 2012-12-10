@@ -7,6 +7,7 @@
 //
 
 #import "RptqQueryPredicate.h"
+#import "RptqField.h"
 #import "RptqQuery.h"
 
 
@@ -16,5 +17,7 @@
 @dynamic fieldleftpred;
 @dynamic fieldrightpred;
 @dynamic inQuery;
+@dynamic hasLeftField;
+@dynamic hasRightField;
 
 @end

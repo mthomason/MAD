@@ -334,21 +334,6 @@
     }];
 }
 
-- (void)addPredicateWithLeft:(NSString *)leftField
-                   comparson:(MNSPredicateOperator)comparsonOperator
-               andRightValue:(NSString *)rightValue {
-    [self dismissModalViewControllerAnimated: YES];
-
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
-    
-    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:leftField comparsonOperator:comparsonOperator andRightValue:rightValue forManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    [RptqQueryPredicate addPredicate:queryPredicate forManagedObjectContext:managedObjectContext];
-    
-    [[self tableViewQueryBuilder] reloadData];
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-    }];
-}
-
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
     [self dismissModalViewControllerAnimated: YES];
 }
@@ -386,7 +371,13 @@
 
     NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
 
-    [RptqQueryGroup createAndInsertQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
+    RptqQueryGroup *queryGroup = [RptqQueryGroup createAndInsertQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    [query addHasQueryGroupsObject: queryGroup];
+
     
     NSError *error = nil;
     NSInteger groupCount = [RptqQueryGroup numberOfGroupsForManagedObjectContext:managedObjectContext];
@@ -397,23 +388,20 @@
     NSUInteger rowSecondTransaction = groupCount + 1;
     NSUInteger rowThirdTransaction = groupCount + 3;
     
-    [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
-    if (!error) {
-        NSArray *indexPaths = [[NSArray alloc] initWithObjects:
-                               [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
-                               [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
-                               [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
-                               nil];
-        
-        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
-                                            withRowAnimation: UITableViewRowAnimationAutomatic];
-        
-        [indexPaths release];
-    }
+    [managedObjectContext save: &error];
+    //if (!error) {
+    NSArray *indexPaths = [NSArray arrayWithObjects:
+                           [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
+                           [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
+                           [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
+                           nil];
     
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
+                                        withRowAnimation: UITableViewRowAnimationAutomatic];
     
     [[self tableViewQueryBuilder] endUpdates];
+
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     
     [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];

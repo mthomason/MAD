@@ -16,7 +16,6 @@
 @protocol AddPredicateDelegate <MUIViewControllerDelegate>
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller;
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate;
-- (void)addPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 
 @interface UITableViewControllerPredicateFormat : MUITableViewController

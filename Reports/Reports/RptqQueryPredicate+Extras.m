@@ -22,14 +22,62 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-+ (id)createPredicateWithLeftField:(NSString *)leftField comparsonOperator:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
++ (id)createPredicateWithLeftField:(RptqField *)leftField
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightField:(RptqField *)rightField
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    [queryPredicate setFieldleftpred: leftField];
-    [queryPredicate setComparson: [NSNumber numberWithInt: comparsonOperator]];
-    [queryPredicate setFieldrightpred: rightValue];
+    [queryPredicate setHasRightField:   rightField];
+    [queryPredicate setHasLeftField:    leftField];
+    [queryPredicate setFieldrightpred:  nil];
+    [queryPredicate setFieldleftpred:   nil];
+    [queryPredicate setComparson:       @(comparsonOperator)];
     return [queryPredicate autorelease];
 }
+
++ (id)createPredicateWithLeftField:(RptqField *)leftField
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightValue:(NSString *)rightUserValue
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+    [queryPredicate setHasRightField:   nil];
+    [queryPredicate setHasLeftField:    leftField];
+    [queryPredicate setFieldrightpred:  rightUserValue];
+    [queryPredicate setFieldleftpred:   nil];
+    [queryPredicate setComparson:       @(comparsonOperator)];
+    return [queryPredicate autorelease];
+}
+
++ (id)createPredicateWithLeftValue:(NSString *)leftUserValue
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightValue:(NSString *)rightUserValue
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+    [queryPredicate setHasRightField:   nil];
+    [queryPredicate setHasLeftField:    nil];
+    [queryPredicate setFieldrightpred:  rightUserValue];
+    [queryPredicate setFieldleftpred:   leftUserValue];
+    [queryPredicate setComparson:       @(comparsonOperator)];
+    return [queryPredicate autorelease];
+}
+
++ (id)createPredicateWithLeftValue:(NSString *)leftUserValue
+                 comparsonOperator:(MNSPredicateOperator)comparsonOperator
+                     andRightField:(RptqField *)rightField
+           forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+    [queryPredicate setHasRightField:   rightField];
+    [queryPredicate setHasLeftField:    nil];
+    [queryPredicate setFieldrightpred:  nil];
+    [queryPredicate setFieldleftpred:   leftUserValue];
+    [queryPredicate setComparson:       @(comparsonOperator)];
+    return [queryPredicate autorelease];    
+}
+
 
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
  

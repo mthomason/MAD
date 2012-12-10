@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RptqQueryPredicate.h"
+#import "RptqQueryPredicate+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "UIManagedDocumentReport.h"
 #import "UITableViewControllerChooseField.h"
@@ -25,8 +25,6 @@ typedef enum {
 @protocol UITableViewControllerSchemaAddPredicateDelegate
 - (void)uITableViewControllerSchemaAddPredicateDidFinish:(UITableViewControllerSchemaAddPredicate *)controller;
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
-@optional
-- (void)uITableViewControllerSchemaAddPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue;
 @end
 
 @interface UITableViewControllerSchemaAddPredicate : UITableViewController
@@ -46,6 +44,8 @@ typedef enum {
 @property (assign) MNSPredicateOperator predicateOperator;
 @property (copy) NSString *leftValue;
 @property (copy) NSString *rightValue;
+@property (nonatomic, retain) RptqField *fieldLeft;
+@property (nonatomic, retain) RptqField *fieldRight;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

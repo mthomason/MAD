@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqQuery;
+@class RptqField, RptqQuery;
 
 @interface RptqQueryLinks : NSManagedObject
 
@@ -20,5 +20,7 @@
 @property (nonatomic, retain) NSString * tableleft;
 @property (nonatomic, retain) NSString * tableright;
 @property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, retain) RptqField *hasLeftField;
+@property (nonatomic, retain) RptqField *hasRightField;
 
 @end

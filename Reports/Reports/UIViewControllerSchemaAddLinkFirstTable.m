@@ -89,7 +89,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[self delegate] viewControllerSchemaAddLinkDidFinishWith:[tablea name] from:[UIManagedDocumentReport activeDocument]];
+    [[self delegate] viewControllerDidFinishWithTable:tablea];
     [tablea release];
 }
 

@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqQuery;
+@class RptqField, RptqQuery;
 
 @interface RptqQuerySort : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * ascending;
 @property (nonatomic, retain) NSString * fields;
 @property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, retain) RptqField *hasField;
 
 @end

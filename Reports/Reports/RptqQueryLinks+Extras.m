@@ -76,21 +76,24 @@
     [doc release];
 }
 
-+ (id)createQueryLinkWithFirstTableName:(NSString *)firstTable
-                         firstFieldName:(NSString *)firstFieldName
-                        secondTableName:(NSString *)secondTableName
-                        secondFieldName:(NSString *)secondFieldName
-                           withJoinType:(MNSLinkType)joinType {
++ (id)createQueryLinkWithLeftField:(RptqField *)fieldLeft
+                         rightField:(RptqField *)fieldRight
+                           andJoinType:(MNSLinkType)joinType {
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
     
     RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
                                          insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    [queryLinks setTableleft: firstTable];
-    [queryLinks setFieldleft: firstFieldName];
-    [queryLinks setTableright: secondTableName];
-    [queryLinks setFieldright: secondFieldName];
-    [queryLinks setJointype: [MNSLinkTypeReuseIds objectAtIndex: joinType]];
-    [queryLinks setJointypeenum: [NSNumber numberWithInteger: joinType]];
+    
+    [queryLinks setHasLeftField:    fieldLeft];
+    [queryLinks setHasRightField:   fieldRight];
+    
+    [queryLinks setTableleft:       [[fieldLeft inTable] name]];
+    [queryLinks setFieldleft:       [fieldLeft name]];
+    [queryLinks setTableright:      [[fieldRight inTable] name]];
+    [queryLinks setFieldright:      [fieldRight name]];
+    [queryLinks setJointype:        [MNSLinkTypeReuseIds objectAtIndex: joinType]];
+    [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
+
     return [queryLinks autorelease];
 }
 

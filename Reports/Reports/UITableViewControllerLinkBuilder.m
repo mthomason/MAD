@@ -10,6 +10,15 @@
 #import "RptqTable.h"
 #import "RptqField.h"
 
+@interface UITableViewControllerLinkBuilder ()
+
+@property (nonatomic, retain) RptqTable *firstTableName;
+@property (nonatomic, retain) RptqTable *secondTableName;
+@property (nonatomic, retain) RptqField *firstFieldName;
+@property (nonatomic, retain) RptqField *secondFieldName;
+
+@end
+
 @implementation UITableViewControllerLinkBuilder
 
 @synthesize delegate = _delegate;
@@ -21,7 +30,6 @@
 @synthesize tableViewCellTableFieldOne = _tableViewCellTableFieldOne;
 @synthesize tableViewCellTableFieldTwo = _tableViewCellTableFieldTwo;
 @synthesize linkType = _linkType;
-@synthesize firstTableName = _firstTableName, firstFieldName = _firstFieldName, secondTableName = _secondTableName, secondFieldName = _secondFieldName;
 @synthesize firstTableFieldName = _firstTableFieldName, secondTableFieldName = _secondTableFieldName;
 @synthesize currentlyEditingPart = _currentlyEditingPart;
 
@@ -119,7 +127,7 @@
                     [vcFf setDelegate:self];                    
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self firstTableName]];
+                    request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self firstTableName] name]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
@@ -145,7 +153,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", query];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [self firstTableName]];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [[self firstTableName] name]];
                     [request setPredicate: predicate];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
@@ -164,7 +172,7 @@
                     
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [self secondTableName]];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self secondTableName] name]];
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -181,7 +189,7 @@
             
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables: ([self secondTableName] ? [NSArray arrayWithObject:[self secondTableName]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self secondTableName] name] ? [NSArray arrayWithObject:[[self secondTableName] name]] : [NSArray array])];
                 [dvc setDelegate: self];
             }
 
@@ -191,7 +199,7 @@
             
             UITableViewControllerChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables: ([self firstTableName] ? [NSArray arrayWithObject:[self firstTableName]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self firstTableName] name] ? [NSArray arrayWithObject:[[self firstTableName] name]] : [NSArray array])];
                 [dvc setDelegate: self];
             }
 
@@ -207,7 +215,7 @@
 }
 
 - (IBAction)save:(id)sender {
-    RptqQueryLinks *queryLink = [RptqQueryLinks createQueryLinkWithFirstTableName:[self firstTableName] firstFieldName:[self firstFieldName] secondTableName:[self secondTableName] secondFieldName:[self secondFieldName] withJoinType:[self linkType]];
+    RptqQueryLinks *queryLink = [RptqQueryLinks createQueryLinkWithLeftField:[self firstFieldName] rightField:[self secondFieldName] andJoinType:[self linkType]];
     [[self delegate] viewControllerSchemaAddLinkDidAdd:queryLink];
 }
 
@@ -221,14 +229,14 @@
                                       withField: (RptqField *)field {
     [[self navigationController] popToViewController: self animated: YES];
     
-    NSString *tableName = [[field inTable] name];
+    RptqTable *tableName = [field inTable];
     NSString *fieldName = [field name];
     NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
     switch ([self currentlyEditingPart]) {
         case MNSLinkLeft:
             [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
             [self setFirstTableName:tableName];
-            [self setFirstFieldName:fieldName];
+            [self setFirstFieldName:field];
             [self setFirstTableFieldName:tableFieldName];
 
             [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
@@ -240,7 +248,7 @@
         case MNSLinkRight:
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
             [self setSecondTableName:tableName];
-            [self setSecondFieldName:fieldName];
+            [self setSecondFieldName:field];
             [self setSecondTableFieldName:tableFieldName];
             break;
         default:
@@ -249,31 +257,27 @@
     [tableFieldName release];
 }
 
-- (void)viewControllerSchemaAddLinkDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
+- (void)viewControllerDidFinishWithTable:(RptqTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellTableOne] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentReport setActiveDocument: document];
+    [[[self tableViewCellTableOne] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setFirstTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqField *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellFieldOne] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentReport setActiveDocument: document];
+    [[[self tableViewCellFieldOne] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setFirstFieldName: result];
 }
 
-- (void)viewControllerSchemaAddLinkSecondTableDidFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
+- (void)viewControllerDidFinishWithSecondTable:(RptqTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellTableTwo] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentReport setActiveDocument: document];
+    [[[self tableViewCellTableTwo] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setSecondTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document {
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqField *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellFieldTwo] detailTextLabel] setText: [result lowercaseString]];
-    [UIManagedDocumentReport setActiveDocument: document];
+    [[[self tableViewCellFieldTwo] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setSecondFieldName: result];
 }
 
@@ -304,7 +308,6 @@
             break;
     }
     [[self navigationController] popToViewController: self animated: YES];
-    [UIManagedDocumentReport setActiveDocument: document];
     [self setLinkType: result];
 }
 

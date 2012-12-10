@@ -52,11 +52,6 @@
     [[self addPredicateDelegate] addRptqPredicate: predicate];
 }
 
-- (void)uITableViewControllerSchemaAddPredicateWithLeft:(NSString *)leftField comparson:(MNSPredicateOperator)comparsonOperator andRightValue:(NSString *)rightValue {
-    [[self addPredicateDelegate] addPredicateWithLeft:leftField comparson:comparsonOperator andRightValue:rightValue];
-}
-
-
 #pragma mark - View lifecycle
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -66,4 +61,5 @@
 - (IBAction)done:(id)sender {
     [[self addPredicateDelegate] addPredicateDidCancel: self];
 }
+
 @end

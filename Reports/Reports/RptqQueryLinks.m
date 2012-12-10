@@ -7,6 +7,7 @@
 //
 
 #import "RptqQueryLinks.h"
+#import "RptqField.h"
 #import "RptqQuery.h"
 
 
@@ -19,5 +20,7 @@
 @dynamic tableleft;
 @dynamic tableright;
 @dynamic inQuery;
+@dynamic hasLeftField;
+@dynamic hasRightField;
 
 @end

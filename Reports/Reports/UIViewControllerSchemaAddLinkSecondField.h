@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "UIManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
+#import "RptqTable.h"
+#import "RptqField.h"
 
 @class UIViewControllerSchemaAddLinkSecondField;
 
 @protocol UIViewControllerSchemaAddLinkSecondFieldDelegate
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(NSString *)result from:(UIManagedDocumentReport *)document;
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqField *)result;
 @end
 
 @interface UIViewControllerSchemaAddLinkSecondField : UITableViewControllerCoreDataResults

@@ -7,6 +7,7 @@
 //
 
 #import "RptqQuerySort.h"
+#import "RptqField.h"
 #import "RptqQuery.h"
 
 
@@ -15,5 +16,6 @@
 @dynamic ascending;
 @dynamic fields;
 @dynamic inQuery;
+@dynamic hasField;
 
 @end

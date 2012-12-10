@@ -9,6 +9,10 @@
 #import "RptqField.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqQuery.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryPredicate.h"
+#import "RptqQuerySort.h"
 #import "RptqRelationship.h"
 #import "RptqTable.h"
 
@@ -23,5 +27,11 @@
 @dynamic inTable;
 @dynamic referenceedByDataObject;
 @dynamic inQuery;
+@dynamic inQueryGroup;
+@dynamic inQueryLinkLeft;
+@dynamic inQueryLinkRight;
+@dynamic inQueryPredicateLeft;
+@dynamic inQueryPredicateRight;
+@dynamic inQuerySort;
 
 @end

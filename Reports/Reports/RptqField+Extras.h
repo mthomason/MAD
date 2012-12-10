@@ -19,4 +19,6 @@
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MNSDatabaseField *)field;
 
+- (NSString *)display;
+
 @end

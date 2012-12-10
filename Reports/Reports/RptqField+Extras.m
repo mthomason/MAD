@@ -45,6 +45,10 @@
     return [rptqField autorelease];
 }
 
+- (NSString *)display {
+    return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]] lowercaseString];
+}
+
 /*
 + (void)addFieldToQueryForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     

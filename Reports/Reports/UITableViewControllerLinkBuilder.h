@@ -56,11 +56,6 @@ typedef enum {
 @property (assign) MNSLinkType linkType;
 @property (copy) NSString *secondTableFieldName;
 
-@property (copy) NSString *firstTableName;
-@property (copy) NSString *secondTableName;
-@property (copy) NSString *firstFieldName;
-@property (copy) NSString *secondFieldName;
-
 - (IBAction)done:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;
