@@ -32,6 +32,7 @@
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 
+    
     /*
     NSInteger tableCounter = 0;
     NSMutableArray *queryTablesOrdered = [[NSMutableArray alloc] initWithCapacity:[[query hasQueryTables] count]];

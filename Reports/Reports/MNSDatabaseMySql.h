@@ -12,6 +12,8 @@
 #import <MySqlClientObjectiveC/MysqlFetch.h>
 #import <MySqlClientObjectiveC/MysqlFetchField.h>
 
+#import "MTGraph.h"
+
 #import "MNSDatabaseConnection.h"
 #import "MNSDatabaseTable.h"
 #import "MNSDatabaseField.h"

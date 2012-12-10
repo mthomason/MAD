@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'libMTDataStrutures' target in the 'libMTDataStrutures' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif

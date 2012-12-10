@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ApplicationSettings.h"
+#import "MTGraph.h"
 #import "MUIViewControllerOpenDocument.h"
 #import "UIManagedDocumentPreferencesApplication.h"
 #import "UIManagedDocumentPreferencesUser.h"

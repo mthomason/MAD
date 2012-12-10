@@ -1,0 +1,260 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C4C6F00167635B8004A3B04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
+		4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */; };
+		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
+		4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; };
+		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C4C6EFA167635B8004A3B04 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMTDataStrutures.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C4C6EFF167635B8004A3B04 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4C4C6F03167635B8004A3B04 /* libMTDataStrutures-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libMTDataStrutures-Prefix.pch"; sourceTree = "<group>"; };
+		4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libMTDataStrutures.h; sourceTree = "<group>"; };
+		4C4C6F131676360A004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraph.h; sourceTree = "<group>"; };
+		4C4C6F141676360A004A3B04 /* MTGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGraph.m; sourceTree = "<group>"; };
+		4C4C6F1616763959004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEdge.h; sourceTree = "<group>"; };
+		4C4C6F1716763959004A3B04 /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEdge.m; sourceTree = "<group>"; };
+		4C4C6F191676397A004A3B04 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVertex.h; sourceTree = "<group>"; };
+		4C4C6F1A1676397A004A3B04 /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C4C6EF9167635B8004A3B04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4C6F00167635B8004A3B04 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C4C6EF1167635B8004A3B04 = {
+			isa = PBXGroup;
+			children = (
+				4C4C6F01167635B8004A3B04 /* libMTDataStrutures */,
+				4C4C6EFE167635B8004A3B04 /* Frameworks */,
+				4C4C6EFD167635B8004A3B04 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C4C6EFD167635B8004A3B04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C4C6EFE167635B8004A3B04 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C4C6EFF167635B8004A3B04 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
+			isa = PBXGroup;
+			children = (
+				4C4C6F1616763959004A3B04 /* MTEdge.h */,
+				4C4C6F1716763959004A3B04 /* MTEdge.m */,
+				4C4C6F131676360A004A3B04 /* MTGraph.h */,
+				4C4C6F141676360A004A3B04 /* MTGraph.m */,
+				4C4C6F191676397A004A3B04 /* MTVertex.h */,
+				4C4C6F1A1676397A004A3B04 /* MTVertex.m */,
+				4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */,
+				4C4C6F02167635B8004A3B04 /* Supporting Files */,
+			);
+			path = libMTDataStrutures;
+			sourceTree = "<group>";
+		};
+		4C4C6F02167635B8004A3B04 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C4C6F03167635B8004A3B04 /* libMTDataStrutures-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C4C6F0A167635B8004A3B04 /* Build configuration list for PBXNativeTarget "libMTDataStrutures" */;
+			buildPhases = (
+				4C4C6EF8167635B8004A3B04 /* Sources */,
+				4C4C6EF9167635B8004A3B04 /* Frameworks */,
+				4C4C6EFA167635B8004A3B04 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libMTDataStrutures;
+			productName = libMTDataStrutures;
+			productReference = 4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C4C6EF3167635B8004A3B04 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+			};
+			buildConfigurationList = 4C4C6EF6167635B8004A3B04 /* Build configuration list for PBXProject "libMTDataStrutures" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C4C6EF1167635B8004A3B04;
+			productRefGroup = 4C4C6EFD167635B8004A3B04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C4C6EF8167635B8004A3B04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */,
+				4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */,
+				4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4C4C6F08167635B8004A3B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4C4C6F09167635B8004A3B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C4C6F0B167635B8004A3B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libMTDataStrutures.dst;
+				EXECUTABLE_PREFIX = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libMTDataStrutures/libMTDataStrutures-Prefix.pch";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4C4C6F0C167635B8004A3B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libMTDataStrutures.dst;
+				EXECUTABLE_PREFIX = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libMTDataStrutures/libMTDataStrutures-Prefix.pch";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C4C6EF6167635B8004A3B04 /* Build configuration list for PBXProject "libMTDataStrutures" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4C6F08167635B8004A3B04 /* Debug */,
+				4C4C6F09167635B8004A3B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C4C6F0A167635B8004A3B04 /* Build configuration list for PBXNativeTarget "libMTDataStrutures" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4C6F0B167635B8004A3B04 /* Debug */,
+				4C4C6F0C167635B8004A3B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C4C6EF3167635B8004A3B04 /* Project object */;
+}
