@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; };
 		4C4C6F00167635B8004A3B04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */; };
 		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C22799C1676B37700B1150D /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLinkedList.h; sourceTree = "<group>"; };
+		4C22799D1676B37700B1150D /* MTLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLinkedList.m; sourceTree = "<group>"; };
 		4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMTDataStrutures.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C4C6EFF167635B8004A3B04 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C4C6F03167635B8004A3B04 /* libMTDataStrutures-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libMTDataStrutures-Prefix.pch"; sourceTree = "<group>"; };
@@ -84,6 +87,8 @@
 				4C4C6F1716763959004A3B04 /* MTEdge.m */,
 				4C4C6F131676360A004A3B04 /* MTGraph.h */,
 				4C4C6F141676360A004A3B04 /* MTGraph.m */,
+				4C22799C1676B37700B1150D /* MTLinkedList.h */,
+				4C22799D1676B37700B1150D /* MTLinkedList.m */,
 				4C4C6F191676397A004A3B04 /* MTVertex.h */,
 				4C4C6F1A1676397A004A3B04 /* MTVertex.m */,
 				4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */,
@@ -154,6 +159,7 @@
 				4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */,
 				4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */,
 				4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */,
+				4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +259,7 @@
 				4C4C6F0C167635B8004A3B04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
