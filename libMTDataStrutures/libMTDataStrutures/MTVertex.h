@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTObject.h"
 
 @class MTEdge;
 
-@interface MTVertex : NSObject
+@interface MTVertex : MTObject
 
 - (id)initWithEdges:(NSSet *)edges;
 - (id)initWithEdges:(NSSet *)edges andObject:(id)object;

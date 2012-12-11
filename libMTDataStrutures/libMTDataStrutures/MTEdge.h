@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTObject.h"
 
 @class MTVertex;
 
-@interface MTEdge : NSObject
+@interface MTEdge : MTObject
 
 @property(readonly) BOOL isDirected;
 

@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTObject.h"
 #import "MTVertex.h"
 #import "MTEdge.h"
 
-@interface MTGraph : NSObject
+@interface MTGraph : MTObject
 
 - (id)init;
 - (id)initWithVertices:(NSSet *)vertices;

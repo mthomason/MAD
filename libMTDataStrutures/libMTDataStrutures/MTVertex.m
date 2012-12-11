@@ -11,7 +11,6 @@
 
 @interface MTVertex()
 
-@property(nonatomic, retain) id object;                 //Container to hold something
 @property(nonatomic, retain) NSMutableArray *edges;     //The edges this node has
 
 @end
@@ -82,7 +81,6 @@
 }
 
 - (void)dealloc {
-    if (_object != nil) [_object release];
     [_edges release];
     [super dealloc];
 }

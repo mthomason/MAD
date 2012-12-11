@@ -318,6 +318,12 @@
 		4C202133163DD4090058F869 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C202139163DD40A0058F869 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C202137163DD4090058F869 /* InfoPlist.strings */; };
 		4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */; };
+		4C2279A8167712D600B1150D /* MTObject.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A6167712D600B1150D /* MTObject.h */; };
+		4C2279A9167712D600B1150D /* MTObject.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A6167712D600B1150D /* MTObject.h */; };
+		4C2279AA167712D600B1150D /* MTObject.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A6167712D600B1150D /* MTObject.h */; };
+		4C2279AB167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
+		4C2279AC167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
+		4C2279AD167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
 		4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
@@ -1038,6 +1044,8 @@
 		4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReportsGeneralTest.h; sourceTree = "<group>"; };
 		4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReportsGeneralTest.m; sourceTree = "<group>"; };
 		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
+		4C2279A6167712D600B1150D /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTObject.h; path = ../libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
+		4C2279A7167712D600B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTPair.h; path = ../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -2096,6 +2104,8 @@
 		4C4C6F1C1676424C004A3B04 /* MTDataStructures */ = {
 			isa = PBXGroup;
 			children = (
+				4C2279A6167712D600B1150D /* MTObject.h */,
+				4C2279A7167712D600B1150D /* MTPair.h */,
 				4C4C6F1E167642D9004A3B04 /* MTEdge.h */,
 				4C4C6F1F167642D9004A3B04 /* MTGraph.h */,
 				4C4C6F20167642D9004A3B04 /* MTVertex.h */,
@@ -3455,6 +3465,8 @@
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C4C6F25167642D9004A3B04 /* MTGraph.h in Resources */,
 				4C4C6F28167642D9004A3B04 /* MTVertex.h in Resources */,
+				4C2279A9167712D600B1150D /* MTObject.h in Resources */,
+				4C2279AC167712D600B1150D /* MTPair.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3612,6 +3624,8 @@
 				4C4C6F23167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C4C6F26167642D9004A3B04 /* MTGraph.h in Resources */,
 				4C4C6F29167642D9004A3B04 /* MTVertex.h in Resources */,
+				4C2279AA167712D600B1150D /* MTObject.h in Resources */,
+				4C2279AD167712D600B1150D /* MTPair.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3857,6 +3871,8 @@
 				4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C4C6F24167642D9004A3B04 /* MTGraph.h in Resources */,
 				4C4C6F27167642D9004A3B04 /* MTVertex.h in Resources */,
+				4C2279A8167712D600B1150D /* MTObject.h in Resources */,
+				4C2279AB167712D600B1150D /* MTPair.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
