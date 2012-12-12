@@ -10,7 +10,8 @@
 
 @interface MTObject : NSObject
 
-@property (nonatomic, retain) id object;
-@property (assign) Class objectType;
+@property (retain) id object;
+
++ (id)objectWithObject:(id)object;
 
 @end

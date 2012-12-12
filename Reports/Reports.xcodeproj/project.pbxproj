@@ -1044,8 +1044,8 @@
 		4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReportsGeneralTest.h; sourceTree = "<group>"; };
 		4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReportsGeneralTest.m; sourceTree = "<group>"; };
 		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
-		4C2279A6167712D600B1150D /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTObject.h; path = ../libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
-		4C2279A7167712D600B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTPair.h; path = ../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C2279A6167712D600B1150D /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
+		4C2279A7167712D600B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -4504,7 +4504,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4525,7 +4525,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;

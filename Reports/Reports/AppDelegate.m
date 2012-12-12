@@ -37,7 +37,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
+
     UIViewController *rvc = [[[application windows] lastObject] rootViewController];
     if ([rvc isKindOfClass:[MUIViewControllerOpenDocument class]]) {
         [(MUIViewControllerOpenDocument *)rvc setDelegate:self];

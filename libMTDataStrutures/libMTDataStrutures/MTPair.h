@@ -7,12 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTObject.h"
 
 @interface MTPair : NSObject
 
-- (id)initWithFormer:(id)former andLater:(id)later;
 
-@property (nonatomic, retain) id former;
-@property (nonatomic, retain) id latter;
+@property (retain) id former;
+@property (retain) id latter;
+
+- (id)init;
+- (id)initWithFormer:(id)former andLatter:(id)latter;
+
++ (id)pairWithFormer:(id)former andLatter:(id)latter;
 
 @end

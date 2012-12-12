@@ -10,6 +10,7 @@
 #import "MTObject.h"
 #import "MTVertex.h"
 #import "MTEdge.h"
+#import "MTQueue.h"
 
 @interface MTGraph : MTObject
 
@@ -17,7 +18,7 @@
 - (id)initWithVertices:(NSSet *)vertices;
 
 - (void)insertVertex:(MTVertex *)vertex;
-- (void)insertEdge:(MTEdge *)edge;
+- (BOOL)insertEdge:(MTEdge *)edge;
 
 - (void)removeVertex:(MTVertex *)vertex;
 - (void)removeEdge:(MTEdge *)edge;
@@ -25,7 +26,13 @@
 - (NSUInteger)numberOfVertices;
 - (NSUInteger)numberOfEdges;
 
-- (NSSet *)allVertices;
+- (NSArray *)allVertices;
 - (NSSet *)allEdges;
+
+- (MTVertex *)vertexForObject:(MTObject *)object;
+
+- (MTGraph *)breadthFirstSearch:(MTVertex *)vertexSource;
+
+- (NSString *)graphToString;
 
 @end

@@ -11,9 +11,9 @@
 
 @interface MTEdge ()
 
-@property(nonatomic, retain) MTPair *vertices;
-@property(nonatomic, retain) NSNumber *weight;
-@property(assign, readwrite) BOOL isDirected;
+@property(retain) MTPair *vertices;
+@property(retain) NSNumber *weight;
+@property(readwrite, assign) BOOL isDirected;
 
 @end
 
@@ -40,12 +40,19 @@
     if (self) {
 
         [self setIsDirected:YES];
-        MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLater:vertex2];
+        
+        MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
         [self setVertices:pair];
         [pair release];
         
-        [self setObject:object];
-        [self setWeight:weight];
+        id obj = [object retain];
+        [self setObject: obj];
+        [obj release];
+        
+        NSNumber *w = [weight retain];
+        [self setWeight:w];
+        [w release];
+
     }
     return self;
 }

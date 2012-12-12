@@ -11,7 +11,7 @@
 
 @interface MTVertex()
 
-@property(nonatomic, retain) NSMutableArray *edges;     //The edges this node has
+@property (retain) NSMutableArray *edges;     //The edges this node has
 
 @end
 
@@ -24,11 +24,15 @@
 - (id)initWithEdges:(NSSet *)edges andObject:(id)object {
     self = [super init];
     if (self) {
-        NSMutableArray *edgesOrdered = [[NSMutableArray alloc] initWithArray:[edges allObjects]];
-        [self setEdges:edgesOrdered];
-        [edgesOrdered release];
 
-        [self setObject:object];
+        NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithArray:[edges allObjects]];
+        [self setEdges:arrayEmpty];
+        [arrayEmpty release];
+        
+        id obj = [object retain];
+        [self setObject: obj];
+        [obj release];
+
     }
     return self;
 }
@@ -37,12 +41,22 @@
     return [[self edges] count];
 }
 
-- (NSSet *)incidentEdges {
-    return [NSSet setWithArray: [self edges]];
+- (NSArray *)incidentEdges {
+    NSArray *results;
+    @synchronized(self) {
+        results = [[[self edges] retain] autorelease];
+    }
+    return results;
 }
 
 - (void)addEdge:(MTEdge *)edge {
-    [[self edges] addObject:edge];
+    if ([self edges]) {
+        [[self edges] addObject:edge];
+    } else {
+        NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithObjects:edge, nil];
+        [self setEdges:arrayEmpty];
+        [arrayEmpty release];
+    }
 }
 
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex {
@@ -81,6 +95,8 @@
 }
 
 - (void)dealloc {
+    [_bfsPredecessor release];
+    [_bfsDistance release];
     [_edges release];
     [super dealloc];
 }

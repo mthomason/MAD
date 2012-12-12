@@ -7,6 +7,7 @@
 //
 
 #import "MTPair.h"
+#import "MTObject.h"
 
 @interface MTPair ()
 
@@ -15,22 +16,34 @@
 @implementation MTPair
 
 - (void)dealloc {
-    if (_former) [_former release];
-    if (_latter) [_latter release];
+    [_former release];
+    [_latter release];
     [super dealloc];
 }
 
 - (id)init {
-    return [self initWithFormer:nil andLater:nil];
+    return [self initWithFormer:nil andLatter:nil];
 }
 
-- (id)initWithFormer:(id)former andLater:(id)later {
+- (id)initWithFormer:(id)former andLatter:(id)latter {
     self = [super init];
     if (self) {
-        [self setFormer:former];
-        [self setLatter:later];
+
+        id f = [former retain];
+        [self setFormer:f];
+        [f release];
+        
+        id l = [latter retain];
+        [self setLatter:l];
+        [latter release];
+        
     }
     return self;
+}
+
++ (id)pairWithFormer:(id)former andLatter:(id)latter {
+    MTPair *pair = [[MTPair alloc] initWithFormer:former andLatter:latter];
+    return [pair autorelease];
 }
 
 @end

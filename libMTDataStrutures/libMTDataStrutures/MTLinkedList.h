@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+// MARK: Just a wrapper around NSArray.
+
 @interface MTLinkedList : NSObject
 
 - (NSUInteger)count;

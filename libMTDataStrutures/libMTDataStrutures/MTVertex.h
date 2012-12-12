@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 
+typedef enum {
+	MTColorBlack,
+	MTColorWhite,
+	MTColorGray
+} MTAlgorithmColor;
+
 @class MTEdge;
 
 @interface MTVertex : MTObject
@@ -19,8 +25,16 @@
 - (void)addEdge:(MTEdge *)edge;
 
 - (NSUInteger)numberOfIncidentEdges;
-- (NSSet *)incidentEdges;
+- (NSArray *)incidentEdges;
 - (void)removeEdge:(MTEdge *)edge;
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
+
+@property (assign)   MTAlgorithmColor bfsVertexColor;
+@property (retain) MTVertex *bfsPredecessor;
+@property (retain) NSNumber *bfsDistance;
+
+- (void)setBfsVertexColor:(MTAlgorithmColor)bfsVertexColor;
+- (void)setBfsPredecessor:(MTVertex *)bfsPredecessor;
+- (void)setBfsDistance:(NSNumber *)bfsDistance;
 
 @end

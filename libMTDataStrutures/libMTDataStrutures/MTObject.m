@@ -14,8 +14,27 @@
 
 @implementation MTObject
 
+- (id)init {
+    return [self initWithObject:nil];
+}
+
+- (id)initWithObject:(id)object {
+    self = [super init];
+    if (self) {
+        id obj = [object retain];
+        [self setObject:obj];
+        [obj release];
+    }
+    return self;
+}
+
++ (id)objectWithObject:(id)object {
+    MTObject *result = [[MTObject alloc] initWithObject:object];
+    return [result autorelease];
+}
+
 - (void)dealloc {
-    if (_object) [_object release];
+    [_object release];
     [super dealloc];
 }
 

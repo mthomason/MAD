@@ -8,6 +8,9 @@
 
 #import "RptqQuery+Extras.h"
 #import "MTGraph.h"
+#import "MTPair.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+Extras.h"
 
 @implementation RptqQuery (Extras)
 
@@ -24,10 +27,46 @@
 }
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query {
-    NSSet *emptyPair = [NSSet setWithObjects:nil, nil, nil];
-    MTVertex *vertex = [[MTVertex alloc] initWithEdges:[emptyPair objectAtIndex:0] andObject:[emptyPair objectAtIndex:1]];
-    NSMutableSet *vertices = [[NSMutableSet alloc] init];
+
+    NSSet *hasTables = [query hasTables];
+    NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasTables count]];
+    
+    // MARK: Create vertex in the graph for each query table.
+    for (RptqTable *table in hasTables) {
+        
+        MTVertex *unconnectedVertex = [[MTVertex alloc] initWithEdges:nil andObject:[table objectID]];
+        [vertices addObject: unconnectedVertex];
+        [unconnectedVertex release];
+        
+    }
+    
     MTGraph *graph = [[MTGraph alloc] initWithVertices: vertices];
+    
+    // MARK: Create an edge in the graph for each query link.
+    NSSet *hasQueryLinks = [query hasQueryLinks];
+    for (RptqQueryLinks *queryLink in hasQueryLinks) {
+ 
+        RptqTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
+        RptqTable *tableDestination =   [[queryLink hasRightField] inTable];
+        id objectOrigin =               [tableOrigin objectID];
+        id objectDestination =          [tableDestination objectID];
+        MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
+        MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
+
+        MTEdge *edge =                  [[MTEdge alloc] initWithOrigin: vertexOrigin
+                                                           destination: vertexDestination
+                                                             andObject: [queryLink objectID]];
+        
+        [graph insertEdge:edge];
+        
+        [edge release];
+    }
+    
+    [graph graphToString];
+    
+    [graph breadthFirstSearch:[vertices anyObject]];
+    
+    [vertices release];
     
     return  [graph autorelease];
 }
@@ -45,9 +84,7 @@
         NSString *queryString = [RptqQuery getSqlForQuery: query];
 
     }
-    
     completion(success);
-    
 }
 
 @end
