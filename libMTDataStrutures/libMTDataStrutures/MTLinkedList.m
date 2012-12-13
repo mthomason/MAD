@@ -52,24 +52,36 @@
     }
 }
 
+- (id)head {
+    id result;
+    @synchronized(self) {
+        result = [[[[self list] objectAtIndex:0] retain] autorelease];
+    }
+    return result;
+}
+
 - (id)getNext {
     id result;
-    if ([self isNext]) {
-        self.location++;
-        result = [[self list] objectAtIndex:[self location]];
-    } else {
-        result = nil;
+    @synchronized(self) {
+        if ([self isNext]) {
+            self.location++;
+            result = [[[[self list] objectAtIndex:[self location]] retain] autorelease];
+        } else {
+            result = nil;
+        }
     }
     return result;
 }
 
 - (id)getPrevious {
     id result;
-    if ([self isPrevious]) {
-        self.location--;
-        result = [[self list] objectAtIndex:[self location]];
-    } else {
-        result = nil;
+    @synchronized(self) {
+        if ([self isPrevious]) {
+            self.location--;
+            result = [[[[self list] objectAtIndex:[self location]] retain] autorelease];
+        } else {
+            result = nil;
+        }
     }
     return result;
 }
@@ -84,6 +96,16 @@
 
 - (id)objectAtIndex:(NSUInteger)index {
     return [[self list] objectAtIndex:index];
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
+    BOOL haveAnother = state->state < [[self list] count];
+    NSUInteger result = haveAnother ? 1 : 0;
+    if (haveAnother) {
+        state->itemsPtr[0] = [[self list] objectAtIndex:state->state];
+        state->state++;
+    }
+    return result;
 }
 
 @end

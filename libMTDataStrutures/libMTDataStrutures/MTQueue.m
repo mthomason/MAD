@@ -71,4 +71,14 @@
     return [self counter];
 }
 
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
+    BOOL haveAnother = state->state < [[self queue] count];
+    NSUInteger result = haveAnother ? 1 : 0;
+    if (haveAnother) {
+        state->itemsPtr[0] = [[self queue] objectAtIndex:state->state];
+        state->state++;
+    }
+    return result;
+}
+
 @end

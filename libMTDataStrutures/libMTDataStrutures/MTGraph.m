@@ -118,7 +118,7 @@
 }
 
 - (NSString *)graphToString {
-    NSMutableString *result = [[NSMutableString alloc] initWithString:@"Graph ->\n"];
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"Printing Graph %@\nGraph ->\n", self];
     for (MTVertex *vertex in [self allVertices]) {
         [result appendFormat:@"\tVertex (%@) ->\n", vertex];
         [result appendFormat:@"\t\t%@\n",[vertex object]];

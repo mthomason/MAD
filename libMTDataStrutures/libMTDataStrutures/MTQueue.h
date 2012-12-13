@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MTQueue : NSObject
+@interface MTQueue : NSObject  <NSFastEnumeration>
 
 - (void)enqueue:(id)object;
 - (id)dequeue;

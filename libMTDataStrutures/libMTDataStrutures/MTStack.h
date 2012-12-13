@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 
-@interface MTStack : MTObject
+@interface MTStack : MTObject  <NSFastEnumeration>
 
 - (void)push:(id)object;
 - (id)pop;

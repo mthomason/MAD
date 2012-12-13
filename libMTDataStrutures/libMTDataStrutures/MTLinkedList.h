@@ -10,10 +10,11 @@
 
 // MARK: Just a wrapper around NSArray.
 
-@interface MTLinkedList : NSObject
+@interface MTLinkedList : NSObject <NSFastEnumeration>
 
 - (NSUInteger)count;
 - (void)add:(id)object;
+- (id)head;
 - (id)getNext;
 - (id)getPrevious;
 - (id)getTop;
