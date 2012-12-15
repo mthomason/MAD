@@ -10,6 +10,8 @@
 
 @implementation RptqQueryGroup (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -37,6 +39,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+#pragma mark - Static
 
 + (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
@@ -101,6 +105,19 @@
             break;
     }
     return [sort lowercaseString];
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqQueryGroup *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

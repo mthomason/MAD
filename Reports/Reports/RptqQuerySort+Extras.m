@@ -10,6 +10,8 @@
 
 @implementation RptqQuerySort (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -36,6 +38,19 @@
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqQuerySort *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

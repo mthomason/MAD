@@ -7,7 +7,8 @@
 //
 
 #import "RptqQueryCache.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQueryCache (Extras)
+@interface RptqQueryCache (Extras) <MTProtocolCompare>
 
 @end

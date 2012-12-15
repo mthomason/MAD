@@ -10,6 +10,8 @@
 
 @implementation RptqQueryPredicate (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -37,6 +39,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+#pragma mark - Static
 
 + (id)createPredicateWithLeftField:(RptqField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
@@ -100,6 +104,19 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: predicate]];
 
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqQueryPredicate *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

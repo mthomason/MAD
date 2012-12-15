@@ -12,8 +12,9 @@
 #import "Constants.h"
 #import "RptqField.h"
 #import "RptqDocument+Extras.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQueryGroup (Extras)
+@interface RptqQueryGroup (Extras) <MTProtocolCompare>
 
 + (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqQueryGroup *)createQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;

@@ -10,6 +10,8 @@
 
 @implementation RptqField (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -38,7 +40,7 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-
+#pragma mark - Static
 
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label name:(NSString *)name
@@ -89,6 +91,19 @@
 
 - (NSString *)toStringForDebugging {
     return [self humanReadableObjectIdentifier];
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqField *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

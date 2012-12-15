@@ -14,6 +14,8 @@
 
 @implementation RptqQuery (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -42,7 +44,7 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-
+#pragma mark - Static
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query {
 
@@ -111,6 +113,19 @@
 
     }
     completion(success);
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqQuery *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

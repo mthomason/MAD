@@ -20,7 +20,7 @@
 #import "RptqTable+Extras.h"
 #import "RptqField+Extras.h"
 
-@interface RptqDocument (Extras)
+@interface RptqDocument (Extras) <MTProtocolCompare>
 
 + (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
               completion: (void (^)(NSArray *results))completion;

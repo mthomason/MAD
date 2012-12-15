@@ -11,6 +11,7 @@
 #import "RptqDatabase+Extras.h"
 #import "MNSDatabaseTable.h"
 #import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
 
 @interface RptqTable (Extras) <MTProtocolCompare, MTProtocolLog>
 

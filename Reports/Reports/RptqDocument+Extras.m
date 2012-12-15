@@ -10,6 +10,8 @@
 
 @implementation RptqDocument (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -37,6 +39,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+#pragma mark - Static
 
 + (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
               completion: (void (^)(NSArray *results))completion {
@@ -186,6 +190,19 @@
         
     }];
     
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqDocument *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

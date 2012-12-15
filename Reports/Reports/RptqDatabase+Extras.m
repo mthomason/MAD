@@ -10,6 +10,8 @@
 
 @implementation RptqDatabase (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -37,6 +39,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+#pragma mark - Static
 
 + (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
                          withConnecitonId:(NSNumber *)connectionId {
@@ -67,9 +71,16 @@
     return [database autorelease];
 }
 
+#pragma mark - MTProtocolCompare
+
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
- 
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqDatabase *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
     return result;
 }
 

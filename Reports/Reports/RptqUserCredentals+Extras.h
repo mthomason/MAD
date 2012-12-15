@@ -8,8 +8,9 @@
 
 #import "RptqUserCredentals.h"
 #import "NSError+UserInterface.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqUserCredentals (Extras)
+@interface RptqUserCredentals (Extras) <MTProtocolCompare>
 
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;

@@ -10,6 +10,8 @@
 
 @implementation RptqTable (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -37,6 +39,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+#pragma mark - Static
 
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label

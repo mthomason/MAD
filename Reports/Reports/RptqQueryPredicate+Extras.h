@@ -9,8 +9,9 @@
 #import "RptqQueryPredicate.h"
 #import "RptqDocument+Extras.h"
 #import "UITableViewControllerOpperators.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQueryPredicate (Extras)
+@interface RptqQueryPredicate (Extras) <MTProtocolCompare>
 
 + (id)createPredicateWithLeftField:(RptqField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator

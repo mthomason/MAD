@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "RptqDocument+Extras.h"
 #import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
 
 typedef NS_ENUM(NSUInteger, MNSLinkType) {
 	MNSLinkTypeInnerJoin = 0,
@@ -27,7 +28,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
-@interface RptqQueryLinks (Extras) <MTProtocolLog>
+@interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;

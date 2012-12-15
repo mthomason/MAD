@@ -10,6 +10,8 @@
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -38,7 +40,7 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-
+#pragma mark - Static
 
 + (RptqDocumentObjectLabelDataField *)labelDataFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
     RptqDocumentObjectLabelDataField *result = nil;
@@ -57,6 +59,19 @@
         NSLog(@"Warning: Could not find %@ in %@.", objid, objectContext);
     }
     [results release];
+    return result;
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqDocumentObjectLabelDataField *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
     return result;
 }
 

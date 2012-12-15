@@ -7,7 +7,8 @@
 //
 
 #import "RptqQuerySort.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQuerySort (Extras)
+@interface RptqQuerySort (Extras) <MTProtocolCompare>
 
 @end

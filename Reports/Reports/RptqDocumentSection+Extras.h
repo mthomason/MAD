@@ -9,6 +9,7 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
+#import "MTProtocolCompare.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
@@ -21,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
     MNSDocumentSectionTypeGroupFooter = 7,
 };
 
-@interface RptqDocumentSection (Extras)
+@interface RptqDocumentSection (Extras) <MTProtocolCompare>
 
 + (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid;
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;

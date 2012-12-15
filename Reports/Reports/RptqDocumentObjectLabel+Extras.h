@@ -7,7 +7,8 @@
 //
 
 #import "RptqDocumentObjectLabel.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqDocumentObjectLabel (Extras)
+@interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>
 
 @end

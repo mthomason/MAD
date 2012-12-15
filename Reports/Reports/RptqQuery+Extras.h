@@ -10,8 +10,9 @@
 #import "RptqDatabase.h"
 #import "MNSDatabase.h"
 #import "MTGraph.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQuery (Extras)
+@interface RptqQuery (Extras) <MTProtocolCompare>
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query;
 + (NSString *)getSqlForQuery:(RptqQuery *)query;

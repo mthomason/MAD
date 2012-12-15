@@ -10,6 +10,8 @@
 
 @implementation RptqUserCredentals (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -38,6 +40,8 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
+#pragma mark - Static
+
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
     RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
@@ -52,6 +56,19 @@
     NSArray *results = [[NSArray alloc] initWithArray:[objectContext executeFetchRequest:request error:&error]];
     if (error) [error presentErrorToUser];
     return results;
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqUserCredentals *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end

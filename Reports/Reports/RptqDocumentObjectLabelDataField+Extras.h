@@ -7,8 +7,9 @@
 //
 
 #import "RptqDocumentObjectLabelDataField.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqDocumentObjectLabelDataField (Extras)
+@interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare>
 
 + (RptqDocumentObjectLabelDataField *)labelDataFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid;
 

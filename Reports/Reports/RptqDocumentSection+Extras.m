@@ -10,6 +10,8 @@
 
 @implementation RptqDocumentSection (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -38,7 +40,7 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
-
+#pragma mark - Static
 
 + (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
     RptqDocumentSection *result = nil;
@@ -259,6 +261,19 @@
             break;
         default:
             break;
+    }
+    return result;
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqDocumentSection *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
 }

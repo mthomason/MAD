@@ -7,7 +7,8 @@
 //
 
 #import "RptqRelationship.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqRelationship (Extras)
+@interface RptqRelationship (Extras) <MTProtocolCompare>
 
 @end

@@ -10,6 +10,8 @@
 
 @implementation RptqDocumentObject (Extras)
 
+#pragma mark - Overrides
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
@@ -38,8 +40,25 @@
     [super awakeFromSnapshotEvents:flag];
 }
 
+#pragma mark - Static
+
+#pragma mark - Member
+
 - (MNSSectionType)getType {
     return [[self type] integerValue];
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqualTo:sender]) {
+        result = YES;
+    } else {
+        RptqDocumentObject *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end
