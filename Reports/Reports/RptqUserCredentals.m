@@ -2,7 +2,7 @@
 //  RptqUserCredentals.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -25,6 +25,7 @@
 @dynamic sf_login_redirect_uri;
 @dynamic sf_password;
 @dynamic sf_username;
+@dynamic identifier;
 @dynamic inDatabase;
 
 @end

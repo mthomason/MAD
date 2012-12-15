@@ -12,6 +12,22 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    
+    // MARK: Auto increment row counter
+    NSString *queryField = NSStringFromSelector(@selector(identifier));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger identifier = 0;
+    if (error == nil) {
+        RptqDocumentSection *lastObject = [fetchResults lastObject];
+        identifier = [[lastObject identifier] integerValue] + 1;
+    }
+    [self setIdentifier:@(identifier)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -21,6 +37,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+
 
 + (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
     RptqDocumentSection *result = nil;

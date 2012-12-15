@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTProtocolLog.h"
 
 // MARK: Just a wrapper around NSArray.
 
-@interface MTLinkedList : NSObject <NSFastEnumeration>
+@interface MTLinkedList : NSObject <NSFastEnumeration, MTProtocolLog>
 
 - (NSUInteger)count;
 - (void)add:(id)object;

@@ -8,16 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
+#import "MTProtocolLog.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 	MTColorBlack,
 	MTColorWhite,
 	MTColorGray
-} MTAlgorithmColor;
+};
 
 @class MTEdge;
 
-@interface MTVertex : MTObject
+@interface MTVertex : MTObject <MTProtocolLog>
 
 - (id)initWithEdges:(NSSet *)edges;
 - (id)initWithEdges:(NSSet *)edges andObject:(id)object;

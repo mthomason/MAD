@@ -38,4 +38,30 @@
     [super dealloc];
 }
 
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([[self object] conformsToProtocol:@protocol(MTProtocolCompare)]) {
+        result = [[self object] isEqualTo:sender];
+    } else {
+        result = [[self object] isEqual:sender];
+    }
+    return result;
+}
+
+#pragma mark - MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    return [[self object] humanReadableObjectIdentifier];
+}
+
+- (NSString *)toString {
+    return [[self object] toString];
+}
+
+- (NSString *)toStringForDebugging {
+    return [NSString stringWithFormat:@"%@", [self object]];
+}
+
 @end

@@ -1,0 +1,43 @@
+//
+//  NSManagedObjectID+Extras.m
+//  Reports
+//
+//  Created by Michael Thomason on 12/13/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import "NSManagedObjectID+Extras.h"
+#import "UIManagedDocumentReport.h"
+#import "NSError+UserInterface.h"
+
+@implementation NSManagedObjectID (Extras)
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    NSString *result = nil;
+    UIManagedDocumentReport *document = [UIManagedDocumentReport activeDocument];
+    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
+    NSError *error = nil;
+    id existingObject = [managedObjectContext existingObjectWithID:self error:&error];
+    if (error == nil) {
+        if ([existingObject conformsToProtocol:@protocol(MTProtocolLog)]) {
+            result = [existingObject humanReadableObjectIdentifier];
+        } else {
+            result = [self toString];
+        }
+    } else {
+        [error presentErrorToUser];
+    }
+    return result;
+}
+
+- (NSString *)toString {
+    return [NSString stringWithFormat:@"%@", self];
+}
+
+- (NSString *)toStringForDebugging {
+    return [NSString stringWithFormat:@"%@", self];
+}
+
+@end

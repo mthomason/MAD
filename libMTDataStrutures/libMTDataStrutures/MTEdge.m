@@ -19,12 +19,10 @@
 
 @implementation MTEdge
 
-- (MTVertex *)origin {
-    return [[self vertices] former];
-}
-
-- (MTVertex *)destination {
-    return [[self vertices] latter];
+- (void)dealloc {
+    [_vertices release];
+    [_weight release];
+    [super dealloc];
 }
 
 - (id)initWithOrigin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
@@ -57,31 +55,40 @@
     return self;
 }
 
-- (BOOL)isEqual:(id)object {
-    return (self == object) ? YES :  ([self isDirected] == [object isDirected] &&
-                                      [[self weight] isEqual:[object weight]] &&
-                                      [[self object] isEqual:[object object]] &&
-                                      [[[self vertices] former] isEqual:[[object vertices] former]] &&
-                                      [[[self vertices] latter] isEqual:[[object vertices] latter]]);
+- (MTVertex *)origin {
+    return [[self vertices] former];
 }
 
-- (NSUInteger)hash {
-    NSUInteger result = 1;
-    NSUInteger prime = 31;
-    NSUInteger yesPrime = 1231;
-    NSUInteger noPrime = 1237;
-    result = prime * result + [[self object] hash];
-    result = prime * result + [[[self vertices] former] hash];
-    result = prime * result + [[[self vertices] latter] hash];
-    result = prime * result + [[self weight] hash];
-    result = prime * result + [self isDirected] ? yesPrime : noPrime;
-    return result;
+- (MTVertex *)destination {
+    return [[self vertices] latter];
 }
 
-- (void)dealloc {
-    [_vertices release];
-    [_weight release];
-    [super dealloc];
+- (BOOL)isEqualTo:(id)object {
+    BOOL objectComparson;
+    if ([object conformsToProtocol:@protocol(MTProtocolCompare)]) {
+        objectComparson = [[self object] isEqualTo:[object object]];
+    } else {
+        objectComparson = [[self object] isEqual:[object object]];
+    }
+    return (self == object) ? YES :  (objectComparson &&
+                                      [self isDirected] == [object isDirected] &&
+                                      [[self weight] compare:[object weight]] &&
+                                      [[[self vertices] former] isEqualTo:[[object vertices] former]] &&
+                                      [[[self vertices] latter] isEqualTo:[[object vertices] latter]]);
+}
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    return [NSString stringWithFormat:@"->%@", [[self destination] humanReadableObjectIdentifier]];
+}
+
+- (NSString *)toString {
+    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [[self origin] humanReadableObjectIdentifier], [[self destination] humanReadableObjectIdentifier]];
+}
+
+- (NSString *)toStringForDebugging {
+    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [self origin], [self destination]];
 }
 
 @end

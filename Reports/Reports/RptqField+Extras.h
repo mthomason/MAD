@@ -8,8 +8,9 @@
 
 #import "RptqField.h"
 #import "MNSDatabaseField.h"
+#import "MTProtocolLog.h"
 
-@interface RptqField (Extras)
+@interface RptqField (Extras) <MTProtocolLog>
 
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label

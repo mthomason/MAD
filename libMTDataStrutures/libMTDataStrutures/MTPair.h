@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
+#import "MTProtocolLog.h"
 
-@interface MTPair : NSObject
-
+@interface MTPair : NSObject <MTProtocolLog>
 
 @property (retain) id former;
 @property (retain) id latter;

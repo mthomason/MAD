@@ -2,7 +2,7 @@
 //  RptqDocumentSection.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * type;
 @property (nonatomic, retain) NSNumber * visibility;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSSet *hasObjects;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nonatomic, retain) RptqDocument *inReport;

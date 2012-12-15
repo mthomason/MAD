@@ -8,10 +8,11 @@
 
 #import "RptqTable.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 #import "MNSDatabaseTable.h"
+#import "MTProtocolLog.h"
 
-@interface RptqTable (Extras)
+@interface RptqTable (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label

@@ -12,6 +12,22 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    
+    // MARK: Auto increment row counter
+    NSString *queryField = NSStringFromSelector(@selector(identifier));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger identifier = 0;
+    if (error == nil) {
+        RptqField *lastObject = [fetchResults lastObject];
+        identifier = [[lastObject identifier] integerValue] + 1;
+    }
+    [self setIdentifier:@(identifier)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -21,6 +37,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+
 
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                label:(NSString *)label name:(NSString *)name
@@ -58,5 +76,19 @@
     
 }
 */
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]];
+}
+
+- (NSString *)toString {
+    return [self humanReadableObjectIdentifier];
+}
+
+- (NSString *)toStringForDebugging {
+    return [self humanReadableObjectIdentifier];
+}
 
 @end

@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 	MNSPredicateOperatorEqual = 0,
 	MNSPredicateOperatorNotEqual,
 	MNSPredicateOperatorGreaterThan,
 	MNSPredicateOperatorGreaterThanOrEqualTo,
 	MNSPredicateOperatorLessThan,
 	MNSPredicateOperatorLessThanOrEqualTo
-} MNSPredicateOperator;
+};
 
 #define MNSPredicateOperatorReuseIds [NSArray arrayWithObjects: @"UITableViewCellPredicateOperatorEqual", @"UITableViewCellPredicateOperatorNotEqual", @"UITableViewCellPredicateOperatorGreaterThan", @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo", @"UITableViewCellPredicateOperatorLessThan", @"UITableViewCellPredicateOperatorLessThanOrEqualTo", nil]
 

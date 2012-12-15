@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
 
-@interface MTObject : NSObject
+@interface MTObject : NSObject <MTProtocolCompare, MTProtocolLog>
 
 @property (retain) id object;
 

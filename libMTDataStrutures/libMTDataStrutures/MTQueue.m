@@ -81,4 +81,16 @@
     return result;
 }
 
+- (NSString *)humanReadableObjectIdentifier {
+    return nil;
+}
+
+- (NSString *)toString {
+    return nil;
+}
+
+- (NSString *)toStringForDebugging {
+    return [NSString stringWithFormat:@"%@", [self destination]];
+}
+
 @end

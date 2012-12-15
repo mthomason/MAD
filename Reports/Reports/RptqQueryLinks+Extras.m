@@ -12,6 +12,22 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    
+    // MARK: Auto increment row counter
+    NSString *queryField = NSStringFromSelector(@selector(identifier));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger identifier = 0;
+    if (error == nil) {
+        RptqQueryLinks *lastObject = [fetchResults lastObject];
+        identifier = [[lastObject identifier] integerValue] + 1;
+    }
+    [self setIdentifier:@(identifier)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -100,6 +116,29 @@
 + (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: [NSSet setWithObject: queryLink]];
+}
+
+- (NSString *)linkDescription {
+    return [NSString stringWithFormat:@"%@ (%@)",
+            [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
+            [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
+}
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:[[self hasLeftField] name]];
+    [result appendFormat:@" %@ ", [self linkDescription]];
+    [result appendString:[[self hasRightField] name]];
+    return [result autorelease];
+}
+
+- (NSString *)toString {
+    return [self humanReadableObjectIdentifier];
+}
+
+- (NSString *)toStringForDebugging {
+    return [self humanReadableObjectIdentifier];
 }
 
 @end

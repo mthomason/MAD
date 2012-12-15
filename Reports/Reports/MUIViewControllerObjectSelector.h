@@ -10,11 +10,11 @@
 #import "MUIViewController.h"
 #import "UITableViewControllerChooseField.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 	MNSSegmentedControlOptionsData = 0,
 	MNSSegmentedControlOptionsObjects = 1,
 	MNSSegmentedControlOptionsMedia = 2,
-} MNSSegmentedControlOptions;
+};
 
 @protocol UIViewControllerObjectSelectorDelegate <MUIViewControllerDelegate>
 - (void)didSelectDataField:(RptqField *)field;

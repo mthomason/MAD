@@ -12,6 +12,22 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    
+    // MARK: Auto increment row counter
+    NSString *queryField = NSStringFromSelector(@selector(identifier));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabase class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger identifier = 0;
+    if (error == nil) {
+        RptqDatabase *lastObject = [fetchResults lastObject];
+        identifier = [[lastObject identifier] integerValue] + 1;
+    }
+    [self setIdentifier:@(identifier)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -27,7 +43,7 @@
     
     RptqDatabase *currentDatabase = nil;
     for (RptqDatabase *db in [document hasDatabaseSchemas]) {
-        if ([[db connection_id] integerValue] == [connectionId integerValue]) {
+        if ([[db identifier] integerValue] == [connectionId integerValue]) {
             currentDatabase = db;
             break;
         }
@@ -47,8 +63,14 @@
     RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
                                    insertIntoManagedObjectContext:objectContext];
     [database setDatabase_driver_type: driverIdentifier];
-    [database setConnection_id:connectionId];
+    [database setIdentifier:connectionId];
     return [database autorelease];
+}
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+ 
+    return result;
 }
 
 @end

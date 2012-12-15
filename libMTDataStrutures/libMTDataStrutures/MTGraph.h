@@ -11,8 +11,9 @@
 #import "MTVertex.h"
 #import "MTEdge.h"
 #import "MTQueue.h"
+#import "MTProtocolLog.h"
 
-@interface MTGraph : MTObject
+@interface MTGraph : MTObject <MTProtocolLog>
 
 - (id)init;
 - (id)initWithVertices:(NSSet *)vertices;
@@ -32,7 +33,5 @@
 - (MTVertex *)vertexForObject:(MTObject *)object;
 
 - (MTGraph *)breadthFirstSearch:(MTVertex *)vertexSource;
-
-- (NSString *)graphToString;
 
 @end

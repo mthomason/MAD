@@ -2,7 +2,7 @@
 //  RptqDocumentObjectFormula.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 @implementation RptqDocumentObjectFormula
 
 @dynamic formulaSource;
+@dynamic identifier;
 @dynamic parentObjectFormula;
 
 @end

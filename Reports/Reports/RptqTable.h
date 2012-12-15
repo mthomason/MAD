@@ -2,7 +2,7 @@
 //  RptqTable.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * label_plural;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * queryable;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSSet *hasFields;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
 @property (nonatomic, retain) NSSet *inQuery;

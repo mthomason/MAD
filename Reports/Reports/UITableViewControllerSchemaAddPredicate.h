@@ -13,12 +13,12 @@
 #import "UITableViewControllerChooseField.h"
 #import "UITableViewControllerEnterString.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
 	MNSPredicateCenter,
 	MNSPredicateRight,
 	MNSPredicateNone
-} MNSPredicatePart;
+};
 
 @class UITableViewControllerSchemaAddPredicate;
 

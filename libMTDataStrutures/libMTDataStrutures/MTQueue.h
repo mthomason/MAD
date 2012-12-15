@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTProtocolLog.h"
 
-@interface MTQueue : NSObject  <NSFastEnumeration>
+@interface MTQueue : NSObject  <NSFastEnumeration,  MTProtocolLog>
 
 - (void)enqueue:(id)object;
 - (id)dequeue;

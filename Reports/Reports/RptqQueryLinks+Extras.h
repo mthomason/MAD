@@ -9,8 +9,9 @@
 #import "RptqQueryLinks.h"
 #import <CoreData/CoreData.h>
 #import "RptqDocument+Extras.h"
+#import "MTProtocolLog.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSLinkType) {
 	MNSLinkTypeInnerJoin = 0,
 	MNSLinkTypeEquiJoin,
 	MNSLinkTypeNaturalJoin,
@@ -18,7 +19,7 @@ typedef enum {
     MNSLinkTypeLeftOuterJoin,
     MNSLinkTypeRightOuterJoin,
     MNSLinkTypeFullOuterJoin,
-} MNSLinkType;
+};
 
 #define MNSLinkTypeReuseIds [NSArray arrayWithObjects: @"MNSJoinTypeInnerJoin", @"MNSJoinTypeEquiJoin", @"MNSJoinTypeNaturalJoin", @"MNSJoinTypeCrossJoin", @"MNSJoinTypeLeftOuterJoin", @"MNSJoinTypeRightOuterJoin", @"MNSJoinTypeFullOuterJoin", nil]
 
@@ -26,7 +27,7 @@ typedef enum {
 
 #define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
-@interface RptqQueryLinks (Extras)
+@interface RptqQueryLinks (Extras) <MTProtocolLog>
 
 + (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;

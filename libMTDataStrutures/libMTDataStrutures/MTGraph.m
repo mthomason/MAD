@@ -54,15 +54,29 @@
 // ???: What happens with malformated edges?
 - (BOOL)insertEdge:(MTEdge *)edge {
     BOOL result = NO;
-    for (MTVertex *vertex in [self vertices]) {
-        MTVertex *edgeOrigin = [edge origin];
-        NSLog(@"edgeOrigin: %@", edgeOrigin);
-        if ([vertex isEqual:[edge origin]]) {
-            [vertex addEdge:edge];
-            result = YES;
+    
+    // MARK: Make sure edge does not exist.
+    BOOL edgeExist = NO;
+    for (MTEdge *existingEdge in [self allEdges]) {
+        if ([edge isEqual:existingEdge]) {
+            edgeExist = YES;
             break;
         }
     }
+
+    // MARK: Insert edge.
+    if (!edgeExist) {
+        for (MTVertex *vertex in [self vertices]) {
+            MTVertex *edgeOrigin = [edge origin];
+            NSLog(@"edgeOrigin: %@", edgeOrigin);
+            if ([vertex isEqual:[edge origin]]) {
+                [vertex addEdge:edge];
+                result = YES;
+                break;
+            }
+        }
+    }
+
     return result;
 }
 
@@ -117,20 +131,6 @@
     return result;
 }
 
-- (NSString *)graphToString {
-    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"Printing Graph %@\nGraph ->\n", self];
-    for (MTVertex *vertex in [self allVertices]) {
-        [result appendFormat:@"\tVertex (%@) ->\n", vertex];
-        [result appendFormat:@"\t\t%@\n",[vertex object]];
-        for (MTEdge *edge in [vertex incidentEdges]) {
-            [result appendFormat:@"\t\tEdge (%@) ->\n", edge];
-            [result appendFormat:@"\t\t\t{%@, %@}\n", [edge origin], [edge destination]];
-        }
-    }
-    NSLog(@"%@", result);
-    return [result autorelease];
-}
-
 // MARK: Breadth first search returns a breadth first tree
 - (MTGraph *)breadthFirstSearch:(MTVertex *)vertexSource {
     
@@ -166,6 +166,35 @@
     [greyVertices release];
     
     return [breadthFirstTree autorelease];
+}
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
+    for (MTVertex *vertex in [self allVertices]) {
+        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+    }
+    NSLog(@"%@--------------------\n", result);
+    return [result autorelease];
+}
+
+- (NSString *)toString {
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
+    for (MTVertex *vertex in [self allVertices]) {
+        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+    }
+    NSLog(@"%@\n--------------------\n", result);
+    return [result autorelease];
+}
+
+- (NSString *)toStringForDebugging {
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
+    for (MTVertex *vertex in [self allVertices]) {
+        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+    }
+    NSLog(@"%@\n--------------------\n", result);
+    return [result autorelease];
 }
 
 @end

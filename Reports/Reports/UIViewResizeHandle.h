@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 	north = 1,
 	south,
 	east,
@@ -17,7 +17,7 @@ typedef enum {
     northWest,
     southEast,
     southWest
-} MNSCompusPosition;
+};
 
 @class UIViewResizeHandle;
 

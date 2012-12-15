@@ -69,7 +69,7 @@
     return result;
 }
 
-- (BOOL)isEqual:(id)object {
+- (BOOL)isEqualTo:(id)object {
     BOOL result;
     if (self == object) {
         result = YES;
@@ -84,21 +84,41 @@
     [[self edges] removeObject: edge];
 }
 
-- (NSUInteger)hash {
-    NSUInteger result = 1;
-    NSUInteger prime = 31;
-    result = prime * result + [[self object] hash];
-    for (MTVertex *edges in [self edges]) {
-        result = prime * result + [edges hash];
-    }
-    return result;
-}
-
 - (void)dealloc {
     [_bfsPredecessor release];
     [_bfsDistance release];
     [_edges release];
     [super dealloc];
+}
+
+// MARK: MTProtocolLog
+
+- (NSString *)humanReadableObjectIdentifier {
+    NSString *humanReadableVector;
+    if ([[self object] respondsToSelector:@selector(humanReadableObjectIdentifier)]) {
+        humanReadableVector = [[self object] humanReadableObjectIdentifier];
+    } else {
+        humanReadableVector = [self toStringForDebugging];
+    }
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", humanReadableVector];
+    for (MTEdge *edge in [self edges]) {
+        [result appendString:@"\t->"];
+        [result appendString:[edge humanReadableObjectIdentifier]];
+    }
+    return [result autorelease];
+}
+
+- (NSString *)toString {
+    NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", self];
+    for (MTEdge *edge in [self edges]) {
+        [result appendString:@"\tEdge->"];
+        [result appendString:[edge toStringForDebugging]];
+    }
+    return [result autorelease];
+}
+
+- (NSString *)toStringForDebugging {
+    return [NSString stringWithFormat:@"%@", self];
 }
 
 @end

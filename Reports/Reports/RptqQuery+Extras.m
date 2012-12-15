@@ -16,6 +16,22 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    
+    // MARK: Auto increment row counter
+    NSString *queryField = NSStringFromSelector(@selector(identifier));
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger identifier = 0;
+    if (error == nil) {
+        RptqQuery *lastObject = [fetchResults lastObject];
+        identifier = [[lastObject identifier] integerValue] + 1;
+    }
+    [self setIdentifier:@(identifier)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -25,6 +41,8 @@
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
 }
+
+
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query {
 
@@ -50,6 +68,14 @@
         RptqTable *tableDestination =   [[queryLink hasRightField] inTable];
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
+        
+        
+        if ([[objectOrigin URIRepresentation] isEqual: [objectDestination URIRepresentation]]) {
+            NSLog(@"Match");
+        }
+        
+        
+        
         MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
         MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
 
@@ -62,7 +88,7 @@
         [edge release];
     }
     
-    [graph graphToString];
+    [graph humanReadableObjectIdentifier];
     
     [graph breadthFirstSearch:[vertices anyObject]];
     

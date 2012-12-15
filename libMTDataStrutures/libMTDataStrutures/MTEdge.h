@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
+#import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
 
 @class MTVertex;
 
-@interface MTEdge : MTObject
+@interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
 
 @property(readonly) BOOL isDirected;
 

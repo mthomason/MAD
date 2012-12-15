@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -23,6 +23,8 @@
 @dynamic sizeheight;
 @dynamic sizewidth;
 @dynamic type;
+@dynamic rowid;
+@dynamic identifier;
 @dynamic inSection;
 @dynamic isFormula;
 @dynamic isLabel;

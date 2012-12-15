@@ -11,7 +11,7 @@
 #import "SectionEnumerator.h"
 
 //Do not change these enum values, as they are used in core data.
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 	MNSDocumentSectionTypeReportHeader = 1,
 	MNSDocumentSectionTypeReportFooter = 2,
 	MNSDocumentSectionTypePageHeader = 3,
@@ -19,7 +19,7 @@ typedef enum {
     MNSDocumentSectionTypeBody = 5,
     MNSDocumentSectionTypeGroupHeader = 6,
     MNSDocumentSectionTypeGroupFooter = 7,
-} MNSDocumentSectionType;
+};
 
 @interface RptqDocumentSection (Extras)
 

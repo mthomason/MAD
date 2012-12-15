@@ -8,8 +8,9 @@
 
 #import "RptqDatabase.h"
 #import "RptqDocument+Extras.h"
+#import "MTProtocolCompare.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 	MNSDatabaseTypeSalesforceCom        = 0,
 	MNSDatabaseTypeDatabaseCom          = 1,
 	MNSDatabaseTypeMySQL                = 2,
@@ -20,13 +21,13 @@ typedef enum {
     MNSDatabaseTypeODBC                 = 7,
     MNSDatabaseTypeGooleAppEngine       = 8,
     MNSDatabaseTypeNone                 = 9,
-} MNSDatabaseType;
+};
 
 #define MNSDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MNSDatabaseTypeSalesforceCom", @"MNSDatabaseTypeDatabaseCom", @"MNSDatabaseTypeMySQL", @"MNSDatabaseTypeMicrosoftSqlAzure", @"MNSDatabaseTypeAmazonSimpleDb", @"MNSDatabaseTypeMicrosoftSqlServer", @"MNSDatabaseTypeOracle", @"MNSDatabaseTypeODBC", @"MNSDatabaseTypeGooleAppEngine", @"MNSDatabaseTypeNone", nil]
 
 #define MNSDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
 
-@interface RptqDatabase (Extras)
+@interface RptqDatabase (Extras) <MTProtocolCompare>
 
 + (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
                          withConnecitonId:(NSNumber *)connectionId;

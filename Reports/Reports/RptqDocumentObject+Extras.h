@@ -8,12 +8,12 @@
 
 #import "RptqDocumentObject.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSSectionType) {
 	MNSObjectTypeLabel = 1,
 	MNSObjectTypeLabelDataField = 2,
 	MNSObjectTypeLabelFormula= 3,
 	MNSObjectTypeLabelLabelLink = 4,
-} MNSSectionType;
+};
 
 @interface RptqDocumentObject (Extras)
 

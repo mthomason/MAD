@@ -18,12 +18,12 @@
 
 @class UITableViewControllerLinkBuilder;
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 	MNSLinkLeft = 0,
 	MNSLinkCenter,
 	MNSLinkRight,
 	MNSLinkNone
-} MNSLinkPart;
+};
 
 @protocol UITableViewControllerLinkBuilderDelegate
 - (void)viewControllerSchemaAddLinkDidFinish:(UITableViewControllerLinkBuilder *)controller;

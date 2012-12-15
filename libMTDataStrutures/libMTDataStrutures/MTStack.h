@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
+#import "MTProtocolLog.h"
 
-@interface MTStack : MTObject  <NSFastEnumeration>
+@interface MTStack : MTObject  <NSFastEnumeration,  MTProtocolLog>
 
 - (void)push:(id)object;
 - (id)pop;

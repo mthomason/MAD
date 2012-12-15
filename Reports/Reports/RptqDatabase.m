@@ -2,7 +2,7 @@
 //  RptqDatabase.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,7 +16,7 @@
 
 @implementation RptqDatabase
 
-@dynamic connection_id;
+@dynamic identifier;
 @dynamic database_driver_type;
 @dynamic hasQueries;
 @dynamic hasRelationships;

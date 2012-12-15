@@ -2,7 +2,7 @@
 //  RptqQueryCache.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 @interface RptqQueryCache : NSManagedObject
 
 @property (nonatomic, retain) NSData * data;
-@property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqQuery *hasQuery;
 
 @end

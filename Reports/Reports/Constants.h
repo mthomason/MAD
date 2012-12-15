@@ -10,12 +10,12 @@
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
             UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderAccending = 0,
 	MNSSortOrderDecending
-} MNSSortOrder;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
     UIViewControllerSchemaTablesSectionsDatasource = 1,
 	UIViewControllerSchemaTablesSectionsTables = 2,
@@ -23,7 +23,7 @@ typedef enum {
 	UIViewControllerSchemaTablesSectionsGroups = 4,
 	UIViewControllerSchemaTablesSectionsPredicate = 5,
     UIViewControllerSchemaTablesSectionsSql = 6
-} UIViewControllerSchemaTablesSections;
+};
 
 extern NSString * const MNSStringInterfaceButtonTitleContinue;
 extern NSString * const MNSStringInterfaceButtonTitleContinueDesc;

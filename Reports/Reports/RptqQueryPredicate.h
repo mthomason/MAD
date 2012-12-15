@@ -2,7 +2,7 @@
 //  RptqQueryPredicate.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,8 +16,9 @@
 @property (nonatomic, retain) NSNumber * comparson;
 @property (nonatomic, retain) NSString * fieldleftpred;
 @property (nonatomic, retain) NSString * fieldrightpred;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqField *hasLeftField;
 @property (nonatomic, retain) RptqField *hasRightField;
+@property (nonatomic, retain) RptqQuery *inQuery;
 
 @end

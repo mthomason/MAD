@@ -53,6 +53,8 @@
 		4C4C6F1716763959004A3B04 /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEdge.m; sourceTree = "<group>"; };
 		4C4C6F191676397A004A3B04 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVertex.h; sourceTree = "<group>"; };
 		4C4C6F1A1676397A004A3B04 /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
+		4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolLog.h; sourceTree = "<group>"; };
+		4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,8 @@
 		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
 			isa = PBXGroup;
 			children = (
+				4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */,
+				4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */,
 				4C4C6F1616763959004A3B04 /* MTEdge.h */,
 				4C4C6F1716763959004A3B04 /* MTEdge.m */,
 				4C4C6F131676360A004A3B04 /* MTGraph.h */,

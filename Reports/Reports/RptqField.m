@@ -2,7 +2,7 @@
 //  RptqField.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -20,12 +20,9 @@
 @implementation RptqField
 
 @dynamic datatype;
-@dynamic id;
 @dynamic label;
 @dynamic name;
-@dynamic inRelationships;
-@dynamic inTable;
-@dynamic referenceedByDataObject;
+@dynamic identifier;
 @dynamic inQuery;
 @dynamic inQueryGroup;
 @dynamic inQueryLinkLeft;
@@ -33,5 +30,8 @@
 @dynamic inQueryPredicateLeft;
 @dynamic inQueryPredicateRight;
 @dynamic inQuerySort;
+@dynamic inRelationships;
+@dynamic inTable;
+@dynamic referenceedByDataObject;
 
 @end

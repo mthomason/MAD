@@ -11,13 +11,13 @@
 #import "RptqQuery+Extras.h"
 #import "MNSDatabaseTable.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, NSDatabaseQueryType) {
 	NSDatabaseQueryTypeNone = 0,
 	NSDatabaseQueryTypeGetTables,
 	NSDatabaseQueryTypeGetFields,
 	NSDatabaseQueryTypeGetResults,
 	NSDatabaseQueryTypeVerify
-} NSDatabaseQueryType;
+};
 
 //extern NSString * const KEY_DB_TYPE_NONE;
 

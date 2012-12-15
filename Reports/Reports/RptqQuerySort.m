@@ -2,7 +2,7 @@
 //  RptqQuerySort.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/8/12.
+//  Created by Michael Thomason on 12/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,7 +15,8 @@
 
 @dynamic ascending;
 @dynamic fields;
-@dynamic inQuery;
+@dynamic identifier;
 @dynamic hasField;
+@dynamic inQuery;
 
 @end
