@@ -30,9 +30,14 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 - (void)removeEdge:(MTEdge *)edge;
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
-@property (assign)   MTAlgorithmColor bfsVertexColor;
-@property (retain) MTVertex *bfsPredecessor;
-@property (retain) NSNumber *bfsDistance;
+@property (assign) MTAlgorithmColor bfsVertexColor;
+@property (retain) MTVertex         *bfsPredecessor;
+@property (retain) NSNumber         *bfsDistance;
+
+@property (assign) MTAlgorithmColor dfsVertexColor;
+@property (retain) NSNumber         *dfsDistance;
+@property (retain) MTVertex         *dfsPredecessor;
+@property (retain) NSNumber         *dfsFoundCounter;
 
 - (void)setBfsVertexColor:(MTAlgorithmColor)bfsVertexColor;
 - (void)setBfsPredecessor:(MTVertex *)bfsPredecessor;

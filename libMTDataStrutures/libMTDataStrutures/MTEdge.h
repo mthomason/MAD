@@ -11,11 +11,20 @@
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
+typedef NS_ENUM(NSUInteger, MTEdgeType) {
+	MTEdgeTypeTreeEdge,
+	MTEdgeTypeBackEdge,
+	MTEdgeTypeForwardEdge,
+    MTEdgeTypeCrossEdge
+};
+
 @class MTVertex;
 
 @interface MTEdge : MTObject <MTProtocolLog, MTProtocolCompare>
 
 @property(readonly) BOOL isDirected;
+
+@property(assign) MTEdgeType dfsEdgeType;
 
 - (id)initWithOrigin:(MTVertex *)origin andDestination:(MTVertex *)destination;
 - (id)initWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination andObject:(id)object;

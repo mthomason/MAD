@@ -14,6 +14,7 @@
 @interface MTLinkedList : NSObject <NSFastEnumeration, MTProtocolLog>
 
 - (NSUInteger)count;
+- (void)insert:(id)object;
 - (void)add:(id)object;
 - (id)head;
 - (id)getNext;

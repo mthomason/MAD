@@ -16,4 +16,9 @@
 
 @optional
 
+- (BOOL)isGreaterThan:(id)sender;
+- (BOOL)isLessThan:(id)sender;
+- (BOOL)isGreaterThanOrEqualTo:(id)sender;
+- (BOOL)isLessThanOrEqualToSender:(id)sender;
+
 @end

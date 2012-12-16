@@ -45,6 +45,12 @@
     return ([self location] - 1 < [self count] && [self location] > 0);
 }
 
+- (void)insert:(id)object {
+    if (object != nil) {
+        [[self list] insertObject:object atIndex:0];
+    }
+}
+
 - (void)add:(id)object {
     if (object != nil) {
         [[self list] addObject:object];

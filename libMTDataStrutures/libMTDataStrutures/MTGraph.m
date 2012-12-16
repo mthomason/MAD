@@ -16,7 +16,7 @@
 
 @implementation MTGraph
 
-// MARK: NSObject Overrides
+#pragma mark - NSObject Overrides
 
 - (void)dealloc {
     [_vertices release];
@@ -27,7 +27,7 @@
     return [self initWithVertices:[NSSet set]];
 }
 
-// MARK: Factory
+#pragma mark - Factory
 
 - (id)initWithVertices:(NSSet *)verticesSet {
     self = [super init];
@@ -39,10 +39,19 @@
     return self;
 }
 
-// MARK: Members
+#pragma mark - Members
 
 - (void)insertVertex:(MTVertex *)newVertex {
-    [[self vertices] addObject:newVertex];
+    BOOL duplicate = NO;
+    for (MTVertex *vertex in [self vertices]) {
+        if (![newVertex isEqualTo:vertex]) {
+            duplicate = YES;
+            break;
+        }
+    }
+    if (!duplicate) {
+        [[self vertices] addObject:newVertex];
+    }
 }
 
 - (void)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination andObject:(id)object {
@@ -58,7 +67,7 @@
     // MARK: Make sure edge does not exist.
     BOOL edgeExist = NO;
     for (MTEdge *existingEdge in [self allEdges]) {
-        if ([edge isEqual:existingEdge]) {
+        if ([edge isEqualTo:existingEdge]) {
             edgeExist = YES;
             break;
         }
@@ -132,18 +141,18 @@
 }
 
 // MARK: Breadth first search returns a breadth first tree
-- (MTGraph *)breadthFirstSearch:(MTVertex *)vertexSource {
+- (NSArray *)breadthFirstSearch:(MTVertex *)root {
+    NSMutableArray *resultList = [[NSMutableArray alloc] init];
     
     MTQueue *greyVertices = [[MTQueue alloc] init];
-    MTGraph *breadthFirstTree = [[MTGraph alloc] init];
     for (MTVertex *vertex in [self vertices]) {
         [vertex setBfsVertexColor:MTColorWhite];
     }
-    [vertexSource setBfsDistance:@(0)];
-    [vertexSource setBfsVertexColor:MTColorGray];
-    [vertexSource setBfsPredecessor:nil];
+    [root setBfsDistance:@(0)];
+    [root setBfsVertexColor:MTColorGray];
+    [root setBfsPredecessor:nil];
     
-    [greyVertices enqueue:vertexSource];
+    [greyVertices enqueue:root];
 
     do {
         MTVertex *u = [greyVertices dequeue];
@@ -160,15 +169,74 @@
             } while ([vertex bfsVertexColor] == MTColorWhite);
         }
         [u setBfsVertexColor:MTColorBlack];
-        [breadthFirstTree insertVertex:u];
+        [resultList addObject:u];
     } while ([greyVertices count] > 0);
     
     [greyVertices release];
     
-    return [breadthFirstTree autorelease];
+    return [resultList autorelease];
 }
 
-// MARK: MTProtocolLog
+- (NSArray *)depthFirstSearch:(MTVertex *)root {
+
+    NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
+
+    for (MTVertex *vertex in [self vertices]) {
+        [vertex setBfsVertexColor:MTColorWhite];
+    }
+    
+    MTLinkedList *edges = [[MTLinkedList alloc] init];
+    
+    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter list:&edges];
+    for (MTVertex *vertex in [self vertices]) {
+        if ([vertex dfsVertexColor] == MTColorWhite) {
+            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter list:&edges];
+        }
+    }
+    
+    [edges release];
+    
+    return nil;
+}
+
+- (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex
+                                       counter:(NSNumber **)counter
+                                          list:(MTLinkedList **)list {
+    
+    [vertex setDfsVertexColor: MTColorGray];
+    *counter = @([(*counter) integerValue] + 1);
+    
+    [vertex setDfsDistance:*counter];
+    
+    for (MTEdge *incidentEdge in [vertex incidentEdges]) {
+        
+        MTVertex *neighborVertex = [incidentEdge destination];
+
+        MTEdgeType edgeType = MTEdgeTypeCrossEdge;
+        if ([neighborVertex dfsVertexColor] == MTColorWhite) {
+            edgeType = MTEdgeTypeTreeEdge;
+        } else if ([neighborVertex dfsVertexColor] == MTColorGray) {
+            edgeType = MTEdgeTypeBackEdge;
+        } else {
+            if ([vertex dfsDistance] < [neighborVertex dfsDistance]) {
+                edgeType = MTEdgeTypeForwardEdge;
+            }
+        }
+        
+        [*list insert:[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)]];
+        
+        if ([neighborVertex dfsVertexColor] == MTColorWhite) {
+            [neighborVertex setDfsPredecessor: vertex];
+            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter list:list];
+        }
+    }
+    
+    [vertex setDfsVertexColor:MTColorBlack];
+    *counter = @([(*counter) integerValue] + 1);
+    [vertex setDfsFoundCounter:*counter];
+}
+
+#pragma mark - MTProtocolLog
 
 - (NSString *)humanReadableObjectIdentifier {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];

@@ -71,12 +71,9 @@
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
         
-        
         if ([[objectOrigin URIRepresentation] isEqual: [objectDestination URIRepresentation]]) {
             NSLog(@"Match");
         }
-        
-        
         
         MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
         MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
