@@ -12,7 +12,7 @@
 
 @implementation NSManagedObjectID (Extras)
 
-// MARK: MTProtocolLog
+#pragma mark - MTProtocolLog
 
 - (NSString *)humanReadableObjectIdentifier {
     NSString *result = nil;

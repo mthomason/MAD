@@ -8,7 +8,6 @@
 
 #import "MNSDatabase.h"
 #import "Constants.h"
-#import "SFOAuthCoordinator.h"
 #import "SFRestAPI.h"
 #import "RptqTable.h"
 //#import "RptqField.h"
@@ -16,6 +15,10 @@
 
 #import "MNSDatabaseTable.h"
 #import "MNSDatabaseField.h"
+#import "SFOAuthCoordinator.h"
+
+@class SFOAuthCoordinatorDelegate;
+@class SFRestDelegate;
 
 @interface MNSDatabaseSalesForce : MNSDatabase
     <SFOAuthCoordinatorDelegate, SFRestDelegate>

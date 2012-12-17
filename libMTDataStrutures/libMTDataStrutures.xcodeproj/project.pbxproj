@@ -13,21 +13,28 @@
 		4C2279B01677AFFB00B1150D /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279AF1677AFFB00B1150D /* MTStack.m */; };
 		4C2279B31677B00F00B1150D /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279B21677B00F00B1150D /* MTQueue.m */; };
 		4C4C6F00167635B8004A3B04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
-		4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */; };
+		4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */; };
 		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
 		4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; };
 		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; };
+		4CA16361167EB67C00540A14 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16359167EB5B100540A14 /* SenTestingKit.framework */; };
+		4CA16363167EB67C00540A14 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
+		4CA16364167EB67C00540A14 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
+		4CA1636A167EB67C00540A14 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CA16368167EB67C00540A14 /* InfoPlist.strings */; };
+		4CA1636D167EB67C00540A14 /* MTDataStructuresTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1636C167EB67C00540A14 /* MTDataStructuresTesting.m */; };
+		4CA16372167EB68C00540A14 /* MTTestGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA16357167EB53500540A14 /* MTTestGraph.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4C4C6EFA167635B8004A3B04 /* CopyFiles */ = {
+		4C4C6EFA167635B8004A3B04 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in CopyFiles */,
+				4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -55,6 +62,16 @@
 		4C4C6F1A1676397A004A3B04 /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
 		4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolLog.h; sourceTree = "<group>"; };
 		4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
+		4CA16356167EB53400540A14 /* MTTestGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTestGraph.h; sourceTree = "<group>"; };
+		4CA16357167EB53500540A14 /* MTTestGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTestGraph.m; sourceTree = "<group>"; };
+		4CA16359167EB5B100540A14 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4CA16360167EB67C00540A14 /* MTDataStructuresTesting.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MTDataStructuresTesting.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA16362167EB67C00540A14 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4CA16367167EB67C00540A14 /* MTDataStructuresTesting-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MTDataStructuresTesting-Info.plist"; sourceTree = "<group>"; };
+		4CA16369167EB67C00540A14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4CA1636B167EB67C00540A14 /* MTDataStructuresTesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTDataStructuresTesting.h; sourceTree = "<group>"; };
+		4CA1636C167EB67C00540A14 /* MTDataStructuresTesting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTDataStructuresTesting.m; sourceTree = "<group>"; };
+		4CA1636E167EB67C00540A14 /* MTDataStructuresTesting-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MTDataStructuresTesting-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +83,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CA1635C167EB67C00540A14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA16361167EB67C00540A14 /* SenTestingKit.framework in Frameworks */,
+				4CA16363167EB67C00540A14 /* UIKit.framework in Frameworks */,
+				4CA16364167EB67C00540A14 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -73,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				4C4C6F01167635B8004A3B04 /* libMTDataStrutures */,
+				4CA16365167EB67C00540A14 /* MTDataStructuresTesting */,
 				4C4C6EFE167635B8004A3B04 /* Frameworks */,
 				4C4C6EFD167635B8004A3B04 /* Products */,
 			);
@@ -82,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */,
+				4CA16360167EB67C00540A14 /* MTDataStructuresTesting.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,7 +118,9 @@
 		4C4C6EFE167635B8004A3B04 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CA16359167EB5B100540A14 /* SenTestingKit.framework */,
 				4C4C6EFF167635B8004A3B04 /* Foundation.framework */,
+				4CA16362167EB67C00540A14 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -97,6 +128,7 @@
 		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
 			isa = PBXGroup;
 			children = (
+				4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */,
 				4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */,
 				4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */,
 				4C4C6F1616763959004A3B04 /* MTEdge.h */,
@@ -115,7 +147,8 @@
 				4C2279AF1677AFFB00B1150D /* MTStack.m */,
 				4C4C6F191676397A004A3B04 /* MTVertex.h */,
 				4C4C6F1A1676397A004A3B04 /* MTVertex.m */,
-				4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */,
+				4CA16356167EB53400540A14 /* MTTestGraph.h */,
+				4CA16357167EB53500540A14 /* MTTestGraph.m */,
 				4C4C6F02167635B8004A3B04 /* Supporting Files */,
 			);
 			path = libMTDataStrutures;
@@ -129,6 +162,26 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4CA16365167EB67C00540A14 /* MTDataStructuresTesting */ = {
+			isa = PBXGroup;
+			children = (
+				4CA1636B167EB67C00540A14 /* MTDataStructuresTesting.h */,
+				4CA1636C167EB67C00540A14 /* MTDataStructuresTesting.m */,
+				4CA16366167EB67C00540A14 /* Supporting Files */,
+			);
+			path = MTDataStructuresTesting;
+			sourceTree = "<group>";
+		};
+		4CA16366167EB67C00540A14 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CA16367167EB67C00540A14 /* MTDataStructuresTesting-Info.plist */,
+				4CA16368167EB67C00540A14 /* InfoPlist.strings */,
+				4CA1636E167EB67C00540A14 /* MTDataStructuresTesting-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,7 +191,7 @@
 			buildPhases = (
 				4C4C6EF8167635B8004A3B04 /* Sources */,
 				4C4C6EF9167635B8004A3B04 /* Frameworks */,
-				4C4C6EFA167635B8004A3B04 /* CopyFiles */,
+				4C4C6EFA167635B8004A3B04 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -148,6 +201,24 @@
 			productName = libMTDataStrutures;
 			productReference = 4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */;
 			productType = "com.apple.product-type.library.static";
+		};
+		4CA1635F167EB67C00540A14 /* MTDataStructuresTesting */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA1636F167EB67C00540A14 /* Build configuration list for PBXNativeTarget "MTDataStructuresTesting" */;
+			buildPhases = (
+				4CA1635B167EB67C00540A14 /* Sources */,
+				4CA1635C167EB67C00540A14 /* Frameworks */,
+				4CA1635D167EB67C00540A14 /* Resources */,
+				4CA1635E167EB67C00540A14 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MTDataStructuresTesting;
+			productName = MTDataStructuresTesting;
+			productReference = 4CA16360167EB67C00540A14 /* MTDataStructuresTesting.octest */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -171,9 +242,37 @@
 			projectRoot = "";
 			targets = (
 				4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */,
+				4CA1635F167EB67C00540A14 /* MTDataStructuresTesting */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CA1635D167EB67C00540A14 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA1636A167EB67C00540A14 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CA1635E167EB67C00540A14 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C4C6EF8167635B8004A3B04 /* Sources */ = {
@@ -191,7 +290,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CA1635B167EB67C00540A14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA1636D167EB67C00540A14 /* MTDataStructuresTesting.m in Sources */,
+				4CA16372167EB68C00540A14 /* MTTestGraph.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4CA16368167EB67C00540A14 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CA16369167EB67C00540A14 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4C4C6F08167635B8004A3B04 /* Debug */ = {
@@ -245,6 +364,10 @@
 			buildSettings = {
 				DSTROOT = /tmp/libMTDataStrutures.dst;
 				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libMTDataStrutures/libMTDataStrutures-Prefix.pch";
 				ONLY_ACTIVE_ARCH = NO;
@@ -259,12 +382,49 @@
 			buildSettings = {
 				DSTROOT = /tmp/libMTDataStrutures.dst;
 				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libMTDataStrutures/libMTDataStrutures-Prefix.pch";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4CA16370167EB67C00540A14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MTDataStructuresTesting/MTDataStructuresTesting-Prefix.pch";
+				INFOPLIST_FILE = "MTDataStructuresTesting/MTDataStructuresTesting-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4CA16371167EB67C00540A14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MTDataStructuresTesting/MTDataStructuresTesting-Prefix.pch";
+				INFOPLIST_FILE = "MTDataStructuresTesting/MTDataStructuresTesting-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -288,6 +448,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4CA1636F167EB67C00540A14 /* Build configuration list for PBXNativeTarget "MTDataStructuresTesting" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA16370167EB67C00540A14 /* Debug */,
+				4CA16371167EB67C00540A14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

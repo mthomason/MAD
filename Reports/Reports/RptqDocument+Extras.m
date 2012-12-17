@@ -170,8 +170,7 @@
     
     [database getTables:^(NSArray *tables) {
         
-        [tables enumerateObjectsUsingBlock: ^(MNSDatabaseTable *databaseTable, NSUInteger idx, BOOL *stop) {
-            
+        for (MNSDatabaseTable *databaseTable in tables) {
             RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
                                                                            andTable: databaseTable];
             
@@ -182,8 +181,7 @@
             
             [database getFieldsForTable:rptqTable completion:^(NSArray *fields) {
                 
-                [fields enumerateObjectsUsingBlock:^(MNSDatabaseField *objField, NSUInteger idx, BOOL *stop) {
-                    
+                for (MNSDatabaseField *objField in fields) {
                     RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                          withConnecitonId: connectionId];
                     
@@ -194,13 +192,13 @@
                     RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
                                                                                    andField: objField];
                     [rptqTableOrigional addHasFieldsObject: rptqField];
-                    
-                }];
-                
+                }
+             
             }];
             
             [rptqTable release];
-        }];
+            
+        }
         
         completion(YES);
         
