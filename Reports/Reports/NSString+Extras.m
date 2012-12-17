@@ -12,11 +12,9 @@
 
 + (const char *)cStringFromString:(NSString *)theString {
     NSMutableData *theData;
-    NSLog(@"theString, %@", theString);
     if (! theString) {
         return (const char *)NULL;
     }
-    
     theData = [NSMutableData dataWithData:[theString dataUsingEncoding:NSISOLatin1StringEncoding allowLossyConversion:YES]];
     [theData increaseLengthBy:1];
     return (const char *)[theData bytes];
