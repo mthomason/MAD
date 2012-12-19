@@ -153,7 +153,7 @@
 
 #pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     return [self name];
 }
 
@@ -161,7 +161,7 @@
     return [self name];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [self name];
 }
 

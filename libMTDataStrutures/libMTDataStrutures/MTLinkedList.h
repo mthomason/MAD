@@ -24,5 +24,6 @@
 - (bool)isNext;
 - (bool)isPrevious;
 - (id)objectAtIndex:(NSUInteger)index;
+- (void)reverse;
 
 @end

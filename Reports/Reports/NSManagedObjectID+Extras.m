@@ -14,7 +14,7 @@
 
 #pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     NSString *result = nil;
     UIManagedDocumentReport *document = [UIManagedDocumentReport activeDocument];
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
@@ -22,7 +22,7 @@
     id existingObject = [managedObjectContext existingObjectWithID:self error:&error];
     if (error == nil) {
         if ([existingObject conformsToProtocol:@protocol(MTProtocolLog)]) {
-            result = [existingObject humanReadableObjectIdentifier];
+            result = [existingObject toStringHumanReadable];
         } else {
             result = [self toString];
         }
@@ -36,7 +36,7 @@
     return [NSString stringWithFormat:@"%@", self];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", self];
 }
 

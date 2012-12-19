@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 #import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
+#import "NSNumber+Extras.h"
 
 typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 	MTColorBlack,
@@ -18,10 +20,11 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 
 @class MTEdge;
 
-@interface MTVertex : MTObject <MTProtocolLog>
+@interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
-- (id)initWithEdges:(NSSet *)edges;
-- (id)initWithEdges:(NSSet *)edges andObject:(id)object;
+- (id)init;
+- (id)initWithID:(NSUInteger)idnumber;
+- (id)initWithID:(NSUInteger)idnumber andObject:(id)object;
 
 - (void)addEdge:(MTEdge *)edge;
 
@@ -31,16 +34,14 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
 @property (assign) MTAlgorithmColor bfsVertexColor;
-@property (retain) MTVertex         *bfsPredecessor;
-@property (retain) NSNumber         *bfsDistance;
+@property (nonatomic, retain) MTVertex         *bfsPredecessor;
+@property (nonatomic, retain) NSNumber         *bfsDistance;
 
 @property (assign) MTAlgorithmColor dfsVertexColor;
-@property (retain) NSNumber         *dfsDistance;
-@property (retain) MTVertex         *dfsPredecessor;
-@property (retain) NSNumber         *dfsFoundCounter;
-
-- (void)setBfsVertexColor:(MTAlgorithmColor)bfsVertexColor;
-- (void)setBfsPredecessor:(MTVertex *)bfsPredecessor;
-- (void)setBfsDistance:(NSNumber *)bfsDistance;
+@property (nonatomic, retain) NSNumber         *dfsDistance;
+@property (nonatomic, retain) MTVertex         *dfsPredecessor;
+@property (nonatomic, retain) NSNumber         *dfsFoundCounter;
+@property (nonatomic, retain) NSNumber         *dfsTimestampDiscovered;
+@property (nonatomic, retain) NSNumber         *dfsTimestampFinished;
 
 @end

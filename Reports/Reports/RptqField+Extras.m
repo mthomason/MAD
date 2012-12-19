@@ -97,16 +97,16 @@
 
 // MARK: MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]];
 }
 
 - (NSString *)toString {
-    return [self humanReadableObjectIdentifier];
+    return [self toStringHumanReadable];
 }
 
-- (NSString *)toStringForDebugging {
-    return [self humanReadableObjectIdentifier];
+- (NSString *)toStringDebug {
+    return [self toStringHumanReadable];
 }
 
 #pragma mark - MTProtocolCompare

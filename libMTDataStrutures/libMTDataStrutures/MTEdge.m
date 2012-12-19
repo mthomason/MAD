@@ -77,17 +77,17 @@
                                       [[[self vertices] latter] isEqualTo:[[object vertices] latter]]);
 }
 
-// MARK: MTProtocolLog
+#pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
-    return [NSString stringWithFormat:@"->%@", [[self destination] humanReadableObjectIdentifier]];
+- (NSString *)toStringHumanReadable {
+    return [NSString stringWithFormat:@"->%@", [[self destination] toStringHumanReadable]];
 }
 
 - (NSString *)toString {
-    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [[self origin] humanReadableObjectIdentifier], [[self destination] humanReadableObjectIdentifier]];
+    return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [[self origin] toStringHumanReadable], [[self destination] toStringHumanReadable]];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"(%@)[%@->%@]", self, [self origin], [self destination]];
 }
 

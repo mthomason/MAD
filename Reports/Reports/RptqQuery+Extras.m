@@ -66,17 +66,13 @@
 
     NSSet *hasTables = [query hasTables];
     NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasTables count]];
-    
+
+    MTGraph *graph = [[MTGraph alloc] init];
+
     // MARK: Create vertex in the graph for each query table.
     for (RptqTable *table in hasTables) {
-        
-        MTVertex *unconnectedVertex = [[MTVertex alloc] initWithEdges:nil andObject:[table objectID]];
-        [vertices addObject: unconnectedVertex];
-        [unconnectedVertex release];
-        
+        [graph addVertexWithObject:[table objectID]];
     }
-    
-    MTGraph *graph = [[MTGraph alloc] initWithVertices: vertices];
     
     // MARK: Create an edge in the graph for each query link.
     NSSet *hasQueryLinks = [query hasQueryLinks];
@@ -94,16 +90,11 @@
         MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
         MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
 
-        MTEdge *edge =                  [[MTEdge alloc] initWithOrigin: vertexOrigin
-                                                           destination: vertexDestination
-                                                             andObject: [queryLink objectID]];
+        [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:[queryLink objectID] andWeight:@(1)];
         
-        [graph insertEdge:edge];
-        
-        [edge release];
     }
     
-    [graph humanReadableObjectIdentifier];
+    [graph toStringHumanReadable];
     
     [graph breadthFirstSearch:[vertices anyObject]];
     

@@ -64,16 +64,10 @@
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
-    BOOL haveAnother = state->state < [[self stack] count];
-    NSUInteger result = haveAnother ? 1 : 0;
-    if (haveAnother) {
-        state->itemsPtr[0] = [[self stack] objectAtIndex:state->state];
-        state->state++;
-    }
-    return result;
+    return [[self stack] countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     return nil;
 }
 
@@ -81,7 +75,7 @@
     return nil;
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", self];
 }
 

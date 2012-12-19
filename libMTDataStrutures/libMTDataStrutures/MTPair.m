@@ -46,15 +46,20 @@
     return [pair autorelease];
 }
 
-- (NSString *)humanReadableObjectIdentifier {
-    return nil;
+- (NSString *)toStringHumanReadable {
+    Protocol *protocolLog = @protocol(MTProtocolLog);
+    BOOL formerConfirmsToLoggingProtocol = [[self former] conformsToProtocol: protocolLog];
+    BOOL latterConfirmsToLoggingProtocol = [[self latter] conformsToProtocol: protocolLog];
+    NSString *formerToString = formerConfirmsToLoggingProtocol ? [[self former] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self former]];
+    NSString *latterToString = latterConfirmsToLoggingProtocol ? [[self latter] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self latter]];
+    return [NSString stringWithFormat:@"(%@, %@)", formerToString, latterToString];
 }
 
 - (NSString *)toString {
     return nil;
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", [self destination]];
 }
 

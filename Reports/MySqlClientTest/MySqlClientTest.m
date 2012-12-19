@@ -10,42 +10,12 @@
 
 @implementation MySqlClientTest
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
-    
-    // Set-up code here.
 }
 
-- (void)tearDown
-{
-    // Tear-down code here.
-    
+- (void)tearDown {
     [super tearDown];
-}
-
-- (void)testBasicConnection {
-    /*
-    MYSQL *_connection = mysql_init(NULL);
-    unsigned int timeout = 30;
-    mysql_options(_connection, MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
-    
-    BOOL connectionSucceded = false;
-    //NSLog(@"Connecting to %@",server);
-    
-    if (!mysql_real_connect(_connection,
-                            "everydayapps.com",
-                            "edatest",
-                            "tEsT289ydjk",
-                            "quotationary",
-                            3306,  // default port
-                            NULL,  // default socket
-                            CLIENT_FOUND_ROWS)) {
-        connectionSucceded = true;
-    }
-    mysql_close(_connection);
-     */
-    STAssertTrue(YES, @"Failed to connect to the MySql test server.  This could be bad, or very bad.");
 }
 
 - (void)testMySqlApiObjC {

@@ -11,23 +11,32 @@
 
 @interface MTVertex()
 
-@property (retain) NSMutableArray *edges;     //The edges this node has
+@property (nonatomic, retain) NSMutableArray *edges;     //The edges this node has
+@property (nonatomic, retain) NSNumber *uniqueIdForStructure;
 
 @end
 
 @implementation MTVertex
 
-- (id)initWithEdges:(NSSet *)edges {
-    return [self initWithEdges:edges andObject:nil];
+- (id)init {
+    return [self initWithID:[NSNumber zero]];
 }
 
-- (id)initWithEdges:(NSSet *)edges andObject:(id)object {
+- (id)initWithID:(NSUInteger)idnumber {
+    return [self initWithID:idnumber andObject:nil];
+}
+
+- (id)initWithID:(NSUInteger)idnumber andObject:(id)object {
     self = [super init];
     if (self) {
+        
+        NSNumber *number = [[NSNumber alloc] initWithInteger:idnumber];
+        [self setUniqueIdForStructure:number];
+        [number release];
 
-        NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithArray:[edges allObjects]];
-        [self setEdges:arrayEmpty];
-        [arrayEmpty release];
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        [self setEdges:array];
+        [array release];
         
         id obj = [object retain];
         [self setObject: obj];
@@ -69,41 +78,50 @@
     return result;
 }
 
-- (BOOL)isEqualTo:(id)object {
-    BOOL result;
-    if (self == object) {
-        result = YES;
-    } else {
-        result = ([[self object] isEqual:[object object]] &&
-                  [[self edges] isEqualToArray:[object edges]]);
-    }
-    return result;
-}
-
 - (void)removeEdge:(MTEdge *)edge {
     [[self edges] removeObject: edge];
 }
 
 - (void)dealloc {
+    [_uniqueIdForStructure release];
+    [_dfsTimestampDiscovered release];
+    [_dfsTimestampFinished release];
+    [_dfsFoundCounter release];
+    [_dfsPredecessor release];
+    [_dfsDistance release];
     [_bfsPredecessor release];
     [_bfsDistance release];
     [_edges release];
     [super dealloc];
 }
 
-// MARK: MTProtocolLog
+#pragma mark - MTProtocolCompare
 
-- (NSString *)humanReadableObjectIdentifier {
-    NSString *humanReadableVector;
-    if ([[self object] respondsToSelector:@selector(humanReadableObjectIdentifier)]) {
-        humanReadableVector = [[self object] humanReadableObjectIdentifier];
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if (self == sender) {
+        result = YES;
     } else {
-        humanReadableVector = [self toStringForDebugging];
+        result = ([[self object] isEqual:[sender object]] &&
+                  [[self edges] isEqualToArray:[sender edges]]);
+    }
+    return result;
+}
+
+#pragma mark - MTProtocolLog
+
+- (NSString *)toStringHumanReadable {
+    NSString *humanReadableVector;
+    if ([[self object] respondsToSelector:@selector(toStringHumanReadable)]) {
+        humanReadableVector = [[self object] toStringHumanReadable];
+    } else {
+        humanReadableVector = [self toStringDebug];
     }
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", humanReadableVector];
     for (MTEdge *edge in [self edges]) {
-        [result appendString:@"\t->"];
-        [result appendString:[edge humanReadableObjectIdentifier]];
+        [result appendString:@"->"];
+        MTVertex *destination = [edge destination];
+        [result appendString:[[destination object] toStringHumanReadable]];
     }
     return [result autorelease];
 }
@@ -112,12 +130,12 @@
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"(%@)", self];
     for (MTEdge *edge in [self edges]) {
         [result appendString:@"\tEdge->"];
-        [result appendString:[edge toStringForDebugging]];
+        [result appendString:[edge toStringDebug]];
     }
     return [result autorelease];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", self];
 }
 

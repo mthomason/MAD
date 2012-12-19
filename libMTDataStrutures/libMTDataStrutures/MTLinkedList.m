@@ -105,25 +105,35 @@
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
-    BOOL haveAnother = state->state < [[self list] count];
-    NSUInteger result = haveAnother ? 1 : 0;
-    if (haveAnother) {
-        state->itemsPtr[0] = [[self list] objectAtIndex:state->state];
-        state->state++;
-    }
-    return result;
+    return [[self list] countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
-- (NSString *)humanReadableObjectIdentifier {
-    return nil;
+- (NSString *)toStringHumanReadable {
+    NSMutableString *result = [[NSMutableString alloc] initWithString:@"*<->"];
+    for (id object in [self list]) {
+        if ([object conformsToProtocol:@protocol(MTProtocolLog)]) {
+            [result appendFormat:@"%@<->", [object toStringHumanReadable]];
+        } else {
+            [result appendFormat:@"%@<->", object];
+        }
+    }
+    [result appendString:@"*"];
+    return [result autorelease];
 }
 
 - (NSString *)toString {
     return nil;
 }
 
-- (NSString *)toStringForDebugging {
-    return [NSString stringWithFormat:@"%@", [self destination]];
+- (NSString *)toStringDebug {
+    return [NSString stringWithFormat:@"%@", self];
+}
+
+- (void)reverse {
+    NSArray *reverse = [[[self list] reverseObjectEnumerator] allObjects];
+    NSMutableArray *newList = [[NSMutableArray alloc] initWithArray:reverse];
+    [self setList:newList];
+    [newList release];
 }
 
 @end

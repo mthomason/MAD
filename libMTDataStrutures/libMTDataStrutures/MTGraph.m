@@ -10,7 +10,12 @@
 
 @interface MTGraph ()
 
-@property (retain) NSMutableArray *vertices;
+// MARK: The graph is defined as an adjacency list.
+@property (nonatomic, retain) NSMutableArray *vertices;
+
+// MARK: Counters to give edges and verties unique ids.
+@property (assign) NSUInteger idUniqueVertices;
+@property (assign) NSUInteger idUniqueEdges;
 
 @end
 
@@ -35,35 +40,32 @@
         NSMutableArray *vertices = [[NSMutableArray alloc] initWithArray: [verticesSet allObjects]];
         [self setVertices: vertices];
         [vertices release];
+        
+        [self setIdUniqueEdges:0];
+        [self setIdUniqueVertices:0];
     }
     return self;
 }
 
 #pragma mark - Members
 
-- (void)insertVertex:(MTVertex *)newVertex {
-    BOOL duplicate = NO;
-    for (MTVertex *vertex in [self vertices]) {
-        if (![newVertex isEqualTo:vertex]) {
-            duplicate = YES;
-            break;
-        }
-    }
-    if (!duplicate) {
-        [[self vertices] addObject:newVertex];
-    }
+// MARK: Add new vertex to adjacency list.
+- (MTVertex *)addVertexWithObject:(id)object {
+    MTVertex *vertex = [[MTVertex alloc] initWithID:[self idUniqueVertices] andObject:object];
+    [self setIdUniqueVertices: ([self idUniqueVertices] + 1)];
+    [[self vertices] addObject:vertex];
+    return [vertex autorelease];
 }
 
-- (void)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination andObject:(id)object {
-    MTEdge *edge = [[MTEdge alloc] initWithOrigin:origin destination:destination andObject:object];
-    [self insertEdge:edge];
-    [edge release];
-}
-
-// ???: What happens with malformated edges?
-- (BOOL)insertEdge:(MTEdge *)edge {
+// MARK: Add new edge to the graph.
+- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id)object andWeight:(NSNumber *)weight {
+    
     BOOL result = NO;
     
+    // MARK: Create new edge.
+    MTEdge *edge = [[MTEdge alloc] initWithOrigin:origin destination:destination object:object andWeight:weight];
+    [self setIdUniqueEdges: ([self idUniqueEdges] + 1)];
+
     // MARK: Make sure edge does not exist.
     BOOL edgeExist = NO;
     for (MTEdge *existingEdge in [self allEdges]) {
@@ -72,21 +74,20 @@
             break;
         }
     }
-
+    
     // MARK: Insert edge.
     if (!edgeExist) {
         for (MTVertex *vertex in [self vertices]) {
             MTVertex *edgeOrigin = [edge origin];
-            NSLog(@"edgeOrigin: %@", edgeOrigin);
-            if ([vertex isEqual:[edge origin]]) {
+            if ([vertex isEqualTo: edgeOrigin]) {
                 [vertex addEdge:edge];
                 result = YES;
                 break;
             }
         }
     }
-
-    return result;
+    [edge autorelease];
+    return result ? edge : nil;
 }
 
 - (void)removeVertex:(MTVertex *)vertex {
@@ -177,36 +178,70 @@
     return [resultList autorelease];
 }
 
-- (NSArray *)depthFirstSearch:(MTVertex *)root {
+- (MTLinkedList *)depthFirstSearch:(MTVertex *)root {
 
     NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
 
     for (MTVertex *vertex in [self vertices]) {
-        [vertex setBfsVertexColor:MTColorWhite];
+        [vertex setDfsVertexColor:MTColorWhite];
     }
     
-    MTLinkedList *edges = [[MTLinkedList alloc] init];
+    MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
+    MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
-    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter list:&edges];
+    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
     for (MTVertex *vertex in [self vertices]) {
         if ([vertex dfsVertexColor] == MTColorWhite) {
-            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter list:&edges];
+            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }
     }
+    [resultVertices autorelease];
+    return [resultEdges autorelease];
+}
+
+- (MTLinkedList *)topologicalSort:(MTVertex *)root error:(NSError **)anError {
     
-    [edges release];
+    NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
     
-    return nil;
+    for (MTVertex *vertex in [self vertices]) {
+        [vertex setDfsVertexColor:MTColorWhite];
+    }
+    
+    MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
+    MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
+    
+    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+    for (MTVertex *vertex in [self vertices]) {
+        if ([vertex dfsVertexColor] == MTColorWhite) {
+            [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+        }
+    }
+    BOOL isDirectedAcyclicGraph = YES;
+    for (MTPair *pair in resultEdges) {
+        MTEdgeType edgeType = [[pair latter] integerValue];
+        if (edgeType == MTEdgeTypeBackEdge) {
+            isDirectedAcyclicGraph = NO;
+            *anError = [NSError errorWithDomain:@"MTDataStructures" code:1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
+            break;
+        }
+    }
+    [resultEdges autorelease];
+    [resultVertices reverse];
+    [resultVertices autorelease];
+    return isDirectedAcyclicGraph ? resultVertices : nil;
+
 }
 
 - (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex
                                        counter:(NSNumber **)counter
-                                          list:(MTLinkedList **)list {
+                                   listOfEdges:(MTLinkedList **)listOfEdges
+                                listOfVertices:(MTLinkedList **)listOfVertices {
     
     [vertex setDfsVertexColor: MTColorGray];
     *counter = @([(*counter) integerValue] + 1);
     
     [vertex setDfsDistance:*counter];
+    [vertex setDfsTimestampDiscovered:*counter];
     
     for (MTEdge *incidentEdge in [vertex incidentEdges]) {
         
@@ -223,43 +258,49 @@
             }
         }
         
-        [*list insert:[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)]];
+        [*listOfEdges add:[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)]];
         
         if ([neighborVertex dfsVertexColor] == MTColorWhite) {
             [neighborVertex setDfsPredecessor: vertex];
-            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter list:list];
+            [self depthFirstSearchVisitWithCurrentVertex:neighborVertex counter:counter listOfEdges:listOfEdges listOfVertices:listOfVertices];
         }
     }
     
     [vertex setDfsVertexColor:MTColorBlack];
     *counter = @([(*counter) integerValue] + 1);
+    [vertex setDfsTimestampFinished:*counter];
     [vertex setDfsFoundCounter:*counter];
+    
+    [*listOfVertices add:[MTPair pairWithFormer:vertex andLatter:*counter]];
+
+    
+    NSLog(@"(%@) (%d/%d)", [vertex toStringHumanReadable], [[vertex dfsTimestampDiscovered] integerValue], [[vertex dfsTimestampFinished] integerValue]);
 }
 
 #pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
     for (MTVertex *vertex in [self allVertices]) {
-        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+        [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
-    NSLog(@"%@--------------------\n", result);
+    [result appendString:@"--------------------\n"];
     return [result autorelease];
 }
 
 - (NSString *)toString {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
     for (MTVertex *vertex in [self allVertices]) {
-        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+        [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     NSLog(@"%@\n--------------------\n", result);
     return [result autorelease];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     NSMutableString *result = [[NSMutableString alloc] initWithFormat:@"\n %@\n--------------------\n", self];
     for (MTVertex *vertex in [self allVertices]) {
-        [result appendFormat:@"%@\n", [vertex humanReadableObjectIdentifier]];
+        [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     NSLog(@"%@\n--------------------\n", result);
     return [result autorelease];

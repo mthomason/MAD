@@ -10,9 +10,21 @@
 
 @implementation NSNumber (MTProtocol)
 
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqual:sender]) {
+        result = YES;
+    } else {
+        result = [self isEqualToNumber:sender];
+    }
+    return result;
+}
+
 #pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     return [self stringValue];
 }
 
@@ -20,7 +32,7 @@
     return [self stringValue];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [self debugDescription];
 }
 

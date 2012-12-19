@@ -52,15 +52,15 @@
 
 #pragma mark - MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
-    return [[self object] humanReadableObjectIdentifier];
+- (NSString *)toStringHumanReadable {
+    return [[self object] toStringHumanReadable];
 }
 
 - (NSString *)toString {
     return [[self object] toString];
 }
 
-- (NSString *)toStringForDebugging {
+- (NSString *)toStringDebug {
     return [NSString stringWithFormat:@"%@", [self object]];
 }
 

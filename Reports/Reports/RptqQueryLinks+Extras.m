@@ -146,7 +146,7 @@
 
 // MARK: MTProtocolLog
 
-- (NSString *)humanReadableObjectIdentifier {
+- (NSString *)toStringHumanReadable {
     NSMutableString *result = [[NSMutableString alloc] initWithString:[[self hasLeftField] name]];
     [result appendFormat:@" %@ ", [self linkDescription]];
     [result appendString:[[self hasRightField] name]];
@@ -154,11 +154,11 @@
 }
 
 - (NSString *)toString {
-    return [self humanReadableObjectIdentifier];
+    return [self toStringHumanReadable];
 }
 
-- (NSString *)toStringForDebugging {
-    return [self humanReadableObjectIdentifier];
+- (NSString *)toStringDebug {
+    return [self toStringHumanReadable];
 }
 
 #pragma mark - MTProtocolCompare

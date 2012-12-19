@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
 
-@interface NSNumber (MTProtocol) <MTProtocolLog>
+@interface NSNumber (MTProtocol) <MTProtocolCompare, MTProtocolLog>
 
 @end

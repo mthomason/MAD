@@ -12,10 +12,14 @@
 
 @required
 
-- (NSString *)humanReadableObjectIdentifier;
 - (NSString *)toString;
-- (NSString *)toStringForDebugging;
+- (NSString *)toStringDebug;
+- (NSString *)toStringHumanReadable;
 
 @optional
+
+- (NSString *)toStringExpressive;
+- (NSString *)toStringSymbolic;
+- (NSString *)toStringName;
 
 @end
