@@ -417,7 +417,7 @@
 
 - (void)didSelectDataField:(RptqField *)field {
     
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
+    RptqDocument *doc = [RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
     if (doc) {
         
         NSEntityDescription *rdoEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
@@ -445,22 +445,21 @@
         //dataObject.isLabelDataField = dataField;
         
         [[doc hasDetailSection] addHasObjectsObject:dataObject];
+        
+        [dataObject release];
 
         NSError *error = nil;
         [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
+
         if (!error) {
             [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
                                   forSaveOperation: UIDocumentSaveForOverwriting
                                  completionHandler: ^(BOOL success) {
                                      
                                      [dataObject release];
-                                     [doc release];
                                  }];
         }
-    } else {
-        [doc release];
     }
-
     
     [self dismissViewControllerAnimated:YES completion:^{
         

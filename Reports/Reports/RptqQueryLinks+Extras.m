@@ -58,30 +58,13 @@
 
 #pragma mark - Static
 
-+ (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
-    RptqQueryLinks *result = nil;
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: moc] retain];
-    if (doc) {
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-        request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
-        NSError *error = nil;
-        NSArray *results = [[moc executeFetchRequest:request error:&error] retain];
-        if ([results count] == 1) {
-            result = [[[results objectAtIndex: 0] retain] autorelease];
-        } else if ([results count] > 1) {
-            for (RptqQueryLinks *link in results) {
-                result = [[link retain] autorelease];
-                break;
-            }
-        } else {
-            NSLog(@"Could not find item to delete.  This is a bug.  :(");
-        }
-        [results release];                            
-        
-    }
-    [doc release];
++ (id)getQueryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    NSError *error = nil;
+    NSArray *results = [moc executeFetchRequest:request error:&error];
+    RptqTable *result = nil;
+    if (results) result = [results lastObject];
     return result;
 }
 

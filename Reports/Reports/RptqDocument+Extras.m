@@ -196,8 +196,6 @@
              
             }];
             
-            [rptqTable release];
-            
         }
         
         completion(YES);

@@ -80,18 +80,31 @@
  
         RptqTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
         RptqTable *tableDestination =   [[queryLink hasRightField] inTable];
+
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
-        
-        if ([[objectOrigin URIRepresentation] isEqual: [objectDestination URIRepresentation]]) {
-            NSLog(@"Match");
-        }
+        id objectQueryLink =            [queryLink objectID];
         
         MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
         MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
 
-        [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:[queryLink objectID] andWeight:@(1)];
+        [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
         
+    }
+    
+    NSError *error = nil;
+    MTLinkedList *topologicalSort = [graph topologicalSort:[vertices anyObject] error:&error];
+    if (!error) {
+        for (MTPair *pair in topologicalSort) {
+            MTVertex *queryTable = [pair former];
+            NSManagedObjectID *objectID = [queryTable object];
+
+            RptqTable *table = [RptqTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
+            
+            
+            
+            
+        };
     }
     
     [graph toStringHumanReadable];
@@ -110,6 +123,15 @@
 
 + (void)cacheQueryForDatabase:(RptqDatabase *)database progress:(void (^)(NSNumber *percentage))progress completion:(void (^)(BOOL success))completion {
 #warning incomplete
+    
+    /*
+     NSString *prefixString = @"MyFilename";
+     
+     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
+     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
+     
+     NSLog(@"uniqueFileName: '%@'", uniqueFileName);
+     */
     BOOL success = YES;
 
     for (RptqQuery *query in [database hasQueries]) {

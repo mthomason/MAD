@@ -11,7 +11,7 @@
 
 @interface MTVertex()
 
-@property (nonatomic, retain) NSMutableArray *edges;     //The edges this node has
+@property (nonatomic, retain) NSMutableArray *edges;     // MARK: The edges this node has
 @property (nonatomic, retain) NSNumber *uniqueIdForStructure;
 
 @end
@@ -19,7 +19,7 @@
 @implementation MTVertex
 
 - (id)init {
-    return [self initWithID:[NSNumber zero]];
+    return [self initWithID:0];
 }
 
 - (id)initWithID:(NSUInteger)idnumber {
@@ -102,8 +102,8 @@
     if (self == sender) {
         result = YES;
     } else {
-        result = ([[self object] isEqual:[sender object]] &&
-                  [[self edges] isEqualToArray:[sender edges]]);
+        MTVertex *v = sender;
+        result = [[self uniqueIdForStructure] isEqualToNumber:[v uniqueIdForStructure]];
     }
     return result;
 }

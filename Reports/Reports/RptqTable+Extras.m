@@ -102,6 +102,16 @@
     return result;
 }
 
++ (id)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    NSError *error = nil;
+    NSArray *results = [moc executeFetchRequest:request error:&error];
+    RptqTable *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
 + (void)addTableToQuery:(RptqTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -142,7 +152,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if (self == sender) {
         result = YES;
     } else {
         RptqTable *s = sender;

@@ -14,12 +14,12 @@
 
 typedef NS_ENUM(NSUInteger, MNSLinkType) {
 	MNSLinkTypeInnerJoin = 0,
-	MNSLinkTypeEquiJoin,
-	MNSLinkTypeNaturalJoin,
-    MNSLinkTypeCrossJoin,
-    MNSLinkTypeLeftOuterJoin,
-    MNSLinkTypeRightOuterJoin,
-    MNSLinkTypeFullOuterJoin,
+	MNSLinkTypeEquiJoin = 1,
+	MNSLinkTypeNaturalJoin = 2,
+    MNSLinkTypeCrossJoin = 3,
+    MNSLinkTypeLeftOuterJoin = 4,
+    MNSLinkTypeRightOuterJoin = 5,
+    MNSLinkTypeFullOuterJoin = 6,
 };
 
 #define MNSLinkTypeReuseIds [NSArray arrayWithObjects: @"MNSJoinTypeInnerJoin", @"MNSJoinTypeEquiJoin", @"MNSJoinTypeNaturalJoin", @"MNSJoinTypeCrossJoin", @"MNSJoinTypeLeftOuterJoin", @"MNSJoinTypeRightOuterJoin", @"MNSJoinTypeFullOuterJoin", nil]
@@ -28,9 +28,12 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
+#define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"EQUI JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
+
+
 @interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
 
-+ (id)queryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
++ (id)getQueryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 
 + (id)createQueryLinkWithLeftField:(RptqField *)fieldLeft

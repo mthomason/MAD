@@ -11,9 +11,10 @@
 
 @interface MTEdge ()
 
-@property(retain) MTPair *vertices;
-@property(retain) NSNumber *weight;
+@property(nonatomic, retain) MTPair *vertices;
+@property(nonatomic, retain) NSNumber *weight;
 @property(readwrite, assign) BOOL isDirected;
+@property (nonatomic, retain) NSNumber *uniqueIdForStructure;
 
 @end
 
@@ -25,15 +26,15 @@
     [super dealloc];
 }
 
-- (id)initWithOrigin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
-    return [self initWithOrigin:vertex1 destination:vertex2 andObject:nil];
+- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
+    return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];
 }
 
-- (id)initWithOrigin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id)object {
-    return [self initWithOrigin:vertex1 destination:vertex2 object:nil andWeight:@(1)];
+- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id)object {
+    return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 object:nil andWeight:@(1)];
 }
 
-- (id)initWithOrigin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id)object andWeight:(NSNumber *)weight {
+- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id)object andWeight:(NSNumber *)weight {
     self = [super init];
     if (self) {
 
@@ -43,14 +44,9 @@
         [self setVertices:pair];
         [pair release];
         
-        id obj = [object retain];
-        [self setObject: obj];
-        [obj release];
-        
-        NSNumber *w = [weight retain];
-        [self setWeight:w];
-        [w release];
-
+        [self setObject: object];
+        [self setWeight:weight];
+        [self setUniqueIdForStructure:uniqueID];
     }
     return self;
 }
@@ -63,18 +59,17 @@
     return [[self vertices] latter];
 }
 
-- (BOOL)isEqualTo:(id)object {
-    BOOL objectComparson;
-    if ([object conformsToProtocol:@protocol(MTProtocolCompare)]) {
-        objectComparson = [[self object] isEqualTo:[object object]];
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if (self == sender) {
+        result = YES;
     } else {
-        objectComparson = [[self object] isEqual:[object object]];
+        MTEdge *e = sender;
+        result = [[self uniqueIdForStructure] isEqualToNumber:[e uniqueIdForStructure]];
     }
-    return (self == object) ? YES :  (objectComparson &&
-                                      [self isDirected] == [object isDirected] &&
-                                      [[self weight] compare:[object weight]] &&
-                                      [[[self vertices] former] isEqualTo:[[object vertices] former]] &&
-                                      [[[self vertices] latter] isEqualTo:[[object vertices] latter]]);
+    return result;
 }
 
 #pragma mark - MTProtocolLog

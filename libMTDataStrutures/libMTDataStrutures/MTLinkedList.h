@@ -25,5 +25,6 @@
 - (bool)isPrevious;
 - (id)objectAtIndex:(NSUInteger)index;
 - (void)reverse;
+- (NSArray *)toArray;
 
 @end

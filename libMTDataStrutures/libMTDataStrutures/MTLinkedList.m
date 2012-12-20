@@ -136,4 +136,8 @@
     [newList release];
 }
 
+- (NSArray *)toArray {
+    return [self list];
+}
+
 @end

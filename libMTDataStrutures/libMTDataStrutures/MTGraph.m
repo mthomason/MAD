@@ -63,7 +63,7 @@
     BOOL result = NO;
     
     // MARK: Create new edge.
-    MTEdge *edge = [[MTEdge alloc] initWithOrigin:origin destination:destination object:object andWeight:weight];
+    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:@([self idUniqueEdges]) origin:origin destination:destination object:object andWeight:weight];
     [self setIdUniqueEdges: ([self idUniqueEdges] + 1)];
 
     // MARK: Make sure edge does not exist.
@@ -221,7 +221,7 @@
         MTEdgeType edgeType = [[pair latter] integerValue];
         if (edgeType == MTEdgeTypeBackEdge) {
             isDirectedAcyclicGraph = NO;
-            *anError = [NSError errorWithDomain:@"MTDataStructures" code:1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
+            if (anError != NULL) *anError = [NSError errorWithDomain:@"MTDataStructures" code:1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
             break;
         }
     }

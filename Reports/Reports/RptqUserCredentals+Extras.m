@@ -71,7 +71,8 @@
     NSError *error = nil;
     NSArray *results = [[NSArray alloc] initWithArray:[objectContext executeFetchRequest:request error:&error]];
     if (error) [error presentErrorToUser];
-    return results;
+    [request release];
+    return [results autorelease];
 }
 
 #pragma mark - MTProtocolCompare
