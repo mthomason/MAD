@@ -11,9 +11,6 @@
 
 @implementation UITableViewCellQueryLink
 
-@synthesize labelFieldLeft = _labelFieldLeft, labelFieldRight = _labelFieldRight, labelJoinArrow = _labelJoinArrow, labelJoinDesc = _labelJoinDesc, labelTableLeft = _labelTableLeft, labelTableRight = _labelTableRight;
-@synthesize tableID = _tableID;
-
 - (void)dealloc {
     [_tableID release];
     [super dealloc];

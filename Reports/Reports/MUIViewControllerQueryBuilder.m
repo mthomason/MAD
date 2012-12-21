@@ -844,8 +844,6 @@
              [NSString stringWithFormat:@"%@.%@", [links tableleft], [links fieldleft]]];
             [[(UITableViewCellQueryLink *)result labelTableRight] setText:
              [NSString stringWithFormat:@"%@.%@", [links tableright], [links fieldright]]];
-            [[(UITableViewCellQueryLink *)result labelFieldLeft] setText: @""];
-            [[(UITableViewCellQueryLink *)result labelFieldRight] setText: @""];
             [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [NSString stringWithFormat:@"%@ (%@)", [MNSLinkTypeSymbols objectAtIndex: [[links jointypeenum] integerValue]], [MNSLinkTypeNames objectAtIndex: [[links jointypeenum] integerValue]]]];
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
             [links release];

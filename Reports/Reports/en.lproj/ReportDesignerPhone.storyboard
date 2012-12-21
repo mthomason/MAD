@@ -679,31 +679,17 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" text="Table One" lineBreakMode="middleTruncation" minimumFontSize="10" id="bS3-mz-AI4">
-                                                            <rect key="frame" x="10" y="11" width="122" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                            <rect key="frame" x="10" y="11" width="260" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" text="Table Two" lineBreakMode="middleTruncation" minimumFontSize="10" id="Yv0-Ru-eLi">
-                                                            <rect key="frame" x="10" y="68" width="121" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                            <rect key="frame" x="10" y="68" width="260" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Field One" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="NTH-yX-nCA">
-                                                            <rect key="frame" x="157" y="11" width="105" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Field Two" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Oxm-g3-E2s">
-                                                            <rect key="frame" x="144" y="69" width="112" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="eRy-bM-sTz">
@@ -717,8 +703,6 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <connections>
-                                                    <outlet property="labelFieldLeft" destination="NTH-yX-nCA" id="Z9M-iq-hLZ"/>
-                                                    <outlet property="labelFieldRight" destination="Oxm-g3-E2s" id="wm8-zI-A8S"/>
                                                     <outlet property="labelJoinDesc" destination="eRy-bM-sTz" id="qqP-kG-wXU"/>
                                                     <outlet property="labelTableLeft" destination="bS3-mz-AI4" id="EQ1-rr-07Q"/>
                                                     <outlet property="labelTableRight" destination="Yv0-Ru-eLi" id="ZL7-Q8-Xvy"/>
@@ -4854,8 +4838,6 @@
         <class className="UITableViewCellQueryLink" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
             <relationships>
-                <relationship kind="outlet" name="labelFieldLeft" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelFieldRight" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelJoinDesc" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelTableLeft" candidateClass="UILabel"/>

@@ -15,8 +15,6 @@
 
 @property (nonatomic, assign) IBOutlet UILabel *labelTableLeft;
 @property (nonatomic, assign) IBOutlet UILabel *labelTableRight;
-@property (nonatomic, assign) IBOutlet UILabel *labelFieldLeft;
-@property (nonatomic, assign) IBOutlet UILabel *labelFieldRight;
 @property (nonatomic, assign) IBOutlet UILabel *labelJoinArrow;
 @property (nonatomic, assign) IBOutlet UILabel *labelJoinDesc;
 
