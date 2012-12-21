@@ -15,7 +15,7 @@
 @end
 
 @implementation MNSDatabaseMySql
-
+ 
 - (void)dealloc {
     [_databaseConnection release];
     [super dealloc];
