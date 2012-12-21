@@ -1680,7 +1680,7 @@
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
 		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
-		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = "<group>"; };
+		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = SOURCE_ROOT; };
 		4C7C8AF11660348D00F2B88B /* UIManagedDocument+FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIManagedDocument+FileOperations.h"; sourceTree = "<group>"; };
 		4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIManagedDocument+FileOperations.m"; sourceTree = "<group>"; };
 		4C7C8AF516603D3B00F2B88B /* ApplicationSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationSettings.h; path = Reports/ApplicationSettings.h; sourceTree = "<group>"; };
@@ -5791,7 +5791,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/Reports-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -5835,7 +5835,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/Reports-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
