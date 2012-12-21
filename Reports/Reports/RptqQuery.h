@@ -2,7 +2,7 @@
 //  RptqQuery.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/15/12.
+//  Created by Michael Thomason on 12/21/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,9 +14,9 @@
 @interface RptqQuery : NSManagedObject
 
 @property (nonatomic, retain) NSString * cachedText;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSNumber * override;
 @property (nonatomic, retain) NSString * overrideText;
-@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSSet *hasFields;
 @property (nonatomic, retain) RptqQueryCache *hasQueryCache;
 @property (nonatomic, retain) NSSet *hasQueryGroups;

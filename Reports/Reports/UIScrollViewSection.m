@@ -36,8 +36,8 @@
     [[UIColor blueColor] set];
     [[self localizedName] drawInRect: rect
                             withFont: [UIFont systemFontOfSize:([UIFont systemFontSize])]
-                       lineBreakMode: UILineBreakModeClip
-                           alignment: UITextAlignmentLeft];
+                       lineBreakMode: NSLineBreakByClipping
+                           alignment: NSTextAlignmentLeft];
 }
 
 @end

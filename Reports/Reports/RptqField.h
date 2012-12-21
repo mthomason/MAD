@@ -2,7 +2,7 @@
 //  RptqField.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/15/12.
+//  Created by Michael Thomason on 12/21/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,9 +14,9 @@
 @interface RptqField : NSManagedObject
 
 @property (nonatomic, retain) NSString * datatype;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSSet *inQuery;
 @property (nonatomic, retain) NSSet *inQueryGroup;
 @property (nonatomic, retain) NSSet *inQueryLinkLeft;

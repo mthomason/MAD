@@ -8,6 +8,59 @@
 
 /* Make a point from `(x, y)'. */
 
+#define square(x) ( (x) * (x) )
+
+CG_INLINE CGPoint CGCenterOfRect(CGRect rect);
+
+CG_INLINE CGPoint
+CGCenterOfRect(CGRect rect) {
+    return CGPointMake(rect.origin.x + (rect.size.width / 2.0000f), rect.origin.y + (rect.size.height / 2.0000f));
+}
+
+CG_INLINE CGPoint CGPointMakeRandomOffscreen();
+
+CG_INLINE CGPoint
+CGPointMakeRandomOffscreen() {
+	CGPoint offScreen;
+	CGFloat offSetSize = 200.0000f * 2;
+	if (rand()%2 == 0) {
+		if (rand()%2 == 0) {
+			//offscreen top
+			offScreen = CGPointMake(rand() % (int)1024.0000f, 0.0000f - offSetSize);
+		} else {
+			//offscreen left
+			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)1024.0000f);
+		}
+		
+	} else {
+		if (rand()%2 == 0) {
+			//offscreen bottom
+			offScreen = CGPointMake(rand() % (int)1024.0000f, 1024.0000f + offSetSize);
+		} else {
+			//offscreen right
+			offScreen = CGPointMake(1024.0000f + offSetSize, rand() % (int)1024.0000f);
+		}
+	}
+	return offScreen;
+}
+
+CG_INLINE CGRect CGRectFrameAtRandomOffscreenLocation(CGSize size);
+CG_INLINE CGRect
+CGRectFrameAtRandomOffscreenLocation(CGSize size) {
+    CGPoint offScreen = CGPointMakeRandomOffscreen();
+	return CGRectMake(offScreen.x, offScreen.y, size.width, size.height);
+}
+
+CG_INLINE CGPoint CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom);
+CG_INLINE CGPoint
+CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom) {
+	containerRect = CGRectMake(containerRect.origin.x, containerRect.origin.y, containerRect.size.width, containerRect.size.height - withPaddingTop - andPaddingBottom);
+	CGFloat moveDistanceX = (containerRect.size.width - (tileRect.size.width * ofCols)) / (((ofCols - 1) * 2) + 2);
+	CGFloat moveDistanceY = (containerRect.size.height - (tileRect.size.height * ofRows)) / (((ofRows - 1) * 2) + 2);
+	return CGPointMake((tileRect.size.width * andOnCol) + (moveDistanceX * andOnCol * 2) + moveDistanceX,
+					   (tileRect.size.width * onRow) + (moveDistanceY * onRow * 2) + moveDistanceY + withPaddingTop);
+}
+
 CG_INLINE CGPoint CGPointRoundPointToGrid(CGPoint point);
 CG_INLINE CGPoint
 CGPointRoundPointToGrid(CGPoint point) {
@@ -64,33 +117,6 @@ CG_INLINE CGPoint CGEdgeLeftPointInRect(CGRect frame);
 CG_INLINE CGPoint
 CGEdgeLeftPointInRect(CGRect frame) {
 	return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0000f));
-}
-
-CG_INLINE CGPoint CGPointMakeRandomOffscreen();
-
-CG_INLINE CGPoint
-CGPointMakeRandomOffscreen() {
-	CGPoint offScreen;
-	CGFloat offSetSize = 200.0000f * 2;
-	if (rand()%2 == 0) {
-		if (rand()%2 == 0) {
-			//offscreen top
-			offScreen = CGPointMake(rand() % (int)1024.0000f, 0.0000f - offSetSize);
-		} else {
-			//offscreen left
-			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)1024.0000f);
-		}
-		
-	} else {
-		if (rand()%2 == 0) {
-			//offscreen bottom
-			offScreen = CGPointMake(rand() % (int)1024.0000f, 1024.0000f + offSetSize);
-		} else {
-			//offscreen right
-			offScreen = CGPointMake(1024.0000f + offSetSize, rand() % (int)1024.0000f);
-		}
-	}
-	return offScreen;
 }
 
 CG_INLINE CGFloat CGFloatPointsForInches(CGFloat inches);

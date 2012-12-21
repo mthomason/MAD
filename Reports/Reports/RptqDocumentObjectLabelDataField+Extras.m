@@ -58,24 +58,46 @@
 
 #pragma mark - Static
 
-+ (RptqDocumentObjectLabelDataField *)labelDataFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
-    RptqDocumentObjectLabelDataField *result = nil;
+
++ (id)getLabelDataFieldForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelDataField class])];
     request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"table" ascending:YES];
-    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     NSError *error = nil;
-    NSArray *results = [[objectContext executeFetchRequest:request error:&error] retain];
-    if ([results count] == 1) {
-        result = [[[results objectAtIndex: 0] retain] autorelease];
-    } else if ([results count] > 1) {
-        NSLog(@"Error: Why is it like this? %@ in %@!", objid, objectContext);
-        result = [[[results objectAtIndex: 0] retain] autorelease];
-    } else {
-        NSLog(@"Warning: Could not find %@ in %@.", objid, objectContext);
-    }
-    [results release];
+    NSArray *results = [moc executeFetchRequest:request error:&error];
+    RptqDocumentObjectLabelDataField *result = nil;
+    if (results) result = [results lastObject];
     return result;
+}
+
++ (void)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document {
+    NSManagedObjectContext  *managedObjectContext = [document managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                                       inManagedObjectContext: managedObjectContext];
+    NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+                                                                                     inManagedObjectContext: managedObjectContext];
+    
+    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                                 insertIntoManagedObjectContext: managedObjectContext];
+    
+    
+    RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
+                                                                               insertIntoManagedObjectContext: managedObjectContext];
+    
+    
+    dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
+    dataObject.isLabelDataField.referencesField = field;
+    dataObject.originx = @(CGPointZero.x);
+    dataObject.originy = @(CGPointZero.y);
+    dataObject.sizewidth = @(200.0000f);
+    dataObject.sizeheight = @(44.0000f);
+    dataObject.type = @(MNSObjectTypeLabelDataField);
+    dataObject.isLabelDataField = reportObject;
+    RptqDocumentSection *detailSection = [document hasDetailSection];
+    [detailSection addHasObjectsObjectFixed:dataObject];
+    
+    [dataObject release];
+    [reportObject release];
+
 }
 
 #pragma mark - MTProtocolCompare

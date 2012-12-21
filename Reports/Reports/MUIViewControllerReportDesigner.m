@@ -21,13 +21,7 @@
 
 - (void)dealloc {
     [_scrollViewFrames release];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSManagedObjectContextObjectsDidChangeNotification
-                                                  object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    [_svSections release];
+    [_sections release];
     if (_toolbox) [_toolbox release];
     [_settingsPopoverController release];
     [_designScrollView release];
@@ -47,96 +41,7 @@
 #pragma mark - View lifecycle
 
 - (void)awakeFromNib {
-    [[NSNotificationCenter defaultCenter] addObserver: self 
-                                             selector: @selector(objectsDidChange:) 
-                                                 name: NSManagedObjectContextObjectsDidChangeNotification 
-                                               object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self 
-                                             selector: @selector(objectsDidSave:) 
-                                                 name: NSManagedObjectContextDidSaveNotification 
-                                               object: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    
-}
 
-- (void)objectsDidSave:(NSNotification *)notification {
-
-}
-
-- (void)objectsDidChange:(NSNotification *)notification {
-    if ([notification isKindOfClass:[NSNotification class]]) {
-        NSDictionary *userInfo = [[notification userInfo] retain];
-        NSLog(@"(contextChanged) Name:           %@", [notification name]);
-        NSLog(@"(contextChanged) Object Class:   %@", NSStringFromClass( [[notification object] class] ));
-        
-        NSSet *inserted = [[userInfo objectForKey:NSInsertedObjectsKey] retain];
-        for (id object in inserted) {
-            NSLog(@"NSInsertedObjectsKey: %@", object);
-            if ([object isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
-                [self insertDocumentElementLabelDataField:object];
-            }
-        }
-        [inserted release];
-
-        NSSet *updated = [[userInfo objectForKey:NSUpdatedObjectsKey] retain];
-        for (id object in updated) {
-            if ([object isKindOfClass:[RptqDocumentObject class]]) {
-                NSLog(@"NSUpdatedObjectsKey: %@", object);
-                
-            }
-        }
-        [updated release];
-        
-        NSSet *deleted = [[userInfo objectForKey:NSDeletedObjectsKey] retain];
-        for (id object in deleted) {
-            if ([object isKindOfClass:[RptqDocumentObject class]]) {
-                NSLog(@"NSDeletedObjectsKey: %@", object);
-                
-            }
-        }
-        [deleted release];
-        
-        NSSet *refreshed = [[userInfo objectForKey:NSRefreshedObjectsKey] retain];
-        for (id object in refreshed) {
-            if ([object isKindOfClass:[RptqDocumentObject class]]) {
-                NSLog(@"NSRefreshedObjectsKey: %@", object);
-                
-            }
-        }
-        [refreshed release];
-        
-        NSSet *invalidated = [[userInfo objectForKey:NSInvalidatedObjectsKey] retain];
-        for (id object in invalidated) {
-            if ([object isKindOfClass:[RptqDocumentObject class]]) {
-                NSLog(@"NSInvalidatedObjectsKey: %@", object);
-                
-            }
-        }
-        [invalidated release];
-        
-        NSSet *invalidatedAll = [[userInfo objectForKey:NSInvalidatedAllObjectsKey] retain];
-        for (id object in invalidatedAll) {
-            if ([object isKindOfClass:[RptqDocumentObject class]]) {
-                NSLog(@"NSInvalidatedAllObjectsKey: %@", object);
-                
-            }
-        }
-        [invalidatedAll release];
-        
-        [userInfo release];
-    }
-}
-
-- (void)insertDocumentElement:(RptqDocumentObject *)documentObj {
-    if (documentObj.isLabel) {
-        
-    } else if (documentObj.isLabelDataField) {
-        [self insertDocumentElementLabelDataField: documentObj.isLabelDataField];        
-    } else if (documentObj.isLabelLink) {
-        
-    } else if (documentObj.isFormula) {
-        
-    }
 }
 
 - (void)insertDocumentElementLabel:(RptqDocumentObjectLabel *)documentObj {
@@ -148,12 +53,17 @@
 }
 
 - (void)insertDocumentElementLabelDataField:(RptqDocumentObjectLabelDataField *)documentObj {
+
     if (![[self designScrollView] viewWithTag: [[documentObj objectID] hash]]) {
+        
         CGRect f = CGRectMake([[documentObj.parentObjectLabelDataField originx] floatValue], [[documentObj.parentObjectLabelDataField originy] floatValue], [[documentObj.parentObjectLabelDataField sizewidth] floatValue], [[documentObj.parentObjectLabelDataField sizeheight] floatValue]);
         
-        RptqDocumentSection *objSec = [[documentObj.parentObjectLabelDataField inSection] retain];
+        RptqDocumentSection *objSec = [[documentObj parentObjectLabelDataField] inSection];
+
         if (objSec) {
-            UIScrollView *scrollView = [[[self svSections] valueForKey: objSec.objectID.URIRepresentation.absoluteString] retain];
+
+            MTCollectionViewSection *scrollView = [[[self sections] valueForKey: objSec.objectID.URIRepresentation.absoluteString] retain];
+            
             if (scrollView) {
                 ElementView *newView = [[ElementView alloc] initWithFrame: f
                                                             inSectionView: scrollView
@@ -166,14 +76,21 @@
                 [newView setDelegate: self];
                 [newView setContainerView: scrollView];
                 [newView setTag: [[documentObj objectID] hash]];
-                [scrollView addSubview: newView];
+                CGPoint center = CGCenterOfRect(f);
+                NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
+                
+                [scrollView performBatchUpdates:^{
+                    [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
+                } completion:^(BOOL finished) {
+                }];
+                
                 [newView release];
                 
             }
             [scrollView release];
         }
-        [objSec release];
     }
+    
 }
 
 - (void)insertDocumentElementLabelLink:(RptqDocumentObjectLabelLink *)documentObj {
@@ -182,7 +99,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
@@ -195,9 +119,9 @@
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[UIManagedDocumentReport activeDocument]];
     NSInteger ctr = 0;
-
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
-    [self setSvSections: dict];
+    [self setSections: dict];
     [dict release];
     
     frame.size.height = 22.0000f;
@@ -215,11 +139,11 @@
         
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
         
-        UIScrollViewSection *scrollView = [[UIScrollViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID]];
+        MTCollectionViewSection *scrollView = [[MTCollectionViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID]];
         
         
         [[self designScrollView] addSubview:scrollView];
-        [[self svSections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
+        [[self sections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
         
         //NSLog(@"ScrollView %@", [[[sec objectID] URIRepresentation] absoluteString]);
         
@@ -260,20 +184,11 @@
     }
     
     [enumerator release];
-
+    
     [[self designScrollView] setScrollEnabled:YES];
-
+    
     [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -416,54 +331,31 @@
 }
 
 - (void)didSelectDataField:(RptqField *)field {
-    
-    RptqDocument *doc = [RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-    if (doc) {
-        
-        NSEntityDescription *rdoEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                 inManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
 
-        NSEntityDescription *roldfEd = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
-                                                   inManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-
-        RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: rdoEd
-                                                     insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-
-        
-        RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: roldfEd
-                                                                            insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
-        dataObject.isLabelDataField = reportObject;
-        [reportObject release];
-        dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
-        
-        dataObject.isLabelDataField.referencesField = field;
-        dataObject.originx = [NSNumber numberWithFloat:CGPointZero.x];
-        dataObject.originy = [NSNumber numberWithFloat:CGPointZero.y];
-        dataObject.sizewidth = [NSNumber numberWithFloat:200.0000f];
-        dataObject.sizeheight = [NSNumber numberWithFloat:44.0000f];
-        dataObject.type = [NSNumber numberWithInteger: MNSObjectTypeLabelDataField];
-        //dataObject.isLabelDataField = dataField;
-        
-        [[doc hasDetailSection] addHasObjectsObject:dataObject];
-        
-        [dataObject release];
-
-        NSError *error = nil;
-        [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
-
-        if (!error) {
-            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
-                                  forSaveOperation: UIDocumentSaveForOverwriting
-                                 completionHandler: ^(BOOL success) {
-                                     
-                                     [dataObject release];
-                                 }];
-        }
-    }
-    
     [self dismissViewControllerAnimated:YES completion:^{
         
-    }];    
+    }];
+
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+
+    if (document) {
+        MTCollectionViewSection *detailSection = [[self sections] objectForKey: [[[[document hasDetailSection] objectID] URIRepresentation] absoluteString]];
+        
+        [detailSection performBatchUpdates:^{
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            NSInteger numberOfExistingObjects = [[[document hasDetailSection] hasObjects] count];
+            [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field toDetailSectionOfDocument:document];
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:numberOfExistingObjects inSection:0]];
+            [detailSection insertItemsAtIndexPaths:indexPaths];
+        } completion:^(BOOL finished) {
+            NSError *error = nil;
+            [managedObjectContext save: &error];
+            if (error) {
+                [error presentErrorToUser];
+            }
+        }];
+    }
 }
 
 
@@ -482,37 +374,28 @@
 #pragma mark Element View Delegate
 
 - (void)elementDidFinishPan:(ElementView *)view {
-    RptqDocumentObjectLabelDataField *datafield = [[RptqDocumentObjectLabelDataField labelDataFieldForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext] withObjectID:[view objectID]] retain];
-    if (datafield) {
-        datafield.parentObjectLabelDataField.originx = [NSNumber numberWithFloat: view.frame.origin.x];
-        datafield.parentObjectLabelDataField.originy = [NSNumber numberWithFloat: view.frame.origin.y];
-        datafield.parentObjectLabelDataField.sizewidth = [NSNumber numberWithFloat: view.frame.size.width];
-        datafield.parentObjectLabelDataField.sizeheight = [NSNumber numberWithFloat: view.frame.size.height];
+    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    
+    RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
 
-        UIScrollViewSection *svSection = (UIScrollViewSection *)[[view containerView] retain];
+    if (datafield) {
+        datafield.parentObjectLabelDataField.originx = @(view.frame.origin.x);
+        datafield.parentObjectLabelDataField.originy = @(view.frame.origin.y);
+        datafield.parentObjectLabelDataField.sizewidth = @(view.frame.size.width);
+        datafield.parentObjectLabelDataField.sizeheight = @(view.frame.size.height);
+
+        MTCollectionViewSection *svSection = (MTCollectionViewSection *)[[view containerView] retain];
         if (svSection) {
-            RptqDocumentSection *documentSection = [[RptqDocumentSection sectionForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext] withObjectID: [svSection objectID]] retain];
+            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectID] fromObjectContext:managedObjectContext];
             NSLog(@"Document section: %@", [documentSection localizedDisplayName]);
             datafield.parentObjectLabelDataField.inSection = documentSection;
-            [documentSection release];
         }
         [svSection release];
-        
 
         NSError *error = nil;
-        [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
-        if (error) {
-            NSLog(@"Error: %@", error);
-        } else {
-            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
-                                  forSaveOperation: UIDocumentSaveForOverwriting
-                                 completionHandler: ^(BOOL success) {
-                                     
-                                     
-                                 }];
-        }
+        [managedObjectContext save: &error];
+
     }
-    [datafield release];
 }
 
 - (BOOL)elementDidRequestRemoval:(ElementView *)view {

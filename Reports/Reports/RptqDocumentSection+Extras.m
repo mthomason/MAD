@@ -59,25 +59,21 @@
     }
 }
 
+- (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value {
+    NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasObjects];
+    [tempSet addObject:value];
+    self.hasObjects = tempSet;
+}
+
 #pragma mark - Static
 
-+ (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid {
-    RptqDocumentSection *result = nil;
++ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
     request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     NSError *error = nil;
-    NSArray *results = [[objectContext executeFetchRequest:request error:&error] retain];
-    if ([results count] == 1) {
-        result = [[[results objectAtIndex: 0] retain] autorelease];
-    } else if ([results count] > 1) {
-        NSLog(@"Error: Why is it like this? %@ in %@!", objid, objectContext);
-        result = [[[results objectAtIndex: 0] retain] autorelease];
-    } else {
-        NSLog(@"Warning: Could not find %@ in %@.", objid, objectContext);
-    }
-    [results release];
+    NSArray *results = [moc executeFetchRequest:request error:&error];
+    RptqDocumentSection *result = nil;
+    if (results) result = [results lastObject];
     return result;
 }
 

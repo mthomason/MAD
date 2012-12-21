@@ -2,7 +2,7 @@
 //  RptqDocumentObjectLabelDataField.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/15/12.
+//  Created by Michael Thomason on 12/21/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,9 +14,9 @@
 @interface RptqDocumentObjectLabelDataField : NSManagedObject
 
 @property (nonatomic, retain) NSString * field;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSString * table;
 @property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqDocumentObject *parentObjectLabelDataField;
 @property (nonatomic, retain) RptqField *referencesField;
 

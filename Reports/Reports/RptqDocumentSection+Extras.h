@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 
 @interface RptqDocumentSection (Extras) <MTProtocolCompare>
 
-+ (RptqDocumentSection *)sectionForManagedObjectContext:(NSManagedObjectContext *)objectContext withObjectID:(NSManagedObjectID *)objid;
++ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                           forManagedObjectContext:(NSManagedObjectContext *)objectContext;
@@ -33,5 +33,6 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentReport *)managedDocument;
 
 - (NSString *)localizedDisplayName;
+- (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
 
 @end

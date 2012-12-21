@@ -57,6 +57,9 @@
 	[super dealloc];
 }
 
+- (id)initWithFrame:(CGRect)frame {
+    return [self initWithFrame:frame inSectionView:nil ofDesignerView:nil];
+}
 - (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview {
     self = [super initWithFrame:frame];
     if (self) {
@@ -273,6 +276,7 @@
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
+            
         case UIGestureRecognizerStateBegan: {
             
             [self setOrigionalSuperview: (UIScrollView *)[self superview]];

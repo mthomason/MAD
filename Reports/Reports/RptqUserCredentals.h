@@ -2,7 +2,7 @@
 //  RptqUserCredentals.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/15/12.
+//  Created by Michael Thomason on 12/21/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface RptqUserCredentals : NSManagedObject
 
 @property (nonatomic, retain) NSString * database_driver_type;
+@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSNumber * inUse;
 @property (nonatomic, retain) NSString * mysql_database;
 @property (nonatomic, retain) NSString * mysql_host;
@@ -26,7 +27,6 @@
 @property (nonatomic, retain) NSString * sf_login_redirect_uri;
 @property (nonatomic, retain) NSString * sf_password;
 @property (nonatomic, retain) NSString * sf_username;
-@property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
 
 @end

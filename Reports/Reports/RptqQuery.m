@@ -2,7 +2,7 @@
 //  RptqQuery.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/15/12.
+//  Created by Michael Thomason on 12/21/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -20,9 +20,9 @@
 @implementation RptqQuery
 
 @dynamic cachedText;
+@dynamic identifier;
 @dynamic override;
 @dynamic overrideText;
-@dynamic identifier;
 @dynamic hasFields;
 @dynamic hasQueryCache;
 @dynamic hasQueryGroups;

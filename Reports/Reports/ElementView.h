@@ -48,6 +48,7 @@
 
 @property (assign, getter = isHighlighted) BOOL highlight;
 
+- (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview;
 
 @end
