@@ -15,7 +15,7 @@
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     
-    // MARK: Auto increment row counter
+    // MARK: Auto increment row counter.
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
@@ -29,6 +29,9 @@
         identifier = [[lastObject identifier] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
+    
+    // MARK: Initalize section height.
+    [self setHeight:@(44.0000f)];
     
 }
 

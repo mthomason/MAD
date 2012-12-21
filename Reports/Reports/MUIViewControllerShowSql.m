@@ -35,6 +35,10 @@
     [super didReceiveMemoryWarning];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
 - (IBAction)done:(id)sender {
     [[self delegate] viewControllerDidFinish:self];
 }

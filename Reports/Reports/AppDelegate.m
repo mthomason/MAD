@@ -56,6 +56,11 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationWillTerminate:(UIApplication *)application { }
 
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return   [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ?
+                    UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
 /*
 #pragma mark - Persistent Store Coordinator
 

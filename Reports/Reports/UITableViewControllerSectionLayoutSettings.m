@@ -64,7 +64,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 - (IBAction)heightChanged:(id)sender {
     double stepperValue = [self stepperValueNormalized];

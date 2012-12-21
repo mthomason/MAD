@@ -54,7 +54,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 }
 
 
-#pragma mark - View lifecycle
+#pragma mark - UIViewController Overrides
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -86,12 +86,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+    return YES;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
