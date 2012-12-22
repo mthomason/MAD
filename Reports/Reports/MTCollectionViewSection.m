@@ -13,19 +13,23 @@
 @implementation MTCollectionViewSection
 
 - (void)dealloc {
+    [_designerViewController release];
     [_objectID release];
     [_localizedName release];
     [super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid {
+- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid inDesigner:(MUIViewControllerReportDesigner *)designerViewController {
+    
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     self = [super initWithFrame:frame collectionViewLayout:layout];
     if (self) {
         [self setDelegate:self];
         [self setDataSource:self];
-        [self registerClass:[MTCollectionViewCellElement class] forCellWithReuseIdentifier:@"MTCollectionViewCellElement"];
         
+        [self setDesignerViewController:designerViewController];
+
+        [self registerClass:[MTCollectionViewCellElement class] forCellWithReuseIdentifier:@"MTCollectionViewCellElement"];
         [self setObjectID: objid];
         [self setLocalizedName: name];
 
@@ -36,6 +40,7 @@
 
     }
     [layout release];
+
     return self;
 }
 
@@ -80,7 +85,9 @@
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[self objectID] fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [documentSection hasObjects];
+
     if ([objects count] > row) {
+
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
         switch ([documentObject getType]) {
             case MNSObjectTypeLabel: {
@@ -90,13 +97,13 @@
             case MNSObjectTypeLabelDataField: {
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
                         CGRect f = CGRectMake([[documentObjectCast.parentObjectLabelDataField originx] floatValue], [[documentObjectCast.parentObjectLabelDataField originy] floatValue], [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue], [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
-                ElementView *newView = [[ElementView alloc] initWithFrame: f];
+                ElementView *newView = [[ElementView alloc] initWithFrame: f inSectionView:self ofDesignerView:[[self designerViewController] designScrollView]];
                 [newView setBounds: f];
                 [newView setStringElm: documentObjectCast.parentObjectLabelDataField.isLabelDataField.text];
                 [newView setMultipleTouchEnabled: YES];
                 [newView setExclusiveTouch: YES];
                 [newView setObjectID: [documentObjectCast objectID]];
-                [newView setDelegate: self];
+                [newView setDelegate: [self designerViewController]];
                 [newView setTag: [[documentObjectCast objectID] hash]];
                 [cell addSubview:newView];
                 [newView release];
@@ -120,6 +127,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[self objectID] fromObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
+    NSLog(@"%@", objects);
     return [objects count];
 }
 

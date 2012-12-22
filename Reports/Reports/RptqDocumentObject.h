@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/21/12.
+//  Created by Michael Thomason on 12/22/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -18,7 +18,6 @@
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSNumber * originx;
 @property (nonatomic, retain) NSNumber * originy;
-@property (nonatomic, retain) NSNumber * rowid;
 @property (nonatomic, retain) NSNumber * sizeheight;
 @property (nonatomic, retain) NSNumber * sizewidth;
 @property (nonatomic, retain) NSNumber * type;

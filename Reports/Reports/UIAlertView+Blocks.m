@@ -30,7 +30,7 @@ static CancelBlock _cancelBlock;
     for (NSString *buttonTitle in otherButtons) {
         [alert addButtonWithTitle: buttonTitle];
     }
-    
+    [alert show];
     return [alert autorelease];
 }
 

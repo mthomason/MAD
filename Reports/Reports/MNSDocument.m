@@ -45,14 +45,6 @@
             }
             completion(success);
         }];
-/*
-        id document = [[managedObjectType alloc] initWithFileURL:applicationFileUrlWithExtention];
-        [self setManagedDocument:document];
-        [document release];
-        
-        [self saveToUrl:applicationFileUrlWithExtention completion:^(BOOL success) {
-            completion(success);
-        }];*/
     }
     return self;
 }

@@ -468,11 +468,11 @@
     
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
-                                       forSaveOperation: UIDocumentSaveForOverwriting
-                                      completionHandler: ^(BOOL success) {
-
-                                      }];
+    NSError *error = nil;
+    [managedObjectContext save:&error];
+    if (error) {
+        [error presentErrorToUser];
+    }
 }
 
 #pragma mark - Table View Data Source Protocol
@@ -495,27 +495,27 @@
                 //  body, group header, and group footer
                 NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
                 numberOfRows = (2 * numberOfGroups) + 5;
-                NSLog(@"Section Rows:   %d", numberOfRows);
+                //NSLog(@"Section Rows:   %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsTables: {
                 numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Table Rows:     %d", numberOfRows);
+                //NSLog(@"Table Rows:     %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsLinks: {
                 numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Link Rows:      %d", numberOfRows);
+                //NSLog(@"Link Rows:      %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsPredicate: {
                 numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Predicate Rows: %d", numberOfRows);
+                //NSLog(@"Predicate Rows: %d", numberOfRows);
                 break;
             }
             case UIViewControllerSchemaTablesSectionsGroups: {
                 numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-                NSLog(@"Group Rows:     %d", numberOfRows);
+                //NSLog(@"Group Rows:     %d", numberOfRows);
                 break;
             }
             default:

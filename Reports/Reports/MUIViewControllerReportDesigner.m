@@ -7,6 +7,8 @@
 //
 
 #import "MUIViewControllerReportDesigner.h"
+#import "MTCollectionViewSection.h"
+#import "SectionEnumerator.h"
 
 @interface MUIViewControllerReportDesigner()
 
@@ -74,12 +76,13 @@
                 [newView setExclusiveTouch: YES];
                 [newView setObjectID: [documentObj objectID]];
                 [newView setDelegate: self];
-                [newView setContainerView: scrollView];
                 [newView setTag: [[documentObj objectID] hash]];
+                
                 CGPoint center = CGCenterOfRect(f);
                 NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
                 
                 [scrollView performBatchUpdates:^{
+                    
                     [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
                 } completion:^(BOOL finished) {
                 }];
@@ -99,14 +102,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
@@ -139,8 +134,7 @@
         
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
         
-        MTCollectionViewSection *scrollView = [[MTCollectionViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID]];
-        
+        MTCollectionViewSection *scrollView = [[MTCollectionViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID] inDesigner:self];
         
         [[self designScrollView] addSubview:scrollView];
         [[self sections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
@@ -189,6 +183,14 @@
     
     [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -343,16 +345,23 @@
         MTCollectionViewSection *detailSection = [[self sections] objectForKey: [[[[document hasDetailSection] objectID] URIRepresentation] absoluteString]];
         
         [detailSection performBatchUpdates:^{
+            
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             NSInteger numberOfExistingObjects = [[[document hasDetailSection] hasObjects] count];
             [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field toDetailSectionOfDocument:document];
             NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:numberOfExistingObjects inSection:0]];
             [detailSection insertItemsAtIndexPaths:indexPaths];
-        } completion:^(BOOL finished) {
             NSError *error = nil;
             [managedObjectContext save: &error];
             if (error) {
                 [error presentErrorToUser];
+            }
+
+            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+            }];
+         
+        } completion:^(BOOL finished) {
+            if (finished) {
             }
         }];
     }

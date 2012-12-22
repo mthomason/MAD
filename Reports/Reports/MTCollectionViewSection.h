@@ -14,15 +14,17 @@
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "MUIViewControllerReportDesigner.h"
 
 @interface MTCollectionViewSection : UICollectionView
     <UICollectionViewDataSource, UICollectionViewDelegate, ElementViewDelegate>
 
-@property (retain) NSManagedObjectID *objectID;
-@property (retain) NSString *localizedName;
+@property (nonatomic, retain) NSManagedObjectID *objectID;
+@property (nonatomic, retain) NSString *localizedName;
+@property (nonatomic, retain) MUIViewControllerReportDesigner *designerViewController;
 @property (assign, getter = isHighlighted) BOOL highlighted;
 
-- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid;
+- (id)initWithFrame:(CGRect)frame name:(NSString *)name andObjectID:(NSManagedObjectID *)objid inDesigner:(MUIViewControllerReportDesigner *)designerViewController;
 - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter;
 
 @end

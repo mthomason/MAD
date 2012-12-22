@@ -161,12 +161,17 @@
                                                                            connectionId: connectionId];
     
     RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
+    
+    
     [userCredentals setDatabase_driver_type: [database identifier]];
+    
+    
     [rptqDatabase setOwnedByUser: userCredentals];
 
     [rptqDatabase addHasQueriesObject:[NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
     
-    [rptqDocument setHasDatabaseSchemas: [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase]];
+    NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
+    [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     [database getTables:^(NSArray *tables) {
         

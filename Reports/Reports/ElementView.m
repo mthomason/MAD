@@ -25,21 +25,6 @@
 
 @implementation ElementView
 
-@synthesize delegate = _delegate;
-@synthesize containerView = _parentView;
-@synthesize designerView = _designerView;
-@synthesize objectID = _objectID;
-
-@synthesize highlight = _highlight;
-
-@synthesize stringElm = _stringElm;
-@synthesize originalSize = _originalSize, originalPointCenter = _originalPointCenter;
-@synthesize currentTime = _currentTime, lastTime = _lastTime;
-
-@synthesize origionalSuperview = _origionalSuperview, origionalCenter = _origionalCenter;
-
-@synthesize handleEdgeRight = _handleEdgeRight, handleEdgeLeft = _handleEdgeLeft, handleEdgeTop = _handleEdgeTop, handleEdgeBottom = _handleEdgeBottom, handleCornerTopLeft = _handleCornerTopLeft, handleCornerTopRight = _handleCornerTopRight, handleCornerBottomLeft = _handleCornerBottomLeft, handleCornerBottomRight = _handleCornerBottomRight;
-
 - (void)dealloc {
     if (_origionalSuperview != nil) [_origionalSuperview release];
     [_objectID release];
@@ -52,7 +37,7 @@
     [_handleEdgeRight release];
     [_handleEdgeTop release];
     [_designerView release];
-    [_parentView release];
+    [_containerView release];
     [_stringElm release];
 	[super dealloc];
 }
@@ -67,7 +52,7 @@
         [self setExclusiveTouch: YES];
         [self setMultipleTouchEnabled:YES];
         [self setContainerView: pview];
-		self.originalSize = self.frame.size;
+		[self setOriginalSize: self.frame.size];
         
 		[self setOpaque: YES];
         [self setHighlight: NO];
@@ -184,8 +169,8 @@
     UIFont *font = [UIFont systemFontOfSize:([UIFont systemFontSize])];        
     [[self stringElm] drawInRect: rect
                         withFont: font
-                   lineBreakMode: UILineBreakModeClip
-                       alignment: UITextAlignmentLeft];
+                   lineBreakMode: NSLineBreakByClipping
+                       alignment: NSTextAlignmentLeft];
     
     CGPathRelease(path);
     

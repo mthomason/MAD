@@ -33,7 +33,6 @@
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="originx" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="originy" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="rowid" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="sizeheight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="sizewidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -187,7 +186,7 @@
     <elements>
         <element name="RptqDatabase" positionX="0" positionY="0" width="128" height="150"/>
         <element name="RptqDocument" positionX="0" positionY="0" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="255"/>
+        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="240"/>
         <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="128" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="128" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="128" height="135"/>

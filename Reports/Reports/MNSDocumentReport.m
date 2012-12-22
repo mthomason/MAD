@@ -18,8 +18,6 @@
     [super dealloc];
 }
 
-
-
 //Create a new file
 - (id)initFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
     self = [super initFileWithName:name extension:SCHEMA_PATH_EXTENSION managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success) {
@@ -64,6 +62,8 @@
     
 }
 
+- (void)commitChanges {
+}
 
 - (void)refresh {
     [NSException exceptionWithName: NSInternalInconsistencyException

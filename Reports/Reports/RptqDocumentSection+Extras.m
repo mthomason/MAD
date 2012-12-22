@@ -60,9 +60,13 @@
 }
 
 - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value {
-    NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasObjects];
-    [tempSet addObject:value];
-    self.hasObjects = tempSet;
+    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)[self hasObjects] addObject:value];
+    } else {
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasObjects];
+        [tempSet addObject:value];
+        [self setHasObjects: tempSet];
+    }
 }
 
 #pragma mark - Static

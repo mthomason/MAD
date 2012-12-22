@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewController.h"
-#import "MTCollectionViewSection.h"
 #import "UIManagedDocumentPreferencesUser.h"
 #import "UITableViewControllerSettings.h"
 #import "UIViewControllerToolbox.h"
@@ -20,7 +19,6 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "CGGeometry+Extras.h"
-#import "SectionEnumerator.h"
 #import "NSError+UserInterface.h"
 
 @interface MUIViewControllerReportDesigner : MUIViewController
