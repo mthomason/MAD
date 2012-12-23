@@ -14,6 +14,7 @@
 #import "UITableViewCellQueryLink.h"
 #import "UITableViewCellQueryInput.h"
 #import "RptqTable.h"
+#import "AppDelegate.h"
 
 @interface QueryBuilderDataModal ()
 
@@ -245,7 +246,7 @@
 }
 
 - (NSMutableDictionary *)datamodel {
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     NSInteger numberOfTablesInQuery = [RptqTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
     return [self datamodelForNumberOfTables:numberOfTablesInQuery];
 }

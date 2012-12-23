@@ -62,7 +62,7 @@
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     [[self tableViewQueryBuilder] setOpaque: YES];
     
-    QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[UIManagedDocumentReport activeDocument]];
+    QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[AppDelegate activeDocument]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
 }
@@ -117,9 +117,9 @@
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
-                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqTable namesForTablesInQueryForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqTable namesForTablesInQueryForManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]]];
 
-                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]]];
                     if ([tableNames count]) {
                         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
                         [request setPredicate: predicate];
@@ -127,7 +127,7 @@
                     [tableNames release];
                     
                         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]
+                                                                                              managedObjectContext: [[AppDelegate activeDocument] managedObjectContext]
                                                                                                 sectionNameKeyPath: nil
                                                                                                          cacheName: nil];
                         [tvc setFetchedResultsController: frc];
@@ -188,7 +188,7 @@
                         [tvc setDelegate:self];
                         //NSLog(@"Last selected row: %d", [self lastSelectedRowNumber]);
                         RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                              forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
+                                                                              forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
                         //NSLog(@"About to show section: %@", section);                        
                         //NSLog(@"Inital height: %@", [section height]);
                         //NSLog(@"Inital visibility: %@", [section visibility]);
@@ -289,17 +289,17 @@
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                          forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
+                                                          forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
     [section setHeight: [NSNumber numberWithFloat:height]];
     [section release];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                          forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
+                                                          forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
     [section setVisibility: [NSNumber numberWithBool:isVisible]];
     [section release];
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];
 
 }
@@ -327,10 +327,10 @@
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
     [self dismissModalViewControllerAnimated: YES];
 
-    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
 
     [[self tableViewQueryBuilder] reloadData];
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];
 }
 
@@ -341,8 +341,8 @@
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissModalViewControllerAnimated: YES];
     
-    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];    
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];    
+    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];    
 }
 
@@ -369,7 +369,7 @@
 
     [[self tableViewQueryBuilder] beginUpdates];
 
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
 
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
@@ -403,7 +403,7 @@
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     
-    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
     }];
 }
 
@@ -417,7 +417,7 @@
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-    UIManagedDocumentReport *report = [UIManagedDocumentReport activeDocument];
+    UIManagedDocumentReport *report = [AppDelegate activeDocument];
     NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
     
     [RptqTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
@@ -553,7 +553,7 @@
                 case UIViewControllerSchemaTablesSectionsTables: {
                     
                     NSError *error = nil;
-                    __block UIManagedDocumentReport *activateDocument = [UIManagedDocumentReport activeDocument];
+                    __block UIManagedDocumentReport *activateDocument = [AppDelegate activeDocument];
                     __block NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
@@ -637,10 +637,10 @@
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
                         NSManagedObjectID *objid = [[tvcLink tableID] retain];
-                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
                         [objid release];
                         
-                        [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+                        [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                         }];
                     }
                     [tvcLink release];
@@ -651,10 +651,10 @@
                 case UIViewControllerSchemaTablesSectionsGroups: {
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
                     [[self tableViewQueryBuilder] beginUpdates];
-                    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]] retain];
+                    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
                     NSError *error = nil;
-                    NSInteger result = [[[UIManagedDocumentReport activeDocument] managedObjectContext] countForFetchRequest:request error:&error];
+                    NSInteger result = [[[AppDelegate activeDocument] managedObjectContext] countForFetchRequest:request error:&error];
                     NSInteger numberOfGroups = error ? 0 : result;
 
                     if (doc) {
@@ -676,18 +676,18 @@
                             NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
                             NSArray *sections = [[sectionsToRemove allObjects] retain];
                             if ([sections count] == 2) {
-                                [[[UIManagedDocumentReport activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 0]];
+                                [[[AppDelegate activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 0]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-                                [[[UIManagedDocumentReport activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 1]];
+                                [[[AppDelegate activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 1]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
                             }
                             [sections release];
                             [sectionsToRemove release];
-                            [[[UIManagedDocumentReport activeDocument] managedObjectContext] deleteObject: groupToRemove];
+                            [[[AppDelegate activeDocument] managedObjectContext] deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
 
                             NSError *error = nil;
-                            [[[UIManagedDocumentReport activeDocument] managedObjectContext] save: &error];
+                            [[[AppDelegate activeDocument] managedObjectContext] save: &error];
                             if (!error) {
                                 
                                 NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
@@ -712,7 +712,7 @@
 
                     [doc release];
                     
-                    [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL]
+                    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL]
                                                        forSaveOperation: UIDocumentSaveForOverwriting
                                                       completionHandler: ^(BOOL success) {
                                                           [[self tableViewQueryBuilder] endUpdates];
@@ -790,7 +790,7 @@
                 [result setIndentationLevel: 1];
                 [self setTableViewCellTableName:nil];
             }
-            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
             if (connections) {
                 [connections retain];
                 if ([connections count] >= 1) {

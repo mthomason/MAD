@@ -7,6 +7,7 @@
 //
 
 #import "SectionEnumerator.h"
+#import "AppDelegate.h"
 
 @implementation SectionEnumerator
 
@@ -24,7 +25,7 @@
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
         request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
         NSError *error = nil;
-        NSArray *groups = [[[[UIManagedDocumentReport activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
+        NSArray *groups = [[[[AppDelegate activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
         [self setTotal: (error) ? 0 : [groups count]];
         [groups release];
     }
@@ -39,14 +40,14 @@
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {
         [result addObject:[RptqDocumentSection getDocumentSectionForRow: [self current]
-                                                forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]]];
+                                                forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]]];
     }
     return [result autorelease];
 }
 
 - (id)nextObject {
     return [RptqDocumentSection getDocumentSectionForRow: self.current++
-                                 forManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
+                                 forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]];
 }
 
 @end

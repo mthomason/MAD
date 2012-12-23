@@ -18,13 +18,11 @@
 #import "UINavigationControllerQueryDesigner.h"
 #import "UINavigationControllerModelControllers.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, MUIViewControllerOpenDocumentDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (retain) UIManagedDocumentReport *managedDocumentQuery;
-
-@property (retain, nonatomic) UIManagedDocumentPreferencesApplication *applicationPreferences;
-@property (retain, nonatomic) UIManagedDocumentPreferencesUser *openReport;
++ (UIManagedDocumentReport *)activeDocument;
++ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument;
 
 @end

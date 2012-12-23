@@ -15,6 +15,7 @@
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "UIManagedDocument+FileOperations.h"
+#import "NSError+UserInterface.h"
 
 @interface MNSDocument : NSObject
 
@@ -22,14 +23,18 @@
 @property (retain, nonatomic) id managedDocument;
 
 //Create a new file
-- (id)initFileWithName:(NSString *)name extension:(NSString *)extension
+- (id)initNewFileWithName:(NSString *)name extension:(NSString *)extension
      managedObjectType:(Class)managedObjectType completion:(void (^)(BOOL success))completion;
 
 //Open an existing file
-- (id)initFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success))completion;
+- (id)initExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion;
+- (id)initExistingFileWithUrl:(NSURL *)url managedObjectType:(Class)managedObjectType completion:(void (^)(BOOL success, id document))completion;
+
+- (void)saveContext;
 
 - (void)save:(void (^)(BOOL success))completion;
-
 - (void)saveToUrl:(NSURL *)url completion:(void (^)(BOOL success))completion;
+
+- (NSManagedObjectModel *)managedObjectModel;
 
 @end

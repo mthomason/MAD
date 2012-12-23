@@ -9,6 +9,7 @@
 #import "MTCollectionViewSection.h"
 #import "CGGeometry+Extras.h"
 #import "MTCollectionViewCellElement.h"
+#import "AppDelegate.h"
 
 @implementation MTCollectionViewSection
 
@@ -76,7 +77,7 @@
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
     
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     static NSString *tileReuseIdentifier = @"MTCollectionViewCellElement";
     UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:tileReuseIdentifier
@@ -125,7 +126,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[self objectID] fromObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[self objectID] fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
     NSLog(@"%@", objects);
     return [objects count];

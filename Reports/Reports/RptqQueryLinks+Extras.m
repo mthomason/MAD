@@ -7,6 +7,7 @@
 //
 
 #import "RptqQueryLinks+Extras.h"
+#import "AppDelegate.h"
 
 @implementation RptqQueryLinks (Extras)
 
@@ -98,10 +99,10 @@
 + (id)createQueryLinkWithLeftField:(RptqField *)fieldLeft
                          rightField:(RptqField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {
-    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[UIManagedDocumentReport activeDocument] managedObjectContext]];
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     
     RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
-                                         insertIntoManagedObjectContext: [[UIManagedDocumentReport activeDocument] managedObjectContext]];
+                                         insertIntoManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]];
     
     [queryLinks setHasLeftField:    fieldLeft];
     [queryLinks setHasRightField:   fieldRight];

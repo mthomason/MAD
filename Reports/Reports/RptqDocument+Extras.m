@@ -141,9 +141,9 @@
     }
 
     //Create the document if it does not exist.
-    if (!doc) {
-        doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
-    }
+    //if (!doc) {
+    //    doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
+    //}
 
     return doc;
 }
@@ -197,6 +197,11 @@
                     RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
                                                                                    andField: objField];
                     [rptqTableOrigional addHasFieldsObject: rptqField];
+                    NSError *error = nil;
+                    [[rptqField managedObjectContext] save:&error];
+                    if (error) {
+                        NSLog(@"%@", [error localizedDescription]);
+                    }
                 }
              
             }];

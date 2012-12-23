@@ -10,6 +10,7 @@
 #import "UITableViewControllerChooseField.h"
 #import "UITableViewControllerEnterString.h"
 #import "RptqTable.h"
+#import "AppDelegate.h"
 
 @implementation UITableViewControllerSchemaAddPredicate
 
@@ -96,7 +97,7 @@
 - (IBAction)save:(id)sender {
     
     RptqQueryPredicate *queryPredicate = nil;
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     if ([self leftValue] == nil) {
         if ([self rightValue] == nil) {

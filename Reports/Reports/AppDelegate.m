@@ -7,23 +7,31 @@
 //
 
 #import "AppDelegate.h"
+#import "MNSDocumentReport.h"
 
 @interface AppDelegate()
+
+@property (retain) UIManagedDocumentReport *managedDocumentQuery;
+@property (retain) UIManagedDocumentPreferencesApplication *applicationPreferences;
+@property (retain) UIManagedDocumentPreferencesUser *openReport;
 
 @end
 
 @implementation AppDelegate
 
-@synthesize window = _window;
-
-@synthesize managedDocumentQuery = _managedDocumentQuery;
-
-@synthesize applicationPreferences = _applicationPreferences;
-@synthesize openReport = _openReport;
-
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"%@", exception);
+}
+
++ (UIManagedDocumentReport *)activeDocument {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedDocumentQuery];
+}
+
++ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate setManagedDocumentQuery:activeDocument];
 }
 
 - (void)dealloc {
@@ -34,15 +42,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     [super dealloc];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-
-    UIViewController *rvc = [[[application windows] lastObject] rootViewController];
-    if ([rvc isKindOfClass:[MUIViewControllerOpenDocument class]]) {
-        [(MUIViewControllerOpenDocument *)rvc setDelegate:self];
-    }
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     return YES;
 }
 			
@@ -96,96 +96,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     return persistentStoreCoordinator;
 }*/
-
-#pragma mark - Open Document Delegate
-
-- (void)openDocumentWithUrl:(NSURL *)url insideViewController:(UIViewController *)viewController {
-    UIManagedDocumentReport *mdq = [[UIManagedDocumentReport alloc] initWithFileURL:url];
-    [self setManagedDocumentQuery: mdq];
-    [mdq release];
-    
-    if ([viewController isKindOfClass:[MUIViewControllerQueryBuilder class]]) {
-        MUIViewControllerQueryBuilder *tvc = (MUIViewControllerQueryBuilder *)viewController;
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-            [[self managedDocumentQuery] openWithCompletionHandler:^(BOOL success) {
-                
-                NSManagedObjectContext *managedObjectContext = [[self managedDocumentQuery] managedObjectContext];
-                
-                {
-
-                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                    RptqQuery *query = [[database hasQueries] anyObject];
-
-                    NSString *entityName = NSStringFromClass([RptqTable class]);
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: managedObjectContext
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsControllerTables: frc];
-                    
-                    [frc release];
-                    frc = nil;
-                }
-                
-                {
-                    NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: managedObjectContext
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsControllerLinks: frc];
-                    
-                    [frc release];
-                    frc = nil;
-                }
-                
-                {
-                    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: managedObjectContext
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsControllerGroups: frc];
-                    [frc release];
-                    frc = nil;
-                    
-                }
-                
-                {
-                    NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: managedObjectContext
-                                                                                            sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
-                    [tvc setFetchedResultsControllerPredicates: frc];
-                    [frc release];
-                    
-                    frc = nil;
-                }
-                
-                [tvc release];
-                
-            }];
-        }
-    }
-    
-
-}
 
 #pragma mark - Actions
 

@@ -7,6 +7,7 @@
 //
 
 #import "UITableViewControllerChooseField.h"
+#import "AppDelegate.h"
 
 #pragma mark -
 #pragma mark TableViewController
@@ -55,7 +56,7 @@
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
 
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     NSArray *rptqQueryTables = [RptqTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
     //NSArray *rptqQueryTables = [RptqQueryTables namesForManagedObjectContext: managedObjectContext];
     NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: rptqQueryTables];
@@ -70,7 +71,7 @@
         [request setPredicate: predicate];
         
         NSError *error = nil;
-        NSArray *tablesResults = [[[UIManagedDocumentReport activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
+        NSArray *tablesResults = [[[AppDelegate activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
         [self setDataTables: (!error ? tablesResults : [NSArray array]) ]; 
 
     } else {

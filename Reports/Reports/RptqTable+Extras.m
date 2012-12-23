@@ -131,10 +131,14 @@
 }
 
 + (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    return [[query hasTables] count];
+    NSUInteger result = 0;
+    if (managedObjectContext) {
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        RptqQuery *query = [[database hasQueries] anyObject];
+        result = [[query hasTables] count];
+    }
+    return result;
 }
 
 + (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

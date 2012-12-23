@@ -19,22 +19,26 @@
 }
 
 //Create a new file
-- (id)initFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
-    self = [super initFileWithName:name extension:SCHEMA_PATH_EXTENSION managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success) {
+- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
+    self = [super initNewFileWithName:name extension:SCHEMA_PATH_EXTENSION managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success) {
         if (self) {
             RptqDocument *doc = [RptqDocument createMainDocumentForManagedObjectContext: [[self managedDocument] managedObjectContext]];
             [doc setName: name];
-            completion(YES);
+            
+            [self saveContext];
+            [self save:^(BOOL success) {
+                completion(success);
+            }];
         }
     }];
     return self;
 }
 
 //Open an existing file
-- (id)initFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success))completion {
-    self = [super initFileWithUrl:url completion:^(BOOL success) {
+- (id)initExistingExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion {
+    self = [super initExistingFileWithUrl:url managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success, id document) {
         if (self) {
-            completion(success);
+            completion(success, self);
         }
     }];
     return self;

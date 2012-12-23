@@ -31,7 +31,7 @@
 /*
  Create a new file in standard file-directory paradigm.
  */
-- (id)initFileWithName:(NSString *)name extension:(NSString *)extension
+- (id)initNewFileWithName:(NSString *)name extension:(NSString *)extension
      managedObjectType:(Class)managedObjectType completion:(void (^)(BOOL success))completion {
 
     self = [super init];
@@ -41,6 +41,7 @@
         
         [UIManagedDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withWrapper:managedObjectType andCompletionHandler:^(id managedDocument, BOOL success) {
             if (success) {
+                [self setManagedDocumentType:[managedDocument class]];
                 [self setManagedDocument:managedDocument];
             }
             completion(success);
@@ -52,29 +53,68 @@
 /*
  This is to open an existing file.
  */
-- (id)initFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success))completion {
+- (id)initExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion {
 
     self = [super init];
     if (self) {
-        id document = [[[self managedDocumentType] alloc] initWithFileURL:url];
-        [self setManagedDocument: document];
-        [document release];
+
+        [UIManagedDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
+
+            [self setManagedDocumentType: [managedDocument class]];
+            [self setManagedDocument: managedDocument];
+            
+            completion(success, self);
+            
+        }];
         
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-            [[self managedDocument] openWithCompletionHandler:^(BOOL success) {
-                completion(success);
-            }];
-        } else {
-            [self save:^(BOOL success) {
-                completion(success);
-            }];
-        }
     }
     return self;
 }
 
+- (id)initExistingFileWithUrl:(NSURL *)url managedObjectType:(Class)managedObjectType completion:(void (^)(BOOL success, id document))completion {
+    
+    self = [super init];
+    if (self) {
+        
+        [UIManagedDocument openManagedDocumentAtUrl:url withWrapper:managedObjectType andCompletionHandler:^(id managedDocument, BOOL success) {
+            
+            [self setManagedDocumentType: managedObjectType];
+            [self setManagedDocument: managedDocument];
+            
+            completion(success, self);
+            
+        }];
+        
+    }
+    return self;
+}
+
+
+- (NSManagedObjectContext *) managedObjectContext {
+    return [[self document] managedObjectContext];
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    return [[self document] managedObjectModel];
+}
+
+- (id)document {
+    return [self managedDocument];
+}
+
+- (void)saveContext {
+    NSError *error;
+    if ([self managedObjectContext] != nil) {
+        if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
+            [error presentErrorToUserWithTryAgain:^(BOOL success) {
+                [self saveContext];
+            }];
+        }
+    }
+}
+
 - (void)save:(void (^)(BOOL success))completion {
-    [self saveToUrl:[[self managedDocument] fileURL] completion:^(BOOL success) {
+    [self saveToUrl:[[self document] fileURL] completion:^(BOOL success) {
         completion(success);
     }];
 }
@@ -82,11 +122,11 @@
 - (void)saveToUrl:(NSURL *)url completion:(void (^)(BOOL success))completion {
     BOOL fileExistAtUrl = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
     UIDocumentSaveOperation documentSaveOperation = fileExistAtUrl ? UIDocumentSaveForOverwriting : UIDocumentSaveForCreating;
-    [[self managedDocument] saveToURL: url
-                     forSaveOperation: documentSaveOperation
-                    completionHandler:^(BOOL success) {
-                        completion(success);
-                    }];
+    [[self document] saveToURL: url
+              forSaveOperation: documentSaveOperation
+             completionHandler:^(BOOL success) {
+                 completion(success);
+             }];
 }
 
 @end

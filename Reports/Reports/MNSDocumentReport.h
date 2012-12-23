@@ -26,12 +26,12 @@
 @interface MNSDocumentReport : MNSDocument
 
 //Create a new file
-- (id)initFileWithName: (NSString *)name
+- (id)initNewFileWithName: (NSString *)name
             completion: (void (^)(BOOL success))completion;
 
 //Open an existing file
-- (id)initFileWithUrl: (NSURL *)url
-           completion: (void (^)(BOOL success))completion;
+- (id)initExistingExistingFileWithUrl: (NSURL *)url
+           completion: (void (^)(BOOL success, id document))completion;
 
 //Save the currently opend UIManagedDocument
 - (void)save:(void (^)(BOOL success))completion;

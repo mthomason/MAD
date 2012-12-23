@@ -20,7 +20,7 @@
         <attribute name="overrideText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="papersize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="thumbnailpreview" optional="YES" attributeType="Binary" syncable="YES"/>
-        <relationship name="hasDatabaseSchemas" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByQueryAsStaticResource" inverseEntity="RptqDatabase" syncable="YES"/>
+        <relationship name="hasDatabaseSchemas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByQueryAsStaticResource" inverseEntity="RptqDatabase" syncable="YES"/>
         <relationship name="hasDetailSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReport" inverseEntity="RptqDocumentSection" syncable="YES"/>
         <relationship name="hasPageFooterSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReport" inverseEntity="RptqDocumentSection" syncable="YES"/>
         <relationship name="hasPageHeaderSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReport" inverseEntity="RptqDocumentSection" syncable="YES"/>

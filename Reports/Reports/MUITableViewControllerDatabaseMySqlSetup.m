@@ -97,7 +97,7 @@
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
     [[self view] addSubview: [vc view]];
 
-    __block MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
+    __block MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initNewFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
         
         if (success) {
             

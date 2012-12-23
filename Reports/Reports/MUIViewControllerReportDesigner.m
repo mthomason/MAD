@@ -9,6 +9,7 @@
 #import "MUIViewControllerReportDesigner.h"
 #import "MTCollectionViewSection.h"
 #import "SectionEnumerator.h"
+#import "AppDelegate.h"
 
 @interface MUIViewControllerReportDesigner()
 
@@ -112,7 +113,7 @@
     [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
     [self setDesignScrollViewNormal: [[self designScrollView] frame]];
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[UIManagedDocumentReport activeDocument]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[AppDelegate activeDocument]];
     NSInteger ctr = 0;
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
@@ -338,7 +339,7 @@
         
     }];
 
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
 
     if (document) {
@@ -357,7 +358,7 @@
                 [error presentErrorToUser];
             }
 
-            [[UIManagedDocumentReport activeDocument] saveToURL: [[UIManagedDocumentReport activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
+            [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
             }];
          
         } completion:^(BOOL finished) {
@@ -383,7 +384,7 @@
 #pragma mark Element View Delegate
 
 - (void)elementDidFinishPan:(ElementView *)view {
-    NSManagedObjectContext *managedObjectContext = [[UIManagedDocumentReport activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
 

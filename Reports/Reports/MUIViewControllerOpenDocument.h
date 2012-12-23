@@ -14,10 +14,6 @@
 extern NSString * const SEGUE_SHOWADDDOCUMENT;
 extern NSString * const SEGUE_OPENDOCUMENT;
 
-@protocol MUIViewControllerOpenDocumentDelegate
-- (void)openDocumentWithUrl:(NSURL *)url insideViewController:(UIViewController *)viewController;
-@end
-
 @interface MUIViewControllerOpenDocument : UIViewController
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
@@ -25,8 +21,6 @@ extern NSString * const SEGUE_OPENDOCUMENT;
         UIViewControllerTemplateSelectorDelegate,
         MUIViewControllerDelegate,
         MUIViewControllerDelegate>
-
-@property (assign) IBOutlet id <MUIViewControllerOpenDocumentDelegate> delegate;
 
 @property (strong, nonatomic) UIPopoverController *tableViewControllerDataSourceTypes;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
