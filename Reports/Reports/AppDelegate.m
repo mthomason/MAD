@@ -11,6 +11,7 @@
 
 @interface AppDelegate()
 
+@property (retain) MNSDocumentReport *documentReport;
 @property (retain) UIManagedDocumentReport *managedDocumentQuery;
 @property (retain) UIManagedDocumentPreferencesApplication *applicationPreferences;
 @property (retain) UIManagedDocumentPreferencesUser *openReport;
@@ -24,17 +25,18 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"%@", exception);
 }
 
-+ (UIManagedDocumentReport *)activeDocument {
++ (MNSDocumentReport *)activeDocument {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate managedDocumentQuery];
+    return [appDelegate documentReport];
 }
 
-+ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument {
++ (void)setActiveDocument:(MNSDocumentReport *)activeDocument {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate setManagedDocumentQuery:activeDocument];
+    return [appDelegate setDocumentReport:activeDocument];
 }
 
 - (void)dealloc {
+    [_documentReport release];
     [_applicationPreferences release];
     [_managedDocumentQuery release];
     [_openReport release];

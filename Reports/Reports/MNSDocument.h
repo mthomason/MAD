@@ -30,11 +30,14 @@
 - (id)initExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion;
 - (id)initExistingFileWithUrl:(NSURL *)url managedObjectType:(Class)managedObjectType completion:(void (^)(BOOL success, id document))completion;
 
+- (id)document;
+
 - (void)saveContext;
 
 - (void)save:(void (^)(BOOL success))completion;
 - (void)saveToUrl:(NSURL *)url completion:(void (^)(BOOL success))completion;
 
 - (NSManagedObjectModel *)managedObjectModel;
+- (NSManagedObjectContext *) managedObjectContext;
 
 @end

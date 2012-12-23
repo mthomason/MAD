@@ -17,12 +17,13 @@
 #import "UIColor+EverydayApps.h"
 #import "UINavigationControllerQueryDesigner.h"
 #import "UINavigationControllerModelControllers.h"
+#import "MNSDocumentReport.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-+ (UIManagedDocumentReport *)activeDocument;
-+ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument;
++ (MNSDocumentReport *)activeDocument;
++ (void)setActiveDocument:(MNSDocumentReport *)activeDocument;
 
 @end

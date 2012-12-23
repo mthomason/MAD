@@ -62,7 +62,7 @@
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     [[self tableViewQueryBuilder] setOpaque: YES];
     
-    QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[AppDelegate activeDocument]];
+    QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
 }
@@ -299,9 +299,7 @@
                                                           forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
     [section setVisibility: [NSNumber numberWithBool:isVisible]];
     [section release];
-    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-    }];
-
+    [[AppDelegate activeDocument] saveContext];
 }
 
 #pragma mark - Delegates
@@ -310,61 +308,59 @@
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [self dismissModalViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [self dismissModalViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 
     [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
 
     [[self tableViewQueryBuilder] reloadData];
-    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-    }];
+    [[AppDelegate activeDocument] saveContext];
 }
 
 - (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
     [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];    
-    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-    }];    
+    [[AppDelegate activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLinkFirstTable *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewControllerSchemaAddTableDidFinish:(UIViewControllerSchemaAddTable *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(UITableViewControllerSchemaAddGroup *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidFinish:(UITableViewControllerSchemaAddPredicate *)controller {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addGroupDidAddGroupWithField:(RptqField *)field andSort:(MNSSortOrder)sortOrder {
 
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     [[self tableViewQueryBuilder] beginUpdates];
@@ -402,14 +398,11 @@
     [[self tableViewQueryBuilder] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-    
-    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-    }];
+    [[AppDelegate activeDocument] commitChanges];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
-    
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
@@ -417,8 +410,8 @@
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-    UIManagedDocumentReport *report = [AppDelegate activeDocument];
-    NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
+    UIManagedDocumentReport *report = [[AppDelegate activeDocument] document];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     [RptqTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
     //[RptqQueryTables createAndInsertQueryTableFor:table inManagedObjectContext:managedObjectContext];   // FIXME: Depreciated
@@ -553,8 +546,8 @@
                 case UIViewControllerSchemaTablesSectionsTables: {
                     
                     NSError *error = nil;
-                    __block UIManagedDocumentReport *activateDocument = [AppDelegate activeDocument];
-                    __block NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
+                    __block UIManagedDocumentReport *activateDocument = [[AppDelegate activeDocument] document];
+                    __block NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
@@ -639,9 +632,7 @@
                         NSManagedObjectID *objid = [[tvcLink tableID] retain];
                         [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
                         [objid release];
-                        
-                        [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                        }];
+                        [[AppDelegate activeDocument] saveContext];
                     }
                     [tvcLink release];
                     break;
@@ -712,12 +703,7 @@
 
                     [doc release];
                     
-                    [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL]
-                                                       forSaveOperation: UIDocumentSaveForOverwriting
-                                                      completionHandler: ^(BOOL success) {
-                                                          [[self tableViewQueryBuilder] endUpdates];
-                                                          [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                                                      }];
+                    [[AppDelegate activeDocument] saveContext];
                     break;
                 }
                 

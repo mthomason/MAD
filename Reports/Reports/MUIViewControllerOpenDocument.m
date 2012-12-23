@@ -223,9 +223,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                     }
                                     
                                 }];
-                                
-                                //[AppDelegate setActiveDocument:[documentReport managedDocument]];
-                                
+                                                                
                                 [url release];
 
 
@@ -270,15 +268,16 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissModalViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
         [self setTableViewControllerDataSourceTypes: nil];
     }
+    [AppDelegate setActiveDocument: nil];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -

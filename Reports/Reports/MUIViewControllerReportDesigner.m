@@ -113,7 +113,7 @@
     [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
     [self setDesignScrollViewNormal: [[self designScrollView] frame]];
     [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[AppDelegate activeDocument]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     NSInteger ctr = 0;
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
@@ -358,8 +358,7 @@
                 [error presentErrorToUser];
             }
 
-            [[AppDelegate activeDocument] saveToURL: [[AppDelegate activeDocument] fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-            }];
+            [[AppDelegate activeDocument] saveContext];
          
         } completion:^(BOOL finished) {
             if (finished) {
