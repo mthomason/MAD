@@ -147,7 +147,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                     
                                     if (success) {
                                         
-                                        [AppDelegate setActiveDocument: [document managedDocument]];
+                                        [AppDelegate setActiveDocument: document];
                                         
                                         NSManagedObjectContext *managedObjectContext = [[document managedDocument] managedObjectContext];
                                         

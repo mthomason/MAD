@@ -66,9 +66,6 @@
     
 }
 
-- (void)commitChanges {
-}
-
 - (void)refresh {
     [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]

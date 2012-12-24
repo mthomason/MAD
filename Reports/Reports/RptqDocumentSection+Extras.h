@@ -33,6 +33,8 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentReport *)managedDocument;
 
 - (NSString *)localizedDisplayName;
+
 - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
+- (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value;
 
 @end

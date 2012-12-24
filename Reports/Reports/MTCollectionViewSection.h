@@ -17,7 +17,7 @@
 #import "MUIViewControllerReportDesigner.h"
 
 @interface MTCollectionViewSection : UICollectionView
-    <UICollectionViewDataSource, UICollectionViewDelegate, ElementViewDelegate>
+    <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ElementViewDelegate>
 
 @property (nonatomic, retain) NSManagedObjectID *objectID;
 @property (nonatomic, retain) NSString *localizedName;

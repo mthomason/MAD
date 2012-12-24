@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/23/12.
+//  Created by Michael Thomason on 12/24/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
@@ -21,6 +21,8 @@
 @property (nonatomic, retain) NSNumber * sizeheight;
 @property (nonatomic, retain) NSNumber * sizewidth;
 @property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * sectionIndexItem;
+@property (nonatomic, retain) NSNumber * sectionIndexRow;
 @property (nonatomic, retain) RptqDocumentSection *inSection;
 @property (nonatomic, retain) RptqDocumentObjectFormula *isFormula;
 @property (nonatomic, retain) RptqDocumentObjectLabel *isLabel;

@@ -14,6 +14,7 @@
 
 @protocol ElementViewDelegate
 - (BOOL)elementDidRequestRemoval:(ElementView *)view;
+- (void)elementDidBeginPan:(ElementView *)view;
 - (void)elementDidFinishPan:(ElementView *)view;
 @end
 
@@ -23,7 +24,7 @@
             UIView *pieceForReset;
 }
 
-@property (retain) UIScrollView *containerView;
+@property (retain) UICollectionView *containerView;
 @property (retain) UIScrollView *designerView;
 
 @property (assign) IBOutlet id <ElementViewDelegate> delegate;
@@ -49,6 +50,6 @@
 @property (assign, getter = isHighlighted) BOOL highlight;
 
 - (id)initWithFrame:(CGRect)frame;
-- (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview;
+- (id)initWithFrame:(CGRect)frame inSectionView:(UICollectionView *)pview ofDesignerView:(UIScrollView *)dview;
 
 @end

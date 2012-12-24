@@ -120,12 +120,14 @@
             [databaseConnection release];
             
         } else {
+
             [UIAlertView showAlertViewWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
                                         message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
                               cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
                                otherButtonTitle: nil
                                       onDismiss: ^(int buttonIndex) { }
                                        onCancel: ^{ }];
+
         }
         
     }];

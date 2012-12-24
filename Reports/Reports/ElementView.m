@@ -18,7 +18,7 @@
 
 @interface ElementView ()
 
-@property (retain) UIScrollView *origionalSuperview;
+@property (retain) UICollectionView *origionalSuperview;
 @property (assign) CGPoint origionalCenter;
 
 @end
@@ -45,7 +45,7 @@
 - (id)initWithFrame:(CGRect)frame {
     return [self initWithFrame:frame inSectionView:nil ofDesignerView:nil];
 }
-- (id)initWithFrame:(CGRect)frame inSectionView:(UIScrollView *)pview ofDesignerView:(UIScrollView *)dview {
+- (id)initWithFrame:(CGRect)frame inSectionView:(UICollectionView *)pview ofDesignerView:(UIScrollView *)dview {
     self = [super initWithFrame:frame];
     if (self) {
         [self setDesignerView: dview];
@@ -264,7 +264,7 @@
             
         case UIGestureRecognizerStateBegan: {
             
-            [self setOrigionalSuperview: (UIScrollView *)[self superview]];
+            [self setOrigionalSuperview: (UICollectionView *)[self superview]];
 
             CGPoint newCenter = [gestureRecognizer locationInView:[self containerView]];
             [self setCenter: newCenter];
@@ -281,6 +281,8 @@
             }
             [[self containerView] bringSubviewToFront: self];
 
+            [[self delegate] elementDidBeginPan:self];
+            
             break;
         }
         case UIGestureRecognizerStateChanged: {
@@ -295,38 +297,45 @@
         }
         case UIGestureRecognizerStateCancelled: {
 #warning FIXME - This should go back to origional postion
+            /*
             if ([self origionalSuperview]) {
                 if (![[self origionalSuperview] isEqual: self]) {
                     [self setContainerView: [self origionalSuperview]];
                     [[self origionalSuperview] addSubview: self];
                 }
             }
+             */
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
             break;
         }
         case UIGestureRecognizerStateFailed: {
 #warning FIXME - This should go back to origional postion
+            /*
             if ([self origionalSuperview]) {
                 if (![[self origionalSuperview] isEqual: self]) {
                     [self setContainerView: [self origionalSuperview]];
                     [[self origionalSuperview] addSubview: self];
                 }
             }
+            */
             [self setParentScrollersEnabled: YES];
             [self stopWobble];
             break;
         }
         case UIGestureRecognizerStateEnded: {
             
+            
+            // MARK: Remove the element from one section and place it into the next new section
+            
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];
+            UICollectionView *newParent = nil;
+            
+            // MARK: Try to find the section to place the element view into.
             BOOL addedToNewParent = NO;
-            
-            CGPoint newCenter = [gestureRecognizer locationInView:[self designerView]];//CGPointRoundPointToGrid([gestureRecognizer locationInView:[self designerView]]);
-            
-            UIScrollView *newParent = nil;
-            for (UIScrollView *view in [[self designerView] subviews]) {
+            for (UICollectionView *view in [[self designerView] subviews]) {
                 if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
-                    if ([view isKindOfClass:[UIScrollView class]]) {
+                    if ([view isKindOfClass:[UICollectionView class]]) {
                         newParent = [[view retain] autorelease];
                         addedToNewParent = YES;
                         newCenter = [gestureRecognizer locationInView:newParent];
@@ -336,8 +345,8 @@
                 }
             }
             if (!addedToNewParent) {                                            //OK, lets be less choosie, and get the first one, yo
-                for (UIScrollView *view in [[self designerView] subviews]) {
-                    if ([view isKindOfClass: [UIScrollView class]]) {
+                for (UICollectionView *view in [[self designerView] subviews]) {
+                    if ([view isKindOfClass: [UICollectionView class]]) {
                         newParent = [[view retain] autorelease];
                         addedToNewParent = YES;
                         newCenter = CGPointMake(self.frame.size.width / 2.0000f, self.frame.size.height / 2.0000f);
@@ -346,23 +355,27 @@
                     }
                 }
             }
+
+            
+            
             if (addedToNewParent) {
                 if (newParent) {
                     if (![newParent isEqual: self]) {
                         [self setContainerView: newParent];
-                        [newParent addSubview: self];
+                        
+                        //[newParent addSubview: self];
                     }
                 } else {
                     newParent = [[[self origionalSuperview] retain] autorelease];
                     [self setContainerView: [self origionalSuperview]];
-                    [[self origionalSuperview] addSubview: self];
+                    //[[self origionalSuperview] addSubview: self];
                     [self setCenter: [self origionalCenter]];
                     newCenter = [self origionalCenter];
                 }
             } else {
                 newParent = [[[self origionalSuperview] retain] autorelease];
                 [self setContainerView: [self origionalSuperview]];
-                [[self origionalSuperview] addSubview: self];
+                //[[self origionalSuperview] addSubview: self];
                 [self setCenter: [self origionalCenter]];
                 newCenter = [self origionalCenter];
             }

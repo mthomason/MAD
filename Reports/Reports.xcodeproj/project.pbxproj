@@ -37,7 +37,6 @@
 		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
 		4C0E7725163B5AEC003B951E /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4C0E7727163B5AEC003B951E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
@@ -388,7 +387,6 @@
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C76F0B114B4F132005DCE49 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4C76F0BA14B5250F005DCE49 /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
 		4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */; };
@@ -474,7 +472,6 @@
 		4C860B0D167EDE7000AC1904 /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
 		4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4C860B10167EDE7000AC1904 /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4C860B12167EDE7000AC1904 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
@@ -822,10 +819,8 @@
 		4CA163D6167EB8D500540A14 /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
 		4CA163D7167EB8D500540A14 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4CA163D8167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4CA163D9167EB8DA00540A14 /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4CA163DC167EB8DA00540A14 /* UIScrollViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */; };
 		4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4CA163DE167EB8E100540A14 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
@@ -1158,11 +1153,6 @@
 		4CD88CDC1687983200683C01 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CD91687983200683C01 /* RptqQuery.m */; };
 		4CD88CDD1687983200683C01 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CD91687983200683C01 /* RptqQuery.m */; };
 		4CD88CDE1687983200683C01 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CD91687983200683C01 /* RptqQuery.m */; };
-		4CD88CE11687983200683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE01687983200683C01 /* RptqDocumentObject.m */; };
-		4CD88CE21687983200683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE01687983200683C01 /* RptqDocumentObject.m */; };
-		4CD88CE31687983200683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE01687983200683C01 /* RptqDocumentObject.m */; };
-		4CD88CE41687983200683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE01687983200683C01 /* RptqDocumentObject.m */; };
-		4CD88CE51687983200683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE01687983200683C01 /* RptqDocumentObject.m */; };
 		4CD88CE81687983300683C01 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE71687983300683C01 /* RptqDocumentObjectLabel.m */; };
 		4CD88CE91687983300683C01 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE71687983300683C01 /* RptqDocumentObjectLabel.m */; };
 		4CD88CEA1687983300683C01 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CE71687983300683C01 /* RptqDocumentObjectLabel.m */; };
@@ -1173,6 +1163,11 @@
 		4CD88CF11687983300683C01 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CEE1687983300683C01 /* RptqDocumentSection.m */; };
 		4CD88CF21687983300683C01 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CEE1687983300683C01 /* RptqDocumentSection.m */; };
 		4CD88CF31687983300683C01 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CEE1687983300683C01 /* RptqDocumentSection.m */; };
+		4CD88CF61688ECCE00683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */; };
+		4CD88CF71688ECCE00683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */; };
+		4CD88CF81688ECCE00683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */; };
+		4CD88CF91688ECCE00683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */; };
+		4CD88CFA1688ECCE00683C01 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */; };
 		4CD98C6E163F7DE70096D7BC /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4CD98C6F163F7DE70096D7BC /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4CD98C72163F7DE70096D7BC /* gcc_builtins.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CD98C26163F7DE60096D7BC /* gcc_builtins.h */; };
@@ -1624,8 +1619,8 @@
 		4C384E3214B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C384E3414B29789007B4F48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
-		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Reports/AppDelegate.h; sourceTree = "<group>"; };
+		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Reports/AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPhone.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerOpenDocument.h; sourceTree = "<group>"; };
@@ -1683,8 +1678,6 @@
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerReportDesigner.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerReportDesigner.h; sourceTree = "<group>"; };
-		4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewSection.h; sourceTree = "<group>"; };
-		4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewSection.m; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageToolbarDatabase.png; sourceTree = "<group>"; };
 		4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageToolbarDatabase@2x.png"; sourceTree = "<group>"; };
 		4C76F0BF14B529E6005DCE49 /* UIImagePictureFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePictureFrame.png; sourceTree = "<group>"; };
@@ -2117,12 +2110,12 @@
 		4CD88CD21687983200683C01 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
 		4CD88CD81687983200683C01 /* RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuery.h; sourceTree = "<group>"; };
 		4CD88CD91687983200683C01 /* RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuery.m; sourceTree = "<group>"; };
-		4CD88CDF1687983200683C01 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
-		4CD88CE01687983200683C01 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CD88CE61687983200683C01 /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
 		4CD88CE71687983300683C01 /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
 		4CD88CED1687983300683C01 /* RptqDocumentSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSection.h; sourceTree = "<group>"; };
 		4CD88CEE1687983300683C01 /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSection.m; sourceTree = "<group>"; };
+		4CD88CF41688ECCE00683C01 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
+		4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CD98C25163F7DE60096D7BC /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = /Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/libMySqlClientObjectiveC/../../StaticLibraries/libmysqlclient.a; sourceTree = "<absolute>"; };
 		4CD98C26163F7DE60096D7BC /* gcc_builtins.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CD98C27163F7DE60096D7BC /* generic-msvc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
@@ -2668,7 +2661,8 @@
 				4C5482741672D4A800CA24EB /* TODO.txt */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
-				4CDB624A14E38C5600A5389E /* App Delegate */,
+				4C384E3714B29789007B4F48 /* AppDelegate.h */,
+				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
@@ -2866,12 +2860,12 @@
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
 			isa = PBXGroup;
 			children = (
+				4CD88CF41688ECCE00683C01 /* RptqDocumentObject.h */,
+				4CD88CF51688ECCE00683C01 /* RptqDocumentObject.m */,
 				4CD88CED1687983300683C01 /* RptqDocumentSection.h */,
 				4CD88CEE1687983300683C01 /* RptqDocumentSection.m */,
 				4CD88CE61687983200683C01 /* RptqDocumentObjectLabel.h */,
 				4CD88CE71687983300683C01 /* RptqDocumentObjectLabel.m */,
-				4CD88CDF1687983200683C01 /* RptqDocumentObject.h */,
-				4CD88CE01687983200683C01 /* RptqDocumentObject.m */,
 				4CD88CD81687983200683C01 /* RptqQuery.h */,
 				4CD88CD91687983200683C01 /* RptqQuery.m */,
 				4CD88CD11687983200683C01 /* RptqRelationship.h */,
@@ -3174,8 +3168,6 @@
 				4C00818214B73884003DF437 /* Toolbox */,
 				4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */,
 				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
-				4C76F0B814B5250F005DCE49 /* UIScrollViewSection.h */,
-				4C76F0B914B5250F005DCE49 /* UIScrollViewSection.m */,
 				4CAB178F150FE38400BA0A9B /* UIViewRuler.h */,
 				4CAB1790150FE38400BA0A9B /* UIViewRuler.m */,
 			);
@@ -3701,16 +3693,6 @@
 				4CFC3DE316714A260016E1E8 /* MUIViewControllerShowSql.m */,
 			);
 			name = "View Controllers";
-			sourceTree = "<group>";
-		};
-		4CDB624A14E38C5600A5389E /* App Delegate */ = {
-			isa = PBXGroup;
-			children = (
-				4C384E3714B29789007B4F48 /* AppDelegate.h */,
-				4C384E3814B29789007B4F48 /* AppDelegate.m */,
-			);
-			name = "App Delegate";
-			path = Reports;
 			sourceTree = "<group>";
 		};
 		4CDB624B14E38C8400A5389E /* Categories */ = {
@@ -4768,7 +4750,6 @@
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
 				4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */,
 				4C0E7725163B5AEC003B951E /* MUIViewControllerReportDesigner.m in Sources */,
-				4C0E7726163B5AEC003B951E /* UIScrollViewSection.m in Sources */,
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
 				4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */,
 				4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */,
@@ -4899,9 +4880,9 @@
 				4CD88CCD1687983100683C01 /* RptqQuerySort.m in Sources */,
 				4CD88CD41687983200683C01 /* RptqRelationship.m in Sources */,
 				4CD88CDB1687983200683C01 /* RptqQuery.m in Sources */,
-				4CD88CE21687983200683C01 /* RptqDocumentObject.m in Sources */,
 				4CD88CE91687983300683C01 /* RptqDocumentObjectLabel.m in Sources */,
 				4CD88CF01687983300683C01 /* RptqDocumentSection.m in Sources */,
+				4CD88CF71688ECCE00683C01 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4969,7 +4950,6 @@
 				4CA163D4167EB8D400540A14 /* UITableViewControllerSettings.m in Sources */,
 				4CA163D5167EB8D400540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163D8167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
-				4CA163D9167EB8DA00540A14 /* UIScrollViewSection.m in Sources */,
 				4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */,
 				4CA163DE167EB8E100540A14 /* UIViewControllerToolbox.m in Sources */,
 				4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */,
@@ -5036,9 +5016,9 @@
 				4CD88CCF1687983100683C01 /* RptqQuerySort.m in Sources */,
 				4CD88CD61687983200683C01 /* RptqRelationship.m in Sources */,
 				4CD88CDD1687983200683C01 /* RptqQuery.m in Sources */,
-				4CD88CE41687983200683C01 /* RptqDocumentObject.m in Sources */,
 				4CD88CEB1687983300683C01 /* RptqDocumentObjectLabel.m in Sources */,
 				4CD88CF21687983300683C01 /* RptqDocumentSection.m in Sources */,
+				4CD88CF91688ECCE00683C01 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5106,7 +5086,6 @@
 				4CA163D6167EB8D500540A14 /* UITableViewControllerSettings.m in Sources */,
 				4CA163D7167EB8D500540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
-				4CA163DC167EB8DA00540A14 /* UIScrollViewSection.m in Sources */,
 				4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */,
 				4CA163E1167EB8E200540A14 /* UIViewControllerToolbox.m in Sources */,
 				4CA163E2167EB8E200540A14 /* UITableViewControllerFontSettings.m in Sources */,
@@ -5173,9 +5152,9 @@
 				4CD88CCE1687983100683C01 /* RptqQuerySort.m in Sources */,
 				4CD88CD51687983200683C01 /* RptqRelationship.m in Sources */,
 				4CD88CDC1687983200683C01 /* RptqQuery.m in Sources */,
-				4CD88CE31687983200683C01 /* RptqDocumentObject.m in Sources */,
 				4CD88CEA1687983300683C01 /* RptqDocumentObjectLabel.m in Sources */,
 				4CD88CF11687983300683C01 /* RptqDocumentSection.m in Sources */,
+				4CD88CF81688ECCE00683C01 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5187,7 +5166,6 @@
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
 				4C384E5214B36980007B4F48 /* ReportOld.xcdatamodeld in Sources */,
 				4C76F0B114B4F132005DCE49 /* MUIViewControllerReportDesigner.m in Sources */,
-				4C76F0BA14B5250F005DCE49 /* UIScrollViewSection.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */,
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
@@ -5318,9 +5296,9 @@
 				4CD88CCC1687983100683C01 /* RptqQuerySort.m in Sources */,
 				4CD88CD31687983200683C01 /* RptqRelationship.m in Sources */,
 				4CD88CDA1687983200683C01 /* RptqQuery.m in Sources */,
-				4CD88CE11687983200683C01 /* RptqDocumentObject.m in Sources */,
 				4CD88CE81687983300683C01 /* RptqDocumentObjectLabel.m in Sources */,
 				4CD88CEF1687983300683C01 /* RptqDocumentSection.m in Sources */,
+				4CD88CF61688ECCE00683C01 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5387,7 +5365,6 @@
 				4C860B0D167EDE7000AC1904 /* UITableViewControllerSettings.m in Sources */,
 				4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */,
 				4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */,
-				4C860B10167EDE7000AC1904 /* UIScrollViewSection.m in Sources */,
 				4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */,
 				4C860B12167EDE7000AC1904 /* UIViewControllerToolbox.m in Sources */,
 				4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */,
@@ -5455,9 +5432,9 @@
 				4CD88CD01687983100683C01 /* RptqQuerySort.m in Sources */,
 				4CD88CD71687983200683C01 /* RptqRelationship.m in Sources */,
 				4CD88CDE1687983200683C01 /* RptqQuery.m in Sources */,
-				4CD88CE51687983200683C01 /* RptqDocumentObject.m in Sources */,
 				4CD88CEC1687983300683C01 /* RptqDocumentObjectLabel.m in Sources */,
 				4CD88CF31687983300683C01 /* RptqDocumentSection.m in Sources */,
+				4CD88CFA1688ECCE00683C01 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,17 +10,7 @@
 #import "AppDelegate.h"
 
 @implementation UIManagedDocumentReport
-/*
-+ (UIManagedDocumentReport *)activeDocument {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate managedDocumentQuery];
-}
 
-+ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate setManagedDocumentQuery:activeDocument];
-}
-*/
 #pragma mark - Managed Document Override
 
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {

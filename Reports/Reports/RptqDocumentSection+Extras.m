@@ -69,6 +69,16 @@
     }
 }
 
+- (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value {
+    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)[self hasObjects] removeObject:value];
+    } else {
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasObjects]];
+        [tempSet removeObject:value];
+        [self setHasObjects: tempSet];
+    }
+}
+
 #pragma mark - Static
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {

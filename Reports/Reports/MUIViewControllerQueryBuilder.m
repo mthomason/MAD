@@ -398,7 +398,7 @@
     [[self tableViewQueryBuilder] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-    [[AppDelegate activeDocument] commitChanges];
+    [[AppDelegate activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {

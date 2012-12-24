@@ -61,40 +61,36 @@
         
         CGRect f = CGRectMake([[documentObj.parentObjectLabelDataField originx] floatValue], [[documentObj.parentObjectLabelDataField originy] floatValue], [[documentObj.parentObjectLabelDataField sizewidth] floatValue], [[documentObj.parentObjectLabelDataField sizeheight] floatValue]);
         
-        RptqDocumentSection *objSec = [[documentObj parentObjectLabelDataField] inSection];
+        RptqDocumentSection *documentSectionOld = [[documentObj parentObjectLabelDataField] inSection];
 
-        if (objSec) {
-
-            MTCollectionViewSection *scrollView = [[[self sections] valueForKey: objSec.objectID.URIRepresentation.absoluteString] retain];
+        MTCollectionViewSection *scrollView = [self getCollectionViewForRptqSection: documentSectionOld];
+        
+        if (scrollView) {
+            ElementView *newView = [[ElementView alloc] initWithFrame: f
+                                                        inSectionView: scrollView
+                                                       ofDesignerView:[self designScrollView]];
+            [newView setBounds: f];
+            [newView setStringElm: documentObj.parentObjectLabelDataField.isLabelDataField.text];
+            [newView setMultipleTouchEnabled: YES];
+            [newView setExclusiveTouch: YES];
+            [newView setObjectID: [documentObj objectID]];
+            [newView setDelegate: self];
+            [newView setTag: [[documentObj objectID] hash]];
             
-            if (scrollView) {
-                ElementView *newView = [[ElementView alloc] initWithFrame: f
-                                                            inSectionView: scrollView
-                                                           ofDesignerView:[self designScrollView]];
-                [newView setBounds: f];
-                [newView setStringElm: documentObj.parentObjectLabelDataField.isLabelDataField.text];
-                [newView setMultipleTouchEnabled: YES];
-                [newView setExclusiveTouch: YES];
-                [newView setObjectID: [documentObj objectID]];
-                [newView setDelegate: self];
-                [newView setTag: [[documentObj objectID] hash]];
+            CGPoint center = CGCenterOfRect(f);
+            NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
+            
+            [scrollView performBatchUpdates:^{
+                RptqDocumentSection *sectionNew = [RptqDocumentSection getDocumentSectionForObjectID:[scrollView objectID] fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+                [[documentObj parentObjectLabelDataField] setInSection: sectionNew];
+                [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
                 
-                CGPoint center = CGCenterOfRect(f);
-                NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
-                
-                [scrollView performBatchUpdates:^{
-                    
-                    [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
-                } completion:^(BOOL finished) {
-                }];
-                
-                [newView release];
-                
-            }
-            [scrollView release];
+            } completion:^(BOOL finished) {
+            }];
+            
+            [newView release];
         }
     }
-    
 }
 
 - (void)insertDocumentElementLabelLink:(RptqDocumentObjectLabelLink *)documentObj {
@@ -138,9 +134,10 @@
         MTCollectionViewSection *scrollView = [[MTCollectionViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID] inDesigner:self];
         
         [[self designScrollView] addSubview:scrollView];
-        [[self sections] setValue:scrollView forKey:[[[sec objectID] URIRepresentation] absoluteString]];
         
-        //NSLog(@"ScrollView %@", [[[sec objectID] URIRepresentation] absoluteString]);
+        [self setCollectionView:scrollView forSection:sec];
+
+        /*
         
         for (RptqDocumentObject *obj in [sec hasObjects]) {
             switch ([obj getType]) {
@@ -172,7 +169,9 @@
                     break;
                 }
             }
-        }
+         }
+*/
+        
         
         [scrollView release];
         ctr++;
@@ -184,6 +183,14 @@
     
     [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+}
+
+- (MTCollectionViewSection *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
+    return [[self sections] objectForKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
+}
+
+- (void)setCollectionView:(MTCollectionViewSection *)collectionView forSection:(RptqDocumentSection *)documentSection {
+    [[self sections] setValue:collectionView forKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -343,7 +350,9 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
 
     if (document) {
-        MTCollectionViewSection *detailSection = [[self sections] objectForKey: [[[[document hasDetailSection] objectID] URIRepresentation] absoluteString]];
+        
+        
+        MTCollectionViewSection *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -361,8 +370,7 @@
             [[AppDelegate activeDocument] saveContext];
          
         } completion:^(BOOL finished) {
-            if (finished) {
-            }
+
         }];
     }
 }
@@ -381,28 +389,82 @@
 }
 
 #pragma mark Element View Delegate
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+
+- (void)elementDidBeginPan:(ElementView *)view {
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
+    
+    if (datafield) {
+
+        __block MTCollectionViewSection *svSection = (MTCollectionViewSection *)[view containerView];
+
+        [svSection performBatchUpdates:^{
+            
+            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectID] fromObjectContext:managedObjectContext];
+            //[documentSection removeHasObjectsObject:[datafield parentObjectLabelDataField]];
+            [documentSection removeHasObjectsObjectFixed:[datafield parentObjectLabelDataField]];
+            NSIndexPath *deletePath = [NSIndexPath indexPathForItem:[[[datafield parentObjectLabelDataField] sectionIndexItem] integerValue]
+                                                          inSection:[[[datafield parentObjectLabelDataField] sectionIndexRow] integerValue]];
+            
+            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+
+            // MARK: Add this to the data context and to the container for the sections collection view.
+            [[datafield parentObjectLabelDataField] setInSection: nil];
+            [[datafield parentObjectLabelDataField] setSectionIndexRow:@(0)];
+            [[datafield parentObjectLabelDataField] setSectionIndexItem:@(0)];
+            
+        } completion:^(BOOL finished) {
+            
+            [[AppDelegate activeDocument] saveContext];
+            
+        }];
+
+    }
+}
 
 - (void)elementDidFinishPan:(ElementView *)view {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
-
+    
     if (datafield) {
+
         datafield.parentObjectLabelDataField.originx = @(view.frame.origin.x);
         datafield.parentObjectLabelDataField.originy = @(view.frame.origin.y);
         datafield.parentObjectLabelDataField.sizewidth = @(view.frame.size.width);
         datafield.parentObjectLabelDataField.sizeheight = @(view.frame.size.height);
 
-        MTCollectionViewSection *svSection = (MTCollectionViewSection *)[[view containerView] retain];
-        if (svSection) {
+        __block MTCollectionViewSection *svSection = (MTCollectionViewSection *)[view containerView];
+        
+        [svSection performBatchUpdates:^{
+            
+            // MARK: Add this to the data context and to the container for the sections collection view.
+            
             RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectID] fromObjectContext:managedObjectContext];
-            NSLog(@"Document section: %@", [documentSection localizedDisplayName]);
             datafield.parentObjectLabelDataField.inSection = documentSection;
-        }
-        [svSection release];
+            
+            NSIndexPath *indexPath = [svSection indexPathForItemAtPoint:[view center]];
+            if (indexPath == nil) {
+                indexPath = [svSection indexOfAlienViewWithCenterPoint:[view center]];
+                if (indexPath == nil) {
+                    indexPath = [NSIndexPath indexPathForItem:[svSection numberOfItemsInSection: 0] inSection:0];
+                }
+            }
+            NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+            [svSection insertItemsAtIndexPaths:indexPaths];
+            
+            
+            [[datafield parentObjectLabelDataField] setSectionIndexItem:@([indexPath item])];
+            [[datafield parentObjectLabelDataField] setSectionIndexRow:@([indexPath section])];
 
-        NSError *error = nil;
-        [managedObjectContext save: &error];
+            [view removeFromSuperview];
+            
+        } completion:^(BOOL finished) {
+            
+            [[AppDelegate activeDocument] saveContext];
+            
+        }];
 
     }
 }

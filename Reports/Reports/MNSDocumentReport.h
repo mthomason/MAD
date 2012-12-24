@@ -50,6 +50,4 @@
 //Export the data inside the currently opened managed document
 - (void)sendTo;
 
-- (void)commitChanges;
-
 @end

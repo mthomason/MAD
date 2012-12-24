@@ -12,7 +12,4 @@
 
 @interface UIManagedDocumentReport : UIManagedDocument
 
-//+ (UIManagedDocumentReport *)activeDocument;
-//+ (void)setActiveDocument:(UIManagedDocumentReport *)activeDocument;
-
 @end
