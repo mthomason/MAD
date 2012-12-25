@@ -18,8 +18,18 @@
 
 @interface ElementView ()
 
-@property (retain) UICollectionView *origionalSuperview;
+@property (nonatomic, retain) UICollectionView *origionalSuperview;
+
 @property (assign) CGPoint origionalCenter;
+
+@property (nonatomic, retain) UIViewResizeHandle *handleEdgeRight;
+@property (nonatomic, retain) UIViewResizeHandle *handleEdgeLeft;
+@property (nonatomic, retain) UIViewResizeHandle *handleEdgeTop;
+@property (nonatomic, retain) UIViewResizeHandle *handleEdgeBottom;
+@property (nonatomic, retain) UIViewResizeHandle *handleCornerTopRight;
+@property (nonatomic, retain) UIViewResizeHandle *handleCornerTopLeft;
+@property (nonatomic, retain) UIViewResizeHandle *handleCornerBottomRight;
+@property (nonatomic, retain) UIViewResizeHandle *handleCornerBottomLeft;
 
 @end
 

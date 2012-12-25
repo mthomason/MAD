@@ -52,7 +52,6 @@
 }
 
 - (void)getTables: (void (^)(NSArray *tables))completion {
-    NSLog(@"self: %@", self);
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

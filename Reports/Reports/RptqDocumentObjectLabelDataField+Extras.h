@@ -16,6 +16,6 @@
 @interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare>
 
 + (id)getLabelDataFieldForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-+ (void)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document;
++ (RptqDocumentObject *)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document withManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

@@ -69,8 +69,7 @@
     return result;
 }
 
-+ (void)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document {
-    NSManagedObjectContext  *managedObjectContext = [document managedObjectContext];
++ (RptqDocumentObject *)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document withManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
                                                                        inManagedObjectContext: managedObjectContext];
     NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
@@ -82,7 +81,8 @@
     
     RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
                                                                                insertIntoManagedObjectContext: managedObjectContext];
-    
+
+    dataObject.isLabelDataField = reportObject;
     
     dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
     dataObject.isLabelDataField.referencesField = field;
@@ -91,13 +91,15 @@
     dataObject.sizewidth = @(200.0000f);
     dataObject.sizeheight = @(44.0000f);
     dataObject.type = @(MNSObjectTypeLabelDataField);
-    dataObject.isLabelDataField = reportObject;
-    RptqDocumentSection *detailSection = [document hasDetailSection];
-    [detailSection addHasObjectsObjectFixed:dataObject];
-    
-    [dataObject release];
+    reportObject.referencesField = field;
+    //dataObject.isLabelDataField = reportObject;
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+    [hasObjects insertObject:dataObject atIndex:0];
+    [[document hasDetailSection] setHasObjects:hasObjects];
+    //RptqDocumentSection *detailSection = [document hasDetailSection];
+    //[detailSection addHasObjectsObjectFixed:dataObject];
     [reportObject release];
-
+    return [dataObject autorelease];
 }
 
 #pragma mark - MTProtocolCompare

@@ -13,7 +13,6 @@
 #import "UIViewControllerToolbox.h"
 #import "MUIViewControllerObjectSelector.h"
 #import "MUIViewControllerReportViewer.h"
-#import "ElementView.h"
 #import "NSFileManager+Common.h"
 #import "UIViewRuler.h"
 #import "RptqDocumentObject+Extras.h"
@@ -28,10 +27,10 @@
         UICollectionViewDataSource,
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
+        UIGestureRecognizerDelegate,
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
-        LabelInformationViewControllerDelegate,
-        ElementViewDelegate>
+        LabelInformationViewControllerDelegate>
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 
@@ -40,7 +39,6 @@
 @property (assign) CGRect toolboxOffScreen;
 @property (assign) CGRect toolboxOnScreen;
 
-@property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) IBOutlet UIScrollView *designScrollView;
 @property (retain, nonatomic) IBOutlet UIButton *informationButton;

@@ -19,6 +19,12 @@
     return self;
 }
 
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+    for (UIView *subview in [[self contentView] subviews]) {
+        [subview setNeedsDisplay];
+    }
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

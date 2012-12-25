@@ -13,6 +13,8 @@
 #import "UIView+StringTag.h"
 #import "UICollectionView+Extras.h"
 #import "UIView+NSObjectIdTag.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+
 
 @interface MUIViewControllerReportDesigner()
 
@@ -28,10 +30,9 @@
 - (void)dealloc {
     [_scrollViewFrames release];
     [_sections release];
-    if (_toolbox) [_toolbox release];
+    [_toolbox release];
     [_settingsPopoverController release];
     [_designScrollView release];
-    [_containerView release];
     [_informationButton release];
     [_barButtonItemInfo release];
     [_barButtonItemSettings release];
@@ -50,58 +51,9 @@
 
 }
 
-- (void)insertDocumentElementLabel:(RptqDocumentObjectLabel *)documentObj {
-
-}
-
-- (void)insertDocumentElementFormula:(RptqDocumentObjectFormula *)documentObj {
-    
-}
-
-- (void)insertDocumentElementLabelDataField:(RptqDocumentObjectLabelDataField *)documentObj {
-
-    if (![[self designScrollView] viewWithTag: [[documentObj objectID] hash]]) {
-        
-        CGRect f = CGRectMake([[documentObj.parentObjectLabelDataField originx] floatValue], [[documentObj.parentObjectLabelDataField originy] floatValue], [[documentObj.parentObjectLabelDataField sizewidth] floatValue], [[documentObj.parentObjectLabelDataField sizeheight] floatValue]);
-        
-        RptqDocumentSection *documentSectionOld = [[documentObj parentObjectLabelDataField] inSection];
-
-        UICollectionView *scrollView = [self getCollectionViewForRptqSection: documentSectionOld];
-        
-        if (scrollView) {
-            ElementView *newView = [[ElementView alloc] initWithFrame: f
-                                                        inSectionView: scrollView
-                                                       ofDesignerView:[self designScrollView]];
-            [newView setBounds: f];
-            [newView setStringElm: documentObj.parentObjectLabelDataField.isLabelDataField.text];
-            [newView setMultipleTouchEnabled: YES];
-            [newView setExclusiveTouch: YES];
-            [newView setObjectID: [documentObj objectID]];
-            [newView setDelegate: self];
-            [newView setTag: [[documentObj objectID] hash]];
-            
-            CGPoint center = CGCenterOfRect(f);
-            NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
-            
-            [scrollView performBatchUpdates:^{
-                RptqDocumentSection *sectionNew = [RptqDocumentSection getDocumentSectionForObjectID:[scrollView objectIdTag] fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
-                [[documentObj parentObjectLabelDataField] setInSection: sectionNew];
-                [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
-                
-            } completion:^(BOOL finished) {
-            }];
-            
-            [newView release];
-        }
-    }
-}
-
-- (void)insertDocumentElementLabelLink:(RptqDocumentObjectLabelLink *)documentObj {
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     //CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
@@ -122,7 +74,7 @@
     
     frame.size.height = 22.0000f;
     
-    frame.origin.y += frame.size.height + 10.0000f;
+    //frame.origin.y += frame.size.height + 10.0000f;
     for (RptqDocumentSection *sec in enumerator) {
         //NSLog(@"Ctr: %d, Type: %d", ctr, [[sec type] integerValue]);
 
@@ -133,6 +85,7 @@
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
         
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
@@ -226,6 +179,216 @@
     }
 }
 
+#pragma mark - Gesture Recognizers
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
+
+#pragma mark - Gesture Recognizer Delegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return YES;
+}
+
+- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+
+    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    
+    switch ([gestureRecognizer state]) {
+
+            // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
+            case UIGestureRecognizerStateBegan: {
+            
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            [[gestureRecognizer view] setCenter: newCenter];
+            
+            [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
+            newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            [self setScrollersEnabled: NO];
+
+            [[gestureRecognizer view] setCenter: newCenter];
+            [[self designScrollView] addSubview: [gestureRecognizer view]];
+
+            
+            {
+                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[[gestureRecognizer view] objectIdTag]
+                                                                                                           fromObjectContext:managedObjectContext];
+                NSLog(@"OBJTag %@", [[gestureRecognizer view] objectIdTag]);
+                NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
+                if (datafield) {
+                    
+                    RptqDocumentSection *section = [[datafield parentObjectLabelDataField] inSection];
+                    __block UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
+                    
+                    
+                    
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+                    
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [documentSection hasObjects]];
+                    NSUInteger deleteIndex = 0;
+                    
+                    BOOL found = NO;
+                    for (RptqDocumentObject *object in hasObjects) {
+                        if ([[[object isLabelDataField] objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
+                            found = YES;
+                            break;
+                        }
+                        deleteIndex++;
+                    }
+                    if (found) {
+                        [svSection performBatchUpdates:^{
+                            [hasObjects removeObjectAtIndex:deleteIndex];
+                            [documentSection setHasObjects:hasObjects];
+                            
+                            [[AppDelegate activeDocument] saveContext];
+                            
+                            
+                            NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
+                            NSLog(@"Delete %@", deletePath);
+                            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+                            
+                        } completion:^(BOOL finished) {
+                            
+                        }];
+                    }
+                }
+            }
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            [[gestureRecognizer view] setCenter: newCenter];
+            break;
+        }
+        case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
+        case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
+        case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
+            
+            
+            // MARK: Remove the element from one section and place it into the next new section
+            
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            __block UICollectionView *newParent = nil;
+            
+            // MARK: Try to find the section to place the element view into.
+            BOOL addedToNewParent = NO;
+            for (UICollectionView *view in [[self designScrollView] subviews]) {
+                if (CGRectContainsPoint([view frame], [[gestureRecognizer view] center]) && ![view isEqual:self]) {
+                    if ([view isKindOfClass:[UICollectionView class]]) {
+                        newParent = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        newCenter = [gestureRecognizer locationInView:newParent];
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        break;
+                    }
+                }
+            }
+            if (!addedToNewParent) {
+                for (UICollectionView *view in [[self designScrollView] subviews]) {
+                    if ([view isKindOfClass: [UICollectionView class]]) {
+                        newParent = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        newCenter = CGPointMake([gestureRecognizer view].frame.size.width / 2.0000f, [gestureRecognizer view].frame.size.height / 2.0000f);
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        break;
+                    }
+                }
+            }
+            
+            
+            
+            if (addedToNewParent) {
+                newCenter = CGPointRoundPointToGrid(newCenter);
+                [[gestureRecognizer view] setCenter: newCenter];
+
+                
+                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                
+                RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[[gestureRecognizer view] objectIdTag]
+                                                                                                           fromObjectContext:managedObjectContext];
+                
+                if (datafield) {
+                    
+                    datafield.parentObjectLabelDataField.originx = @([gestureRecognizer view].frame.origin.x);
+                    datafield.parentObjectLabelDataField.originy = @([gestureRecognizer view].frame.origin.y);
+                    datafield.parentObjectLabelDataField.sizewidth = @([gestureRecognizer view].frame.size.width);
+                    datafield.parentObjectLabelDataField.sizeheight = @([gestureRecognizer view].frame.size.height);
+                    
+                    CGPoint newCenter = [[gestureRecognizer view] center];
+                    [[gestureRecognizer view] removeFromSuperview];
+                    
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[newParent objectIdTag]
+                                                                                            fromObjectContext:managedObjectContext];
+                    NSIndexPath *indexPath = [newParent indexPathForItemAtPoint:newCenter];
+                    if (indexPath == nil) {
+                        indexPath = [newParent indexOfAlienViewWithCenterPoint:newCenter];
+                        if (indexPath == nil) {
+                            indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
+                        }
+                    }
+
+                    indexPath = [NSIndexPath indexPathForItem:([indexPath item] + 1) inSection:[indexPath section]];
+                    NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+
+                    // MARK: Add this to the data context and to the container for the sections collection view.
+                    [newParent performBatchUpdates:^{
+                        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
+                        [hasObjects insertObject:[datafield parentObjectLabelDataField] atIndex:[indexPath item]];
+                        [documentSection setHasObjects:hasObjects];
+                        [[AppDelegate activeDocument] saveContext];
+
+                        [newParent insertItemsAtIndexPaths:indexPaths];
+
+                    } completion:^(BOOL finished) {
+                    }];
+                    
+                }
+                
+            }
+            [self setScrollersEnabled:YES];
+            [[gestureRecognizer view] setNeedsDisplay];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)setScrollersEnabled:(BOOL)enabled {
+    @synchronized([self designScrollView]) {
+        if ([[self designScrollView] respondsToSelector:@selector(setScrollEnabled:)]) {
+            [[self designScrollView] setScrollEnabled:enabled];
+            [[self designScrollView] flashScrollIndicators];
+            for (UICollectionView *collectionView in [[self designScrollView] subviews]) {
+                if ([collectionView isKindOfClass: [UICollectionView class]]) {
+                    [collectionView setScrollEnabled:enabled];
+                    [collectionView flashScrollIndicators];
+                }
+            }
+        }
+    }
+}
+
 #pragma mark - Collection View Flow Layout Delegate
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
@@ -266,7 +429,7 @@
     } else {
         result = CGSizeZero;
     }
-    
+    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
     return result;
 }
 
@@ -274,7 +437,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     NSInteger row = [indexPath row];
     
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
@@ -300,26 +463,36 @@
             case MNSObjectTypeLabelDataField: {
                 
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-                CGRect f = CGRectMake(0, 0, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue], [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
-                ElementView *newView = [[ElementView alloc] initWithFrame: f
-                                                            inSectionView: collectionView
-                                                           ofDesignerView:[self designScrollView]];
-                [newView setBounds: f];
-                [newView setStringElm: documentObjectCast.parentObjectLabelDataField.isLabelDataField.text];
-                [newView setMultipleTouchEnabled: YES];
-                [newView setExclusiveTouch: YES];
-                [newView setObjectID: [documentObjectCast objectID]];
-                [newView setDelegate: self];
-                [newView setTag: [[documentObjectCast objectID] hash]];
+                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue],
+                                      [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
+                
+                UIView *newView1 = [[UIView alloc] initWithFrame: f];
+                UILabel *label = [[UILabel alloc] initWithFrame: f];
+                NSLog(@"%@", [[documentObjectCast parentObjectLabelDataField] isLabelDataField]);
+                [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
+                [label setBackgroundColor:[UIColor clearColor]];
+                [newView1 setBackgroundColor:[UIColor whiteColor]];
+                [newView1 addSubview: label];
+                [newView1 setBounds: f];
+                [newView1 setMultipleTouchEnabled: YES];
+                [newView1 setExclusiveTouch: YES];
+                [newView1 setObjectIdTag: [documentObjectCast objectID]];
+                [newView1 setOpaque: YES];
+                [[newView1 layer] setCornerRadius: 5.0000f];
+                
+                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+                [panGesture setMaximumNumberOfTouches:1];
+                [panGesture setDelegate:self];
+                [newView1 addGestureRecognizer:panGesture];
+                [panGesture release];
+                
+                [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
                 [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
                 [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
                 
-                [[cell contentView] addSubview:newView];
-                
-                [cell setBackgroundColor:[UIColor redColor]];
-                [[cell contentView] setBackgroundColor:[UIColor blueColor]];
-                
-                [newView release];
+                [[cell contentView] addSubview:newView1];
+                [newView1 setNeedsDisplay];
+                [newView1 release];
                 
                 break;
             }
@@ -342,7 +515,7 @@
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
-    NSLog(@"Objects in section: %d", [objects count]);
+    //NSLog(@"Objects in section: %d", [objects count]);
     return [objects count];
 }
 
@@ -526,17 +699,16 @@
         [detailSection performBatchUpdates:^{
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-            NSInteger numberOfExistingObjects = [[[document hasDetailSection] hasObjects] count];
-            [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field toDetailSectionOfDocument:document];
-            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:numberOfExistingObjects inSection:0]];
-            [detailSection insertItemsAtIndexPaths:indexPaths];
-            NSError *error = nil;
-            [managedObjectContext save: &error];
-            if (error) {
-                [error presentErrorToUser];
-            }
+            
+            RptqDocumentObject *dobject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
+                                                 toDetailSectionOfDocument:document
+                                                  withManagedObjectContext:managedObjectContext];
 
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
             [[AppDelegate activeDocument] saveContext];
+
+            
+            [detailSection insertItemsAtIndexPaths:indexPaths];
          
         } completion:^(BOOL finished) {
 
@@ -557,268 +729,5 @@
                      }];
 }
 
-#pragma mark Element View Delegate
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-
-- (void)elementDidBeginPan:(ElementView *)view {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
-    
-    if (datafield) {
-
-        __block UICollectionView *svSection = [view containerView];
-
-        [svSection performBatchUpdates:^{
-            
-            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
-            //[documentSection removeHasObjectsObject:[datafield parentObjectLabelDataField]];
-            [documentSection removeHasObjectsObjectFixed:[datafield parentObjectLabelDataField]];
-            NSIndexPath *deletePath = [NSIndexPath indexPathForItem:[[[datafield parentObjectLabelDataField] sectionIndexItem] integerValue]
-                                                          inSection:[[[datafield parentObjectLabelDataField] sectionIndexRow] integerValue]];
-            
-            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-
-            // MARK: Add this to the data context and to the container for the sections collection view.
-            [[datafield parentObjectLabelDataField] setInSection: nil];
-            [[datafield parentObjectLabelDataField] setSectionIndexRow:@(0)];
-            [[datafield parentObjectLabelDataField] setSectionIndexItem:@(0)];
-            
-        } completion:^(BOOL finished) {
-            
-            [[AppDelegate activeDocument] saveContext];
-            
-        }];
-
-    }
-}
-
-- (void)elementDidFinishPan:(ElementView *)view {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    
-    RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[view objectID] fromObjectContext:managedObjectContext];
-    
-    if (datafield) {
-
-        datafield.parentObjectLabelDataField.originx = @(view.frame.origin.x);
-        datafield.parentObjectLabelDataField.originy = @(view.frame.origin.y);
-        datafield.parentObjectLabelDataField.sizewidth = @(view.frame.size.width);
-        datafield.parentObjectLabelDataField.sizeheight = @(view.frame.size.height);
-
-        __block UICollectionView *svSection = [view containerView];
-        
-        [svSection performBatchUpdates:^{
-            
-            // MARK: Add this to the data context and to the container for the sections collection view.
-            
-            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
-            datafield.parentObjectLabelDataField.inSection = documentSection;
-            
-            NSIndexPath *indexPath = [svSection indexPathForItemAtPoint:[view center]];
-            if (indexPath == nil) {
-                indexPath = [svSection indexOfAlienViewWithCenterPoint:[view center]];
-                if (indexPath == nil) {
-                    indexPath = [NSIndexPath indexPathForItem:[svSection numberOfItemsInSection: 0] inSection:0];
-                }
-            }
-            NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
-            [svSection insertItemsAtIndexPaths:indexPaths];
-            
-            
-            [[datafield parentObjectLabelDataField] setSectionIndexItem:@([indexPath item])];
-            [[datafield parentObjectLabelDataField] setSectionIndexRow:@([indexPath section])];
-
-            [view removeFromSuperview];
-            
-        } completion:^(BOOL finished) {
-            
-            [[AppDelegate activeDocument] saveContext];
-            
-        }];
-
-    }
-}
-
-- (BOOL)elementDidRequestRemoval:(ElementView *)view {
-    return NO;
-}
-
-#pragma mark Table View Data Source Protocol
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
-}
-
-/*
- - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
- 
- }
- */
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {    
-    UITableViewCell *result = nil;
-    static NSString *MyIdentifier = @"UITableViewCell";
-    result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-    if (result == nil) {
-        result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:MyIdentifier] autorelease];
-        result.textLabel.text = @"What up!?!";
-    }
-    return result;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-	
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	NSInteger numberOfRows;
-    switch (section) {
-        case 0: {
-            numberOfRows = 5;
-            break;
-        }            
-        default:
-            numberOfRows = 0;
-            break;
-    }
-	return numberOfRows;
-}
-
-/*
- - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
- NSString *result;
- switch (section) {
- case 0:
- result = @"";
- break;
- case 1:
- result = @"";
- break;
- default:
- result = @"";
- break;
- }
- return result;
- }
- */
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
-}
-
-#pragma mark -
-#pragma mark Table View Delegate Protocol
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 0.0000f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat result = 27.0000f;
-    return result;
-}
-
-/*
- - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath { }
- */
-
-/*
- - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section { }
- */
-
-/*
- 
- - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-
-/*
- - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
 
 @end

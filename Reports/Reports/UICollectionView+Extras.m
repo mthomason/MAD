@@ -12,16 +12,18 @@
 
 - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter {
     CGFloat minDistance = CGFLOAT_MAX;
-    NSIndexPath *nearestIndexPath = nil;
+    NSUInteger item = 0;
+    NSUInteger section = 0;
     for (NSIndexPath *indexPath in [self indexPathsForVisibleItems]) {
         UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath: indexPath];
         CGFloat distance = CGDistance([layoutAttributes center], alienCenter);
         if (distance < minDistance) {
             minDistance = distance;
-            nearestIndexPath = indexPath;
+            item = [indexPath item];
+            section = [indexPath section];
         }
     }
-    return  nearestIndexPath;
+    return  [NSIndexPath indexPathForItem:item inSection:section];
 }
 
 @end

@@ -38,15 +38,6 @@
 @property (assign) NSTimeInterval lastTime;
 @property (assign) NSTimeInterval currentTime;
 
-@property (retain) UIViewResizeHandle *handleEdgeRight;
-@property (retain) UIViewResizeHandle *handleEdgeLeft;
-@property (retain) UIViewResizeHandle *handleEdgeTop;
-@property (retain) UIViewResizeHandle *handleEdgeBottom;
-@property (retain) UIViewResizeHandle *handleCornerTopRight;
-@property (retain) UIViewResizeHandle *handleCornerTopLeft;
-@property (retain) UIViewResizeHandle *handleCornerBottomRight;
-@property (retain) UIViewResizeHandle *handleCornerBottomLeft;
-
 @property (assign, getter = isHighlighted) BOOL highlight;
 
 - (id)initWithFrame:(CGRect)frame;
