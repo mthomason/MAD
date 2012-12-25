@@ -7,9 +7,12 @@
 //
 
 #import "MUIViewControllerReportDesigner.h"
-#import "MTCollectionViewSection.h"
+#import "MTCollectionViewCellElement.h"
 #import "SectionEnumerator.h"
 #import "AppDelegate.h"
+#import "UIView+StringTag.h"
+#import "UICollectionView+Extras.h"
+#import "UIView+NSObjectIdTag.h"
 
 @interface MUIViewControllerReportDesigner()
 
@@ -63,7 +66,7 @@
         
         RptqDocumentSection *documentSectionOld = [[documentObj parentObjectLabelDataField] inSection];
 
-        MTCollectionViewSection *scrollView = [self getCollectionViewForRptqSection: documentSectionOld];
+        UICollectionView *scrollView = [self getCollectionViewForRptqSection: documentSectionOld];
         
         if (scrollView) {
             ElementView *newView = [[ElementView alloc] initWithFrame: f
@@ -81,7 +84,7 @@
             NSIndexPath *ip = [scrollView indexOfAlienViewWithCenterPoint:center];
             
             [scrollView performBatchUpdates:^{
-                RptqDocumentSection *sectionNew = [RptqDocumentSection getDocumentSectionForObjectID:[scrollView objectID] fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+                RptqDocumentSection *sectionNew = [RptqDocumentSection getDocumentSectionForObjectID:[scrollView objectIdTag] fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
                 [[documentObj parentObjectLabelDataField] setInSection: sectionNew];
                 [scrollView insertItemsAtIndexPaths:[NSArray arrayWithObject: ip]];
                 
@@ -101,7 +104,8 @@
     [super viewDidLoad];
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
-    CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
+    //CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
+    CGRect frame = CGRectMake(origin.x, origin.y, self.view.frame.size.width - 10.0000f, CGSizeZero.height);
     
     CGFloat halfHeight = self.view.frame.size.height / 2;
     
@@ -118,78 +122,61 @@
     
     frame.size.height = 22.0000f;
     
-    UIViewRuler *ruler = [[UIViewRuler alloc] initWithFrame: frame];
-    [[self designScrollView] addSubview:ruler];
-    [ruler release];
-    
     frame.origin.y += frame.size.height + 10.0000f;
-    
     for (RptqDocumentSection *sec in enumerator) {
         //NSLog(@"Ctr: %d, Type: %d", ctr, [[sec type] integerValue]);
+
+
         if (ctr > 0) frame.origin.y += frame.size.height + 10.0000f;
         frame.size.height = [[sec height] floatValue];
         
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
         
-        MTCollectionViewSection *scrollView = [[MTCollectionViewSection alloc] initWithFrame:frame name:[sec localizedDisplayName] andObjectID:[sec objectID] inDesigner:self];
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         
-        [[self designScrollView] addSubview:scrollView];
-        
-        [self setCollectionView:scrollView forSection:sec];
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
+        [collectionView registerClass:[MTCollectionViewCellElement class] forCellWithReuseIdentifier:@"MTCollectionViewCellElement"];
+        [collectionView setDelegate:self];
+        [collectionView setDataSource:self];
+        [collectionView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [[collectionView layer] setCornerRadius:5.0000f];
+        [collectionView setClipsToBounds:YES];
+        [collectionView setObjectIdTag:[sec objectID]];
 
-        /*
-        
-        for (RptqDocumentObject *obj in [sec hasObjects]) {
-            switch ([obj getType]) {
-                case MNSObjectTypeLabel: {
-                    if ([obj isLabel] != nil) {
-                        
-                    }
-                    break;
-                }
-                case MNSObjectTypeLabelDataField: {
-                    if ([obj isLabelDataField] != nil) {
-                        [self insertDocumentElementLabelDataField:[obj isLabelDataField]];
-                    }
-                    break;
-                }
-                case MNSObjectTypeLabelFormula: {
-                    if ([obj isFormula] != nil) {
-                        
-                    }
-                    break;
-                }
-                case MNSObjectTypeLabelLabelLink: {
-                    if ([obj isLabelLink] != nil) {
-                        
-                    }
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-         }
-*/
-        
-        
-        [scrollView release];
+        UIView *backgroundView = [[UIView alloc] initWithFrame:[collectionView frame]];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, backgroundView.frame.size.width, 22.0000f)];
+        [label setText:[sec localizedDisplayName]];
+        [label setBackgroundColor:[UIColor clearColor]];
+
+        [backgroundView addSubview:label];
+
+        [collectionView setBackgroundView:backgroundView];
+        [[self designScrollView] addSubview:collectionView];
+        [self setCollectionView:collectionView forSection:sec];
+
+        [layout release];
+        [collectionView release];
+        [backgroundView release];
+        [label release];
+
         ctr++;
     }
     
+
     [enumerator release];
     
     [[self designScrollView] setScrollEnabled:YES];
     
-    [[self designScrollView] setContentSize:CGSizeMake(paperWidth + 10.0000f, frame.origin.y + frame.size.height + 5.0000f)];
+    [[self designScrollView] setContentSize:self.view.frame.size];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
 }
 
-- (MTCollectionViewSection *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
+- (UICollectionView *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
     return [[self sections] objectForKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
 }
 
-- (void)setCollectionView:(MTCollectionViewSection *)collectionView forSection:(RptqDocumentSection *)documentSection {
+- (void)setCollectionView:(UICollectionView *)collectionView forSection:(RptqDocumentSection *)documentSection {
     [[self sections] setValue:collectionView forKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
 }
 
@@ -238,6 +225,188 @@
         [viewControllerReportViewer setDelegate:self];
     }
 }
+
+#pragma mark - Collection View Flow Layout Delegate
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 5.0000f;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 5.0000f;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger row = [indexPath row];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    
+    NSOrderedSet *objects = [documentSection hasObjects];
+    
+    CGSize result;
+    
+    if ([objects count] > row) {
+        
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        result = CGSizeMake([[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+    } else {
+        result = CGSizeZero;
+    }
+    
+    return result;
+}
+
+#pragma mark - Collection View Data Source
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger row = [indexPath row];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    
+    static NSString *tileReuseIdentifier = @"MTCollectionViewCellElement";
+    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:tileReuseIdentifier
+                                                                            forIndexPath:indexPath] retain];
+    
+    //[[[collectionView] tag]
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    
+    NSOrderedSet *objects = [documentSection hasObjects];
+    
+    if ([objects count] > row) {
+        
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        switch ([documentObject getType]) {
+            case MNSObjectTypeLabel: {
+                
+                break;
+            }
+            case MNSObjectTypeLabelDataField: {
+                
+                RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
+                CGRect f = CGRectMake(0, 0, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue], [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
+                ElementView *newView = [[ElementView alloc] initWithFrame: f
+                                                            inSectionView: collectionView
+                                                           ofDesignerView:[self designScrollView]];
+                [newView setBounds: f];
+                [newView setStringElm: documentObjectCast.parentObjectLabelDataField.isLabelDataField.text];
+                [newView setMultipleTouchEnabled: YES];
+                [newView setExclusiveTouch: YES];
+                [newView setObjectID: [documentObjectCast objectID]];
+                [newView setDelegate: self];
+                [newView setTag: [[documentObjectCast objectID] hash]];
+                [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
+                [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
+                
+                [[cell contentView] addSubview:newView];
+                
+                [cell setBackgroundColor:[UIColor redColor]];
+                [[cell contentView] setBackgroundColor:[UIColor blueColor]];
+                
+                [newView release];
+                
+                break;
+            }
+            case MNSObjectTypeLabelFormula: {
+                break;
+            }
+            case MNSObjectTypeLabelLabelLink: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+    
+    return [cell autorelease];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    NSOrderedSet *objects = [documentSection hasObjects];
+    NSLog(@"Objects in section: %d", [objects count]);
+    return [objects count];
+}
+
+/*
+ - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+ viewForSupplementaryElementOfKind:(NSString *)kind
+ atIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ */
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+#pragma mark - Collection View Delegate
+/*
+ - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }*/
 
 #pragma mark - Actions
 
@@ -352,7 +521,7 @@
     if (document) {
         
         
-        MTCollectionViewSection *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -397,11 +566,11 @@
     
     if (datafield) {
 
-        __block MTCollectionViewSection *svSection = (MTCollectionViewSection *)[view containerView];
+        __block UICollectionView *svSection = [view containerView];
 
         [svSection performBatchUpdates:^{
             
-            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectID] fromObjectContext:managedObjectContext];
+            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
             //[documentSection removeHasObjectsObject:[datafield parentObjectLabelDataField]];
             [documentSection removeHasObjectsObjectFixed:[datafield parentObjectLabelDataField]];
             NSIndexPath *deletePath = [NSIndexPath indexPathForItem:[[[datafield parentObjectLabelDataField] sectionIndexItem] integerValue]
@@ -435,13 +604,13 @@
         datafield.parentObjectLabelDataField.sizewidth = @(view.frame.size.width);
         datafield.parentObjectLabelDataField.sizeheight = @(view.frame.size.height);
 
-        __block MTCollectionViewSection *svSection = (MTCollectionViewSection *)[view containerView];
+        __block UICollectionView *svSection = [view containerView];
         
         [svSection performBatchUpdates:^{
             
             // MARK: Add this to the data context and to the container for the sections collection view.
             
-            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectID] fromObjectContext:managedObjectContext];
+            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
             datafield.parentObjectLabelDataField.inSection = documentSection;
             
             NSIndexPath *indexPath = [svSection indexPathForItemAtPoint:[view center]];
