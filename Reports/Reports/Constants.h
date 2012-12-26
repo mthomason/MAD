@@ -25,6 +25,8 @@ typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
     UIViewControllerSchemaTablesSectionsSql = 6
 };
 
+extern NSString * const MTCollectionElementKindSectionLabel;
+
 extern NSString * const MNSStringInterfaceButtonTitleContinue;
 extern NSString * const MNSStringInterfaceButtonTitleContinueDesc;
 extern NSString * const MNSStringInterfaceButtonTitleTryAgain;

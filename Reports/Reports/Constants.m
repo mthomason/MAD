@@ -10,6 +10,10 @@
 
 #pragma mark - Customizable Constants
 #pragma mark Common UI Strings
+
+NSString * const MTCollectionElementKindSectionLabel         = @"MTCollectionElementKindSectionLabel";
+
+
 NSString * const MNSStringInterfaceButtonTitleContinue      = @"Continue";
 NSString * const MNSStringInterfaceButtonTitleContinueDesc  = @"Continue Button Title";
 

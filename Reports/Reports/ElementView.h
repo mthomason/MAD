@@ -12,35 +12,17 @@
 
 @class ElementView;
 
-@protocol ElementViewDelegate
-- (BOOL)elementDidRequestRemoval:(ElementView *)view;
-- (void)elementDidBeginPan:(ElementView *)view;
-- (void)elementDidFinishPan:(ElementView *)view;
-@end
+@interface ElementView : UIView;
 
-@interface ElementView : UIView
-    <UIViewResizeHandleDelegate,
-        UIGestureRecognizerDelegate> {
-            UIView *pieceForReset;
-}
+- (void)setResizeHandlesVisable:(BOOL)visable;
+- (BOOL)handlesVisable;
 
-@property (retain) UICollectionView *containerView;
-@property (retain) UIScrollView *designerView;
+- (void)setWobbleRunning:(BOOL)running;
+- (BOOL)isWobbleRunning;
 
-@property (assign) IBOutlet id <ElementViewDelegate> delegate;
-
-@property (retain) NSManagedObjectID * objectID;
-
-@property (copy) NSString *stringElm;
-@property (assign) CGSize originalSize;
-@property (assign) CGPoint originalPointCenter;
-
-@property (assign) NSTimeInterval lastTime;
-@property (assign) NSTimeInterval currentTime;
-
-@property (assign, getter = isHighlighted) BOOL highlight;
+- (void)setHighlighted:(BOOL)selected;
+- (BOOL)isHighlighted;
 
 - (id)initWithFrame:(CGRect)frame;
-- (id)initWithFrame:(CGRect)frame inSectionView:(UICollectionView *)pview ofDesignerView:(UIScrollView *)dview;
 
 @end

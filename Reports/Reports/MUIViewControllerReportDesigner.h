@@ -19,6 +19,7 @@
 #import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "CGGeometry+Extras.h"
 #import "NSError+UserInterface.h"
+#import "MTCollectionViewFlowLayoutDesignerSection.h"
 
 @interface MUIViewControllerReportDesigner : MUIViewController
     <UITableViewDataSource,

@@ -14,7 +14,11 @@
 #import "UICollectionView+Extras.h"
 #import "UIView+NSObjectIdTag.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
-
+#import "UICollectionViewCell+Reuse.h"
+#import "UICollectionReusableView+Reuse.h"
+#import "MTCollectionReuseableViewDefault.h"
+#import "MTCollectionReusableViewFloatingLabel.h"
+#import "ElementView.h"
 
 @interface MUIViewControllerReportDesigner()
 
@@ -26,6 +30,7 @@
 @end
 
 @implementation MUIViewControllerReportDesigner
+
 
 - (void)dealloc {
     [_scrollViewFrames release];
@@ -74,44 +79,76 @@
     
     frame.size.height = 22.0000f;
     
-    //frame.origin.y += frame.size.height + 10.0000f;
+    NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
+    //NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
+    //NSString *supplmentaryViewReuseIdFloatingLabel = [MTCollectionReusableViewFloatingLabel reuseIdentifier];
+    
     for (RptqDocumentSection *sec in enumerator) {
-        //NSLog(@"Ctr: %d, Type: %d", ctr, [[sec type] integerValue]);
-
 
         if (ctr > 0) frame.origin.y += frame.size.height + 10.0000f;
         frame.size.height = [[sec height] floatValue];
         
         [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
-        
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+
+        MTCollectionViewFlowLayoutDesignerSection *layout = [[MTCollectionViewFlowLayoutDesignerSection alloc] init];
         
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         
+        
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
-        [collectionView registerClass:[MTCollectionViewCellElement class] forCellWithReuseIdentifier:@"MTCollectionViewCellElement"];
+        
+        [collectionView registerClass:[MTCollectionViewCellElement class]
+           forCellWithReuseIdentifier: collectionViewReuseId];
+
+        /*
+        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
+           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+
+        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
+           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+
+        [collectionView registerClass:[MTCollectionReusableViewFloatingLabel class]
+           forSupplementaryViewOfKind:MTCollectionElementKindSectionLabel
+                  withReuseIdentifier:supplmentaryViewReuseIdFloatingLabel];
+         */
         [collectionView setDelegate:self];
         [collectionView setDataSource:self];
-        [collectionView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [collectionView setBackgroundColor:[UIColor whiteColor]];
         [[collectionView layer] setCornerRadius:5.0000f];
         [collectionView setClipsToBounds:YES];
         [collectionView setObjectIdTag:[sec objectID]];
+        [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
 
         UIView *backgroundView = [[UIView alloc] initWithFrame:[collectionView frame]];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, backgroundView.frame.size.width, 22.0000f)];
+
+        
+        CGRect labelFrame = CGRectMake((frame.origin.x + frame.size.width) - 120.0000f,
+                                       (frame.origin.y + frame.size.height) - 22.0000f,
+                                       120.0000f, 22.0000f);
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
+        [label setTextAlignment:NSTextAlignmentCenter];
+        [[label layer] setCornerRadius:5.0000f];
         [label setText:[sec localizedDisplayName]];
-        [label setBackgroundColor:[UIColor clearColor]];
-
-        [backgroundView addSubview:label];
-
+        [label setBackgroundColor:[UIColor edaBlackFiftyPercent]];
+        [label setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [collectionView setBackgroundView:backgroundView];
+        
+
         [[self designScrollView] addSubview:collectionView];
         [self setCollectionView:collectionView forSection:sec];
+
+        [[self designScrollView] addSubview:label];
+        
+
+        
+        [label release];
 
         [layout release];
         [collectionView release];
         [backgroundView release];
-        [label release];
 
         ctr++;
     }
@@ -347,7 +384,6 @@
                         }
                     }
 
-                    indexPath = [NSIndexPath indexPathForItem:([indexPath item] + 1) inSection:[indexPath section]];
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
 
                     // MARK: Add this to the data context and to the container for the sections collection view.
@@ -403,11 +439,11 @@
     return 5.0000f;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     return CGSizeZero;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     return CGSizeZero;
 }
 
@@ -442,8 +478,7 @@
     
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
-    static NSString *tileReuseIdentifier = @"MTCollectionViewCellElement";
-    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:tileReuseIdentifier
+    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:[MTCollectionViewCellElement reuseIdentifier]
                                                                             forIndexPath:indexPath] retain];
     
     //[[[collectionView] tag]
@@ -466,7 +501,7 @@
                 CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue],
                                       [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
                 
-                UIView *newView1 = [[UIView alloc] initWithFrame: f];
+                ElementView *newView1 = [[ElementView alloc] initWithFrame: f];
                 UILabel *label = [[UILabel alloc] initWithFrame: f];
                 NSLog(@"%@", [[documentObjectCast parentObjectLabelDataField] isLabelDataField]);
                 [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
@@ -519,13 +554,42 @@
     return [objects count];
 }
 
-/*
- - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
- viewForSupplementaryElementOfKind:(NSString *)kind
- atIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+
+    MTCollectionReuseableViewDefault *result = nil;
+    
+    if ([kind isEqualToString:MTCollectionElementKindSectionLabel]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReusableViewFloatingLabel reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 100.0000f, 22.0000f)];
+        [label setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [label setText:@"Floating Label"];
+        [result addSubview:label];
+        [label release];
+    } else if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+        [label setText:@"Header"];
+        [result addSubview:label];
+        [label release];
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+        [label setText:@"Footer"];
+        [result addSubview:label];
+        [label release];
+    } else {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+    }
+    return result;
+}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
