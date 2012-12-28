@@ -13,7 +13,7 @@
 
 @class UIViewControllerToolbox;
 
-@protocol LabelInformationViewControllerDelegate
+@protocol ToolboxViewControllerDelegate
 - (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller;
 @end
 
@@ -22,7 +22,7 @@
     FontSettingsTableViewControllerDelegate,
     UITableViewControllerFontSelectorDelegate>
 
-@property (assign, nonatomic) IBOutlet id <LabelInformationViewControllerDelegate> delegate;
+@property (assign, nonatomic) IBOutlet id <ToolboxViewControllerDelegate> delegate;
 @property (retain, nonatomic) IBOutlet UIScrollView *mainScrollView;
 
 @property (retain, nonatomic) UITableViewControllerFontSettings *fontSettingsTableViewController;

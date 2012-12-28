@@ -18,14 +18,26 @@
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MTCollectionReusableViewFloatingLabel.h"
-#import "ElementView.h"
+#import "MTElementView.h"
+#import "MTCollectionViewSection.h"
 
 @interface MUIViewControllerReportDesigner()
 
-@property (retain) NSMutableArray *scrollViewFrames;
+@property (nonatomic, retain) NSMutableArray *scrollViewFrames;
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
 @property (assign) BOOL labelInformationViewIsVisable;
+
+// MARK: Needed for the toolbox.
+@property (nonatomic, retain) UIToolbar *toolboxToolbar;
+@property (nonatomic, retain) UIScrollView *toolboxScrollView;
+@property (nonatomic, retain) UIView *toolboxBackgroundView;
+@property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
+@property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
+
+@property (nonatomic, retain) UITableViewControllerFontSettings *toolboxTableViewControllerFontSettings;
+@property (nonatomic, retain) UITableViewControllerFontSelector *toolboxTableViewControllerFontSelector;
+
 
 @end
 
@@ -33,6 +45,14 @@
 
 
 - (void)dealloc {
+    [_toolboxBackgroundView release];
+    [_toolboxTableViewControllerFontSettings release];
+    [_toolboxTableViewControllerFontSelector release];
+    [_toolboxScrollView release];
+    [_toolboxToolbarItemsFontChooser release];
+    [_toolboxToolbarItemsPrimary release];
+    [_toolboxToolbar release];
+
     [_scrollViewFrames release];
     [_sections release];
     [_toolbox release];
@@ -43,6 +63,9 @@
     [_barButtonItemSettings release];
     [_barButtonItemObjects release];
     [_navBar release];
+    [_toolbarBottom release];
+    [_toolbarTop release];
+    [_toolboxView release];
     [super dealloc];
 }
 
@@ -59,17 +82,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    //CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
+    
+    
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
-    CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     //CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
     CGRect frame = CGRectMake(origin.x, origin.y, self.view.frame.size.width - 10.0000f, CGSizeZero.height);
     
-    CGFloat halfHeight = self.view.frame.size.height / 2;
-    
-    [self setToolboxOnScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height - halfHeight, self.view.bounds.size.width, halfHeight)];
-    [self setToolboxOffScreen: CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + self.view.bounds.size.height, self.view.bounds.size.width, halfHeight)];
-    [self setDesignScrollViewNormal: [[self designScrollView] frame]];
-    [self setDesignScrollViewWithToolbox: CGRectMake(self.designScrollViewNormal.origin.x, self.designScrollViewNormal.origin.y, self.designScrollViewNormal.size.width, self.designScrollViewNormal.size.height - halfHeight)];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     NSInteger ctr = 0;
     
@@ -80,8 +100,14 @@
     frame.size.height = 22.0000f;
     
     NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
+    
+
     //NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
     //NSString *supplmentaryViewReuseIdFloatingLabel = [MTCollectionReusableViewFloatingLabel reuseIdentifier];
+    
+//    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Info", @"Info")
+//                                                      action:@selector(customAction:)];
+//    [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:menuItem]];
     
     for (RptqDocumentSection *sec in enumerator) {
 
@@ -123,16 +149,19 @@
 
         UIView *backgroundView = [[UIView alloc] initWithFrame:[collectionView frame]];
 
-        
-        CGRect labelFrame = CGRectMake((frame.origin.x + frame.size.width) - 120.0000f,
-                                       (frame.origin.y + frame.size.height) - 22.0000f,
-                                       120.0000f, 22.0000f);
+        CGFloat labelHeight = 14.0000f;
+        CGFloat labelWidth = 70.0000f;
+        CGRect labelFrame = CGRectMake((frame.origin.x + frame.size.width) - labelWidth,
+                                       (frame.origin.y + frame.size.height) - labelHeight,
+                                       labelWidth,
+                                       labelHeight);
         
         UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
         [label setTextAlignment:NSTextAlignmentCenter];
         [[label layer] setCornerRadius:5.0000f];
+        [label setFont:[UIFont systemFontOfSize:8.0000f]];
         [label setText:[sec localizedDisplayName]];
-        [label setBackgroundColor:[UIColor edaBlackFiftyPercent]];
+        [label setBackgroundColor:[UIColor edaYellow]];
         [label setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [collectionView setBackgroundView:backgroundView];
         
@@ -216,6 +245,656 @@
     }
 }
 
+#pragma mark - Actions
+
+- (void)cut:(id)sender {
+    NSLog(@"Fake a cut.");
+}
+
+- (void)copy:(id)sender {
+    NSLog(@"Fake a copy.");
+}
+
+- (void)select:(id)sender {
+    NSLog(@"Fake a select.");
+}
+
+- (void)selectAll:(id)sender {
+    NSLog(@"Fake a select all.");
+}
+
+- (void)paste:(id)sender {
+    NSLog(@"Fake a paste.");
+}
+
+- (void)delete:(id)sender {
+    NSLog(@"Fake a delete.");
+}
+
+- (void)toggleUnderline:(id)sender {
+    NSLog(@"Fake a delete.");
+    
+}
+
+- (void)toggleItalics:(id)sender {
+    NSLog(@"Fake a delete.");
+    
+}
+
+- (void)toggleBoldface:(id)sender {
+    NSLog(@"Fake a delete.");
+    
+}
+
+- (void)showFontChooser:(id)sender {
+    
+}
+
+- (void)hideFontChooser:(id)sender {
+    
+}
+
+- (void)customAction:(id)sender {
+    NSLog(@"custom action! %@", sender);
+}
+
+- (void)openReport:(NSURL *)url {
+    UIManagedDocumentPreferencesUser *trvFile = [[UIManagedDocumentPreferencesUser alloc] initWithFileURL:url];
+    
+    [trvFile release];
+}
+
+- (void)openTemplate:(NSURL *)url {
+    
+    NSString *origionalFileName = [[url lastPathComponent] retain];
+    
+    NSURL *urlLibraryTemplate = [[NSFileManager applicationLibraryTemplatesDirectoryUrl] retain];
+    NSURL *urlFilenameWithoutExtention = [[[urlLibraryTemplate URLByAppendingPathComponent:origionalFileName] URLByDeletingPathExtension] retain];
+    
+    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+    NSString *templateDestinationName = [[templateDestination lastPathComponent] retain];
+    
+    BOOL fileWritten = NO;
+    
+    NSInteger ctr = 0;
+    while (!fileWritten) {
+        NSError *error;
+        fileWritten = [[NSFileManager defaultManager] copyItemAtURL:url toURL:templateDestination error:&error];
+        if (!fileWritten) {
+            [templateDestination release];
+            NSString *p = [[[urlFilenameWithoutExtention path] stringByAppendingFormat:@" %d", (ctr + 1)] retain];
+            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+            [p release];
+        }
+    }
+    [urlFilenameWithoutExtention release];
+    [urlLibraryTemplate release];
+    [templateDestinationName release];
+    [origionalFileName release];
+    
+    
+    //Now that we copied the file, we open it.  Yay!
+    [self openReport:templateDestination];
+    
+    [templateDestination release];
+}
+
+- (IBAction)done:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (IBAction)showObjects:(id)sender {
+    [self performSegueWithIdentifier:@"showObjects" sender:sender];
+}
+
+- (IBAction)showSettings:(id)sender {
+    [self performSegueWithIdentifier:@"showSettings" sender:sender];
+}
+
+- (IBAction)info:(id)sender {
+    /*
+    //Make sure there are no information views open
+    [[self informationButton] setEnabled: NO];
+    
+    UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
+    UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
+    [self setToolbox:lblControl];
+    [lblControl release];
+    [sbLblControl release];
+    
+    [[self toolbox] setDelegate: self];
+    [[[self toolbox] view] setFrame:[self toolboxOffScreen]];
+    [[self view] addSubview:[[self toolbox] view]];
+    
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                     animations: ^{
+                         [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
+                         [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+     */
+    [self showToolbox:sender];
+}
+
+- (IBAction)showToolbox:(id)sender {
+/*
+    // MARK: Lazy initalize the toolbox items.
+    if (![self toolboxBackgroundView]) {
+        
+        SEL showToolbox = @selector(showToolbox:);
+        SEL hideToolbox = @selector(hideToolbox:);
+        SEL showFontChooser = @selector(showFontChooser:);
+        SEL hideFontChooser = @selector(hideFontChooser:);
+        
+        [[self barButtonItemInfo] setTarget:self];
+        [[self barButtonItemInfo] setAction:showToolbox];
+        
+        CGRect selfFrame = [[self view] frame];
+        CGFloat toolboxBackgroundViewOriginX = selfFrame.origin.x;
+        CGFloat toolboxBackgroundViewOriginY = selfFrame.origin.y + selfFrame.size.height;
+        CGFloat toolboxBackgroundViewOriginWidth = selfFrame.size.width;
+        CGFloat toolboxBackgroundViewOriginHeight = selfFrame.size.height / 2.0000f;
+        CGRect toolboxBackgroundViewFrame = CGRectMake(toolboxBackgroundViewOriginX, toolboxBackgroundViewOriginY, toolboxBackgroundViewOriginWidth, toolboxBackgroundViewOriginHeight);
+        
+        UIView *toolboxBackgroundView = [[UIView alloc] initWithFrame:toolboxBackgroundViewFrame];
+        [toolboxBackgroundView setBackgroundColor:[UIColor blackColor]];
+
+        UIViewAutoresizing autoresizingMaskAll = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [toolboxBackgroundView setAutoresizingMask: autoresizingMaskAll];
+        
+        UIViewAutoresizing autoresizingMaskToolbarTop = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+
+        
+        
+        UIToolbar *toolboxToolbar = [[UIToolbar alloc] init];
+        [toolboxToolbar setAutoresizingMask:autoresizingMaskToolbarTop];
+        CGRect toolboxToolbarFrame = CGRectMake(CGPointZero.x, CGPointZero.y, selfFrame.size.width, 44.0000f);
+        [toolboxToolbar setFrame:toolboxToolbarFrame];
+                
+        CGFloat toolboxScrollViewOriginX = CGPointZero.x;
+        CGFloat toolboxScrollViewOriginY = CGPointZero.y + toolboxToolbar.frame.size.height;
+        CGFloat toolboxScrollViewSizeWidth = toolboxBackgroundView.frame.size.width;
+        CGFloat toolboxScrollViewSizeHeight = [toolboxBackgroundView frame].size.height - [toolboxToolbar frame].size.height;
+        CGRect toolboxScrollViewFrame = CGRectMake(toolboxScrollViewOriginX, toolboxScrollViewOriginY, toolboxScrollViewSizeWidth, toolboxScrollViewSizeHeight);
+        
+        UIScrollView *toolboxScrollView = [[UIScrollView alloc] initWithFrame: toolboxScrollViewFrame];
+        [toolboxScrollView setBackgroundColor:[UIColor greenColor]];
+        [toolboxScrollView setAutoresizingMask:autoresizingMaskAll];
+        
+        CGFloat toolboxScrollViewContentSizeWidth = toolboxScrollViewSizeWidth * 2;
+        CGFloat toolboxScrollViewContentSizeHeight = toolboxScrollViewSizeHeight;
+        CGSize contentSize = CGSizeMake(toolboxScrollViewContentSizeWidth, toolboxScrollViewContentSizeHeight);
+        
+        [toolboxScrollView setContentSize: contentSize];
+        [toolboxBackgroundView addSubview: toolboxScrollView];
+        
+        
+        // MARK: Initalize toolbox bar button items.
+        UIBarButtonItem *barButtonFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        UIBarButtonItem *barButtonToolbarDone = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideToolbox];
+        NSArray *toolboxToolbarItemsPrimary = [[NSArray alloc] initWithObjects:barButtonFlexible, barButtonToolbarDone, nil];
+        
+        [toolboxToolbar setItems:toolboxToolbarItemsPrimary animated:NO];
+        
+        [toolboxBackgroundView addSubview: toolboxToolbar];
+
+        [self setToolboxToolbarItemsPrimary:toolboxToolbarItemsPrimary];
+        
+        [toolboxToolbarItemsPrimary release];
+        [barButtonToolbarDone release];
+        [barButtonFlexible release];
+        
+        // MARK: Initalize toolbox font bar button items.
+        UIBarButtonItem *barButtonItemBack = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideFontChooser];
+        barButtonFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        barButtonToolbarDone = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideToolbox];
+        NSArray *toolboxToolbarItemsFontChooser = [[NSArray alloc] initWithObjects:barButtonItemBack, barButtonFlexible, barButtonToolbarDone, nil];
+        [self setToolboxToolbarItemsFontChooser:toolboxToolbarItemsFontChooser];
+        [toolboxToolbarItemsFontChooser release];
+        [barButtonToolbarDone release];
+        [barButtonFlexible release];
+        [barButtonItemBack release];
+        
+        [self setToolboxToolbar:toolboxToolbar];
+        [self setToolboxScrollView:toolboxScrollView];
+        [self setToolboxBackgroundView:toolboxBackgroundView];
+        [toolboxScrollView release];
+        [toolboxToolbar release];
+        [toolboxBackgroundView release];
+    }
+    
+    CGFloat toolboxFrameHiddenOriginX = [[self view] frame].origin.x;
+    CGFloat toolboxFrameHiddenOriginY = CGPointZero.y + [[self view] frame].size.height;
+    CGFloat toolboxFrameHiddenSizeWidth = [[self view] frame].size.width;
+    CGFloat toolboxFrameHiddenSizeHeight = [[self view] frame].size.height / 2.0000f;
+
+    CGRect toolboxFrameHidden = CGRectMake(toolboxFrameHiddenOriginX, toolboxFrameHiddenOriginY, toolboxFrameHiddenSizeWidth, toolboxFrameHiddenSizeHeight);
+    
+    CGFloat designViewNormalOriginX = [[self view] frame].origin.x;
+    CGFloat designViewNormalOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height;
+    CGFloat designViewNormalSizeWidth = [[self view] frame].size.width;
+    CGFloat designViewNormalSizeHeight = [[self view] frame].size.height - [[self toolbarTop] frame].size.height - [[self toolbarBottom] frame].size.height;
+
+    CGRect designViewNormal = CGRectMake(designViewNormalOriginX, designViewNormalOriginY, designViewNormalSizeWidth, designViewNormalSizeHeight);
+    
+    CGFloat designViewHiddenOriginX = [[self view] frame].origin.x;
+    CGFloat designViewHiddenOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height;
+    CGFloat designViewHiddenSizeWidth = [[self view] frame].size.width;
+    CGFloat designViewHiddenSizeHeight = [[self view] frame].size.height - toolboxFrameHiddenSizeHeight;
+    
+    CGRect designViewHidden = CGRectMake(designViewHiddenOriginX, designViewHiddenOriginY, designViewHiddenSizeWidth, designViewHiddenSizeHeight);
+    
+    CGFloat toolboxFrameVisibleOriginX = [[self view] frame].origin.x;
+    CGFloat toolboxFrameVisibleOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height + designViewHiddenSizeHeight;
+    CGFloat toolboxFrameVisibleSizeWidth = toolboxFrameHiddenSizeWidth;
+    CGFloat toolboxFrameVisibleSizeHeight = toolboxFrameHiddenSizeHeight;
+    
+    CGRect toolboxFrameVisible = CGRectMake(toolboxFrameVisibleOriginX, toolboxFrameVisibleOriginY, toolboxFrameVisibleSizeWidth, toolboxFrameVisibleSizeHeight);
+    
+    
+    [self setToolboxOffScreen: toolboxFrameHidden];
+    [self setDesignScrollViewNormal: designViewNormal];
+    [self setDesignScrollViewWithToolbox: designViewHidden];
+    [self setToolboxOnScreen:toolboxFrameVisible];
+    
+    [[self toolboxBackgroundView] setFrame:[self toolboxOffScreen]];
+    [[self view] addSubview:[self toolboxBackgroundView]];
+    
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                     animations: ^{
+                         
+                         
+                         [[self toolboxBackgroundView] setFrame: toolboxFrameVisible];
+                         [[self designScrollView] setFrame:designViewHidden];
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+ */
+
+    CGFloat designViewWidth = [[self view] bounds].size.width;
+    CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarTop] bounds].size.height - [[self toolboxView] bounds].size.height;
+    CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
+    
+    CGFloat designViewOriginX = [[self designScrollView] frame].origin.x;
+    CGFloat designViewOriginY = [[self designScrollView] frame].origin.y;
+    CGRect designViewRectToCenter = CGRectMake(designViewOriginX, designViewOriginY, designViewBounds.size.width, designViewBounds.size.height);
+    CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
+    
+    CGFloat toolboxOriginX = CGPointZero.x;
+    CGFloat toolboxOriginY = designViewOriginY + designViewHeight;
+    CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
+    CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
+    
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                     animations: ^{
+                         [[self designScrollView] setBounds: designViewBounds];
+                         [[self designScrollView] setCenter:designViewCenter];
+                         [[self toolboxView] setBounds:[[self toolboxView] bounds]];
+                         [[self toolboxView] setCenter:toolboxCenter];
+                         [[self view] bringSubviewToFront:[self toolboxView]];
+                     } completion:^(BOOL finished) {
+                         //[[self toolboxBackgroundView] removeFromSuperview];
+                         [[self informationButton] setEnabled: YES];
+                     }];
+
+    
+}
+
+- (IBAction)hideToolbox:(id)sender {
+    CGFloat designViewWidth = [[self view] bounds].size.width;
+    CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarBottom] bounds].size.height - [[self toolbarTop] bounds].size.height;
+    CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
+
+    CGFloat designViewCenterX = [[self designScrollView] frame].origin.x;
+    CGFloat designViewCenterY = [[self designScrollView] frame].origin.y;
+    CGRect designViewRectToCenter = CGRectMake(designViewCenterX, designViewCenterY, designViewBounds.size.width, designViewBounds.size.height);
+    CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
+
+    //[[self designScrollView] setBounds: designViewBounds];
+    //[[self designScrollView] setCenter:designViewCenter];
+    
+    CGFloat toolboxOriginX = CGPointZero.x;
+    CGFloat toolboxOriginY = CGPointZero.y + [[self view] bounds].size.height;
+    CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
+    CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
+    
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                     animations: ^{
+                         [[self designScrollView] setBounds: designViewBounds];
+                         [[self designScrollView] setCenter:designViewCenter];
+                         [[self toolboxView] setBounds:[[self toolboxView] bounds]];
+                         [[self toolboxView] setCenter:toolboxCenter];
+                     } completion:^(BOOL finished) {
+                         //[[self toolboxBackgroundView] removeFromSuperview];
+                         [[self informationButton] setEnabled: YES];
+                     }];
+}
+
+#pragma mark - UIMenuController required methods
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    NSLog(@"Action %@ with %@", NSStringFromSelector(action), sender);
+    return action == @selector(cut:) ||
+            action == @selector(copy:) ||
+            action == @selector(paste:) ||
+            action == @selector(delete:) ||
+            action == @selector(select:) ||
+            action == @selector(selectAll:) ||
+            action == @selector(toggleBoldface:) ||
+            action == @selector(toggleItalics:) ||
+            action == @selector(toggleUnderline:) ||
+            action == @selector(customAction:) ||
+            [super canPerformAction:action withSender:sender];
+}
+
+#pragma mark - Collection View Flow Layout Delegate
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 5.0000f;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 5.0000f;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger row = [indexPath row];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    
+    NSOrderedSet *objects = [documentSection hasObjects];
+    
+    CGSize result;
+    
+    if ([objects count] > row) {
+        
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        result = CGSizeMake([[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+    } else {
+        result = CGSizeZero;
+    }
+    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
+    return result;
+}
+
+#pragma mark - Collection View Data Source
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    NSInteger row = [indexPath row];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    
+    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:[MTCollectionViewCellElement reuseIdentifier]
+                                                                            forIndexPath:indexPath] retain];
+    
+    //[[[collectionView] tag]
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    
+    NSOrderedSet *objects = [documentSection hasObjects];
+    
+    if ([objects count] > row) {
+        
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        switch ([documentObject getType]) {
+            case MNSObjectTypeLabel: {
+                
+                break;
+            }
+            case MNSObjectTypeLabelDataField: {
+                
+                RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
+                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue],
+                                      [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
+                
+                MTElementView *newView1 = [[MTElementView alloc] initWithFrame: f];
+                UILabel *label = [[UILabel alloc] initWithFrame: f];
+                NSLog(@"%@", [[documentObjectCast parentObjectLabelDataField] isLabelDataField]);
+                [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
+                [label setBackgroundColor:[UIColor clearColor]];
+                [newView1 setBackgroundColor:[UIColor whiteColor]];
+                [newView1 addSubview: label];
+                [newView1 setBounds: f];
+                [newView1 setMultipleTouchEnabled: YES];
+                [newView1 setExclusiveTouch: YES];
+                [newView1 setObjectIdTag: [documentObjectCast objectID]];
+                [newView1 setOpaque: YES];
+                [[newView1 layer] setCornerRadius: 5.0000f];
+                
+                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+                [panGesture setMaximumNumberOfTouches:1];
+                [panGesture setDelegate:self];
+                [newView1 addGestureRecognizer:panGesture];
+                [panGesture release];
+                
+                [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
+                [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
+                [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
+                
+                [[cell contentView] addSubview:newView1];
+                [newView1 setNeedsDisplay];
+                [newView1 release];
+                
+                
+                break;
+            }
+            case MNSObjectTypeLabelFormula: {
+                break;
+            }
+            case MNSObjectTypeLabelLabelLink: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+    
+    return [cell autorelease];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    NSOrderedSet *objects = [documentSection hasObjects];
+    //NSLog(@"Objects in section: %d", [objects count]);
+    return [objects count];
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+
+    MTCollectionReuseableViewDefault *result = nil;
+    
+    if ([kind isEqualToString:MTCollectionElementKindSectionLabel]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReusableViewFloatingLabel reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 100.0000f, 22.0000f)];
+        [label setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [label setText:@"Floating Label"];
+        [result addSubview:label];
+        [label release];
+    } else if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+        [label setText:@"Header"];
+        [result addSubview:label];
+        [label release];
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+        [label setText:@"Footer"];
+        [result addSubview:label];
+        [label release];
+    } else {
+        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
+                                                           forIndexPath: indexPath];
+    }
+    return result;
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+#pragma mark - Collection View Delegate
+/*
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+  
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ }
+ 
+*/
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    NSLog(@"Can Perform Action %@?  %@", NSStringFromSelector(action), [self respondsToSelector:action] ? @"YES" : @"NO");
+    return [self respondsToSelector:action];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    
+    NSInteger row = [indexPath row];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    NSOrderedSet *objects = [documentSection hasObjects];
+
+    if ([objects count] > row) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        [self performSelector:action withObject:documentObject];
+    }
+    
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+#pragma mark - Delegates
+
+#pragma mark MUIViewControllerDelegate
+
+- (void)viewControllerDidFinish:(id)sender {
+    if ([sender isKindOfClass:[UITableViewControllerSettings class]]) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        } else {
+            [[self settingsPopoverController] dismissPopoverAnimated:YES];
+            [self setSettingsPopoverController: nil];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
+}
+
+- (void)didSelectDataField:(RptqField *)field {
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+
+    if (document) {
+        
+        
+        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        
+        [detailSection performBatchUpdates:^{
+            
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            
+            RptqDocumentObject *dobject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
+                                                 toDetailSectionOfDocument:document
+                                                  withManagedObjectContext:managedObjectContext];
+
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
+            [[AppDelegate activeDocument] saveContext];
+
+            
+            [detailSection insertItemsAtIndexPaths:indexPaths];
+         
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+}
+
+
+- (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
+    
+    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                     animations: ^{
+                         [[self designScrollView] setFrame:[self designScrollViewNormal]];
+                         [[[self toolbox] view] setFrame: [self toolboxOffScreen]];
+                     } completion:^(BOOL finished) {
+                         [[[self toolbox] view] removeFromSuperview];
+                         [[self informationButton] setEnabled: YES];
+                     }];
+}
+
 #pragma mark - Gesture Recognizers
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
@@ -244,13 +923,13 @@
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-
+    
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
-
+            
             // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-            case UIGestureRecognizerStateBegan: {
+        case UIGestureRecognizerStateBegan: {
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [[gestureRecognizer view] setCenter: newCenter];
@@ -258,10 +937,10 @@
             [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
             newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [self setScrollersEnabled: NO];
-
+            
             [[gestureRecognizer view] setCenter: newCenter];
             [[self designScrollView] addSubview: [gestureRecognizer view]];
-
+            
             
             {
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
@@ -357,7 +1036,7 @@
             if (addedToNewParent) {
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
-
+                
                 
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 
@@ -383,18 +1062,18 @@
                             indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
                         }
                     }
-
+                    
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
-
+                    
                     // MARK: Add this to the data context and to the container for the sections collection view.
                     [newParent performBatchUpdates:^{
                         NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
                         [hasObjects insertObject:[datafield parentObjectLabelDataField] atIndex:[indexPath item]];
                         [documentSection setHasObjects:hasObjects];
                         [[AppDelegate activeDocument] saveContext];
-
+                        
                         [newParent insertItemsAtIndexPaths:indexPaths];
-
+                        
                     } completion:^(BOOL finished) {
                     }];
                     
@@ -425,373 +1104,10 @@
     }
 }
 
-#pragma mark - Collection View Flow Layout Delegate
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+- (void)viewDidUnload {
+    [self setToolbarBottom:nil];
+    [self setToolbarTop:nil];
+    [self setToolboxView:nil];
+    [super viewDidUnload];
 }
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 5.0000f;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 5.0000f;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger row = [indexPath row];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    
-    NSOrderedSet *objects = [documentSection hasObjects];
-    
-    CGSize result;
-    
-    if ([objects count] > row) {
-        
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = CGSizeMake([[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
-    } else {
-        result = CGSizeZero;
-    }
-    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
-    return result;
-}
-
-#pragma mark - Collection View Data Source
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    NSInteger row = [indexPath row];
-    
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    
-    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:[MTCollectionViewCellElement reuseIdentifier]
-                                                                            forIndexPath:indexPath] retain];
-    
-    //[[[collectionView] tag]
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    
-    NSOrderedSet *objects = [documentSection hasObjects];
-    
-    if ([objects count] > row) {
-        
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        switch ([documentObject getType]) {
-            case MNSObjectTypeLabel: {
-                
-                break;
-            }
-            case MNSObjectTypeLabelDataField: {
-                
-                RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue],
-                                      [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
-                
-                ElementView *newView1 = [[ElementView alloc] initWithFrame: f];
-                UILabel *label = [[UILabel alloc] initWithFrame: f];
-                NSLog(@"%@", [[documentObjectCast parentObjectLabelDataField] isLabelDataField]);
-                [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
-                [label setBackgroundColor:[UIColor clearColor]];
-                [newView1 setBackgroundColor:[UIColor whiteColor]];
-                [newView1 addSubview: label];
-                [newView1 setBounds: f];
-                [newView1 setMultipleTouchEnabled: YES];
-                [newView1 setExclusiveTouch: YES];
-                [newView1 setObjectIdTag: [documentObjectCast objectID]];
-                [newView1 setOpaque: YES];
-                [[newView1 layer] setCornerRadius: 5.0000f];
-                
-                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
-                [panGesture setMaximumNumberOfTouches:1];
-                [panGesture setDelegate:self];
-                [newView1 addGestureRecognizer:panGesture];
-                [panGesture release];
-                
-                [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
-                [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
-                [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
-                
-                [[cell contentView] addSubview:newView1];
-                [newView1 setNeedsDisplay];
-                [newView1 release];
-                
-                break;
-            }
-            case MNSObjectTypeLabelFormula: {
-                break;
-            }
-            case MNSObjectTypeLabelLabelLink: {
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-    
-    return [cell autorelease];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
-    NSOrderedSet *objects = [documentSection hasObjects];
-    //NSLog(@"Objects in section: %d", [objects count]);
-    return [objects count];
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-
-    MTCollectionReuseableViewDefault *result = nil;
-    
-    if ([kind isEqualToString:MTCollectionElementKindSectionLabel]) {
-        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                    withReuseIdentifier: [MTCollectionReusableViewFloatingLabel reuseIdentifier]
-                                                           forIndexPath: indexPath];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 100.0000f, 22.0000f)];
-        [label setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
-        [label setText:@"Floating Label"];
-        [result addSubview:label];
-        [label release];
-    } else if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
-                                                           forIndexPath: indexPath];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
-        [label setText:@"Header"];
-        [result addSubview:label];
-        [label release];
-    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
-                                                           forIndexPath: indexPath];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
-        [label setText:@"Footer"];
-        [result addSubview:label];
-        [label release];
-    } else {
-        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                    withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
-                                                           forIndexPath: indexPath];
-    }
-    return result;
-}
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-#pragma mark - Collection View Delegate
-/*
- - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }*/
-
-#pragma mark - Actions
-
-- (void)openReport:(NSURL *)url {
-    UIManagedDocumentPreferencesUser *trvFile = [[UIManagedDocumentPreferencesUser alloc] initWithFileURL:url];
-    
-    [trvFile release];
-}
-
-- (void)openTemplate:(NSURL *)url {
-    
-    NSString *origionalFileName = [[url lastPathComponent] retain];
-    
-    NSURL *urlLibraryTemplate = [[NSFileManager applicationLibraryTemplatesDirectoryUrl] retain];
-    NSURL *urlFilenameWithoutExtention = [[[urlLibraryTemplate URLByAppendingPathComponent:origionalFileName] URLByDeletingPathExtension] retain];
-    
-    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
-    NSString *templateDestinationName = [[templateDestination lastPathComponent] retain];
-    
-    BOOL fileWritten = NO;
-    
-    NSInteger ctr = 0;
-    while (!fileWritten) {
-        NSError *error;
-        fileWritten = [[NSFileManager defaultManager] copyItemAtURL:url toURL:templateDestination error:&error];
-        if (!fileWritten) {
-            [templateDestination release];
-            NSString *p = [[[urlFilenameWithoutExtention path] stringByAppendingFormat:@" %d", (ctr + 1)] retain];
-            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
-            [p release];
-        }
-    }
-    [urlFilenameWithoutExtention release];
-    [urlLibraryTemplate release];
-    [templateDestinationName release];
-    [origionalFileName release];
-    
-    
-    //Now that we copied the file, we open it.  Yay!
-    [self openReport:templateDestination];
-    
-    [templateDestination release];
-}
-
-- (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidFinish:self];
-}
-
-- (IBAction)showObjects:(id)sender {
-    [self performSegueWithIdentifier:@"showObjects" sender:sender];
-}
-
-- (IBAction)showSettings:(id)sender {
-    [self performSegueWithIdentifier:@"showSettings" sender:sender];
-}
-
-- (IBAction)info:(id)sender {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        //Make sure there are no information views open
-        [[self informationButton] setEnabled: NO];
-        
-        UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
-        UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
-        [self setToolbox:lblControl];
-        [lblControl release];
-        [sbLblControl release];
-                
-        [[self toolbox] setDelegate: self];
-        [[[self toolbox] view] setFrame:[self toolboxOffScreen]];
-        [[self view] addSubview:[[self toolbox] view]];
-        
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                         animations: ^{
-                             [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
-                             [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
-                         } completion:^(BOOL finished) {
-
-                         }];
-    }
-}
-
-#pragma mark - Delegates
-
-#pragma mark MUIViewControllerDelegate
-
-- (void)viewControllerDidFinish:(id)sender {
-    if ([sender isKindOfClass:[UITableViewControllerSettings class]]) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                
-            }];
-        } else {
-            [[self settingsPopoverController] dismissPopoverAnimated:YES];
-            [self setSettingsPopoverController: nil];
-        }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
-}
-
-- (void)didSelectDataField:(RptqField *)field {
-
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-
-    if (document) {
-        
-        
-        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
-        
-        [detailSection performBatchUpdates:^{
-            
-            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-            
-            RptqDocumentObject *dobject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
-                                                 toDetailSectionOfDocument:document
-                                                  withManagedObjectContext:managedObjectContext];
-
-            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
-            [[AppDelegate activeDocument] saveContext];
-
-            
-            [detailSection insertItemsAtIndexPaths:indexPaths];
-         
-        } completion:^(BOOL finished) {
-
-        }];
-    }
-}
-
-
-- (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         [[self designScrollView] setFrame:[self designScrollViewNormal]];
-                         [[[self toolbox] view] setFrame: [self toolboxOffScreen]];
-                     } completion:^(BOOL finished) {
-                         [[[self toolbox] view] removeFromSuperview];
-                         [[self informationButton] setEnabled: YES];
-                     }];
-}
-
-
 @end

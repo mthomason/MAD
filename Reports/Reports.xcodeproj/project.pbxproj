@@ -99,7 +99,7 @@
 		4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
 		4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
 		4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
-		4C0E7779163B5AEC003B951E /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4C0E7779163B5AEC003B951E /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4C0E777A163B5AEC003B951E /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
 		4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
@@ -480,7 +480,7 @@
 		4C860AFC167EDE7000AC1904 /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4C860AFD167EDE7000AC1904 /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4C860AFF167EDE7000AC1904 /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4C860AFF167EDE7000AC1904 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4C860B00167EDE7000AC1904 /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
 		4C860B01167EDE7000AC1904 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4C860B02167EDE7000AC1904 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -657,7 +657,7 @@
 		4C8779DE14CA9D90005CBE6F /* UIManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */; };
 		4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
 		4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
-		4C88A9B014ECDE560069A0AF /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4C88A9B014ECDE560069A0AF /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4C88A9C714EE23D00069A0AF /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
@@ -808,12 +808,12 @@
 		4CA163B2167EB8BA00540A14 /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA163B3167EB8BA00540A14 /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4CA163B5167EB8BA00540A14 /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4CA163B6167EB8BA00540A14 /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
 		4CA163B7167EB8BB00540A14 /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4CA163B8167EB8BB00540A14 /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4CA163B9167EB8BB00540A14 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4CA163BA167EB8BB00540A14 /* ElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* ElementView.m */; };
+		4CA163BA167EB8BB00540A14 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4CA163BB167EB8BB00540A14 /* UIViewResizeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */; };
 		4CA163BC167EB8C500540A14 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4CA163BD167EB8C500540A14 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -1492,6 +1492,11 @@
 		4CDB61F614E33BF400A5389E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
+		4CDBED24168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
+		4CDBED25168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
+		4CDBED26168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
+		4CDBED27168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
+		4CDBED28168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
 		4CE17E1D164E2BFA0002F8EA /* MNSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */; };
 		4CE17E1E164E2BFA0002F8EA /* MNSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */; };
 		4CE17E2116501A800002F8EA /* RptqField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E2016501A800002F8EA /* RptqField+Extras.m */; };
@@ -1766,8 +1771,8 @@
 		4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4C88A99714EA22F80069A0AF /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
 		4C88A99814EA22F90069A0AF /* SectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionEnumerator.m; sourceTree = "<group>"; };
-		4C88A9AE14ECDE560069A0AF /* ElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElementView.h; sourceTree = "<group>"; };
-		4C88A9AF14ECDE560069A0AF /* ElementView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ElementView.m; sourceTree = "<group>"; };
+		4C88A9AE14ECDE560069A0AF /* MTElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTElementView.h; sourceTree = "<group>"; };
+		4C88A9AF14ECDE560069A0AF /* MTElementView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTElementView.m; sourceTree = "<group>"; };
 		4C88A9C514EE23CF0069A0AF /* UIViewResizeHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewResizeHandle.h; sourceTree = "<group>"; };
 		4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewResizeHandle.m; sourceTree = "<group>"; };
 		4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -2249,6 +2254,8 @@
 		4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
 		4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTableSectionHeaderQueryBuilder.h; sourceTree = "<group>"; };
 		4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderQueryBuilder.m; sourceTree = "<group>"; };
+		4CDBED22168B50AB00C5147B /* MTCollectionViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewSection.h; sourceTree = "<group>"; };
+		4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewSection.m; sourceTree = "<group>"; };
 		4CE17E1B164E2BF90002F8EA /* MNSDatabaseSalesForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSDatabaseSalesForce.h; sourceTree = "<group>"; };
 		4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSDatabaseSalesForce.m; sourceTree = "<group>"; };
 		4CE17E1F16501A800002F8EA /* RptqField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqField+Extras.h"; sourceTree = "<group>"; };
@@ -3255,8 +3262,8 @@
 				4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */,
 				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
 				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
-				4C88A9AE14ECDE560069A0AF /* ElementView.h */,
-				4C88A9AF14ECDE560069A0AF /* ElementView.m */,
+				4C88A9AE14ECDE560069A0AF /* MTElementView.h */,
+				4C88A9AF14ECDE560069A0AF /* MTElementView.m */,
 				4C88A9C514EE23CF0069A0AF /* UIViewResizeHandle.h */,
 				4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */,
 			);
@@ -3728,6 +3735,8 @@
 				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
 				4C85C6A814FF72F3003785AC /* MUIViewControllerReportViewer.h */,
 				4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */,
+				4CDBED22168B50AB00C5147B /* MTCollectionViewSection.h */,
+				4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -4875,7 +4884,7 @@
 				4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */,
 				4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */,
 				4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */,
-				4C0E7779163B5AEC003B951E /* ElementView.m in Sources */,
+				4C0E7779163B5AEC003B951E /* MTElementView.m in Sources */,
 				4C0E777A163B5AEC003B951E /* UIViewResizeHandle.m in Sources */,
 				4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */,
 				4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */,
@@ -4953,6 +4962,7 @@
 				4C3727C3168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4C3727D6168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DD168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4CDBED25168B50AB00C5147B /* MTCollectionViewSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5003,7 +5013,7 @@
 				4CA163B2167EB8BA00540A14 /* UIViewEntityRelationshipTable.m in Sources */,
 				4CA163B3167EB8BA00540A14 /* UIViewEntityRelationshipLink.m in Sources */,
 				4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */,
-				4CA163B5167EB8BA00540A14 /* ElementView.m in Sources */,
+				4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */,
 				4CA163B6167EB8BA00540A14 /* UIViewResizeHandle.m in Sources */,
 				4CA163BC167EB8C500540A14 /* UITableViewCellTableName.m in Sources */,
 				4CA163BD167EB8C500540A14 /* UITableViewCellQueryInput.m in Sources */,
@@ -5096,6 +5106,7 @@
 				4C3727C5168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4C3727D8168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DF168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4CDBED27168B50AB00C5147B /* MTCollectionViewSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5146,7 +5157,7 @@
 				4CA163B7167EB8BB00540A14 /* UIViewEntityRelationshipTable.m in Sources */,
 				4CA163B8167EB8BB00540A14 /* UIViewEntityRelationshipLink.m in Sources */,
 				4CA163B9167EB8BB00540A14 /* UILabelStrikethrough.m in Sources */,
-				4CA163BA167EB8BB00540A14 /* ElementView.m in Sources */,
+				4CA163BA167EB8BB00540A14 /* MTElementView.m in Sources */,
 				4CA163BB167EB8BB00540A14 /* UIViewResizeHandle.m in Sources */,
 				4CA163C4167EB8C600540A14 /* UITableViewCellTableName.m in Sources */,
 				4CA163C5167EB8C600540A14 /* UITableViewCellQueryInput.m in Sources */,
@@ -5239,6 +5250,7 @@
 				4C3727C4168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4C3727D7168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DE168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4CDBED26168B50AB00C5147B /* MTCollectionViewSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5312,7 +5324,7 @@
 				4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */,
 				4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */,
 				4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */,
-				4C88A9B014ECDE560069A0AF /* ElementView.m in Sources */,
+				4C88A9B014ECDE560069A0AF /* MTElementView.m in Sources */,
 				4C88A9C714EE23D00069A0AF /* UIViewResizeHandle.m in Sources */,
 				4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */,
 				4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */,
@@ -5390,6 +5402,7 @@
 				4C3727C2168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4C3727D5168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4CDBED24168B50AB00C5147B /* MTCollectionViewSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5439,7 +5452,7 @@
 				4C860AFC167EDE7000AC1904 /* UIViewEntityRelationshipTable.m in Sources */,
 				4C860AFD167EDE7000AC1904 /* UIViewEntityRelationshipLink.m in Sources */,
 				4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */,
-				4C860AFF167EDE7000AC1904 /* ElementView.m in Sources */,
+				4C860AFF167EDE7000AC1904 /* MTElementView.m in Sources */,
 				4C860B00167EDE7000AC1904 /* UIViewResizeHandle.m in Sources */,
 				4C860B01167EDE7000AC1904 /* UITableViewCellTableName.m in Sources */,
 				4C860B02167EDE7000AC1904 /* UITableViewCellQueryInput.m in Sources */,
@@ -5533,6 +5546,7 @@
 				4C3727C6168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4C3727D9168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727E0168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4CDBED28168B50AB00C5147B /* MTCollectionViewSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

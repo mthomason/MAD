@@ -31,7 +31,10 @@
         UIGestureRecognizerDelegate,
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
-        LabelInformationViewControllerDelegate>
+        ToolboxViewControllerDelegate,
+        FontSettingsTableViewControllerDelegate,
+        UITableViewControllerFontSelectorDelegate,
+        UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 
@@ -39,6 +42,8 @@
 @property (assign) CGRect designScrollViewWithToolbox;
 @property (assign) CGRect toolboxOffScreen;
 @property (assign) CGRect toolboxOnScreen;
+
+@property (retain, nonatomic) IBOutlet UIView *toolboxView;
 
 @property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) IBOutlet UIScrollView *designScrollView;
@@ -48,6 +53,8 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemObjects;
 @property (retain, nonatomic) IBOutlet UINavigationItem *navBar;
 
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (retain) NSMutableDictionary *sections;
 
 - (void)openReport:(NSURL *)url;
@@ -56,5 +63,12 @@
 - (IBAction)info:(id)sender;
 - (IBAction)showObjects:(id)sender;
 - (IBAction)showSettings:(id)sender;
+
+- (void)cut:(id)sender;
+- (void)copy:(id)sender;
+- (void)select:(id)sender;
+- (void)selectAll:(id)sender;
+- (void)paste:(id)sender;
+- (void)delete:(id)sender;
 
 @end
