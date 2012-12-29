@@ -22,11 +22,14 @@
 #import "MTCollectionViewSection.h"
 
 @interface MUIViewControllerReportDesigner()
+    <FontSettingsTableViewControllerDelegate,
+        UITableViewControllerFontSelectorDelegate>
 
-@property (nonatomic, retain) NSMutableArray *scrollViewFrames;
 @property (assign) BOOL formualInformationViewIsVisable;
 @property (assign) BOOL imageInformationViewIsVisable;
 @property (assign) BOOL labelInformationViewIsVisable;
+
+@property (nonatomic, retain) NSMutableArray *scrollViewFrames;
 
 // MARK: Needed for the toolbox.
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
@@ -35,19 +38,38 @@
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
 
-@property (nonatomic, retain) UITableViewControllerFontSettings *toolboxTableViewControllerFontSettings;
-@property (nonatomic, retain) UITableViewControllerFontSelector *toolboxTableViewControllerFontSelector;
+@property (retain, nonatomic) UITableViewControllerFontSettings *tableViewControllerTextLayoutSettings;
+@property (retain, nonatomic) UITableViewControllerFontSelector *tableViewControllerFontSelector;
 
+@property (assign) BOOL toolboxIsVisible;
 
 @end
 
 @implementation MUIViewControllerReportDesigner
 
+#pragma mark - UITableViewControllerFontSelectorDelegate
+
+- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
+    
+}
+
+#pragma mark - FontSettingsTableViewControllerDelegate
+
+- (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
+    
+}
+
+#pragma mark - NSObject
 
 - (void)dealloc {
+    [_navigationItemStyle release];
+    [_navigationItemLayout release];
+    [_navigationItemFontChooser release];
+    
+    [_tableViewControllerTextLayoutSettings release];
+    [_tableViewControllerFontSelector release];
+    
     [_toolboxBackgroundView release];
-    [_toolboxTableViewControllerFontSettings release];
-    [_toolboxTableViewControllerFontSelector release];
     [_toolboxScrollView release];
     [_toolboxToolbarItemsFontChooser release];
     [_toolboxToolbarItemsPrimary release];
@@ -62,12 +84,14 @@
     [_barButtonItemInfo release];
     [_barButtonItemSettings release];
     [_barButtonItemObjects release];
-    [_navBar release];
     [_toolbarBottom release];
     [_toolbarTop release];
     [_toolboxView release];
+    [_toolboxContainerView release];
     [super dealloc];
 }
+
+#pragma mark - UIViewController
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -85,6 +109,7 @@
     
     //CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     
+    [self setToolboxIsVisible:NO];
     
     CGPoint origin = CGPointMake(5.0000f, 5.0000f);
     //CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
@@ -378,197 +403,92 @@
 }
 
 - (IBAction)showToolbox:(id)sender {
-/*
-    // MARK: Lazy initalize the toolbox items.
-    if (![self toolboxBackgroundView]) {
-        
-        SEL showToolbox = @selector(showToolbox:);
-        SEL hideToolbox = @selector(hideToolbox:);
-        SEL showFontChooser = @selector(showFontChooser:);
-        SEL hideFontChooser = @selector(hideFontChooser:);
-        
-        [[self barButtonItemInfo] setTarget:self];
-        [[self barButtonItemInfo] setAction:showToolbox];
-        
-        CGRect selfFrame = [[self view] frame];
-        CGFloat toolboxBackgroundViewOriginX = selfFrame.origin.x;
-        CGFloat toolboxBackgroundViewOriginY = selfFrame.origin.y + selfFrame.size.height;
-        CGFloat toolboxBackgroundViewOriginWidth = selfFrame.size.width;
-        CGFloat toolboxBackgroundViewOriginHeight = selfFrame.size.height / 2.0000f;
-        CGRect toolboxBackgroundViewFrame = CGRectMake(toolboxBackgroundViewOriginX, toolboxBackgroundViewOriginY, toolboxBackgroundViewOriginWidth, toolboxBackgroundViewOriginHeight);
-        
-        UIView *toolboxBackgroundView = [[UIView alloc] initWithFrame:toolboxBackgroundViewFrame];
-        [toolboxBackgroundView setBackgroundColor:[UIColor blackColor]];
+    if (![self toolboxIsVisible]) {
+        [self setToolboxIsVisible:YES];
+        [[self informationButton] setEnabled: NO];
 
-        UIViewAutoresizing autoresizingMaskAll = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        [toolboxBackgroundView setAutoresizingMask: autoresizingMaskAll];
+        if (![self tableViewControllerFontSelector]) {
+            
+            
+            UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
+            
+            UITableViewControllerFontSettings *tb1 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"];
+            [tb1 setDelegate: self];
+            [self setTableViewControllerTextLayoutSettings:tb1];
+            
+            UITableViewControllerFontSelector *tb2 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
+            [tb2 setDelegate: self];
+            [self setTableViewControllerFontSelector:tb2];
+        }
         
-        UIViewAutoresizing autoresizingMaskToolbarTop = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+        CGFloat designViewWidth = [[self view] bounds].size.width;
+        CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarTop] bounds].size.height - [[self toolboxView] bounds].size.height;
+        CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
+        
+        CGFloat designViewOriginX = [[self designScrollView] frame].origin.x;
+        CGFloat designViewOriginY = [[self designScrollView] frame].origin.y;
+        CGRect designViewRectToCenter = CGRectMake(designViewOriginX, designViewOriginY, designViewBounds.size.width, designViewBounds.size.height);
+        CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
+        
+        CGFloat toolboxOriginX = CGPointZero.x;
+        CGFloat toolboxOriginY = designViewOriginY + designViewHeight;
+        CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
+        CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
+        
+        //CGRect displayBoundsToolboxContainer = CGRectMake(CGPointZero.x, CGPointZero.y, [[self toolboxContainerView] bounds].size.width, [[self toolboxContainerView] bounds].size.height);
 
+        [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
+        [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
+//        [[[self tableViewControllerTextLayoutSettings] tableView] setCenter: [[self toolboxContainerView] center]];
+        [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                         animations: ^{
+                             [[self designScrollView] setBounds: designViewBounds];
+                             [[self designScrollView] setCenter:designViewCenter];
+                             [[self toolboxView] setBounds:[[self toolboxView] bounds]];
+                             [[self toolboxView] setCenter:toolboxCenter];
+                             [[self view] bringSubviewToFront:[self toolboxView]];
+                         } completion:^(BOOL finished) {
+                             //[[self toolboxBackgroundView] removeFromSuperview];
+                             //[[[self tableViewControllerTextLayoutSettings] tableView] setFrame:[[self toolboxContainerView] frame]];
+                         }];
         
         
-        UIToolbar *toolboxToolbar = [[UIToolbar alloc] init];
-        [toolboxToolbar setAutoresizingMask:autoresizingMaskToolbarTop];
-        CGRect toolboxToolbarFrame = CGRectMake(CGPointZero.x, CGPointZero.y, selfFrame.size.width, 44.0000f);
-        [toolboxToolbar setFrame:toolboxToolbarFrame];
-                
-        CGFloat toolboxScrollViewOriginX = CGPointZero.x;
-        CGFloat toolboxScrollViewOriginY = CGPointZero.y + toolboxToolbar.frame.size.height;
-        CGFloat toolboxScrollViewSizeWidth = toolboxBackgroundView.frame.size.width;
-        CGFloat toolboxScrollViewSizeHeight = [toolboxBackgroundView frame].size.height - [toolboxToolbar frame].size.height;
-        CGRect toolboxScrollViewFrame = CGRectMake(toolboxScrollViewOriginX, toolboxScrollViewOriginY, toolboxScrollViewSizeWidth, toolboxScrollViewSizeHeight);
-        
-        UIScrollView *toolboxScrollView = [[UIScrollView alloc] initWithFrame: toolboxScrollViewFrame];
-        [toolboxScrollView setBackgroundColor:[UIColor greenColor]];
-        [toolboxScrollView setAutoresizingMask:autoresizingMaskAll];
-        
-        CGFloat toolboxScrollViewContentSizeWidth = toolboxScrollViewSizeWidth * 2;
-        CGFloat toolboxScrollViewContentSizeHeight = toolboxScrollViewSizeHeight;
-        CGSize contentSize = CGSizeMake(toolboxScrollViewContentSizeWidth, toolboxScrollViewContentSizeHeight);
-        
-        [toolboxScrollView setContentSize: contentSize];
-        [toolboxBackgroundView addSubview: toolboxScrollView];
-        
-        
-        // MARK: Initalize toolbox bar button items.
-        UIBarButtonItem *barButtonFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UIBarButtonItem *barButtonToolbarDone = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideToolbox];
-        NSArray *toolboxToolbarItemsPrimary = [[NSArray alloc] initWithObjects:barButtonFlexible, barButtonToolbarDone, nil];
-        
-        [toolboxToolbar setItems:toolboxToolbarItemsPrimary animated:NO];
-        
-        [toolboxBackgroundView addSubview: toolboxToolbar];
-
-        [self setToolboxToolbarItemsPrimary:toolboxToolbarItemsPrimary];
-        
-        [toolboxToolbarItemsPrimary release];
-        [barButtonToolbarDone release];
-        [barButtonFlexible release];
-        
-        // MARK: Initalize toolbox font bar button items.
-        UIBarButtonItem *barButtonItemBack = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideFontChooser];
-        barButtonFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        barButtonToolbarDone = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"UIImageArrowDown"] style:UIBarButtonItemStyleBordered target:self action:hideToolbox];
-        NSArray *toolboxToolbarItemsFontChooser = [[NSArray alloc] initWithObjects:barButtonItemBack, barButtonFlexible, barButtonToolbarDone, nil];
-        [self setToolboxToolbarItemsFontChooser:toolboxToolbarItemsFontChooser];
-        [toolboxToolbarItemsFontChooser release];
-        [barButtonToolbarDone release];
-        [barButtonFlexible release];
-        [barButtonItemBack release];
-        
-        [self setToolboxToolbar:toolboxToolbar];
-        [self setToolboxScrollView:toolboxScrollView];
-        [self setToolboxBackgroundView:toolboxBackgroundView];
-        [toolboxScrollView release];
-        [toolboxToolbar release];
-        [toolboxBackgroundView release];
     }
-    
-    CGFloat toolboxFrameHiddenOriginX = [[self view] frame].origin.x;
-    CGFloat toolboxFrameHiddenOriginY = CGPointZero.y + [[self view] frame].size.height;
-    CGFloat toolboxFrameHiddenSizeWidth = [[self view] frame].size.width;
-    CGFloat toolboxFrameHiddenSizeHeight = [[self view] frame].size.height / 2.0000f;
-
-    CGRect toolboxFrameHidden = CGRectMake(toolboxFrameHiddenOriginX, toolboxFrameHiddenOriginY, toolboxFrameHiddenSizeWidth, toolboxFrameHiddenSizeHeight);
-    
-    CGFloat designViewNormalOriginX = [[self view] frame].origin.x;
-    CGFloat designViewNormalOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height;
-    CGFloat designViewNormalSizeWidth = [[self view] frame].size.width;
-    CGFloat designViewNormalSizeHeight = [[self view] frame].size.height - [[self toolbarTop] frame].size.height - [[self toolbarBottom] frame].size.height;
-
-    CGRect designViewNormal = CGRectMake(designViewNormalOriginX, designViewNormalOriginY, designViewNormalSizeWidth, designViewNormalSizeHeight);
-    
-    CGFloat designViewHiddenOriginX = [[self view] frame].origin.x;
-    CGFloat designViewHiddenOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height;
-    CGFloat designViewHiddenSizeWidth = [[self view] frame].size.width;
-    CGFloat designViewHiddenSizeHeight = [[self view] frame].size.height - toolboxFrameHiddenSizeHeight;
-    
-    CGRect designViewHidden = CGRectMake(designViewHiddenOriginX, designViewHiddenOriginY, designViewHiddenSizeWidth, designViewHiddenSizeHeight);
-    
-    CGFloat toolboxFrameVisibleOriginX = [[self view] frame].origin.x;
-    CGFloat toolboxFrameVisibleOriginY = CGPointZero.y + [[self toolbarTop] frame].size.height + designViewHiddenSizeHeight;
-    CGFloat toolboxFrameVisibleSizeWidth = toolboxFrameHiddenSizeWidth;
-    CGFloat toolboxFrameVisibleSizeHeight = toolboxFrameHiddenSizeHeight;
-    
-    CGRect toolboxFrameVisible = CGRectMake(toolboxFrameVisibleOriginX, toolboxFrameVisibleOriginY, toolboxFrameVisibleSizeWidth, toolboxFrameVisibleSizeHeight);
-    
-    
-    [self setToolboxOffScreen: toolboxFrameHidden];
-    [self setDesignScrollViewNormal: designViewNormal];
-    [self setDesignScrollViewWithToolbox: designViewHidden];
-    [self setToolboxOnScreen:toolboxFrameVisible];
-    
-    [[self toolboxBackgroundView] setFrame:[self toolboxOffScreen]];
-    [[self view] addSubview:[self toolboxBackgroundView]];
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         
-                         
-                         [[self toolboxBackgroundView] setFrame: toolboxFrameVisible];
-                         [[self designScrollView] setFrame:designViewHidden];
-                     } completion:^(BOOL finished) {
-                         
-                     }];
- */
-
-    CGFloat designViewWidth = [[self view] bounds].size.width;
-    CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarTop] bounds].size.height - [[self toolboxView] bounds].size.height;
-    CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
-    
-    CGFloat designViewOriginX = [[self designScrollView] frame].origin.x;
-    CGFloat designViewOriginY = [[self designScrollView] frame].origin.y;
-    CGRect designViewRectToCenter = CGRectMake(designViewOriginX, designViewOriginY, designViewBounds.size.width, designViewBounds.size.height);
-    CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
-    
-    CGFloat toolboxOriginX = CGPointZero.x;
-    CGFloat toolboxOriginY = designViewOriginY + designViewHeight;
-    CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
-    CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         [[self designScrollView] setBounds: designViewBounds];
-                         [[self designScrollView] setCenter:designViewCenter];
-                         [[self toolboxView] setBounds:[[self toolboxView] bounds]];
-                         [[self toolboxView] setCenter:toolboxCenter];
-                         [[self view] bringSubviewToFront:[self toolboxView]];
-                     } completion:^(BOOL finished) {
-                         //[[self toolboxBackgroundView] removeFromSuperview];
-                         [[self informationButton] setEnabled: YES];
-                     }];
-
-    
 }
 
 - (IBAction)hideToolbox:(id)sender {
-    CGFloat designViewWidth = [[self view] bounds].size.width;
-    CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarBottom] bounds].size.height - [[self toolbarTop] bounds].size.height;
-    CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
-
-    CGFloat designViewCenterX = [[self designScrollView] frame].origin.x;
-    CGFloat designViewCenterY = [[self designScrollView] frame].origin.y;
-    CGRect designViewRectToCenter = CGRectMake(designViewCenterX, designViewCenterY, designViewBounds.size.width, designViewBounds.size.height);
-    CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
-
-    //[[self designScrollView] setBounds: designViewBounds];
-    //[[self designScrollView] setCenter:designViewCenter];
-    
-    CGFloat toolboxOriginX = CGPointZero.x;
-    CGFloat toolboxOriginY = CGPointZero.y + [[self view] bounds].size.height;
-    CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
-    CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         [[self designScrollView] setBounds: designViewBounds];
-                         [[self designScrollView] setCenter:designViewCenter];
-                         [[self toolboxView] setBounds:[[self toolboxView] bounds]];
-                         [[self toolboxView] setCenter:toolboxCenter];
-                     } completion:^(BOOL finished) {
-                         //[[self toolboxBackgroundView] removeFromSuperview];
-                         [[self informationButton] setEnabled: YES];
-                     }];
+    if ([self toolboxIsVisible]) {
+        [self setToolboxIsVisible:NO];
+        
+        CGFloat designViewWidth = [[self view] bounds].size.width;
+        CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarBottom] bounds].size.height - [[self toolbarTop] bounds].size.height;
+        CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
+        
+        CGFloat designViewCenterX = [[self designScrollView] frame].origin.x;
+        CGFloat designViewCenterY = [[self designScrollView] frame].origin.y;
+        CGRect designViewRectToCenter = CGRectMake(designViewCenterX, designViewCenterY, designViewBounds.size.width, designViewBounds.size.height);
+        CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
+        
+        //[[self designScrollView] setBounds: designViewBounds];
+        //[[self designScrollView] setCenter:designViewCenter];
+        
+        CGFloat toolboxOriginX = CGPointZero.x;
+        CGFloat toolboxOriginY = CGPointZero.y + [[self view] bounds].size.height;
+        CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
+        CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
+        
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                         animations: ^{
+                             [[self designScrollView] setBounds: designViewBounds];
+                             [[self designScrollView] setCenter:designViewCenter];
+                             [[self toolboxView] setBounds:[[self toolboxView] bounds]];
+                             [[self toolboxView] setCenter:toolboxCenter];
+                         } completion:^(BOOL finished) {
+                             [[[self tableViewControllerTextLayoutSettings] tableView] removeFromSuperview];
+                             [[self informationButton] setEnabled: YES];
+                         }];
+    }
 }
 
 #pragma mark - UIMenuController required methods
@@ -1108,6 +1028,26 @@
     [self setToolbarBottom:nil];
     [self setToolbarTop:nil];
     [self setToolboxView:nil];
+    [self setToolboxContainerView:nil];
     [super viewDidUnload];
 }
+
+#pragma mark - UINavigationBarDelegate
+
+- (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
+    
+}
+
+- (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
+    
+}
+
+- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
+    
+}
+
+- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item {
+    
+}
+
 @end

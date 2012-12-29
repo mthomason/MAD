@@ -29,6 +29,7 @@
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
+        UINavigationBarDelegate,
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
         ToolboxViewControllerDelegate,
@@ -38,24 +39,27 @@
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;
 
-@property (assign) CGRect designScrollViewNormal;
-@property (assign) CGRect designScrollViewWithToolbox;
-@property (assign) CGRect toolboxOffScreen;
-@property (assign) CGRect toolboxOnScreen;
-
 @property (retain, nonatomic) IBOutlet UIView *toolboxView;
-
-@property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) IBOutlet UIScrollView *designScrollView;
 @property (retain, nonatomic) IBOutlet UIButton *informationButton;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemInfo;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSettings;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemObjects;
-@property (retain, nonatomic) IBOutlet UINavigationItem *navBar;
-
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
-@property (retain) NSMutableDictionary *sections;
+@property (retain, nonatomic) IBOutlet UIView *toolboxContainerView;
+
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
+
+@property (retain, nonatomic) UIViewControllerToolbox *toolbox;
+@property (retain, nonatomic) NSMutableDictionary *sections;
+
+@property (assign) CGRect designScrollViewNormal;
+@property (assign) CGRect designScrollViewWithToolbox;
+@property (assign) CGRect toolboxOffScreen;
+@property (assign) CGRect toolboxOnScreen;
 
 - (void)openReport:(NSURL *)url;
 - (void)openTemplate:(NSURL *)url;
