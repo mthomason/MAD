@@ -49,9 +49,10 @@
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (retain, nonatomic) IBOutlet UIView *toolboxContainerView;
 
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
+@property (retain, nonatomic) IBOutlet UINavigationBar *navigationBarToolbox;
+@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemStyle;
+@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemLayout;
+@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemFontChooser;
 
 @property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) NSMutableDictionary *sections;

@@ -56,6 +56,7 @@
 #pragma mark - FontSettingsTableViewControllerDelegate
 
 - (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
+    [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
     
 }
 
@@ -88,6 +89,7 @@
     [_toolbarTop release];
     [_toolboxView release];
     [_toolboxContainerView release];
+    [_navigationBarToolbox release];
     [super dealloc];
 }
 
@@ -164,6 +166,7 @@
            forSupplementaryViewOfKind:MTCollectionElementKindSectionLabel
                   withReuseIdentifier:supplmentaryViewReuseIdFloatingLabel];
          */
+        
         [collectionView setDelegate:self];
         [collectionView setDataSource:self];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
@@ -171,7 +174,8 @@
         [collectionView setClipsToBounds:YES];
         [collectionView setObjectIdTag:[sec objectID]];
         [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
-
+        [collectionView setAllowsSelection:YES];
+        [collectionView setAllowsMultipleSelection:YES];
         UIView *backgroundView = [[UIView alloc] initWithFrame:[collectionView frame]];
 
         CGFloat labelHeight = 14.0000f;
@@ -434,12 +438,9 @@
         CGFloat toolboxOriginY = designViewOriginY + designViewHeight;
         CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
         CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
-        
-        //CGRect displayBoundsToolboxContainer = CGRectMake(CGPointZero.x, CGPointZero.y, [[self toolboxContainerView] bounds].size.width, [[self toolboxContainerView] bounds].size.height);
 
         [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
         [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
-//        [[[self tableViewControllerTextLayoutSettings] tableView] setCenter: [[self toolboxContainerView] center]];
         [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                          animations: ^{
@@ -558,6 +559,8 @@
 
 #pragma mark - Collection View Data Source
 
+// MARK: Load the elements into the sections.
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -590,7 +593,6 @@
                 
                 MTElementView *newView1 = [[MTElementView alloc] initWithFrame: f];
                 UILabel *label = [[UILabel alloc] initWithFrame: f];
-                NSLog(@"%@", [[documentObjectCast parentObjectLabelDataField] isLabelDataField]);
                 [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
                 [label setBackgroundColor:[UIColor clearColor]];
                 [newView1 setBackgroundColor:[UIColor whiteColor]];
@@ -684,11 +686,17 @@
 }
 
 #pragma mark - Collection View Delegate
+
+- (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    MTElementView *result = nil;
+    for (MTElementView *elementView in [[cell contentView] subviews]) {
+        result = elementView;
+        break;
+    }
+    return result;
+}
 /*
- 
- - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
  
  - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
  
@@ -698,34 +706,54 @@
  
  }
  
- - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
-  
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
 */
 
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    [elementView setSelected:NO];
+    MTLog(@"Deselect");
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    [elementView setHighlight:YES];
+    MTLog(@"Highlight");
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    [elementView setSelected:YES];
+    MTLog(@"Select");
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    [elementView setHighlight:NO];
+    MTLog(@"Unhighlight");
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    MTLog(@"Should deselect?\t%@", [elementView isSelected] ? @"YES" : @"NO");
+    return [elementView isSelected];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    MTLog(@"Should highlight?\t%@", ![elementView highlight] ? @"YES" : @"NO");
+    return ![elementView highlight];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    MTLog(@"Should select?\t%@", ![elementView isSelected] ? @"YES" : @"NO");
+    return ![elementView isSelected];
+}
+
+
+
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    NSLog(@"Can Perform Action %@?  %@", NSStringFromSelector(action), [self respondsToSelector:action] ? @"YES" : @"NO");
+    //NSLog(@"Can Perform Action %@?  %@", NSStringFromSelector(action), [self respondsToSelector:action] ? @"YES" : @"NO");
     return [self respondsToSelector:action];
 }
 
@@ -1029,25 +1057,75 @@
     [self setToolbarTop:nil];
     [self setToolboxView:nil];
     [self setToolboxContainerView:nil];
+    [self setNavigationBarToolbox:nil];
     [super viewDidUnload];
 }
 
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
+
+    if ([item isEqual:[self navigationItemFontChooser]]) {
+    } else if ([item isEqual:[self navigationItemLayout]]) {
+    } else if ([item isEqual:[self navigationItemStyle]]) {
+    }
     
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-    
+
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
+    BOOL shouldPopItem = NO;
+
+    if ([item isEqual:[self navigationItemFontChooser]]) {
+        shouldPopItem = YES;
+        
+        CGRect offScreen = CGRectMake([[[self tableViewControllerFontSelector] tableView] frame].origin.x + [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y,
+                                      [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
+        
+        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self toolboxContainerView] bounds]];
+        
+        
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self tableViewControllerFontSelector] tableView] setFrame: offScreen];
+        } completion:^(BOOL finished) {
+            [[[self tableViewControllerFontSelector] tableView] removeFromSuperview];
+        }];
+    } else if ([item isEqual:[self navigationItemLayout]]) {
+
+    } else if ([item isEqual:[self navigationItemStyle]]) {
     
+    }
+    
+    return shouldPopItem;
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item {
+    BOOL shouldPushItem = NO;
     
+    if ([item isEqual:[self navigationItemFontChooser]]) {
+        shouldPushItem = YES;
+        
+        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self toolboxContainerView] bounds]];
+        [[[self tableViewControllerFontSelector] tableView] setBounds: [[self toolboxContainerView] bounds]];
+        CGRect newRect = [[[self tableViewControllerFontSelector] tableView] frame];
+        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[self toolboxContainerView] bounds].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y, [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
+        
+        [[[self tableViewControllerFontSelector] tableView] setFrame: newRectOffscreen];
+        [[self toolboxContainerView] addSubview:[[self tableViewControllerFontSelector] tableView]];
+
+        
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self tableViewControllerFontSelector] tableView] setFrame:newRect];
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else if ([item isEqual:[self navigationItemLayout]]) {
+    } else if ([item isEqual:[self navigationItemStyle]]) {
+    }
+    return shouldPushItem;
 }
 
 @end

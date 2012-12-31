@@ -6,6 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#define MT_DEBUG_MODE
+
+#ifdef MT_DEBUG_MODE
+#define MTLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define MTLog( s, ... )
+#endif
+
 #define STORYBOARD_NAME() \
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
             UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)

@@ -12,14 +12,14 @@
 
 @interface MTElementView : UIView;
 
-- (void)setResizeHandlesVisable:(BOOL)visable;
-- (BOOL)handlesVisable;
-
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
 
-- (void)setHighlighted:(BOOL)selected;
-- (BOOL)isHighlighted;
+- (void)setHighlight:(BOOL)selected;
+- (BOOL)highlight;
+
+- (void)setSelected:(BOOL)selected;
+- (BOOL)isSelected;
 
 - (id)initWithFrame:(CGRect)frame;
 

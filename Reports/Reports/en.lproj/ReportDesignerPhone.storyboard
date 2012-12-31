@@ -358,6 +358,7 @@
                         <outlet property="barButtonItemSettings" destination="Yli-Ut-BGk" id="yL5-2B-6sc"/>
                         <outlet property="designScrollView" destination="lma-we-TIM" id="H8I-0A-d89"/>
                         <outlet property="informationButton" destination="OjZ-K0-Nfy" id="2OZ-4y-csV"/>
+                        <outlet property="navigationBarToolbox" destination="YCc-Jy-cEW" id="Uys-zN-2na"/>
                         <outlet property="navigationItemFontChooser" destination="TfO-WM-pdr" id="kju-qG-7hh"/>
                         <outlet property="navigationItemLayout" destination="26t-V7-i8J" id="Wp3-Hk-c4O"/>
                         <outlet property="navigationItemStyle" destination="fcd-MR-7nw" id="Eav-n3-wnd"/>
@@ -4813,6 +4814,7 @@
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
                 <relationship kind="outlet" name="navigationItemFontChooser" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
@@ -4924,7 +4926,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="textFieldDidEndOnExit:"/>
                 <relationship kind="outlet" name="enterStringDelegate"/>
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
             </relationships>
@@ -5011,6 +5012,8 @@
         <class className="UITableViewControllerSectionLayoutSettings" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSectionLayoutSettings.h"/>
             <relationships>
+                <relationship kind="action" name="heightChanged:"/>
+                <relationship kind="action" name="visibilityChanged:"/>
                 <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
@@ -5043,6 +5046,7 @@
         <class className="UIViewControllerSchemaAddLinkFirstField" superclassName="UITableViewControllerCoreDataResults">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstField.h"/>
             <relationships>
+                <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
@@ -5069,6 +5073,7 @@
         <class className="UIViewControllerSchemaAddLinkSecondTable" superclassName="UITableViewControllerCoreDataResults">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkSecondTable.h"/>
             <relationships>
+                <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
