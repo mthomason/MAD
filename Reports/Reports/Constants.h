@@ -18,6 +18,70 @@
             (([[UIDevice currentDevice] userInterfaceIdiom] == \
             UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
 
+
+#pragma mark - Layout
+
+// MARK: Margin
+
+struct MTMargin {
+    CGFloat left;
+    CGFloat right;
+    CGFloat top;
+    CGFloat bottom;
+};
+typedef struct MTMargin MTMargin;
+
+
+CG_INLINE MTMargin
+MTMarginMake(CGFloat top, CGFloat right, CGFloat bottom, CGFloat left) {
+    MTMargin margin;
+    margin.top = top;
+    margin.right = right;
+    margin.bottom = bottom;
+    margin.left = left;
+    return margin;
+}
+
+CG_INLINE MTMargin
+MTMarginMakeQuick(CGFloat m) {
+    MTMargin margin;
+    margin.top = m;
+    margin.right = m;
+    margin.bottom = m;
+    margin.left = m;
+    return margin;
+}
+
+// MARK: Margin
+
+struct MTPadding {
+    CGFloat left;
+    CGFloat right;
+    CGFloat top;
+    CGFloat bottom;
+};
+typedef struct MTPadding MTPadding;
+
+CG_INLINE MTPadding
+MTPaddingMake(CGFloat top, CGFloat right, CGFloat bottom, CGFloat left) {
+    MTPadding padding;
+    padding.top = top;
+    padding.right = right;
+    padding.bottom = bottom;
+    padding.left = left;
+    return padding;
+}
+
+CG_INLINE MTPadding
+MTPaddingMakeQuick(CGFloat p) {
+    MTPadding padding;
+    padding.top = p;
+    padding.right = p;
+    padding.bottom = p;
+    padding.left = p;
+    return padding;
+}
+
 typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderAccending = 0,
 	MNSSortOrderDecending

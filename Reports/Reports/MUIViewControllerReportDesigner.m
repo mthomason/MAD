@@ -166,7 +166,7 @@
            forSupplementaryViewOfKind:MTCollectionElementKindSectionLabel
                   withReuseIdentifier:supplmentaryViewReuseIdFloatingLabel];
          */
-        
+        [collectionView setTag:[[sec identifier] integerValue]];
         [collectionView setDelegate:self];
         [collectionView setDataSource:self];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
@@ -234,6 +234,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contextChanged:)
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification
+                                               object:managedObjectContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -241,6 +246,10 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSManagedObjectContextObjectsDidChangeNotification
+                                                  object:managedObjectContext];
     [super viewDidDisappear:animated];
 }
 
@@ -272,6 +281,12 @@
         MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
     }
+}
+
+#pragma mark - Core Data Notifications
+
+- (void)contextChanged:(NSNotification *)notification {
+    
 }
 
 #pragma mark - Actions
@@ -410,7 +425,12 @@
     if (![self toolboxIsVisible]) {
         [self setToolboxIsVisible:YES];
         [[self informationButton] setEnabled: NO];
+        
+        NSSet *selectItemIds = [self selectedObjectIds];
 
+        MTMargin margin = MTMarginMake(5.0000f, 5.00000f, 5.0000f, 5.0000f);
+    
+        
         if (![self tableViewControllerFontSelector]) {
             
             
@@ -588,19 +608,16 @@
             case MNSObjectTypeLabelDataField: {
                 
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue],
-                                      [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue]);
+                CGFloat elementViewWidth = [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue];
+                CGFloat elementViewHeight = [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue];
+                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, elementViewWidth, elementViewHeight);
                 
-                MTElementView *newView1 = [[MTElementView alloc] initWithFrame: f];
-                UILabel *label = [[UILabel alloc] initWithFrame: f];
-                [label setText: [[[documentObjectCast parentObjectLabelDataField] isLabelDataField] text]];
-                [label setBackgroundColor:[UIColor clearColor]];
+                MTElementView *newView1 = [[MTElementView alloc] initWithFrame:f andObjectId:[documentObject objectID] /*[documentObjectCast objectID]*/ inObjectContext:managedObjectContext];
                 [newView1 setBackgroundColor:[UIColor whiteColor]];
-                [newView1 addSubview: label];
+                //[newView1 addSubview: label];
                 [newView1 setBounds: f];
                 [newView1 setMultipleTouchEnabled: YES];
                 [newView1 setExclusiveTouch: YES];
-                [newView1 setObjectIdTag: [documentObjectCast objectID]];
                 [newView1 setOpaque: YES];
                 [[newView1 layer] setCornerRadius: 5.0000f];
                 
@@ -696,6 +713,36 @@
     }
     return result;
 }
+
+- (NSSet *)selectedObjectIdsInCollectionView:(UICollectionView *)collectionView {
+    NSMutableSet *result = [[NSMutableSet alloc] init];
+    for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
+        for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
+            MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+            if ([elementView isSelected]) {
+                [result addObject:[elementView objectIdTag]];
+            }
+        }
+    }
+    return [result autorelease];
+}
+
+- (NSSet *)selectedObjectIds {
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    for (RptqDocumentSection *documentSection in enumerator) {
+        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
+        if ([subview isKindOfClass:[UICollectionView class]]) {
+            UICollectionView *collectionView = (UICollectionView *)subview;
+            NSArray *selectedObjects = [[self selectedObjectIdsInCollectionView:collectionView] allObjects];
+            [results addObjectsFromArray: selectedObjects];
+        }
+    }
+    NSLog(@"Selected Object Ids %@", results);
+    return [results autorelease];
+}
+
 /*
  
  - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -892,8 +939,8 @@
             
             {
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-                RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[[gestureRecognizer view] objectIdTag]
-                                                                                                           fromObjectContext:managedObjectContext];
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
+                RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
                 NSLog(@"OBJTag %@", [[gestureRecognizer view] objectIdTag]);
                 NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
                 if (datafield) {
@@ -910,7 +957,7 @@
                     
                     BOOL found = NO;
                     for (RptqDocumentObject *object in hasObjects) {
-                        if ([[[object isLabelDataField] objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
+                        if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
                             found = YES;
                             break;
                         }
@@ -988,15 +1035,17 @@
                 
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 
-                RptqDocumentObjectLabelDataField *datafield = [RptqDocumentObjectLabelDataField getLabelDataFieldForObjectID:[[gestureRecognizer view] objectIdTag]
-                                                                                                           fromObjectContext:managedObjectContext];
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag]
+                                                                             fromObjectContext:managedObjectContext];
+                
+                RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
                 
                 if (datafield) {
                     
-                    datafield.parentObjectLabelDataField.originx = @([gestureRecognizer view].frame.origin.x);
-                    datafield.parentObjectLabelDataField.originy = @([gestureRecognizer view].frame.origin.y);
-                    datafield.parentObjectLabelDataField.sizewidth = @([gestureRecognizer view].frame.size.width);
-                    datafield.parentObjectLabelDataField.sizeheight = @([gestureRecognizer view].frame.size.height);
+                    documentObject.originx = @([gestureRecognizer view].frame.origin.x);
+                    documentObject.originy = @([gestureRecognizer view].frame.origin.y);
+                    documentObject.sizewidth = @([gestureRecognizer view].frame.size.width);
+                    documentObject.sizeheight = @([gestureRecognizer view].frame.size.height);
                     
                     CGPoint newCenter = [[gestureRecognizer view] center];
                     [[gestureRecognizer view] removeFromSuperview];
@@ -1016,7 +1065,7 @@
                     // MARK: Add this to the data context and to the container for the sections collection view.
                     [newParent performBatchUpdates:^{
                         NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
-                        [hasObjects insertObject:[datafield parentObjectLabelDataField] atIndex:[indexPath item]];
+                        [hasObjects insertObject:documentObject atIndex:[indexPath item]];
                         [documentSection setHasObjects:hasObjects];
                         [[AppDelegate activeDocument] saveContext];
                         

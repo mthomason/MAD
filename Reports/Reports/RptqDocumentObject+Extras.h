@@ -18,6 +18,8 @@ typedef NS_ENUM(NSUInteger, MNSSectionType) {
 
 @interface RptqDocumentObject (Extras) <MTProtocolCompare>
 
++ (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 - (MNSSectionType)getType;
 
 @end

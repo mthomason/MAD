@@ -10,6 +10,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CGGeometry+Extras.h"
 #import "UIViewResizeHandle.h"
+#import "UIView+NSObjectIdTag.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "Constants.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -22,6 +26,8 @@
 @property (assign) BOOL displayHighlighted;
 @property (assign) BOOL displaySelected;
 
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
 @end
 
 @implementation MTElementView
@@ -29,31 +35,59 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSManagedObjectContextDidSaveNotification
+                                                  object:_managedObjectContext];
+    
+    [_managedObjectContext release];
 	[super dealloc];
 }
 
 #pragma mark - UIView
 
 - (id)init {
-    self = [super init];
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Use initWithFrame: andObjectId:.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Use initWithFrame: andObjectId:.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
+- (id)initWithFrame:(CGRect)frame andObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    self = [super initWithFrame:frame];
     if (self) {
+        [self setObjectIdTag:objectId];
         [self setDisplayWobbling: NO];
         [self setDisplayHighlighted: NO];
+        [self setManagedObjectContext:managedObjectContext];
+        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+        [defaultCenter addObserver:self
+                          selector:@selector(managedObjectContextDidSave:)
+                              name:NSManagedObjectContextDidSaveNotification
+                            object:managedObjectContext];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setDisplayWobbling: NO];
-        [self setDisplayHighlighted: NO];
+- (void)managedObjectContextDidSave:(NSNotification *)notification {
+    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    for (NSManagedObjectID *objectId in updatedObjects) {
+        if ([[self objectIdTag] isEqual:objectId]) {
+            [self setNeedsDisplay];
+            break;
+        }
     }
-    return self;
 }
 
 - (void)drawRect:(CGRect)rect {
 
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    MTLog(@"Object ID: %@\t\t Document Object: %@", [self objectIdTag], [[documentObject isLabelDataField] text]);
+    
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, rect);
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
@@ -77,7 +111,7 @@
     } else {
         [[UIColor blackColor] set];
     }
-
+    [[[documentObject isLabelDataField] text] drawInRect:rect withFont:[UIFont systemFontOfSize:[UIFont systemFontSize]] lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentLeft];
     CGPathRelease(path);
     
 }

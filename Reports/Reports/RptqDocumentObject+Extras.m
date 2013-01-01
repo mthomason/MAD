@@ -58,6 +58,17 @@
 
 #pragma mark - Static
 
+
++ (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqDocumentObject *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
 #pragma mark - Member
 
 - (MNSSectionType)getType {

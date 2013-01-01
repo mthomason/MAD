@@ -21,6 +21,6 @@
 - (void)setSelected:(BOOL)selected;
 - (BOOL)isSelected;
 
-- (id)initWithFrame:(CGRect)frame;
+- (id)initWithFrame:(CGRect)frame andObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
