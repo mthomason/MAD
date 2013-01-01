@@ -34,6 +34,15 @@
 
 #pragma mark - UIView
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self setDisplayWobbling: NO];
+        [self setDisplayHighlighted: NO];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
