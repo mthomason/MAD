@@ -20,6 +20,7 @@
 #import "MTCollectionReusableViewFloatingLabel.h"
 #import "MTElementView.h"
 #import "MTCollectionViewSection.h"
+#import "MTFont.h"
 
 @interface MUIViewControllerReportDesigner()
     <FontSettingsTableViewControllerDelegate,
@@ -50,7 +51,19 @@
 #pragma mark - UITableViewControllerFontSelectorDelegate
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
-    
+    CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
+    MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
+    [[[self tableViewControllerTextLayoutSettings] labelFontName] setFont:[font font]];
+    [[[self tableViewControllerTextLayoutSettings] labelFontName] setText:[font name]];
+
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setFontname:[font name]];
+    }
+    [[AppDelegate activeDocument] saveContext];
+    [font release];
+    [[self navigationBarToolbox] popNavigationItemAnimated:YES];
 }
 
 #pragma mark - FontSettingsTableViewControllerDelegate
@@ -461,6 +474,7 @@
 
         [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
         [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
+        [[self tableViewControllerTextLayoutSettings] initalizeDocumentObjects:[self selectedObjectIds]];
         [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                          animations: ^{
@@ -611,7 +625,7 @@
                 CGFloat elementViewWidth = [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue];
                 CGFloat elementViewHeight = [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue];
                 CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, elementViewWidth, elementViewHeight);
-                
+
                 MTElementView *newView1 = [[MTElementView alloc] initWithFrame:f andObjectId:[documentObject objectID] /*[documentObjectCast objectID]*/ inObjectContext:managedObjectContext];
                 [newView1 setBackgroundColor:[UIColor whiteColor]];
                 //[newView1 addSubview: label];
@@ -631,8 +645,8 @@
                 [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
                 [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
                 
+                [newView1 updateDisplayLabel];
                 [[cell contentView] addSubview:newView1];
-                [newView1 setNeedsDisplay];
                 [newView1 release];
                 
                 
@@ -758,6 +772,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:NO];
+    [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
     MTLog(@"Deselect");
 }
 
@@ -770,6 +785,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:YES];
+    [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
     MTLog(@"Select");
 }
 
@@ -861,13 +877,25 @@
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
-            RptqDocumentObject *dobject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
+            RptqDocumentObject *documentObject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
                                                  toDetailSectionOfDocument:document
                                                   withManagedObjectContext:managedObjectContext];
-
+            
+            // MARK: Get a permanent id on insert.  Who gives a fuck if it's slow on insert.  Let's make sure it's correct.
+            if ([[documentObject objectID] isTemporaryID]) {
+                NSError *error = nil;
+                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                if (error != nil) {
+                    error = nil;
+                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                    if (error != nil) {
+                        [error presentErrorToUser];
+                    }
+                }
+            }
+            
             NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
             [[AppDelegate activeDocument] saveContext];
-
             
             [detailSection insertItemsAtIndexPaths:indexPaths];
          

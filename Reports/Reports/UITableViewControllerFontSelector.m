@@ -7,9 +7,10 @@
 //
 
 #import "UITableViewControllerFontSelector.h"
+#import "MTFont.h"
 
 @interface UITableViewControllerFontSelector()
-- (void)shouldUpdateFont;
+
 @end
 
 @implementation UITableViewControllerFontSelector
@@ -38,7 +39,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self shouldUpdateFont];
     [[self tableView] setDelegate:self];
 }
 
@@ -52,7 +52,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self shouldUpdateFont];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -64,27 +63,36 @@
 }
 
 #pragma mark -
-#pragma Actions
-
-- (void)shouldUpdateFont {
-    for (NSInteger section = 0; section < [[self tableView] numberOfSections]; section++) {
-        for (NSInteger row = 0; row < [[self tableView] numberOfRowsInSection:section]; row++) {
-            UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
-            if ([cell accessoryType] == UITableViewCellAccessoryCheckmark) {
-                [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:[[cell textLabel] text]];
-                break;
-            }
-        }
-    }
-}
-
-#pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [[[self tableView] cellForRowAtIndexPath:indexPath] retain];
 
+    if ([cell isEqual:[self tableViewCellFontAmericanTypewriter]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
+    } else if ([cell isEqual:[self tableViewCellFontArial]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyArial];
+    } else if ([cell isEqual:[self tableViewCellFontCourierNew]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourierNew];
+    } else if ([cell isEqual:[self tableViewCellFontCourier]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourier];
+    } else if ([cell isEqual:[self tableViewCellFontGeorgia]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyGeorgia];
+    } else if ([cell isEqual:[self tableViewCellFontHelvetica]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelvetica];
+    } else if ([cell isEqual:[self tableViewCellFontHelveticaNeue]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelveticaNeue];
+    } else if ([cell isEqual:[self tableViewCellFontTimesNewRoman]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTimesNewRoman];
+    } else if ([cell isEqual:[self tableViewCellFontTrebuchet]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTrebuchet];
+    } else if ([cell isEqual:[self tableViewCellFontVerdana]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyVerdana];
+    } else if ([cell isEqual:[self tableViewCellFontZapfino]]) {
+        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
+    }
+    
     if ([cell accessoryType] != UITableViewCellAccessoryCheckmark) {
         [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryNone];
         [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryNone];
@@ -100,7 +108,6 @@
         
         //Check this box, or not (could test)
         [[[self tableView] cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [self shouldUpdateFont];
     }
     
     [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];

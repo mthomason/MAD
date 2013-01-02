@@ -2,8 +2,8 @@
 //  RptqDocumentSection.h
 //  Reports
 //
-//  Created by Michael Thomason on 12/31/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Created by Michael Thomason on 1/1/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -15,17 +15,17 @@
 
 @property (nonatomic, retain) NSNumber * height;
 @property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * type;
-@property (nonatomic, retain) NSNumber * visibility;
-@property (nonatomic, retain) NSNumber * paddingTop;
-@property (nonatomic, retain) NSNumber * paddingBottom;
-@property (nonatomic, retain) NSNumber * paddingLeft;
-@property (nonatomic, retain) NSNumber * paddingRight;
-@property (nonatomic, retain) NSNumber * marginTop;
 @property (nonatomic, retain) NSNumber * marginBottom;
 @property (nonatomic, retain) NSNumber * marginLeft;
 @property (nonatomic, retain) NSNumber * marginRight;
+@property (nonatomic, retain) NSNumber * marginTop;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * paddingBottom;
+@property (nonatomic, retain) NSNumber * paddingLeft;
+@property (nonatomic, retain) NSNumber * paddingRight;
+@property (nonatomic, retain) NSNumber * paddingTop;
+@property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * visibility;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
 @property (nonatomic, retain) NSOrderedSet *hasObjects;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;

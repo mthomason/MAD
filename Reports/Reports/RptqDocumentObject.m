@@ -2,8 +2,8 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 12/31/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Created by Michael Thomason on 1/1/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentObject.h"
@@ -17,29 +17,33 @@
 @implementation RptqDocumentObject
 
 @dynamic binary;
+@dynamic color;
+@dynamic fontname;
+@dynamic fontsize;
+@dynamic horizontalAlignment;
 @dynamic identifier;
 @dynamic label;
+@dynamic marginBottom;
+@dynamic marginLeft;
+@dynamic marginRight;
+@dynamic marginTop;
 @dynamic originx;
 @dynamic originy;
+@dynamic paddingBottom;
+@dynamic paddingLeft;
+@dynamic paddingRight;
+@dynamic paddingTop;
 @dynamic sectionIndexItem;
 @dynamic sectionIndexRow;
 @dynamic sizeheight;
 @dynamic sizewidth;
 @dynamic type;
-@dynamic horizontalAlignment;
 @dynamic verticalAlignment;
-@dynamic marginTop;
-@dynamic paddingTop;
-@dynamic color;
-@dynamic fontname;
-@dynamic fontsize;
-@dynamic marginBottom;
-@dynamic marginLeft;
-@dynamic marginRight;
-@dynamic paddingBottom;
-@dynamic paddingLeft;
-@dynamic paddingRight;
 @dynamic wrappingStyle;
+@dynamic bold;
+@dynamic underline;
+@dynamic italic;
+@dynamic strike;
 @dynamic inSection;
 @dynamic isFormula;
 @dynamic isLabel;

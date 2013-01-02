@@ -7,8 +7,18 @@
 //
 
 #import "UITableViewControllerFontSettings.h"
+#import "RptqDocumentObject+Extras.h"
+#import "AppDelegate.h"
+#import "MTFont.h"
 
 @interface UITableViewControllerFontSettings()
+
+@property (nonatomic, retain) NSSet *userSelectedObjectIds;
+
+@property (assign) MTControlState controlStateBold;
+@property (assign) MTControlState controlStateItalic;
+@property (assign) MTControlState controlStateStrike;
+@property (assign) MTControlState controlStateUnderline;
 
 @end
 
@@ -22,6 +32,13 @@
 @synthesize labelFontSize;
 @synthesize stepperFontSize;
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        
+    }
+    return self;
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -34,12 +51,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[self tableView] setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -59,23 +77,261 @@
 }
 
 - (void)dealloc {
+    [_userSelectedObjectIds release];
     [labelFontName release];
     [segControlFontStyle release];
     [fontLabelTableViewCell release];
     [labelFontSize release];
     [stepperFontSize release];
+    [_buttonBold release];
+    [_buttonItalic release];
+    [_buttonStrike release];
+    [_buttonUnderline release];
     [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Actions
 
-- (IBAction)stepperFontSizeValueChanged:(id)sender {
-    [self updateFontSizeDisplay];
+- (void)setStateInControl:(UIControl *)control forState:(MTControlState)state {
+    BOOL select, highlight;
+    switch (state) {
+        case MTControlStateOn:
+            select = NO;
+            highlight = YES;
+            break;
+        case MTControlStateOff:
+            select = NO;
+            highlight = NO;
+            break;
+        case MTControlStateAmbiguous:
+            select = YES;
+            highlight = NO;
+            break;
+        default:
+            select = NO;
+            highlight = NO;
+            break;
+    }
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [control setSelected:select];
+        [control setHighlighted:highlight];
+    }];
+        });
+
 }
 
-- (void)updateFontSizeDisplay {
-    [[self labelFontSize] setText:[NSString stringWithFormat:NSLocalizedString(@"Size: %#.1f pt", @"Font size in points."), [[self stepperFontSize] value]]];
+- (void)initalizeDocumentObjects:(NSSet *)objectIds {
+    [self setUserSelectedObjectIds:objectIds];
+}
+
+- (void)setSelectedDocumentObjects:(NSSet *)objectIds {
+    [self setUserSelectedObjectIds:objectIds];
+    [self updateDisplay];
+
+}
+
+- (void)updateDisplay {
+    if ([[self userSelectedObjectIds] count] == 0) {
+        [[self buttonItalic] setEnabled:NO];
+        [[self buttonBold] setEnabled:NO];
+        [[self buttonStrike] setEnabled:NO];
+        [[self buttonUnderline] setEnabled:NO];
+        [self setControlStateBold: MTControlStateOff];
+        [self setControlStateItalic: MTControlStateOff];
+        [self setControlStateStrike: MTControlStateOff];
+        [self setControlStateUnderline: MTControlStateOff];
+        [[self labelFontName] setText:NSLocalizedString(@"Nothing Selected", @"Nothing Selected")];
+        [[self labelFontName] setFont:[UIFont systemFontOfSize:[[[self labelFontName] font] pointSize]]];
+        [[self labelFontSize] setText:@"Nothing"];
+        [[self fontLabelTableViewCell] setUserInteractionEnabled:NO];
+        [[self stepperFontSize] setUserInteractionEnabled:NO];
+    } else {
+        
+        [[self buttonItalic] setEnabled:YES];
+        [[self buttonBold] setEnabled:YES];
+        [[self buttonStrike] setEnabled:YES];
+        [[self buttonUnderline] setEnabled:YES];
+        
+        [self setControlStateBold: MTControlStateOn];
+        [self setControlStateItalic: MTControlStateOn];
+        [self setControlStateStrike: MTControlStateOn];
+        [self setControlStateUnderline: MTControlStateOn];
+
+        NSString *fontDisplayName = nil;
+        
+        NSInteger numberFonts = 0;
+
+        CGFloat aFontSize = [MTFont defaultSize];
+        
+        NSInteger numberBold = 0, numberItalic = 0, numberStrike = 0, numberUnderline = 0;
+        NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
+        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            if (![[documentObject fontname] isEqualToString:fontDisplayName]) {
+                fontDisplayName = [documentObject fontname];
+                aFontSize = [[documentObject fontsize] floatValue];
+                numberFonts++;
+            }
+            [[documentObject bold] boolValue] ? numberBold++ : numberNotBold++;
+            [[documentObject underline] boolValue] ? numberUnderline++ : numberNotUnderline++;
+            [[documentObject strike] boolValue] ? numberStrike++ : numberNotStrike++;
+            [[documentObject italic] boolValue] ? numberItalic++ : numberNotItalic++;
+        }
+        CGFloat labelSize = [[[self labelFontName] font] pointSize];
+
+        switch (numberFonts) {
+            case 0:
+                fontDisplayName = NSLocalizedString(@"Undefined", @"Undefined");
+                aFontSize = [[[self labelFontName] font] pointSize];
+                [[self labelFontSize] setText:@"Nothing"];
+                [[self labelFontName] setFont:[UIFont systemFontOfSize:labelSize]];
+                break;
+            case 1:
+                
+                break;
+            default:
+                fontDisplayName = NSLocalizedString(@"Ambigious", @"Ambigious");
+                aFontSize = [[[self labelFontName] font] pointSize];
+                [[self labelFontSize] setText:[NSString stringWithFormat:@"%f", aFontSize]];
+                [[self labelFontName] setFont:[UIFont systemFontOfSize:labelSize]];
+                break;
+        }
+        
+        [[self stepperFontSize] setValue:aFontSize];
+        [[self labelFontSize] setText:[NSString stringWithFormat:@"%f", aFontSize]];
+        [[self labelFontName] setText:fontDisplayName];
+        
+        self.controlStateBold = numberBold > 0 ? ( numberNotBold > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
+        self.controlStateItalic = numberItalic > 0 ? ( numberNotItalic > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
+        self.controlStateStrike = numberStrike > 0 ? ( numberNotStrike > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
+        self.controlStateUnderline = numberUnderline > 0 ? ( numberNotUnderline > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
+        
+        [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
+        [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
+        [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
+        [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
+        
+        [[self fontLabelTableViewCell] setUserInteractionEnabled:YES];
+        [[self stepperFontSize] setUserInteractionEnabled:YES];
+
+    }
+}
+
+- (IBAction)toggleBold:(id)sender {
+
+    switch ([self controlStateBold]) {
+        case MTControlStateOn:
+            [self setControlStateBold:MTControlStateOff];
+            break;
+        case MTControlStateOff:
+            [self setControlStateBold:MTControlStateOn];
+            break;
+        case MTControlStateAmbiguous:
+            [self setControlStateBold:MTControlStateOn];
+            break;
+        default:
+            [self setControlStateBold:MTControlStateOn];
+            break;
+    }
+    [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setBold:[self controlStateBold] == MTControlStateOn ? @YES : @NO];
+    }
+    [[AppDelegate activeDocument] saveContext];
+}
+
+- (IBAction)toggleItalic:(id)sender {
+    switch ([self controlStateItalic]) {
+        case MTControlStateOn:
+            [self setControlStateItalic:MTControlStateOff];
+            break;
+        case MTControlStateOff:
+            [self setControlStateItalic:MTControlStateOn];
+            break;
+        case MTControlStateAmbiguous:
+            [self setControlStateItalic:MTControlStateOn];
+            break;
+        default:
+            [self setControlStateItalic:MTControlStateOn];
+            break;
+    }
+    [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setItalic:[self controlStateBold] == MTControlStateOn ? @YES : @NO];
+    }
+    [[AppDelegate activeDocument] saveContext];
+}
+
+- (IBAction)toggleStrikeThrough:(id)sender {
+    switch ([self controlStateStrike]) {
+        case MTControlStateOn:
+            [self setControlStateStrike:MTControlStateOff];
+            break;
+        case MTControlStateOff:
+            [self setControlStateStrike:MTControlStateOn];
+            break;
+        case MTControlStateAmbiguous:
+            [self setControlStateStrike:MTControlStateOn];
+            break;
+        default:
+            [self setControlStateStrike:MTControlStateOn];
+            break;
+    }
+    [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setStrike:[self controlStateStrike] == MTControlStateOn ? @YES : @NO];
+    }
+    [[AppDelegate activeDocument] saveContext];
+}
+
+- (IBAction)toggleUnderline:(id)sender {
+    switch ([self controlStateUnderline]) {
+        case MTControlStateOn:
+            [self setControlStateUnderline:MTControlStateOff];
+            break;
+        case MTControlStateOff:
+            [self setControlStateUnderline:MTControlStateOn];
+            break;
+        case MTControlStateAmbiguous:
+            [self setControlStateUnderline:MTControlStateOn];
+            break;
+        default:
+            [self setControlStateUnderline:MTControlStateOn];
+            break;
+    }
+    [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setUnderline:[self controlStateUnderline] == MTControlStateOn ? @YES : @NO];
+    }
+    [[AppDelegate activeDocument] saveContext];
+}
+
+- (IBAction)stepperFontSizeValueChanged:(id)sender {
+    CGFloat stepperValue = [[self stepperFontSize] value];
+    NSString *localizedMessage = NSLocalizedString(@"Size: %#.1f pt", @"Font size in points.");
+    [[self labelFontSize] setText:[NSString stringWithFormat:localizedMessage, stepperValue]];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        [documentObject setFontsize:@(stepperValue)];
+    }
+    [[AppDelegate activeDocument] saveContext];
 }
 
 #pragma mark -
@@ -176,4 +432,11 @@
  }
  */
 
+- (void)viewDidUnload {
+    [self setButtonBold:nil];
+    [self setButtonItalic:nil];
+    [self setButtonStrike:nil];
+    [self setButtonUnderline:nil];
+    [super viewDidUnload];
+}
 @end

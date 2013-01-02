@@ -44,7 +44,6 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 @interface MTFont()
 
-@property (assign) CGFloat pointSize;
 @property (nonatomic, retain) NSString *familyName;
 
 @end
@@ -273,6 +272,10 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     }
     result = [UIFont fontWithName:fontName size:[self pointSize]];
     return result;
+}
+
+- (NSString *)name {
+    return [self familyName];
 }
 
 @end

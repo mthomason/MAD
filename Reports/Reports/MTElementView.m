@@ -14,6 +14,7 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "Constants.h"
+#import "MTFont.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -25,6 +26,7 @@
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
 @property (assign) BOOL displaySelected;
+@property (nonatomic, retain) UILabel *displayLabel;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
@@ -39,6 +41,7 @@
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];
     
+    [_displayLabel release];
     [_managedObjectContext release];
 	[super dealloc];
 }
@@ -64,6 +67,14 @@
         [self setDisplayWobbling: NO];
         [self setDisplayHighlighted: NO];
         [self setManagedObjectContext:managedObjectContext];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:frame];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:label];
+        [self setDisplayLabel:label];
+        [label release];
+
+        
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver:self
                           selector:@selector(managedObjectContextDidSave:)
@@ -75,19 +86,54 @@
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
-    for (NSManagedObjectID *objectId in updatedObjects) {
-        if ([[self objectIdTag] isEqual:objectId]) {
-            [self setNeedsDisplay];
-            break;
+
+    for (id updatedObject in updatedObjects) {
+        if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
+            if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
+                [self updateDisplayLabel];
+                [self setNeedsDisplay];
+                break;
+            }
         }
     }
+
+}
+
+- (void)updateDisplayLabel {
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    
+    NSString *fontName = [documentObject fontname];
+    CGFloat pointSize = [[documentObject fontsize] floatValue];
+    UIFont *displayFont;
+    if ([fontName length] == 0) {
+        displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    } else {
+        MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+        if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+            displayFont = [stylizedDisplayFont boldItalicFont];
+        } else if ([[documentObject bold] boolValue]) {
+            displayFont = [stylizedDisplayFont boldFont];
+        } else if ([[documentObject italic] boolValue]) {
+            displayFont = [stylizedDisplayFont italicFont];
+        } else {
+            displayFont = [stylizedDisplayFont font];
+        }
+    }
+    
+    NSString *string = [[documentObject isLabelDataField] text];
+    NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    
+    NSDictionary *attributes = @{NSFontAttributeName : displayFont,
+                                    NSStrikethroughStyleAttributeName : strikeThroughStyle,
+                                    NSUnderlineStyleAttributeName : underlineStyle
+    };
+    NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    [[self displayLabel] setAttributedText:attributtedString];
+    [attributtedString release];
 }
 
 - (void)drawRect:(CGRect)rect {
-
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    MTLog(@"Object ID: %@\t\t Document Object: %@", [self objectIdTag], [[documentObject isLabelDataField] text]);
-    
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, rect);
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
@@ -111,7 +157,7 @@
     } else {
         [[UIColor blackColor] set];
     }
-    [[[documentObject isLabelDataField] text] drawInRect:rect withFont:[UIFont systemFontOfSize:[UIFont systemFontSize]] lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentLeft];
+
     CGPathRelease(path);
     
 }

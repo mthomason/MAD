@@ -29,11 +29,13 @@
     </entity>
     <entity name="RptqDocumentObject" representedClassName="RptqDocumentObject" syncable="YES">
         <attribute name="binary" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="bold" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fontname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fontsize" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="horizontalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="italic" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="marginBottom" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="marginLeft" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -49,7 +51,9 @@
         <attribute name="sectionIndexRow" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="sizeheight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="sizewidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="strike" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="underline" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="inSection" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasObjects" inverseEntity="RptqDocumentSection" syncable="YES"/>
@@ -211,7 +215,7 @@
     <elements>
         <element name="RptqDatabase" positionX="0" positionY="0" width="128" height="150"/>
         <element name="RptqDocument" positionX="0" positionY="0" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="480"/>
+        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="540"/>
         <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="128" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="128" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="128" height="135"/>

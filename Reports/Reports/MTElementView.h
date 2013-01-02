@@ -23,4 +23,6 @@
 
 - (id)initWithFrame:(CGRect)frame andObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+- (void)updateDisplayLabel;
+
 @end

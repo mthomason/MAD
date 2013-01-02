@@ -97,6 +97,26 @@ typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
     UIViewControllerSchemaTablesSectionsSql = 6
 };
 
+typedef NS_ENUM(NSUInteger, MTControlState) {
+	MTControlStateOff = 0,
+	MTControlStateOn,
+    MTControlStateAmbiguous
+};
+
+typedef NS_ENUM(NSUInteger, MTVerticalAlignment) {
+	MTVerticalAlignmentTop = 1,
+	MTVerticalAlignmentCenter = 2,
+	MTVerticalAlignmentBottom = 3
+};
+
+typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
+	MTHorizontalAlignmentLeft = 1,
+	MTHorizontalAlignmentCenter = 2,
+	MTHorizontalAlignmentRight = 3,
+	MTHorizontalAlignmentNatrual = 4,
+	MTHorizontalAlignmentJustified = 5
+};
+
 extern NSString * const MTCollectionElementKindSectionLabel;
 
 extern NSString * const MNSStringInterfaceButtonTitleContinue;

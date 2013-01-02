@@ -23,8 +23,15 @@
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segControlFontStyle;
 @property (retain, nonatomic) IBOutlet UILabel *labelFontSize;
 @property (retain, nonatomic) IBOutlet UIStepper *stepperFontSize;
+@property (retain, nonatomic) IBOutlet UIButton *buttonBold;
+@property (retain, nonatomic) IBOutlet UIButton *buttonItalic;
+@property (retain, nonatomic) IBOutlet UIButton *buttonStrike;
+@property (retain, nonatomic) IBOutlet UIButton *buttonUnderline;
 
 - (IBAction)stepperFontSizeValueChanged:(id)sender;
 - (void)updateFontSizeDisplay;
+
+- (void)initalizeDocumentObjects:(NSSet *)objectIds;    //Call this before you add view to super.
+- (void)setSelectedDocumentObjects:(NSSet *)objectIds;  //This is called on viewWillAppear... only call on change.
 
 @end

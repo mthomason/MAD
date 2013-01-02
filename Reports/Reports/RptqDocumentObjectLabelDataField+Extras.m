@@ -91,6 +91,7 @@
     dataObject.sizewidth = @(200.0000f);
     dataObject.sizeheight = @(44.0000f);
     dataObject.type = @(MNSObjectTypeLabelDataField);
+    
     reportObject.referencesField = field;
     //dataObject.isLabelDataField = reportObject;
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];

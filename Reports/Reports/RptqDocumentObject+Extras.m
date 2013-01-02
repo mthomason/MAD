@@ -7,6 +7,8 @@
 //
 
 #import "RptqDocumentObject+Extras.h"
+#import "MTFont.h"
+#import "Constants.h"
 
 @implementation RptqDocumentObject (Extras)
 
@@ -29,6 +31,24 @@
         identifier = [[lastObject identifier] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
+    
+    // MARK: Default style.
+    [self setFontname:[MTFont defaultFamily]];
+    [self setFontsize:@([MTFont defaultSize])];
+    [self setBold:@NO];
+    [self setItalic:@NO];
+    [self setUnderline:@NO];
+    [self setStrike:@NO];
+    [self setMarginBottom:@(0.0000f)];
+    [self setMarginTop:@(0.0000f)];
+    [self setMarginLeft:@(0.0000f)];
+    [self setMarginRight:@(0.0000f)];
+    [self setPaddingBottom:@(0.0000f)];
+    [self setPaddingTop:@(0.0000f)];
+    [self setPaddingLeft:@(0.0000f)];
+    [self setPaddingRight:@(0.0000f)];
+    [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
+    [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
     
 }
 
