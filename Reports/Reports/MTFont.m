@@ -154,7 +154,9 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
         MTFontBoldOblique :     @"Helvetica-BoldOblique",
         MTFontLight :           @"Helvetica-Light",
         MTFontLightOblique :    @"Helvetica-LightOblique",
-        MTFontOblique :         @"Helvetica-Oblique"
+        MTFontOblique :         @"Helvetica-Oblique",
+        MTFontItalic :          @"Helvetica-Oblique",
+        MTFontBoldItalic :      @"Helvetica-BoldOblique"
     };
 }
 

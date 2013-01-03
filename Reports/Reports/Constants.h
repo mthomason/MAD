@@ -104,17 +104,17 @@ typedef NS_ENUM(NSUInteger, MTControlState) {
 };
 
 typedef NS_ENUM(NSUInteger, MTVerticalAlignment) {
-	MTVerticalAlignmentTop = 1,
-	MTVerticalAlignmentCenter = 2,
-	MTVerticalAlignmentBottom = 3
+	MTVerticalAlignmentTop = 0,
+	MTVerticalAlignmentCenter = 1,
+	MTVerticalAlignmentBottom = 2
 };
 
 typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
-	MTHorizontalAlignmentLeft = 1,
-	MTHorizontalAlignmentCenter = 2,
-	MTHorizontalAlignmentRight = 3,
-	MTHorizontalAlignmentNatrual = 4,
-	MTHorizontalAlignmentJustified = 5
+	MTHorizontalAlignmentLeft = 0,
+	MTHorizontalAlignmentCenter = 1,
+	MTHorizontalAlignmentRight = 2,
+	MTHorizontalAlignmentJustified = 3,
+	MTHorizontalAlignmentNatrual = 4
 };
 
 extern NSString * const MTCollectionElementKindSectionLabel;

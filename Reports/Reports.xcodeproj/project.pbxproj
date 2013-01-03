@@ -138,7 +138,6 @@
 		4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
 		4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
-		4C0E77BB163B5AEC003B951E /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
 		4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
 		4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
@@ -1419,6 +1418,41 @@
 		4CE17E391658F0A10002F8EA /* MNSDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E371658F0A00002F8EA /* MNSDatabaseTable.m */; };
 		4CE17E3C1658F1100002F8EA /* MNSDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E3B1658F10F0002F8EA /* MNSDatabaseField.m */; };
 		4CE17E3D1658F1100002F8EA /* MNSDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E3B1658F10F0002F8EA /* MNSDatabaseField.m */; };
+		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
+		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
+		4CE314191694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
+		4CE3141A1694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
+		4CE3141B1694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
+		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
+		4CE3141D1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
+		4CE3141E1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
+		4CE3141F1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
+		4CE314201694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
+		4CE314211694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
+		4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
+		4CE314231694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
+		4CE314241694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
+		4CE314251694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
+		4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
+		4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
+		4CE314281694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
+		4CE314291694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
+		4CE3142A1694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
+		4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
+		4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
+		4CE3142D1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
+		4CE3142E1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
+		4CE3142F1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
+		4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE314321694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE314331694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE314341694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
+		4CE3143716952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
+		4CE3143816952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
+		4CE3143916952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
+		4CE3143A16952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
+		4CE3143B16952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
 		4CE7B77514C2D168007D0148 /* MUIViewControllerObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */; };
 		4CE8A03914BFF744007C8345 /* Report.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */; };
 		4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03A14C019B4007C8345 /* UIImageDocuments20.png */; };
@@ -1428,7 +1462,6 @@
 		4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4CE8A04614C01C7B007C8345 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
 		4CE8A04914C01EA1007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
-		4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CEEA0D814C559B000BB9ABC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
 		4CF338C21693714E00390B3A /* RptqField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF338C11693714E00390B3A /* RptqField.m */; };
@@ -2237,6 +2270,14 @@
 		4CE17E371658F0A00002F8EA /* MNSDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSDatabaseTable.m; sourceTree = "<group>"; };
 		4CE17E3A1658F10E0002F8EA /* MNSDatabaseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSDatabaseField.h; sourceTree = "<group>"; };
 		4CE17E3B1658F10F0002F8EA /* MNSDatabaseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSDatabaseField.m; sourceTree = "<group>"; };
+		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
+		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
+		4CE314131694BCEC00114431 /* UIImageAlignTop20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignTop20.png; sourceTree = "<group>"; };
+		4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignTop20@2x.png"; sourceTree = "<group>"; };
+		4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignBottom20.png; sourceTree = "<group>"; };
+		4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageAlignBottom20@2x.png"; sourceTree = "<group>"; };
+		4CE3143516952E3B00114431 /* MTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTextView.h; sourceTree = "<group>"; };
+		4CE3143616952E3B00114431 /* MTTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTextView.m; sourceTree = "<group>"; };
 		4CE7B77314C2D168007D0148 /* MUIViewControllerObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerObjectSelector.h; sourceTree = "<group>"; };
 		4CE7B77414C2D168007D0148 /* MUIViewControllerObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerObjectSelector.m; sourceTree = "<group>"; };
 		4CE8A03814BFF744007C8345 /* Report.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Report.xcdatamodel; sourceTree = "<group>"; };
@@ -2249,7 +2290,6 @@
 		4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseDriverSelector.m; sourceTree = "<group>"; };
 		4CE8A04714C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewControllerDatabaseMySqlSetup.h; sourceTree = "<group>"; };
 		4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseMySqlSetup.m; sourceTree = "<group>"; };
-		4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardToolbox.storyboard; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
 		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Reports/README.txt; sourceTree = "<group>"; };
@@ -2491,6 +2531,12 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */,
+				4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */,
+				4CE314131694BCEC00114431 /* UIImageAlignTop20.png */,
+				4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */,
+				4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */,
+				4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */,
 				4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */,
 				4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */,
 				4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */,
@@ -2553,7 +2599,6 @@
 		4C00818214B73884003DF437 /* Toolbox */ = {
 			isa = PBXGroup;
 			children = (
-				4CE9985A14B6369A0015C8D1 /* StoryboardToolbox.storyboard */,
 				4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */,
 				4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
@@ -3275,6 +3320,8 @@
 				4C88A9AF14ECDE560069A0AF /* MTElementView.m */,
 				4C88A9C514EE23CF0069A0AF /* UIViewResizeHandle.h */,
 				4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */,
+				4CE3143516952E3B00114431 /* MTTextView.h */,
+				4CE3143616952E3B00114431 /* MTTextView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -4021,7 +4068,6 @@
 				4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */,
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
 				4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */,
-				4C0E77BB163B5AEC003B951E /* StoryboardToolbox.storyboard in Resources */,
 				4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */,
 				4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */,
 				4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */,
@@ -4259,6 +4305,12 @@
 				4C8EC0A8167A489200F37DA7 /* libMTDataStrutures.h in Resources */,
 				4CA162BF167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4CF8D41A1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
+				4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
+				4CE3141D1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
+				4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
+				4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
+				4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4343,6 +4395,12 @@
 				4C8EC0AA167A489200F37DA7 /* libMTDataStrutures.h in Resources */,
 				4CA162C1167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4CF8D41C1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
+				4CE3141A1694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
+				4CE3141F1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
+				4CE314241694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
+				4CE314291694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
+				4CE3142E1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4CE314331694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4432,6 +4490,12 @@
 				4CA162C0167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4C860BBA167EE1BF00AC1904 /* InfoPlist.strings in Resources */,
 				4CF8D41B1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
+				4CE314191694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
+				4CE3141E1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
+				4CE314231694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
+				4CE314281694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
+				4CE3142D1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4CE314321694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4450,7 +4514,6 @@
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
-				4CE9985B14B6369A0015C8D1 /* StoryboardToolbox.storyboard in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
@@ -4686,6 +4749,12 @@
 				4C8EC0A7167A489200F37DA7 /* libMTDataStrutures.h in Resources */,
 				4CA162BE167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4CF8D4191685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
+				4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
+				4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
+				4CE314211694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
+				4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
+				4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4775,6 +4844,12 @@
 				4C860BA9167EDE7000AC1904 /* MTProtocolCompare.h in Resources */,
 				4C860BBF167EE21100AC1904 /* InfoPlist.strings in Resources */,
 				4CF8D41D1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
+				4CE3141B1694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
+				4CE314201694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
+				4CE314251694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
+				4CE3142A1694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
+				4CE3142F1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4CE314341694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4973,6 +5048,7 @@
 				4CF339331693715100390B3A /* RptqQueryPredicate.m in Sources */,
 				4CF3393A1693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339451693E5B400390B3A /* MTFont.m in Sources */,
+				4CE3143816952E3B00114431 /* MTTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5118,6 +5194,7 @@
 				4CF339351693715100390B3A /* RptqQueryPredicate.m in Sources */,
 				4CF3393C1693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339471693E5B400390B3A /* MTFont.m in Sources */,
+				4CE3143A16952E3B00114431 /* MTTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5263,6 +5340,7 @@
 				4CF339341693715100390B3A /* RptqQueryPredicate.m in Sources */,
 				4CF3393B1693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339461693E5B400390B3A /* MTFont.m in Sources */,
+				4CE3143916952E3B00114431 /* MTTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5416,6 +5494,7 @@
 				4CF339321693715100390B3A /* RptqQueryPredicate.m in Sources */,
 				4CF339391693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339441693E5B400390B3A /* MTFont.m in Sources */,
+				4CE3143716952E3B00114431 /* MTTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5561,6 +5640,7 @@
 				4CF339361693715100390B3A /* RptqQueryPredicate.m in Sources */,
 				4CF3393D1693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339481693E5B400390B3A /* MTFont.m in Sources */,
+				4CE3143B16952E3B00114431 /* MTTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
