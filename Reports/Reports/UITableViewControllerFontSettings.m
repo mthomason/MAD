@@ -294,7 +294,7 @@
         NSNumber *verticalAlignmentHolder = @(-1), *horizontalAlignmentHolder = @(-1);
         NSNumber *sizeWidthHolder = @(CGFLOAT_MIN), *sizeHeightHolder = @(CGFLOAT_MIN);
         
-        CGFloat aFontSize = [MTFont defaultSize];
+        CGFloat fontSizeHolder = [MTFont defaultSize];
         
         NSInteger numberOfMarginTop = 0, numberOfMarginBottom = 0, numberOfMarginLeft = 0, numberOfMarginRight = 0;
         NSInteger numberOfPaddingTop = 0, numberOfPaddingBottom = 0, numberOfPaddingLeft = 0, numberOfPaddingRight = 0;
@@ -312,7 +312,7 @@
             
             if (![[documentObject fontname] isEqualToString:fontDisplayName]) {
                 fontDisplayName = [documentObject fontname];
-                aFontSize = [[documentObject fontsize] floatValue];
+                fontSizeHolder = [[documentObject fontsize] floatValue];
                 numberFonts++;
             }
 
@@ -332,7 +332,6 @@
                 marginRightHolder = [documentObject marginRight];
                 numberOfMarginRight++;
             }
-
             if (![[documentObject paddingTop] isEqualToNumber:paddingTopHolder] ) {
                 paddingTopHolder = [documentObject paddingTop];
                 numberOfPaddingTop++;
@@ -372,8 +371,6 @@
             [[documentObject underline] boolValue] ? numberUnderline++ : numberNotUnderline++;
             [[documentObject strike] boolValue] ? numberStrike++ : numberNotStrike++;
             [[documentObject italic] boolValue] ? numberItalic++ : numberNotItalic++;
-            
-            
         }
         
         [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:[horizontalAlignmentHolder integerValue]];
@@ -383,29 +380,44 @@
 
         NSNumber *displayNumber = numberOfMarginTop == 1 ? marginTopHolder : nil;
         [[self labelMarginTop] setAttributedText: [self marginTopForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperMarginTop] setValue:[marginTopHolder doubleValue]];
 
         displayNumber = numberOfMarginBottom == 1 ? marginBottomHolder : nil;
         [[self labelMarginBottom] setAttributedText: [self marginBottomForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperMarginBottom] setValue:[marginBottomHolder doubleValue]];
         
         displayNumber = numberOfMarginLeft == 1 ? marginLeftHolder : nil;
         [[self labelMarginLeft] setAttributedText: [self marginLeftForValue:marginLeftHolder andFontSize:labelSize]];
+        [[self stepperMarginLeft] setValue:[marginLeftHolder doubleValue]];
         
         displayNumber = numberOfMarginRight == 1 ? marginRightHolder : nil;
         [[self labelMarginRight] setAttributedText: [self marginRightForValue:marginRightHolder andFontSize:labelSize]];
+        [[self stepperMarginRight] setValue:[marginRightHolder doubleValue]];
 
         displayNumber = numberOfPaddingTop == 1 ? paddingTopHolder : nil;
         [[self labelPaddingTop] setAttributedText: [self marginTopForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperPaddingTop] setValue:[paddingTopHolder doubleValue]];
 
         displayNumber = numberOfPaddingBottom == 1 ? paddingBottomHolder : nil;
         [[self labelPaddingBottom] setAttributedText: [self marginBottomForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperPaddingBottom] setValue:[paddingBottomHolder doubleValue]];
 
         displayNumber = numberOfPaddingLeft == 1 ? paddingLeftHolder : nil;
         [[self labelPaddingLeft] setAttributedText: [self marginLeftForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperPaddingLeft] setValue:[paddingLeftHolder doubleValue]];
 
         displayNumber = numberOfPaddingRight == 1 ? paddingRightHolder : nil;
         [[self labelPaddingRight] setAttributedText: [self marginRightForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperPaddingRight] setValue:[paddingRightHolder doubleValue]];
 
-        aFontSize = [[[self labelFontName] font] pointSize];
+        displayNumber = numberOfSizeHeights == 1 ? sizeHeightHolder : nil;
+        [[self labelSizeHeight] setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperSizeHeight] setValue:[sizeHeightHolder doubleValue]];
+
+        displayNumber = numberOfSizeWidths == 1 ? sizeWidthHolder : nil;
+        [[self labelSizeWidth] setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
+        [[self stepperSizeWidth] setValue:[sizeWidthHolder doubleValue]];
+        
         switch (numberFonts) {
             case 0:
                 fontDisplayName = NSLocalizedString(@"Undefined", @"Undefined");
@@ -414,7 +426,7 @@
                 break;
             case 1:
                 [[self labelFontName] setAttributedText: [self boldSystemString:fontDisplayName ofSize:labelSize]];
-                [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:aFontSize]];
+                [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:fontSizeHolder]];
                 break;
             default:
                 fontDisplayName = NSLocalizedString(@"Ambigious", @"Ambigious");
@@ -423,7 +435,7 @@
                 break;
         }
         
-        [[self stepperFontSize] setValue:aFontSize];
+        [[self stepperFontSize] setValue:fontSizeHolder];
 
         
         self.controlStateBold = numberBold > 0 ? ( numberNotBold > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
@@ -707,16 +719,19 @@
         valueThatChanged = @([[self stepperFontSize] value]);
         [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[valueThatChanged floatValue]]];
 
-    } else if ([sender isEqual:[self stepperSizeHeight]] || [sender isEqual:[self stepperSizeWidth]]) {
-        valueChangedAction = @selector(setFontsize:);
-        CGSize newSize = CGSizeMake([[self stepperSizeWidth] value], [[self stepperSizeHeight] value]);
-        valueThatChanged = [NSValue valueWithCGSize:newSize];
+    } else if ([sender isEqual:[self stepperSizeHeight]]) {
+        valueChangedAction = @selector(setSizeheight:);
+        valueThatChanged = @([[self stepperSizeHeight] value]);
+        CGFloat fontSize = [[[self labelSizeHeight] font] pointSize];
+        NSAttributedString *displayHeight = [self sizeHeightForValue:valueThatChanged andFontSize:fontSize];
+        [[self labelSizeHeight] setAttributedText:displayHeight];
 
+    } else if ([sender isEqual:[self stepperSizeWidth]]) {
+        valueChangedAction = @selector(setSizewidth:);
+        valueThatChanged = @([[self stepperSizeWidth] value]);
         CGFloat fontSize = [[[self labelSizeWidth] font] pointSize];
-        NSAttributedString *displayHeight = [self sizeHeightForValue:@(newSize.height) andFontSize:fontSize];
-        NSAttributedString *displayWidth = [self sizeWidthForValue:@(newSize.width) andFontSize:fontSize];
+        NSAttributedString *displayWidth = [self sizeWidthForValue:valueThatChanged andFontSize:fontSize];
         [[self labelSizeWidth] setAttributedText:displayWidth];
-        [[self labelSizeWidth] setAttributedText:displayHeight];
         
     } else if ([sender isEqual:[self segmentedControlHorizontalAlignment]]) {
         valueChangedAction = @selector(setHorizontalAlignment:);
