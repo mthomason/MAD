@@ -52,16 +52,10 @@
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
     CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
+    
     MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
-    [[[self tableViewControllerTextLayoutSettings] labelFontName] setFont:[font font]];
-    [[[self tableViewControllerTextLayoutSettings] labelFontName] setText:[font name]];
+    [[self tableViewControllerTextLayoutSettings] chooseFont:font];
 
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-        [documentObject setFontname:[font name]];
-    }
-    [[AppDelegate activeDocument] saveContext];
     [font release];
     [[self navigationBarToolbox] popNavigationItemAnimated:YES];
 }
@@ -409,28 +403,6 @@
 }
 
 - (IBAction)info:(id)sender {
-    /*
-    //Make sure there are no information views open
-    [[self informationButton] setEnabled: NO];
-    
-    UIStoryboard *sbLblControl = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
-    UIViewControllerToolbox *lblControl = [[sbLblControl instantiateViewControllerWithIdentifier:@"LabelViewController"] retain];
-    [self setToolbox:lblControl];
-    [lblControl release];
-    [sbLblControl release];
-    
-    [[self toolbox] setDelegate: self];
-    [[[self toolbox] view] setFrame:[self toolboxOffScreen]];
-    [[self view] addSubview:[[self toolbox] view]];
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         [[[self toolbox] view] setFrame: [self toolboxOnScreen]];
-                         [[self designScrollView] setFrame:[self designScrollViewWithToolbox]];
-                     } completion:^(BOOL finished) {
-                         
-                     }];
-     */
     [self showToolbox:sender];
 }
 
@@ -554,7 +526,7 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 5.0000f;
+    return 50.0000f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {

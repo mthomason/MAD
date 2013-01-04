@@ -386,6 +386,22 @@
 		4C4C6F28167642D9004A3B04 /* MTVertex.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F20167642D9004A3B04 /* MTVertex.h */; };
 		4C4C6F29167642D9004A3B04 /* MTVertex.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F20167642D9004A3B04 /* MTVertex.h */; };
 		4C4C6F2A167643C9004A3B04 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
+		4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */; };
+		4C4C78C116960C23000ADD1D /* UIColor+Gradients.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */; };
+		4C4C78C816961EAC000ADD1D /* UIButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78C616961EAC000ADD1D /* UIButton.png */; };
+		4C4C78C916961EAC000ADD1D /* UIButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78C616961EAC000ADD1D /* UIButton.png */; };
+		4C4C78CA16961EAC000ADD1D /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78C716961EAC000ADD1D /* UIButton@2x.png */; };
+		4C4C78CB16961EAC000ADD1D /* UIButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78C716961EAC000ADD1D /* UIButton@2x.png */; };
+		4C4C78CE16962172000ADD1D /* UIButtonHighlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78CC16962172000ADD1D /* UIButtonHighlighted@2x.png */; };
+		4C4C78CF16962172000ADD1D /* UIButtonHighlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78CC16962172000ADD1D /* UIButtonHighlighted@2x.png */; };
+		4C4C78D016962172000ADD1D /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78CD16962172000ADD1D /* UIButtonHighlighted.png */; };
+		4C4C78D116962172000ADD1D /* UIButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78CD16962172000ADD1D /* UIButtonHighlighted.png */; };
+		4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */; };
+		4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */; };
+		4C4C78D816962944000ADD1D /* UIButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */; };
+		4C4C78D916962944000ADD1D /* UIButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */; };
+		4C4C78DA16962944000ADD1D /* UIButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D716962944000ADD1D /* UIButtonSelected.png */; };
+		4C4C78DB16962944000ADD1D /* UIButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D716962944000ADD1D /* UIButtonSelected.png */; };
 		4C507B1114D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */; };
 		4C507B1214D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.m */; };
 		4C507B1314D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkSecondField.m */; };
@@ -1723,6 +1739,16 @@
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
 		4C4C6F20167642D9004A3B04 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = ../libMTDataStrutures/libMTDataStrutures/MTVertex.h; sourceTree = "<group>"; };
+		4C4C78BE16960C23000ADD1D /* UIColor+Gradients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Gradients.h"; sourceTree = "<group>"; };
+		4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Gradients.m"; sourceTree = "<group>"; };
+		4C4C78C616961EAC000ADD1D /* UIButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButton.png; sourceTree = "<group>"; };
+		4C4C78C716961EAC000ADD1D /* UIButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButton@2x.png"; sourceTree = "<group>"; };
+		4C4C78CC16962172000ADD1D /* UIButtonHighlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonHighlighted@2x.png"; sourceTree = "<group>"; };
+		4C4C78CD16962172000ADD1D /* UIButtonHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonHighlighted.png; sourceTree = "<group>"; };
+		4C4C78D2169624A3000ADD1D /* UIImage+Resizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resizable.h"; sourceTree = "<group>"; };
+		4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizable.m"; sourceTree = "<group>"; };
+		4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonSelected@2x.png"; sourceTree = "<group>"; };
+		4C4C78D716962944000ADD1D /* UIButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonSelected.png; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkFirstField.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkFirstField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerSchemaAddLinkFirstField.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* UIViewControllerSchemaAddLinkJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerSchemaAddLinkJoinType.h; sourceTree = "<group>"; };
@@ -2658,6 +2684,12 @@
 		4C0E7860163B5C8D003B951E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */,
+				4C4C78D716962944000ADD1D /* UIButtonSelected.png */,
+				4C4C78CC16962172000ADD1D /* UIButtonHighlighted@2x.png */,
+				4C4C78CD16962172000ADD1D /* UIButtonHighlighted.png */,
+				4C4C78C616961EAC000ADD1D /* UIButton.png */,
+				4C4C78C716961EAC000ADD1D /* UIButton@2x.png */,
 				4C2AC2FA153573FB00738091 /* icon@2x.png */,
 				4C2AC2F71535736200738091 /* icon.png */,
 			);
@@ -3850,6 +3882,10 @@
 				4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */,
 				4C3727C0168A402A007DA7C3 /* UICollectionReusableView+Reuse.h */,
 				4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */,
+				4C4C78BE16960C23000ADD1D /* UIColor+Gradients.h */,
+				4C4C78BF16960C23000ADD1D /* UIColor+Gradients.m */,
+				4C4C78D2169624A3000ADD1D /* UIImage+Resizable.h */,
+				4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -4311,6 +4347,12 @@
 				4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
+				4C4C78C916961EAC000ADD1D /* UIButton.png in Resources */,
+				4C4C78CB16961EAC000ADD1D /* UIButton@2x.png in Resources */,
+				4C4C78CF16962172000ADD1D /* UIButtonHighlighted@2x.png in Resources */,
+				4C4C78D116962172000ADD1D /* UIButtonHighlighted.png in Resources */,
+				4C4C78D916962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
+				4C4C78DB16962944000ADD1D /* UIButtonSelected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4755,6 +4797,12 @@
 				4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
+				4C4C78C816961EAC000ADD1D /* UIButton.png in Resources */,
+				4C4C78CA16961EAC000ADD1D /* UIButton@2x.png in Resources */,
+				4C4C78CE16962172000ADD1D /* UIButtonHighlighted@2x.png in Resources */,
+				4C4C78D016962172000ADD1D /* UIButtonHighlighted.png in Resources */,
+				4C4C78D816962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
+				4C4C78DA16962944000ADD1D /* UIButtonSelected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5049,6 +5097,8 @@
 				4CF3393A1693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339451693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143816952E3B00114431 /* MTTextView.m in Sources */,
+				4C4C78C116960C23000ADD1D /* UIColor+Gradients.m in Sources */,
+				4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5495,6 +5545,8 @@
 				4CF339391693715100390B3A /* RptqDocumentSection.m in Sources */,
 				4CF339441693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143716952E3B00114431 /* MTTextView.m in Sources */,
+				4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */,
+				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

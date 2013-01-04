@@ -27,7 +27,7 @@
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
 @property (assign) BOOL displaySelected;
-@property (nonatomic, retain) MTTextView *displayLabel;
+@property (nonatomic, retain) UILabel *displayLabel;
 @property (nonatomic, retain) UIView *displayLabelBackground;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
@@ -71,40 +71,18 @@
         [self setDisplayHighlighted: NO];
         [self setManagedObjectContext:managedObjectContext];
         
-        //CGRect tableViewFrame = CGRectInset(frame, 16.0000f, 16.0000f);
-        CGRect tableViewBackgroundFrame = CGRectInset(frame, -8.0000f, -8.0000f);
         UIView *labelBackground = [[UIView alloc] initWithFrame:frame];
-        
         [labelBackground setClipsToBounds:YES];
-        [labelBackground setBackgroundColor:[UIColor lightGrayColor]];
+        [labelBackground setBackgroundColor:[UIColor clearColor]];
         [self addSubview:labelBackground];
-        //UIView *clippingView = [[UIView alloc] initWithFrame:frame];
-        //[clippingView setClipsToBounds:YES];
-        //[clippingView setBackgroundColor:[UIColor clearColor]];
-        //[labelBackground addSubview:clippingView];
-        //[clippingView release];
         [self setDisplayLabelBackground:labelBackground];
         [labelBackground release];
         
-        MTTextView *label = [[MTTextView alloc] initWithFrame:frame];
-        //[label addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
-        //[label addObserver:self forKeyPath:@"contentInset" options:(NSKeyValueObservingOptionNew) context:NULL];
-        //[label removeObserver:nil forKeyPath:@"contentInset"];
-        //[label setEditable:NO];
-        //[label setUserInteractionEnabled:NO];
-        //[label setClipsToBounds:YES];
-        //[[label layer] setBorderWidth:8.0000f];
-        //[[label layer] setBorderColor:[[UIColor purpleColor] CGColor]];
-        //[label setContentOffset:CGPointZero];
-        //[label setBackgroundColor:[UIColor greenColor]];
-        //for (UIView *view in [label subviews]) {
-        //    NSLog(@"View: %@", view);
-            
-        //}
+        UILabel *label = [[UILabel alloc] initWithFrame:frame];
+        [label setUserInteractionEnabled:NO];
+        [label setBackgroundColor:[UIColor clearColor]];
         [self addSubview:label];
         [self setDisplayLabel:label];
-        //self.displayLabel.contentInset = UIEdgeInsetsMake(-8.0000f, -8.0000f, -8.0000f, -8.0000f);
-        //self.displayLabel.contentOffset = CGPointZero;
         [label release];
 
         
@@ -115,30 +93,6 @@
                             object:managedObjectContext];
     }
     return self;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([object isKindOfClass:[UITextView class]]) {
-        UITextView *tableView = object;
-        if ([keyPath isEqualToString:@"contentSize"]) {
-            CGFloat topCorrect = ([tableView bounds].size.height - [tableView contentSize].height * [tableView zoomScale])  / 2.0;
-            topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
-            tableView.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
-            UIEdgeInsets eights = UIEdgeInsetsMake(-8.0000f, -8.0000f, -8.0000f, -16.0000f);
-            [tableView setContentInset:eights];
-        } else if ([keyPath isEqualToString:@"contentInset"]) {
-            UIEdgeInsets eights = UIEdgeInsetsMake(-8.0000f, -8.0000f, -8.0000f, -16.0000f);
-           // UIEdgeInsets eights  = UIEdgeInsetsMake(-32.0000f, -32.0000f, -32.0000f, -32.0000f);
-
-            UIEdgeInsets newValue = [[change valueForKey: NSKeyValueChangeNewKey] UIEdgeInsetsValue];
-
-            //NSLog(@"%@", );
-            if (!UIEdgeInsetsEqualToEdgeInsets(newValue, eights)) {
-                [tableView setContentInset:eights];
-            }
-            //[object setValue:[NSValue valueWithUIEdgeInsets:edgeInsets] forKey:@"contentInset"];
-        }
-    }
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
@@ -198,8 +152,7 @@
     CGFloat sizeHeight =  [self bounds].size.height - paddingTop - paddingBottom;
     CGRect newBoundsAfterPadding = CGRectMake(originX, originY, sizeWidth, sizeHeight);
     [[self displayLabelBackground] setFrame:newBoundsAfterPadding];
-    //[[self displayLabel] setFrame:newBoundsAfterPadding];
-    [[[self displayLabel] textView] setAttributedText:attributtedString];
+    [[self displayLabel] setAttributedText:attributtedString];
     
     MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
     NSTextAlignment textAlignment;
@@ -220,14 +173,13 @@
             textAlignment = NSTextAlignmentNatural;
             break;
     }
-    [[[self displayLabel] textView] setTextAlignment:textAlignment];
+    [[self displayLabel] setTextAlignment:textAlignment];
     
     MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-    //UIBaselineAdjustment baselineAdjustment;
+    UIBaselineAdjustment baselineAdjustment;
     switch (verticalAlignment) {
         case MTVerticalAlignmentTop: {
-            [[self displayLabel] verticalAlignTop];
-            /*
+            //[[self displayLabel] verticalAlignTop];
             [[self displayLabel] sizeToFit];
             CGFloat originX = [[self displayLabelBackground] frame].origin.x;
             CGFloat originY = [[self displayLabelBackground] frame].origin.y;
@@ -235,40 +187,29 @@
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
 
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            //baselineAdjustment = UIBaselineAdjustmentNone;*/
+            baselineAdjustment = UIBaselineAdjustmentNone;
             break;
         }
         case MTVerticalAlignmentCenter: {
-            [[self displayLabel] verticalAlignMiddle];
-/*
-            [[self displayLabel] setFrame:[[self displayLabelBackground] bounds]];*/
-            //baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+            [[self displayLabel] setFrame:[[self displayLabelBackground] bounds]];
+            baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             break;
         }
         case MTVerticalAlignmentBottom: {
-            [[self displayLabel] verticalAlignBottom];
-            /*
-            //Size the label to fit, then, make it so that it streatches the whole length.
             [[self displayLabel] sizeToFit];
-
-            
-            
-            //[[self displayLabel] setBounds:CGRectMake([[self displayLabel] bounds].origin.x, [[self displayLabel] bounds].origin.y, [[self displayLabelBackground] bounds].size.width, [[self displayLabel] bounds].size.height)];
             
             CGFloat originX = [[self displayLabelBackground] frame].origin.x;
             CGFloat originY = [[self displayLabelBackground] frame].origin.y + [[self displayLabelBackground] frame].size.height - [[self displayLabel] bounds].size.height;
             CGFloat sizeWidth = [[self displayLabelBackground] bounds].size.width;
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            //baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-             */
+            baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
             break;
         }
         default:
-            //baselineAdjustment = UIBaselineAdjustmentNone;
+            baselineAdjustment = UIBaselineAdjustmentNone;
             break;
     }
-    //[[self displayLabel] setBaselineAdjustment:baselineAdjustment];
     [[self displayLabel] setNeedsDisplay];
     [attributtedString release];
 }

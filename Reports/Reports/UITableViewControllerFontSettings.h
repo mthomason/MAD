@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTFont.h"
+
 @class UITableViewControllerFontSettings;
 
 @protocol FontSettingsTableViewControllerDelegate
@@ -28,10 +30,11 @@
 @property (retain, nonatomic) IBOutlet UIButton *buttonStrike;
 @property (retain, nonatomic) IBOutlet UIButton *buttonUnderline;
 
-- (IBAction)stepperFontSizeValueChanged:(id)sender;
 - (void)updateFontSizeDisplay;
-
+- (void)chooseFont:(MTFont *)font;
 - (void)initalizeDocumentObjects:(NSSet *)objectIds;    //Call this before you add view to super.
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds;  //This is called on viewWillAppear... only call on change.
+
+- (IBAction)controlValueChanged:(id)sender;
 
 @end
