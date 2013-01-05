@@ -77,15 +77,19 @@
         [self setDisplayHighlighted: NO];
         
         UIView *marginView = [self retain];
+        [marginView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [self setMarginView: marginView];
         [marginView release];
         
         UIView *visibleView = [[UIView alloc] initWithFrame:frame];
+        [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [visibleView setBackgroundColor:[UIColor redColor]];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
         [visibleView release];
         
         UIView *labelBackground = [[UIView alloc] initWithFrame:frame];
+        [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [labelBackground setClipsToBounds:YES];
         [labelBackground setBackgroundColor:[UIColor greenColor]];
         [[self visibleView] addSubview:labelBackground];
@@ -93,6 +97,7 @@
         [labelBackground release];
         
         UILabel *label = [[UILabel alloc] initWithFrame:frame];
+        [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [label setUserInteractionEnabled:NO];
         [label setBackgroundColor:[UIColor yellowColor]];
         [[self paddingView] addSubview:label];
@@ -126,7 +131,7 @@
             if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
                 [self updateDisplayLabel];
                 [self setNeedsDisplay];
-                break;
+                //break;
             }
         }
     }
@@ -174,6 +179,7 @@
     CGFloat sizeWidth = [self bounds].size.width - paddingLeft - paddingRight;
     CGFloat sizeHeight =  [self bounds].size.height - paddingTop - paddingBottom;
     CGRect newBoundsAfterPadding = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+    [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, [documentObject.sizewidth floatValue], [documentObject.sizeheight floatValue])];
     [[self paddingView] setFrame:newBoundsAfterPadding];
     [[self displayLabel] setAttributedText:attributtedString];
     
@@ -204,28 +210,31 @@
         case MTVerticalAlignmentTop: {
             //[[self displayLabel] verticalAlignTop];
             [[self displayLabel] sizeToFit];
-            CGFloat originX = [[self paddingView] frame].origin.x;
-            CGFloat originY = [[self paddingView] frame].origin.y;
+            CGFloat originX = CGPointZero.x;
+            CGFloat originY = CGPointZero.y;
             CGFloat sizeWidth = [[self paddingView] bounds].size.width;
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
 
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
+            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
             baselineAdjustment = UIBaselineAdjustmentNone;
             break;
         }
         case MTVerticalAlignmentCenter: {
             [[self displayLabel] setFrame:[[self paddingView] bounds]];
+            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
             baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             break;
         }
         case MTVerticalAlignmentBottom: {
             [[self displayLabel] sizeToFit];
             
-            CGFloat originX = [[self paddingView] frame].origin.x;
-            CGFloat originY = [[self paddingView] frame].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
+            CGFloat originX = CGPointZero.x;
+            CGFloat originY = CGPointZero.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
             CGFloat sizeWidth = [[self paddingView] bounds].size.width;
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
+            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
             baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
             break;
         }

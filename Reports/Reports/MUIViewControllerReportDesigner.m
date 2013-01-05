@@ -30,12 +30,11 @@
 @property (assign) BOOL imageInformationViewIsVisable;
 @property (assign) BOOL labelInformationViewIsVisable;
 
-@property (nonatomic, retain) NSMutableArray *scrollViewFrames;
-
 // MARK: Needed for the toolbox.
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
 @property (nonatomic, retain) UIScrollView *toolboxScrollView;
 @property (nonatomic, retain) UIView *toolboxBackgroundView;
+
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
 
@@ -85,7 +84,6 @@
     [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
 
-    [_scrollViewFrames release];
     [_sections release];
     [_toolbox release];
     [_settingsPopoverController release];
@@ -154,12 +152,9 @@
         if (ctr > 0) frame.origin.y += frame.size.height + 10.0000f;
         frame.size.height = [[sec height] floatValue];
         
-        [[self scrollViewFrames] addObject:[NSValue valueWithCGRect:frame]];
-
         MTCollectionViewFlowLayoutDesignerSection *layout = [[MTCollectionViewFlowLayoutDesignerSection alloc] init];
         
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        
         
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
         
@@ -322,10 +317,43 @@
             RptqDocumentObject *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             for (id change in changes) {
+                
+                // MARK: Changing the size of the element must change the size of the cell that holds it.
                 if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))]) {
                     MTLog(@"Change That Width");
+                    RptqDocumentSection *documentSection = [documentObject inSection];
+                    UICollectionView *collectionView = [self getCollectionViewForRptqSection:documentSection];
+                    [[collectionView collectionViewLayout] invalidateLayout];
+                    
+                    /*
+                    for (UICollectionView *collectionView in [[self sections] allValues]) {
+                        NSInteger numberOfSections = [collectionView numberOfSections];
+                        for (NSInteger sectionIterator = 0; sectionIterator < numberOfSections; sectionIterator++) {
+                            NSInteger numberOfItems = [collectionView numberOfItemsInSection:sectionIterator];
+                            for (NSInteger itemIterator = 0; itemIterator < numberOfItems; itemIterator++) {
+                                NSIndexPath *collectionViewIterator = [NSIndexPath indexPathForItem:itemIterator inSection:sectionIterator];
+                                MTElementView *elementView = [self elementViewAtIndexPath:collectionViewIterator inCollectionView:collectionView];
+                                if ([[elementView objectIdTag] isEqual:[documentObject objectID]]) {
+                                    UICollectionViewLayoutAttributes *layoutAttributes = [collectionView layoutAttributesForItemAtIndexPath:collectionViewIterator];
+                                    layoutAttributes.size = CGSizeMake([[documentObject sizewidth] floatValue], layoutAttributes.size.height);
+                                    
+                                    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:collectionViewIterator];
+                                    
+                                }
+                            }
+                        }
+                    }
+                    
+                    for (NSManagedObjectID *objectId in [self selectedElementViews]) {
+
+                    }
+                     */
+                    
                 } else if ([change isEqualToString:NSStringFromSelector(@selector(sizeheight))]) {
                     MTLog(@"Change That Height");
+                    RptqDocumentSection *documentSection = [documentObject inSection];
+                    UICollectionView *collectionView = [self getCollectionViewForRptqSection:documentSection];
+                    [[collectionView collectionViewLayout] invalidateLayout];
                 }
             }
         }
@@ -599,7 +627,6 @@
     } else {
         result = CGSizeZero;
     }
-    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
     return result;
 }
 
