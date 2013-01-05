@@ -57,6 +57,8 @@
 @property (retain, nonatomic) UIViewControllerToolbox *toolbox;
 @property (retain, nonatomic) NSMutableDictionary *sections;
 
+@property (readonly, nonatomic, retain) NSMutableArray *selectedElementViews;
+
 @property (assign) CGRect designScrollViewNormal;
 @property (assign) CGRect designScrollViewWithToolbox;
 @property (assign) CGRect toolboxOffScreen;

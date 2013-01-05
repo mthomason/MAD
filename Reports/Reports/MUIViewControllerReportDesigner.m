@@ -39,6 +39,8 @@
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
 
+@property (nonatomic, retain) NSMutableArray *selectedElementViews;
+
 @property (retain, nonatomic) UITableViewControllerFontSettings *tableViewControllerTextLayoutSettings;
 @property (retain, nonatomic) UITableViewControllerFontSelector *tableViewControllerFontSelector;
 
@@ -116,6 +118,10 @@
     [super viewDidLoad];
     
     
+    NSMutableArray *selectedElementViews = [[NSMutableArray alloc] init];
+    [self setSelectedElementViews:selectedElementViews];
+    [selectedElementViews release];
+
     //CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
     
     [self setToolboxIsVisible:NO];
@@ -241,11 +247,20 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contextChanged:)
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification
-                                               object:managedObjectContext];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidChange:)
+                          name: NSManagedObjectContextObjectsDidChangeNotification
+                        object: managedObjectContext];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidSave:)
+                          name: NSManagedObjectContextDidSaveNotification
+                        object: managedObjectContext];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -254,9 +269,16 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:NSManagedObjectContextObjectsDidChangeNotification
-                                                  object:managedObjectContext];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+
+    [defaultCenter removeObserver:self
+                             name:NSManagedObjectContextObjectsDidChangeNotification
+                           object:managedObjectContext];
+
+    [defaultCenter removeObserver:self
+                             name:NSManagedObjectContextDidSaveNotification
+                           object:managedObjectContext];
+
     [super viewDidDisappear:animated];
 }
 
@@ -292,8 +314,26 @@
 
 #pragma mark - Core Data Notifications
 
-- (void)contextChanged:(NSNotification *)notification {
+- (void)managedObjectContextDidChange:(NSNotification *)notification {
+    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
     
+    for (id updatedObject in updatedObjects) {
+        if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
+            RptqDocumentObject *documentObject = updatedObject;
+            NSDictionary *changes = [documentObject changedValues];
+            for (id change in changes) {
+                if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))]) {
+                    MTLog(@"Change That Width");
+                } else if ([change isEqualToString:NSStringFromSelector(@selector(sizeheight))]) {
+                    MTLog(@"Change That Height");
+                }
+            }
+        }
+    }    
+}
+
+- (void)managedObjectContextDidSave:(NSNotification *)notification {
+
 }
 
 #pragma mark - Actions
@@ -577,8 +617,6 @@
     UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:[MTCollectionViewCellElement reuseIdentifier]
                                                                             forIndexPath:indexPath] retain];
     
-    //[[[collectionView] tag]
-    
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [documentSection hasObjects];
@@ -745,6 +783,7 @@
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:NO];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+    [[self selectedElementViews] removeObject:[elementView objectIdTag]];
     MTLog(@"Deselect");
 }
 
@@ -758,6 +797,7 @@
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:YES];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+    [[self selectedElementViews] addObject:[elementView objectIdTag]];
     MTLog(@"Select");
 }
 

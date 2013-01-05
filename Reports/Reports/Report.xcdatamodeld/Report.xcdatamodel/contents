@@ -49,8 +49,8 @@
         <attribute name="paddingTop" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="sectionIndexItem" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="sectionIndexRow" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="sizeheight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="sizewidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sizeheight" attributeType="Float" defaultValueString="44" syncable="YES"/>
+        <attribute name="sizewidth" attributeType="Float" defaultValueString="100" syncable="YES"/>
         <attribute name="strike" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="underline" optional="YES" attributeType="Boolean" syncable="YES"/>
