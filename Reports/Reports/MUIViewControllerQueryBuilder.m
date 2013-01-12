@@ -1252,7 +1252,7 @@
             self.title = newfrc.fetchRequest.entity.name;
         }
         if (newfrc) {
-            NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
+            //NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetchTables];
         } else {
@@ -1289,7 +1289,7 @@
             self.title = newfrc.fetchRequest.entity.name;
         }
         if (newfrc) {
-            NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
+            //NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetchLinks];
         } else {
@@ -1326,7 +1326,7 @@
             self.title = fetchedResultsControllerGroups.fetchRequest.entity.name;
         }
         if (fetchedResultsControllerGroups) {
-            NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
+            //NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetchGroups];
         } else {
@@ -1363,7 +1363,7 @@
             self.title = fetchedResultsControllerPredicates.fetchRequest.entity.name;
         }
         if (fetchedResultsControllerPredicates) {
-            NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
+            //NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetchPredicate];
         } else {

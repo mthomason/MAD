@@ -16,6 +16,7 @@
 #import "Constants.h"
 #import "MTFont.h"
 #import "MTTextView.h"
+#import "UIColor+EverydayApps.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -24,10 +25,12 @@
 
 @interface MTElementView ()
 
-@property (nonatomic, retain) UIView *marginView;
-@property (nonatomic, retain) UIView *visibleView;
-@property (nonatomic, retain) UIView *paddingView;
-@property (nonatomic, retain) UILabel *displayLabel;
+// This element view is made of four total views.
+
+@property (nonatomic, retain) UILabel *displayLabel;    //Display label floats in the padding
+@property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
+@property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
+@property (nonatomic, retain) UIView *marginView;       //[self view]
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
@@ -67,43 +70,52 @@
                                  userInfo: nil];
 }
 
-- (id)initWithFrame:(CGRect)frame andObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    self = [super initWithFrame:frame];
+- (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    self = [super initWithFrame:CGRectZero];
     if (self) {
         [self setObjectIdTag:objectId];
         [self setManagedObjectContext:managedObjectContext];
+        
+        //CGRect frame = [self marginViewBounds];
 
+        [self setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self setDisplayWobbling: NO];
         [self setDisplayHighlighted: NO];
         
         UIView *marginView = [self retain];
-        [marginView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        //[marginView setFrame: frame];
+        [marginView setBackgroundColor:[UIColor yellowColor]];
+        [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
         
-        UIView *visibleView = [[UIView alloc] initWithFrame:frame];
-        [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [visibleView setBackgroundColor:[UIColor redColor]];
+        //CGRect visibleFrame = [self visibleFrame];
+        MTViewBordered *visibleView = [[MTViewBordered alloc] initWithFrame:CGRectZero];
+        [visibleView setClipsToBounds:YES];
+        [visibleView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [visibleView setAutoresizingMask:UIViewAutoresizingNone];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
         [visibleView release];
         
-        UIView *labelBackground = [[UIView alloc] initWithFrame:frame];
-        [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
-        [labelBackground setBackgroundColor:[UIColor greenColor]];
+        [labelBackground setBackgroundColor:[UIColor clearColor]];
+        [labelBackground setAutoresizingMask:UIViewAutoresizingNone];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
         [labelBackground release];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:frame];
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         [label setUserInteractionEnabled:NO];
-        [label setBackgroundColor:[UIColor yellowColor]];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [label setAutoresizingMask:UIViewAutoresizingNone];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];
         [label release];
 
+        [self updateDisplayLabel];
+        
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver:self
                           selector:@selector(managedObjectContextDidSave:)
@@ -113,15 +125,41 @@
     return self;
 }
 
-- (CGRect)marginViewRect {
+- (CGRect)marginViewBounds {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-
-    CGFloat marginOriginX = self.frame.origin.x - [[documentObject marginLeft] floatValue];
-    CGFloat marginOriginY = self.frame.origin.y - [[documentObject marginTop] floatValue];
-    CGFloat marginSizeWidth = self.frame.size.width + [[documentObject marginLeft] floatValue] + [[documentObject marginRight] floatValue];
-    CGFloat marginSizeHeight = self.frame.size.width + [[documentObject marginTop] floatValue] + [[documentObject marginBottom] floatValue];
-    return CGRectMake(marginOriginX, marginOriginY, marginSizeWidth, marginSizeHeight);
+    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+    
+    CGRect paddingBounds = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                      elementBounds.size.width + [[documentObject paddingLeft] floatValue] + [[documentObject paddingRight] floatValue],
+                                      elementBounds.size.height + [[documentObject paddingTop] floatValue] + [[documentObject paddingBottom] floatValue]);
+    
+    CGFloat marginBoundsSizeWidth = [[documentObject marginLeft] floatValue] + [[documentObject marginRight] floatValue] + paddingBounds.size.width;
+    CGFloat marginBoundsSizeHeight = [[documentObject marginTop] floatValue] + [[documentObject marginBottom] floatValue] + paddingBounds.size.height;
+    CGRect marginBounds = CGRectMake(CGPointZero.x, CGPointZero.y, marginBoundsSizeWidth, marginBoundsSizeHeight);
+    
+    return marginBounds;
 }
+
+- (CGRect)elementFrame {
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+    CGFloat elementFrameOriginX =  CGPointZero.x + [[documentObject marginLeft] floatValue];
+    CGFloat elementFrameOriginY = CGPointZero.y + [[documentObject marginTop] floatValue];
+    CGRect elementFrame = CGRectMake(elementFrameOriginX, elementFrameOriginY,
+                                     elementBounds.size.width, elementBounds.size.height);
+    return elementFrame;
+}
+
+- (CGRect)visibleFrame {
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+    
+    return CGRectMake(CGPointZero.x + [[documentObject marginLeft] floatValue],
+                      CGPointZero.y + [[documentObject marginTop] floatValue],
+                      elementBounds.size.width + [[documentObject paddingLeft] floatValue] + [[documentObject paddingRight] floatValue],
+                      elementBounds.size.height + [[documentObject paddingTop] floatValue] + [[documentObject paddingBottom] floatValue]);
+}
+
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
@@ -131,7 +169,7 @@
             if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
                 [self updateDisplayLabel];
                 [self setNeedsDisplay];
-                //break;
+                break;
             }
         }
     }
@@ -141,8 +179,12 @@
 - (void)updateDisplayLabel {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
     
+    [[self marginView] setFrame:[self marginViewBounds]];
+    [[self visibleView] setFrame:[self elementFrame]];
+    
     NSString *fontName = [documentObject fontname];
     CGFloat pointSize = [[documentObject fontsize] floatValue];
+    
     UIFont *displayFont;
     if ([fontName length] == 0) {
         displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
@@ -165,8 +207,8 @@
     
     NSDictionary *attributes = @{NSFontAttributeName : displayFont,
                                     NSStrikethroughStyleAttributeName : strikeThroughStyle,
-                                    NSUnderlineStyleAttributeName : underlineStyle
-    };
+                                    NSUnderlineStyleAttributeName : underlineStyle};
+
     NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
     
     
@@ -179,9 +221,9 @@
     CGFloat sizeWidth = [self bounds].size.width - paddingLeft - paddingRight;
     CGFloat sizeHeight =  [self bounds].size.height - paddingTop - paddingBottom;
     CGRect newBoundsAfterPadding = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-    [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, [documentObject.sizewidth floatValue], [documentObject.sizeheight floatValue])];
     [[self paddingView] setFrame:newBoundsAfterPadding];
     [[self displayLabel] setAttributedText:attributtedString];
+    
     
     MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
     NSTextAlignment textAlignment;
@@ -208,33 +250,30 @@
     UIBaselineAdjustment baselineAdjustment;
     switch (verticalAlignment) {
         case MTVerticalAlignmentTop: {
-            //[[self displayLabel] verticalAlignTop];
+            
             [[self displayLabel] sizeToFit];
-            CGFloat originX = CGPointZero.x;
-            CGFloat originY = CGPointZero.y;
+            CGFloat originX = [[self paddingView] bounds].origin.x;
+            CGFloat originY = [[self paddingView] bounds].origin.y;
             CGFloat sizeWidth = [[self paddingView] bounds].size.width;
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
 
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
             baselineAdjustment = UIBaselineAdjustmentNone;
             break;
         }
         case MTVerticalAlignmentCenter: {
             [[self displayLabel] setFrame:[[self paddingView] bounds]];
-            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
             baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             break;
         }
         case MTVerticalAlignmentBottom: {
             [[self displayLabel] sizeToFit];
             
-            CGFloat originX = CGPointZero.x;
-            CGFloat originY = CGPointZero.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
+            CGFloat originX = [[self paddingView] bounds].origin.x;
+            CGFloat originY = [[self paddingView] bounds].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
             CGFloat sizeWidth = [[self paddingView] bounds].size.width;
             CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
             [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            [[self displayLabel] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
             baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
             break;
         }
@@ -245,25 +284,20 @@
     [[self displayLabel] setNeedsDisplay];
     [attributtedString release];
 }
-
+/*
 - (void)drawRect:(CGRect)rect {
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, rect);
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, path);
-    [[UIColor whiteColor] setFill];
+    [[UIColor edaBlackFiftyPercent] setFill];
     [[UIColor blackColor] setStroke];
     if ([self highlight] || [self isSelected]) {
         [[UIColor redColor] setStroke];
     } else {
         [[UIColor blackColor] setStroke];
     }
-    float dashPhase = 0.0;
-    float dashLengths[] = { 7, 3, 7, 3, 7, 3 };
-    CGContextSetLineDash(currentContext,
-                         dashPhase, dashLengths,
-                         sizeof( dashLengths ) / sizeof( float ) );
-    CGContextSetLineWidth(currentContext, 5.0000f);
+    CGContextSetLineWidth(currentContext, 1.0000f);
     CGContextDrawPath(currentContext, kCGPathFillStroke);
     if ([self highlight] || [self isSelected]) {
         [[UIColor redColor] set];
@@ -273,7 +307,7 @@
 
     CGPathRelease(path);
     
-}
+}*/
 
 #pragma mark - Members
 

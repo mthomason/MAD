@@ -37,4 +37,6 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 - (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value;
 - (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value;
 
+- (NSString *)sectionKey;
+
 @end

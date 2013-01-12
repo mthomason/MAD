@@ -79,6 +79,15 @@
     }
 }
 
+- (NSString *)sectionKey {
+    NSCharacterSet *nonAumericCharacterSet = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
+    NSString *objectIdAsUrlString = [[[self objectID] URIRepresentation] absoluteString];
+    NSString *section = [NSString stringWithFormat:@"%d", [[self identifier] integerValue]];
+    NSArray *components = [objectIdAsUrlString componentsSeparatedByCharactersInSet:nonAumericCharacterSet];
+    NSString *key = [components componentsJoinedByString: section];
+    return key;
+}
+
 #pragma mark - Static
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
@@ -157,7 +166,7 @@
                 //                                                               ascending: YES];
                 //NSArray *groupSorted = [[[groupsUnsorted allObjects] sortedArrayUsingDescriptors: [NSArray arrayWithObject:sortDescriptor]] retain];
                 for (RptqQueryGroup *group in groupsUnsorted) {
-                    NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
+                    //NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
                     if ([[group weight] integerValue] == groupNumber) {
                         NSSet *sections = [[group hasSection] retain];
                         for (RptqDocumentSection *section in sections) {
@@ -175,7 +184,7 @@
                 break;
             }
             case MNSDocumentSectionTypeGroupFooter: {
-                NSLog(@"Get GF, %d", row);
+                //NSLog(@"Get GF, %d", row);
                 NSInteger body              = 2 + numberOfGroups;
                 NSInteger indentLevel = body - (row - body);
                 NSInteger groupNumber = indentLevel - 2;
@@ -197,7 +206,7 @@
                 break;
             }
             default:
-                NSLog(@"Get Default, %d", row);
+                //NSLog(@"Get Default, %d", row);
                 
                 break;
         }

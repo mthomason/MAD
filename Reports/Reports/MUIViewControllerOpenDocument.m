@@ -16,6 +16,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 @interface MUIViewControllerOpenDocument()
 
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemTitle;
 
 @end
 
@@ -26,6 +27,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
     [_tableViewControllerDataSourceTypes release];
     [_tableViewQueries release];
     [_toolbar release];
+    [_barButtonItemTitle release];
     [super dealloc];
 }
 
@@ -60,7 +62,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     //[[UIToolbar appearance] setTintColor:[UIColor clearColor]];
 
 	// Do any additional setup after loading the view, typically from a nib.
@@ -264,13 +265,23 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
     [barButtonItem release];
 }
 
+- (IBAction)about:(id)sender {
+    NSString *title = NSLocalizedString(@"About Reports", @"About Reports");
+    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.", @"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.");
+    NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
+    [UIAlertView showAlertViewWithTitle: title
+                                message: message
+                      cancelButtonTitle: buttonTitle
+                       otherButtonTitle: nil onDismiss: nil onCancel: nil];
+}
+
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated:YES];
+        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated: YES];
         [self setTableViewControllerDataSourceTypes: nil];
     }
     [AppDelegate setActiveDocument: nil];
@@ -499,4 +510,8 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
  }
  */
 
+- (void)viewDidUnload {
+    [self setBarButtonItemTitle:nil];
+    [super viewDidUnload];
+}
 @end

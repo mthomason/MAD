@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "UIViewResizeHandle.h"
+#import "MTViewBordered.h"
 
 @interface MTElementView : UIView;
 
@@ -21,7 +22,7 @@
 - (void)setSelected:(BOOL)selected;
 - (BOOL)isSelected;
 
-- (id)initWithFrame:(CGRect)frame andObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (void)updateDisplayLabel;
 

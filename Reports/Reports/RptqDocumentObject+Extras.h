@@ -21,5 +21,6 @@ typedef NS_ENUM(NSUInteger, MNSSectionType) {
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (MNSSectionType)getType;
+- (CGSize)viewSize;
 
 @end

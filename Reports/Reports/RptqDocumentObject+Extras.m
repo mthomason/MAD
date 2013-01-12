@@ -76,8 +76,27 @@
     }
 }
 
-#pragma mark - Static
+- (CGSize)elementViewSize {
+    return CGSizeMake([[self sizewidth] floatValue], [[self sizeheight] floatValue]);
+}
 
+- (CGSize)paddingViewSize {
+    CGSize elementSize = [self elementViewSize];
+    return CGSizeMake(elementSize.width + [[self paddingLeft] floatValue] + [[self paddingRight] floatValue],
+                      elementSize.height + [[self paddingTop] floatValue] + [[self paddingBottom] floatValue]);
+}
+
+- (CGSize)marginViewSize {
+    CGSize paddingSize = [self paddingViewSize];
+    return CGSizeMake(paddingSize.width + [[self marginLeft] floatValue] + [[self marginRight] floatValue],
+                      paddingSize.height + [[self marginTop] floatValue] + [[self marginBottom] floatValue]);
+}
+
+- (CGSize)viewSize {
+    return [self marginViewSize];
+}
+
+#pragma mark - Static
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];

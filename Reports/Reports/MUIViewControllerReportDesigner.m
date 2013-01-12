@@ -7,70 +7,63 @@
 //
 
 #import "MUIViewControllerReportDesigner.h"
-#import "MTCollectionViewCellElement.h"
-#import "SectionEnumerator.h"
-#import "AppDelegate.h"
-#import "UIView+StringTag.h"
-#import "UICollectionView+Extras.h"
-#import "UIView+NSObjectIdTag.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "UICollectionViewCell+Reuse.h"
-#import "UICollectionReusableView+Reuse.h"
-#import "MTCollectionReuseableViewDefault.h"
-#import "MTCollectionReusableViewFloatingLabel.h"
-#import "MTElementView.h"
-#import "MTCollectionViewSection.h"
-#import "MTFont.h"
 
 @interface MUIViewControllerReportDesigner()
     <FontSettingsTableViewControllerDelegate,
         UITableViewControllerFontSelectorDelegate>
 
-@property (assign) BOOL formualInformationViewIsVisable;
-@property (assign) BOOL imageInformationViewIsVisable;
-@property (assign) BOOL labelInformationViewIsVisable;
+@property (assign) BOOL toolboxIsVisible;
 
-// MARK: Needed for the toolbox.
+@property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
+
+@property (nonatomic, retain) NSMutableDictionary *sectionViews;
+
+@property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
+
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
-@property (nonatomic, retain) UIScrollView *toolboxScrollView;
 @property (nonatomic, retain) UIView *toolboxBackgroundView;
+@property (nonatomic, retain) UIScrollView *toolboxScrollView;
+@property (nonatomic, retain) UITableViewControllerFontSettings *tableViewControllerTextLayoutSettings;
+@property (nonatomic, retain) UITableViewControllerFontSelector *tableViewControllerFontSelector;
 
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
+@property (nonatomic, retain) NSArray *layoutConstraintsToolboxVisiable;
+@property (nonatomic, retain) NSArray *layoutConstraintsToolboxHidden;
+@property (nonatomic, retain) NSArray *toolbarTopItems;
+@property (nonatomic, retain) NSArray *toolbarBottomItems;
 
-@property (nonatomic, retain) NSMutableArray *selectedElementViews;
+@property (nonatomic, retain) IBOutlet UIView *toolboxView;
+@property (nonatomic, retain) IBOutlet UIView *toolboxContainerView;
 
-@property (retain, nonatomic) UITableViewControllerFontSettings *tableViewControllerTextLayoutSettings;
-@property (retain, nonatomic) UITableViewControllerFontSelector *tableViewControllerFontSelector;
+@property (nonatomic, retain) IBOutlet UIButton *informationButton;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemInfo;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSettings;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemObjects;
 
-@property (assign) BOOL toolboxIsVisible;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
+
+@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBarToolbox;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
+
+@property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @end
 
 @implementation MUIViewControllerReportDesigner
 
-#pragma mark - UITableViewControllerFontSelectorDelegate
-
-- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
-    CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
-    
-    MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
-    [[self tableViewControllerTextLayoutSettings] chooseFont:font];
-
-    [font release];
-    [[self navigationBarToolbox] popNavigationItemAnimated:YES];
-}
-
-#pragma mark - FontSettingsTableViewControllerDelegate
-
-- (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
-    [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
-    
-}
-
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_toolbarTopItems release];
+    [_toolbarBottomItems release];
+    
+    [_layoutConstraintsToolboxHidden release];
+    [_layoutConstraintsToolboxVisiable release];
+    
     [_navigationItemStyle release];
     [_navigationItemLayout release];
     [_navigationItemFontChooser release];
@@ -84,8 +77,7 @@
     [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
 
-    [_sections release];
-    [_toolbox release];
+    [_sectionViews release];
     [_settingsPopoverController release];
     [_designScrollView release];
     [_informationButton release];
@@ -97,6 +89,7 @@
     [_toolboxView release];
     [_toolboxContainerView release];
     [_navigationBarToolbox release];
+    [_layoutConstraintsToRemove release];
     [super dealloc];
 }
 
@@ -109,131 +102,152 @@
 #pragma mark - View lifecycle
 
 - (void)awakeFromNib {
-
+    [super awakeFromNib];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setToolbarTopItems:[[self toolbarTop] items]];
+    [self setToolbarBottomItems:[[self toolbarBottom] items]];
     
-    NSMutableArray *selectedElementViews = [[NSMutableArray alloc] init];
-    [self setSelectedElementViews:selectedElementViews];
-    [selectedElementViews release];
+    NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
+    NSMutableString *stringContstraintsVertical = [[NSMutableString alloc] initWithString:@"V:|"];
+    NSMutableDictionary *dictionaryViewsVertical = [[NSMutableDictionary alloc] init];
+    CGFloat paddingBorder = 3.0000f, paddingLabel = 2.0000f, heightLabel = 12.0000f,cornerRadius = 5.0000f;
+    UICollectionView *lastCollectionView = nil;
+    NSInteger sectionCounter = 0;
+    
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
 
-    //CGFloat paperWidth = CGFloatPointsForInches(8.5000f);
+    NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setSectionViews: dictionarySections];
+    [dictionarySections release];
+
+    // MARK: Setup horizontal constraints.
+    [[self view] removeConstraints:[self layoutConstraintsToRemove]];
+
+     NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
+    NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+    NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+
+    [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight, layoutConstraintToolbarBottomHeight]];
+
+    NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
+    NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
+    NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+    [[self view] addConstraint:layoutConstraintToolboxHeightHidden];
+
+    [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
+
+     NSLayoutConstraint *layoutConstraintToolbarTopBottomToDesignViewTop = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+     [[self view] addConstraint:layoutConstraintToolbarTopBottomToDesignViewTop];
+     
+     NSLayoutConstraint *layoutConstraintToolbarBottomTopToDesignerBottom = [NSLayoutConstraint constraintWithItem: [self designScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+     [[self view] addConstraint:layoutConstraintToolbarBottomTopToDesignerBottom];
+     
+     NSLayoutConstraint *layoutConstraintToolboxTopToBottomToolbarBottom = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+     [[self view] addConstraint:layoutConstraintToolboxTopToBottomToolbarBottom];
+    
+     NSLayoutConstraint *layoutConstraintToolboxVisible = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f];
+    [[self view] addConstraint:layoutConstraintToolboxVisible];
     
     [self setToolboxIsVisible:NO];
     
-    CGPoint origin = CGPointMake(5.0000f, 5.0000f);
-    //CGRect frame = CGRectMake(origin.x, origin.y, paperWidth, CGSizeZero.height);
-    CGRect frame = CGRectMake(origin.x, origin.y, self.view.frame.size.width - 10.0000f, CGSizeZero.height);
-    
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
-    NSInteger ctr = 0;
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:[enumerator count]];
-    [self setSections: dict];
-    [dict release];
-    
-    frame.size.height = 22.0000f;
-    
-    NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
-    
+    for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
-    //NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
-    //NSString *supplmentaryViewReuseIdFloatingLabel = [MTCollectionReusableViewFloatingLabel reuseIdentifier];
-    
-//    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Info", @"Info")
-//                                                      action:@selector(customAction:)];
-//    [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:menuItem]];
-    
-    for (RptqDocumentSection *sec in enumerator) {
+        CGFloat paddingTop = sectionCounter == 0 ? paddingBorder : (2 * paddingBorder);
+        [lastCollectionView  release];  //Should be nil on first pass.
 
-        if (ctr > 0) frame.origin.y += frame.size.height + 10.0000f;
-        frame.size.height = [[sec height] floatValue];
         
-        MTCollectionViewFlowLayoutDesignerSection *layout = [[MTCollectionViewFlowLayoutDesignerSection alloc] init];
-        
-        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        
-        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
-        
-        [collectionView registerClass:[MTCollectionViewCellElement class]
-           forCellWithReuseIdentifier: collectionViewReuseId];
+        // MARK: Create collection view for report document section.
+        MTCollectionViewFlowLayoutDesignerSection *flowLayoutDesignerSection = [[MTCollectionViewFlowLayoutDesignerSection alloc] init];
+        [flowLayoutDesignerSection setScrollDirection:UICollectionViewScrollDirectionHorizontal];
 
-        /*
-        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
-           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
-        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
-           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
-
-        [collectionView registerClass:[MTCollectionReusableViewFloatingLabel class]
-           forSupplementaryViewOfKind:MTCollectionElementKindSectionLabel
-                  withReuseIdentifier:supplmentaryViewReuseIdFloatingLabel];
-         */
-        [collectionView setTag:[[sec identifier] integerValue]];
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: collectionViewReuseId];
+        [collectionView setTag:[[reportSection identifier] integerValue]];
         [collectionView setDelegate:self];
         [collectionView setDataSource:self];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
-        [[collectionView layer] setCornerRadius:5.0000f];
         [collectionView setClipsToBounds:YES];
-        [collectionView setObjectIdTag:[sec objectID]];
+        [collectionView setObjectIdTag:[reportSection objectID]];
         [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
         [collectionView setAllowsSelection:YES];
         [collectionView setAllowsMultipleSelection:YES];
-        UIView *backgroundView = [[UIView alloc] initWithFrame:[collectionView frame]];
-
-        CGFloat labelHeight = 14.0000f;
-        CGFloat labelWidth = 70.0000f;
-        CGRect labelFrame = CGRectMake((frame.origin.x + frame.size.width) - labelWidth,
-                                       (frame.origin.y + frame.size.height) - labelHeight,
-                                       labelWidth,
-                                       labelHeight);
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
-        [label setTextAlignment:NSTextAlignmentCenter];
-        [[label layer] setCornerRadius:5.0000f];
-        [label setFont:[UIFont systemFontOfSize:8.0000f]];
-        [label setText:[sec localizedDisplayName]];
-        [label setBackgroundColor:[UIColor edaYellow]];
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [collectionView setBackgroundView:backgroundView];
+        [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [[collectionView layer] setCornerRadius:cornerRadius];
         
-
         [[self designScrollView] addSubview:collectionView];
-        [self setCollectionView:collectionView forSection:sec];
 
-        [[self designScrollView] addSubview:label];
+        // MARK: Create label to identify document section.
+        UILabel *labelSectionIdentifer = [[UILabel alloc] init];
+        [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
+        [[labelSectionIdentifer layer] setCornerRadius:cornerRadius];
+        [labelSectionIdentifer setFont:[UIFont systemFontOfSize:8.0000f]];
+        [labelSectionIdentifer setText:[reportSection localizedDisplayName]];
+        [labelSectionIdentifer setBackgroundColor:[UIColor edaYellow]];
+        [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+        [[self designScrollView] addSubview:labelSectionIdentifer];
         
-
         
-        [label release];
+        // MARK: Setup vert auto layout
+        NSString *collectionViewKey = [reportSection sectionKey];
+        NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
+        
+        [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
+        [dictionaryViewsVertical setValue:labelSectionIdentifer forKey:labelKey];
+        [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
+        
+        [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, [[reportSection height] floatValue], - paddingLabel - heightLabel, labelKey, heightLabel];
+        
+        NSLayoutConstraint *layoutConstraintCenter = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeCenterX relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeCenterX multiplier: 1.0000f constant: 0.0000f];
+        [[self designScrollView] addConstraint:layoutConstraintCenter];
+        
+        NSLayoutConstraint *layoutConstraintRight = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: paddingLabel];
+        [[self designScrollView] addConstraint:layoutConstraintRight];
 
-        [layout release];
+        NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 1.0000f constant: -(paddingBorder * 2.0000f)];
+        [[self designScrollView] addConstraint:layoutConstraintWidth];
+
+        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f];
+        [[self designScrollView] addConstraint:layoutConstraintLabelWidth];
+        
+        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: 0.0000f];
+        [[self designScrollView] addConstraint:layoutConstraintLabelRight];
+
+        [labelSectionIdentifer release];
+        lastCollectionView = [collectionView retain];
         [collectionView release];
         [backgroundView release];
+        [flowLayoutDesignerSection release];
 
-        ctr++;
+        sectionCounter++;
+
     }
     
 
-    [enumerator release];
+    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-|", paddingBorder * 2];
     
+    [lastCollectionView release];
+    NSArray *labelconstraintsVertical = [NSLayoutConstraint constraintsWithVisualFormat: stringContstraintsVertical
+                                                                                options: 0
+                                                                                metrics: nil
+                                                                                  views: dictionaryViewsVertical];
+    [[self designScrollView] addConstraints:labelconstraintsVertical];
     [[self designScrollView] setScrollEnabled:YES];
-    
-    [[self designScrollView] setContentSize:self.view.frame.size];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
-}
+    [[self designScrollView] setUserInteractionEnabled:YES];
+    [[self designScrollView] flashScrollIndicators];
 
-- (UICollectionView *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
-    return [[self sections] objectForKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
-}
-
-- (void)setCollectionView:(UICollectionView *)collectionView forSection:(RptqDocumentSection *)documentSection {
-    [[self sections] setValue:collectionView forKey:[[[documentSection objectID] URIRepresentation] absoluteString]];
+    [stringContstraintsVertical release];
+    [dictionaryViewsVertical release];
+    [sectionEnumerator release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -311,49 +325,20 @@
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
-    
+    BOOL contextSaved = NO;
     for (id updatedObject in updatedObjects) {
         if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
             RptqDocumentObject *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             for (id change in changes) {
-                
-                // MARK: Changing the size of the element must change the size of the cell that holds it.
-                if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))]) {
-                    MTLog(@"Change That Width");
-                    RptqDocumentSection *documentSection = [documentObject inSection];
-                    UICollectionView *collectionView = [self getCollectionViewForRptqSection:documentSection];
-                    [[collectionView collectionViewLayout] invalidateLayout];
+                if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(sizeheight))]) {
                     
-                    /*
-                    for (UICollectionView *collectionView in [[self sections] allValues]) {
-                        NSInteger numberOfSections = [collectionView numberOfSections];
-                        for (NSInteger sectionIterator = 0; sectionIterator < numberOfSections; sectionIterator++) {
-                            NSInteger numberOfItems = [collectionView numberOfItemsInSection:sectionIterator];
-                            for (NSInteger itemIterator = 0; itemIterator < numberOfItems; itemIterator++) {
-                                NSIndexPath *collectionViewIterator = [NSIndexPath indexPathForItem:itemIterator inSection:sectionIterator];
-                                MTElementView *elementView = [self elementViewAtIndexPath:collectionViewIterator inCollectionView:collectionView];
-                                if ([[elementView objectIdTag] isEqual:[documentObject objectID]]) {
-                                    UICollectionViewLayoutAttributes *layoutAttributes = [collectionView layoutAttributesForItemAtIndexPath:collectionViewIterator];
-                                    layoutAttributes.size = CGSizeMake([[documentObject sizewidth] floatValue], layoutAttributes.size.height);
-                                    
-                                    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:collectionViewIterator];
-                                    
-                                }
-                            }
-                        }
-                    }
+                    if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
                     
-                    for (NSManagedObjectID *objectId in [self selectedElementViews]) {
-
-                    }
-                     */
-                    
-                } else if ([change isEqualToString:NSStringFromSelector(@selector(sizeheight))]) {
-                    MTLog(@"Change That Height");
-                    RptqDocumentSection *documentSection = [documentObject inSection];
-                    UICollectionView *collectionView = [self getCollectionViewForRptqSection:documentSection];
-                    [[collectionView collectionViewLayout] invalidateLayout];
+                    UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
+                    [[section collectionViewLayout] invalidateLayout];
+                    MTLog(@"Change that size.");
                 }
             }
         }
@@ -365,6 +350,14 @@
 }
 
 #pragma mark - Actions
+
+- (UICollectionView *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
+    return [[self sectionViews] objectForKey:[documentSection sectionKey]];
+}
+
+- (void)setCollectionView:(UICollectionView *)collectionView forSection:(RptqDocumentSection *)documentSection {
+    [[self sectionViews] setValue:collectionView forKey:[documentSection sectionKey]];
+}
 
 - (void)cut:(id)sender {
     NSLog(@"Fake a cut.");
@@ -475,94 +468,59 @@
 }
 
 - (IBAction)showToolbox:(id)sender {
+
     if (![self toolboxIsVisible]) {
         [self setToolboxIsVisible:YES];
         [[self informationButton] setEnabled: NO];
-        
-        NSSet *selectItemIds = [self selectedObjectIds];
-
-        MTMargin margin = MTMarginMake(5.0000f, 5.00000f, 5.0000f, 5.0000f);
-    
-        
         if (![self tableViewControllerFontSelector]) {
-            
             
             UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
             
-            UITableViewControllerFontSettings *tb1 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"];
+            UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
             [tb1 setDelegate: self];
             [self setTableViewControllerTextLayoutSettings:tb1];
+            [tb1 release];
             
-            UITableViewControllerFontSelector *tb2 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
+            UITableViewControllerFontSelector *tb2 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
             [tb2 setDelegate: self];
             [self setTableViewControllerFontSelector:tb2];
+            [tb2 release];
         }
-        
-        CGFloat designViewWidth = [[self view] bounds].size.width;
-        CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarTop] bounds].size.height - [[self toolboxView] bounds].size.height;
-        CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
-        
-        CGFloat designViewOriginX = [[self designScrollView] frame].origin.x;
-        CGFloat designViewOriginY = [[self designScrollView] frame].origin.y;
-        CGRect designViewRectToCenter = CGRectMake(designViewOriginX, designViewOriginY, designViewBounds.size.width, designViewBounds.size.height);
-        CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
-        
-        CGFloat toolboxOriginX = CGPointZero.x;
-        CGFloat toolboxOriginY = designViewOriginY + designViewHeight;
-        CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
-        CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
 
         [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
         [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
         [[self tableViewControllerTextLayoutSettings] initalizeDocumentObjects:[self selectedObjectIds]];
         [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                         animations: ^{
-                             [[self designScrollView] setBounds: designViewBounds];
-                             [[self designScrollView] setCenter:designViewCenter];
-                             [[self toolboxView] setBounds:[[self toolboxView] bounds]];
-                             [[self toolboxView] setCenter:toolboxCenter];
-                             [[self view] bringSubviewToFront:[self toolboxView]];
-                         } completion:^(BOOL finished) {
-                             //[[self toolboxBackgroundView] removeFromSuperview];
-                             //[[[self tableViewControllerTextLayoutSettings] tableView] setFrame:[[self toolboxContainerView] frame]];
-                         }];
         
+        [[self toolbarBottom] setItems:nil animated:YES];
+        [[self toolbarTop] setItems:nil animated:YES];
         
+        [[self view] layoutIfNeeded];
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
+            [self setWantsFullScreenLayout:YES];
+            [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
+            [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
+            [[self view] layoutIfNeeded];
+        } completion:nil];
     }
 }
 
 - (IBAction)hideToolbox:(id)sender {
+
     if ([self toolboxIsVisible]) {
         [self setToolboxIsVisible:NO];
-        
-        CGFloat designViewWidth = [[self view] bounds].size.width;
-        CGFloat designViewHeight = [[self view] bounds].size.height - [[self toolbarBottom] bounds].size.height - [[self toolbarTop] bounds].size.height;
-        CGRect designViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, designViewWidth, designViewHeight);
-        
-        CGFloat designViewCenterX = [[self designScrollView] frame].origin.x;
-        CGFloat designViewCenterY = [[self designScrollView] frame].origin.y;
-        CGRect designViewRectToCenter = CGRectMake(designViewCenterX, designViewCenterY, designViewBounds.size.width, designViewBounds.size.height);
-        CGPoint designViewCenter = CGCenterOfRect(designViewRectToCenter);
-        
-        //[[self designScrollView] setBounds: designViewBounds];
-        //[[self designScrollView] setCenter:designViewCenter];
-        
-        CGFloat toolboxOriginX = CGPointZero.x;
-        CGFloat toolboxOriginY = CGPointZero.y + [[self view] bounds].size.height;
-        CGRect toolboxRectToCenter = CGRectMake(toolboxOriginX, toolboxOriginY, [[self toolboxView] bounds].size.width, [[self toolboxView] bounds].size.height);
-        CGPoint toolboxCenter = CGCenterOfRect(toolboxRectToCenter);
-        
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                         animations: ^{
-                             [[self designScrollView] setBounds: designViewBounds];
-                             [[self designScrollView] setCenter:designViewCenter];
-                             [[self toolboxView] setBounds:[[self toolboxView] bounds]];
-                             [[self toolboxView] setCenter:toolboxCenter];
-                         } completion:^(BOOL finished) {
-                             [[[self tableViewControllerTextLayoutSettings] tableView] removeFromSuperview];
-                             [[self informationButton] setEnabled: YES];
-                         }];
+
+        [[self view] layoutIfNeeded];
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
+            [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
+            [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
+            [[self view] layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
+            [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
+            [[[self tableViewControllerTextLayoutSettings] tableView] removeFromSuperview];
+            [[self informationButton] setEnabled: YES];
+        }];
     }
 }
 
@@ -590,15 +548,15 @@
 #pragma mark - Collection View Flow Layout Delegate
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+    return UIEdgeInsetsMake(0.0000f, 0.0000f, 0.0000f, 0.0000f);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 50.0000f;
+    return 0.0000f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 5.0000f;
+    return 0.0000f;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -614,19 +572,20 @@
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
     
     NSOrderedSet *objects = [documentSection hasObjects];
     
     CGSize result;
     
     if ([objects count] > row) {
-        
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = CGSizeMake([[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
+        result = [documentObject viewSize];
     } else {
         result = CGSizeZero;
     }
+    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
     return result;
 }
 
@@ -659,14 +618,12 @@
             case MNSObjectTypeLabelDataField: {
                 
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-                CGFloat elementViewWidth = [[documentObjectCast.parentObjectLabelDataField sizewidth] floatValue];
-                CGFloat elementViewHeight = [[documentObjectCast.parentObjectLabelDataField sizeheight] floatValue];
-                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, elementViewWidth, elementViewHeight);
+                CGSize documentObjectSize = [documentObject viewSize];
+                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
 
-                MTElementView *newView1 = [[MTElementView alloc] initWithFrame:f andObjectId:[documentObject objectID] /*[documentObjectCast objectID]*/ inObjectContext:managedObjectContext];
+                MTElementView *newView1 = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:managedObjectContext];
                 [newView1 setBackgroundColor:[UIColor whiteColor]];
-                //[newView1 addSubview: label];
-                [newView1 setBounds: f];
+                [newView1 setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height)];
                 [newView1 setMultipleTouchEnabled: YES];
                 [newView1 setExclusiveTouch: YES];
                 [newView1 setOpaque: YES];
@@ -679,8 +636,11 @@
                 [panGesture release];
                 
                 [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
-                [cell setBounds: CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
-                [[cell contentView]  setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.height)];
+                CGRect cellSize = CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, collectionView.bounds.size.height - 2.0000f);
+                [cell setBounds: cellSize];
+                [[cell contentView] setBounds:cellSize];
+                [[cell contentView] setAutoresizingMask:UIViewAutoresizingNone];
+                //[[cell contentView] setBackgroundColor:[UIColor redColor]];
                 
                 [newView1 updateDisplayLabel];
                 [[cell contentView] addSubview:newView1];
@@ -790,7 +750,7 @@
             [results addObjectsFromArray: selectedObjects];
         }
     }
-    NSLog(@"Selected Object Ids %@", results);
+    //MTLog(@"Selected Object Ids %@", results);
     return [results autorelease];
 }
 
@@ -810,7 +770,6 @@
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:NO];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-    [[self selectedElementViews] removeObject:[elementView objectIdTag]];
     MTLog(@"Deselect");
 }
 
@@ -824,7 +783,6 @@
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setSelected:YES];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-    [[self selectedElementViews] addObject:[elementView objectIdTag]];
     MTLog(@"Select");
 }
 
@@ -836,19 +794,19 @@
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    MTLog(@"Should deselect?\t%@", [elementView isSelected] ? @"YES" : @"NO");
+    //MTLog(@"Should deselect?\t%@", [elementView isSelected] ? @"YES" : @"NO");
     return [elementView isSelected];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    MTLog(@"Should highlight?\t%@", ![elementView highlight] ? @"YES" : @"NO");
+    //MTLog(@"Should highlight?\t%@", ![elementView highlight] ? @"YES" : @"NO");
     return ![elementView highlight];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    MTLog(@"Should select?\t%@", ![elementView isSelected] ? @"YES" : @"NO");
+    //MTLog(@"Should select?\t%@", ![elementView isSelected] ? @"YES" : @"NO");
     return ![elementView isSelected];
 }
 
@@ -944,19 +902,6 @@
     }
 }
 
-
-- (void)labelInformationViewControllerDidFinish:(UIViewControllerToolbox *)controller {
-    
-    [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                     animations: ^{
-                         [[self designScrollView] setFrame:[self designScrollViewNormal]];
-                         [[[self toolbox] view] setFrame: [self toolboxOffScreen]];
-                     } completion:^(BOOL finished) {
-                         [[[self toolbox] view] removeFromSuperview];
-                         [[self informationButton] setEnabled: YES];
-                     }];
-}
-
 #pragma mark - Gesture Recognizers
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
@@ -984,14 +929,39 @@
     return YES;
 }
 
+- (void)pinchView:(UIPinchGestureRecognizer *)gestureRecognizer {
+    gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
+    gestureRecognizer.scale = 1.f;
+    
+    switch ([gestureRecognizer state]) {
+        case UIGestureRecognizerStateBegan: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateBegan
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {     // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateChanged
+            break;
+        }
+        case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
+            break;
+        }
+        case UIGestureRecognizerStateCancelled: {   // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateCancelled
+            break;
+        }
+        case UIGestureRecognizerStateFailed: {      // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateFailed
+            break;
+        }
+        case UIGestureRecognizerStateEnded: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateEnded
+            break;
+        }
+    }
+}
+
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
             
-            // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-        case UIGestureRecognizerStateBegan: {
+        case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [[gestureRecognizer view] setCenter: newCenter];
@@ -1039,7 +1009,7 @@
                             
                             
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
-                            NSLog(@"Delete %@", deletePath);
+                            //NSLog(@"Delete %@", deletePath);
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                             
                         } completion:^(BOOL finished) {
@@ -1174,6 +1144,7 @@
     [self setToolboxView:nil];
     [self setToolboxContainerView:nil];
     [self setNavigationBarToolbox:nil];
+    [self setLayoutConstraintsToRemove:nil];
     [super viewDidUnload];
 }
 
@@ -1242,6 +1213,25 @@
     } else if ([item isEqual:[self navigationItemStyle]]) {
     }
     return shouldPushItem;
+}
+
+#pragma mark - UITableViewControllerFontSelectorDelegate
+
+- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
+    CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
+    
+    MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
+    [[self tableViewControllerTextLayoutSettings] chooseFont:font];
+    
+    [font release];
+    [[self navigationBarToolbox] popNavigationItemAnimated:YES];
+}
+
+#pragma mark - FontSettingsTableViewControllerDelegate
+
+- (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
+    [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
+    
 }
 
 @end

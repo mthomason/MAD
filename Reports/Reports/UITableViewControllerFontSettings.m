@@ -149,28 +149,32 @@
     [_buttonStrike release];
     [_buttonUnderline release];
     [_segmentedControlHorizontalAlignment release];
+
     [_labelPaddingTop release];
     [_labelPaddingBottom release];
     [_labelPaddingLeft release];
     [_labelPaddingRight release];
+
     [_stepperPaddingTop release];
     [_stepperPaddingBottom release];
     [_stepperPaddingLeft release];
     [_stepperPaddingRight release];
+    
     [_stepperMarginTop release];
     [_stepperMarginBottom release];
     [_stepperMarginLeft release];
     [_stepperMarginRight release];
-    [_labelMarginTop release];
-    [_labelPaddingTop release];
+    
     [_labelMarginTop release];
     [_labelMarginBottom release];
     [_labelMarginLeft release];
     [_labelMarginRight release];
+    
     [_segmentedControlVerticalAlignment release];
     [_steppers release];
     [_stepperSizeWidth release];
     [_stepperSizeHeight release];
+    
     [_labelSizeWidth release];
     [_labelSizeHeight release];
     [super dealloc];
@@ -712,7 +716,7 @@
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction;
-    id valueThatChanged;
+    id valueThatChanged = nil;
     
     if ([sender isEqual:[self stepperFontSize]]) {
         valueChangedAction = @selector(setFontsize:);

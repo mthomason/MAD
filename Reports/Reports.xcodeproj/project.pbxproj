@@ -1003,6 +1003,10 @@
 		4CB653E1164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4CBFF2ED14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
 		4CC24AA51503E3AB00C4EE98 /* UIViewGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */; };
+		4CC6BA5016A13D3B000A69A1 /* MTViewBordered.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTViewBordered.m */; };
+		4CC6BA5116A13D3B000A69A1 /* MTViewBordered.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTViewBordered.m */; };
+		4CC6BA5416A155AD000A69A1 /* MTViewVaporTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA5316A155AD000A69A1 /* MTViewVaporTouch.m */; };
+		4CC6BA5516A155AD000A69A1 /* MTViewVaporTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA5316A155AD000A69A1 /* MTViewVaporTouch.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CC8993714DAFAF80094E17E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
@@ -2068,6 +2072,10 @@
 		4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewControllerDatabaseSalesforceSetup.m; sourceTree = "<group>"; };
 		4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewGradient.h; sourceTree = "<group>"; };
 		4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewGradient.m; sourceTree = "<group>"; };
+		4CC6BA4E16A13D3B000A69A1 /* MTViewBordered.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewBordered.h; sourceTree = "<group>"; };
+		4CC6BA4F16A13D3B000A69A1 /* MTViewBordered.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewBordered.m; sourceTree = "<group>"; };
+		4CC6BA5216A155AD000A69A1 /* MTViewVaporTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewVaporTouch.h; sourceTree = "<group>"; };
+		4CC6BA5316A155AD000A69A1 /* MTViewVaporTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewVaporTouch.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryPredicate.m; sourceTree = "<group>"; };
@@ -3354,6 +3362,10 @@
 				4C88A9C614EE23CF0069A0AF /* UIViewResizeHandle.m */,
 				4CE3143516952E3B00114431 /* MTTextView.h */,
 				4CE3143616952E3B00114431 /* MTTextView.m */,
+				4CC6BA4E16A13D3B000A69A1 /* MTViewBordered.h */,
+				4CC6BA4F16A13D3B000A69A1 /* MTViewBordered.m */,
+				4CC6BA5216A155AD000A69A1 /* MTViewVaporTouch.h */,
+				4CC6BA5316A155AD000A69A1 /* MTViewVaporTouch.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -5099,6 +5111,8 @@
 				4CE3143816952E3B00114431 /* MTTextView.m in Sources */,
 				4C4C78C116960C23000ADD1D /* UIColor+Gradients.m in Sources */,
 				4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
+				4CC6BA5116A13D3B000A69A1 /* MTViewBordered.m in Sources */,
+				4CC6BA5516A155AD000A69A1 /* MTViewVaporTouch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5547,6 +5561,8 @@
 				4CE3143716952E3B00114431 /* MTTextView.m in Sources */,
 				4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */,
 				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
+				4CC6BA5016A13D3B000A69A1 /* MTViewBordered.m in Sources */,
+				4CC6BA5416A155AD000A69A1 /* MTViewVaporTouch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
