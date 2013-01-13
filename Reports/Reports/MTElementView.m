@@ -90,7 +90,7 @@
         
         UIView *marginView = [self retain];
         //[marginView setFrame: frame];
-        [marginView setBackgroundColor:[UIColor clearColor]];
+        [marginView setBackgroundColor:[UIColor edaBlackFiftyPercent]];
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
@@ -99,7 +99,7 @@
         
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
-        [visibleView setBackgroundColor:[UIColor clearColor]];
+        [visibleView setBackgroundColor:[UIColor yellowColor]];
         [visibleView setAutoresizingMask:UIViewAutoresizingNone];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];

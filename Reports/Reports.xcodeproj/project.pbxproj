@@ -319,6 +319,8 @@
 		4C2279AB167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C2279AC167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C2279AD167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
+		4C28FB8E16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m */; };
+		4C28FB8F16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m */; };
 		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
 		4C2AC2FB153573FB00738091 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FA153573FB00738091 /* icon@2x.png */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
@@ -1693,6 +1695,8 @@
 		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C2279A6167712D600B1150D /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
 		4C2279A7167712D600B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C28FB8C16A2A1A6007D6D23 /* MTCollectionViewLineLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewLineLayout.h; sourceTree = "<group>"; };
+		4C28FB8D16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewLineLayout.m; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4C2AC2FA153573FB00738091 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Reports/icon@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -3837,6 +3841,8 @@
 				4C85C6A914FF72F3003785AC /* MUIViewControllerReportViewer.m */,
 				4CDBED22168B50AB00C5147B /* MTCollectionViewSection.h */,
 				4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */,
+				4C28FB8C16A2A1A6007D6D23 /* MTCollectionViewLineLayout.h */,
+				4C28FB8D16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -5113,6 +5119,7 @@
 				4C4C78D5169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 				4CC6BA5116A13D3B000A69A1 /* MTViewBordered.m in Sources */,
 				4CC6BA5516A155AD000A69A1 /* MTViewVaporTouch.m in Sources */,
+				4C28FB8F16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5563,6 +5570,7 @@
 				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 				4CC6BA5016A13D3B000A69A1 /* MTViewBordered.m in Sources */,
 				4CC6BA5416A155AD000A69A1 /* MTViewVaporTouch.m in Sources */,
+				4C28FB8E16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

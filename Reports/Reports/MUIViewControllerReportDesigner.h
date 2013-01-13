@@ -23,6 +23,7 @@
 #import "MTCollectionReusableViewFloatingLabel.h"
 #import "MTElementView.h"
 #import "MTFont.h"
+#import "MTCollectionViewLineLayout.h"
 
 @interface MUIViewControllerReportDesigner : MUIViewController
     <UITableViewDataSource,
@@ -34,6 +35,7 @@
         UIGestureRecognizerDelegate,
         UINavigationBarDelegate,
         MTElementViewDelegate,
+        MTCollectionViewLineLayoutDelegate,
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
         FontSettingsTableViewControllerDelegate,

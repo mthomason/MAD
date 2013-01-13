@@ -49,14 +49,22 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
-
 @property (nonatomic, retain) NSMutableSet *selectedObjectIds;
+
+@property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @end
 
 @implementation MUIViewControllerReportDesigner
+
+#pragma mark - MTCollectionViewLineLayoutDelegate
+
+- (CGPoint)centerPointForIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
+    NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
+    return [result CGPointValue];
+}
 
 - (void)didSelectElementView:(id)sender {
     if ([sender isKindOfClass:[MTElementView class]]) {
@@ -82,6 +90,8 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_holderForLastTouchesByCollectionView release];
+    
     [_selectedObjectIds release];
     
     [_toolbarTopItems release];
@@ -133,6 +143,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
+    [self setHolderForLastTouchesByCollectionView:holderForLastTouchesByCollectionView];
+    [holderForLastTouchesByCollectionView release];
     
     NSMutableSet *set = [[NSMutableSet alloc] init];
     [self setSelectedObjectIds:set];
@@ -195,14 +208,23 @@
 
         
         // MARK: Create collection view for report document section.
-        MTCollectionViewFlowLayoutDesignerSection *flowLayoutDesignerSection = [[MTCollectionViewFlowLayoutDesignerSection alloc] init];
+        
+        //MTCollectionViewLineLayout *flowLayoutDesignerSection = [[MTCollectionViewLineLayout alloc] init];
+        //[flowLayoutDesignerSection setDelegate:self];
+        
+        UICollectionViewFlowLayout *flowLayoutDesignerSection = [[UICollectionViewFlowLayout alloc] init];
         [flowLayoutDesignerSection setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        
+        
 
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
         NSString *reuse = [collectionViewReuseId stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
+        NSMutableDictionary *lastTouches = [[NSMutableDictionary alloc] init];
+        [[self holderForLastTouchesByCollectionView] setObject:lastTouches forKey:@(collectionView.tag)];
+        [lastTouches release];
         [[self collectionViewReuseIdentifiers] setObject:reuse forKey:[reportSection identifier]];
         [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
         [collectionView setTag:[[reportSection identifier] integerValue]];
@@ -591,7 +613,7 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 5.0000f;
+    return 0.0000f;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -1028,7 +1050,7 @@
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
+    //NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
 
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
@@ -1052,8 +1074,8 @@
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
                 RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
-                NSLog(@"OBJTag %@", [[gestureRecognizer view] objectIdTag]);
-                NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
+                //NSLog(@"OBJTag %@", [[gestureRecognizer view] objectIdTag]);
+                //NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
                 if (datafield) {
                     
                     RptqDocumentSection *section = [documentObject inSection];
@@ -1089,9 +1111,9 @@
                             [svSection setDelegate:self];
                             [[svSection collectionViewLayout] invalidateLayout];
                             
-                            NSLog(@"Complete: %@", finished ? @"YES" : @"NO");
-                            NSLog(@"allowsMultipleSelection: %@", [svSection allowsMultipleSelection] ? @"YES" : @"NO");
-                            NSLog(@"allowsSelection: %@", [svSection allowsSelection] ? @"YES" : @"NO");
+                            //NSLog(@"Complete: %@", finished ? @"YES" : @"NO");
+                            //NSLog(@"allowsMultipleSelection: %@", [svSection allowsMultipleSelection] ? @"YES" : @"NO");
+                            //NSLog(@"allowsSelection: %@", [svSection allowsSelection] ? @"YES" : @"NO");
 
                         }];
                     }
@@ -1148,8 +1170,7 @@
             if (addedToNewParent) {
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
-                
-                
+                                
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag]
@@ -1178,6 +1199,10 @@
                     }
                     
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+                    
+                    for (NSIndexPath *indexPath in indexPaths) {
+                        [[[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])] setObject:[NSValue valueWithCGPoint:newCenter] forKey:indexPath];
+                    }
                     
                     // MARK: Add this to the data context and to the container for the sections collection view.
                     [newParent performBatchUpdates:^{
