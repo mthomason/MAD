@@ -33,6 +33,7 @@
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         UINavigationBarDelegate,
+        MTElementViewDelegate,
         UIViewControllerObjectSelectorDelegate,
         MUIViewControllerDelegate,
         FontSettingsTableViewControllerDelegate,

@@ -10,10 +10,10 @@
 
 @implementation MTCollectionViewCellElement
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        //[self setUserInteractionEnabled:YES];
         // Initialization code
     }
     return self;

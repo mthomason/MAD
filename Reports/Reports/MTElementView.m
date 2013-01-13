@@ -71,8 +71,14 @@
 }
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    self = [super initWithFrame:CGRectZero];
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+    CGSize viewSize = [documentObject viewSize];
+    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height);
+    self = [super initWithFrame:frame];
     if (self) {
+        
+        [self setDisplaySelected:NO];
+        [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
         [self setManagedObjectContext:managedObjectContext];
         
@@ -84,15 +90,16 @@
         
         UIView *marginView = [self retain];
         //[marginView setFrame: frame];
-        [marginView setBackgroundColor:[UIColor yellowColor]];
+        [marginView setBackgroundColor:[UIColor clearColor]];
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
         
         //CGRect visibleFrame = [self visibleFrame];
-        MTViewBordered *visibleView = [[MTViewBordered alloc] initWithFrame:CGRectZero];
+        
+        UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
-        [visibleView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [visibleView setBackgroundColor:[UIColor clearColor]];
         [visibleView setAutoresizingMask:UIViewAutoresizingNone];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
@@ -100,15 +107,15 @@
         
         UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
-        [labelBackground setBackgroundColor:[UIColor clearColor]];
+        [labelBackground setBackgroundColor:[UIColor whiteColor]];
         [labelBackground setAutoresizingMask:UIViewAutoresizingNone];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
         [labelBackground release];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        [label setUserInteractionEnabled:NO];
-        [label setBackgroundColor:[UIColor clearColor]];
+        //[label setUserInteractionEnabled:NO];
+        [label setBackgroundColor:[UIColor whiteColor]];
         [label setAutoresizingMask:UIViewAutoresizingNone];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];
@@ -224,7 +231,6 @@
     [[self paddingView] setFrame:newBoundsAfterPadding];
     [[self displayLabel] setAttributedText:attributtedString];
     
-    
     MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
     NSTextAlignment textAlignment;
     switch (horizontalAlignment) {
@@ -286,29 +292,28 @@
 }
 /*
 - (void)drawRect:(CGRect)rect {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, rect);
-    CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextAddPath(currentContext, path);
-    [[UIColor edaBlackFiftyPercent] setFill];
-    [[UIColor blackColor] setStroke];
-    if ([self highlight] || [self isSelected]) {
-        [[UIColor redColor] setStroke];
+    if ([self isSelected]) {
+        
+        [[self displayLabel] setBackgroundColor:[UIColor redColor]];
+        [[self paddingView] setBackgroundColor:[UIColor redColor]];
+        [[self visibleView] setBackgroundColor:[UIColor redColor]];
+        [[self marginView] setBackgroundColor:[UIColor redColor]];
+        
+        //[[UIColor redColor] setFill];
+        //[[self paddingView] setBackgroundColor:[UIColor redColor]];
+//    } else if ([self highlight]) {
+//        [[UIColor yellowColor] setFill];
     } else {
-        [[UIColor blackColor] setStroke];
+        [[self displayLabel] setBackgroundColor:[UIColor whiteColor]];
+        [[self paddingView] setBackgroundColor:[UIColor whiteColor]];
+        [[self visibleView] setBackgroundColor:[UIColor whiteColor]];
+        [[self marginView] setBackgroundColor:[UIColor whiteColor]];
+        //[[self paddingView] setBackgroundColor:[UIColor clearColor]];
+        //[[UIColor whiteColor] setFill];
     }
-    CGContextSetLineWidth(currentContext, 1.0000f);
-    CGContextDrawPath(currentContext, kCGPathFillStroke);
-    if ([self highlight] || [self isSelected]) {
-        [[UIColor redColor] set];
-    } else {
-        [[UIColor blackColor] set];
-    }
-
-    CGPathRelease(path);
-    
-}*/
-
+    //UIRectFill(rect);
+}
+*/
 #pragma mark - Members
 
 - (void)setWobbleRunning:(BOOL)running {
@@ -343,22 +348,61 @@
     return [self displayWobbling];
 }
 
+- (BOOL)toggleSelected {
+    [self setDisplaySelected:![self displaySelected]];
+    return [self displaySelected];
+}
+
 - (void)setSelected:(BOOL)selected {
+    /*
+    NSLog(@"%@", selected ? @"Select" : @"Deselect");
     [self setDisplaySelected:selected];
-    [self setNeedsDisplay];
+    //[self setNeedsDisplay];
+    
+    if (selected) {
+        [[self paddingView] setBackgroundColor:[UIColor yellowColor]];
+        //[[UIColor redColor] setFill];
+        //[[self paddingView] setBackgroundColor:[UIColor redColor]];
+        //    } else if ([self highlight]) {
+        //        [[UIColor yellowColor] setFill];
+    } else {
+        [[self paddingView] setBackgroundColor:[UIColor grayColor]];
+        //[[self paddingView] setBackgroundColor:[UIColor clearColor]];
+        //[[UIColor whiteColor] setFill];
+    }
+*/
 }
 
 - (BOOL)isSelected {
     return [self displaySelected];
 }
 
-- (void)setHighlight:(BOOL)selected {
-    [self setDisplayHighlighted:selected];
-    [self setNeedsDisplay];
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self setDisplayHighlighted:YES];
+    [[self delegate] didHighlightElementView:self];
 }
 
-- (BOOL)highlight {
-    return [self displayHighlighted];
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesCancelled:touches withEvent:event];
+    [self setDisplayHighlighted:NO];
+    [[self delegate] didUnhighlightElementView:self];
 }
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    [self setDisplayHighlighted:NO];
+    [[self delegate] didUnhighlightElementView:self];
+    if ([self toggleSelected]) {
+        [[self delegate] didSelectElementView:self];
+    } else {
+        [[self delegate] didDeselectElementView:self];
+    }
+}
+
 
 @end

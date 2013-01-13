@@ -42,7 +42,7 @@
     CGPathAddRect(path, NULL, rect);
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, path);
-    [[UIColor whiteColor] setFill];
+    [[UIColor clearColor] setFill];
     [[self borderColor] setStroke];
     float dashPhase = 0.0;
     float dashLengths[] = { 7, 3, 7, 3, 7, 3 };

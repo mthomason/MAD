@@ -11,27 +11,19 @@
 @implementation MTViewVaporTouch
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (id view in [self subviews]) {
-        [view touchesBegan:touches withEvent:event];
-    }
+    [[self superview] touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (id view in [self subviews]) {
-        [view touchesCancelled:touches withEvent:event];
-    }
+    [[self superview] touchesCancelled:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (id view in [self subviews]) {
-        [view touchesMoved:touches withEvent:event];
-    }
+    [[self superview] touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (id view in [self subviews]) {
-        [view touchesEnded:touches withEvent:event];
-    }
+    [[self superview] touchesEnded:touches withEvent:event];
 }
 
 @end

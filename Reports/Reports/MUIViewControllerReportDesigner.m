@@ -17,7 +17,6 @@
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
-
 @property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
 
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
@@ -32,6 +31,8 @@
 @property (nonatomic, retain) NSArray *layoutConstraintsToolboxHidden;
 @property (nonatomic, retain) NSArray *toolbarTopItems;
 @property (nonatomic, retain) NSArray *toolbarBottomItems;
+
+@property (nonatomic, retain) NSMutableDictionary *collectionViewReuseIdentifiers;
 
 @property (nonatomic, retain) IBOutlet UIView *toolboxView;
 @property (nonatomic, retain) IBOutlet UIView *toolboxContainerView;
@@ -49,15 +50,40 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
 
+@property (nonatomic, retain) NSMutableSet *selectedObjectIds;
+
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @end
 
 @implementation MUIViewControllerReportDesigner
 
+- (void)didSelectElementView:(id)sender {
+    if ([sender isKindOfClass:[MTElementView class]]) {
+        MTElementView *elementView = sender;
+        [[self selectedObjectIds] addObject:[elementView objectIdTag]];
+        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+        [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
+        [[elementView layer] setBorderWidth:3.0000f];
+    }
+}
+- (void)didDeselectElementView:(id)sender {
+    if ([sender isKindOfClass:[MTElementView class]]) {
+        MTElementView *elementView = sender;
+        [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
+        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[elementView layer] setBorderWidth:0.0000f];
+    }
+}
+- (void)didHighlightElementView:(id)sender { }
+- (void)didUnhighlightElementView:(id)sender { }
+
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_selectedObjectIds release];
+    
     [_toolbarTopItems release];
     [_toolbarBottomItems release];
     
@@ -108,6 +134,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSMutableSet *set = [[NSMutableSet alloc] init];
+    [self setSelectedObjectIds:set];
+    [set release];
+    
     [self setToolbarTopItems:[[self toolbarTop] items]];
     [self setToolbarBottomItems:[[self toolbarBottom] items]];
     
@@ -154,6 +184,10 @@
     
     [self setToolboxIsVisible:NO];
     
+    NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
+    [collectionViewReuseIdentifiers release];
+    
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
         CGFloat paddingTop = sectionCounter == 0 ? paddingBorder : (2 * paddingBorder);
@@ -168,7 +202,9 @@
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
-        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: collectionViewReuseId];
+        NSString *reuse = [collectionViewReuseId stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
+        [[self collectionViewReuseIdentifiers] setObject:reuse forKey:[reportSection identifier]];
+        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
         [collectionView setTag:[[reportSection identifier] integerValue]];
         [collectionView setDelegate:self];
         [collectionView setDataSource:self];
@@ -199,7 +235,7 @@
         // MARK: Setup vert auto layout
         NSString *collectionViewKey = [reportSection sectionKey];
         NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
-        
+        [self setCollectionView:collectionView forSection:reportSection];
         [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
         [dictionaryViewsVertical setValue:labelSectionIdentifer forKey:labelKey];
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
@@ -231,7 +267,6 @@
 
     }
     
-
     [stringContstraintsVertical appendFormat:@"-(==%f@1000)-|", paddingBorder * 2];
     
     [lastCollectionView release];
@@ -548,7 +583,7 @@
 #pragma mark - Collection View Flow Layout Delegate
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(0.0000f, 0.0000f, 0.0000f, 0.0000f);
+    return UIEdgeInsetsZero;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
@@ -556,7 +591,7 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.0000f;
+    return 5.0000f;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -593,23 +628,27 @@
 
 // MARK: Load the elements into the sections.
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     NSInteger row = [indexPath row];
     
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
-    UICollectionViewCell *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:[MTCollectionViewCellElement reuseIdentifier]
-                                                                            forIndexPath:indexPath] retain];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [documentSection hasObjects];
+
+    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]]
+                                                                                  forIndexPath:indexPath];
     
     if ([objects count] > row) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        
+        CGSize documentObjectSize = [documentObject viewSize];
+        CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
+        
         switch ([documentObject getType]) {
             case MNSObjectTypeLabel: {
                 
@@ -617,17 +656,27 @@
             }
             case MNSObjectTypeLabelDataField: {
                 
+                for (UIView *subview in [[cell contentView] subviews]) {
+                    [subview removeFromSuperview];
+                }
+                
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-                CGSize documentObjectSize = [documentObject viewSize];
-                CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
 
-                MTElementView *newView1 = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:managedObjectContext];
-                [newView1 setBackgroundColor:[UIColor whiteColor]];
-                [newView1 setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height)];
-                [newView1 setMultipleTouchEnabled: YES];
-                [newView1 setExclusiveTouch: YES];
-                [newView1 setOpaque: YES];
-                [[newView1 layer] setCornerRadius: 5.0000f];
+                MTElementView *newView1 = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
+                                                                  inObjectContext:managedObjectContext];
+                
+                [newView1 setDelegate:self];
+                
+                BOOL cellSelected = [[self selectedObjectIds] containsObject:[documentObject objectID]];
+                //[cell setSelected:cellSelected];
+                //[newView1 setBackgroundColor:[UIColor whiteColor]];
+                //[newView1 setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height)];
+                //[newView1 setSelected:cellSelected];
+                //[newView1 setHighlight:[cell isHighlighted]];
+                //[newView1 setMultipleTouchEnabled: YES];
+                //[newView1 setExclusiveTouch: NO];
+                //[newView1 setOpaque: YES];
+                [[newView1 layer] setCornerRadius: 3.0000f];
                 
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
                 [panGesture setMaximumNumberOfTouches:1];
@@ -636,13 +685,13 @@
                 [panGesture release];
                 
                 [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
-                CGRect cellSize = CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, collectionView.bounds.size.height - 2.0000f);
-                [cell setBounds: cellSize];
+                CGRect cellSize = CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.width);
+                [cell setFrame: cellSize];
                 [[cell contentView] setBounds:cellSize];
                 [[cell contentView] setAutoresizingMask:UIViewAutoresizingNone];
-                //[[cell contentView] setBackgroundColor:[UIColor redColor]];
+                [[cell contentView] setBackgroundColor:[UIColor clearColor]];
+                [cell setUserInteractionEnabled:YES];
                 
-                [newView1 updateDisplayLabel];
                 [[cell contentView] addSubview:newView1];
                 [newView1 release];
                 
@@ -661,14 +710,13 @@
         }
     }
     
-    return [cell autorelease];
+    return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
-    //NSLog(@"Objects in section: %d", [objects count]);
     return [objects count];
 }
 
@@ -718,11 +766,14 @@
 - (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     MTElementView *result = nil;
-    for (MTElementView *elementView in [[cell contentView] subviews]) {
-        result = elementView;
-        break;
+    for (id elementView in [[cell contentView] subviews]) {
+        NSLog(@"%@", [[cell contentView] subviews]);
+        if ([elementView isKindOfClass:[MTElementView class]]) {
+            result = [elementView retain];
+            break;
+        }
     }
-    return result;
+    return [result autorelease];
 }
 
 - (NSSet *)selectedObjectIdsInCollectionView:(UICollectionView *)collectionView {
@@ -730,16 +781,19 @@
     for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
         for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-            MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-            if ([elementView isSelected]) {
-                [result addObject:[elementView objectIdTag]];
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            if ([cell isSelected]) {
+                MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+                //if ([elementView isSelected]) {
+                    [result addObject:[elementView objectIdTag]];
+                //}
             }
         }
     }
     return [result autorelease];
 }
 
-- (NSSet *)selectedObjectIds {
+- (NSSet *)selectedObjectIdsCalculated {
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     for (RptqDocumentSection *documentSection in enumerator) {
@@ -750,7 +804,7 @@
             [results addObjectsFromArray: selectedObjects];
         }
     }
-    //MTLog(@"Selected Object Ids %@", results);
+    [enumerator release];
     return [results autorelease];
 }
 
@@ -767,50 +821,67 @@
 */
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    [elementView setSelected:NO];
+    //[elementView setSelected:NO];
+    [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+    [[elementView layer] setBorderWidth:0.0000f];
     MTLog(@"Deselect");
+     */
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setHighlight:YES];
     MTLog(@"Highlight");
+     */
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    [elementView setSelected:YES];
-    [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+    //[elementView setSelected:YES];
+    [[self selectedObjectIds] addObject:[elementView objectIdTag]];
+   [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
+    [[elementView layer] setBorderWidth:3.0000f];
     MTLog(@"Select");
+     */
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [elementView setHighlight:NO];
     MTLog(@"Unhighlight");
+    */
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    BOOL isSelected = [[collectionView cellForItemAtIndexPath:indexPath] isSelected];
+//    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     //MTLog(@"Should deselect?\t%@", [elementView isSelected] ? @"YES" : @"NO");
-    return [elementView isSelected];
-}
+    //return YES;
+//    NSLog(@"shouldDeselectItemAtIndexPath: %@", isSelected ? @"YES" : @"NO");
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+//    return isSelected;
+//}
+
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    //MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     //MTLog(@"Should highlight?\t%@", ![elementView highlight] ? @"YES" : @"NO");
-    return ![elementView highlight];
-}
+//    return YES;
+//}
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    //MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     //MTLog(@"Should select?\t%@", ![elementView isSelected] ? @"YES" : @"NO");
-    return ![elementView isSelected];
-}
-
-
+//    NSLog(@"shouldSelectItemAtIndexPath: %@", @"YES");
+//    return YES;
+//}
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     //NSLog(@"Can Perform Action %@?  %@", NSStringFromSelector(action), [self respondsToSelector:action] ? @"YES" : @"NO");
@@ -818,7 +889,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    
+    NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
@@ -930,6 +1001,7 @@
 }
 
 - (void)pinchView:(UIPinchGestureRecognizer *)gestureRecognizer {
+    NSLog(@"pinchView");
     gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
     gestureRecognizer.scale = 1.f;
     
@@ -956,7 +1028,8 @@
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    
+    NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
+
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
@@ -971,6 +1044,7 @@
             [self setScrollersEnabled: NO];
             
             [[gestureRecognizer view] setCenter: newCenter];
+            
             [[self designScrollView] addSubview: [gestureRecognizer view]];
             
             
@@ -982,10 +1056,8 @@
                 NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
                 if (datafield) {
                     
-                    RptqDocumentSection *section = [[datafield parentObjectLabelDataField] inSection];
-                    __block UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
-                    
-                    
+                    RptqDocumentSection *section = [documentObject inSection];
+                    UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
                     
                     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
                     
@@ -1004,16 +1076,23 @@
                         [svSection performBatchUpdates:^{
                             [hasObjects removeObjectAtIndex:deleteIndex];
                             [documentSection setHasObjects:hasObjects];
-                            
                             [[AppDelegate activeDocument] saveContext];
                             
                             
+                            UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
+                            
+                            
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
-                            //NSLog(@"Delete %@", deletePath);
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                             
                         } completion:^(BOOL finished) {
+                            [svSection setDelegate:self];
+                            [[svSection collectionViewLayout] invalidateLayout];
                             
+                            NSLog(@"Complete: %@", finished ? @"YES" : @"NO");
+                            NSLog(@"allowsMultipleSelection: %@", [svSection allowsMultipleSelection] ? @"YES" : @"NO");
+                            NSLog(@"allowsSelection: %@", [svSection allowsSelection] ? @"YES" : @"NO");
+
                         }];
                     }
                 }
@@ -1026,6 +1105,7 @@
             break;
         }
         case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
+
             break;
         }
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
@@ -1036,7 +1116,7 @@
             // MARK: Remove the element from one section and place it into the next new section
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
-            __block UICollectionView *newParent = nil;
+            UICollectionView *newParent = nil;
             
             // MARK: Try to find the section to place the element view into.
             BOOL addedToNewParent = NO;
@@ -1105,6 +1185,7 @@
                         [hasObjects insertObject:documentObject atIndex:[indexPath item]];
                         [documentSection setHasObjects:hasObjects];
                         [[AppDelegate activeDocument] saveContext];
+                        [hasObjects release];
                         
                         [newParent insertItemsAtIndexPaths:indexPaths];
                         
@@ -1231,7 +1312,6 @@
 
 - (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
     [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
-    
 }
 
 @end

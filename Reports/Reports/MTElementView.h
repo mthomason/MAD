@@ -11,7 +11,18 @@
 #import "UIViewResizeHandle.h"
 #import "MTViewBordered.h"
 
+@class MTElementView;
+
+@protocol MTElementViewDelegate
+- (void)didSelectElementView:(id)sender;
+- (void)didDeselectElementView:(id)sender;
+- (void)didHighlightElementView:(id)sender;
+- (void)didUnhighlightElementView:(id)sender;
+@end
+
 @interface MTElementView : UIView;
+
+@property (assign, nonatomic) id <MTElementViewDelegate> delegate;
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
