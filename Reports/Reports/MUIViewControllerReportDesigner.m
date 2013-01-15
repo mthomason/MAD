@@ -61,7 +61,7 @@
 
 #pragma mark - MTCollectionViewLineLayoutDelegate
 
-- (CGPoint)centerPointForIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
     NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
     return [result CGPointValue];
 }
@@ -170,7 +170,7 @@
     // MARK: Setup horizontal constraints.
     [[self view] removeConstraints:[self layoutConstraintsToRemove]];
 
-     NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
+    NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
 
@@ -209,11 +209,11 @@
         
         // MARK: Create collection view for report document section.
         
-        //MTCollectionViewLineLayout *flowLayoutDesignerSection = [[MTCollectionViewLineLayout alloc] init];
-        //[flowLayoutDesignerSection setDelegate:self];
+        MTCollectionViewLineLayout *flowLayoutDesignerSection = [[MTCollectionViewLineLayout alloc] init];
+        [flowLayoutDesignerSection setDelegate:self];
         
-        UICollectionViewFlowLayout *flowLayoutDesignerSection = [[UICollectionViewFlowLayout alloc] init];
-        [flowLayoutDesignerSection setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        //UICollectionViewFlowLayout *flowLayoutDesignerSection = [[UICollectionViewFlowLayout alloc] init];
+        //[flowLayoutDesignerSection setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         
         
 
@@ -221,6 +221,7 @@
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+        [collectionView setObjectIdTag:[reportSection objectID]];
         NSString *reuse = [collectionViewReuseId stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
         NSMutableDictionary *lastTouches = [[NSMutableDictionary alloc] init];
         [[self holderForLastTouchesByCollectionView] setObject:lastTouches forKey:@(collectionView.tag)];
@@ -232,7 +233,6 @@
         [collectionView setDataSource:self];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
         [collectionView setClipsToBounds:YES];
-        [collectionView setObjectIdTag:[reportSection objectID]];
         [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
         [collectionView setAllowsSelection:YES];
         [collectionView setAllowsMultipleSelection:YES];
@@ -309,6 +309,16 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    for (RptqDocumentSection *reportSection in sectionEnumerator) {
+        UICollectionView *section = [self getCollectionViewForRptqSection: reportSection];
+        [[section collectionViewLayout] invalidateLayout];
+    }
+//    for (UICollectionView *collectionView in [self sectionViews]) {
+//        NSLog(@"collectionView: %@", collectionView);
+//        NSLog(@"collectionViewLayout: %@", [collectionView collectionViewLayout]);
+//        [[collectionView collectionViewLayout] invalidateLayout];
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -394,7 +404,7 @@
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
                     
                     UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
-                    [[section collectionViewLayout] invalidateLayout];
+                    //[[section collectionViewLayout] invalidateLayout];
                     MTLog(@"Change that size.");
                 }
             }
@@ -661,12 +671,14 @@
     
     NSOrderedSet *objects = [documentSection hasObjects];
 
+    //MTCollectionViewCellElement *cell = nil;
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]]
                                                                                   forIndexPath:indexPath];
     
     if ([objects count] > row) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+    
         
         CGSize documentObjectSize = [documentObject viewSize];
         CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
@@ -1109,7 +1121,7 @@
                             
                         } completion:^(BOOL finished) {
                             [svSection setDelegate:self];
-                            [[svSection collectionViewLayout] invalidateLayout];
+                            //[[svSection collectionViewLayout] invalidateLayout];
                             
                             //NSLog(@"Complete: %@", finished ? @"YES" : @"NO");
                             //NSLog(@"allowsMultipleSelection: %@", [svSection allowsMultipleSelection] ? @"YES" : @"NO");

@@ -11,7 +11,8 @@
 @class MTCollectionViewLineLayout;
 
 @protocol MTCollectionViewLineLayoutDelegate
-- (CGPoint)centerPointForIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView;
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface MTCollectionViewLineLayout : UICollectionViewLayout
