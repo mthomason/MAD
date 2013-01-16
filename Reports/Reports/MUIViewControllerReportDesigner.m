@@ -312,7 +312,7 @@
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         UICollectionView *section = [self getCollectionViewForRptqSection: reportSection];
-        [[section collectionViewLayout] invalidateLayout];
+        //[[section collectionViewLayout] invalidateLayout];
     }
 //    for (UICollectionView *collectionView in [self sectionViews]) {
 //        NSLog(@"collectionView: %@", collectionView);
@@ -404,7 +404,7 @@
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
                     
                     UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
-                    //[[section collectionViewLayout] invalidateLayout];
+                    [[section collectionViewLayout] invalidateLayout];
                     MTLog(@"Change that size.");
                 }
             }
