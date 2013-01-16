@@ -180,6 +180,7 @@
 }
 
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
+    UICollectionViewLayoutAttributes *layoutAttributes = [super layoutAttributesForItemAtIndexPath:itemIndexPath];
     NSLog(@"finalLayoutAttributesForDisappearingItemAtIndexPath: %@", itemIndexPath);
     /*
     NSUInteger sectionIndex = [itemIndexPath section];
@@ -192,13 +193,14 @@
         NSLog(@"Crash");
     }
     */
-    UICollectionViewLayoutAttributes *layoutAttributes = [[self updateItemsDeleted] objectForKey: itemIndexPath];
+    //UICollectionViewLayoutAttributes *layoutAttributes = [[self updateItemsDeleted] objectForKey: itemIndexPath];
     
     [layoutAttributes setHidden:YES];
     return layoutAttributes;
 }
-
+/*
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
+    [super prepareForCollectionViewUpdates:updateItems];
     NSLog(@"prepareForCollectionViewUpdates");
     for (UICollectionViewUpdateItem *updateItem in updateItems) {
         switch ([updateItem updateAction]) {
@@ -210,7 +212,7 @@
                 break;
             case UICollectionUpdateActionDelete:
                 NSLog(@"%@%@%@", @"UICollectionUpdateActionDelete", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                [[self updateItemsDeleted] setObject:[self invalidatedLayoutAttributesForItemAtIndexPath:[updateItem indexPathBeforeUpdate]] forKey:[updateItem indexPathBeforeUpdate]];
+//                [[self updateItemsDeleted] setObject:[self invalidatedLayoutAttributesForItemAtIndexPath:[updateItem indexPathBeforeUpdate]] forKey:[updateItem indexPathBeforeUpdate]];
                 break;
             case UICollectionUpdateActionReload:
                 NSLog(@"%@%@%@", @"UICollectionUpdateActionReload", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
@@ -225,8 +227,10 @@
 }
 
 - (void)finalizeCollectionViewUpdates {
+    [super finalizeCollectionViewUpdates];
     NSLog(@"finalizeCollectionViewUpdates");
 }
+ */
 
 - (void)invalidateLayout {
     NSLog(@"invalidateLayout");
