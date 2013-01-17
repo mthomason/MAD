@@ -24,6 +24,7 @@ extern NSString * const MTFontFamilyZapfino;
 
 @property (assign) CGFloat pointSize;
 
++ (id)fontWithFamilyName:(NSString *)familyName;
 - (id)initWithFamilyName:(NSString *)familyName;
 - (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize;
 

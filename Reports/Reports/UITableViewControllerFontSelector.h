@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTFont.h"
 
 @class UITableViewControllerFontSelector;
 
@@ -29,5 +30,7 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontVerdana;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontZapfino;
+
+- (void)setSelectedFont:(MTFont *)font;
 
 @end

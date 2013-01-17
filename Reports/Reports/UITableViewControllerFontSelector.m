@@ -10,7 +10,7 @@
 #import "MTFont.h"
 
 @interface UITableViewControllerFontSelector()
-
+@property (nonatomic, retain) MTFont *initalSelectedFont;
 @end
 
 @implementation UITableViewControllerFontSelector
@@ -44,6 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self checkSelectedFont:[self initalSelectedFont]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -94,17 +95,7 @@
     }
     
     if ([cell accessoryType] != UITableViewCellAccessoryCheckmark) {
-        [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryNone];
+        [self uncheckAllCells];
         
         //Check this box, or not (could test)
         [[[self tableView] cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -116,7 +107,55 @@
     
 }
 
+- (void)checkSelectedFont:(MTFont *)font {
+    [self uncheckAllCells];
+    
+    if ([[font name] isEqualToString:MTFontFamilyAmericanTypewriter]) {
+        [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyArial]) {
+        [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyCourierNew]) {
+        [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyCourier]) {
+        [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyGeorgia]) {
+        [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyHelvetica]) {
+        [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyHelveticaNeue]) {
+        [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyTimesNewRoman]) {
+        [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyTrebuchet]) {
+        [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyVerdana]) {
+        [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else if ([[font name] isEqualToString:MTFontFamilyZapfino]) {
+        [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+}
+
+- (void)setSelectedFont:(MTFont *)font {
+    [self setInitalSelectedFont:font];
+}
+
+- (void)uncheckAllCells {
+    [[self tableViewCellFontAmericanTypewriter] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontArial] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontCourierNew] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontCourier] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontGeorgia] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontHelvetica] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontHelveticaNeue] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontTimesNewRoman] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontTrebuchet] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontVerdana] setAccessoryType:UITableViewCellAccessoryNone];
+    [[self tableViewCellFontZapfino] setAccessoryType:UITableViewCellAccessoryNone];
+    
+}
+
 - (void)dealloc {
+    [_initalSelectedFont release];
     [tableViewCellFontAmericanTypewriter release];
     [tableViewCellFontArial release];
     [tableViewCellFontCourierNew release];

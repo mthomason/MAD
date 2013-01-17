@@ -106,14 +106,6 @@
     [[self buttonUnderline] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
     [[self buttonUnderline] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
     [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
-
-    //[[self segmentedControlHorizontalAlignment] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    //[[self segmentedControlHorizontalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-    //[[self segmentedControlHorizontalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateApplication barMetrics:UIBarMetricsDefault];
-
-    //[[self segmentedControlVerticalAlignment] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    //[[self segmentedControlVerticalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-    //[[self segmentedControlVerticalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateApplication barMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -419,7 +411,7 @@
         [[self stepperSizeHeight] setValue:[sizeHeightHolder doubleValue]];
 
         displayNumber = numberOfSizeWidths == 1 ? sizeWidthHolder : nil;
-        [[self labelSizeWidth] setAttributedText:[self sizeHeightForValue:displayNumber andFontSize:labelSize]];
+        [[self labelSizeWidth] setAttributedText:[self sizeWidthForValue:displayNumber andFontSize:labelSize]];
         [[self stepperSizeWidth] setValue:[sizeWidthHolder doubleValue]];
         
         switch (numberFonts) {
@@ -604,6 +596,7 @@
         [documentObject setFontname:[font name]];
     }
     [[AppDelegate activeDocument] saveContext];
+
 }
 
 - (IBAction)toggleBold:(id)sender {

@@ -1306,7 +1306,16 @@
     
     if ([item isEqual:[self navigationItemFontChooser]]) {
         shouldPushItem = YES;
-        
+
+        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        NSString *frontName = @"";
+        for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            frontName = [documentObject fontname];
+            break;
+        }
+        [[self tableViewControllerFontSelector] setSelectedFont:[MTFont fontWithFamilyName:frontName]];
+
         [[[self tableViewControllerFontSelector] tableView] setFrame: [[self toolboxContainerView] bounds]];
         [[[self tableViewControllerFontSelector] tableView] setBounds: [[self toolboxContainerView] bounds]];
         CGRect newRect = [[[self tableViewControllerFontSelector] tableView] frame];
@@ -1333,6 +1342,8 @@
     CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
     
     MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
+
+
     [[self tableViewControllerTextLayoutSettings] chooseFont:font];
     
     [font release];

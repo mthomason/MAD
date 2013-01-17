@@ -217,6 +217,14 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return 9.0000f;
 }
 
++ (id)fontWithFamilyName:(NSString *)familyName {
+    if ([familyName length] == 0) {
+        familyName = MTFontFamilyHelveticaNeue;
+    }
+    MTFont *font = [[MTFont alloc] initWithFamilyName:familyName];
+    return [font autorelease];
+}
+
 - (id)init {
     return [self initWithFamilyName:[MTFont defaultFamily]];
 }

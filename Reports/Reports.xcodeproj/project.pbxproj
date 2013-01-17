@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
 		4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
 		4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
@@ -40,7 +39,6 @@
 		4C0E7727163B5AEC003B951E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
-		4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
 		4C0E772D163B5AEC003B951E /* PreferencesApplication.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */; };
@@ -515,7 +513,6 @@
 		4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
 		4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
-		4C860B12167EDE7000AC1904 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4C860B14167EDE7000AC1904 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C860B15167EDE7000AC1904 /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
@@ -864,10 +861,8 @@
 		4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
 		4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
-		4CA163DE167EB8E100540A14 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CA163E0167EB8E100540A14 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
-		4CA163E1167EB8E200540A14 /* UIViewControllerToolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */; };
 		4CA163E2167EB8E200540A14 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CA163E3167EB8E200540A14 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4CA163E4167EB8E700540A14 /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
@@ -1630,7 +1625,6 @@
 /* Begin PBXFileReference section */
 		4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelStrikethrough.h; sourceTree = "<group>"; };
 		4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelStrikethrough.m; sourceTree = "<group>"; };
-		4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerToolbox.m; sourceTree = "<group>"; };
 		4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignCenter20.png; sourceTree = "<group>"; };
 		4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignLeft20.png; sourceTree = "<group>"; };
 		4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageAlignRight20.png; sourceTree = "<group>"; };
@@ -1808,7 +1802,6 @@
 		4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageLandscape@2x.png"; sourceTree = "<group>"; };
 		4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageArrowDown.png; sourceTree = "<group>"; };
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
-		4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolbox.h; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = SOURCE_ROOT; };
 		4C7C8AF11660348D00F2B88B /* UIManagedDocument+FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIManagedDocument+FileOperations.h"; sourceTree = "<group>"; };
@@ -2637,8 +2630,6 @@
 		4C00818214B73884003DF437 /* Toolbox */ = {
 			isa = PBXGroup;
 			children = (
-				4C76F0EF14B556F5005DCE49 /* UIViewControllerToolbox.h */,
-				4C00815A14B6BE2C003DF437 /* UIViewControllerToolbox.m */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
 				4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */,
 				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
@@ -4975,7 +4966,6 @@
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
 				4C0E7728163B5AEC003B951E /* UITableViewControllerFontSettings.m in Sources */,
 				4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */,
-				4C0E772A163B5AEC003B951E /* UIViewControllerToolbox.m in Sources */,
 				4C0E772B163B5AEC003B951E /* UITableViewControllerFontSelector.m in Sources */,
 				4C0E772C163B5AEC003B951E /* NSFileManager+Common.m in Sources */,
 				4C0E772D163B5AEC003B951E /* PreferencesApplication.xcdatamodeld in Sources */,
@@ -5188,7 +5178,6 @@
 				4CA163D5167EB8D400540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163D8167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
 				4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */,
-				4CA163DE167EB8E100540A14 /* UIViewControllerToolbox.m in Sources */,
 				4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */,
 				4CA163E0167EB8E100540A14 /* UITableViewControllerFontSelector.m in Sources */,
 				4CA163E4167EB8E700540A14 /* UITableViewControllerLinkBuilder.m in Sources */,
@@ -5334,7 +5323,6 @@
 				4CA163D7167EB8D500540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
 				4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */,
-				4CA163E1167EB8E200540A14 /* UIViewControllerToolbox.m in Sources */,
 				4CA163E2167EB8E200540A14 /* UITableViewControllerFontSettings.m in Sources */,
 				4CA163E3167EB8E200540A14 /* UITableViewControllerFontSelector.m in Sources */,
 				4CA163EA167EB8E800540A14 /* UITableViewControllerLinkBuilder.m in Sources */,
@@ -5426,7 +5414,6 @@
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */,
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
-				4C00815B14B6BE2C003DF437 /* UIViewControllerToolbox.m in Sources */,
 				4C00818114B6D158003DF437 /* UITableViewControllerFontSelector.m in Sources */,
 				4C00818B14B745C9003DF437 /* NSFileManager+Common.m in Sources */,
 				4C00819614B84293003DF437 /* PreferencesApplication.xcdatamodeld in Sources */,
@@ -5638,7 +5625,6 @@
 				4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */,
 				4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */,
 				4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */,
-				4C860B12167EDE7000AC1904 /* UIViewControllerToolbox.m in Sources */,
 				4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */,
 				4C860B14167EDE7000AC1904 /* UITableViewControllerFontSelector.m in Sources */,
 				4C860B15167EDE7000AC1904 /* UITableViewControllerLinkBuilder.m in Sources */,

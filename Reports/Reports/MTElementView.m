@@ -239,19 +239,6 @@
 
     NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
     
-    
-    CGFloat paddingLeft = [[documentObject paddingLeft] floatValue];
-    CGFloat paddingTop = [[documentObject paddingTop] floatValue];
-    CGFloat paddingBottom = [[documentObject paddingBottom] floatValue];
-    CGFloat paddingRight = [[documentObject paddingRight] floatValue];
-    CGFloat originX = CGPointZero.x + paddingLeft;
-    CGFloat originY = CGPointZero.y + paddingTop;
-    CGFloat sizeWidth = [self bounds].size.width - paddingLeft - paddingRight;
-    CGFloat sizeHeight =  [self bounds].size.height - paddingTop - paddingBottom;
-    CGRect newBoundsAfterPadding = CGRectMake(originX + paddingRight, originY + paddingTop, sizeWidth - paddingLeft, sizeHeight - paddingTop);
-    //[[self paddingView] setFrame:newBoundsAfterPadding];
-    //[[self paddingView] setFrame:[self paddingViewFrame]];
-    //[[self visibleView] setFrame:CGRectMake(self.visibleView.frame.origin.x, self.visibleView.frame.origin.y, self.visibleView.frame.size.width - paddingLeft, self.visibleView.frame.size.height - paddingTop)];
     [[self displayLabel] setAttributedText:attributtedString];
     
     MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
@@ -313,30 +300,7 @@
     [[self displayLabel] setNeedsDisplay];
     [attributtedString release];
 }
-/*
-- (void)drawRect:(CGRect)rect {
-    if ([self isSelected]) {
-        
-        [[self displayLabel] setBackgroundColor:[UIColor redColor]];
-        [[self paddingView] setBackgroundColor:[UIColor redColor]];
-        [[self visibleView] setBackgroundColor:[UIColor redColor]];
-        [[self marginView] setBackgroundColor:[UIColor redColor]];
-        
-        //[[UIColor redColor] setFill];
-        //[[self paddingView] setBackgroundColor:[UIColor redColor]];
-//    } else if ([self highlight]) {
-//        [[UIColor yellowColor] setFill];
-    } else {
-        [[self displayLabel] setBackgroundColor:[UIColor whiteColor]];
-        [[self paddingView] setBackgroundColor:[UIColor whiteColor]];
-        [[self visibleView] setBackgroundColor:[UIColor whiteColor]];
-        [[self marginView] setBackgroundColor:[UIColor whiteColor]];
-        //[[self paddingView] setBackgroundColor:[UIColor clearColor]];
-        //[[UIColor whiteColor] setFill];
-    }
-    //UIRectFill(rect);
-}
-*/
+
 #pragma mark - Members
 
 - (void)setWobbleRunning:(BOOL)running {
@@ -374,26 +338,6 @@
 - (BOOL)toggleSelected {
     [self setDisplaySelected:![self displaySelected]];
     return [self displaySelected];
-}
-
-- (void)setSelected:(BOOL)selected {
-    /*
-    NSLog(@"%@", selected ? @"Select" : @"Deselect");
-    [self setDisplaySelected:selected];
-    //[self setNeedsDisplay];
-    
-    if (selected) {
-        [[self paddingView] setBackgroundColor:[UIColor yellowColor]];
-        //[[UIColor redColor] setFill];
-        //[[self paddingView] setBackgroundColor:[UIColor redColor]];
-        //    } else if ([self highlight]) {
-        //        [[UIColor yellowColor] setFill];
-    } else {
-        [[self paddingView] setBackgroundColor:[UIColor grayColor]];
-        //[[self paddingView] setBackgroundColor:[UIColor clearColor]];
-        //[[UIColor whiteColor] setFill];
-    }
-*/
 }
 
 - (BOOL)isSelected {
