@@ -13,27 +13,19 @@
 @property (assign) CGSize contentSize;
 @property (assign) NSInteger numberOfSections;
 
-@property (assign) BOOL layoutValid;
-
 @property (nonatomic, retain) NSMutableArray *layoutArray;
 @property (nonatomic, retain) NSMutableArray *invalidatedLayoutArray;
 
-@property (nonatomic, retain) NSMutableDictionary *updateItemsInserted;
-@property (nonatomic, retain) NSMutableDictionary *updateItemsDeleted;
-@property (nonatomic, retain) NSMutableDictionary *updateItemsMoved;
-@property (nonatomic, retain) NSMutableDictionary *updateItemsReload;
+@property (nonatomic, retain) NSMutableArray *disappearingAttributes;
 
 @end
 
 @implementation MTCollectionViewLineLayout
 
 - (void)dealloc {
-    [_updateItemsInserted release];
-    [_updateItemsDeleted release];
-    [_updateItemsMoved release];
-    [_updateItemsReload release];
     [_invalidatedLayoutArray release];
     [_layoutArray release];
+    [_disappearingAttributes release];
     [super dealloc];
 }
 
@@ -45,21 +37,9 @@
         [self setLayoutArray:rectArray];
         [rectArray release];
 
-        NSMutableDictionary *updateItemsInserted = [[NSMutableDictionary alloc] init];
-        [self setUpdateItemsInserted:updateItemsInserted];
-        [updateItemsInserted release];
-        
-        NSMutableDictionary *updateItemsDeleted = [[NSMutableDictionary alloc] init];
-        [self setUpdateItemsDeleted:updateItemsDeleted];
-        [updateItemsDeleted release];
-
-        NSMutableDictionary *updateItemsMoved = [[NSMutableDictionary alloc] init];
-        [self setUpdateItemsMoved:updateItemsMoved];
-        [updateItemsMoved release];
-
-        NSMutableDictionary *updateItemsReload = [[NSMutableDictionary alloc] init];
-        [self setUpdateItemsReload:updateItemsReload];
-        [updateItemsReload release];
+        NSMutableArray *disappearingAttributes = [[NSMutableArray alloc] init];
+        [self setDisappearingAttributes:disappearingAttributes];
+        [disappearingAttributes release];
 
     }
     return self;
@@ -117,7 +97,6 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    //NSLog(@"layoutAttributesForElementsInRect");
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
     for (NSInteger section = 0; section < [self.layoutArray count]; section++) {
@@ -135,54 +114,39 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"layoutAttributesForItemAtIndexPath");
     NSUInteger sectionIndex = [indexPath section];
     NSUInteger itemIndex = [indexPath item];
-    if (sectionIndex >= [[self layoutArray] count]) {
-        NSLog(@"Crash");
-    }
     NSArray *rectsForSection = [[self layoutArray] objectAtIndex:sectionIndex];
-    if (itemIndex >= [rectsForSection count]) {
-        NSLog(@"Crash");
-    }
     UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:itemIndex];
-    
     return layoutAttributes;
 }
 
 - (UICollectionViewLayoutAttributes *)invalidatedLayoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"layoutAttributesForItemAtIndexPath");
     NSUInteger sectionIndex = [indexPath section];
     NSUInteger itemIndex = [indexPath item];
-    if (sectionIndex >= [[self invalidatedLayoutArray] count]) {
-        NSLog(@"Crash");
-    }
     NSArray *rectsForSection = [[self invalidatedLayoutArray] objectAtIndex:sectionIndex];
-    if (itemIndex >= [rectsForSection count]) {
-        NSLog(@"Crash");
-    }
     UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:itemIndex];
-    
     return layoutAttributes;
 }
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
+    NSLog(@"Appearing %@", itemIndexPath);
     UICollectionViewLayoutAttributes *layoutAttributes = [[[[self layoutArray] objectAtIndex:itemIndexPath.section] objectAtIndex:itemIndexPath.item] copy];
-    //result.center = [[self delegate] collectionView:[self collectionView] layout:self initialLayoutCenterPointForIndexPath:itemIndexPath];
-    NSLog(@"%@initial layout [%d, %d] %@", self, itemIndexPath.section, itemIndexPath.item, NSStringFromCGRect(layoutAttributes.frame));
     return [layoutAttributes autorelease];
 }
 
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
+    NSLog(@"Disappearing %@", itemIndexPath);
     [super layoutAttributesForItemAtIndexPath:itemIndexPath];
     UICollectionViewLayoutAttributes *layoutAttributes = [[[self invalidatedLayoutArray] objectAtIndex:itemIndexPath.section] objectAtIndex: itemIndexPath.item];
-    NSLog(@"%@final layout [%d, %d] %@", self, itemIndexPath.section, itemIndexPath.item, NSStringFromCGRect(layoutAttributes.frame));
     return layoutAttributes;
 }
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
-    NSLog(@"%@prepareForCollectionViewUpdates", self);
+    
+    NSMutableArray *disappearingAttributes = [[NSMutableArray alloc] initWithArray:[self invalidatedLayoutArray]];
+    //NSMutableArray *appearingAttributes = [[NSMutableArray alloc] initWithArray:[self layoutArray]];
     
     //NSMutableArray *invalidatedLayoutArray = [[NSMutableArray alloc] initWithArray:[self layoutArray]];
     /*
@@ -194,14 +158,15 @@
                 break;
             case UICollectionUpdateActionInsert:
                 NSLog(@"%@%@%@", @"UICollectionUpdateActionInsert", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                NSIndexPath *insertedIndex = [updateItem indexPathAfterUpdate];
-                UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:insertedIndex];
-                [[invalidatedLayoutArray objectAtIndex:[insertedIndex section]] insertObject:layoutAttributes atIndex:[insertedIndex item]];
+                UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:updateItem.indexPathAfterUpdate];
+                layoutAttributes.size = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:updateItem.indexPathAfterUpdate];
+                layoutAttributes.center = [[self delegate] collectionView:[self collectionView] layout:self initialLayoutCenterPointForIndexPath:updateItem.indexPathAfterUpdate];
+                [[disappearingAttributes objectAtIndex:updateItem.indexPathAfterUpdate.section] insertObject:layoutAttributes atIndex:updateItem.indexPathAfterUpdate.item];
                 break;
             case UICollectionUpdateActionDelete:
                 NSLog(@"%@%@%@", @"UICollectionUpdateActionDelete", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                NSIndexPath *deletedIndex = [updateItem indexPathBeforeUpdate];
-                [[invalidatedLayoutArray objectAtIndex:[deletedIndex section]] removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:[deletedIndex item]]];
+                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:updateItem.indexPathBeforeUpdate.item];
+                [[disappearingAttributes objectAtIndex:updateItem.indexPathBeforeUpdate.section] removeObjectsAtIndexes:indexSet];
                 break;
             case UICollectionUpdateActionReload:
                 NSLog(@"%@%@%@", @"UICollectionUpdateActionReload", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
@@ -214,6 +179,11 @@
         }
     }
     */
+    [self setDisappearingAttributes:disappearingAttributes];
+    [disappearingAttributes release];
+    //[appearingAttributes release];
+    
+    
     // MARK: Recalculate updated attributes.
     CGSize contentSize = CGSizeZero;
     NSUInteger sectionCounter = 0, itemCounter = 0;
@@ -241,42 +211,18 @@
 
         sectionCounter++;
     }
-    //[self setContentSize:contentSize];
-
-
-    //[self setInvalidatedLayoutArray:invalidatedLayoutArray];
-    
-    //[invalidatedLayoutArray release];
+     
 }
 
 - (void)finalizeCollectionViewUpdates {
     [super finalizeCollectionViewUpdates];
-    NSLog(@"%@finalizeCollectionViewUpdates", self);
 }
 
 - (void)invalidateLayout {
-    NSLog(@"%@invalidateLayout", self);
     NSMutableArray *invalidatedLayoutArray = [[self layoutArray] copy];
     [self setInvalidatedLayoutArray:invalidatedLayoutArray];
     [invalidatedLayoutArray release];
     [super invalidateLayout];
-    //[self setInvalidatedLayoutArray:[self layoutArray]];
 }
 
-/*
--(NSArray*)layoutAttributesForElementsInRect:(CGRect)rect
-{
-    NSArray* array = [super layoutAttributesForElementsInRect:rect];
-    CGRect visibleRect;
-    visibleRect.origin = self.collectionView.contentOffset;
-    visibleRect.size = self.collectionView.bounds.size;
- 
-    for (UICollectionViewLayoutAttributes *attributes in array) {
-        if (CGRectIntersectsRect(attributes.frame, rect)) {
-            [attributes setFrame:CGRectMake(attributes.frame.origin.x, CGPointZero.y, attributes.frame.size.width, attributes.frame.size.height)];
-        }
-    }
-    return array;
-}
- */
 @end

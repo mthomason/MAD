@@ -95,8 +95,6 @@
         [self setMarginView: marginView];
         [marginView release];
         
-        //CGRect visibleFrame = [self visibleFrame];
-        
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
         [visibleView setBackgroundColor:[UIColor yellowColor]];
@@ -134,80 +132,60 @@
 
 - (CGRect)marginViewBounds {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect paddingBounds = [self paddingViewBounds];
-    
-    CGFloat marginBoundsSizeWidth = [[documentObject marginLeft] floatValue] + [[documentObject marginRight] floatValue] + paddingBounds.size.width;
-    CGFloat marginBoundsSizeHeight = [[documentObject marginTop] floatValue] + [[documentObject marginBottom] floatValue] + paddingBounds.size.height;
-    CGRect marginBounds = CGRectMake(CGPointZero.x, CGPointZero.y, marginBoundsSizeWidth, marginBoundsSizeHeight);
-    
-    return marginBounds;
-}
-
-- (CGRect)paddingViewBounds {
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect elementBounds = [self elementViewBounds];
-    CGFloat paddingBoundsSizeWidth = elementBounds.size.width + [[documentObject paddingLeft] floatValue] + [[documentObject paddingRight] floatValue];
-    CGFloat paddingBoundsSizeHeight = elementBounds.size.height + [[documentObject paddingTop] floatValue] + [[documentObject paddingBottom] floatValue];
-    CGRect paddingBounds = CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
-
-    return paddingBounds;
-}
-
-- (CGRect)elementViewBounds {
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
-    return elementBounds;
+    CGFloat marginBoundsSizeWidth = [[documentObject marginLeft] floatValue] +
+                                    [[documentObject marginRight] floatValue] +
+                                    [[documentObject paddingLeft] floatValue] +
+                                    [[documentObject paddingRight] floatValue] +
+                                    [[documentObject sizewidth] floatValue];
+    CGFloat marginBoundsSizeHeight = [[documentObject marginTop] floatValue] +
+                                    [[documentObject marginBottom] floatValue] +
+                                    [[documentObject paddingTop] floatValue] +
+                                    [[documentObject paddingBottom] floatValue] +
+                                    [[documentObject sizeheight] floatValue];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, marginBoundsSizeWidth, marginBoundsSizeHeight);
 }
 
 - (CGRect)marginViewFrame {
     return [self marginViewBounds];
 }
 
+- (CGRect)paddingViewBounds {
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    CGFloat paddingBoundsSizeWidth = [[documentObject paddingLeft] floatValue] +
+                                        [[documentObject paddingRight] floatValue] +
+                                        [[documentObject sizewidth] floatValue];
+    CGFloat paddingBoundsSizeHeight = [[documentObject paddingTop] floatValue] +
+                                        [[documentObject paddingBottom] floatValue] +
+                                        [[documentObject sizeheight] floatValue];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
+}
+
 - (CGRect)paddingViewFrame {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect marginViewFrame = [self marginViewFrame];
     CGRect paddingViewBounds = [self paddingViewBounds];
-    CGFloat originX = marginViewFrame.origin.x + [[documentObject paddingLeft] floatValue];
-    CGFloat originY = marginViewFrame.origin.y + [[documentObject paddingTop] floatValue];
+    CGFloat originX = CGPointZero.x + [[documentObject marginLeft] floatValue];
+    CGFloat originY = CGPointZero.y + [[documentObject marginTop] floatValue];
     CGFloat sizeWidth = paddingViewBounds.size.width;
     CGFloat sizeHeight = paddingViewBounds.size.height;
-    CGRect paddingViewFrame = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-    return paddingViewFrame;
+    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+}
+
+- (CGRect)elementViewBounds {
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    return CGRectMake(CGPointZero.x, CGPointZero.y,
+                      [[documentObject sizewidth] floatValue],
+                      [[documentObject sizeheight] floatValue]);
 }
 
 - (CGRect)elementViewFrame {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect paddingViewFrame = [self paddingViewFrame];
     CGRect elementViewBounds = [self elementViewBounds];
-    CGFloat originX = paddingViewFrame.origin.x + [[documentObject paddingLeft] floatValue];
-    CGFloat originY = paddingViewFrame.origin.y + [[documentObject paddingTop] floatValue];
+    CGFloat originX = CGPointZero.x + [[documentObject paddingLeft] floatValue];
+    CGFloat originY = CGPointZero.y + [[documentObject paddingTop] floatValue];
     CGFloat sizeWidth = elementViewBounds.size.width;
     CGFloat sizeHeight = elementViewBounds.size.height;
-    CGRect elementViewFrame = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-    return elementViewFrame;
+    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
 }
-
-
-- (CGRect)elementFrame {
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
-    CGFloat elementFrameOriginX =  CGPointZero.x + [[documentObject marginLeft] floatValue];
-    CGFloat elementFrameOriginY = CGPointZero.y + [[documentObject marginTop] floatValue];
-    CGRect elementFrame = CGRectMake(elementFrameOriginX, elementFrameOriginY,
-                                     elementBounds.size.width, elementBounds.size.height);
-    return elementFrame;
-}
-
-- (CGRect)visibleFrame {
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    CGRect elementBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [[documentObject sizewidth] floatValue], [[documentObject sizeheight] floatValue]);
-    
-    return CGRectMake(CGPointZero.x + [[documentObject marginLeft] floatValue],
-                      CGPointZero.y + [[documentObject marginTop] floatValue],
-                      elementBounds.size.width + [[documentObject paddingLeft] floatValue] + [[documentObject paddingRight] floatValue],
-                      elementBounds.size.height + [[documentObject paddingTop] floatValue] + [[documentObject paddingBottom] floatValue]);
-}
-
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
@@ -226,12 +204,10 @@
 
 - (void)updateDisplayLabel {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    
-    //[[self marginView] setFrame:[self marginViewBounds]];
-    //[[self visibleView] setFrame:[self elementFrame]];
 
     [[self marginView] setFrame:[self marginViewFrame]];
-    [[self visibleView] setFrame:[self elementViewFrame]];
+    [[self visibleView] setFrame:[self paddingViewFrame]];
+    [[self paddingView] setFrame:[self elementViewFrame]];
 
     
     NSString *fontName = [documentObject fontname];
@@ -274,7 +250,7 @@
     CGFloat sizeHeight =  [self bounds].size.height - paddingTop - paddingBottom;
     CGRect newBoundsAfterPadding = CGRectMake(originX + paddingRight, originY + paddingTop, sizeWidth - paddingLeft, sizeHeight - paddingTop);
     //[[self paddingView] setFrame:newBoundsAfterPadding];
-    [[self paddingView] setFrame:[self paddingViewFrame]];
+    //[[self paddingView] setFrame:[self paddingViewFrame]];
     //[[self visibleView] setFrame:CGRectMake(self.visibleView.frame.origin.x, self.visibleView.frame.origin.y, self.visibleView.frame.size.width - paddingLeft, self.visibleView.frame.size.height - paddingTop)];
     [[self displayLabel] setAttributedText:attributtedString];
     

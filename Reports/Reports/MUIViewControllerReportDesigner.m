@@ -309,11 +309,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
-    for (RptqDocumentSection *reportSection in sectionEnumerator) {
-        UICollectionView *section = [self getCollectionViewForRptqSection: reportSection];
+    //SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    //for (RptqDocumentSection *reportSection in sectionEnumerator) {
+        //UICollectionView *section = [self getCollectionViewForRptqSection: reportSection];
         //[[section collectionViewLayout] invalidateLayout];
-    }
+    //}
 //    for (UICollectionView *collectionView in [self sectionViews]) {
 //        NSLog(@"collectionView: %@", collectionView);
 //        NSLog(@"collectionViewLayout: %@", [collectionView collectionViewLayout]);
@@ -399,10 +399,17 @@
             NSDictionary *changes = [documentObject changedValues];
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(sizeheight))]) {
+                    [change isEqualToString:NSStringFromSelector(@selector(sizeheight))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(marginLeft))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(marginRight))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(marginTop))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(marginBottom))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(paddingLeft))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(paddingRight))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(paddingTop))] ||
+                    [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
-                    
                     UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
                     [[section collectionViewLayout] invalidateLayout];
                     MTLog(@"Change that size.");
@@ -671,17 +678,16 @@
     
     NSOrderedSet *objects = [documentSection hasObjects];
 
-    //MTCollectionViewCellElement *cell = nil;
-    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]]
+    NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
+    MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
     
     if ([objects count] > row) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
     
-        
         CGSize documentObjectSize = [documentObject viewSize];
-        CGRect f = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
+        CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
             case MNSObjectTypeLabel: {
@@ -696,39 +702,27 @@
                 
                 RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
 
-                MTElementView *newView1 = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
+                MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
                                                                   inObjectContext:managedObjectContext];
                 
-                [newView1 setDelegate:self];
-                
-                BOOL cellSelected = [[self selectedObjectIds] containsObject:[documentObject objectID]];
-                //[cell setSelected:cellSelected];
-                //[newView1 setBackgroundColor:[UIColor whiteColor]];
-                //[newView1 setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height)];
-                //[newView1 setSelected:cellSelected];
-                //[newView1 setHighlight:[cell isHighlighted]];
-                //[newView1 setMultipleTouchEnabled: YES];
-                //[newView1 setExclusiveTouch: NO];
-                //[newView1 setOpaque: YES];
-                [[newView1 layer] setCornerRadius: 3.0000f];
+                [elementView setDelegate:self];
+                [cell setBackgroundColor:[UIColor greenColor]];
+                [elementView setFrame:cellFrame];
+                [[elementView layer] setCornerRadius: 3.0000f];
                 
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
                 [panGesture setMaximumNumberOfTouches:1];
                 [panGesture setDelegate:self];
-                [newView1 addGestureRecognizer:panGesture];
+                [elementView addGestureRecognizer:panGesture];
                 [panGesture release];
                 
                 [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
-                CGRect cellSize = CGRectMake(CGPointZero.x, CGPointZero.y, f.size.width, f.size.width);
-                [cell setFrame: cellSize];
-                [[cell contentView] setBounds:cellSize];
-                [[cell contentView] setAutoresizingMask:UIViewAutoresizingNone];
-                [[cell contentView] setBackgroundColor:[UIColor clearColor]];
+                [cell setObjectIdTag:[documentObject objectID]];
+                [cell setFrame: cellFrame];
                 [cell setUserInteractionEnabled:YES];
-                
-                [[cell contentView] addSubview:newView1];
-                [newView1 release];
-                
+                [[cell contentView] addSubview:elementView];
+
+                [elementView release];
                 
                 break;
             }
