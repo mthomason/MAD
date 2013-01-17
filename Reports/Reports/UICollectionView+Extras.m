@@ -11,17 +11,29 @@
 @implementation UICollectionView (Extras)
 
 - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter {
-    CGFloat minDistance = CGFLOAT_MAX;
     NSUInteger item = 0;
     NSUInteger section = 0;
-    for (NSIndexPath *indexPath in [self indexPathsForVisibleItems]) {
+    NSInteger counter = 0;
+    BOOL valueSet = NO;
+    NSArray *indexPathsForItems = [self indexPathsForVisibleItems];
+    for (NSIndexPath *indexPath in indexPathsForItems) {
+        
         UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath: indexPath];
-        CGFloat distance = CGDistance([layoutAttributes center], alienCenter);
-        if (distance < minDistance) {
-            minDistance = distance;
+        
+        if (alienCenter.x < [layoutAttributes center].x) {
             item = [indexPath item];
             section = [indexPath section];
+            valueSet = YES;
+            break;
         }
+        counter++;
+    }
+    if (counter == 0) {
+        item = 0, section = 0;
+        valueSet = YES;
+    }
+    if (!valueSet) {
+        item = [indexPathsForItems count], section = 0;
     }
     return  [NSIndexPath indexPathForItem:item inSection:section];
 }

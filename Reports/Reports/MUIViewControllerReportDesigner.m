@@ -1003,15 +1003,22 @@
 
 #pragma mark - Gesture Recognizers
 
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+- (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint result = CGPointZero;
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         UIView *piece = gestureRecognizer.view;
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
         CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
         
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
-        piece.center = locationInSuperview;
+        CGPoint anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            piece.layer.anchorPoint = anchorPoint;
+            piece.center = locationInSuperview;
+        }
+        result = locationInSuperview;
     }
+    return result;
 }
 
 #pragma mark - Gesture Recognizer Delegate
@@ -1058,7 +1065,7 @@
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     //NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
 
-    [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    CGPoint adjustedCenter = [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
             
@@ -1080,8 +1087,7 @@
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
                 RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
-                //NSLog(@"OBJTag %@", [[gestureRecognizer view] objectIdTag]);
-                //NSLog(@"dataSe %@", [datafield parentObjectLabelDataField]);
+                
                 if (datafield) {
                     
                     RptqDocumentSection *section = [documentObject inSection];
@@ -1105,22 +1111,11 @@
                             [hasObjects removeObjectAtIndex:deleteIndex];
                             [documentSection setHasObjects:hasObjects];
                             [[AppDelegate activeDocument] saveContext];
-                            
-                            
                             UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
-                            
-                            
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-                            
                         } completion:^(BOOL finished) {
                             [svSection setDelegate:self];
-                            //[[svSection collectionViewLayout] invalidateLayout];
-                            
-                            //NSLog(@"Complete: %@", finished ? @"YES" : @"NO");
-                            //NSLog(@"allowsMultipleSelection: %@", [svSection allowsMultipleSelection] ? @"YES" : @"NO");
-                            //NSLog(@"allowsSelection: %@", [svSection allowsSelection] ? @"YES" : @"NO");
-
                         }];
                     }
                 }
@@ -1196,13 +1191,13 @@
                     
                     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[newParent objectIdTag]
                                                                                             fromObjectContext:managedObjectContext];
-                    NSIndexPath *indexPath = [newParent indexPathForItemAtPoint:newCenter];
-                    if (indexPath == nil) {
-                        indexPath = [newParent indexOfAlienViewWithCenterPoint:newCenter];
+                    //NSIndexPath *indexPath = [newParent indexPathForItemAtPoint:newCenter];
+                    //if (indexPath == nil) {
+                        NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
                         if (indexPath == nil) {
                             indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
                         }
-                    }
+                    //}
                     
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
                     
@@ -1233,6 +1228,10 @@
         default:
             break;
     }
+}
+
+- (NSIndexPath *)insertPathForItemWithCenterPoint:(CGPoint)center {
+    
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
