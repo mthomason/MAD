@@ -51,6 +51,8 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
 @property (nonatomic, retain) NSMutableSet *selectedObjectIds;
 
+@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlToolbox;
+
 @property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
@@ -126,6 +128,7 @@
     [_toolboxContainerView release];
     [_navigationBarToolbox release];
     [_layoutConstraintsToRemove release];
+    [_segmentedControlToolbox release];
     [super dealloc];
 }
 
@@ -482,6 +485,18 @@
 
 - (void)customAction:(id)sender {
     NSLog(@"custom action! %@", sender);
+}
+
+- (IBAction)segmentedControlToolboxValueChanged:(id)sender {
+    if ([sender selectedSegmentIndex] == 0) {
+        [[[self tableViewControllerTextLayoutSettings] tableView] performBatchUpdates:^{
+
+        
+        }];
+        [[self tableViewControllerTextLayoutSettings] displayStyleSettings];
+    } else  if ([sender selectedSegmentIndex] == 1) {
+        [[self tableViewControllerTextLayoutSettings] displayLayoutSettings];
+    }
 }
 
 - (void)openReport:(NSURL *)url {
@@ -1256,6 +1271,7 @@
     [self setToolboxContainerView:nil];
     [self setNavigationBarToolbox:nil];
     [self setLayoutConstraintsToRemove:nil];
+    [self setSegmentedControlToolbox:nil];
     [super viewDidUnload];
 }
 

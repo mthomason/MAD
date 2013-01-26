@@ -2,7 +2,7 @@
 //  RptqQuery.h
 //  Reports
 //
-//  Created by Michael Thomason on 1/1/13.
+//  Created by Michael Thomason on 1/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -25,6 +25,7 @@
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nonatomic, retain) NSSet *hasTables;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, retain) NSSet *hasQueryResultFields;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)
@@ -53,5 +54,10 @@
 - (void)removeHasTablesObject:(RptqTable *)value;
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
+
+- (void)addHasQueryResultFieldsObject:(NSManagedObject *)value;
+- (void)removeHasQueryResultFieldsObject:(NSManagedObject *)value;
+- (void)addHasQueryResultFields:(NSSet *)values;
+- (void)removeHasQueryResultFields:(NSSet *)values;
 
 @end

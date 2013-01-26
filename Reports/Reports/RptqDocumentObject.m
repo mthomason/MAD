@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 1/1/13.
+//  Created by Michael Thomason on 1/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,11 +17,13 @@
 @implementation RptqDocumentObject
 
 @dynamic binary;
+@dynamic bold;
 @dynamic color;
 @dynamic fontname;
 @dynamic fontsize;
 @dynamic horizontalAlignment;
 @dynamic identifier;
+@dynamic italic;
 @dynamic label;
 @dynamic marginBottom;
 @dynamic marginLeft;
@@ -37,13 +39,11 @@
 @dynamic sectionIndexRow;
 @dynamic sizeheight;
 @dynamic sizewidth;
+@dynamic strike;
 @dynamic type;
+@dynamic underline;
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
-@dynamic bold;
-@dynamic underline;
-@dynamic italic;
-@dynamic strike;
 @dynamic inSection;
 @dynamic isFormula;
 @dynamic isLabel;

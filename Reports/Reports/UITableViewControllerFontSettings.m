@@ -50,8 +50,10 @@
 @property (assign) MTControlState controlStateStrike;
 @property (assign) MTControlState controlStateUnderline;
 
-@property (retain, nonatomic) IBOutletCollection(UIStepper) NSArray *steppers;
+@property (retain, nonatomic) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
+@property (retain, nonatomic) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
 
+@property (retain, nonatomic) IBOutletCollection(UIStepper) NSArray *steppers;
 
 @end
 
@@ -129,6 +131,39 @@
     return YES;
 }
 
+- (void)displayLayoutSettings {
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
+        [tableViewCell setHidden:NO];
+    }
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
+        [tableViewCell setHidden:YES];
+    }
+/*
+    NSMutableArray *insertPaths = [[NSMutableArray alloc] initWithCapacity:[[self groupTableViewCellStyle] count]];
+    NSMutableArray *removePaths = [[NSMutableArray alloc] initWithCapacity:[[self groupTableViewCellLayout] count]];
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
+        [insertPaths addObject:[[self tableView] indexPathForCell:tableViewCell]];
+    }
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
+        [insertPaths addObject:[[self tableView] indexPathForCell:tableViewCell]];
+    }
+    
+    [[self tableView] beginUpdates];
+    [[self tableView] insertRowsAtIndexPaths:insertPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] deleteRowsAtIndexPaths:removePaths withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] endUpdates];
+ */
+}
+
+- (void)displayStyleSettings {
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
+        [tableViewCell setHidden:NO];
+    }
+    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
+        [tableViewCell setHidden:YES];
+    }
+}
+
 - (void)dealloc {
     [_userSelectedObjectIds release];
     [labelFontName release];
@@ -169,6 +204,8 @@
     
     [_labelSizeWidth release];
     [_labelSizeHeight release];
+    [_groupTableViewCellStyle release];
+    [_groupTableViewCellLayout release];
     [super dealloc];
 }
 
@@ -894,6 +931,8 @@
     [self setStepperSizeHeight:nil];
     [self setLabelSizeWidth:nil];
     [self setLabelSizeHeight:nil];
+    [self setGroupTableViewCellStyle:nil];
+    [self setGroupTableViewCellLayout:nil];
     [super viewDidUnload];
 }
 @end

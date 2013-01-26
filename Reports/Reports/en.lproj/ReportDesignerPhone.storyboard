@@ -355,6 +355,9 @@
                                                             <segment title="Style"/>
                                                             <segment title="Layout"/>
                                                         </segments>
+                                                        <connections>
+                                                            <action selector="segmentedControlToolboxValueChanged:" destination="d6e-CT-kmt" eventType="valueChanged" id="AmW-V4-oDx"/>
+                                                        </connections>
                                                     </segmentedControl>
                                                 </barButtonItem>
                                                 <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="OZC-Tn-3la">
@@ -414,6 +417,7 @@
                         <outlet property="navigationItemFontChooser" destination="TfO-WM-pdr" id="kju-qG-7hh"/>
                         <outlet property="navigationItemLayout" destination="26t-V7-i8J" id="Wp3-Hk-c4O"/>
                         <outlet property="navigationItemStyle" destination="fcd-MR-7nw" id="Eav-n3-wnd"/>
+                        <outlet property="segmentedControlToolbox" destination="riD-Ho-iBL" id="w94-ua-MnZ"/>
                         <outlet property="toolbarBottom" destination="cSM-my-rda" id="psB-WE-cMp"/>
                         <outlet property="toolbarTop" destination="9VI-qP-p12" id="6uA-15-dB6"/>
                         <outlet property="toolboxContainerView" destination="sbu-HP-hQz" id="MY1-El-WMi"/>
@@ -5138,6 +5142,14 @@
                         <outletCollection property="steppers" destination="8xA-d1-fea" id="o6K-Ba-Hzk"/>
                         <outletCollection property="steppers" destination="pUH-zW-XSc" id="rCZ-hi-lrT"/>
                         <outletCollection property="steppers" destination="VoN-hl-tmS" id="7IV-ab-oo9"/>
+                        <outletCollection property="groupTableViewCellStyle" destination="nA3-af-GzS" id="uyy-dn-keq"/>
+                        <outletCollection property="groupTableViewCellStyle" destination="sxp-wQ-JfJ" id="bfM-X0-23k"/>
+                        <outletCollection property="groupTableViewCellStyle" destination="b21-8Y-JGs" id="rrF-W9-wpm"/>
+                        <outletCollection property="groupTableViewCellStyle" destination="KEA-0P-k1j" id="8hO-WE-KHC"/>
+                        <outletCollection property="groupTableViewCellStyle" destination="tEc-Yw-Duf" id="pdb-Qm-mZC"/>
+                        <outletCollection property="groupTableViewCellLayout" destination="TM3-7k-AWd" id="BO7-un-p5B"/>
+                        <outletCollection property="groupTableViewCellLayout" destination="Ylh-xO-ovQ" id="qYv-2S-KKa"/>
+                        <outletCollection property="groupTableViewCellLayout" destination="AYB-GO-l60" id="vYM-gK-yI8"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PTF-58-MR6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5575,6 +5587,7 @@
                 <relationship kind="outlet" name="navigationItemFontChooser" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="segmentedControlToolbox" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolboxContainerView" candidateClass="UIView"/>
@@ -5748,6 +5761,8 @@
                 <relationship kind="outlet" name="stepperPaddingTop" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="stepperSizeHeight" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="stepperSizeWidth" candidateClass="UIStepper"/>
+                <relationship kind="outletCollection" name="groupTableViewCellLayout" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="groupTableViewCellStyle" candidateClass="UITableViewCell"/>
                 <relationship kind="outletCollection" name="steppers" candidateClass="UIStepper"/>
             </relationships>
         </class>

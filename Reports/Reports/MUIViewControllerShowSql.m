@@ -7,7 +7,6 @@
 //
 
 #import "MUIViewControllerShowSql.h"
-#import "AppDelegate.h"
 
 @interface MUIViewControllerShowSql ()
 
@@ -25,11 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    [[self textView] setText:[RptqQuery getSqlForQuery:query]];
+    [[self textView] setText:[RptqDocument sqlStatementForActiveDocument]];
 }
 
 - (void)didReceiveMemoryWarning {

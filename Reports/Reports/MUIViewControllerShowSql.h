@@ -7,9 +7,10 @@
 //
 
 #import "MUIViewController.h"
-#import "UIManagedDocumentReport.h"
-#import "RptqDocument+Extras.h"
-#import "RptqQuery+Extras.h"
+//#import "UIManagedDocumentReport.h"
+//#import "RptqDocument+Extras.h"
+//#import "RptqQuery+Extras.h"
+#import "RptqDocument+ActiveDocument.h"
 
 @interface MUIViewControllerShowSql : MUIViewController
 

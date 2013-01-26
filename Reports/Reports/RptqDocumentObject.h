@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 1/1/13.
+//  Created by Michael Thomason on 1/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,11 +14,13 @@
 @interface RptqDocumentObject : NSManagedObject
 
 @property (nonatomic, retain) NSData * binary;
+@property (nonatomic, retain) NSNumber * bold;
 @property (nonatomic, retain) id color;
 @property (nonatomic, retain) NSString * fontname;
 @property (nonatomic, retain) NSNumber * fontsize;
 @property (nonatomic, retain) NSNumber * horizontalAlignment;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSNumber * italic;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSNumber * marginBottom;
 @property (nonatomic, retain) NSNumber * marginLeft;
@@ -34,13 +36,11 @@
 @property (nonatomic, retain) NSNumber * sectionIndexRow;
 @property (nonatomic, retain) NSNumber * sizeheight;
 @property (nonatomic, retain) NSNumber * sizewidth;
+@property (nonatomic, retain) NSNumber * strike;
 @property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * underline;
 @property (nonatomic, retain) NSNumber * verticalAlignment;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSNumber * bold;
-@property (nonatomic, retain) NSNumber * underline;
-@property (nonatomic, retain) NSNumber * italic;
-@property (nonatomic, retain) NSNumber * strike;
 @property (nonatomic, retain) RptqDocumentSection *inSection;
 @property (nonatomic, retain) RptqDocumentObjectFormula *isFormula;
 @property (nonatomic, retain) RptqDocumentObjectLabel *isLabel;

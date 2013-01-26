@@ -16,20 +16,17 @@
 @implementation MNSDatabase
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database {
-    
     RptqUserCredentals *userCredentals = [database ownedByUser];
+    return [MNSDatabase databaseWithIdentifier:[userCredentals database_driver_type]];
+}
+
++ (id)databaseWithIdentifier:(NSString *)identifier {
     id result = nil;
-    if ([[userCredentals database_driver_type] isEqualToString:[MNSDatabaseMySql identifier]]) {
-        MNSDatabaseConnection *databaseConnection = [[MNSDatabaseConnection alloc] init];
-        [databaseConnection setUsername:    [userCredentals mysql_username]];
-        [databaseConnection setPassword:    [userCredentals mysql_password]];
-        [databaseConnection setServer:      [userCredentals mysql_host]];
-        [databaseConnection setDatabase:    [userCredentals mysql_database]];
-        [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
+    if ([identifier isEqualToString:[MNSDatabaseMySql identifier]]) {
         MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:nil];
         result = databaseMySql;
         [databaseMySql autorelease];
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MNSDatabaseSalesForce identifier]]) {
+    } else if ([identifier isEqualToString:[MNSDatabaseSalesForce identifier]]) {
         MNSDatabaseSalesForce *databaseSalesForce = [[MNSDatabaseSalesForce alloc] init];
         result = databaseSalesForce;
         [databaseSalesForce autorelease];

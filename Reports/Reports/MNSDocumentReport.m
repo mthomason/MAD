@@ -67,6 +67,15 @@
 }
 
 - (void)refresh {
+    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    MNSDatabase *mnsDatabase = [MNSDatabase databaseWithIdentifier: [database database_driver_type]];
+    NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
+    [mnsDatabase runQuery:sqlSelect completion:^(MNSDatabase *database, NSArray *results) {
+        
+    }];
     [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

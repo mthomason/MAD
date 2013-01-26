@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, NSDatabaseQueryType) {
 @interface MNSDatabase : NSObject
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
++ (id)databaseWithIdentifier:(NSString *)identifier;
 
 - (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
               completion: (void (^)(MNSDatabase *database, RptqTable *originTable, NSArray *fields))completion;

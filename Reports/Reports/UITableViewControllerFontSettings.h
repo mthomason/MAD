@@ -37,4 +37,7 @@
 
 - (IBAction)controlValueChanged:(id)sender;
 
+- (void)displayLayoutSettings;
+- (void)displayStyleSettings;
+
 @end

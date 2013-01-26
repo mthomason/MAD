@@ -2,7 +2,7 @@
 //  RptqQueryCache.h
 //  Reports
 //
-//  Created by Michael Thomason on 1/1/13.
+//  Created by Michael Thomason on 1/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSData * data;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSString * filename;
 @property (nonatomic, retain) RptqQuery *hasQuery;
 
 @end
