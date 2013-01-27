@@ -386,8 +386,12 @@
         MUIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
+        [[AppDelegate activeDocument] refresh];
+        
         MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
+        
+        
     }
 }
 

@@ -10,7 +10,7 @@
 
 @interface MNSDatabaseMySql ()
 
-@property (nonatomic, retain) MNSDatabaseConnection *databaseConnection;
+@property (readwrite, nonatomic, retain) MNSDatabaseConnection *databaseConnection;
 
 @end
 
@@ -223,9 +223,6 @@
             [serv setSchema:    [[self databaseConnection] database]];
             
             MysqlConnection *conn = [MysqlConnection connectToServer: serv];
-            
-            //NSInteger colctr = 0;
-            
             NSMutableArray *results = nil;
             
             if (conn) {
@@ -299,6 +296,22 @@
 
 - (void)runQuery: (NSString *)query
       completion: (void (^)(MNSDatabase *database, NSArray *results))completion {
+    MysqlServer *serv = [[MysqlServer alloc] init];
+    
+    [serv setHost:      [[self databaseConnection] server]];
+    [serv setUser:      [[self databaseConnection] username]];
+    [serv setPassword:  [[self databaseConnection] password]];
+    [serv setSchema:    [[self databaseConnection] database]];
+    
+    MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+    if (conn) {
+        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn];
+        
+        completion(self, [fetch results]);
+
+    } else {
+        completion(self, nil);
+    }
     
 }
 
@@ -308,6 +321,10 @@
 
 + (NSString *)identifier {
     return @"MySQL";
+}
+
+- (id)connectionSettings {
+    return [self databaseConnection];
 }
 
 @end

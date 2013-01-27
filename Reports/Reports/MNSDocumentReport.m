@@ -71,10 +71,26 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    MNSDatabase *mnsDatabase = [MNSDatabase databaseWithIdentifier: [database database_driver_type]];
+    MNSDatabase *mnsDatabase = [MNSDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
+    sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 500", sqlSelect];
     [mnsDatabase runQuery:sqlSelect completion:^(MNSDatabase *database, NSArray *results) {
-        
+        if (results != nil) {
+            
+            
+            NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+            RptqQuery *query = [[database hasQueries] anyObject];
+            //RptqQueryResultFields *queryResultFields = [RptqQueryResultFields newResultField:];
+            
+            for (NSDictionary *result in results) {
+                NSLog(@"%@", result);
+                //for (id obj in [result objectEnumerator]) {
+                //    NSLog(@"Object %@", obj);
+                //}
+            }
+        }
     }];
     [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]

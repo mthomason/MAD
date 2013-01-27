@@ -22,6 +22,7 @@
 #import "RptqField+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
+#import "RptqQueryResultFields+Extras.h"
 
 @interface MNSDocumentReport : MNSDocument
 

@@ -288,4 +288,8 @@ typedef void (^rsltBlk_complete)(MNSDatabaseSalesForce *database, BOOL complete)
     return @"Salesforce.com";
 }
 
+- (id)connectionSettings {
+    return nil;
+}
+
 @end

@@ -137,6 +137,16 @@
 		4C0AFCC816B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCC516B3D1F60007964D /* RptqDocumentObjectLabelDataField.m */; };
 		4C0AFCC916B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCC516B3D1F60007964D /* RptqDocumentObjectLabelDataField.m */; };
 		4C0AFCCA16B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCC516B3D1F60007964D /* RptqDocumentObjectLabelDataField.m */; };
+		4C0AFCCD16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */; };
+		4C0AFCCE16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */; };
+		4C0AFCCF16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */; };
+		4C0AFCD016B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */; };
+		4C0AFCD116B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */; };
+		4C0AFCD416B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
+		4C0AFCD516B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
+		4C0AFCD616B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
+		4C0AFCD716B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
+		4C0AFCD816B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
 		4C0E7721163B5AEC003B951E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
@@ -1714,6 +1724,10 @@
 		4C0AFCBE16B3D1F60007964D /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4C0AFCC416B3D1F60007964D /* RptqDocumentObjectLabelDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabelDataField.h; sourceTree = "<group>"; };
 		4C0AFCC516B3D1F60007964D /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
+		4C0AFCCB16B4AE6F0007964D /* RptqQueryResultFields+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryResultFields+Extras.h"; sourceTree = "<group>"; };
+		4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryResultFields+Extras.m"; sourceTree = "<group>"; };
+		4C0AFCD216B4AEE10007964D /* RptqQueryResultValues+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryResultValues+Extras.h"; sourceTree = "<group>"; };
+		4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryResultValues+Extras.m"; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* ReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* ReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReportViewer-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/ReportViewer-Info.plist"; sourceTree = "<absolute>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
@@ -2800,7 +2814,6 @@
 		4C1B7A65163E123200E331AA /* ReportDesigner */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */,
 				4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */,
 			);
 			name = ReportDesigner;
@@ -2844,6 +2857,7 @@
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
+				4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
@@ -3321,6 +3335,10 @@
 				4C88A99814EA22F90069A0AF /* SectionEnumerator.m */,
 				4CDBCB6416AF91B000E08FAD /* RptqDocument+ActiveDocument.h */,
 				4CDBCB6516AF91B000E08FAD /* RptqDocument+ActiveDocument.m */,
+				4C0AFCCB16B4AE6F0007964D /* RptqQueryResultFields+Extras.h */,
+				4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */,
+				4C0AFCD216B4AEE10007964D /* RptqQueryResultValues+Extras.h */,
+				4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */,
 			);
 			name = Rptq;
 			sourceTree = "<group>";
@@ -5150,6 +5168,8 @@
 				4C0AFCB916B3D1F60007964D /* RptqQueryResultFields.m in Sources */,
 				4C0AFCC016B3D1F60007964D /* RptqDocumentObject.m in Sources */,
 				4C0AFCC716B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0AFCCE16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
+				4C0AFCD516B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5299,6 +5319,8 @@
 				4C0AFCBB16B3D1F60007964D /* RptqQueryResultFields.m in Sources */,
 				4C0AFCC216B3D1F60007964D /* RptqDocumentObject.m in Sources */,
 				4C0AFCC916B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0AFCD016B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
+				4C0AFCD716B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5448,6 +5470,8 @@
 				4C0AFCBA16B3D1F60007964D /* RptqQueryResultFields.m in Sources */,
 				4C0AFCC116B3D1F60007964D /* RptqDocumentObject.m in Sources */,
 				4C0AFCC816B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0AFCCF16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
+				4C0AFCD616B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5610,6 +5634,8 @@
 				4C0AFCB816B3D1F60007964D /* RptqQueryResultFields.m in Sources */,
 				4C0AFCBF16B3D1F60007964D /* RptqDocumentObject.m in Sources */,
 				4C0AFCC616B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0AFCCD16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
+				4C0AFCD416B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5759,6 +5785,8 @@
 				4C0AFCBC16B3D1F60007964D /* RptqQueryResultFields.m in Sources */,
 				4C0AFCC316B3D1F60007964D /* RptqDocumentObject.m in Sources */,
 				4C0AFCCA16B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4C0AFCD116B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
+				4C0AFCD816B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -37,4 +37,6 @@
 - (NSString *)identifier;
 + (NSString *)identifier;
 
+- (id)connectionSettings;
+
 @end

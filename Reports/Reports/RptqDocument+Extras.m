@@ -165,6 +165,18 @@
     
     [userCredentals setDatabase_driver_type: [database identifier]];
     
+    if ([[database identifier] isEqualToString:[MNSDatabaseMySql identifier]]) {
+        MNSDatabaseConnection *connectionSettings = [database connectionSettings];
+        if (connectionSettings != nil) {
+            [userCredentals setMysql_host:[connectionSettings server]];
+            [userCredentals setMysql_database:[connectionSettings database]];
+            [userCredentals setMysql_port:@([connectionSettings port])];
+            [userCredentals setMysql_username:[connectionSettings username]];
+            [userCredentals setMysql_password:[connectionSettings password]];
+        }
+    } else if ([[database identifier] isEqualToString:[MNSDatabaseSalesForce identifier]]) {
+        
+    }
     
     [rptqDatabase setOwnedByUser: userCredentals];
 
