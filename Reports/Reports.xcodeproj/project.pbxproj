@@ -461,6 +461,8 @@
 		4C2AC3161535926100738091 /* UIImageExportTypeRSS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */; };
 		4C2AC3171535926100738091 /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
+		4C33B74316B6768D000DF49F /* MTViewToolbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C33B74216B6768D000DF49F /* MTViewToolbox.xib */; };
+		4C33B74416B6768D000DF49F /* MTViewToolbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C33B74216B6768D000DF49F /* MTViewToolbox.xib */; };
 		4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C3727B6168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
@@ -1553,6 +1555,8 @@
 		4CDBED26168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
 		4CDBED27168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
 		4CDBED28168B50AB00C5147B /* MTCollectionViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */; };
+		4CDF618B16B66BA500C80E01 /* UIViewControllerToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* UIViewControllerToolBox.m */; };
+		4CDF618C16B66BA500C80E01 /* UIViewControllerToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* UIViewControllerToolBox.m */; };
 		4CE17E1D164E2BFA0002F8EA /* MNSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */; };
 		4CE17E1E164E2BFA0002F8EA /* MNSDatabaseSalesForce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */; };
 		4CE17E2116501A800002F8EA /* RptqField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E2016501A800002F8EA /* RptqField+Extras.m */; };
@@ -1796,6 +1800,7 @@
 		4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeAppEngine@2x.png"; sourceTree = "<group>"; };
 		4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeRSS.png; sourceTree = "<group>"; };
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
+		4C33B74216B6768D000DF49F /* MTViewToolbox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTViewToolbox.xib; sourceTree = "<group>"; };
 		4C3727B2168A38A7007DA7C3 /* UICollectionViewCell+Reuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionViewCell+Reuse.h"; sourceTree = "<group>"; };
 		4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionViewCell+Reuse.m"; sourceTree = "<group>"; };
 		4C3727B9168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReuseableViewDefault.h; sourceTree = "<group>"; };
@@ -2380,6 +2385,8 @@
 		4CDBCB6516AF91B000E08FAD /* RptqDocument+ActiveDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+ActiveDocument.m"; sourceTree = "<group>"; };
 		4CDBED22168B50AB00C5147B /* MTCollectionViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewSection.h; sourceTree = "<group>"; };
 		4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewSection.m; sourceTree = "<group>"; };
+		4CDF618916B66BA500C80E01 /* UIViewControllerToolBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewControllerToolBox.h; sourceTree = "<group>"; };
+		4CDF618A16B66BA500C80E01 /* UIViewControllerToolBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewControllerToolBox.m; sourceTree = "<group>"; };
 		4CE17E1B164E2BF90002F8EA /* MNSDatabaseSalesForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSDatabaseSalesForce.h; sourceTree = "<group>"; };
 		4CE17E1C164E2BFA0002F8EA /* MNSDatabaseSalesForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSDatabaseSalesForce.m; sourceTree = "<group>"; };
 		4CE17E1F16501A800002F8EA /* RptqField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqField+Extras.h"; sourceTree = "<group>"; };
@@ -2691,6 +2698,8 @@
 				4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */,
 				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
 				4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */,
+				4CDF618916B66BA500C80E01 /* UIViewControllerToolBox.h */,
+				4CDF618A16B66BA500C80E01 /* UIViewControllerToolBox.m */,
 			);
 			name = Toolbox;
 			sourceTree = "<group>";
@@ -2866,6 +2875,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C33B74216B6768D000DF49F /* MTViewToolbox.xib */,
 				4CEEA0D714C559B000BB9ABC /* README.txt */,
 				4C5482741672D4A800CA24EB /* TODO.txt */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
@@ -4433,6 +4443,7 @@
 				4C4C78D916962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
 				4C4C78DB16962944000ADD1D /* UIButtonSelected.png in Resources */,
 				4C0AFCDF16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
+				4C33B74416B6768D000DF49F /* MTViewToolbox.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4886,6 +4897,7 @@
 				4C4C78D816962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
 				4C4C78DA16962944000ADD1D /* UIButtonSelected.png in Resources */,
 				4C0AFCDE16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
+				4C33B74316B6768D000DF49F /* MTViewToolbox.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5192,6 +5204,7 @@
 				4C0AFCCE16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD516B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
+				4CDF618C16B66BA500C80E01 /* UIViewControllerToolBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5661,6 +5674,7 @@
 				4C0AFCCD16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD416B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
+				4CDF618B16B66BA500C80E01 /* UIViewControllerToolBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

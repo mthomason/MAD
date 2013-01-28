@@ -288,7 +288,7 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS" customClass="UIScrollViewSection"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS" customClass="UIScrollViewSection"/>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-v2-HyI">
                                 <items>
                                     <barButtonItem title="Reports" id="Ph0-RK-UQf">
@@ -401,7 +401,7 @@
                             <constraint firstItem="dLN-M6-x2r" firstAttribute="bottom" secondItem="uh3-7g-fPO" secondAttribute="bottom" type="default" id="OKE-Hc-Hky"/>
                             <constraint firstItem="wQV-wk-ktS" firstAttribute="top" secondItem="lq1-v2-HyI" secondAttribute="bottom" type="default" id="cqC-32-btf"/>
                             <constraint firstItem="wQV-wk-ktS" firstAttribute="trailing" secondItem="uh3-7g-fPO" secondAttribute="trailing" type="default" id="f3a-6X-Dec"/>
-                            <constraint firstItem="K4W-Fo-5ZQ" firstAttribute="top" secondItem="uh3-7g-fPO" secondAttribute="top" constant="186" id="fuT-2a-ZcG"/>
+                            <constraint firstItem="K4W-Fo-5ZQ" firstAttribute="top" secondItem="uh3-7g-fPO" secondAttribute="top" constant="186" type="user" id="fuT-2a-ZcG"/>
                             <constraint firstItem="K4W-Fo-5ZQ" firstAttribute="trailing" secondItem="uh3-7g-fPO" secondAttribute="trailing" type="default" id="lpC-Rg-Q7A"/>
                             <constraint firstItem="dLN-M6-x2r" firstAttribute="leading" secondItem="uh3-7g-fPO" secondAttribute="leading" type="default" id="pV7-qK-RMT"/>
                             <constraint firstItem="K4W-Fo-5ZQ" firstAttribute="top" secondItem="wQV-wk-ktS" secondAttribute="bottom" type="default" id="sic-fz-gH4"/>
@@ -427,8 +427,11 @@
                         <outlet property="toolboxContainerView" destination="s6t-y5-Cb8" id="GVL-l3-EnL"/>
                         <outlet property="toolboxView" destination="dLN-M6-x2r" id="uzB-vX-5is"/>
                         <outlet property="view" destination="uh3-7g-fPO" id="92x-Vj-d3g"/>
+                        <outletCollection property="layoutConstraintsToRemove" destination="fuT-2a-ZcG" id="Ygz-Zd-Ywo"/>
                         <segue destination="nIy-As-met" kind="modal" identifier="showSettings" id="zpo-BI-iwN"/>
-                        <segue destination="huR-Hj-JfS" kind="modal" identifier="showObjects" id="JF4-OO-zOT"/>
+                        <segue destination="huR-Hj-JfS" kind="popover" identifier="showObjects" popoverAnchorBarButtonItem="Jgg-su-8FN" id="JF4-OO-zOT">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="00r-rl-oe4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -680,7 +683,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="2Ap-Xs-YBR"/>
                                     <barButtonItem style="plain" id="MiG-7u-gZG">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="mU3-9h-j6B">
-                                            <rect key="frame" x="284" y="7" width="200" height="30"/>
+                                            <rect key="frame" x="284" y="8" width="200" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Direct"/>
@@ -1605,7 +1608,7 @@
             <objects>
                 <viewController id="huR-Hj-JfS" customClass="MUIViewControllerObjectSelector" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8ZR-Iq-qcn">
-                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <rect key="frame" x="0.0" y="20" width="540" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="9hL-Yu-nZ8">
@@ -1649,6 +1652,7 @@
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="containerView" destination="1RM-ql-eGS" id="zeT-i8-fzf"/>
                         <outlet property="navigationBar" destination="9hL-Yu-nZ8" id="llG-7z-QEc"/>
@@ -1658,7 +1662,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yB2-Y9-lPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2220" y="4127"/>
+            <point key="canvasLocation" x="1994" y="3851"/>
         </scene>
         <!--Table View Controller Database My Sql Setup - MySQL Setup-->
         <scene sceneID="anf-Zf-9az">
@@ -4611,56 +4615,6 @@
             </objects>
             <point key="canvasLocation" x="838" y="4741"/>
         </scene>
-        <!--View Controller Toolbox-->
-        <scene sceneID="qjk-88-6Uu">
-            <objects>
-                <viewController storyboardIdentifier="LabelViewController" id="zgR-Ff-jL5" customClass="UIViewControllerToolbox" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="GIv-5x-bjw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="230"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xai-T2-GRl">
-                                <color key="backgroundColor" red="0.48891147550000003" green="1" blue="0.41309311980000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="zgR-Ff-jL5" id="FtY-RU-Th6"/>
-                                </connections>
-                            </scrollView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="8De-2S-81i">
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="daS-wX-bom"/>
-                                    <barButtonItem image="UIImageArrowDown.png" id="nln-M4-cgd">
-                                        <connections>
-                                            <action selector="done:" destination="zgR-Ff-jL5" id="g1E-MX-G9J"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="8De-2S-81i" firstAttribute="trailing" secondItem="GIv-5x-bjw" secondAttribute="trailing" type="default" id="1CM-BQ-UnG"/>
-                            <constraint firstItem="Xai-T2-GRl" firstAttribute="bottom" secondItem="GIv-5x-bjw" secondAttribute="bottom" type="default" id="6ad-u1-zyC"/>
-                            <constraint firstItem="8De-2S-81i" firstAttribute="top" secondItem="GIv-5x-bjw" secondAttribute="top" type="default" id="8eo-gp-uMO"/>
-                            <constraint firstItem="Xai-T2-GRl" firstAttribute="leading" secondItem="GIv-5x-bjw" secondAttribute="leading" type="default" id="LhT-vA-3i2"/>
-                            <constraint firstItem="Xai-T2-GRl" firstAttribute="trailing" secondItem="GIv-5x-bjw" secondAttribute="trailing" type="default" id="Xd5-DJ-4w5"/>
-                            <constraint firstItem="8De-2S-81i" firstAttribute="leading" secondItem="GIv-5x-bjw" secondAttribute="leading" type="default" id="Xtl-TU-1Ct"/>
-                            <constraint firstItem="Xai-T2-GRl" firstAttribute="top" secondItem="8De-2S-81i" secondAttribute="bottom" type="default" id="tr6-62-tYZ"/>
-                        </constraints>
-                    </view>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="mainScrollView" destination="Xai-T2-GRl" id="fZl-Nx-FCo"/>
-                        <outlet property="toolbar" destination="8De-2S-81i" id="Vfx-E7-ufP"/>
-                        <outlet property="view" destination="GIv-5x-bjw" id="ELp-4j-uZO"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mPG-WO-jUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="890" y="3109"/>
-        </scene>
         <!--Table View Controller Font Settings-->
         <scene sceneID="sBH-UF-9iP">
             <objects>
@@ -4801,20 +4755,14 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="lzp-dU-dxE" firstAttribute="baseline" secondItem="NfR-hB-2k2" secondAttribute="baseline" type="default" id="FUw-lT-yVr"/>
                                             <constraint firstItem="R94-sh-OE8" firstAttribute="leading" secondItem="EEX-Ky-oJR" secondAttribute="leading" constant="161" id="Jhk-cp-6jH"/>
-                                            <constraint firstItem="lzp-dU-dxE" firstAttribute="baseline" secondItem="dwT-U7-TpX" secondAttribute="baseline" type="default" id="K5J-Q3-gDD"/>
                                             <constraint firstItem="lzp-dU-dxE" firstAttribute="leading" secondItem="EEX-Ky-oJR" secondAttribute="leading" constant="236" id="MNd-7D-dx7"/>
-                                            <constraint firstItem="R94-sh-OE8" firstAttribute="top" secondItem="lzp-dU-dxE" secondAttribute="top" type="default" id="SyW-rF-SE8"/>
                                             <constraint firstItem="NfR-hB-2k2" firstAttribute="leading" secondItem="EEX-Ky-oJR" secondAttribute="leading" constant="11" id="TL6-Of-SG1"/>
                                             <constraint firstItem="R94-sh-OE8" firstAttribute="baseline" secondItem="lzp-dU-dxE" secondAttribute="baseline" type="default" id="UIq-RS-Li2"/>
                                             <constraint firstItem="dwT-U7-TpX" firstAttribute="leading" secondItem="EEX-Ky-oJR" secondAttribute="leading" constant="86" id="ZiN-45-K9S"/>
                                             <constraint firstItem="dwT-U7-TpX" firstAttribute="baseline" secondItem="NfR-hB-2k2" secondAttribute="baseline" type="default" id="c80-w8-EdP"/>
-                                            <constraint firstItem="R94-sh-OE8" firstAttribute="baseline" secondItem="NfR-hB-2k2" secondAttribute="baseline" type="default" id="fYS-T8-SWu"/>
-                                            <constraint firstItem="dwT-U7-TpX" firstAttribute="top" secondItem="NfR-hB-2k2" secondAttribute="top" type="default" id="itE-M9-C4u"/>
                                             <constraint firstItem="NfR-hB-2k2" firstAttribute="top" secondItem="EEX-Ky-oJR" secondAttribute="top" constant="-1" id="ktm-0l-LXQ"/>
                                             <constraint firstItem="R94-sh-OE8" firstAttribute="baseline" secondItem="dwT-U7-TpX" secondAttribute="baseline" type="default" id="x6L-QQ-jVi"/>
-                                            <constraint firstItem="R94-sh-OE8" firstAttribute="top" secondItem="dwT-U7-TpX" secondAttribute="top" type="default" id="xlx-RE-uVA"/>
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TvcSegmentedControl" rowHeight="44" id="B0Z-dH-9fK">
@@ -5447,6 +5395,77 @@
             </objects>
             <point key="canvasLocation" x="1180" y="4548"/>
         </scene>
+        <!--View Controller Tool Box-->
+        <scene sceneID="YzC-uu-Dqh">
+            <objects>
+                <viewController storyboardIdentifier="ViewControllerToolBox" id="dfi-Af-2GI" customClass="UIViewControllerToolBox" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oE6-2z-Rwu">
+                        <rect key="frame" x="0.0" y="20" width="320" height="320"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="3Lg-x0-vTY">
+                                <items>
+                                    <navigationItem title="Style" id="GEZ-bD-Wrc">
+                                        <barButtonItem key="leftBarButtonItem" width="6" style="plain" id="qcH-Y1-xgm">
+                                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Gsd-Ys-TJG">
+                                                <rect key="frame" x="7" y="7" width="112" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <segments>
+                                                    <segment title="Style"/>
+                                                    <segment title="Layout"/>
+                                                </segments>
+                                                <connections>
+                                                    <action selector="segmentedControlToolboxValueChanged:" destination="oy5-et-qFd" eventType="valueChanged" id="Lqe-jr-0E5"/>
+                                                </connections>
+                                            </segmentedControl>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="axG-jf-9EB">
+                                            <connections>
+                                                <action selector="hideToolbox:" destination="oy5-et-qFd" id="7VV-DP-1Gs"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                                <connections>
+                                    <outlet property="delegate" destination="dfi-Af-2GI" id="Myi-fF-W7x"/>
+                                </connections>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjS-oW-H1B">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QjS-oW-H1B" firstAttribute="trailing" secondItem="oE6-2z-Rwu" secondAttribute="trailing" type="default" id="0IZ-Nz-5Um"/>
+                            <constraint firstItem="QjS-oW-H1B" firstAttribute="bottom" secondItem="oE6-2z-Rwu" secondAttribute="bottom" type="default" id="1xB-7S-WVK"/>
+                            <constraint firstItem="QjS-oW-H1B" firstAttribute="top" secondItem="3Lg-x0-vTY" secondAttribute="bottom" type="default" id="7W7-4Y-Q2x"/>
+                            <constraint firstItem="3Lg-x0-vTY" firstAttribute="top" secondItem="oE6-2z-Rwu" secondAttribute="top" type="default" id="DOP-Io-Udf"/>
+                            <constraint firstItem="3Lg-x0-vTY" firstAttribute="trailing" secondItem="oE6-2z-Rwu" secondAttribute="trailing" type="default" id="Get-bw-A3c"/>
+                            <constraint firstItem="QjS-oW-H1B" firstAttribute="leading" secondItem="oE6-2z-Rwu" secondAttribute="leading" type="default" id="rzk-Zx-tij"/>
+                            <constraint firstItem="3Lg-x0-vTY" firstAttribute="leading" secondItem="oE6-2z-Rwu" secondAttribute="leading" type="default" id="yhd-sT-4NM"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="backgroundView" destination="oE6-2z-Rwu" id="tJe-GO-O8O"/>
+                        <outlet property="contentView" destination="QjS-oW-H1B" id="nrE-F2-Rz2"/>
+                        <outlet property="navigationBar" destination="3Lg-x0-vTY" id="s1W-4h-jtx"/>
+                        <outlet property="navigationItemFontSelector" destination="Yj7-Nr-ehq" id="dxp-6j-UGZ"/>
+                        <outlet property="navigationItemLayout" destination="Pn4-fc-4RN" id="vez-oL-tpS"/>
+                        <outlet property="navigationItemStyle" destination="GEZ-bD-Wrc" id="kcQ-ch-FBM"/>
+                        <segue destination="oy5-et-qFd" kind="popover" popoverAnchorView="QjS-oW-H1B" id="m4R-Aw-J3C">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
+                    </connections>
+                </viewController>
+                <navigationItem title="Font Selector" id="Yj7-Nr-ehq">
+                    <barButtonItem key="backBarButtonItem" title="Back" id="NVn-1X-zuS"/>
+                </navigationItem>
+                <navigationItem title="Layout" id="Pn4-fc-4RN"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rsx-fG-ESg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2258" y="2829"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>
@@ -5595,9 +5614,12 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hideToolbox:"/>
                 <relationship kind="action" name="info:"/>
+                <relationship kind="action" name="segmentedControlToolboxValueChanged:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
+                <relationship kind="action" name="showToolbox:"/>
                 <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
@@ -5902,6 +5924,17 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
+        <class className="UIViewControllerToolBox" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerToolBox.h"/>
+            <relationships>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemFontSelector" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
@@ -5909,8 +5942,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="k76-5g-D9d"/>
-        <segue reference="adm-q7-gyv"/>
+        <segue reference="YlD-km-rEj"/>
+        <segue reference="m4R-Aw-J3C"/>
         <segue reference="Mlr-1g-y8b"/>
+        <segue reference="adm-q7-gyv"/>
     </inferredMetricsTieBreakers>
 </document>

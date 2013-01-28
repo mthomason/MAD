@@ -165,10 +165,4 @@
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
 }
 
-- (void)viewDidUnload {
-    [self setTableViewCellDatabase:nil];
-    [self setTextFieldDatabase:nil];
-    [self setTextFieldReportName:nil];
-    [super viewDidUnload];
-}
 @end

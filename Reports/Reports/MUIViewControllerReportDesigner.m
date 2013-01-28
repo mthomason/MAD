@@ -7,10 +7,16 @@
 //
 
 #import "MUIViewControllerReportDesigner.h"
+#import "UIViewControllerToolBox.h"
 
 @interface MUIViewControllerReportDesigner()
     <FontSettingsTableViewControllerDelegate,
         UITableViewControllerFontSelectorDelegate>
+
+@property (nonatomic, retain) UIViewControllerToolBox *viewControllerToolbox;
+
+@property (nonatomic, retain) UIPopoverController *popoverControllerInformation;
+@property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
 
 @property (assign) BOOL toolboxIsVisible;
 
@@ -63,6 +69,24 @@
 
 #pragma mark - MTCollectionViewLineLayoutDelegate
 
+- (BOOL)dismissAllPopovers {
+    BOOL result = NO;
+    if ([AppDelegate isPad]) {
+        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
+        if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
+        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
+        
+        for (UIPopoverController *popoverController in allpopovers) {
+            if ([popoverController isPopoverVisible]) {
+                [popoverController dismissPopoverAnimated:YES];
+                result = YES;
+            }
+        }
+        [allpopovers release];
+    }
+    return result;
+}
+
 - (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
     NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
     return [result CGPointValue];
@@ -75,6 +99,42 @@
         [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
         [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
         [[elementView layer] setBorderWidth:3.0000f];
+        
+        if ([AppDelegate isPad]) {
+            
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+            [passThroughViews addObject:elementView];
+            [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            [passThroughViews release];
+
+            CGRect popoverRect;
+            if ([[self selectedObjectIds] count] == 1) {
+                popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+            } else if ([[self selectedObjectIds] count] > 1) {
+                CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+                NSUInteger counter = 0;
+                for (MTElementView *elementView in [self selectedElementViews]) {
+                    CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                    if (counter == 0) {
+                        minx = frame.origin.x;
+                        miny = frame.origin.y;
+                        maxx = frame.origin.x + frame.size.width;
+                        maxy = frame.origin.y + frame.size.height;
+                    } else {
+                        minx = minx < frame.origin.x ? minx : frame.origin.x;
+                        miny = miny < frame.origin.y ? miny : frame.origin.y;
+                        maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
+                        maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
+                    }
+                    counter++;
+                }
+                popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+            }
+            
+            [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            
+        }
     }
 }
 - (void)didDeselectElementView:(id)sender {
@@ -84,14 +144,64 @@
         [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
         [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
         [[elementView layer] setBorderWidth:0.0000f];
+        
+        if ([AppDelegate isPad]) {
+            
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+            [passThroughViews removeObject:elementView];
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            [passThroughViews release];
+            
+            if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
+                if ([[self selectedObjectIds] count] > 0) {
+                    CGRect popoverRect = [self rectForSelectedElements];
+                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    
+                } else {
+                    [[self popoverControllerInformation] dismissPopoverAnimated:YES];
+                }
+            }
+        }
     }
 }
 - (void)didHighlightElementView:(id)sender { }
 - (void)didUnhighlightElementView:(id)sender { }
 
+- (CGRect)rectForSelectedElements {
+    CGRect popoverRect = CGRectZero;
+    if ([[self selectedObjectIds] count] == 1) {
+        MTElementView *elementView = [[self selectedElementViews] anyObject];
+        popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+    } else if ([[self selectedObjectIds] count] > 1) {
+        CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+        NSUInteger counter = 0;
+        for (MTElementView *elementView in [self selectedElementViews]) {
+            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+            if (counter == 0) {
+                minx = frame.origin.x;
+                miny = frame.origin.y;
+                maxx = frame.origin.x + frame.size.width;
+                maxy = frame.origin.y + frame.size.height;
+            } else {
+                minx = minx < frame.origin.x ? minx : frame.origin.x;
+                miny = miny < frame.origin.y ? miny : frame.origin.y;
+                maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
+                maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
+            }
+            counter++;
+        }
+        popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+    }
+    return popoverRect;
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_popoverControllerObjectSelector release];
+    [_popoverControllerInformation release];
+
+    [_viewControllerToolbox release];
     [_holderForLastTouchesByCollectionView release];
     
     [_selectedObjectIds release];
@@ -146,6 +256,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+    
+    if ([AppDelegate isPad]) {
+        
+        UIViewControllerToolBox *viewControllerToolbox = [[UIViewControllerToolBox alloc] initWithNibName:@"MTViewToolbox" bundle:nil];
+        [viewControllerToolbox setFontDelegates:self];
+        [self setViewControllerToolbox:viewControllerToolbox];
+        [viewControllerToolbox release];
+        
+        UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:[self viewControllerToolbox]];
+        [popoverControllerInformation setDelegate:self];
+        [self setPopoverControllerInformation:popoverControllerInformation];
+        [popoverControllerInformation release];
+
+    } else {
+    
+        UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
+        [tb1 setDelegate: self];
+        [self setTableViewControllerTextLayoutSettings:tb1];
+        [tb1 release];
+        
+        UITableViewControllerFontSelector *tb2 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
+        [tb2 setDelegate: self];
+        [self setTableViewControllerFontSelector:tb2];
+        [tb2 release];
+        
+    }
+
     NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
     [self setHolderForLastTouchesByCollectionView:holderForLastTouchesByCollectionView];
     [holderForLastTouchesByCollectionView release];
@@ -215,11 +354,6 @@
         MTCollectionViewLineLayout *flowLayoutDesignerSection = [[MTCollectionViewLineLayout alloc] init];
         [flowLayoutDesignerSection setDelegate:self];
         
-        //UICollectionViewFlowLayout *flowLayoutDesignerSection = [[UICollectionViewFlowLayout alloc] init];
-        //[flowLayoutDesignerSection setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        
-        
-
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
@@ -313,16 +447,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
-    //for (RptqDocumentSection *reportSection in sectionEnumerator) {
-        //UICollectionView *section = [self getCollectionViewForRptqSection: reportSection];
-        //[[section collectionViewLayout] invalidateLayout];
-    //}
-//    for (UICollectionView *collectionView in [self sectionViews]) {
-//        NSLog(@"collectionView: %@", collectionView);
-//        NSLog(@"collectionViewLayout: %@", [collectionView collectionViewLayout]);
-//        [[collectionView collectionViewLayout] invalidateLayout];
-//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -377,13 +501,12 @@
             }
         }
         [navController release];
-        
-        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-        //    [self setSettingsPopoverController: popoverController];
-        //    popoverController.delegate = self;
-        //}
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
+        NSLog(@"Sender :%@", sender);
+        if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+            UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
+            [self setPopoverControllerObjectSelector:[popoverSegue popoverController]];
+        }
         MUIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
@@ -432,6 +555,44 @@
 }
 
 #pragma mark - Actions
+
+- (NSSet *)elementViews {
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    for (RptqDocumentSection *documentSection in enumerator) {
+        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
+        if ([subview isKindOfClass:[UICollectionView class]]) {
+            UICollectionView *collectionView = (UICollectionView *)subview;
+            for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
+                for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
+                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView];
+                    [results addObject:elementView];
+                }
+            }
+        }
+    }
+    return [results autorelease];
+}
+
+- (NSSet *)selectedElementViews {
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    for (RptqDocumentSection *documentSection in enumerator) {
+        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
+        if ([subview isKindOfClass:[UICollectionView class]]) {
+            UICollectionView *collectionView = (UICollectionView *)subview;
+            for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
+                for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
+                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView];
+                    if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                        [results addObject:elementView];
+                    }
+                }
+            }
+        }
+    }
+    return [results autorelease];
+}
 
 - (UICollectionView *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
     return [[self sectionViews] objectForKey:[documentSection sectionKey]];
@@ -494,10 +655,6 @@
 
 - (IBAction)segmentedControlToolboxValueChanged:(id)sender {
     if ([sender selectedSegmentIndex] == 0) {
-        [[[self tableViewControllerTextLayoutSettings] tableView] performBatchUpdates:^{
-
-        
-        }];
         [[self tableViewControllerTextLayoutSettings] displayStyleSettings];
     } else  if ([sender selectedSegmentIndex] == 1) {
         [[self tableViewControllerTextLayoutSettings] displayLayoutSettings];
@@ -546,56 +703,62 @@
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish:self];
+    if (![self dismissAllPopovers]) {
+        [[self delegate] viewControllerDidFinish:self];
+    }
 }
 
 - (IBAction)showObjects:(id)sender {
-    [self performSegueWithIdentifier:@"showObjects" sender:sender];
+    if (![self dismissAllPopovers]) {
+        [self performSegueWithIdentifier:@"showObjects" sender:sender];
+    }
 }
 
 - (IBAction)showSettings:(id)sender {
-    [self performSegueWithIdentifier:@"showSettings" sender:sender];
+    if (![self dismissAllPopovers]) {
+        [self performSegueWithIdentifier:@"showSettings" sender:sender];
+    }
 }
 
 - (IBAction)info:(id)sender {
-    [self showToolbox:sender];
+    if (![self dismissAllPopovers]) {
+        [self showToolbox:sender];
+    }
 }
 
 - (IBAction)showToolbox:(id)sender {
-
-    if (![self toolboxIsVisible]) {
-        [self setToolboxIsVisible:YES];
-        [[self informationButton] setEnabled: NO];
-        if (![self tableViewControllerFontSelector]) {
+    
+    if ([AppDelegate isPad]) {
+        [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+        [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
+                                                    permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                                    animated:YES];
+        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+    } else {
+        if (![self toolboxIsVisible]) {
+            [self setToolboxIsVisible:YES];
+            [[self informationButton] setEnabled: NO];
             
-            UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+            [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
+            [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
+            [[self tableViewControllerTextLayoutSettings] initalizeDocumentObjects:[self selectedObjectIds]];
             
-            UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
-            [tb1 setDelegate: self];
-            [self setTableViewControllerTextLayoutSettings:tb1];
-            [tb1 release];
+            [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
             
-            UITableViewControllerFontSelector *tb2 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
-            [tb2 setDelegate: self];
-            [self setTableViewControllerFontSelector:tb2];
-            [tb2 release];
+            [[self toolbarBottom] setItems:nil animated:YES];
+            [[self toolbarTop] setItems:nil animated:YES];
+            
+            [[self view] layoutIfNeeded];
+            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
+                [self setWantsFullScreenLayout:YES];
+                [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
+                [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
+                [[self view] layoutIfNeeded];
+            } completion:nil];
+            
         }
 
-        [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
-        [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
-        [[self tableViewControllerTextLayoutSettings] initalizeDocumentObjects:[self selectedObjectIds]];
-        [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
         
-        [[self toolbarBottom] setItems:nil animated:YES];
-        [[self toolbarTop] setItems:nil animated:YES];
-        
-        [[self view] layoutIfNeeded];
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-            [self setWantsFullScreenLayout:YES];
-            [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
-            [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
-            [[self view] layoutIfNeeded];
-        } completion:nil];
     }
 }
 
@@ -616,6 +779,16 @@
             [[self informationButton] setEnabled: YES];
         }];
     }
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
 }
 
 #pragma mark - UIMenuController required methods
@@ -960,26 +1133,28 @@
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[UITableViewControllerSettings class]]) {
-        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                
-            }];
-        //} else {
-        //    [[self settingsPopoverController] dismissPopoverAnimated:YES];
-        //    [self setSettingsPopoverController: nil];
-        //}
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else if ([sender isKindOfClass:[MUIViewControllerObjectSelector class]]) {
+        if ([AppDelegate isPad]) {
+            if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
+                [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+            }
+        } else {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
     } else {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 - (void)didSelectDataField:(RptqField *)field {
-
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    if ([AppDelegate isPad]) {
+        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
+            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
@@ -1267,17 +1442,6 @@
             }
         }
     }
-}
-
-- (void)viewDidUnload {
-    [self setToolbarBottom:nil];
-    [self setToolbarTop:nil];
-    [self setToolboxView:nil];
-    [self setToolboxContainerView:nil];
-    [self setNavigationBarToolbox:nil];
-    [self setLayoutConstraintsToRemove:nil];
-    [self setSegmentedControlToolbox:nil];
-    [super viewDidUnload];
 }
 
 #pragma mark - UINavigationBarDelegate

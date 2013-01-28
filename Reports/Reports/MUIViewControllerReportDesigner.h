@@ -27,6 +27,7 @@
 
 @interface MUIViewControllerReportDesigner : MUIViewController
     <UITableViewDataSource,
+        UIPopoverControllerDelegate,
         UITableViewDelegate,
         UIPopoverControllerDelegate,
         UICollectionViewDataSource,

@@ -510,8 +510,4 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
  }
  */
 
-- (void)viewDidUnload {
-    [self setBarButtonItemTitle:nil];
-    [super viewDidUnload];
-}
 @end

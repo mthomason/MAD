@@ -17,6 +17,7 @@
 
 + (MNSDocumentReport *)activeDocument;
 + (void)setActiveDocument:(MNSDocumentReport *)activeDocument;
++ (BOOL)isPad;
 + (NSString *)storyboardName;
 
 @end

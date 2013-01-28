@@ -62,7 +62,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableViewQueryBuilder.contentSize = CGSizeMake(self.tableViewQueryBuilder.frame.size.height, self.tableViewQueryBuilder.contentSize.height);
+    [self tableViewQueryBuilder].contentSize = CGSizeMake([self tableViewQueryBuilder].frame.size.height, [self tableViewQueryBuilder].contentSize.height);
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -944,7 +944,7 @@
     switch (section) {
 
         case UIViewControllerSchemaTablesSectionsInstructions: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Instructions", @"Instructions")];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
             [[headerView buttonAdd] setHidden:YES];
             break;
         }
@@ -1080,7 +1080,7 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-        [self.tableViewQueryBuilder beginUpdates];
+        [[self tableViewQueryBuilder] beginUpdates];
         self.beganUpdates = YES;
     }
 }
@@ -1118,12 +1118,12 @@
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             switch(type) {
                 case NSFetchedResultsChangeInsert:
-                    [self.tableViewQueryBuilder insertSections: [NSIndexSet indexSetWithIndex:updateSection]
+                    [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndex:updateSection]
                                               withRowAnimation: UITableViewRowAnimationFade];
                     break;
                     
                 case NSFetchedResultsChangeDelete:
-                    [self.tableViewQueryBuilder deleteSections:
+                    [[self tableViewQueryBuilder] deleteSections:
                      [NSIndexSet indexSetWithIndex:updateSection] withRowAnimation:UITableViewRowAnimationFade];
                     break;
             }
@@ -1151,24 +1151,24 @@
             if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
-                        [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeDelete: {
-                        [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeUpdate: {
-                        [self.tableViewQueryBuilder reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableViewQueryBuilder] reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeMove: {
-                        [self.tableViewQueryBuilder deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
-                        [self.tableViewQueryBuilder insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
@@ -1186,7 +1186,7 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if (self.beganUpdates) [self.tableViewQueryBuilder endUpdates];
+    if (self.beganUpdates) [[self tableViewQueryBuilder] endUpdates];
 }
 
 - (void)endSuspensionOfUpdatesDueToContextChanges {
@@ -1216,7 +1216,7 @@
     } else {
         if (self.debug) NSLog(@"[%@ %@] no NSFetchedResultsController (yet?)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
-    [self.tableViewQueryBuilder reloadData];
+    [[self tableViewQueryBuilder] reloadData];
 }
 
 - (void)setFetchedResultsControllerTables:(NSFetchedResultsController *)newfrc {
@@ -1235,7 +1235,7 @@
             [self performFetchTables];
         } else {
             if (self.debug) NSLog(@"[%@ %@] reset to nil", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-            [self.tableViewQueryBuilder reloadData];
+            [[self tableViewQueryBuilder] reloadData];
         }
     }
 }
@@ -1253,7 +1253,7 @@
     } else {
         if (self.debug) NSLog(@"[%@ %@] no NSFetchedResultsController (yet?)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
-    [self.tableViewQueryBuilder reloadData];
+    [[self tableViewQueryBuilder] reloadData];
 }
 
 - (void)setFetchedResultsControllerLinks:(NSFetchedResultsController *)newfrc {
@@ -1272,7 +1272,7 @@
             [self performFetchLinks];
         } else {
             if (self.debug) NSLog(@"[%@ %@] reset to nil", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-            [self.tableViewQueryBuilder reloadData];
+            [[self tableViewQueryBuilder] reloadData];
         }
     }
 }
@@ -1290,7 +1290,7 @@
     } else {
         if (self.debug) NSLog(@"[%@ %@] no NSFetchedResultsController (yet?)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
-    [self.tableViewQueryBuilder reloadData];
+    [[self tableViewQueryBuilder] reloadData];
 }
 
 - (void)setFetchedResultsControllerGroups:(NSFetchedResultsController *)fetchedResultsControllerGroups {
@@ -1309,7 +1309,7 @@
             [self performFetchGroups];
         } else {
             if (self.debug) NSLog(@"[%@ %@] reset to nil", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-            [self.tableViewQueryBuilder reloadData];
+            [[self tableViewQueryBuilder] reloadData];
         }
     }
 }
@@ -1327,7 +1327,7 @@
     } else {
         if (self.debug) NSLog(@"[%@ %@] no NSFetchedResultsController (yet?)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
-    [self.tableViewQueryBuilder reloadData];
+    [[self tableViewQueryBuilder] reloadData];
 }
 
 - (void)setFetchedResultsControllerPredicates:(NSFetchedResultsController *)fetchedResultsControllerPredicates {
@@ -1346,14 +1346,9 @@
             [self performFetchPredicate];
         } else {
             if (self.debug) NSLog(@"[%@ %@] reset to nil", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-            [self.tableViewQueryBuilder reloadData];
+            [[self tableViewQueryBuilder] reloadData];
         }
     }
 }
 
-- (void)viewDidUnload {
-    [self setViewClipboard:nil];
-    [self setToolbarTop:nil];
-    [super viewDidUnload];
-}
 @end

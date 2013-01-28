@@ -43,8 +43,5 @@
     [_textView release];
     [super dealloc];
 }
-- (void)viewDidUnload {
-    [self setTextView:nil];
-    [super viewDidUnload];
-}
+
 @end

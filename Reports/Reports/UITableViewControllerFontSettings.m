@@ -926,13 +926,4 @@
  }
  */
 
-- (void)viewDidUnload {
-    [self setStepperSizeWidth:nil];
-    [self setStepperSizeHeight:nil];
-    [self setLabelSizeWidth:nil];
-    [self setLabelSizeHeight:nil];
-    [self setGroupTableViewCellStyle:nil];
-    [self setGroupTableViewCellLayout:nil];
-    [super viewDidUnload];
-}
 @end
