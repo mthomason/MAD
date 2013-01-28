@@ -367,7 +367,7 @@
     if ([self toggleSelected]) {
         [[self delegate] didSelectElementView:self];
     } else {
-        [[self delegate] didDeselectElementView:self];
+        [[self delegate] didDeselectElementView:self animated:YES];
     }
 }
 

@@ -15,7 +15,7 @@
 
 @protocol MTElementViewDelegate
 - (void)didSelectElementView:(id)sender;
-- (void)didDeselectElementView:(id)sender;
+- (void)didDeselectElementView:(id)sender animated:(BOOL)animated;
 - (void)didHighlightElementView:(id)sender;
 - (void)didUnhighlightElementView:(id)sender;
 @end

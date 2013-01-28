@@ -19,7 +19,7 @@
 @property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
 
 @property (assign) BOOL toolboxIsVisible;
-
+@property (nonatomic, retain) MTElementView *lastElementViewToShowMenu;
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
@@ -87,6 +87,18 @@
     return result;
 }
 
+- (void)deselectAllElements {
+    for (MTElementView *elementView in [self selectedElementViews]) {
+        [self didDeselectElementView:elementView animated:YES];
+    }
+}
+
+- (void)deselectAllElementsAnimated:(BOOL)animated {
+    for (MTElementView *elementView in [self selectedElementViews]) {
+        [self didDeselectElementView:elementView animated:animated];
+    }
+}
+
 - (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
     NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
     return [result CGPointValue];
@@ -137,7 +149,7 @@
         }
     }
 }
-- (void)didDeselectElementView:(id)sender {
+- (void)didDeselectElementView:(id)sender animated:(BOOL)animated {
     if ([sender isKindOfClass:[MTElementView class]]) {
         MTElementView *elementView = sender;
         [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
@@ -155,15 +167,26 @@
             if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
                 if ([[self selectedObjectIds] count] > 0) {
                     CGRect popoverRect = [self rectForSelectedElements];
-                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
                     
                 } else {
-                    [[self popoverControllerInformation] dismissPopoverAnimated:YES];
+                    [[self popoverControllerInformation] dismissPopoverAnimated:animated];
                 }
             }
         }
     }
 }
+
+- (void)applyBorderToElementView:(MTElementView *)elementView {
+    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
+    [[elementView layer] setBorderWidth:3.0000f];
+}
+
+- (void)removeBorderToElementView:(MTElementView *)elementView {
+    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+    [[elementView layer] setBorderWidth:0.0000f];
+}
+
 - (void)didHighlightElementView:(id)sender { }
 - (void)didUnhighlightElementView:(id)sender { }
 
@@ -198,6 +221,7 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_lastElementViewToShowMenu release];
     [_popoverControllerObjectSelector release];
     [_popoverControllerInformation release];
 
@@ -464,7 +488,17 @@
                       selector: @selector(managedObjectContextDidSave:)
                           name: NSManagedObjectContextDidSaveNotification
                         object: managedObjectContext];
-    
+
+    [defaultCenter addObserver: self
+                      selector: @selector(didHideMenuNotification:)
+                          name: UIMenuControllerDidHideMenuNotification
+                        object: nil];
+
+    [defaultCenter addObserver: self
+                      selector: @selector(didShowMenuNotification:)
+                          name: UIMenuControllerDidShowMenuNotification
+                        object: nil];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -482,7 +516,14 @@
     [defaultCenter removeObserver:self
                              name:NSManagedObjectContextDidSaveNotification
                            object:managedObjectContext];
+    [defaultCenter removeObserver:self
+                             name:UIMenuControllerDidHideMenuNotification
+                           object:nil];
+    [defaultCenter removeObserver:self
+                             name:UIMenuControllerDidShowMenuNotification
+                           object:nil];
 
+    
     [super viewDidDisappear:animated];
 }
 
@@ -552,6 +593,18 @@
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
 
+}
+
+#pragma mark - UIMenu Notifications
+
+- (void)didHideMenuNotification:(NSNotification *)notification {
+    [self removeBorderToElementView:[self lastElementViewToShowMenu]];
+//    [self deselectAllElementsAnimated:NO];
+    //NSLog(@"didHideMenuNotification %@", [notification object]);
+}
+
+- (void)didShowMenuNotification:(NSNotification *)notification {
+    NSLog(@"didShowMenuNotification %@", [notification object]);
 }
 
 #pragma mark - Actions
@@ -705,24 +758,32 @@
 - (IBAction)done:(id)sender {
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:self];
+    } else {
+        [self deselectAllElements];
     }
 }
 
 - (IBAction)showObjects:(id)sender {
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showObjects" sender:sender];
+    } else {
+        [self deselectAllElements];
     }
 }
 
 - (IBAction)showSettings:(id)sender {
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showSettings" sender:sender];
+    } else {
+        [self deselectAllElements];
     }
 }
 
 - (IBAction)info:(id)sender {
     if (![self dismissAllPopovers]) {
         [self showToolbox:sender];
+    } else {
+        [self deselectAllElements];
     }
 }
 
@@ -1124,6 +1185,11 @@
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self dismissAllPopovers];
+    [self deselectAllElementsAnimated:NO];
+    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    [self applyBorderToElementView:elementView];
+    [self setLastElementViewToShowMenu:elementView];
     return YES;
 }
 
@@ -1275,9 +1341,7 @@
             
             [[gestureRecognizer view] setCenter: newCenter];
             
-            [[self designScrollView] addSubview: [gestureRecognizer view]];
-            
-            
+            //[[self designScrollView] addSubview: [gestureRecognizer view]];
             {
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
@@ -1310,6 +1374,11 @@
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                         } completion:^(BOOL finished) {
+                            //[[gestureRecognizer view] setHidden:NO];
+                            [[self designScrollView] addSubview: [gestureRecognizer view]];
+
+                            //[[gestureRecognizer view] setCenter: newCenter];
+                            //[[self designScrollView] addSubview: [gestureRecognizer view]];
                             [svSection setDelegate:self];
                         }];
                     }
