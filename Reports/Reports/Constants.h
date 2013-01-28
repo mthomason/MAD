@@ -14,11 +14,6 @@
 #define MTLog( s, ... )
 #endif
 
-#define STORYBOARD_NAME() \
-            (([[UIDevice currentDevice] userInterfaceIdiom] == \
-            UIUserInterfaceIdiomPhone) ? MNSReportDesigner_Phone : MNSReportDesigner_Pad)
-
-
 #pragma mark - Layout
 
 // MARK: Margin
@@ -126,8 +121,8 @@ extern NSString * const MNSStringInterfaceButtonTitleTryAgainDesc;
 extern NSString * const MNSStringInterfaceButtonTitleAbort;
 extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
 
-extern NSString * const MNSReportDesigner_Phone;
-extern NSString * const MNSReportDesigner_Pad;
+extern NSString * const MTStoryboardReportDesigner;
+extern NSString * const MTStoryboardReportDesignerPad;
 
 extern CGFloat const MNSAnimationDurationShowFromBottom;
 extern CGFloat const MNSAnimationDurationShowFromBottomHalf;

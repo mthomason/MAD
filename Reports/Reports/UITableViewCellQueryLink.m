@@ -20,4 +20,8 @@
     return MNSTableViewCellQueryLinkHeightDefault;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 @end

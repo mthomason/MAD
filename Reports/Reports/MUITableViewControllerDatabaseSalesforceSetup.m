@@ -115,10 +115,6 @@ typedef void (^tablesComplete)(id *database, NSArray *tables);
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Actions
 
 //Create new file using core data with

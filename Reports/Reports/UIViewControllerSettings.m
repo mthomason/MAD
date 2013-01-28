@@ -31,7 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIStoryboard *sb= [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
+    UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     UITableViewControllerSettings *tb1 = [[sb instantiateViewControllerWithIdentifier:@"UITableViewControllerSettings"] retain];
     [self setTableViewControllerSettings: tb1];
     [tb1 release];

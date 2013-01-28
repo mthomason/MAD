@@ -65,11 +65,6 @@
     [self showObjectSelector];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
-
 #pragma mark - Actions
 
 - (void)showObjectSelector {
@@ -81,7 +76,7 @@
     switch ([[self segmentedControlSelectorType] selectedSegmentIndex]) {
         case MNSSegmentedControlOptionsData: {
             [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
-            UIStoryboard *sb= [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
+            UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
             UITableViewControllerChooseField *tv = [[sb instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
             [tv setExcludeTables:[NSArray array]];
             [tv setDelegate: self];

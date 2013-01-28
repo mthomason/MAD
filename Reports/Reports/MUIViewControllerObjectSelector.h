@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewController.h"
 #import "UITableViewControllerChooseField.h"
+#import "AppDelegate.h"
 
 typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 	MNSSegmentedControlOptionsData = 0,

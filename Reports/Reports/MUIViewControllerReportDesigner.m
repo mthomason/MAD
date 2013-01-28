@@ -299,6 +299,7 @@
                                                                                 options: 0
                                                                                 metrics: nil
                                                                                   views: dictionaryViewsVertical];
+    
     [[self designScrollView] addConstraints:labelconstraintsVertical];
     [[self designScrollView] setScrollEnabled:YES];
     [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
@@ -377,11 +378,11 @@
         }
         [navController release];
         
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [self setSettingsPopoverController: popoverController];
-            popoverController.delegate = self;
-        }
+        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+        //    [self setSettingsPopoverController: popoverController];
+        //    popoverController.delegate = self;
+        //}
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
         MUIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
@@ -567,7 +568,7 @@
         [[self informationButton] setEnabled: NO];
         if (![self tableViewControllerFontSelector]) {
             
-            UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:STORYBOARD_NAME() bundle:nil] retain];
+            UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
             
             UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
             [tb1 setDelegate: self];
@@ -959,14 +960,14 @@
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[UITableViewControllerSettings class]]) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             [self dismissViewControllerAnimated:YES completion:^{
                 
             }];
-        } else {
-            [[self settingsPopoverController] dismissPopoverAnimated:YES];
-            [self setSettingsPopoverController: nil];
-        }
+        //} else {
+        //    [[self settingsPopoverController] dismissPopoverAnimated:YES];
+        //    [self setSettingsPopoverController: nil];
+        //}
     } else {
         [self dismissViewControllerAnimated:YES completion:^{
             

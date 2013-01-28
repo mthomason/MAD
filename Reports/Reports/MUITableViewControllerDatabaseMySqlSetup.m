@@ -85,15 +85,11 @@
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:MNSIdentifierStoryboardReportDesignerPhone bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
     [[self view] addSubview: [vc view]];
 

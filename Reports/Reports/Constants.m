@@ -23,8 +23,8 @@ NSString * const MNSStringInterfaceButtonTitleTryAgainDesc  = @"Try Again Button
 NSString * const MNSStringInterfaceButtonTitleAbort         = @"Abort";
 NSString * const MNSStringInterfaceButtonTitleAbortDesc     = @"Abort Button Title";
 
-NSString * const MNSReportDesigner_Phone = @"ReportDesignerPhone";
-NSString * const MNSReportDesigner_Pad = @"ReportDesignerPad";
+NSString * const MTStoryboardReportDesigner = @"MTStoryboardReportDesigner";
+NSString * const MTStoryboardReportDesignerPad = @"MTStoryboardReportDesignerPad";
 
 CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
 CGFloat const MNSAnimationDurationShowFromBottomHalf = 0.3500f;
@@ -79,7 +79,7 @@ CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
 // MARK: Storyboard Identifiers
-NSString * const MNSIdentifierStoryboardReportDesignerPhone         = @"ReportDesignerPhone";
+NSString * const MNSIdentifierStoryboardReportDesignerPhone         = @"MTStoryboardReportDesigner";
 
 // MARK: View Controller Identifiers
 NSString * const MNSIdentifierUIViewControllerTableHeaderTables     = @"UIViewControllerTableHeaderTables";

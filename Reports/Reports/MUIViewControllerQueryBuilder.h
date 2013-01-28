@@ -27,6 +27,7 @@
 #import "RptqQueryGroup+Extras.h"
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryLinks+Extras.h"
+#import "MTViewTableHeader.h"
 
 @interface MUIViewControllerQueryBuilder : MUIViewController
     <UITableViewDataSource,
@@ -47,7 +48,7 @@
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
-
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;
 
 @property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;

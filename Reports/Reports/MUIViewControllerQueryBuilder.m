@@ -8,16 +8,22 @@
 
 #import "MUIViewControllerQueryBuilder.h"
 #import "AppDelegate.h"
+#import "UIViewClipboard.h"
 
 #pragma mark - Private Category
 
 @interface MUIViewControllerQueryBuilder()
 
 @property (retain, nonatomic) UIFont *boldSystemFont;
-@property (retain, nonatomic) UIView *cellBackgroundView;
+//@property (retain, nonatomic) UIView *cellBackgroundView;
 @property (retain, nonatomic) QueryBuilderDataModal *queryBuilderDataModal;
 @property (retain, nonatomic) NSArray *tableSectionTitles;
 @property (assign) BOOL beganUpdates;
+@property (retain, nonatomic) IBOutlet UIViewClipboard *viewClipboard;
+
+//@property (nonatomic, retain) UIView *sectionHeaderIntroduction;
+//@property (nonatomic, retain) UIView *sectionHeaderDatasource;
+//@property (nonatomic, retain) UIView *sectionHeaderTables;
 
 @end
 
@@ -27,7 +33,7 @@
 
 - (void)dealloc {
     [_boldSystemFont release];
-    [_cellBackgroundView release];
+    //[_cellBackgroundView release];
     [_queryBuilderDataModal release];
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
@@ -37,6 +43,8 @@
     [_tableViewQueryBuilder release];
     [_toolbar release];
     [_navigationItemMain release];
+    [_viewClipboard release];
+    [_toolbarTop release];
     [super dealloc];
 }
 
@@ -48,6 +56,20 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableViewQueryBuilder.contentSize = CGSizeMake(self.tableViewQueryBuilder.frame.size.height, self.tableViewQueryBuilder.contentSize.height);
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    //[[self tableViewQueryBuilder] reloadData];  // ???: This is here because table headers do not resize on auto rotate, throwing off table views scroll view content size.  Needed in iOS 6.
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -55,16 +77,17 @@
 
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-    UIView *bgView = [[UIView alloc] init];
-    [self setCellBackgroundView: bgView];
-    [bgView release];
 
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     [[self tableViewQueryBuilder] setOpaque: YES];
+    [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     
     QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -74,10 +97,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
     [[self tableViewQueryBuilder] reloadData];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
@@ -307,19 +326,19 @@
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    //} else {
+    //    [self dismissViewControllerAnimated:YES completion:nil];
+    //}
 }
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    //} else {
+    //    [self dismissViewControllerAnimated:YES completion:nil];
+    //}
 }
 
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
@@ -909,111 +928,70 @@
         [[result textLabel] setText: @"Err"];
     }
     
-    [[self cellBackgroundView] setFrame:[result bounds]];
+    //[result setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    //[[self cellBackgroundView] setFrame:[result bounds]];
 
     return result;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *result = nil;
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:MNSIdentifierStoryboardReportDesignerPhone bundle:nil];
-    
+    MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
+
     section = [self tableSectionTypeForIndexPathSection: section];
 
     switch (section) {
 
         case UIViewControllerSchemaTablesSectionsInstructions: {
-            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderLayout] view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Instructions", @"Instructions")];
+            [[headerView buttonAdd] setHidden:YES];
             break;
         }
 
         case UIViewControllerSchemaTablesSectionsDatasource: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderDatasource];
-            for (id subview in [[vc view] subviews]) {
-                if ([subview isKindOfClass: [UIButton class]]) {
-                    UIButton *button = subview;
-                    if (button) {
-                        [button setHidden:YES];
-                        /*[button addTarget:self action:@selector(addConnection:) forControlEvents:UIControlEventTouchUpInside];*/
-                    }
-                }
-            }
-            result = [vc view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
+            [[headerView buttonAdd] setHidden:YES];
             break;
         }
 
         case UIViewControllerSchemaTablesSectionsTables: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderTables];
-            for (id subview in [[vc view] subviews]) {
-                if ([subview isKindOfClass: [UIButton class]]) {
-                    UIButton *button = subview;
-                    if (button) {
-                        [button addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }
-            }
-            result = [vc view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
+            [[headerView buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
             break;
         }
 
         case UIViewControllerSchemaTablesSectionsLinks: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderLinks];
-            for (id subview in [[vc view] subviews]) {
-                if ([subview isKindOfClass: [UIButton class]]) {
-                    UIButton *button = subview;
-                    if (button) {
-                        [button addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }
-            }
-            result = [vc view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
+            [[headerView buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
             break;
         }
 
         case UIViewControllerSchemaTablesSectionsGroups: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderGroups];
-            for (id subview in [[vc view] subviews]) {
-                if ([subview isKindOfClass: [UIButton class]]) {
-                    UIButton *button = subview;
-                    if (button) {
-                        [button addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }
-            }
-            result = [vc view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
+            [[headerView buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
             break;
         }
 
         case UIViewControllerSchemaTablesSectionsPredicate: {
-            UIViewController *vc = [sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderPredicate];
-            for (id subview in [[vc view] subviews]) {
-                if ([subview isKindOfClass: [UIButton class]]) {
-                    UIButton *button = subview;
-                    if (button) {
-                        [button addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }
-            }
-            result = [vc view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
+            [[headerView buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
             break;
         }
-
-        
         case UIViewControllerSchemaTablesSectionsSql: {
-            result = [[sb instantiateViewControllerWithIdentifier:MNSIdentifierUIViewControllerTableHeaderQuery] view];
+            [[headerView labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
+            [[headerView buttonAdd] setHidden:YES];
             break;
         }
-
         default: {
+            [[headerView labelTitle] setText:@""];
+            [[headerView buttonAdd] setHidden:YES];
             break;
         }
 
     }
-    
-    [result setBackgroundColor: [UIColor edaTableHeaderBackground]];
 
-    return result;
+    return [headerView autorelease];
 }
 
 
@@ -1373,4 +1351,9 @@
     }
 }
 
+- (void)viewDidUnload {
+    [self setViewClipboard:nil];
+    [self setToolbarTop:nil];
+    [super viewDidUnload];
+}
 @end

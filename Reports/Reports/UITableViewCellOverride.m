@@ -15,4 +15,8 @@
     return MNSTableViewCellOverrideHeightDefault;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 @end

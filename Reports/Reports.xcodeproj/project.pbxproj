@@ -147,6 +147,16 @@
 		4C0AFCD616B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
 		4C0AFCD716B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
 		4C0AFCD816B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */; };
+		4C0AFCDE16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */; };
+		4C0AFCDF16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */; };
+		4C0AFCE016B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */; };
+		4C0AFCE116B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */; };
+		4C0AFCE216B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */; };
+		4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
+		4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
+		4C0AFCE716B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
+		4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
+		4C0AFCE916B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
 		4C0E7721163B5AEC003B951E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C0E7724163B5AEC003B951E /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
@@ -241,7 +251,7 @@
 		4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
-		4C0E77B1163B5AEC003B951E /* ReportDesignerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */; };
+		4C0E77B1163B5AEC003B951E /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */; };
 		4C0E77B2163B5AEC003B951E /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
 		4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
@@ -482,7 +492,7 @@
 		4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
 		4C384E3514B29789007B4F48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
-		4C384E3C14B29789007B4F48 /* ReportDesignerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */; };
+		4C384E3C14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */; };
 		4C384E3F14B29789007B4F48 /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
 		4C384E5214B36980007B4F48 /* ReportOld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E5014B36980007B4F48 /* ReportOld.xcdatamodeld */; };
 		4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
@@ -1728,6 +1738,9 @@
 		4C0AFCCC16B4AE6F0007964D /* RptqQueryResultFields+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryResultFields+Extras.m"; sourceTree = "<group>"; };
 		4C0AFCD216B4AEE10007964D /* RptqQueryResultValues+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryResultValues+Extras.h"; sourceTree = "<group>"; };
 		4C0AFCD316B4AEE10007964D /* RptqQueryResultValues+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryResultValues+Extras.m"; sourceTree = "<group>"; };
+		4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPad.storyboard; path = Reports/MTStoryboardReportDesignerPad.storyboard; sourceTree = "<group>"; };
+		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
+		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewTableHeader.m; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* ReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* ReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReportViewer-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/ReportViewer-Info.plist"; sourceTree = "<absolute>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
@@ -1803,7 +1816,7 @@
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
 		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Reports/AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Reports/AppDelegate.m; sourceTree = "<group>"; };
-		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPhone.storyboard; sourceTree = "<group>"; };
+		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardReportDesigner.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerOpenDocument.h; sourceTree = "<group>"; };
 		4C384E5114B36980007B4F48 /* ReportOld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReportOld.xcdatamodel; sourceTree = "<group>"; };
@@ -2596,6 +2609,8 @@
 				4C3727BA168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m */,
 				4C3727DA168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.h */,
 				4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */,
+				4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */,
+				4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -2857,7 +2872,8 @@
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
-				4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */,
+				4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */,
+				4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
@@ -4157,7 +4173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C0E77B0163B5AEC003B951E /* InfoPlist.strings in Resources */,
-				4C0E77B1163B5AEC003B951E /* ReportDesignerPhone.storyboard in Resources */,
+				4C0E77B1163B5AEC003B951E /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4C0E77B2163B5AEC003B951E /* ReportDesignerPad.storyboard in Resources */,
 				4C0E77B3163B5AEC003B951E /* UIImageToolbarDatabase.png in Resources */,
 				4C0E77B4163B5AEC003B951E /* UIImageToolbarDatabase@2x.png in Resources */,
@@ -4416,6 +4432,7 @@
 				4C4C78D116962172000ADD1D /* UIButtonHighlighted.png in Resources */,
 				4C4C78D916962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
 				4C4C78DB16962944000ADD1D /* UIButtonSelected.png in Resources */,
+				4C0AFCDF16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4506,6 +4523,7 @@
 				4CE314291694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142E1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314331694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
+				4C0AFCE116B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4601,6 +4619,7 @@
 				4CE314281694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142D1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314321694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
+				4C0AFCE016B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4609,7 +4628,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */,
-				4C384E3C14B29789007B4F48 /* ReportDesignerPhone.storyboard in Resources */,
+				4C384E3C14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4C384E3F14B29789007B4F48 /* ReportDesignerPad.storyboard in Resources */,
 				4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */,
 				4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */,
@@ -4866,6 +4885,7 @@
 				4C4C78D016962172000ADD1D /* UIButtonHighlighted.png in Resources */,
 				4C4C78D816962944000ADD1D /* UIButtonSelected@2x.png in Resources */,
 				4C4C78DA16962944000ADD1D /* UIButtonSelected.png in Resources */,
+				4C0AFCDE16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4961,6 +4981,7 @@
 				4CE3142A1694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142F1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314341694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
+				4C0AFCE216B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5170,6 +5191,7 @@
 				4C0AFCC716B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C0AFCCE16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD516B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
+				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5321,6 +5343,7 @@
 				4C0AFCC916B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C0AFCD016B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD716B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
+				4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5472,6 +5495,7 @@
 				4C0AFCC816B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C0AFCCF16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD616B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
+				4C0AFCE716B5EC820007964D /* MTViewTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5636,6 +5660,7 @@
 				4C0AFCC616B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C0AFCCD16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD416B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
+				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5787,6 +5812,7 @@
 				4C0AFCCA16B3D1F60007964D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C0AFCD116B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD816B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
+				4C0AFCE916B5EC820007964D /* MTViewTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5817,12 +5843,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4C384E3A14B29789007B4F48 /* ReportDesignerPhone.storyboard */ = {
+		4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C384E3B14B29789007B4F48 /* en */,
 			);
-			name = ReportDesignerPhone.storyboard;
+			name = MTStoryboardReportDesigner.storyboard;
 			path = Reports;
 			sourceTree = "<group>";
 		};

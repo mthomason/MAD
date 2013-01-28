@@ -41,4 +41,8 @@
     return MNSTableViewCellHeightDefault;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 @end

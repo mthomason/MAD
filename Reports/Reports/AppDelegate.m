@@ -59,8 +59,11 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (void)applicationWillTerminate:(UIApplication *)application { }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return   [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ?
-                    UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+    static NSNumber *isPad;
+    if (!isPad) {
+        isPad = @([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+    }
+    return   [isPad boolValue] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 /*
@@ -156,6 +159,20 @@ void uncaughtExceptionHandler(NSException *exception) {
                                }];
     }
     return [applicationFileUrlWithExtention autorelease];
+}
+
++ (NSString *)storyboardName {
+    
+    return [AppDelegate isPad] ? MTStoryboardReportDesigner : MTStoryboardReportDesignerPad;
+
+}
+
++ (BOOL)isPad {
+    static NSNumber *isPad;
+    if (!isPad) {
+        isPad = @([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+    }
+    return [isPad boolValue];
 }
 
 @end

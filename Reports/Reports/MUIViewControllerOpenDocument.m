@@ -115,11 +115,11 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
         }
         [[segue destinationViewController] setDelegate:self];
         
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [self setTableViewControllerDataSourceTypes: popoverController];
-            [popoverController setDelegate: self];
-        }
+        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+        //    [self setTableViewControllerDataSourceTypes: popoverController];
+        //    [popoverController setDelegate: self];
+        //}
 
     } else if ([[segue identifier] isEqualToString:SEGUE_OPENDOCUMENT]) {
         
@@ -230,11 +230,11 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
                             }
                             
-                            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                                UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-                                [self setTableViewControllerDataSourceTypes: popoverController];
-                                [popoverController setDelegate: self];
-                            }
+                            //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                            //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+                            //    [self setTableViewControllerDataSourceTypes: popoverController];
+                            //    [popoverController setDelegate: self];
+                            //}
                             
                         }
                     }
@@ -278,12 +278,12 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated: YES];
-        [self setTableViewControllerDataSourceTypes: nil];
-    }
+    //} else {
+    //    [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated: YES];
+    //    [self setTableViewControllerDataSourceTypes: nil];
+    //}
     [AppDelegate setActiveDocument: nil];
 }
 

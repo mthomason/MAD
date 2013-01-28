@@ -15,4 +15,8 @@
     return MNSTableViewCellInkNameHeightDefault;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 @end

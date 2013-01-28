@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MUITableViewController.h"
-
+#import "AppDelegate.h"
 @interface UITableViewControllerSettings : MUITableViewController
     <UITableViewDelegate>
 

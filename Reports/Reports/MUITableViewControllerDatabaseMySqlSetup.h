@@ -14,6 +14,7 @@
 #import "MNSDocumentReport.h"
 #import "MNSDatabaseMySql.h"
 #import "UIAlertView+Blocks.h"
+#import "AppDelegate.h"
 
 @interface MUITableViewControllerDatabaseMySqlSetup : MUITableViewController
     <UITableViewDelegate,
