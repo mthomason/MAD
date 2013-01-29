@@ -20,6 +20,7 @@
 @property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemLayout;
 @property (retain, nonatomic) IBOutlet UIView *backgroundView;
 @property (retain, nonatomic) IBOutlet UIView *contentView;
+@property (retain, nonatomic) IBOutlet UISegmentedControl *sceneSelector;
 
 @property (nonatomic, retain) UITableViewControllerFontSettings *tableViewControllerTextLayoutSettings;
 @property (nonatomic, retain) UITableViewControllerFontSelector *tableViewControllerFontSelector;
@@ -53,19 +54,24 @@
 }
 
 - (void)initialize {
-    UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+    UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     
-    UITableViewControllerFontSettings *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
+    UITableViewControllerFontSettings *tb1 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
+    [tb1 setDelegate:self];
     [self setTableViewControllerTextLayoutSettings:tb1];
-    [tb1 release];
     
-    UITableViewControllerFontSelector *tb2 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
+    UITableViewControllerFontSelector *tb2 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
+    [tb2 setDelegate:self];
     [self setTableViewControllerFontSelector:tb2];
-    [tb2 release];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
+    UIBarButtonItem *leftBarButtonItem = [navigationItem leftBarButtonItem];
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
+    [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self contentView] bounds]];
     [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
@@ -84,6 +90,7 @@
     [_navigationItemLayout release];
     [_backgroundView release];
     [_contentView release];
+    [_sceneSelector release];
     [super dealloc];
 }
 
@@ -106,9 +113,34 @@
     
 }
 
-- (void)setFontDelegates:(id)delegate {
-    [[self tableViewControllerTextLayoutSettings] setDelegate:self];
-    [[self tableViewControllerFontSelector] setDelegate:self];
+- (IBAction)valueChanged:(id)sender {
+    [sender setEnabled:NO];
+    UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    id newViewController = nil;
+    if ([sender selectedSegmentIndex] == 0) {
+        //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsStyle" bundle:nil];
+        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
+    } else  if ([sender selectedSegmentIndex] == 1) {
+        //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsLayout" bundle:nil];
+        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
+    }
+    [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
+    [newViewController setDelegate:self];
+    
+    [[newViewController tableView] setBounds: [[self contentView] bounds]];
+    [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+    [UIView animateWithDuration:0.3000f animations:^{
+        [[[self tableViewControllerTextLayoutSettings] view] removeFromSuperview];
+        [self setTableViewControllerTextLayoutSettings:newViewController];
+
+        [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
+    
+    } completion:^(BOOL finished) {
+  //      [newViewController retain];
+//        [self setTableViewControllerTextLayoutSettings:newViewController];
+        //[newViewController release];
+        [sender setEnabled:YES];
+    }];
 }
 
 #pragma mark - UINavigationBarDelegate

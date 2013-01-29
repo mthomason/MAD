@@ -16,5 +16,6 @@
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
 - (void)setFontDelegates:(id)delegate;
+- (IBAction)valueChanged:(id)sender;
 
 @end

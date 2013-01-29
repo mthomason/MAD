@@ -45,6 +45,7 @@
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
 
+@property (retain, nonatomic) IBOutlet UILabel *labelTest;
 @property (assign) MTControlState controlStateBold;
 @property (assign) MTControlState controlStateItalic;
 @property (assign) MTControlState controlStateStrike;
@@ -76,10 +77,7 @@
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
@@ -108,6 +106,7 @@
     [[self buttonUnderline] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
     [[self buttonUnderline] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
     [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -138,21 +137,6 @@
     for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
         [tableViewCell setHidden:YES];
     }
-/*
-    NSMutableArray *insertPaths = [[NSMutableArray alloc] initWithCapacity:[[self groupTableViewCellStyle] count]];
-    NSMutableArray *removePaths = [[NSMutableArray alloc] initWithCapacity:[[self groupTableViewCellLayout] count]];
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
-        [insertPaths addObject:[[self tableView] indexPathForCell:tableViewCell]];
-    }
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
-        [insertPaths addObject:[[self tableView] indexPathForCell:tableViewCell]];
-    }
-    
-    [[self tableView] beginUpdates];
-    [[self tableView] insertRowsAtIndexPaths:insertPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-    [[self tableView] deleteRowsAtIndexPaths:removePaths withRowAnimation:UITableViewRowAnimationAutomatic];
-    [[self tableView] endUpdates];
- */
 }
 
 - (void)displayStyleSettings {
@@ -206,6 +190,7 @@
     [_labelSizeHeight release];
     [_groupTableViewCellStyle release];
     [_groupTableViewCellLayout release];
+    [_labelTest release];
     [super dealloc];
 }
 
@@ -409,7 +394,7 @@
         [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:[horizontalAlignmentHolder integerValue]];
         [[self segmentedControlVerticalAlignment] setSelectedSegmentIndex:[verticalAlignmentHolder integerValue]];
 
-        CGFloat labelSize = [[[self labelFontName] font] pointSize];
+        CGFloat labelSize = [UIFont systemFontSize];
 
         NSNumber *displayNumber = numberOfMarginTop == 1 ? marginTopHolder : nil;
         [[self labelMarginTop] setAttributedText: [self marginTopForValue:displayNumber andFontSize:labelSize]];
@@ -849,81 +834,5 @@
     }
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 0.0000f;
-}
-*/
-
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat result = 27.0000f;
-    return result;
-}
-*/
-
-/*
- - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath { }
- */
-
-/*
- - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section { }
- */
-
-/*
- 
- - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-
-/*
- - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
 
 @end

@@ -162,8 +162,9 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (NSString *)storyboardName {
-    
-    return [AppDelegate isPad] ? MTStoryboardReportDesigner : MTStoryboardReportDesignerPad;
+    NSString *storyboardName = [AppDelegate isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+    NSLog(@"Storyboard name: %@", storyboardName);
+    return storyboardName;
 
 }
 

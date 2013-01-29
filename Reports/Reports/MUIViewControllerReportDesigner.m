@@ -286,7 +286,6 @@
     if ([AppDelegate isPad]) {
         
         UIViewControllerToolBox *viewControllerToolbox = [[UIViewControllerToolBox alloc] initWithNibName:@"MTViewToolbox" bundle:nil];
-        [viewControllerToolbox setFontDelegates:self];
         [self setViewControllerToolbox:viewControllerToolbox];
         [viewControllerToolbox release];
         
@@ -921,8 +920,14 @@
 
 // MARK: Load the elements into the sections.
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    //for (UIView *subview in [[cell contentView] subviews]) {
+    //    [subview removeFromSuperview];
+    //}
+}
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"CellForItem %@", indexPath);
     NSInteger row = [indexPath row];
     
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
@@ -960,7 +965,7 @@
                                                                   inObjectContext:managedObjectContext];
                 
                 [elementView setDelegate:self];
-                [cell setBackgroundColor:[UIColor greenColor]];
+                [cell setBackgroundColor:[UIColor clearColor]];
                 [elementView setFrame:cellFrame];
                 [[elementView layer] setCornerRadius: 3.0000f];
                 
@@ -969,6 +974,7 @@
                 [panGesture setDelegate:self];
                 [elementView addGestureRecognizer:panGesture];
                 [panGesture release];
+                //UICollectionViewLayoutAttributes *layoutAttributes = [[collectionView collectionViewLayout] layoutAttributesForItemAtIndexPath:indexPath];
                 
                 [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
                 [cell setObjectIdTag:[documentObject objectID]];
@@ -1338,6 +1344,11 @@
             [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
             newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [self setScrollersEnabled: NO];
+
+            
+            //[[gestureRecognizer view] retain];
+            //[[gestureRecognizer view] removeFromSuperview];
+
             
             [[gestureRecognizer view] setCenter: newCenter];
             
@@ -1370,7 +1381,7 @@
                             [hasObjects removeObjectAtIndex:deleteIndex];
                             [documentSection setHasObjects:hasObjects];
                             [[AppDelegate activeDocument] saveContext];
-                            UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
+                            //UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                         } completion:^(BOOL finished) {
@@ -1380,6 +1391,7 @@
                             //[[gestureRecognizer view] setCenter: newCenter];
                             //[[self designScrollView] addSubview: [gestureRecognizer view]];
                             [svSection setDelegate:self];
+                            //[[gestureRecognizer view] release];
                         }];
                     }
                 }

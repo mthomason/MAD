@@ -348,7 +348,7 @@
                                         <items>
                                             <navigationItem title="Style" id="fcd-MR-7nw">
                                                 <barButtonItem key="leftBarButtonItem" width="6" style="plain" id="dWQ-pN-pcL">
-                                                    <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="riD-Ho-iBL">
+                                                    <segmentedControl key="customView" hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="riD-Ho-iBL">
                                                         <rect key="frame" x="5" y="7" width="112" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <segments>
@@ -5577,12 +5577,9 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="hideToolbox:"/>
                 <relationship kind="action" name="info:"/>
-                <relationship kind="action" name="segmentedControlToolboxValueChanged:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
-                <relationship kind="action" name="showToolbox:"/>
                 <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
@@ -5730,6 +5727,10 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerFontSettings.h"/>
             <relationships>
                 <relationship kind="action" name="controlValueChanged:"/>
+                <relationship kind="action" name="toggleBold:"/>
+                <relationship kind="action" name="toggleItalic:"/>
+                <relationship kind="action" name="toggleStrikeThrough:"/>
+                <relationship kind="action" name="toggleUnderline:"/>
                 <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
@@ -5748,6 +5749,7 @@
                 <relationship kind="outlet" name="labelPaddingTop" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelSizeHeight" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelSizeWidth" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTest" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="segControlFontStyle" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="segmentedControlHorizontalAlignment" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="segmentedControlVerticalAlignment" candidateClass="UISegmentedControl"/>
