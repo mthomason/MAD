@@ -67,11 +67,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
     UIBarButtonItem *leftBarButtonItem = [navigationItem leftBarButtonItem];
     UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self setSceneSelector:segmentedControl];
     [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self contentView] bounds]];
     [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
@@ -92,6 +93,18 @@
     [_contentView release];
     [_sceneSelector release];
     [super dealloc];
+}
+
+- (CGFloat)contentHeight {
+    CGFloat newHeight = 320.0000f;
+    if ([[self sceneSelector] selectedSegmentIndex] == 0) {
+        if ([[[[self navigationBar] items] lastObject]  isEqual:[self navigationItemFontSelector]]) {
+            newHeight = 580.0000f;
+        }
+    } else if ([[self sceneSelector] selectedSegmentIndex] == 1) {
+        newHeight = 540.0000f;
+    }
+    return newHeight;
 }
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds {
@@ -118,9 +131,11 @@
     UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     id newViewController = nil;
     if ([sender selectedSegmentIndex] == 0) {
+        [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Style", @"Style")];
         //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsStyle" bundle:nil];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     } else  if ([sender selectedSegmentIndex] == 1) {
+        [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Layout", @"Layout")];
         //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsLayout" bundle:nil];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
     }
@@ -136,6 +151,11 @@
         [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
     
     } completion:^(BOOL finished) {
+        [[self delegate] heightChanged:[self contentHeight]];
+        //[self setContentSizeForViewInPopover:CGSizeMake(320.0000f, [self contentHeight])];
+        //[[self view] setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [self contentHeight])];
+        //[[self backgroundView] setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [self contentHeight])];
+
   //      [newViewController retain];
 //        [self setTableViewControllerTextLayoutSettings:newViewController];
         //[newViewController release];
@@ -146,6 +166,7 @@
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
+    [[self delegate] heightChanged:[self contentHeight]];
     
     if ([item isEqual:[self navigationItemFontSelector]]) {
     } else if ([item isEqual:[self navigationItemLayout]]) {
@@ -155,7 +176,7 @@
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-    
+    [[self delegate] heightChanged:[self contentHeight]];
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {

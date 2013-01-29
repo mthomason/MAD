@@ -7,7 +7,6 @@
 //
 
 #import "MUIViewControllerReportDesigner.h"
-#import "UIViewControllerToolBox.h"
 
 @interface MUIViewControllerReportDesigner()
     <FontSettingsTableViewControllerDelegate,
@@ -143,8 +142,9 @@
                 }
                 popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
             }
-            
             [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
+
             
         }
     }
@@ -168,6 +168,7 @@
                 if ([[self selectedObjectIds] count] > 0) {
                     CGRect popoverRect = [self rectForSelectedElements];
                     [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
+                    //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
                     
                 } else {
                     [[self popoverControllerInformation] dismissPopoverAnimated:animated];
@@ -286,6 +287,7 @@
     if ([AppDelegate isPad]) {
         
         UIViewControllerToolBox *viewControllerToolbox = [[UIViewControllerToolBox alloc] initWithNibName:@"MTViewToolbox" bundle:nil];
+        [viewControllerToolbox setDelegate:self];
         [self setViewControllerToolbox:viewControllerToolbox];
         [viewControllerToolbox release];
         
@@ -307,6 +309,7 @@
         [tb2 release];
         
     }
+    [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
 
     NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
     [self setHolderForLastTouchesByCollectionView:holderForLastTouchesByCollectionView];
@@ -559,6 +562,16 @@
     }
 }
 
+#pragma mark - UIViewControllerToolboxDelegate
+
+- (void)heightChanged:(CGFloat)newHeight {
+    NSLog(@"Height changed to %f", newHeight);
+    CGSize newSize = CGSizeMake(320.0000f, newHeight);
+    [[self popoverControllerInformation] setPopoverContentSize:newSize animated:YES];
+    [[[self popoverControllerInformation] contentViewController] setContentSizeForViewInPopover: newSize];
+
+}
+
 #pragma mark - Core Data Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
@@ -781,8 +794,6 @@
 - (IBAction)info:(id)sender {
     if (![self dismissAllPopovers]) {
         [self showToolbox:sender];
-    } else {
-        [self deselectAllElements];
     }
 }
 
@@ -819,6 +830,14 @@
         }
 
         
+    }
+}
+
+- (void)hideToolbox {
+    if ([AppDelegate isPad]) {
+        if ([[self popoverControllerInformation] isPopoverVisible]) {
+            [[self popoverControllerInformation] dismissPopoverAnimated:YES];
+        }
     }
 }
 

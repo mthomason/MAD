@@ -24,6 +24,7 @@
 #import "MTElementView.h"
 #import "MTFont.h"
 #import "MTCollectionViewLineLayout.h"
+#import "UIViewControllerToolBox.h"
 
 @interface MUIViewControllerReportDesigner : MUIViewController
     <UITableViewDataSource,
@@ -35,6 +36,7 @@
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         UINavigationBarDelegate,
+        UIViewControllerToolBoxDelegate,
         MTElementViewDelegate,
         MTCollectionViewLineLayoutDelegate,
         UIViewControllerObjectSelectorDelegate,
