@@ -403,7 +403,6 @@
     NSUInteger rowSecondTransaction = groupCount + 1;
     NSUInteger rowThirdTransaction = groupCount + 3;
     
-    [managedObjectContext save: &error];
     //if (!error) {
     NSArray *indexPaths = [NSArray arrayWithObjects:
                            [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
@@ -413,6 +412,7 @@
     
     [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
+    [managedObjectContext save: &error];
     
     [[self tableViewQueryBuilder] endUpdates];
 
