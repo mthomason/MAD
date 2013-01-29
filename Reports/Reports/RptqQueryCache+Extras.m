@@ -56,6 +56,12 @@
     }
 }
 
++ (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryCache class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryCache *queryCache = [[RptqQueryCache alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:managedObjectContext];
+    return [queryCache autorelease];
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

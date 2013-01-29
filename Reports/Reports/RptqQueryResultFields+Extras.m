@@ -10,4 +10,10 @@
 
 @implementation RptqQueryResultFields (Extras)
 
++ (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryResultFields class]) inManagedObjectContext:managedObjectContext];
+    RptqQueryResultFields *queryResultField = [[RptqQueryResultFields alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:managedObjectContext];
+    return [queryResultField autorelease];
+}
+
 @end

@@ -11,4 +11,6 @@
 
 @interface RptqQueryCache (Extras) <MTProtocolCompare>
 
++ (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 @end

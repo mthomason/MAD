@@ -10,4 +10,6 @@
 
 @interface RptqQueryResultValues (Extras)
 
++ (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 @end
