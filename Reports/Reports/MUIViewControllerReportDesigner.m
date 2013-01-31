@@ -8,6 +8,8 @@
 
 #import "MUIViewControllerReportDesigner.h"
 
+#import "MTPrintPageRendererReport.h"
+
 @interface MUIViewControllerReportDesigner()
     <FontSettingsTableViewControllerDelegate,
         UITableViewControllerFontSelectorDelegate>
@@ -329,7 +331,7 @@
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
 
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
     [self setSectionViews: dictionarySections];
@@ -554,6 +556,10 @@
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
         [[AppDelegate activeDocument] refresh];
+        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
+        NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];
         
         MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
@@ -623,7 +629,7 @@
 
 - (NSSet *)elementViews {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -641,7 +647,7 @@
 
 - (NSSet *)selectedElementViews {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -1102,7 +1108,7 @@
 
 - (NSSet *)selectedObjectIdsCalculated {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -1370,7 +1376,7 @@
 
             
             [[gestureRecognizer view] setCenter: newCenter];
-            
+
             //[[self designScrollView] addSubview: [gestureRecognizer view]];
             {
                 NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
@@ -1405,6 +1411,8 @@
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                         } completion:^(BOOL finished) {
                             //[[gestureRecognizer view] setHidden:NO];
+                            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+                            [[gestureRecognizer view] setCenter: newCenter];
                             [[self designScrollView] addSubview: [gestureRecognizer view]];
 
                             //[[gestureRecognizer view] setCenter: newCenter];

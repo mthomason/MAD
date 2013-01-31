@@ -12,7 +12,7 @@ typedef void (^rsltBlk_tblNames)(MNSDatabaseSalesForce *database, NSArray *table
 typedef void (^rsltBlkGetTables)(NSArray *tables);
 typedef void (^rsltBlkGetFields)(NSArray *fields);
 typedef void (^rsltBlk_fldNames)(MNSDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
-typedef void (^rsltBlk_results)(MNSDatabaseSalesForce *database, NSArray *results);
+typedef void (^rsltBlk_results)(MNSDatabaseSalesForce *database, RptqQueryCache *results);
 typedef void (^rsltBlk_complete)(MNSDatabaseSalesForce *database, BOOL complete);
 
 @interface MNSDatabaseSalesForce ()
@@ -62,8 +62,8 @@ typedef void (^rsltBlk_complete)(MNSDatabaseSalesForce *database, BOOL complete)
 
 }
 
-- (void)runQuery: (NSString *)query
-      completion: (void (^)(MNSDatabase *database, NSArray *results))completion {
+- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+      completion: (void (^)(MNSDatabase *database, RptqQueryCache *cache))completion {
     
     [self setCurrentQueryType: NSDatabaseQueryTypeGetResults];
     

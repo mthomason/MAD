@@ -258,7 +258,7 @@
     
     NSInteger result = 0;
     BOOL breakNow = NO;
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedDocumentQuery: managedDocument];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[managedDocument managedObjectContext]];
     NSURL *urlNeedle = [[[section objectID] URIRepresentation] retain];
 
     for (RptqDocumentSection *sec in enumerator) {

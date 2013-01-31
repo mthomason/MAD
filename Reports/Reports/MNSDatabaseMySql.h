@@ -18,9 +18,14 @@
 #import "MNSDatabaseTable.h"
 #import "MNSDatabaseField.h"
 
+#import "RptqQueryCache+Extras.h"
+#import "RptqQuery+Extras.h"
 #import "RptqQueryLinks+Extras.h"
 #import "RptqTable+Extras.h"
 #import "RptqField+Extras.h"
+#import "RptqQueryResultFields+Extras.h"
+#import "RptqQueryResultValues+Extras.h"
+#import "RptqQueryResult+Extras.h"
 
 @interface MNSDatabaseMySql : MNSDatabase
 
@@ -31,8 +36,8 @@
 - (void)getFieldsForTable: (RptqTable *)table
                completion: (void (^)(NSArray *fields))completion;
 
-- (void)runQuery: (NSString *)query
-      completion: (void (^)(MNSDatabase *database, NSArray *results))completion;
+- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+      completion: (void (^)(MNSDatabase *database, RptqQueryCache *cache))completion;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

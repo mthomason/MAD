@@ -76,8 +76,8 @@
                                  userInfo: nil];
 }
 
-- (void)runQuery: (NSString *)query
-      completion: (void (^)(MNSDatabase *database, NSArray *results))completion {
+- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+      completion: (void (^)(MNSDatabase *database, RptqQueryCache *cache))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

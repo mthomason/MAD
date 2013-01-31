@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
         <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
@@ -131,16 +131,18 @@
         <relationship name="hasQueryGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="inQuery" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="hasQueryLinks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="inQuery" inverseEntity="RptqQueryLinks" syncable="YES"/>
         <relationship name="hasQueryPredicate" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="inQuery" inverseEntity="RptqQueryPredicate" syncable="YES"/>
-        <relationship name="hasQueryResultFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryResultFields" inverseName="hasQuery" inverseEntity="RptqQueryResultFields" syncable="YES"/>
         <relationship name="hasQuerySort" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuerySort" inverseName="inQuery" inverseEntity="RptqQuerySort" syncable="YES"/>
         <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqTable" inverseName="inQuery" inverseEntity="RptqTable" syncable="YES"/>
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasQueries" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <entity name="RptqQueryCache" representedClassName="RptqQueryCache" syncable="YES">
+        <attribute name="cacheDate" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="data" optional="YES" attributeType="Binary" minValueString="0" syncable="YES"/>
         <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <relationship name="hasQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryCache" inverseEntity="RptqQuery" syncable="YES"/>
+        <relationship name="hasQueryResultFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryResultFields" inverseName="inQueryCache" inverseEntity="RptqQueryResultFields" syncable="YES"/>
+        <relationship name="hasQueryResults" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryResult" inverseName="inQueryCache" inverseEntity="RptqQueryResult" syncable="YES"/>
     </entity>
     <entity name="RptqQueryGroup" representedClassName="RptqQueryGroup" syncable="YES">
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
@@ -173,10 +175,18 @@
         <relationship name="hasRightField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqField" inverseName="inQueryPredicateRight" inverseEntity="RptqField" syncable="YES"/>
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryPredicate" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
+    <entity name="RptqQueryResult" representedClassName="RptqQueryResult" syncable="YES">
+        <attribute name="fieldname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rowid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="inQueryCache" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryCache" inverseName="hasQueryResults" inverseEntity="RptqQueryCache" syncable="YES"/>
+    </entity>
     <entity name="RptqQueryResultFields" representedClassName="RptqQueryResultFields" syncable="YES">
+        <attribute name="fieldname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="resultOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="hasQuery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryResultFields" inverseEntity="RptqQuery" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="hasValues" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryResultValues" inverseName="valuesForField" inverseEntity="RptqQueryResultValues" syncable="YES"/>
+        <relationship name="inQueryCache" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryCache" inverseName="hasQueryResultFields" inverseEntity="RptqQueryCache" syncable="YES"/>
     </entity>
     <entity name="RptqQueryResultValues" representedClassName="RptqQueryResultValues" syncable="YES">
         <attribute name="rowId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -234,16 +244,17 @@
         <element name="RptqDocumentObjectLabelLink" positionX="-189" positionY="-54" width="128" height="105"/>
         <element name="RptqDocumentSection" positionX="-1217" positionY="-444" width="128" height="300"/>
         <element name="RptqField" positionX="-720" positionY="771" width="128" height="255"/>
-        <element name="RptqQuery" positionX="-45" positionY="171" width="128" height="238"/>
-        <element name="RptqQueryCache" positionX="162" positionY="135" width="128" height="103"/>
-        <element name="RptqQueryGroup" positionX="457" positionY="366" width="128" height="165"/>
+        <element name="RptqQuery" positionX="-497" positionY="153" width="128" height="223"/>
+        <element name="RptqQueryCache" positionX="99" positionY="128" width="128" height="148"/>
+        <element name="RptqQueryGroup" positionX="457" positionY="366" width="128" height="163"/>
         <element name="RptqQueryLinks" positionX="466" positionY="576" width="128" height="195"/>
         <element name="RptqQueryPredicate" positionX="466" positionY="801" width="128" height="150"/>
+        <element name="RptqQueryResultFields" positionX="277" positionY="144" width="128" height="118"/>
+        <element name="RptqQueryResultValues" positionX="432" positionY="162" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="108" positionY="366" width="128" height="120"/>
-        <element name="RptqRelationship" positionX="-855" positionY="291" width="128" height="105"/>
+        <element name="RptqRelationship" positionX="-873" positionY="309" width="128" height="105"/>
         <element name="RptqTable" positionX="-882" positionY="465" width="128" height="165"/>
         <element name="RptqUserCredentals" positionX="-1053" positionY="387" width="128" height="270"/>
-        <element name="RptqQueryResultFields" positionX="-279" positionY="171" width="128" height="88"/>
-        <element name="RptqQueryResultValues" positionX="-270" positionY="180" width="128" height="88"/>
+        <element name="RptqQueryResult" positionX="90" positionY="63" width="128" height="103"/>
     </elements>
 </model>

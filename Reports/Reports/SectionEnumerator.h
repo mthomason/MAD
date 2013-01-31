@@ -17,7 +17,7 @@
 @property (assign) NSInteger current;
 @property (assign) NSInteger total;
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument;
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 - (NSArray *)allObjects;
 - (id)nextObject;
 - (NSInteger)count;

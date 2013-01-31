@@ -9,23 +9,29 @@
 #import "SectionEnumerator.h"
 #import "AppDelegate.h"
 
+@interface SectionEnumerator ()
+
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
+@end
+
 @implementation SectionEnumerator
 
-@synthesize total = _total, current = _current;
-
 - (void)dealloc {
+    [_managedObjectContext release];
     [super dealloc];
 }
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument {
+- (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     self = [super init];
     if (self) {
+        [self setManagedObjectContext:managedObjectContext];
         [self setCurrent: 0];
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
         request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
         NSError *error = nil;
-        NSArray *groups = [[[[AppDelegate activeDocument] managedObjectContext] executeFetchRequest:request error:&error] retain];
+        NSArray *groups = [[[self managedObjectContext] executeFetchRequest:request error:&error] retain];
         [self setTotal: (error) ? 0 : [groups count]];
         [groups release];
     }
@@ -40,14 +46,14 @@
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {
         [result addObject:[RptqDocumentSection getDocumentSectionForRow: [self current]
-                                                forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]]];
+                                                forManagedObjectContext: [self managedObjectContext]]];
     }
     return [result autorelease];
 }
 
 - (id)nextObject {
     return [RptqDocumentSection getDocumentSectionForRow: self.current++
-                                 forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]];
+                                 forManagedObjectContext: [self managedObjectContext]];
 }
 
 @end

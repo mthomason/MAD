@@ -294,8 +294,10 @@
     
 }
 
-- (void)runQuery: (NSString *)query
-      completion: (void (^)(MNSDatabase *database, NSArray *results))completion {
+- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+      completion: (void (^)(MNSDatabase *database, RptqQueryCache *cache))completion {
+    
+    RptqQueryCache *queryCache = nil;
     MysqlServer *serv = [[MysqlServer alloc] init];
     
     [serv setHost:      [[self databaseConnection] server]];
@@ -307,12 +309,67 @@
     if (conn) {
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn];
         
-        completion(self, [fetch results]);
+        NSArray *results = [[NSArray alloc] initWithArray:[fetch results]];
+        
+        if (results != nil) {
+            
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+            RptqQuery *query = [[database hasQueries] anyObject];
+            queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
+            [query setHasQueryCache:queryCache];
+            
+            //[queryCache removeHasValues:[queryCache hasQueryResults]];
+            NSUInteger resultCounter = 0;
+            for (NSDictionary *result in results) {
+                NSLog(@"%@", result);
+                
+                for (NSString *key in [result keyEnumerator]) {
+                    NSLog(@"Field %@", key);
+                    id object = [result objectForKey:key];
 
-    } else {
-        completion(self, nil);
+                    RptqQueryResult *queryResult = [RptqQueryResult initObjectForManagedObjectContext:managedObjectContext];
+                    [queryResult setFieldname:key];
+                    [queryResult setValue:object];
+                    [queryResult setRowid:@(resultCounter)];
+                    [queryCache addHasQueryResultsObject:queryResult];
+                    //[queryResult setResultOrder:@(fieldCounter)];
+                    //[queryCache addHasQueryResultFieldsObject:queryResultField];
+                    //fieldCounter++;
+                }
+                
+                
+                if (resultCounter == 0) {
+                    NSUInteger fieldCounter = 0;
+                    for (NSString *key in [result keyEnumerator]) {
+                        NSLog(@"Field %@", key);
+                        RptqQueryResultFields *queryResultField = [RptqQueryResultFields initObjectForManagedObjectContext:managedObjectContext];
+                        [queryResultField setFieldname:key];
+                        [queryResultField setResultOrder:@(fieldCounter)];
+                        [queryCache addHasQueryResultFieldsObject:queryResultField];
+                        fieldCounter++;
+                    }
+                }
+                
+                for (RptqQueryResultFields *queryResultField in [[queryCache hasQueryResultFields] objectEnumerator]) {
+                    id object = [result objectForKey:[queryResultField fieldname]];
+                    RptqQueryResultValues *queryResultValue = [RptqQueryResultValues initObjectForManagedObjectContext:managedObjectContext];
+                    [queryResultValue setRowId:@(resultCounter)];
+                    [queryResultValue setValue: object];
+                    [queryResultField addHasValuesObject:queryResultValue];
+                }
+                
+                resultCounter++;
+            }
+        }
+        [results release];
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        if (error) {
+            NSLog(@"Error: %@", error);
+        }
     }
-    
+    completion(self, queryCache);
 }
 
 - (NSString *)identifier {
