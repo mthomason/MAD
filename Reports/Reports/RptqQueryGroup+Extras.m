@@ -58,10 +58,12 @@
 
 #pragma mark - Static
 
-+ (NSInteger)numberOfGroupsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+    [request setPredicate:predicate];
     NSError *error = nil;
-    NSInteger result = [objectContext countForFetchRequest:request error:&error];
+    NSInteger result = [[query managedObjectContext] countForFetchRequest:request error:&error];
     return (error) ? 0 : result;
 }
 
@@ -102,8 +104,41 @@
 
 }
 
+#pragma mark - Member functions
+
+- (id)first {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == 0", [self objectID]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    RptqQueryGroup *firstGroup = error == nil ? [resultArray lastObject] : nil;
+    return firstGroup;
+}
+
+- (id)next {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self objectID], ([[self weight] integerValue] + 1)];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    RptqQueryGroup *nextGroup = error == nil ? [resultArray lastObject] : nil;
+    return nextGroup;
+}
+
+- (id)previous {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self objectID], ([[self weight] integerValue] - 1)];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    RptqQueryGroup *previousGroup = error == nil ? [resultArray lastObject] : nil;
+    return previousGroup;
+}
+
 - (NSString *)fieldNameNice {
-    return [[NSString stringWithFormat:@"%@.%@", [self table], [self field]] lowercaseString];
+    NSString *fieldNameNice = [[[NSString stringWithFormat:@"%@.%@", [self table], [self field]] lowercaseString] retain];
+    return [fieldNameNice autorelease];
 }
 
 - (NSString *)sortDisplayNice {
