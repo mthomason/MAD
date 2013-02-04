@@ -19,4 +19,6 @@
 
 + (void)cacheQueryForDatabase:(RptqDatabase *)database progress:(void (^)(NSNumber *percentage))progress completion:(void (^)(BOOL success))completion;
 
+- (RptqQueryGroup *)firstQueryGroup;
+
 @end

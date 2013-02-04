@@ -141,6 +141,16 @@
     completion(success);
 }
 
+- (RptqQueryGroup *)firstQueryGroup {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == 0", [self objectID]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    RptqQueryGroup *firstGroup = error == nil ? [resultArray lastObject] : nil;
+    return firstGroup;
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
