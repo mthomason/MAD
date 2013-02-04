@@ -1902,6 +1902,7 @@
 		4C8ECDD816BA23C5003D3B30 /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
 		4C8ECDDB16BA23C5003D3B30 /* RptqDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocument.h; sourceTree = "<group>"; };
 		4C8ECDDC16BA23C5003D3B30 /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocument.m; sourceTree = "<group>"; };
+		4C8ECDE216BF64D3003D3B30 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4C8EEC841644E06700FAB2F3 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		4C8EED0A1644EB7500FAB2F3 /* CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreData.h; sourceTree = "<group>"; };
@@ -2922,6 +2923,7 @@
 		4C4C6F1C1676424C004A3B04 /* MTDataStructures */ = {
 			isa = PBXGroup;
 			children = (
+				4C8ECDE216BF64D3003D3B30 /* MTProtocolEnumerator.h */,
 				4C860BCF167F65BC00AC1904 /* NSNumber+Extras.h */,
 				4C860BD0167F65BC00AC1904 /* NSNumber+MTProtocol.h */,
 				4C8EC092167A487600F37DA7 /* MTProtocolLog.h */,

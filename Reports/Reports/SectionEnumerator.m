@@ -25,15 +25,12 @@
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     self = [super init];
     if (self) {
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        RptqQuery *query = [[database hasQueries] anyObject];
         [self setManagedObjectContext:managedObjectContext];
         [self setCurrent: 0];
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-        NSError *error = nil;
-        NSArray *groups = [[[self managedObjectContext] executeFetchRequest:request error:&error] retain];
-        [self setTotal: (error) ? 0 : [groups count]];
-        [groups release];
+        [self setTotal: [RptqQueryGroup numberOfGroupsForQuery:query]];
     }
     return self;
 }
@@ -43,17 +40,27 @@
 }
 
 - (NSArray *)allObjects {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    
     NSMutableArray *result = [[NSMutableArray alloc]initWithCapacity:([self total] - [self current])];
     for (; [self current]<[self total]; self.current++) {
-        [result addObject:[RptqDocumentSection getDocumentSectionForRow: [self current]
-                                                forManagedObjectContext: [self managedObjectContext]]];
+        RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self current]
+                                                                            forQuery: query];
+
+        [result addObject:section];
     }
     return [result autorelease];
 }
 
 - (id)nextObject {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+
     return [RptqDocumentSection getDocumentSectionForRow: self.current++
-                                 forManagedObjectContext: [self managedObjectContext]];
+                                                forQuery: query];
 }
 
 @end

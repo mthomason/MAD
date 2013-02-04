@@ -132,16 +132,12 @@
 }
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
-                          forManagedObjectContext:(NSManagedObjectContext *)objectContext {
+                                         forQuery:(RptqQuery *)query {
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSError *error = nil;
-    NSInteger result = [objectContext countForFetchRequest:request error:&error];
-    NSInteger numberOfGroups = (error) ? 0 : result;
-
+    NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForQuery:query];
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
-        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:objectContext] retain];
+        RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
         //NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
             case MNSDocumentSectionTypeReportHeader:
@@ -206,14 +202,9 @@
                 break;
             }
             default:
-                //NSLog(@"Get Default, %d", row);
-                
                 break;
         }
         
-        //NSLog(@"Document Sections: %@", resultSection);
-        
-        [document autorelease];
     }
 
     return resultSection;

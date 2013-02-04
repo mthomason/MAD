@@ -206,15 +206,17 @@
                     if (tvc) {
                         [tvc setDelegate:self];
                         //NSLog(@"Last selected row: %d", [self lastSelectedRowNumber]);
-                        RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                              forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
+                        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+                        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                        RptqQuery *query = [[database hasQueries] anyObject];
+                        RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                                                             forQuery: query];
                         //NSLog(@"About to show section: %@", section);                        
                         //NSLog(@"Inital height: %@", [section height]);
                         //NSLog(@"Inital visibility: %@", [section visibility]);
                         [tvc setInitalStepperValue:([[section height] floatValue] * 2)];
                         [tvc setInitalSwitchValue:[[section visibility] boolValue]];
-                        [section release];
-
                     }
                 }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportLayout]) {
@@ -307,17 +309,23 @@
 #pragma mark Layout Settings Delegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-    RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                          forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                                         forQuery: query];
     [section setHeight: [NSNumber numberWithFloat:height]];
-    [section release];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-    RptqDocumentSection *section = [[RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                          forManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
+                                                                         forQuery: query];
     [section setVisibility: [NSNumber numberWithBool:isVisible]];
-    [section release];
     [[AppDelegate activeDocument] saveContext];
 }
 
@@ -395,7 +403,7 @@
 
     
     NSError *error = nil;
-    NSInteger groupCount = [RptqQueryGroup numberOfGroupsForManagedObjectContext:managedObjectContext];
+    NSInteger groupCount = [RptqQueryGroup numberOfGroupsForQuery:query];
     NSInteger weight = groupCount - 1;
     NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsGroups];
     NSUInteger rowFirstTransaction = weight;

@@ -10,6 +10,7 @@
 #import "RptqDocument+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqQuery+Extras.h"
+#import "CGGeometry+Extras.h"
 
 @interface MTPrintPageRendererReport : UIPrintPageRenderer
 

@@ -10,6 +10,7 @@
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
 #import "MTProtocolCompare.h"
+#import "RptqQueryGroup+Extras.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
@@ -26,8 +27,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
-                          forManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row forQuery:(RptqQuery *)query;
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentReport *)managedDocument;
