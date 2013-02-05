@@ -85,7 +85,7 @@
 		4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
 		4C0E7752163B5AEC003B951E /* UIManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* UIManagedDocumentReport.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
-		4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4C0E7754163B5AEC003B951E /* MTViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */; };
 		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -570,7 +570,7 @@
 		4C860B2F167EDE7000AC1904 /* MUIViewControllerShowSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MUIViewControllerShowSql.m */; };
 		4C860B30167EDE7000AC1904 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
 		4C860B31167EDE7000AC1904 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
-		4C860B32167EDE7000AC1904 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4C860B32167EDE7000AC1904 /* MTViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */; };
 		4C860B33167EDE7000AC1904 /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
 		4C860B34167EDE7000AC1904 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
 		4C860B35167EDE7000AC1904 /* ApplicationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */; };
@@ -974,7 +974,7 @@
 		4CA1641B167EB90D00540A14 /* MUIViewControllerShowSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MUIViewControllerShowSql.m */; };
 		4CA1641C167EB90D00540A14 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
 		4CA1641D167EB90D00540A14 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
-		4CA1641E167EB90D00540A14 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4CA1641E167EB90D00540A14 /* MTViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */; };
 		4CA1641F167EB90D00540A14 /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
 		4CA16420167EB90D00540A14 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
 		4CA16431167EB90F00540A14 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
@@ -993,7 +993,7 @@
 		4CA1643E167EB90F00540A14 /* MUIViewControllerShowSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MUIViewControllerShowSql.m */; };
 		4CA1643F167EB90F00540A14 /* UITableViewControllerChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* UITableViewControllerChooseField.m */; };
 		4CA16440167EB90F00540A14 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
-		4CA16441167EB90F00540A14 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4CA16441167EB90F00540A14 /* MTViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */; };
 		4CA16442167EB90F00540A14 /* QueryBuilderDataModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */; };
 		4CA16443167EB90F00540A14 /* UITableViewControllerSectionLayoutSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */; };
 		4CA16444167EB91400540A14 /* ApplicationSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */; };
@@ -1179,7 +1179,7 @@
 		4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8D53150385DA002B9E77 /* UIImagePatternYellowLined@2x.png */; };
 		4CCD8DB8150386CB002B9E77 /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
 		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
-		4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */; };
+		4CD0F7C514CC532A003DA079 /* MTViewControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */; };
 		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -2221,8 +2221,8 @@
 		4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PaperPatterns.m"; sourceTree = "<group>"; };
 		4CD0F7B714CC3908003DA079 /* NSFileManager+Reports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Reports.h"; sourceTree = "<group>"; };
 		4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Reports.m"; sourceTree = "<group>"; };
-		4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerQueryBuilder.h; sourceTree = "<group>"; };
-		4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerQueryBuilder.m; sourceTree = "<group>"; };
+		4CD0F7C214CC532A003DA079 /* MTViewControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerQueryBuilder.h; sourceTree = "<group>"; };
+		4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerQueryBuilder.m; sourceTree = "<group>"; };
 		4CD0F7C714CD201E003DA079 /* UITableViewCellTableName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellTableName.h; sourceTree = "<group>"; };
 		4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellTableName.m; sourceTree = "<group>"; };
 		4CD0F7CC14CD2035003DA079 /* UITableViewCellLinkName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellLinkName.h; sourceTree = "<group>"; };
@@ -3667,8 +3667,8 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */,
-				4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */,
+				4CD0F7C214CC532A003DA079 /* MTViewControllerQueryBuilder.h */,
+				4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */,
 				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
 				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
@@ -4857,7 +4857,7 @@
 				4C0E7750163B5AEC003B951E /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
 				4C0E7752163B5AEC003B951E /* UIManagedDocumentReport.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
-				4C0E7754163B5AEC003B951E /* MUIViewControllerQueryBuilder.m in Sources */,
+				4C0E7754163B5AEC003B951E /* MTViewControllerQueryBuilder.m in Sources */,
 				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
 				4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */,
 				4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */,
@@ -5087,7 +5087,7 @@
 				4CA1641B167EB90D00540A14 /* MUIViewControllerShowSql.m in Sources */,
 				4CA1641C167EB90D00540A14 /* UITableViewControllerChooseField.m in Sources */,
 				4CA1641D167EB90D00540A14 /* RptqFieldSelectorManager.m in Sources */,
-				4CA1641E167EB90D00540A14 /* MUIViewControllerQueryBuilder.m in Sources */,
+				4CA1641E167EB90D00540A14 /* MTViewControllerQueryBuilder.m in Sources */,
 				4CA1641F167EB90D00540A14 /* QueryBuilderDataModal.m in Sources */,
 				4CA16420167EB90D00540A14 /* UITableViewControllerSectionLayoutSettings.m in Sources */,
 				4CA16444167EB91400540A14 /* ApplicationSettings.m in Sources */,
@@ -5219,7 +5219,7 @@
 				4CA1643E167EB90F00540A14 /* MUIViewControllerShowSql.m in Sources */,
 				4CA1643F167EB90F00540A14 /* UITableViewControllerChooseField.m in Sources */,
 				4CA16440167EB90F00540A14 /* RptqFieldSelectorManager.m in Sources */,
-				4CA16441167EB90F00540A14 /* MUIViewControllerQueryBuilder.m in Sources */,
+				4CA16441167EB90F00540A14 /* MTViewControllerQueryBuilder.m in Sources */,
 				4CA16442167EB90F00540A14 /* QueryBuilderDataModal.m in Sources */,
 				4CA16443167EB90F00540A14 /* UITableViewControllerSectionLayoutSettings.m in Sources */,
 				4CA16445167EB91500540A14 /* ApplicationSettings.m in Sources */,
@@ -5287,7 +5287,7 @@
 				4CBFF2ED14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
 				4C8779DE14CA9D90005CBE6F /* UIManagedDocumentReport.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
-				4CD0F7C514CC532A003DA079 /* MUIViewControllerQueryBuilder.m in Sources */,
+				4CD0F7C514CC532A003DA079 /* MTViewControllerQueryBuilder.m in Sources */,
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
 				4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */,
 				4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */,
@@ -5516,7 +5516,7 @@
 				4C860B2F167EDE7000AC1904 /* MUIViewControllerShowSql.m in Sources */,
 				4C860B30167EDE7000AC1904 /* UITableViewControllerChooseField.m in Sources */,
 				4C860B31167EDE7000AC1904 /* RptqFieldSelectorManager.m in Sources */,
-				4C860B32167EDE7000AC1904 /* MUIViewControllerQueryBuilder.m in Sources */,
+				4C860B32167EDE7000AC1904 /* MTViewControllerQueryBuilder.m in Sources */,
 				4C860B33167EDE7000AC1904 /* QueryBuilderDataModal.m in Sources */,
 				4C860B34167EDE7000AC1904 /* UITableViewControllerSectionLayoutSettings.m in Sources */,
 				4C860B35167EDE7000AC1904 /* ApplicationSettings.m in Sources */,

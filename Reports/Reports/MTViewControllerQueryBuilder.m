@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MUIViewControllerQueryBuilder.h"
+#import "MTViewControllerQueryBuilder.h"
 #import "AppDelegate.h"
 #import "UIViewClipboard.h"
 
 #pragma mark - Private Category
 
-@interface MUIViewControllerQueryBuilder()
+@interface MTViewControllerQueryBuilder()
 
 @property (retain, nonatomic) UIFont *boldSystemFont;
 //@property (retain, nonatomic) UIView *cellBackgroundView;
@@ -29,7 +29,7 @@
 
 #pragma mark - Main
 
-@implementation MUIViewControllerQueryBuilder
+@implementation MTViewControllerQueryBuilder
 
 - (void)dealloc {
     [_boldSystemFont release];

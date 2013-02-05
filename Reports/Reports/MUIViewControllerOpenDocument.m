@@ -131,8 +131,8 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
             if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
                 UINavigationController *navControl = [[segue destinationViewController] retain];
                 if ([navControl topViewController]) {
-                    if ([[navControl topViewController] isKindOfClass:[MUIViewControllerQueryBuilder class]]) {
-                        MUIViewControllerQueryBuilder *tvc = [(MUIViewControllerQueryBuilder *)[navControl topViewController] retain];
+                    if ([[navControl topViewController] isKindOfClass:[MTViewControllerQueryBuilder class]]) {
+                        MTViewControllerQueryBuilder *tvc = [(MTViewControllerQueryBuilder *)[navControl topViewController] retain];
                         if (tvc) {
                             [tvc setDelegate: self];
                             if (row < [[self availableFilesCache] count]) {

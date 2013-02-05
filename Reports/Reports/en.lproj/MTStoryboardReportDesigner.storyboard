@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2844" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="6">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--View Controller Template Selector - Templates-->
@@ -667,7 +667,7 @@
         <!--View Controller Query Builder - Query Builder-->
         <scene sceneID="m5M-pU-hVe">
             <objects>
-                <viewController id="6Ud-Rv-UQO" customClass="MUIViewControllerQueryBuilder" sceneMemberID="viewController">
+                <viewController id="6Ud-Rv-UQO" customClass="MTViewControllerQueryBuilder" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KGO-Qx-zB3">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5552,25 +5552,6 @@
                 <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerQueryBuilder" superclassName="MUIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerQueryBuilder.h"/>
-            <relationships>
-                <relationship kind="action" name="addLink:"/>
-                <relationship kind="action" name="addTable:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
-                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
-                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
-                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
-                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
-                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="viewClipboard" candidateClass="UIViewClipboard"/>
             </relationships>
         </class>
         <class className="MUIViewControllerReportDesigner" superclassName="MUIViewController">
