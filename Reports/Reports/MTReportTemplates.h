@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Templates : NSObject
+@interface MTReportTemplates : NSObject
 
 + (NSArray *)InstalledTemplates;                //Array of NSURLs
 + (NSArray *)ApplicationBundleTemplates;        //Array of NSURLs

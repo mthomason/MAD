@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "Templates.h"
+#import "MTReportTemplates.h"
 #import "Constants.h"
 #import "NSFileManager+Common.h"
 
-@implementation Templates
+@implementation MTReportTemplates
 
 //Array of NSURLs
 + (NSArray *)InstalledTemplates {
