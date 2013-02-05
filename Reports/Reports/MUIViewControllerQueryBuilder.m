@@ -390,7 +390,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    [[self tableViewQueryBuilder] beginUpdates];
+//    [[self tableViewQueryBuilder] beginUpdates];
 
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
 
@@ -411,6 +411,7 @@
     NSUInteger rowSecondTransaction = groupCount + 1;
     NSUInteger rowThirdTransaction = groupCount + 3;
     
+    [managedObjectContext save: &error];
     //if (!error) {
     NSArray *indexPaths = [NSArray arrayWithObjects:
                            [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
@@ -420,9 +421,8 @@
     
     [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
-    [managedObjectContext save: &error];
     
-    [[self tableViewQueryBuilder] endUpdates];
+    //[[self tableViewQueryBuilder] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     [[AppDelegate activeDocument] saveContext];
@@ -656,37 +656,38 @@
                 case UIViewControllerSchemaTablesSectionsLinks: {
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
-                        NSManagedObjectID *objid = [[tvcLink tableID] retain];
+                        NSManagedObjectID *objid = [tvcLink tableID];
                         [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
-                        [objid release];
                         [[AppDelegate activeDocument] saveContext];
                     }
                     [tvcLink release];
                     break;
                 }
                     
-                // MARK: Delete UIViewControllerSchemaTablesSectionsLinks
+                // MARK: Delete UIViewControllerSchemaTablesSectionsGroups
                 case UIViewControllerSchemaTablesSectionsGroups: {
+                    
+                    MNSDocumentReport *activateDocument = [AppDelegate activeDocument];
+                    NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
+                    
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
-                    [[self tableViewQueryBuilder] beginUpdates];
-                    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]] retain];
+                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
                     NSError *error = nil;
-                    NSInteger result = [[[AppDelegate activeDocument] managedObjectContext] countForFetchRequest:request error:&error];
+                    NSInteger result = [managedObjectContext countForFetchRequest:request error:&error];
                     NSInteger numberOfGroups = error ? 0 : result;
 
-                    if (doc) {
-                        RptqQuery *query = [[[[doc hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                        
+                    if (document) {
+                        RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                         NSSet *groups = [[query hasQueryGroups] retain];
                         NSInteger weightToRemove = [indexPath row];
+
                         RptqQueryGroup *groupToRemove = nil;
-                        
                         for (RptqQueryGroup *group in groups) {
                             if ([[group weight] integerValue] > weightToRemove) {
                                 [group setWeight:[NSNumber numberWithInteger:([[group weight] integerValue] - 1)]];
                             } else if ([[group weight] integerValue] == weightToRemove) {
-                                groupToRemove = [group retain];
+                                groupToRemove = group;
                             }
                         }
                                                 
@@ -694,20 +695,17 @@
                             NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
                             NSArray *sections = [[sectionsToRemove allObjects] retain];
                             if ([sections count] == 2) {
-                                [[[AppDelegate activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 0]];
+                                //[managedObjectContext deleteObject: [sections objectAtIndex: 0]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-                                [[[AppDelegate activeDocument] managedObjectContext] deleteObject: [sections objectAtIndex: 1]];
+                                //[managedObjectContext deleteObject: [sections objectAtIndex: 1]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
                             }
                             [sections release];
                             [sectionsToRemove release];
-                            [[[AppDelegate activeDocument] managedObjectContext] deleteObject: groupToRemove];
+                            [managedObjectContext deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
-
-                            NSError *error = nil;
-                            [[[AppDelegate activeDocument] managedObjectContext] save: &error];
-                            if (!error) {
-                                
+                            
+                            [activateDocument saveContext];
                                 NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
                                 NSInteger headerSectionRow = weightToRemove + 2;
                                 NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
@@ -720,17 +718,18 @@
                                 [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: indexPaths
                                                                     withRowAnimation: UITableViewRowAnimationAutomatic];
                                 [indexPaths release];
-                            }
-                            [groupToRemove release];
                         }
                         
                         [groups release];
                         
                     }
 
-                    [doc release];
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                    [activateDocument save:^(BOOL success) {
+
+                    }];
                     
-                    [[AppDelegate activeDocument] saveContext];
+                    
                     break;
                 }
                 
