@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 #import "Constants.h"
 #import "UITableViewControllerSettings.h"
 
-@interface UIViewControllerSettings : MUIViewController
+@interface UIViewControllerSettings : MTViewController
 
 @property (retain, nonatomic) UITableViewControllerSettings *tableViewControllerSettings;
 

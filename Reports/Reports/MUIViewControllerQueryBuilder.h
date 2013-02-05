@@ -29,7 +29,7 @@
 #import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
 
-@interface MUIViewControllerQueryBuilder : MUIViewController
+@interface MUIViewControllerQueryBuilder : MTViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         NSFetchedResultsControllerDelegate,

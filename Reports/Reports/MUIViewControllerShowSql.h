@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MUIViewController.h"
+#import "MTViewController.h"
 //#import "UIManagedDocumentReport.h"
 //#import "RptqDocument+Extras.h"
 //#import "RptqQuery+Extras.h"
 #import "RptqDocument+ActiveDocument.h"
 
-@interface MUIViewControllerShowSql : MUIViewController
+@interface MUIViewControllerShowSql : MTViewController
 
 @property (retain, nonatomic) IBOutlet UITextView *textView;
 

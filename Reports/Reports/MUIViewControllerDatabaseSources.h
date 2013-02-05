@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 
-@interface MUIViewControllerDatabaseSources : MUIViewController
+@interface MUIViewControllerDatabaseSources : MTViewController
 
 - (IBAction)done:(id)sender;
 

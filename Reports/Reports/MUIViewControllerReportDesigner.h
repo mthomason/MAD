@@ -26,7 +26,7 @@
 #import "MTCollectionViewLineLayout.h"
 #import "UIViewControllerToolBox.h"
 
-@interface MUIViewControllerReportDesigner : MUIViewController
+@interface MUIViewControllerReportDesigner : MTViewController
     <UITableViewDataSource,
         UIPopoverControllerDelegate,
         UITableViewDelegate,

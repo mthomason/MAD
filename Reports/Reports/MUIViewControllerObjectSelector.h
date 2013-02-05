@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 #import "UITableViewControllerChooseField.h"
 #import "AppDelegate.h"
 
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
-@interface MUIViewControllerObjectSelector : MUIViewController
+@interface MUIViewControllerObjectSelector : MTViewController
     <UITableViewControllerChooseFieldDelegate,
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate>

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 #import "UITableViewCellDocument.h"
 #import "NSFileManager+Common.h"
 #import "Constants.h"
@@ -19,7 +19,7 @@
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
 @end
 
-@interface MUIViewControllerTemplateSelector : MUIViewController
+@interface MUIViewControllerTemplateSelector : MTViewController
     <UITableViewDataSource, UITableViewDelegate,
         MUIViewControllerDelegate>
 

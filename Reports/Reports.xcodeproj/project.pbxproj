@@ -135,9 +135,6 @@
 		4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
 		4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
-		4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F115112434004AF941 /* MNSGraph.m */; };
-		4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F415112473004AF941 /* MNSVertex.m */; };
-		4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F715112488004AF941 /* MNSEdge.m */; };
 		4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
@@ -560,7 +557,7 @@
 		4C860B22167EDE7000AC1904 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
 		4C860B23167EDE7000AC1904 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4C860B24167EDE7000AC1904 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
-		4C860B25167EDE7000AC1904 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C860B26167EDE7000AC1904 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4C860B27167EDE7000AC1904 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4C860B28167EDE7000AC1904 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
@@ -790,9 +787,6 @@
 		4C8F7CE714CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* UIViewControllerSchemaAddLinkFirstTable.m */; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
 		4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
-		4C9514F215112434004AF941 /* MNSGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F115112434004AF941 /* MNSGraph.m */; };
-		4C9514F515112473004AF941 /* MNSVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F415112473004AF941 /* MNSVertex.m */; };
-		4C9514F815112488004AF941 /* MNSEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9514F715112488004AF941 /* MNSEdge.m */; };
 		4C955D771644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
 		4C955D781644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
 		4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */; };
@@ -800,8 +794,8 @@
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
-		4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
-		4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
+		4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
@@ -967,7 +961,7 @@
 		4CA1640E167EB90D00540A14 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
 		4CA1640F167EB90D00540A14 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4CA16410167EB90D00540A14 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
-		4CA16411167EB90D00540A14 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4CA16411167EB90D00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16412167EB90D00540A14 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4CA16413167EB90D00540A14 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4CA16414167EB90D00540A14 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
@@ -986,7 +980,7 @@
 		4CA16431167EB90F00540A14 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MUITableViewControllerDatabaseDriverSelector.m */; };
 		4CA16432167EB90F00540A14 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4CA16433167EB90F00540A14 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */; };
-		4CA16434167EB90F00540A14 /* MUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MUIViewController.m */; };
+		4CA16434167EB90F00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16435167EB90F00540A14 /* MUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MUITableViewController.m */; };
 		4CA16436167EB90F00540A14 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
 		4CA16437167EB90F00540A14 /* MUIVewControllerTemplateSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */; };
@@ -2020,12 +2014,6 @@
 		4C8F7CE814CEFBAE006171A7 /* UITableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
 		4C9514ED15108206004AF941 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		4C9514F015112434004AF941 /* MNSGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSGraph.h; sourceTree = "<group>"; };
-		4C9514F115112434004AF941 /* MNSGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSGraph.m; sourceTree = "<group>"; };
-		4C9514F315112473004AF941 /* MNSVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSVertex.h; sourceTree = "<group>"; };
-		4C9514F415112473004AF941 /* MNSVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSVertex.m; sourceTree = "<group>"; };
-		4C9514F615112487004AF941 /* MNSEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNSEdge.h; sourceTree = "<group>"; };
-		4C9514F715112488004AF941 /* MNSEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNSEdge.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
 		4C955D761644FC5700F890D2 /* MUIVewControllerTemplateSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIVewControllerTemplateSelector.m; sourceTree = "<group>"; };
 		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPad.storyboard; sourceTree = "<group>"; };
@@ -2034,8 +2022,8 @@
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
-		4C9F94BB1642280500A562B9 /* MUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewController.h; sourceTree = "<group>"; };
-		4C9F94BC1642280500A562B9 /* MUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewController.m; sourceTree = "<group>"; };
+		4C9F94BB1642280500A562B9 /* MTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewController.h; sourceTree = "<group>"; };
+		4C9F94BC1642280500A562B9 /* MTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewController.m; sourceTree = "<group>"; };
 		4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDelegate.h; sourceTree = "<group>"; };
 		4C9F94C016423D7300A562B9 /* MUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUITableViewController.h; sourceTree = "<group>"; };
 		4C9F94C116423D7300A562B9 /* MUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUITableViewController.m; sourceTree = "<group>"; };
@@ -3056,7 +3044,6 @@
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C00818414B738E9003DF437 /* Model */,
 				4CDB624B14E38C8400A5389E /* Categories */,
-				4C9514EF1511241A004AF941 /* Generics */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -3291,20 +3278,6 @@
 				4C88A99814EA22F90069A0AF /* SectionEnumerator.m */,
 			);
 			name = Rptq;
-			sourceTree = "<group>";
-		};
-		4C9514EF1511241A004AF941 /* Generics */ = {
-			isa = PBXGroup;
-			children = (
-				4C9514F015112434004AF941 /* MNSGraph.h */,
-				4C9514F115112434004AF941 /* MNSGraph.m */,
-				4C9514F315112473004AF941 /* MNSVertex.h */,
-				4C9514F415112473004AF941 /* MNSVertex.m */,
-				4C9514F615112487004AF941 /* MNSEdge.h */,
-				4C9514F715112488004AF941 /* MNSEdge.m */,
-			);
-			name = Generics;
-			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C9962F116401CF800B7BACC /* Products */ = {
@@ -3694,6 +3667,10 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */,
+				4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */,
+				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
+				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
 				4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */,
 				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
@@ -3705,8 +3682,8 @@
 				4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */,
 				4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
-				4C9F94BB1642280500A562B9 /* MUIViewController.h */,
-				4C9F94BC1642280500A562B9 /* MUIViewController.m */,
+				4C9F94BB1642280500A562B9 /* MTViewController.h */,
+				4C9F94BC1642280500A562B9 /* MTViewController.m */,
 				4C9F94C016423D7300A562B9 /* MUITableViewController.h */,
 				4C9F94C116423D7300A562B9 /* MUITableViewController.m */,
 				4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */,
@@ -3721,10 +3698,6 @@
 				4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */,
 				4CBFF2EB14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.h */,
 				4CBFF2EC14C71370000237D3 /* MUITableViewControllerDatabaseSalesforceSetup.m */,
-				4CD0F7C214CC532A003DA079 /* MUIViewControllerQueryBuilder.h */,
-				4CD0F7C314CC532A003DA079 /* MUIViewControllerQueryBuilder.m */,
-				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
-				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
 				4C0358FB14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.h */,
 				4C0358FC14E612B500943CD1 /* UITableViewControllerSectionLayoutSettings.m */,
 				4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */,
@@ -4934,10 +4907,7 @@
 				4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */,
 				4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */,
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
-				4C0E779B163B5AEC003B951E /* MNSGraph.m in Sources */,
-				4C0E779C163B5AEC003B951E /* MNSVertex.m in Sources */,
-				4C0E779D163B5AEC003B951E /* MNSEdge.m in Sources */,
-				4C9F94BE1642280500A562B9 /* MUIViewController.m in Sources */,
+				4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C316423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC871644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D781644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
@@ -5104,7 +5074,7 @@
 				4CA1640E167EB90D00540A14 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
 				4CA1640F167EB90D00540A14 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
 				4CA16410167EB90D00540A14 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
-				4CA16411167EB90D00540A14 /* MUIViewController.m in Sources */,
+				4CA16411167EB90D00540A14 /* MTViewController.m in Sources */,
 				4CA16412167EB90D00540A14 /* MUITableViewController.m in Sources */,
 				4CA16413167EB90D00540A14 /* MUIViewControllerOpenDocument.m in Sources */,
 				4CA16414167EB90D00540A14 /* MUIVewControllerTemplateSelector.m in Sources */,
@@ -5236,7 +5206,7 @@
 				4CA16431167EB90F00540A14 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
 				4CA16432167EB90F00540A14 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
 				4CA16433167EB90F00540A14 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
-				4CA16434167EB90F00540A14 /* MUIViewController.m in Sources */,
+				4CA16434167EB90F00540A14 /* MTViewController.m in Sources */,
 				4CA16435167EB90F00540A14 /* MUITableViewController.m in Sources */,
 				4CA16436167EB90F00540A14 /* MUIViewControllerOpenDocument.m in Sources */,
 				4CA16437167EB90F00540A14 /* MUIVewControllerTemplateSelector.m in Sources */,
@@ -5367,10 +5337,7 @@
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
 				4CAB1791150FE38400BA0A9B /* UIViewRuler.m in Sources */,
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
-				4C9514F215112434004AF941 /* MNSGraph.m in Sources */,
-				4C9514F515112473004AF941 /* MNSVertex.m in Sources */,
-				4C9514F815112488004AF941 /* MNSEdge.m in Sources */,
-				4C9F94BD1642280500A562B9 /* MUIViewController.m in Sources */,
+				4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C216423D7300A562B9 /* MUITableViewController.m in Sources */,
 				4C8EEC861644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D771644FC5700F890D2 /* MUIVewControllerTemplateSelector.m in Sources */,
@@ -5536,7 +5503,7 @@
 				4C860B22167EDE7000AC1904 /* MUITableViewControllerDatabaseDriverSelector.m in Sources */,
 				4C860B23167EDE7000AC1904 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */,
 				4C860B24167EDE7000AC1904 /* MUITableViewControllerDatabaseSalesforceSetup.m in Sources */,
-				4C860B25167EDE7000AC1904 /* MUIViewController.m in Sources */,
+				4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */,
 				4C860B26167EDE7000AC1904 /* MUITableViewController.m in Sources */,
 				4C860B27167EDE7000AC1904 /* MUIViewControllerOpenDocument.m in Sources */,
 				4C860B28167EDE7000AC1904 /* MUIVewControllerTemplateSelector.m in Sources */,

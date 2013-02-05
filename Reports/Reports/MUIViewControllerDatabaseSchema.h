@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 
-@interface MUIViewControllerDatabaseSchema : MUIViewController
+@interface MUIViewControllerDatabaseSchema : MTViewController
 
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollViewMain;
 

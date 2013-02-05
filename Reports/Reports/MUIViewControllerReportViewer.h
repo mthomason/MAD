@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUIViewController.h"
+#import "MTViewController.h"
 
-@interface MUIViewControllerReportViewer : MUIViewController
+@interface MUIViewControllerReportViewer : MTViewController
     <UIPageViewControllerDelegate>
 
 - (IBAction)done:(id)sender;
