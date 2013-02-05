@@ -115,12 +115,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
         }
         [[segue destinationViewController] setDelegate:self];
         
-        //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-        //    [self setTableViewControllerDataSourceTypes: popoverController];
-        //    [popoverController setDelegate: self];
-        //}
-
     } else if ([[segue identifier] isEqualToString:SEGUE_OPENDOCUMENT]) {
         
         NSUInteger row = 0;
@@ -162,7 +156,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                                             request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                                             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                                            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                            [request setSortDescriptors: @[sortDescriptor]];
                                             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                                                   managedObjectContext: managedObjectContext
                                                                                                                     sectionNameKeyPath: nil
@@ -177,7 +171,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                             NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                                             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-                                            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                            [request setSortDescriptors: @[sortDescriptor]];
                                             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                                                   managedObjectContext: managedObjectContext
                                                                                                                     sectionNameKeyPath: nil
@@ -192,7 +186,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                             NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                                             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-                                            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                            [request setSortDescriptors: @[sortDescriptor]];
                                             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                                                   managedObjectContext: managedObjectContext
                                                                                                                     sectionNameKeyPath: nil
@@ -207,7 +201,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                                             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
                                             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
-                                            request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                                            [request setSortDescriptors: @[sortDescriptor]];
                                             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                                                   managedObjectContext: managedObjectContext
                                                                                                                     sectionNameKeyPath: nil
@@ -229,13 +223,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 
                             }
-                            
-                            //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                            //    UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-                            //    [self setTableViewControllerDataSourceTypes: popoverController];
-                            //    [popoverController setDelegate: self];
-                            //}
-                            
                         }
                     }
                 }
@@ -278,12 +265,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
-    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    //} else {
-    //    [[self tableViewControllerDataSourceTypes] dismissPopoverAnimated: YES];
-    //    [self setTableViewControllerDataSourceTypes: nil];
-    //}
+    [self dismissViewControllerAnimated:YES completion:nil];
     [AppDelegate setActiveDocument: nil];
 }
 
@@ -297,12 +279,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
-
-/*
- - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
- 
- }
- */
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 	return YES;
@@ -384,41 +360,6 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 	return numberOfRows;
 }
 
-/*
- - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
- NSString *result;
- switch (section) {
- case 0:
- result = @"";
- break;
- case 1:
- result = @"";
- break;
- default:
- result = @"";
- break;
- }
- return result;
- }
- */
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    return nil;
-//}
-
-
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
@@ -445,69 +386,5 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [UITableViewCellDocument defaultHeight];
 }
-
-/*
- - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath { }
- */
-
-/*
- - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section { }
- */
-
-/*
- 
- - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-
-/*
- - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
 
 @end
