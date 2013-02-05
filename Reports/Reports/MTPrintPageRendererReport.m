@@ -135,34 +135,48 @@
     
 }
 
-- (void)printGroupLevel:(RptqQueryGroup *)queryGroup withSortedResults:(NSArray *)sortedResultsByRow
- printableSpaceRequired:(CGFloat *)printableSpaceRequired printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
-      numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup {
+- (void)printGroupLevel: (RptqQueryGroup *)queryGroup withSortedResults:(NSArray *)sortedResultsByRow
+ printableSpaceRequired: (CGFloat *)printableSpaceRequired printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup {
     BOOL detailPrinted = NO;
-    [self printGroupLevel:queryGroup withSortedResults:sortedResultsByRow
-   printableSpaceRequired:printableSpaceRequired printableSpaceUsedPageHeight:printableSpaceUsedPageHeight
-        numberOfPagesUsed:numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup detailPrinted:&detailPrinted];
+    [self printGroupLevel: queryGroup withSortedResults:sortedResultsByRow
+   printableSpaceRequired: printableSpaceRequired printableSpaceUsedPageHeight:printableSpaceUsedPageHeight
+        numberOfPagesUsed: numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup detailPrinted:&detailPrinted];
     
 }
 
-- (void)printGroupLevel:(RptqQueryGroup *)queryGroup withSortedResults:(NSArray *)sortedResultsByRow
- printableSpaceRequired:(CGFloat *)printableSpaceRequired printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
-numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup detailPrinted:(BOOL *)detailPrinted {
+- (void)printGroupLevel:(RptqQueryGroup *)queryGroup
+      withSortedResults:(NSArray *)sortedResultsByRow
+ printableSpaceRequired:(CGFloat *)printableSpaceRequired
+printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+      numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
+    withSortDescriptors:(NSArray *)sortDescriptorsGroup
+          detailPrinted:(BOOL *)detailPrinted {
     
-    [self printGroupHeader:queryGroup withPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight andPrintableSpaceRequired:printableSpaceRequired numberOfPagesUsed:numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup];
+    [self printGroupHeader: queryGroup printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+    printableSpaceRequired: printableSpaceRequired numberOfPagesUsed: numberOfPagesUsed
+       withSortDescriptors: sortDescriptorsGroup];
     
     RptqQueryGroup *nextGroup = [queryGroup next];
     if (nextGroup != nil) {
-        [self printGroupLevel:nextGroup withSortedResults:sortedResultsByRow printableSpaceRequired:&*printableSpaceRequired printableSpaceUsedPageHeight:&*printableSpaceUsedPageHeight numberOfPagesUsed:&*numberOfPagesUsed  withSortDescriptors:sortDescriptorsGroup  detailPrinted:detailPrinted];
+        [self printGroupLevel: nextGroup
+            withSortedResults: sortedResultsByRow
+       printableSpaceRequired: printableSpaceRequired
+ printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+            numberOfPagesUsed: numberOfPagesUsed
+          withSortDescriptors: sortDescriptorsGroup
+                detailPrinted: detailPrinted];
    }
-    
     
     //Group detail section
     if (*detailPrinted == NO) {
         RptqDocumentSection *detailSection = [[self document] hasDetailSection];
         for (NSDictionary *resultDictionary in sortedResultsByRow) {
             
-            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[detailSection height] floatValue] PrintableSpaceUsedPageHeight:&*printableSpaceUsedPageHeight andPrintableSpaceRequired:&*printableSpaceRequired numberOfPagesUsed:&*numberOfPagesUsed];
+            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[detailSection height] floatValue]
+                      printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+                         printableSpaceRequired: printableSpaceRequired
+                                 numberOfPagesUsed: numberOfPagesUsed];
             
             *printableSpaceRequired += [[detailSection height] floatValue];
             *printableSpaceUsedPageHeight += [[detailSection height] floatValue];
@@ -172,11 +186,16 @@ numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *
     *detailPrinted = YES;
     
     //Group footer section
-    [self printGroupFooter:queryGroup withPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight andPrintableSpaceRequired:printableSpaceRequired numberOfPagesUsed:numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup];
+    [self printGroupFooter: queryGroup printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+    printableSpaceRequired: printableSpaceRequired numberOfPagesUsed: numberOfPagesUsed
+       withSortDescriptors: sortDescriptorsGroup];
     
 }
 
-- (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight PrintableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight andPrintableSpaceRequired:(CGFloat *)printableSpaceRequired numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed  {
+- (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight
+            printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+               printableSpaceRequired:(CGFloat *)printableSpaceRequired
+                       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed  {
     CGRect pageRect;
     if (CGRectIsEmpty([self printableRect])) {
         pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, CGFloatPointsForInches(8.5000f), CGFloatPointsForInches(11.0000f));
@@ -185,31 +204,45 @@ numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *
     }
     
     if (*printableSpaceUsedPageHeight + nextItemHeight > pageRect.size.height) {
-        [self printPageFooterWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight andPrintableSpaceRequired:printableSpaceRequired numberOfPagesUsed:numberOfPagesUsed];
+        [self printPageFooterWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight
+                                       printableSpaceRequired:printableSpaceRequired
+                                            numberOfPagesUsed:numberOfPagesUsed];
         *numberOfPagesUsed = *numberOfPagesUsed + 1;
         *printableSpaceUsedPageHeight = 0.0000f;
-        [self printPageHeaderWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight andPrintableSpaceRequired:printableSpaceRequired numberOfPagesUsed:numberOfPagesUsed];
+        [self printPageHeaderWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight
+                                       printableSpaceRequired:printableSpaceRequired
+                                            numberOfPagesUsed:numberOfPagesUsed];
     }
 
 }
 
-- (void)printPageHeaderWithPrintableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight andPrintableSpaceRequired:(CGFloat *)printableSpaceRequired numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed {
+- (void)printPageHeaderWithPrintableSpaceUsedPageHeight: (CGFloat *)printableSpaceUsedPageHeight
+                                 printableSpaceRequired: (CGFloat *)printableSpaceRequired
+                                      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed {
     NSLog(@"Page Header");
     *printableSpaceRequired += [[[[self document] hasPageHeaderSection] height] floatValue];
     *printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
 }
 
-- (void)printPageFooterWithPrintableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight andPrintableSpaceRequired:(CGFloat *)printableSpaceRequired numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed {
+- (void)printPageFooterWithPrintableSpaceUsedPageHeight: (CGFloat *)printableSpaceUsedPageHeight
+                                 printableSpaceRequired: (CGFloat *)printableSpaceRequired
+                                      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed {
     NSLog(@"Page Footer");
     *printableSpaceRequired += [[[[self document] hasReportFooterSection] height] floatValue];
     *printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
 }
 
-- (void)printGroupHeader:(RptqQueryGroup *)queryGroup withPrintableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight andPrintableSpaceRequired:(CGFloat *)printableSpaceRequired numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup {
+- (void)printGroupHeader: (RptqQueryGroup *)queryGroup printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+  printableSpaceRequired: (CGFloat *)printableSpaceRequired
+       numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed
+     withSortDescriptors: (NSArray *)sortDescriptorsGroup {
     for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
         if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
             
-            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[documentSection height] floatValue] PrintableSpaceUsedPageHeight:&*printableSpaceUsedPageHeight andPrintableSpaceRequired:&*printableSpaceRequired numberOfPagesUsed:&*numberOfPagesUsed];
+            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[documentSection height] floatValue]
+                      printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+                         printableSpaceRequired: printableSpaceRequired
+                                 numberOfPagesUsed: numberOfPagesUsed];
             
             *printableSpaceRequired += [[documentSection height] floatValue];
             *printableSpaceUsedPageHeight += [[documentSection height] floatValue];
@@ -224,11 +257,18 @@ numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *
     }
 }
 
-- (void)printGroupFooter:(RptqQueryGroup *)queryGroup withPrintableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight andPrintableSpaceRequired:(CGFloat *)printableSpaceRequired numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup {
+- (void)printGroupFooter: (RptqQueryGroup *)queryGroup printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+  printableSpaceRequired: (CGFloat *)printableSpaceRequired
+       numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed
+     withSortDescriptors: (NSArray *)sortDescriptorsGroup {
+
     for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
         if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
             
-            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[documentSection height] floatValue] PrintableSpaceUsedPageHeight:&*printableSpaceUsedPageHeight andPrintableSpaceRequired:&*printableSpaceRequired numberOfPagesUsed:&*numberOfPagesUsed];
+            [self printPageBreakWithNextItemHeight: *printableSpaceUsedPageHeight + [[documentSection height] floatValue]
+                      printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+                            printableSpaceRequired: printableSpaceRequired
+                                 numberOfPagesUsed: numberOfPagesUsed];
             
             *printableSpaceRequired += [[documentSection height] floatValue];
             *printableSpaceUsedPageHeight += [[documentSection height] floatValue];
