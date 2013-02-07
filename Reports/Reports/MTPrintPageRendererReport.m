@@ -92,7 +92,8 @@
     
     NSMutableArray *sortDescriptorsGroup = [[NSMutableArray alloc] init];
     NSSet *hasQueryGroups = [[query hasQueryGroups] retain];
-    for (RptqQueryGroup *queryGroup in hasQueryGroups) {
+    NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES]]];
+    for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
         NSString *fieldNameNice = [queryGroup fieldNameNice];
         BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: fieldNameNice
@@ -100,9 +101,15 @@
         [sortDescriptorsGroup addObject:sortDescriptor];
         [sortDescriptor release];
     }
-    NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:sortDescriptorsGroup];
+    NSArray *sortedSortDescriptorsGroup = sortDescriptorsGroup;
+    NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:sortedSortDescriptorsGroup];
+
+    NSDictionary *groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:sortedSortDescriptorsGroup] retain];
     
-    NSLog(@"resultsByRow Sorted by groups (%@): %@", sortDescriptorsGroup, sortedResultsByRow);
+    NSLog(@"Grouped Results %@", groupedRows);
+    
+    
+    NSLog(@"resultsByRow Sorted by groups (%@): %@", sortedSortDescriptorsGroup, sortedResultsByRow);
         
     CGFloat printableSpaceRequired = 0.0000f;
     CGFloat printableSpaceUsedPageHeight = 0.0000f;
@@ -118,7 +125,7 @@
     
     [self printGroupLevel:[query firstQueryGroup] withSortedResults:sortedResultsByRow
    printableSpaceRequired:&printableSpaceRequired printableSpaceUsedPageHeight:&printableSpaceUsedPageHeight
-        numberOfPagesUsed:&numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup];
+        numberOfPagesUsed:&numberOfPagesUsed withSortDescriptors:sortedSortDescriptorsGroup groupedRows:groupedRows];
     
     printableSpaceRequired += [[[[self document] hasReportFooterSection] height] floatValue];
     printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
@@ -131,17 +138,78 @@
     [sortDescriptorsGroup release];
     [hasQueryGroups release];
     [resultsByRow release];
+    [groupedRows release];
 
     
 }
 
-- (void)printGroupLevel: (RptqQueryGroup *)queryGroup withSortedResults:(NSArray *)sortedResultsByRow
- printableSpaceRequired: (CGFloat *)printableSpaceRequired printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
-      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed withSortDescriptors:(NSArray *)sortDescriptorsGroup {
+//Roll through the groups
+//Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).
+- (id)groupedResults:(NSArray *)sortedResults level:(NSUInteger)level
+     sortDescriptors:(NSArray *)sortedSortDescriptorsGroup {
+
+    NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
+    BOOL detailLevel = level == [sortedSortDescriptorsGroup count];
+    id valueForField, lastValueForField = nil;
+    NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
+    NSSortDescriptor *sortDescriptor = detailLevel ? nil : [sortedSortDescriptorsGroup objectAtIndex:level];
+    NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
+
+    id returnValue = nil;
+    
+    if (detailLevel) {
+        //MTLog(@"Detail Level %@", sortedResults);
+        returnValue = [sortedResults copy];
+    } else {
+        //MTLog(@"Group Level %d (%@)", level, sortFieldName);
+        for (NSDictionary *result in sortedResults) {
+            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
+            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
+                //MTLog(@" -Group Level %d (%@)", level, lastValueForField);
+                
+                id resultOfNextGroup = [self groupedResults: resultsForGroup
+                                                      level: (level + 1)
+                                            sortDescriptors: sortedSortDescriptorsGroup];
+                [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
+                [resultsForGroup removeAllObjects];
+            }
+            [resultsForGroup addObject:result];
+            lastValueForField = valueForField;
+        }
+        NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
+        if (valueForField != nil) {
+            //MTLog(@" -Group Level %d (%@)", level, valueForField);
+            id resultOfNextGroup = [self groupedResults: resultsForGroup
+                                                  level: (level + 1)
+                                        sortDescriptors: sortedSortDescriptorsGroup];
+            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
+            [resultsDictionary setObject:resultOfNextGroup forKey:key];
+        }
+        [resultsCopy release];
+        [resultsForGroup removeAllObjects];
+        returnValue = resultsDictionary;
+    }
+    [resultsForGroup release];
+    [resultsDictionary autorelease];
+    return returnValue;
+}
+
+- (void)printGroupLevel:(RptqQueryGroup *)queryGroup
+      withSortedResults:(NSArray *)sortedResultsByRow
+ printableSpaceRequired:(CGFloat *)printableSpaceRequired
+printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+      numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
+withSortDescriptors:(NSArray *)sortDescriptorsGroup
+            groupedRows:(NSDictionary *)groupedRows {
     BOOL detailPrinted = NO;
-    [self printGroupLevel: queryGroup withSortedResults:sortedResultsByRow
-   printableSpaceRequired: printableSpaceRequired printableSpaceUsedPageHeight:printableSpaceUsedPageHeight
-        numberOfPagesUsed: numberOfPagesUsed withSortDescriptors:sortDescriptorsGroup detailPrinted:&detailPrinted];
+    [self printGroupLevel: queryGroup
+        withSortedResults: sortedResultsByRow
+   printableSpaceRequired: printableSpaceRequired
+printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+        numberOfPagesUsed: numberOfPagesUsed
+      withSortDescriptors: sortDescriptorsGroup
+              groupedRows: groupedRows
+            detailPrinted: &detailPrinted];
     
 }
 
@@ -151,11 +219,12 @@
 printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
     withSortDescriptors:(NSArray *)sortDescriptorsGroup
+            groupedRows:(NSDictionary *)groupedRows
           detailPrinted:(BOOL *)detailPrinted {
     
     [self printGroupHeader: queryGroup printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
     printableSpaceRequired: printableSpaceRequired numberOfPagesUsed: numberOfPagesUsed
-       withSortDescriptors: sortDescriptorsGroup];
+       withSortDescriptors: sortDescriptorsGroup sortedResults:sortedResultsByRow];
     
     RptqQueryGroup *nextGroup = [queryGroup next];
     if (nextGroup != nil) {
@@ -165,6 +234,7 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
  printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
             numberOfPagesUsed: numberOfPagesUsed
           withSortDescriptors: sortDescriptorsGroup
+                  groupedRows: groupedRows
                 detailPrinted: detailPrinted];
    }
     
@@ -180,7 +250,19 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
             
             *printableSpaceRequired += [[detailSection height] floatValue];
             *printableSpaceUsedPageHeight += [[detailSection height] floatValue];
-            NSLog(@"Detail");
+            NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
+            NSUInteger documentObjectCounter = 0;
+            for (RptqDocumentObject *documentObject in [detailSection hasObjects]) {
+                if (documentObjectCounter > 0) {
+                    [mutableStringToPrint appendString:@", "];
+                }
+                NSString *stringToPrint = [self printDocumentObject:documentObject
+                                               withResultDictionary:resultDictionary];
+                [mutableStringToPrint appendString:stringToPrint];
+            }
+            NSLog(@"Detail: (%@)", mutableStringToPrint);
+            [mutableStringToPrint release];
+            documentObjectCounter++;
         }
     }
     *detailPrinted = YES;
@@ -190,6 +272,35 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
     printableSpaceRequired: printableSpaceRequired numberOfPagesUsed: numberOfPagesUsed
        withSortDescriptors: sortDescriptorsGroup];
     
+}
+
+- (NSString *)printDocumentObject:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
+    NSString *result = nil;
+    switch ([documentObject getType]) {
+        case MNSObjectTypeLabel: {
+            
+            break;
+        }
+        case MNSObjectTypeLabelDataField: {
+            RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
+            RptqField *field = [documentObjectDataField referencesField];
+            result = [resultDictionary objectForKey: [field display]];
+            break;
+        }
+        case MNSObjectTypeLabelFormula: {
+            break;
+        }
+        case MNSObjectTypeLabelLabelLink: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    if (result == nil) {
+        result = @"Nil";
+    }
+    return result;
 }
 
 - (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight
@@ -235,7 +346,8 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
 - (void)printGroupHeader: (RptqQueryGroup *)queryGroup printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
   printableSpaceRequired: (CGFloat *)printableSpaceRequired
        numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed
-     withSortDescriptors: (NSArray *)sortDescriptorsGroup {
+     withSortDescriptors: (NSArray *)sortDescriptorsGroup
+           sortedResults: (NSArray *)sortedResultsByRow {
     for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
         if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
             
@@ -243,6 +355,18 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
                       printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
                          printableSpaceRequired: printableSpaceRequired
                                  numberOfPagesUsed: numberOfPagesUsed];
+
+            NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
+            NSUInteger documentObjectCounter = 0;
+            for (RptqDocumentObject *documentObject in [documentSection hasObjects]) {
+                if (documentObjectCounter > 0) {
+                    [mutableStringToPrint appendString:@", "];
+                }
+                NSString *stringToPrint = [self printDocumentObject:documentObject
+                                               withResultDictionary:nil/*resultDictionary*/];
+                [mutableStringToPrint appendString:stringToPrint];
+            }
+
             
             *printableSpaceRequired += [[documentSection height] floatValue];
             *printableSpaceUsedPageHeight += [[documentSection height] floatValue];

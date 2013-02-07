@@ -307,7 +307,7 @@
     
     MysqlConnection *conn = [MysqlConnection connectToServer: serv];
     if (conn) {
-        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn];
+        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn extendedNames:YES];
         
         NSArray *results = [[NSArray alloc] initWithArray:[fetch results]];
         

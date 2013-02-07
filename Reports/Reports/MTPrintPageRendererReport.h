@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "RptqDocument+Extras.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqQuery+Extras.h"
 #import "CGGeometry+Extras.h"
