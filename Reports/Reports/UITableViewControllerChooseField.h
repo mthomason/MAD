@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "RptqField.h"
 #import "RptqFieldSelectorManager.h"
 #import "RptqTable+Extras.h"

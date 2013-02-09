@@ -20,7 +20,7 @@
 
 //Create a new file
 - (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
-    self = [super initNewFileWithName:name extension:SCHEMA_PATH_EXTENSION managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success) {
+    self = [super initNewFileWithName:name extension:SCHEMA_PATH_EXTENSION managedObjectType:[MTManagedDocumentReport class] completion:^(BOOL success) {
         if (self) {
             RptqDocument *doc = [RptqDocument createMainDocumentForManagedObjectContext: [[self managedDocument] managedObjectContext]];
             [doc setName: name];
@@ -36,7 +36,7 @@
 
 //Open an existing file
 - (id)initExistingExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion {
-    self = [super initExistingFileWithUrl:url managedObjectType:[UIManagedDocumentReport class] completion:^(BOOL success, id document) {
+    self = [super initExistingFileWithUrl:url managedObjectType:[MTManagedDocumentReport class] completion:^(BOOL success, id document) {
         if (self) {
             completion(success, self);
         }

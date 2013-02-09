@@ -12,7 +12,7 @@
 #import "UITableViewControllerFontSelector.h"
 #import "UITableViewControllerFontSettings.h"
 #import "MUIViewControllerObjectSelector.h"
-#import "MUIViewControllerReportViewer.h"
+#import "MTViewControllerReportViewer.h"
 #import "MTCollectionViewFlowLayoutDesignerSection.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionView+Extras.h"

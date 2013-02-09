@@ -11,7 +11,7 @@
 @interface AppDelegate()
 
 @property (retain) MNSDocumentReport *documentReport;
-@property (retain) UIManagedDocumentReport *managedDocumentQuery;
+@property (retain) MTManagedDocumentReport *managedDocumentQuery;
 @property (retain) UIManagedDocumentPreferencesApplication *applicationPreferences;
 @property (retain) UIManagedDocumentPreferencesUser *openReport;
 

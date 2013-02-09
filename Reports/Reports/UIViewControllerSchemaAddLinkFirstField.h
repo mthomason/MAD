@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
 #import "RptqTable.h"
 #import "RptqField.h"

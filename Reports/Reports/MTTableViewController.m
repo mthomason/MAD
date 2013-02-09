@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 
-@implementation MUITableViewController
+@implementation MTTableViewController
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 #import "Constants.h"
 
 #import "MNSDatabaseConnection.h"
@@ -16,7 +16,7 @@
 #import "UIAlertView+Blocks.h"
 #import "AppDelegate.h"
 
-@interface MUITableViewControllerDatabaseMySqlSetup : MUITableViewController
+@interface MUITableViewControllerDatabaseMySqlSetup : MTTableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
 

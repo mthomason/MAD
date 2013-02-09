@@ -437,7 +437,7 @@
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-    UIManagedDocumentReport *report = [[AppDelegate activeDocument] document];
+    MTManagedDocumentReport *report = [[AppDelegate activeDocument] document];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
     [RptqTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
@@ -573,7 +573,7 @@
                 case UIViewControllerSchemaTablesSectionsTables: {
                     
                     NSError *error = nil;
-                    __block UIManagedDocumentReport *activateDocument = [[AppDelegate activeDocument] document];
+                    __block MTManagedDocumentReport *activateDocument = [[AppDelegate activeDocument] document];
                     __block NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.

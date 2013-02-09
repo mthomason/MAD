@@ -43,8 +43,9 @@
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    [self drawHeaderForPageAtIndex:index inRect:pageRect];
-    [self drawFooterForPageAtIndex:index inRect:pageRect];
+    NSLog(@"Cached results: %@", [[self cachedResults] objectAtIndex:index]);
+    //[self drawHeaderForPageAtIndex:index inRect:pageRect];
+    //[self drawFooterForPageAtIndex:index inRect:pageRect];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
@@ -59,9 +60,6 @@
     [super drawFooterForPageAtIndex:index inRect:footerRect];
 }
 
-- (void)drawPrintFormatter:(UIPrintFormatter *)printFormatter forPageAtIndex:(NSInteger)index {
-    [super drawPrintFormatter:printFormatter forPageAtIndex:index];
-}
 
 - (NSInteger)numberOfPages {
     [self cachePrintPageRenderData];
@@ -276,22 +274,16 @@
     return [self cachedNumberOfPages];
 }
 
-- (void)prepareForDrawingPages:(NSRange)range {
-    [super prepareForDrawingPages:range];
-}
-
 #pragma mark - Object methods
 
 
 - (void)cachePrintPageRenderData {
     
     NSMutableArray *cachedResults = [[NSMutableArray alloc] init];
-
     
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    RptqQueryCache *queryCache = [query hasQueryCache];
-    
+    RptqQueryCache *queryCache = [query hasQueryCache];    
     
     //Setup dictionary by result row for group sorting
     NSMutableDictionary *resultsByRow = [[NSMutableDictionary alloc] init];
@@ -329,11 +321,6 @@
     NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:sortedSortDescriptorsGroup];
     
     NSDictionary *groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:sortedSortDescriptorsGroup] retain];
-    
-    //NSLog(@"Grouped Results %@", groupedRows);
-    
-    
-    //NSLog(@"resultsByRow Sorted by groups (%@): %@", sortedSortDescriptorsGroup, sortedResultsByRow);
     
     CGFloat printableSpaceRequired = 0.0000f;
     CGFloat printableSpaceUsedPageHeight = 0.0000f;
@@ -435,7 +422,8 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
     withSortDescriptors:(NSArray *)sortDescriptorsGroup
             groupedRows:(NSDictionary *)groupedRows
-printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData cachedResults:(NSMutableArray **)cachedResults {
+printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData
+          cachedResults:(NSMutableArray **)cachedResults {
     BOOL detailPrinted = NO;
     NSUInteger groupedRowsLevel = 0;
     [self printGroupLevel: queryGroup
@@ -613,9 +601,9 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
     }
     
     if (*printableSpaceUsedPageHeight + nextItemHeight > pageRect.size.height) {
-        [self printPageFooterWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight
-                                       printableSpaceRequired:printableSpaceRequired
-                                            numberOfPagesUsed:numberOfPagesUsed];
+        NSLog(@"Page Footer");
+        *printableSpaceRequired += [[[[self document] hasReportFooterSection] height] floatValue];
+        *printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
         [*printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
         [*cachedResults addObject:*printPageRenderReportPageData];
@@ -626,28 +614,12 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         
         *numberOfPagesUsed = *numberOfPagesUsed + 1;
         *printableSpaceUsedPageHeight = 0.0000f;
-        [self printPageHeaderWithPrintableSpaceUsedPageHeight:printableSpaceUsedPageHeight
-                                       printableSpaceRequired:printableSpaceRequired
-                                            numberOfPagesUsed:numberOfPagesUsed];
+        NSLog(@"Page Header");
+        *printableSpaceRequired += [[[[self document] hasPageHeaderSection] height] floatValue];
+        *printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
         [*printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
     }
     
-}
-
-- (void)printPageHeaderWithPrintableSpaceUsedPageHeight: (CGFloat *)printableSpaceUsedPageHeight
-                                 printableSpaceRequired: (CGFloat *)printableSpaceRequired
-                                      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed {
-    NSLog(@"Page Header");
-    *printableSpaceRequired += [[[[self document] hasPageHeaderSection] height] floatValue];
-    *printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
-}
-
-- (void)printPageFooterWithPrintableSpaceUsedPageHeight: (CGFloat *)printableSpaceUsedPageHeight
-                                 printableSpaceRequired: (CGFloat *)printableSpaceRequired
-                                      numberOfPagesUsed: (NSUInteger *)numberOfPagesUsed {
-    NSLog(@"Page Footer");
-    *printableSpaceRequired += [[[[self document] hasReportFooterSection] height] floatValue];
-    *printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
 }
 
 @end

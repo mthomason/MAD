@@ -10,6 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "Constants.h"
 
-@interface UIManagedDocumentReport : UIManagedDocument
+@interface MTManagedDocumentReport : UIManagedDocument
 
 @end

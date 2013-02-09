@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTPrintPageRendererReport.h"
+#import "MTViewPrintPageRenderReport.h"
 
 @interface MTViewControllerReportPage : UIViewController
+
+@property (nonatomic, retain) RptqDocument *document;
+@property (nonatomic, assign, readonly) NSUInteger pageNumber;
+
+- (id)initWithPageData:(MTPrintPageRendererReport *)pageData andPageNumber:(NSUInteger)pageNumber;
 
 @end

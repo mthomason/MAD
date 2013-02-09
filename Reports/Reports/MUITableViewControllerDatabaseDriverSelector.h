@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 
-@interface MUITableViewControllerDatabaseDriverSelector : MUITableViewController
+@interface MUITableViewControllerDatabaseDriverSelector : MTTableViewController
 
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;

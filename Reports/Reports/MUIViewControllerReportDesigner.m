@@ -560,12 +560,12 @@
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         
         MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
-        [prtingPageRendererReport setPaperRect:CGRectZero];
-        NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];
-        
-        MUIViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
+        //[prtingPageRendererReport setPaperRect:CGRectZero];
+        //NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];
+        //[prtingPageRendererReport drawPageAtIndex:1 inRect:CGRectMake(CGPointZero.x, CGPointZero.y, CGFloatPointsForInches(8.5000f), CGFloatPointsForInches(11.0000f))];
+        MTViewControllerReportViewer *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
-        
+        [viewControllerReportViewer setDocumentReport:[AppDelegate activeDocument]];
         
     }
 }

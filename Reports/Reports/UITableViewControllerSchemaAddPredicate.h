@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RptqQueryPredicate+Extras.h"
 #import "UITableViewControllerOpperators.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "UITableViewControllerChooseField.h"
 #import "UITableViewControllerEnterString.h"
 

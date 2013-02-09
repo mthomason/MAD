@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 
 @interface SectionEnumerator : NSEnumerator
 

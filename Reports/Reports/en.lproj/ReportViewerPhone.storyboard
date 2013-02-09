@@ -282,7 +282,7 @@
         <!--View Controller Report Viewer-->
         <scene sceneID="Ts3-uT-wQ7">
             <objects>
-                <viewController id="yU8-vi-ajy" customClass="MUIViewControllerReportViewer" sceneMemberID="viewController">
+                <viewController id="yU8-vi-ajy" customClass="MTViewControllerReportViewer" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qss-v8-rBe">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

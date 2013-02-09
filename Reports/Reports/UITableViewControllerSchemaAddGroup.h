@@ -11,7 +11,7 @@
 #import "UITableViewControllerChooseField.h"
 #import "RptqQueryGroup.h"
 #import "RptqField.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 
 @class UITableViewControllerSchemaAddGroup;
 

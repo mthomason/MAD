@@ -445,7 +445,7 @@
         <!--View Controller Report Viewer-->
         <scene sceneID="3nK-bo-OeN">
             <objects>
-                <viewController id="SeT-Hl-V2y" customClass="MUIViewControllerReportViewer" sceneMemberID="viewController">
+                <viewController id="SeT-Hl-V2y" customClass="MTViewControllerReportViewer" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RZN-fd-Qgk">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -464,56 +464,7 @@
                                 <items/>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OlH-qg-mie">
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Michael Thomason" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="qo1-WY-QH4">
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="James Moore" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="3WY-6y-eZE">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="104" id="XwB-8L-C8y"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Mark Anderson" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="FH1-nM-zwg">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="117" id="pAi-JZ-MBT"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Linda Scott" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="KU3-uA-nHN">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="88" id="j5I-Ac-pZk"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Jennifer Hill" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="XI8-Aw-y65">
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="XI8-Aw-y65" firstAttribute="trailing" secondItem="KU3-uA-nHN" secondAttribute="trailing" type="default" id="6Wj-4J-F9W"/>
-                                    <constraint firstAttribute="trailing" secondItem="qo1-WY-QH4" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Ait-yD-HR1"/>
-                                    <constraint firstItem="qo1-WY-QH4" firstAttribute="leading" secondItem="OlH-qg-mie" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="DaN-q0-QZk"/>
-                                    <constraint firstItem="FH1-nM-zwg" firstAttribute="top" secondItem="XI8-Aw-y65" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FRF-Mp-rqM"/>
-                                    <constraint firstItem="3WY-6y-eZE" firstAttribute="top" secondItem="KU3-uA-nHN" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Krl-YB-gkl"/>
-                                    <constraint firstItem="qo1-WY-QH4" firstAttribute="top" secondItem="OlH-qg-mie" secondAttribute="top" constant="20" symbolic="YES" type="default" id="NxL-Cw-r7w"/>
-                                    <constraint firstItem="XI8-Aw-y65" firstAttribute="top" secondItem="OlH-qg-mie" secondAttribute="top" constant="80" id="Xy2-iE-QBA"/>
-                                    <constraint firstItem="3WY-6y-eZE" firstAttribute="leading" secondItem="XI8-Aw-y65" secondAttribute="leading" type="default" id="aX8-UA-uGQ"/>
-                                    <constraint firstItem="FH1-nM-zwg" firstAttribute="leading" secondItem="KU3-uA-nHN" secondAttribute="leading" type="default" id="g0p-Lg-Bb6"/>
-                                    <constraint firstItem="XI8-Aw-y65" firstAttribute="leading" secondItem="OlH-qg-mie" secondAttribute="leading" constant="27" id="oUD-FE-UFm"/>
-                                    <constraint firstItem="KU3-uA-nHN" firstAttribute="top" secondItem="FH1-nM-zwg" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="qJn-Lk-UUe"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -531,6 +482,10 @@
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <connections>
+                        <outlet property="viewBackground" destination="RZN-fd-Qgk" id="yEy-If-GP9"/>
+                        <outlet property="viewContainer" destination="OlH-qg-mie" id="qC3-xC-vSF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dm9-l4-59o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5545,6 +5500,31 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerQueryBuilder" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerQueryBuilder.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewClipboard" candidateClass="UIViewClipboard"/>
+            </relationships>
+        </class>
         <class className="MUITableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewController.h"/>
             <relationships>
@@ -5595,26 +5575,20 @@
                 <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MUIViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerDatabaseSchema" superclassName="MUIViewController">
+        <class className="MUIViewControllerDatabaseSchema" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerDatabaseSchema.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerDatabaseSources" superclassName="MUIViewController">
+        <class className="MUIViewControllerDatabaseSources" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerDatabaseSources.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerObjectSelector" superclassName="MUIViewController">
+        <class className="MUIViewControllerObjectSelector" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerObjectSelector.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5630,7 +5604,6 @@
         <class className="MUIViewControllerOpenDocument" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerOpenDocument.h"/>
             <relationships>
-                <relationship kind="action" name="about:"/>
                 <relationship kind="action" name="add:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
@@ -5640,7 +5613,7 @@
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerReportDesigner" superclassName="MUIViewController">
+        <class className="MUIViewControllerReportDesigner" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5664,26 +5637,20 @@
                 <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerReportViewer" superclassName="MUIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportViewer.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerShowSql" superclassName="MUIViewController">
+        <class className="MUIViewControllerShowSql" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerShowSql.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerStoreTemplates" superclassName="MUIViewController">
+        <class className="MUIViewControllerStoreTemplates" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerStoreTemplates.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerTemplateSelector" superclassName="MUIViewController">
+        <class className="MUIViewControllerTemplateSelector" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerTemplateSelector.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>

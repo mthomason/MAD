@@ -11,7 +11,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "UIManagedDocument+FileOperations.h"

@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "AppDelegate.h"
 
-@implementation UIManagedDocumentReport
+@implementation MTManagedDocumentReport
 
 #pragma mark - Managed Document Override
 

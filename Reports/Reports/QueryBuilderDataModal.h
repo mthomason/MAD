@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class UIManagedDocumentReport;
+@class MTManagedDocumentReport;
 
 @interface QueryBuilderDataModal : NSObject
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument;
+- (id)initWithManagedDocumentQuery:(MTManagedDocumentReport *)managedDocument;
 
 - (NSMutableDictionary *)datamodel;
 - (NSMutableDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables;

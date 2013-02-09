@@ -7,7 +7,7 @@
 //
 
 #import "QueryBuilderDataModal.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "Constants.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
@@ -35,7 +35,7 @@
     [super dealloc];
 }
 
-- (id)initWithManagedDocumentQuery:(UIManagedDocumentReport *)managedDocument {
+- (id)initWithManagedDocumentQuery:(MTManagedDocumentReport *)managedDocument {
     self = [super init];
     if (self) {
         

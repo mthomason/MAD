@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 #import "UITableViewControllerSchemaAddPredicate.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "RptqQueryPredicate.h"
 
 @class UITableViewControllerPredicateFormat;
@@ -18,7 +18,7 @@
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate;
 @end
 
-@interface UITableViewControllerPredicateFormat : MUITableViewController
+@interface UITableViewControllerPredicateFormat : MTTableViewController
     <MUIViewControllerDelegate, UITableViewControllerSchemaAddPredicateDelegate>
 
 @property (assign, nonatomic) IBOutlet id <AddPredicateDelegate> addPredicateDelegate;

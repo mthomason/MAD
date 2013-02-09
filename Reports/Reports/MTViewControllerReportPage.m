@@ -10,29 +10,49 @@
 
 @interface MTViewControllerReportPage ()
 
+@property (nonatomic, assign, readwrite) NSUInteger pageNumber;
+@property (nonatomic, retain) MTPrintPageRendererReport *printRenderData;
+@property (nonatomic, retain) MTViewPrintPageRenderReport *renderedReportView;
+
 @end
 
 @implementation MTViewControllerReportPage
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (void)dealloc {
+    [_document release];
+    [_renderedReportView release];
+    [_printRenderData release];
+    [super dealloc];
+}
+
+- (id)initWithPageData:(MTPrintPageRendererReport *)pageData andPageNumber:(NSUInteger)pageNumber {
+    self = [super init];
     if (self) {
-        // Custom initialization
+        [self setPrintRenderData:pageData];
+        [self setPageNumber:[[self printRenderData] numberOfPages]];
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame] pageNumber:[self pageNumber] andPrintRenderData:[self printRenderData]];
+    [self setRenderedReportView:renderedReportView];
+    [renderedReportView release];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (![[self renderedReportView] isDescendantOfView:[self view]]) {
+        [[self view] addSubview:[self renderedReportView]];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([[self renderedReportView] isDescendantOfView:[self view]]) {
+        [[self renderedReportView] removeFromSuperview];
+    }
 }
 
 @end

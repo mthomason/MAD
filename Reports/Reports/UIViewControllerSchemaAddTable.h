@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "UIManagedDocumentReport.h"
+#import "MTManagedDocumentReport.h"
 #import "RptqTable.h"
 
 @class UIViewControllerSchemaAddTable;

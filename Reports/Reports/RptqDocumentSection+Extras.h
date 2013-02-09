@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row forQuery:(RptqQuery *)query;
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(UIManagedDocumentReport *)managedDocument;
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(MTManagedDocumentReport *)managedDocument;
 
 - (NSString *)localizedDisplayName;
 

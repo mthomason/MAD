@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 //#import "MNSReportDocumentSalesForce.h"
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 
-@interface MUITableViewControllerDatabaseSalesforceSetup : MUITableViewController
+@interface MUITableViewControllerDatabaseSalesforceSetup : MTTableViewController
     <UITableViewDelegate,
         UITextFieldDelegate/*,
         NSDatabaseSalesForceDelegate*/>

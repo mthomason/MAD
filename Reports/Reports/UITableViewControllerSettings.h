@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MUITableViewController.h"
+#import "MTTableViewController.h"
 #import "AppDelegate.h"
-@interface UITableViewControllerSettings : MUITableViewController
+@interface UITableViewControllerSettings : MTTableViewController
     <UITableViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableCellPrint;
