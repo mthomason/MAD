@@ -49,59 +49,73 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)addPageHeaderWithValueDictionary:(NSDictionary *)values {
     [[self cachedPageData] removeAllObjects];
     
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageHeader forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addPageFooterWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageFooter forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addReportHeaderWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportHeader forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addReportFooterWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportFooter forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addGroupHeaderWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportGroupHeader forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addGroupFooterWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportGroupFooter forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 - (void)addDetailWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values retain];
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageDetail forKey:MTReportSectionType];
-    [sectionData setObject:values forKey:MTReportSectionValues];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
     [[self cachedPageData] addObject: sectionData];
     [sectionData release];
+    [newValue release];
 }
 
 @end

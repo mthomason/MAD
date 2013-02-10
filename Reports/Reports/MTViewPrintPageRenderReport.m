@@ -28,7 +28,7 @@
         
         [self setPageNumber:pageNumber];
 
-        MTPrintPageRendererReport *printRenderData = [printRenderReport retain];
+        MTPrintPageRendererReport *printRenderData = [printRenderReport copy];
         [self setPrintRenderData:printRenderReport];
         [printRenderData release];
     }
@@ -36,6 +36,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [[UIColor whiteColor] set];
+    [[UIBezierPath bezierPathWithRect:rect] fill];
     [[self printRenderData]  drawPageAtIndex: [self pageNumber] - 1
                                       inRect: rect];
 }
