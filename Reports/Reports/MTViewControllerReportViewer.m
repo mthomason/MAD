@@ -14,7 +14,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewContainer;
 
 @property (nonatomic, retain) MTPageViewControllerReport *pageController;
-@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
+@property (nonatomic, copy) MTPrintPageRendererReport *printPageRendererReport;
 @property (assign) NSUInteger numberOfPages;
 @property (assign) NSUInteger currentPageIndex;
 
@@ -49,10 +49,9 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
     MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
-    NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];
+    NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];    //Returning zero when there are pages!!!!
     [self setNumberOfPages:numberOfPages];
     [self setPrintPageRendererReport: prtingPageRendererReport];
-    [prtingPageRendererReport release];
     
     MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{}];
 
@@ -79,6 +78,8 @@
     [[self viewContainer] addSubview:[pageController view]];
     [self setPageController:pageController];
     [pageController release];
+    [prtingPageRendererReport release];
+
 }
 
 - (void) viewWillAppear:(BOOL)animated {

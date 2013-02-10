@@ -8,6 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+extern const NSString *MTReportSectionType;
+extern const NSString *MTReportSectionValues;
+
+extern const NSString *MTPageDetail;
+extern const NSString *MTPageHeader;
+extern const NSString *MTPageFooter;
+extern const NSString *MTReportHeader;
+extern const NSString *MTReportFooter;
+extern const NSString *MTReportGroupHeader;
+extern const NSString *MTReportGroupFooter;
+
 @interface MTPrintPageRenderReportPageData : NSObject
 
 - (id)init;

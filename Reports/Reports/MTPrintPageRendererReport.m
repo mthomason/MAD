@@ -11,7 +11,6 @@
 @interface MTPrintPageRendererReport ()
 
 @property (nonatomic, retain) RptqDocument *document;
-@property (nonatomic, retain) NSMutableDictionary *displayOutline;
 
 @property (nonatomic, assign) NSUInteger cachedNumberOfPages;
 @property (nonatomic, copy) NSArray *cachedResults;
@@ -20,9 +19,19 @@
 
 @implementation MTPrintPageRendererReport
 
+- (id)copyWithZone:(NSZone *)zone {
+    MTPrintPageRendererReport *copy = [[MTPrintPageRendererReport alloc] initWithDocument:[self document]];
+    if (copy) {
+        NSArray *cachedResults = [[self cachedResults] copyWithZone:zone];
+        [copy setCachedResults: cachedResults];
+        [cachedResults release];
+        [copy setCachedNumberOfPages:[self cachedNumberOfPages]];
+    }
+    return copy;
+}
+
 - (oneway void)release {
     [_cachedResults release];
-    [_displayOutline release];
     [super release];
 }
 
@@ -30,10 +39,6 @@
     self = [super init];
     if (self) {
         [self setDocument:document];
-        
-        NSMutableDictionary *displayOutline = [[NSMutableDictionary alloc] init];
-        [self setDisplayOutline:displayOutline];
-        [displayOutline release];
         
         NSArray *cachedResults = [[NSArray alloc] init];
         [self setCachedResults:cachedResults];
@@ -43,7 +48,30 @@
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    NSLog(@"Cached results: %@", [[self cachedResults] objectAtIndex:index]);
+//    if () {
+//        <#statements#>
+//    }
+    MTPrintPageRenderReportPageData *data = [[self cachedResults] objectAtIndex:index];
+    NSArray *pageSectionsToPrint = [[data enumeratePageSections] retain];
+    for (NSDictionary *pageSection in pageSectionsToPrint) {
+        NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
+        if ([MTPageDetail isEqualToString:pageSectionId]) {
+        
+        } else if ([MTPageHeader isEqualToString:pageSectionId]) {
+        
+        } else if ([MTPageFooter isEqualToString:pageSectionId]) {
+        
+        } else if ([MTReportHeader isEqualToString:pageSectionId]) {
+        
+        } else if ([MTReportFooter isEqualToString:pageSectionId]) {
+        
+        } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
+
+        } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
+            
+        }
+        NSLog(@"Object to print: %@", pageSectionId);
+    }
     //[self drawHeaderForPageAtIndex:index inRect:pageRect];
     //[self drawFooterForPageAtIndex:index inRect:pageRect];
 }
@@ -262,13 +290,6 @@
     }
     
 
-    
-    
-    NSMutableDictionary *displayOutline = [[NSMutableDictionary alloc] initWithCapacity:numberOfPages];
-    [self setDisplayOutline:displayOutline];
-    [displayOutline release];
-
-    
     return numberOfPages;
      */
     return [self cachedNumberOfPages];
@@ -279,7 +300,7 @@
 
 - (void)cachePrintPageRenderData {
     
-    NSMutableArray *cachedResults = [[NSMutableArray alloc] init];
+    NSMutableArray *mutableCachedResults = [[NSMutableArray alloc] init];
     
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -341,7 +362,7 @@
     [self printGroupLevel:[query firstQueryGroup] withSortedResults:sortedResultsByRow
    printableSpaceRequired:&printableSpaceRequired printableSpaceUsedPageHeight:&printableSpaceUsedPageHeight
         numberOfPagesUsed:&numberOfPagesUsed withSortDescriptors:sortedSortDescriptorsGroup groupedRows:groupedRows
-    printPageRenderReportPageData:&printPageRenderReportPageData cachedResults:&cachedResults];
+    printPageRenderReportPageData:&printPageRenderReportPageData cachedResults:&mutableCachedResults];
     
     printableSpaceRequired += [[[[self document] hasReportFooterSection] height] floatValue];
     printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
@@ -358,9 +379,11 @@
     [resultsByRow release];
     [groupedRows release];
     
+    NSArray *newCachedResuls = [[NSArray alloc] initWithArray:mutableCachedResults];
     [self setCachedNumberOfPages: numberOfPagesUsed];
-    [self setCachedResults:cachedResults];
-    [cachedResults release];
+    [self setCachedResults:newCachedResuls];
+    [mutableCachedResults release];
+    [newCachedResuls release];
 
 }
 
@@ -408,11 +431,11 @@
         }
         [resultsCopy release];
         [resultsForGroup removeAllObjects];
-        returnValue = resultsDictionary;
+        returnValue = [resultsDictionary retain];
+        [resultsDictionary autorelease];
     }
     [resultsForGroup release];
-    [resultsDictionary autorelease];
-    return returnValue;
+    return [returnValue autorelease];
 }
 
 - (void)printGroupLevel:(RptqQueryGroup *)queryGroup

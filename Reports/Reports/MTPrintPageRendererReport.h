@@ -15,7 +15,7 @@
 #import "CGGeometry+Extras.h"
 #import "MTPrintPageRenderReportPageData.h"
 
-@interface MTPrintPageRendererReport : UIPrintPageRenderer
+@interface MTPrintPageRendererReport : UIPrintPageRenderer <NSCopying>
 
 - (id)initWithDocument:(RptqDocument *)document;
 

@@ -21,7 +21,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @interface MTPrintPageRenderReportPageData()
 
-@property (nonatomic, retain, readwrite) NSMutableArray *cachedPageData;
+@property (nonatomic, retain) NSMutableArray *cachedPageData;
 
 @end
 
