@@ -103,7 +103,7 @@
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber + 1 <= [self numberOfPages]) {
         result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber + 1];
-        [result autorelease];
+        //[result autorelease];
     }
     return result;
 }
@@ -113,7 +113,7 @@
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber - 1 > 0) {
         result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber - 1];
-        [result autorelease];
+        //[result autorelease];
     }
     return result;
 }
