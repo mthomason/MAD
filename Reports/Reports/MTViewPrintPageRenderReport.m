@@ -11,7 +11,7 @@
 @interface MTViewPrintPageRenderReport ()
 
 @property (nonatomic, assign) NSUInteger pageNumber;
-@property (nonatomic, copy) MTPrintPageRendererReport *printRenderData;
+@property (nonatomic, retain) MTPrintPageRendererReport *printRenderData;
 
 @end
 
@@ -29,7 +29,7 @@
         [self setPageNumber:pageNumber];
 
         MTPrintPageRendererReport *printRenderData = [printRenderReport copy];
-        [self setPrintRenderData:printRenderReport];
+        [self setPrintRenderData:printRenderData];
         [printRenderData release];
     }
     return self;

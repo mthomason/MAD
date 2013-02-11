@@ -11,8 +11,8 @@
 @interface MTViewControllerReportPage ()
 
 @property (nonatomic, assign, readwrite) NSUInteger pageNumber;
-@property (nonatomic, copy) MTPrintPageRendererReport *printRenderData;
-@property (nonatomic, retain) MTViewPrintPageRenderReport *renderedReportView;
+@property (atomic, retain) MTPrintPageRendererReport *printRenderData;
+@property (atomic, retain) MTViewPrintPageRenderReport *renderedReportView;
 
 @end
 
@@ -28,7 +28,7 @@
 - (id)initWithPageData:(MTPrintPageRendererReport *)pageData andPageNumber:(NSUInteger)pageNumber {
     self = [super init];
     if (self) {
-        MTPrintPageRendererReport *printRenderData = [pageData retain];
+        MTPrintPageRendererReport *printRenderData = [pageData copy];
         [self setPrintRenderData:printRenderData];
         [printRenderData release];
         
@@ -39,7 +39,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame] pageNumber:[self pageNumber] andPrintRenderData:[self printRenderData]];
+    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame]
+                                                                                              pageNumber:[self pageNumber]
+                                                                                      andPrintRenderData:[self printRenderData]];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
 }

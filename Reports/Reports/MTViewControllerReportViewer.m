@@ -14,11 +14,11 @@
 @property (retain, nonatomic) IBOutlet UIView *viewContainer;
 
 @property (nonatomic, retain) MTPageViewControllerReport *pageController;
-@property (nonatomic, copy) MTPrintPageRendererReport *printPageRendererReport;
+@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
 @property (assign) NSUInteger numberOfPages;
 @property (assign) NSUInteger currentPageIndex;
 
-@property (nonatomic, copy) NSArray *initalViewControllers;
+@property (nonatomic, retain) NSArray *initalViewControllers;
 
 @end
 
@@ -103,8 +103,9 @@
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber + 1 <= [self numberOfPages]) {
         result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber + 1];
+        [result autorelease];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
@@ -112,8 +113,9 @@
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber - 1 > 0) {
         result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber - 1];
+        [result autorelease];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {

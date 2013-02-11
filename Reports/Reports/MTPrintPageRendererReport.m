@@ -13,7 +13,7 @@
 @property (nonatomic, retain) RptqDocument *document;
 
 @property (nonatomic, assign) NSUInteger cachedNumberOfPages;
-@property (nonatomic, copy) NSArray *cachedResults;
+@property (nonatomic, retain) NSArray *cachedResults;
 
 @end
 
@@ -22,15 +22,20 @@
 - (id)copyWithZone:(NSZone *)zone {
     MTPrintPageRendererReport *copy = [[MTPrintPageRendererReport alloc] initWithDocument:[self document]];
     if (copy) {
-        NSArray *cachedResults = [[self cachedResults] copyWithZone:zone];
+        NSArray *cachedResults = [[[self cachedResults] copyWithZone:zone] retain];
+        NSLog(@"Retain count: %d", [cachedResults retainCount]);
         [copy setCachedResults: cachedResults];
         [cachedResults release];
+        
+        [copy setDocument:[self document]];
         [copy setCachedNumberOfPages:[self cachedNumberOfPages]];
     }
     return copy;
 }
 
 - (oneway void)release {
+    //NSLog(@"Retain count: %d", [[self cachedResults] retainCount]);
+    NSLog(@"Retain count: %d", [_cachedResults retainCount]);
     [_cachedResults release];
     [super release];
 }
@@ -48,53 +53,105 @@
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-//    if () {
-//        <#statements#>
-//    }
-    MTPrintPageRenderReportPageData *data = [[self cachedResults] objectAtIndex:index];
-    NSArray *pageSectionsToPrint = [[data enumeratePageSections] retain];
+    
+    CGFloat originY = 0.0000f;
+    MTPrintPageRenderReportPageData *data = [[[self cachedResults] objectAtIndex:index] retain];
+    NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:[data enumeratePageSections]];
+ 
     for (NSDictionary *pageSection in pageSectionsToPrint) {
-        NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
+
+        NSString *pageSectionId = [[NSString alloc] initWithString:[pageSection objectForKey: MTReportSectionType]];
+        id reportSectionValues = nil;
+
         if ([MTPageDetail isEqualToString:pageSectionId]) {
-            NSDictionary *reportSectionValues = [pageSection objectForKey:MTReportSectionValues];
+
+            reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
             RptqDocumentSection *detailSection = [[self document] hasDetailSection];
-            for (RptqDocumentObject *documentObject in [detailSection hasObjects]) {
-                NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:reportSectionValues];
-                CGFloat originX = [[documentObject originx] floatValue];
-                CGFloat originY = [[documentObject originy] floatValue];
-                CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
-                CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-                CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                [attributedString drawInRect:elementCanvasRect];
-            }
+            [self printDocumentElementsForSection:detailSection atHeight:originY withResults:reportSectionValues];
+            originY += [[detailSection height] floatValue];
             NSLog(@"Detail (%@): %@", data, detailSection);
+        
         } else if ([MTPageHeader isEqualToString:pageSectionId]) {
+
+            reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
             RptqDocumentSection *pageHeaderSection = [[self document] hasPageHeaderSection];
+            [self printDocumentElementsForSection:pageHeaderSection atHeight:originY withResults:reportSectionValues];
+            originY += [[pageHeaderSection height] floatValue];
             NSLog(@"Page Header (%@): %@", data, pageHeaderSection);
+
         } else if ([MTPageFooter isEqualToString:pageSectionId]) {
+
+            reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
             RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
+            [self printDocumentElementsForSection:pageFooterSection atHeight:originY withResults:reportSectionValues];
+            originY += [[pageFooterSection height] floatValue];
             NSLog(@"Page Footer (%@): %@", data, pageFooterSection);
+
         } else if ([MTReportHeader isEqualToString:pageSectionId]) {
+
+            reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
             RptqDocumentSection *reportHeaderSection = [[self document] hasReportHeaderSection];
+            [self printDocumentElementsForSection:reportHeaderSection atHeight:originY withResults:reportSectionValues];
+            originY += [[reportHeaderSection height] floatValue];
             NSLog(@"Report Header (%@): %@", data, reportHeaderSection);
+
         } else if ([MTReportFooter isEqualToString:pageSectionId]) {
+
+            reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
             RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
+            [self printDocumentElementsForSection:reportFooterSection atHeight:originY withResults:reportSectionValues];
+            originY += [[reportFooterSection height] floatValue];
             NSLog(@"Report Footer (%@): %@", data, reportFooterSection);
+
         } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
+
+            if ([reportSectionValues isKindOfClass:[NSArray class]]) {
+                reportSectionValues = [[NSArray alloc] initWithArray:[pageSection objectForKey:MTReportSectionValues]];
+            } else if ([reportSectionValues isKindOfClass:[NSDictionary class]]) {
+                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+            }
             NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
             RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
             RptqDocumentSection *groupHeader = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
+            [self printDocumentElementsForSection:groupHeader atHeight:originY withResults:reportSectionValues];
+            originY += [[groupHeader height] floatValue];
             NSLog(@"Group Header (%@): %@", data, groupHeader);
+
         } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
+
+            if ([reportSectionValues isKindOfClass:[NSArray class]]) {
+                reportSectionValues = [[NSArray alloc] initWithArray:[pageSection objectForKey:MTReportSectionValues]];
+            } else if ([reportSectionValues isKindOfClass:[NSDictionary class]]) {
+                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+            }
+            reportSectionValues = [[NSArray alloc] initWithArray:[pageSection objectForKey:MTReportSectionValues]];
             NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
             RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
             RptqDocumentSection *groupFooter = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
+            [self printDocumentElementsForSection:groupFooter atHeight:originY withResults:reportSectionValues];
+            originY += [[groupFooter height] floatValue];
             NSLog(@"Group Footer (%@): %@", data, groupFooter);
+
         }
+    
         NSLog(@"Object to print: %@", pageSectionId);
+
+        [pageSectionId release];
+        [reportSectionValues release];
     }
-    //[self drawHeaderForPageAtIndex:index inRect:pageRect];
-    //[self drawFooterForPageAtIndex:index inRect:pageRect];
+    [pageSectionsToPrint release];
+    [data release];
+}
+
+- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(NSDictionary *)results {
+    for (RptqDocumentObject *documentObject in [section hasObjects]) {
+        NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
+        CGFloat originX = [[documentObject originx] floatValue];
+        CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
+        CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
+        CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+        [attributedString drawInRect:elementCanvasRect];
+    }
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
@@ -353,7 +410,8 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                                 printableSpaceRequired: printableSpaceRequired
                                      numberOfPagesUsed: numberOfPagesUsed
                                            groupedRows: groupedRows
-                         printPageRenderReportPageData: printPageRenderReportPageData cachedResults:cachedResults];
+                         printPageRenderReportPageData: printPageRenderReportPageData
+                                         cachedResults: cachedResults];
 
                 [*printPageRenderReportPageData addDetailWithValueDictionary:resultDictionary];
 
@@ -483,7 +541,9 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         *printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
         [*printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
-        [*cachedResults addObject:*printPageRenderReportPageData];
+        MTPrintPageRenderReportPageData *pageData = [*printPageRenderReportPageData copy];
+        [*cachedResults addObject:pageData];
+        [pageData release];
         
         [*printPageRenderReportPageData release];
         *printPageRenderReportPageData = nil;
