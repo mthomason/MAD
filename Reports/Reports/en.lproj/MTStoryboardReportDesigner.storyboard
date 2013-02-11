@@ -458,56 +458,7 @@
                                 <items/>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Osy-v2-DAi">
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Michael Thomason" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ty5-8J-fRy">
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="James Moore" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="2fj-7c-f2U">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="104" id="Zmu-Ws-pa3"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Mark Anderson" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="03R-l6-Yoc">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="117" id="WCN-LQ-Kcn"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Linda Scott" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="R3o-5a-PYl">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="88" id="sOG-Po-qM6"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Jennifer Hill" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="etK-v5-tbM">
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="etK-v5-tbM" firstAttribute="trailing" secondItem="R3o-5a-PYl" secondAttribute="trailing" type="default" id="8hr-PG-kut"/>
-                                    <constraint firstAttribute="trailing" secondItem="Ty5-8J-fRy" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="934-lX-Ck7"/>
-                                    <constraint firstItem="etK-v5-tbM" firstAttribute="top" secondItem="Osy-v2-DAi" secondAttribute="top" constant="80" id="HYy-tz-9cr"/>
-                                    <constraint firstItem="Ty5-8J-fRy" firstAttribute="top" secondItem="Osy-v2-DAi" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Ie3-uw-ePP"/>
-                                    <constraint firstItem="Ty5-8J-fRy" firstAttribute="leading" secondItem="Osy-v2-DAi" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="LCP-Ag-C0J"/>
-                                    <constraint firstItem="03R-l6-Yoc" firstAttribute="leading" secondItem="R3o-5a-PYl" secondAttribute="leading" type="default" id="ORO-cf-KGb"/>
-                                    <constraint firstItem="2fj-7c-f2U" firstAttribute="top" secondItem="R3o-5a-PYl" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="UmW-It-Nbi"/>
-                                    <constraint firstItem="R3o-5a-PYl" firstAttribute="top" secondItem="03R-l6-Yoc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="dpR-s6-fcb"/>
-                                    <constraint firstItem="etK-v5-tbM" firstAttribute="leading" secondItem="Osy-v2-DAi" secondAttribute="leading" constant="27" id="kzY-6q-1js"/>
-                                    <constraint firstItem="etK-v5-tbM" firstAttribute="leading" secondItem="2fj-7c-f2U" secondAttribute="leading" type="default" id="vCt-W8-7ZB"/>
-                                    <constraint firstItem="03R-l6-Yoc" firstAttribute="top" secondItem="etK-v5-tbM" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="wrE-m2-nZ0"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -524,6 +475,10 @@
                             <constraint firstItem="z6W-8h-kya" firstAttribute="bottom" secondItem="qss-v8-rBe" secondAttribute="bottom" type="default" id="yLj-MV-GpV"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="viewBackground" destination="qss-v8-rBe" id="opr-tF-kEL"/>
+                        <outlet property="viewContainer" destination="Osy-v2-DAi" id="cZ5-pF-wHh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZAZ-sk-cfa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5460,20 +5415,52 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
-        <class className="MUITableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewController.h"/>
+        <class className="MTTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseDriverSelector" superclassName="MUITableViewController">
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerQueryBuilder" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerQueryBuilder.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewClipboard" candidateClass="UIViewClipboard"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerReportViewer" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerReportViewer.h"/>
+            <relationships>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MUITableViewControllerDatabaseDriverSelector" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseDriverSelector.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseMySqlSetup" superclassName="MUITableViewController">
+        <class className="MUITableViewControllerDatabaseMySqlSetup" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseMySqlSetup.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5497,7 +5484,7 @@
                 <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseSalesforceSetup" superclassName="MUITableViewController">
+        <class className="MUITableViewControllerDatabaseSalesforceSetup" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseSalesforceSetup.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5510,26 +5497,20 @@
                 <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MUIViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerDatabaseSchema" superclassName="MUIViewController">
+        <class className="MUIViewControllerDatabaseSchema" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerDatabaseSchema.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerDatabaseSources" superclassName="MUIViewController">
+        <class className="MUIViewControllerDatabaseSources" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerDatabaseSources.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerObjectSelector" superclassName="MUIViewController">
+        <class className="MUIViewControllerObjectSelector" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerObjectSelector.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5554,7 +5535,7 @@
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerReportDesigner" superclassName="MUIViewController">
+        <class className="MUIViewControllerReportDesigner" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5578,20 +5559,20 @@
                 <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerShowSql" superclassName="MUIViewController">
+        <class className="MUIViewControllerShowSql" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerShowSql.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerStoreTemplates" superclassName="MUIViewController">
+        <class className="MUIViewControllerStoreTemplates" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerStoreTemplates.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerTemplateSelector" superclassName="MUIViewController">
+        <class className="MUIViewControllerTemplateSelector" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerTemplateSelector.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -5702,10 +5683,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerFontSettings.h"/>
             <relationships>
                 <relationship kind="action" name="controlValueChanged:"/>
-                <relationship kind="action" name="toggleBold:"/>
-                <relationship kind="action" name="toggleItalic:"/>
-                <relationship kind="action" name="toggleStrikeThrough:"/>
-                <relationship kind="action" name="toggleUnderline:"/>
                 <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
@@ -5766,7 +5743,7 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerPredicateFormat" superclassName="MUITableViewController">
+        <class className="UITableViewControllerPredicateFormat" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerPredicateFormat.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5803,7 +5780,7 @@
                 <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerSettings" superclassName="MUITableViewController">
+        <class className="UITableViewControllerSettings" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>

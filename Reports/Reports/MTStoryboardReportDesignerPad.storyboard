@@ -5500,6 +5500,12 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MTTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
         <class className="MTViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
             <relationships>
@@ -5525,20 +5531,21 @@
                 <relationship kind="outlet" name="viewClipboard" candidateClass="UIViewClipboard"/>
             </relationships>
         </class>
-        <class className="MUITableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewController.h"/>
+        <class className="MTViewControllerReportViewer" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerReportViewer.h"/>
             <relationships>
-                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseDriverSelector" superclassName="MUITableViewController">
+        <class className="MUITableViewControllerDatabaseDriverSelector" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseDriverSelector.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseMySqlSetup" superclassName="MUITableViewController">
+        <class className="MUITableViewControllerDatabaseMySqlSetup" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseMySqlSetup.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5562,7 +5569,7 @@
                 <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MUITableViewControllerDatabaseSalesforceSetup" superclassName="MUITableViewController">
+        <class className="MUITableViewControllerDatabaseSalesforceSetup" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseSalesforceSetup.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5821,7 +5828,7 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerPredicateFormat" superclassName="MUITableViewController">
+        <class className="UITableViewControllerPredicateFormat" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerPredicateFormat.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
@@ -5858,7 +5865,7 @@
                 <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerSettings" superclassName="MUITableViewController">
+        <class className="UITableViewControllerSettings" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
