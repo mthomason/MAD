@@ -8,6 +8,7 @@
 
 #import "RptqDocumentObject.h"
 #import "MTProtocolCompare.h"
+#import "MTProtocolLog.h"
 
 typedef NS_ENUM(NSUInteger, MNSSectionType) {
 	MNSObjectTypeLabel = 1,
@@ -16,7 +17,7 @@ typedef NS_ENUM(NSUInteger, MNSSectionType) {
 	MNSObjectTypeLabelLabelLink = 4,
 };
 
-@interface RptqDocumentObject (Extras) <MTProtocolCompare>
+@interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

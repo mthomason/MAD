@@ -131,6 +131,48 @@
     return result;
 }
 
++ (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
+    RptqDocumentSection *resultSection = nil;
+    RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
+    NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
+    for (RptqQueryGroup *group in groupsUnsorted) {
+        if ([[group weight] integerValue] == groupLevel) {
+            NSSet *sections = [[group hasSection] retain];
+            for (RptqDocumentSection *section in sections) {
+                if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+                    resultSection = section;
+                    break;
+                }
+            }
+            [sections release];
+            break;
+        }
+    }
+    [groupsUnsorted release];
+    return resultSection;
+}
+
++ (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
+    RptqDocumentSection *resultSection = nil;
+    RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
+    NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
+    for (RptqQueryGroup *group in groupsUnsorted) {
+        if ([[group weight] integerValue] == groupLevel) {
+            NSSet *sections = [[group hasSection] retain];
+            for (RptqDocumentSection *section in sections) {
+                if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+                    resultSection = section;
+                    break;
+                }
+            }
+            [sections release];
+            break;
+        }
+    }
+    [groupsUnsorted release];
+    return resultSection;
+}
+
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                                          forQuery:(RptqQuery *)query {
     
@@ -158,11 +200,7 @@
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
                 NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
-                //NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
-                //                                                               ascending: YES];
-                //NSArray *groupSorted = [[[groupsUnsorted allObjects] sortedArrayUsingDescriptors: [NSArray arrayWithObject:sortDescriptor]] retain];
                 for (RptqQueryGroup *group in groupsUnsorted) {
-                    //NSLog(@"Group Header Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
                     if ([[group weight] integerValue] == groupNumber) {
                         NSSet *sections = [[group hasSection] retain];
                         for (RptqDocumentSection *section in sections) {
@@ -176,7 +214,6 @@
                     }
                 }
                 [groupsUnsorted release];
-                //[groupSorted release];
                 break;
             }
             case MNSDocumentSectionTypeGroupFooter: {

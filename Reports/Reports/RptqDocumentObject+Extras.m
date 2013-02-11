@@ -127,4 +127,22 @@
     return result;
 }
 
+#pragma mark - MTProtocolLog
+
+- (NSString *)toString {
+    return nil;
+}
+
+- (NSString *)toStringDebug {
+    return nil;
+}
+
+- (NSString *)toStringHumanReadable {
+    return nil;
+}
+
+- (NSAttributedString *)toAttributedString {
+    return nil;
+}
+
 @end

@@ -10,6 +10,7 @@
 
 extern const NSString *MTReportSectionType;
 extern const NSString *MTReportSectionValues;
+extern const NSString *MTReportGroupLevel;
 
 extern const NSString *MTPageDetail;
 extern const NSString *MTPageHeader;
@@ -25,9 +26,9 @@ extern const NSString *MTReportGroupFooter;
 
 - (void)addPageHeaderWithValueDictionary:(NSDictionary *)values;
 - (void)addReportHeaderWithValueDictionary:(NSDictionary *)values;
-- (void)addGroupHeaderWithValueDictionary:(NSDictionary *)values;
+- (void)addGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel;
 - (void)addDetailWithValueDictionary:(NSDictionary *)values;
-- (void)addGroupFooterWithValueDictionary:(NSDictionary *)values;
+- (void)addGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel;
 - (void)addReportFooterWithValueDictionary:(NSDictionary *)values;
 - (void)addPageFooterWithValueDictionary:(NSDictionary *)values;
 

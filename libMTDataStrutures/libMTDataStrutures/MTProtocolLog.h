@@ -21,5 +21,6 @@
 - (NSString *)toStringExpressive;
 - (NSString *)toStringSymbolic;
 - (NSString *)toStringName;
+- (NSAttributedString *)toAttributedString;
 
 @end

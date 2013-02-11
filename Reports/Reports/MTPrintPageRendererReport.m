@@ -56,19 +56,40 @@
     for (NSDictionary *pageSection in pageSectionsToPrint) {
         NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
         if ([MTPageDetail isEqualToString:pageSectionId]) {
-        
+            NSDictionary *reportSectionValues = [pageSection objectForKey:MTReportSectionValues];
+            RptqDocumentSection *detailSection = [[self document] hasDetailSection];
+            for (RptqDocumentObject *documentObject in [detailSection hasObjects]) {
+                NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:reportSectionValues];
+                CGFloat originX = [[documentObject originx] floatValue];
+                CGFloat originY = [[documentObject originy] floatValue];
+                CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
+                CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
+                CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                [attributedString drawInRect:elementCanvasRect];
+            }
+            NSLog(@"Detail (%@): %@", data, detailSection);
         } else if ([MTPageHeader isEqualToString:pageSectionId]) {
-        
+            RptqDocumentSection *pageHeaderSection = [[self document] hasPageHeaderSection];
+            NSLog(@"Page Header (%@): %@", data, pageHeaderSection);
         } else if ([MTPageFooter isEqualToString:pageSectionId]) {
-        
+            RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
+            NSLog(@"Page Footer (%@): %@", data, pageFooterSection);
         } else if ([MTReportHeader isEqualToString:pageSectionId]) {
-        
+            RptqDocumentSection *reportHeaderSection = [[self document] hasReportHeaderSection];
+            NSLog(@"Report Header (%@): %@", data, reportHeaderSection);
         } else if ([MTReportFooter isEqualToString:pageSectionId]) {
-        
+            RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
+            NSLog(@"Report Footer (%@): %@", data, reportFooterSection);
         } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
-
+            NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+            RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+            RptqDocumentSection *groupHeader = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
+            NSLog(@"Group Header (%@): %@", data, groupHeader);
         } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
-            
+            NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+            RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+            RptqDocumentSection *groupFooter = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
+            NSLog(@"Group Footer (%@): %@", data, groupFooter);
         }
         NSLog(@"Object to print: %@", pageSectionId);
     }
@@ -307,7 +328,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                 break;
             }
         }
-        [*printPageRenderReportPageData addGroupHeaderWithValueDictionary:obj];
+        [*printPageRenderReportPageData addGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
 
         RptqQueryGroup *nextGroup = [queryGroup next];
                 
@@ -375,7 +396,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                 break;
             }
         }
-        [*printPageRenderReportPageData addGroupFooterWithValueDictionary:obj];
+        [*printPageRenderReportPageData addGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
         [obj release];
     }
 }
@@ -407,6 +428,40 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         result = @"Nil";
     }
     return result;
+}
+
+- (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
+    NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
+    switch ([documentObject getType]) {
+        case MNSObjectTypeLabel: {
+            
+            break;
+        }
+        case MNSObjectTypeLabelDataField: {
+            RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
+            RptqField *field = [documentObjectDataField referencesField];
+            NSString *displayText = [resultDictionary objectForKey: [field display]];
+            if (displayText != nil) {
+                [[result mutableString] setString:displayText];
+            }
+            [displayText release];
+            break;
+        }
+        case MNSObjectTypeLabelFormula: {
+            break;
+        }
+        case MNSObjectTypeLabelLabelLink: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    NSRange wholeString = NSMakeRange(0, [[result mutableString] length]);
+    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
+    NSDictionary *customAttributes = @{NSFontAttributeName : customFont};
+    [result setAttributes:customAttributes range:wholeString];
+    return [result autorelease];
 }
 
 - (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight

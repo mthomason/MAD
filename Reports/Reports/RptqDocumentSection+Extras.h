@@ -39,4 +39,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 
 - (NSString *)sectionKey;
 
++ (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
++ (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
+
 @end
