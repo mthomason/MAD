@@ -133,7 +133,7 @@
 		4C0E7795163B5AEC003B951E /* UIViewClipboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* UIViewClipboard.m */; };
 		4C0E7796163B5AEC003B951E /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
 		4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
-		4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4C0E7799163B5AEC003B951E /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
 		4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
@@ -538,7 +538,7 @@
 		4C860B0D167EDE7000AC1904 /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
 		4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4C860B11167EDE7000AC1904 /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4C860B14167EDE7000AC1904 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4C860B15167EDE7000AC1904 /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
@@ -925,9 +925,9 @@
 		4CA163D6167EB8D500540A14 /* UITableViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* UITableViewControllerSettings.m */; };
 		4CA163D7167EB8D500540A14 /* UIViewControllerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */; };
 		4CA163D8167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4CA163DA167EB8DA00540A14 /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */; };
-		4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4CA163DD167EB8DA00540A14 /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CA163E0167EB8E100540A14 /* UITableViewControllerFontSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */; };
 		4CA163E2167EB8E200540A14 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
@@ -1051,7 +1051,7 @@
 		4CA16483167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4CA16484167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
-		4CAB1791150FE38400BA0A9B /* UIViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* UIViewRuler.m */; };
+		4CAB1791150FE38400BA0A9B /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4CB12C9E14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
 		4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
@@ -2063,8 +2063,8 @@
 		4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
-		4CAB178F150FE38400BA0A9B /* UIViewRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewRuler.h; sourceTree = "<group>"; };
-		4CAB1790150FE38400BA0A9B /* UIViewRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewRuler.m; sourceTree = "<group>"; };
+		4CAB178F150FE38400BA0A9B /* MTViewRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewRuler.h; sourceTree = "<group>"; };
+		4CAB1790150FE38400BA0A9B /* MTViewRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewRuler.m; sourceTree = "<group>"; };
 		4CB12C9C14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerLinkBuilder.h; sourceTree = "<group>"; };
 		4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerLinkBuilder.m; sourceTree = "<group>"; };
 		4CB42DC6166A339300CE1876 /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
@@ -2556,8 +2556,8 @@
 		4C00815914B6BDB6003DF437 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4CAB178F150FE38400BA0A9B /* UIViewRuler.h */,
-				4CAB1790150FE38400BA0A9B /* UIViewRuler.m */,
+				4CAB178F150FE38400BA0A9B /* MTViewRuler.h */,
+				4CAB1790150FE38400BA0A9B /* MTViewRuler.m */,
 				4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */,
 				4CC24AA41503E3AB00C4EE98 /* UIViewGradient.m */,
 				4C1A586214E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.h */,
@@ -4932,7 +4932,7 @@
 				4C0E7795163B5AEC003B951E /* UIViewClipboard.m in Sources */,
 				4C0E7796163B5AEC003B951E /* RptqQueryGroup+Extras.m in Sources */,
 				4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */,
-				4C0E7799163B5AEC003B951E /* UIViewRuler.m in Sources */,
+				4C0E7799163B5AEC003B951E /* MTViewRuler.m in Sources */,
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C316423D7300A562B9 /* MTTableViewController.m in Sources */,
@@ -5085,7 +5085,7 @@
 				4CA163D4167EB8D400540A14 /* UITableViewControllerSettings.m in Sources */,
 				4CA163D5167EB8D400540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163D8167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
-				4CA163DA167EB8DA00540A14 /* UIViewRuler.m in Sources */,
+				4CA163DA167EB8DA00540A14 /* MTViewRuler.m in Sources */,
 				4CA163DF167EB8E100540A14 /* UITableViewControllerFontSettings.m in Sources */,
 				4CA163E0167EB8E100540A14 /* UITableViewControllerFontSelector.m in Sources */,
 				4CA163E4167EB8E700540A14 /* UITableViewControllerLinkBuilder.m in Sources */,
@@ -5220,7 +5220,7 @@
 				4CA163D6167EB8D500540A14 /* UITableViewControllerSettings.m in Sources */,
 				4CA163D7167EB8D500540A14 /* UIViewControllerSettings.m in Sources */,
 				4CA163DB167EB8DA00540A14 /* MUIViewControllerReportDesigner.m in Sources */,
-				4CA163DD167EB8DA00540A14 /* UIViewRuler.m in Sources */,
+				4CA163DD167EB8DA00540A14 /* MTViewRuler.m in Sources */,
 				4CA163E2167EB8E200540A14 /* UITableViewControllerFontSettings.m in Sources */,
 				4CA163E3167EB8E200540A14 /* UITableViewControllerFontSelector.m in Sources */,
 				4CA163EA167EB8E800540A14 /* UITableViewControllerLinkBuilder.m in Sources */,
@@ -5371,7 +5371,7 @@
 				4C87407A15052D3D007FC473 /* UIViewClipboard.m in Sources */,
 				4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */,
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
-				4CAB1791150FE38400BA0A9B /* UIViewRuler.m in Sources */,
+				4CAB1791150FE38400BA0A9B /* MTViewRuler.m in Sources */,
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C216423D7300A562B9 /* MTTableViewController.m in Sources */,
@@ -5523,7 +5523,7 @@
 				4C860B0D167EDE7000AC1904 /* UITableViewControllerSettings.m in Sources */,
 				4C860B0E167EDE7000AC1904 /* UIViewControllerSettings.m in Sources */,
 				4C860B0F167EDE7000AC1904 /* MUIViewControllerReportDesigner.m in Sources */,
-				4C860B11167EDE7000AC1904 /* UIViewRuler.m in Sources */,
+				4C860B11167EDE7000AC1904 /* MTViewRuler.m in Sources */,
 				4C860B13167EDE7000AC1904 /* UITableViewControllerFontSettings.m in Sources */,
 				4C860B14167EDE7000AC1904 /* UITableViewControllerFontSelector.m in Sources */,
 				4C860B15167EDE7000AC1904 /* UITableViewControllerLinkBuilder.m in Sources */,

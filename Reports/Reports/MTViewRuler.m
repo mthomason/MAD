@@ -6,9 +6,17 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewRuler.h"
+#import "MTViewRuler.h"
 
-@implementation UIViewRuler
+@implementation MTViewRuler
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self setBackgroundColor:[UIColor yellowColor]];
+    }
+    return self;
+}
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

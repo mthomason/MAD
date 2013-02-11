@@ -371,6 +371,11 @@
     [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
     [collectionViewReuseIdentifiers release];
     
+    CGRect rulerFrame = CGRectMake(CGPointZero.x, CGPointZero.y, [[self view] frame].size.width, 24.0000f);
+    MTViewRuler *viewRuler = [[MTViewRuler alloc] initWithFrame:rulerFrame];
+    [[self designScrollView] addSubview:viewRuler];
+    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 2.0, @"viewRuler"];
+    [dictionaryViewsVertical setValue:viewRuler forKey:@"viewRuler"];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
         CGFloat paddingTop = sectionCounter == 0 ? paddingBorder : (2 * paddingBorder);
@@ -471,6 +476,8 @@
     [stringContstraintsVertical release];
     [dictionaryViewsVertical release];
     [sectionEnumerator release];
+    [viewRuler release];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

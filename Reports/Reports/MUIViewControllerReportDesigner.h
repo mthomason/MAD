@@ -25,6 +25,7 @@
 #import "MTFont.h"
 #import "MTCollectionViewLineLayout.h"
 #import "UIViewControllerToolBox.h"
+#import "MTViewRuler.h"
 
 @interface MUIViewControllerReportDesigner : MTViewController
     <UITableViewDataSource,
