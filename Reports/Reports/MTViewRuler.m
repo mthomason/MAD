@@ -39,8 +39,8 @@
             CGRect locationRect = CGRectMake(xPoint - 2.5000f, rect.size.height - 18.0000f, 5.0000f, 5.0000f);
             [[NSString stringWithFormat:@"%d", i / 8] drawInRect: locationRect
                                                     withFont: [UIFont systemFontOfSize: 8.0000f]
-                                               lineBreakMode: UILineBreakModeClip
-                                                   alignment: UITextAlignmentLeft];
+                                               lineBreakMode: NSLineBreakByClipping
+                                                   alignment: NSTextAlignmentLeft];
             
             length = 8.0000f;
         } else if (i % 2) {

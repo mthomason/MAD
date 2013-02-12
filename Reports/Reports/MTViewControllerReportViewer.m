@@ -47,17 +47,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[self view] setBackgroundColor:[UIColor greenColor]];
+    
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
     MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
     NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];    //Returning zero when there are pages!!!!
     [self setNumberOfPages:numberOfPages];
-    self.printPageRendererReport = prtingPageRendererReport;
+    [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
     
     MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{}];
-
+    [[pageController view] setBackgroundColor:[UIColor blueColor]];
 
     NSUInteger initalNumberOfPagesRequired = 1;
     NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
@@ -92,8 +94,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-    
 }
 
 - (IBAction)done:(id)sender {

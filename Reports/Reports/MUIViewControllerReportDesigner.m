@@ -227,8 +227,18 @@
     [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
     [collectionViewReuseIdentifiers release];
     
-    CGRect rulerFrame = CGRectMake(CGPointZero.x, CGPointZero.y, [[self view] frame].size.width, 24.0000f);
-    MTViewRuler *viewRuler = [[MTViewRuler alloc] initWithFrame:rulerFrame];
+    MTViewRuler *viewRuler = [[MTViewRuler alloc] initWithFrame:CGRectZero];
+    [[viewRuler layer] setCornerRadius: 6.0f];
+    [[viewRuler layer] setMasksToBounds: YES];
+    NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
+    NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: -(paddingBorder * 2.0000f)];
+    NSLayoutConstraint *rulerConstraintLeading = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeLeading multiplier:1.0000f constant: paddingBorder];
+    [[self designScrollView] addConstraint:rulerConstraintHeight];
+    [[self designScrollView] addConstraint:rulerConstraintWidth];
+    [[self designScrollView] addConstraint:rulerConstraintLeading];
+    
+    [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [[self designScrollView] addSubview:viewRuler];
     [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 2.0, @"viewRuler"];
     [dictionaryViewsVertical setValue:viewRuler forKey:@"viewRuler"];
@@ -267,12 +277,6 @@
         [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[collectionView layer] setCornerRadius:cornerRadius];
         
-        //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchView:)];
-        //[pinchGesture setDelegate:self];
-        //[collectionView addGestureRecognizer:pinchGesture];
-        //[pinchGesture release];
-
-        
         [[self designScrollView] addSubview:collectionView];
 
         // MARK: Create label to identify document section.
@@ -296,13 +300,9 @@
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
         
         [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, [[reportSection height] floatValue], - paddingLabel - heightLabel, labelKey, heightLabel];
-        //[stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, - paddingLabel - heightLabel, labelKey, heightLabel];
-        
+
         NSLayoutConstraint *layoutConstraintLeft = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeLeft relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeLeft multiplier: 1.0000f constant: paddingBorder];
         [[self designScrollView] addConstraint:layoutConstraintLeft];
-        
-        NSLayoutConstraint *layoutConstraintRight = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: paddingLabel];
-        [[self designScrollView] addConstraint:layoutConstraintRight];
 
         NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 1.0000f constant: -(paddingBorder * 2.0000f)];
         [[self designScrollView] addConstraint:layoutConstraintWidth];
@@ -310,7 +310,7 @@
         NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f];
         [[self designScrollView] addConstraint:layoutConstraintLabelWidth];
         
-        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeTrailing relatedBy: NSLayoutRelationEqual toItem: collectionView attribute: NSLayoutAttributeTrailing multiplier: 1.0000f constant: -paddingLabel];
         [[self designScrollView] addConstraint:layoutConstraintLabelRight];
 
         [labelSectionIdentifer release];
