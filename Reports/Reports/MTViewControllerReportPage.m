@@ -11,7 +11,6 @@
 @interface MTViewControllerReportPage ()
 
 @property (nonatomic, assign, readwrite) NSUInteger pageNumber;
-@property (atomic, retain) MTPrintPageRendererReport *printRenderData;
 @property (atomic, retain) MTViewPrintPageRenderReport *renderedReportView;
 
 @end
@@ -21,17 +20,12 @@
 - (void)dealloc {
     [_document release];
     [_renderedReportView release];
-    [_printRenderData release];
     [super dealloc];
 }
 
-- (id)initWithPageData:(MTPrintPageRendererReport *)pageData andPageNumber:(NSUInteger)pageNumber {
+- (id)initWithPageNumber:(NSUInteger)pageNumber {
     self = [super init];
     if (self) {
-        MTPrintPageRendererReport *printRenderData = [pageData copy];
-        [self setPrintRenderData:printRenderData];
-        [printRenderData release];
-        
         [self setPageNumber:pageNumber];
     }
     return self;
@@ -39,9 +33,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame]
-                                                                                              pageNumber:[self pageNumber]
-                                                                                      andPrintRenderData:[self printRenderData]];
+    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame]];
+    [renderedReportView setDelegate:self];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
 }
@@ -58,6 +51,10 @@
     if ([[self renderedReportView] isDescendantOfView:[self view]]) {
         [[self renderedReportView] removeFromSuperview];
     }
+}
+
+- (void)drawView:(id)sender inRect:(CGRect)rect {
+    [[self delegate] drawPageAtIndex:[self pageNumber] - 1 inRect:rect];
 }
 
 @end

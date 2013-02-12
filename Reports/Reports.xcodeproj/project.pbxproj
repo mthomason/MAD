@@ -2389,6 +2389,7 @@
 		4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFontSettings.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
 		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Reports/README.txt; sourceTree = "<group>"; };
+		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
@@ -2560,6 +2561,10 @@
 		4C00815914B6BDB6003DF437 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4CC182C916C6040F006FAD93 /* MTViewPrintPageRenderReport.h */,
+				4CC182CA16C60410006FAD93 /* MTViewPrintPageRenderReport.m */,
+				4CA226A516C963CC00315EA2 /* MTDocumentSectionView.h */,
+				4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */,
 				4CAB178F150FE38400BA0A9B /* MTViewRuler.h */,
 				4CAB1790150FE38400BA0A9B /* MTViewRuler.m */,
 				4CC24AA31503E3AB00C4EE98 /* UIViewGradient.h */,
@@ -2735,8 +2740,6 @@
 				4C50DF9216B8F9A400CD8BC0 /* MTPrintPageRendererReport.m */,
 				4CC182C016C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.h */,
 				4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */,
-				4CC182C916C6040F006FAD93 /* MTViewPrintPageRenderReport.h */,
-				4CC182CA16C60410006FAD93 /* MTViewPrintPageRenderReport.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -3073,6 +3076,7 @@
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C00818414B738E9003DF437 /* Model */,
 				4CDB624B14E38C8400A5389E /* Categories */,
+				4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -3696,12 +3700,9 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4CD0F7C214CC532A003DA079 /* MTViewControllerQueryBuilder.h */,
-				4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */,
-				4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */,
-				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
-				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
-				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
+				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
+				4CF1329516CA1E5200FD0F0B /* Report Viewer */,
+				4CF1329416CA1E4900FD0F0B /* Report Desinger */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
 				4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */,
 				4C00817F14B6D158003DF437 /* UITableViewControllerFontSelector.h */,
@@ -3777,14 +3778,8 @@
 				4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */,
 				4C28FB8C16A2A1A6007D6D23 /* MTCollectionViewLineLayout.h */,
 				4C28FB8D16A2A1A6007D6D23 /* MTCollectionViewLineLayout.m */,
-				4C85C6A814FF72F3003785AC /* MTViewControllerReportViewer.h */,
-				4C85C6A914FF72F3003785AC /* MTViewControllerReportViewer.m */,
-				4C50DF8D16B8E91000CD8BC0 /* MTViewControllerReportPage.h */,
-				4C50DF8E16B8E91000CD8BC0 /* MTViewControllerReportPage.m */,
 				4CC182D016C6CCC1006FAD93 /* MTPageViewControllerReport.h */,
 				4CC182D116C6CCC1006FAD93 /* MTPageViewControllerReport.m */,
-				4CA226A516C963CC00315EA2 /* MTDocumentSectionView.h */,
-				4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -3834,6 +3829,37 @@
 			);
 			name = Categories;
 			path = Reports;
+			sourceTree = "<group>";
+		};
+		4CF1329416CA1E4900FD0F0B /* Report Desinger */ = {
+			isa = PBXGroup;
+			children = (
+				4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */,
+				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
+			);
+			name = "Report Desinger";
+			sourceTree = "<group>";
+		};
+		4CF1329516CA1E5200FD0F0B /* Report Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				4C85C6A814FF72F3003785AC /* MTViewControllerReportViewer.h */,
+				4C85C6A914FF72F3003785AC /* MTViewControllerReportViewer.m */,
+				4C50DF8D16B8E91000CD8BC0 /* MTViewControllerReportPage.h */,
+				4C50DF8E16B8E91000CD8BC0 /* MTViewControllerReportPage.m */,
+			);
+			name = "Report Viewer";
+			sourceTree = "<group>";
+		};
+		4CF1329616CA1E5D00FD0F0B /* Query Builder */ = {
+			isa = PBXGroup;
+			children = (
+				4CD0F7C214CC532A003DA079 /* MTViewControllerQueryBuilder.h */,
+				4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */,
+				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
+				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
+			);
+			name = "Query Builder";
 			sourceTree = "<group>";
 		};
 		4CFFEE9D16C0E53B00FC6EC4 /* Unreferenced */ = {

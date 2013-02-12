@@ -10,11 +10,13 @@
 
 @interface MTViewControllerReportViewer ()
 
+@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
+
 @property (retain, nonatomic) IBOutlet UIView *viewBackground;
 @property (retain, nonatomic) IBOutlet UIView *viewContainer;
 
 @property (nonatomic, retain) MTPageViewControllerReport *pageController;
-@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
+
 @property (assign) NSUInteger numberOfPages;
 @property (assign) NSUInteger currentPageIndex;
 
@@ -51,18 +53,21 @@
     MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
     NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];    //Returning zero when there are pages!!!!
     [self setNumberOfPages:numberOfPages];
-    [self setPrintPageRendererReport: prtingPageRendererReport];
+    self.printPageRendererReport = prtingPageRendererReport;
+    [prtingPageRendererReport release];
     
     MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{}];
 
 
     NSUInteger initalNumberOfPagesRequired = 1;
     NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
-    MTViewControllerReportPage *pageOne = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:1];
+    MTViewControllerReportPage *pageOne = [[MTViewControllerReportPage alloc] initWithPageNumber:1];
+    [pageOne setDelegate:self];
     [initalPages addObject:pageOne];
     [pageOne release];
     if (initalNumberOfPagesRequired == 2) {
-        MTViewControllerReportPage *pageTwo = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:2];
+        MTViewControllerReportPage *pageTwo = [[MTViewControllerReportPage alloc] initWithPageNumber:2];
+        [pageTwo setDelegate:self];
         [initalPages addObject:pageTwo];
         [pageTwo release];
     }
@@ -78,7 +83,6 @@
     [[self viewContainer] addSubview:[pageController view]];
     [self setPageController:pageController];
     [pageController release];
-    [prtingPageRendererReport release];
 
 }
 
@@ -96,14 +100,18 @@
     [[self delegate] viewControllerDidFinish: self];
 }
 
+- (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
+    [[self printPageRendererReport] drawPageAtIndex:pageIndex inRect:printableRect];
+}
+
 #pragma mark - UIPageViewControllerDataSrouce
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     NSUInteger visablePageNumber = [(MTViewControllerReportPage *)viewController pageNumber];
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber + 1 <= [self numberOfPages]) {
-        result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber + 1];
-        //[result autorelease];
+        result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber + 1];
+        [result setDelegate: self];
     }
     return result;
 }
@@ -112,8 +120,8 @@
     NSUInteger visablePageNumber = [(MTViewControllerReportPage *)viewController pageNumber];
     MTViewControllerReportPage *result = nil;
     if (visablePageNumber - 1 > 0) {
-        result = [[MTViewControllerReportPage alloc] initWithPageData:[self printPageRendererReport] andPageNumber:visablePageNumber - 1];
-        //[result autorelease];
+        result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber - 1];
+        [result setDelegate: self];
     }
     return result;
 }

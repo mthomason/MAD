@@ -11,9 +11,10 @@
 #import "MTViewControllerReportPage.h"
 #import "MNSDocumentReport.h"
 #import "MTPageViewControllerReport.h"
+#import "MTPrintingProtocol.h"
 
 @interface MTViewControllerReportViewer : MTViewController
-    <UIPageViewControllerDelegate, UIPageViewControllerDataSource>
+    <UIPageViewControllerDelegate, UIPageViewControllerDataSource, MTPrintingProtocol>
 
 @property (nonatomic, retain) MNSDocumentReport *documentReport;
 

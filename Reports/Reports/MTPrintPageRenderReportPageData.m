@@ -31,7 +31,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)copyWithZone:(NSZone *)zone {
     MTPrintPageRenderReportPageData *copy = [[MTPrintPageRenderReportPageData alloc] init];
     if (copy) {
-        NSMutableArray *cachedPageData = [[[self cachedPageData] copyWithZone:zone] retain];
+        NSMutableArray *cachedPageData = [[NSMutableArray alloc] initWithArray:[self cachedPageData]];
         [copy setCachedPageData: cachedPageData];
         [cachedPageData release];
     }
@@ -54,7 +54,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSArray *)enumeratePageSections {
-    return [self cachedPageData];
+    return [[[self cachedPageData] retain] autorelease];
 }
 
 - (void)addPageHeaderWithValueDictionary:(NSDictionary *)values {

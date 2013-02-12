@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MTPrintPageRendererReport.h"
+#import "MTPrintingProtocol.h"
+
 
 @interface MTViewPrintPageRenderReport : UIView
 
-- (id)initWithFrame:(CGRect)frame pageNumber:(NSUInteger)pageNumber andPrintRenderData:(MTPrintPageRendererReport *)printRenderReport;
+- (id)initWithFrame:(CGRect)frame;
+
+@property (assign, nonatomic) id <MTPrintingProtocol> delegate;
 
 @end

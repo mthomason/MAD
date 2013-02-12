@@ -70,159 +70,6 @@
 
 @implementation MUIViewControllerReportDesigner
 
-#pragma mark - MTCollectionViewLineLayoutDelegate
-
-- (BOOL)dismissAllPopovers {
-    BOOL result = NO;
-    if ([AppDelegate isPad]) {
-        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
-        if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
-        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
-        
-        for (UIPopoverController *popoverController in allpopovers) {
-            if ([popoverController isPopoverVisible]) {
-                [popoverController dismissPopoverAnimated:YES];
-                result = YES;
-            }
-        }
-        [allpopovers release];
-    }
-    return result;
-}
-
-- (void)deselectAllElements {
-    for (MTElementView *elementView in [self selectedElementViews]) {
-        [self didDeselectElementView:elementView animated:YES];
-    }
-}
-
-- (void)deselectAllElementsAnimated:(BOOL)animated {
-    for (MTElementView *elementView in [self selectedElementViews]) {
-        [self didDeselectElementView:elementView animated:animated];
-    }
-}
-
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
-    NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
-    return [result CGPointValue];
-}
-
-- (void)didSelectElementView:(id)sender {
-    if ([sender isKindOfClass:[MTElementView class]]) {
-        MTElementView *elementView = sender;
-        [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-        [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
-        [[elementView layer] setBorderWidth:3.0000f];
-        
-        if ([AppDelegate isPad]) {
-            
-            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
-            [passThroughViews addObject:elementView];
-            [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-            [passThroughViews release];
-
-            CGRect popoverRect;
-            if ([[self selectedObjectIds] count] == 1) {
-                popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-            } else if ([[self selectedObjectIds] count] > 1) {
-                CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
-                NSUInteger counter = 0;
-                for (MTElementView *elementView in [self selectedElementViews]) {
-                    CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-                    if (counter == 0) {
-                        minx = frame.origin.x;
-                        miny = frame.origin.y;
-                        maxx = frame.origin.x + frame.size.width;
-                        maxy = frame.origin.y + frame.size.height;
-                    } else {
-                        minx = minx < frame.origin.x ? minx : frame.origin.x;
-                        miny = miny < frame.origin.y ? miny : frame.origin.y;
-                        maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
-                        maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
-                    }
-                    counter++;
-                }
-                popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
-            }
-            [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-            //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
-
-            
-        }
-    }
-}
-- (void)didDeselectElementView:(id)sender animated:(BOOL)animated {
-    if ([sender isKindOfClass:[MTElementView class]]) {
-        MTElementView *elementView = sender;
-        [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
-        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[elementView layer] setBorderWidth:0.0000f];
-        
-        if ([AppDelegate isPad]) {
-            
-            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
-            [passThroughViews removeObject:elementView];
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-            [passThroughViews release];
-            
-            if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
-                if ([[self selectedObjectIds] count] > 0) {
-                    CGRect popoverRect = [self rectForSelectedElements];
-                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
-                    //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
-                    
-                } else {
-                    [[self popoverControllerInformation] dismissPopoverAnimated:animated];
-                }
-            }
-        }
-    }
-}
-
-- (void)applyBorderToElementView:(MTElementView *)elementView {
-    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[elementView layer] setBorderWidth:3.0000f];
-}
-
-- (void)removeBorderToElementView:(MTElementView *)elementView {
-    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-    [[elementView layer] setBorderWidth:0.0000f];
-}
-
-- (void)didHighlightElementView:(id)sender { }
-- (void)didUnhighlightElementView:(id)sender { }
-
-- (CGRect)rectForSelectedElements {
-    CGRect popoverRect = CGRectZero;
-    if ([[self selectedObjectIds] count] == 1) {
-        MTElementView *elementView = [[self selectedElementViews] anyObject];
-        popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-    } else if ([[self selectedObjectIds] count] > 1) {
-        CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
-        NSUInteger counter = 0;
-        for (MTElementView *elementView in [self selectedElementViews]) {
-            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-            if (counter == 0) {
-                minx = frame.origin.x;
-                miny = frame.origin.y;
-                maxx = frame.origin.x + frame.size.width;
-                maxy = frame.origin.y + frame.size.height;
-            } else {
-                minx = minx < frame.origin.x ? minx : frame.origin.x;
-                miny = miny < frame.origin.y ? miny : frame.origin.y;
-                maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
-                maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
-            }
-            counter++;
-        }
-        popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
-    }
-    return popoverRect;
-}
-
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -596,8 +443,8 @@
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
         //[[AppDelegate activeDocument] refresh];
-        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        //RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         
         //MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
         //[prtingPageRendererReport setPaperRect:CGRectZero];
@@ -684,7 +531,77 @@
     NSLog(@"didShowMenuNotification %@", [notification object]);
 }
 
+#pragma mark - Methods
+
+- (void)applyBorderToElementView:(MTElementView *)elementView {
+    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
+    [[elementView layer] setBorderWidth:3.0000f];
+}
+
+- (void)removeBorderToElementView:(MTElementView *)elementView {
+    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+    [[elementView layer] setBorderWidth:0.0000f];
+}
+
+- (CGRect)rectForSelectedElements {
+    CGRect popoverRect = CGRectZero;
+    if ([[self selectedObjectIds] count] == 1) {
+        MTElementView *elementView = [[self selectedElementViews] anyObject];
+        popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+    } else if ([[self selectedObjectIds] count] > 1) {
+        CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+        NSUInteger counter = 0;
+        for (MTElementView *elementView in [self selectedElementViews]) {
+            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+            if (counter == 0) {
+                minx = frame.origin.x;
+                miny = frame.origin.y;
+                maxx = frame.origin.x + frame.size.width;
+                maxy = frame.origin.y + frame.size.height;
+            } else {
+                minx = minx < frame.origin.x ? minx : frame.origin.x;
+                miny = miny < frame.origin.y ? miny : frame.origin.y;
+                maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
+                maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
+            }
+            counter++;
+        }
+        popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+    }
+    return popoverRect;
+}
+
 #pragma mark - Actions
+
+- (void)deselectAllElements {
+    for (MTElementView *elementView in [self selectedElementViews]) {
+        [self didDeselectElementView:elementView animated:YES];
+    }
+}
+
+- (void)deselectAllElementsAnimated:(BOOL)animated {
+    for (MTElementView *elementView in [self selectedElementViews]) {
+        [self didDeselectElementView:elementView animated:animated];
+    }
+}
+
+- (BOOL)dismissAllPopovers {
+    BOOL result = NO;
+    if ([AppDelegate isPad]) {
+        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
+        if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
+        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
+        
+        for (UIPopoverController *popoverController in allpopovers) {
+            if ([popoverController isPopoverVisible]) {
+                [popoverController dismissPopoverAnimated:YES];
+                result = YES;
+            }
+        }
+        [allpopovers release];
+    }
+    return result;
+}
 
 - (NSSet *)elementViews {
     NSMutableSet *results = [[NSMutableSet alloc] init];
@@ -956,6 +873,13 @@
             [super canPerformAction:action withSender:sender];
 }
 
+#pragma mark - MTCollectionViewLineLayoutDelegate
+
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
+    NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
+    return [result CGPointValue];
+}
+
 #pragma mark - Collection View Flow Layout Delegate
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
@@ -1005,29 +929,20 @@
 // MARK: Load the elements into the sections.
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    //for (UIView *subview in [[cell contentView] subviews]) {
-    //    [subview removeFromSuperview];
-    //}
+
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"CellForItem %@", indexPath);
-    NSInteger row = [indexPath row];
-    
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    
-    NSOrderedSet *objects = [documentSection hasObjects];
 
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    NSOrderedSet *objects = [documentSection hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
-    
-    if ([objects count] > row) {
+    if ([objects count] > [indexPath row]) {
         
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
     
         CGSize documentObjectSize = [documentObject viewSize];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
@@ -1058,7 +973,6 @@
                 [panGesture setDelegate:self];
                 [elementView addGestureRecognizer:panGesture];
                 [panGesture release];
-                //UICollectionViewLayoutAttributes *layoutAttributes = [[collectionView collectionViewLayout] layoutAttributesForItemAtIndexPath:indexPath];
                 
                 [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
                 [cell setObjectIdTag:[documentObject objectID]];
@@ -1724,5 +1638,86 @@
 - (void)fontSettingsTableViewControllerDidSelectFontList:(UITableViewControllerFontSettings *)controller {
     [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
 }
+
+#pragma mark - MTElementViewDelegate
+
+- (void)didSelectElementView:(id)sender {
+    if ([sender isKindOfClass:[MTElementView class]]) {
+        MTElementView *elementView = sender;
+        [[self selectedObjectIds] addObject:[elementView objectIdTag]];
+        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+        [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
+        [[elementView layer] setBorderWidth:3.0000f];
+        
+        if ([AppDelegate isPad]) {
+            
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+            [passThroughViews addObject:elementView];
+            [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            [passThroughViews release];
+            
+            CGRect popoverRect;
+            if ([[self selectedObjectIds] count] == 1) {
+                popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+            } else if ([[self selectedObjectIds] count] > 1) {
+                CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+                NSUInteger counter = 0;
+                for (MTElementView *elementView in [self selectedElementViews]) {
+                    CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                    if (counter == 0) {
+                        minx = frame.origin.x;
+                        miny = frame.origin.y;
+                        maxx = frame.origin.x + frame.size.width;
+                        maxy = frame.origin.y + frame.size.height;
+                    } else {
+                        minx = minx < frame.origin.x ? minx : frame.origin.x;
+                        miny = miny < frame.origin.y ? miny : frame.origin.y;
+                        maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
+                        maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
+                    }
+                    counter++;
+                }
+                popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+            }
+            [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
+            
+            
+        }
+    }
+}
+
+- (void)didDeselectElementView:(id)sender animated:(BOOL)animated {
+    if ([sender isKindOfClass:[MTElementView class]]) {
+        MTElementView *elementView = sender;
+        [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
+        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
+        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[elementView layer] setBorderWidth:0.0000f];
+        
+        if ([AppDelegate isPad]) {
+            
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+            [passThroughViews removeObject:elementView];
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            [passThroughViews release];
+            
+            if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
+                if ([[self selectedObjectIds] count] > 0) {
+                    CGRect popoverRect = [self rectForSelectedElements];
+                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
+                    //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
+                    
+                } else {
+                    [[self popoverControllerInformation] dismissPopoverAnimated:animated];
+                }
+            }
+        }
+    }
+}
+
+- (void)didHighlightElementView:(id)sender { }
+- (void)didUnhighlightElementView:(id)sender { }
 
 @end
