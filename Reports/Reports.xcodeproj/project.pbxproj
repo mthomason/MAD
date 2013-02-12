@@ -1050,6 +1050,8 @@
 		4CA16482167EBE5700540A14 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4CA16483167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4CA16484167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
+		4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
+		4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4CAB1791150FE38400BA0A9B /* MTViewRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTViewRuler.m */; };
 		4CB12C9E14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* UITableViewControllerLinkBuilder.m */; };
@@ -2061,6 +2063,8 @@
 		4CA16345167CAE7500540A14 /* RptqQuerySort+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuerySort+Extras.m"; sourceTree = "<group>"; };
 		4CA1634A167CAEA700540A14 /* RptqRelationship+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqRelationship+Extras.h"; sourceTree = "<group>"; };
 		4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqRelationship+Extras.m"; sourceTree = "<group>"; };
+		4CA226A516C963CC00315EA2 /* MTDocumentSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentSectionView.h; sourceTree = "<group>"; };
+		4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentSectionView.m; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
 		4CAB178F150FE38400BA0A9B /* MTViewRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewRuler.h; sourceTree = "<group>"; };
@@ -3694,6 +3698,8 @@
 			children = (
 				4CD0F7C214CC532A003DA079 /* MTViewControllerQueryBuilder.h */,
 				4CD0F7C314CC532A003DA079 /* MTViewControllerQueryBuilder.m */,
+				4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */,
+				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
 				4CFF2E041500C43E002770C1 /* QueryBuilderDataModal.h */,
 				4CFF2E051500C43E002770C1 /* QueryBuilderDataModal.m */,
 				4CE9985C14B69AA70015C8D1 /* UITableViewControllerFontSettings.h */,
@@ -3767,8 +3773,6 @@
 				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
 				4C5F02E714BA477200C49BE9 /* UIViewControllerSettings.h */,
 				4C5F02E814BA477200C49BE9 /* UIViewControllerSettings.m */,
-				4C76F0B714B51042005DCE49 /* MUIViewControllerReportDesigner.h */,
-				4C76F0B014B4F132005DCE49 /* MUIViewControllerReportDesigner.m */,
 				4CDBED22168B50AB00C5147B /* MTCollectionViewSection.h */,
 				4CDBED23168B50AB00C5147B /* MTCollectionViewSection.m */,
 				4C28FB8C16A2A1A6007D6D23 /* MTCollectionViewLineLayout.h */,
@@ -3779,6 +3783,8 @@
 				4C50DF8E16B8E91000CD8BC0 /* MTViewControllerReportPage.m */,
 				4CC182D016C6CCC1006FAD93 /* MTPageViewControllerReport.h */,
 				4CC182D116C6CCC1006FAD93 /* MTPageViewControllerReport.m */,
+				4CA226A516C963CC00315EA2 /* MTDocumentSectionView.h */,
+				4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -5018,6 +5024,7 @@
 				4CC182C316C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
 				4CC182CC16C60410006FAD93 /* MTViewPrintPageRenderReport.m in Sources */,
 				4CC182D316C6CCC2006FAD93 /* MTPageViewControllerReport.m in Sources */,
+				4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5457,6 +5464,7 @@
 				4CC182C216C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
 				4CC182CB16C60410006FAD93 /* MTViewPrintPageRenderReport.m in Sources */,
 				4CC182D216C6CCC2006FAD93 /* MTPageViewControllerReport.m in Sources */,
+				4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

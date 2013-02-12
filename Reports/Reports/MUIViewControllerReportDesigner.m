@@ -64,6 +64,8 @@
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
+@property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
+
 @end
 
 @implementation MUIViewControllerReportDesigner
@@ -224,6 +226,7 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_layoutConstraintsReportSectionHeight release];
     [_lastElementViewToShowMenu release];
     [_popoverControllerObjectSelector release];
     [_popoverControllerInformation release];
@@ -331,8 +334,14 @@
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
     
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    NSManagedObjectContext *managedObjectContect = [[AppDelegate activeDocument] managedObjectContext];
+    
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:managedObjectContect];
 
+    NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setLayoutConstraintsReportSectionHeight:layoutConstraintsReportSectionHeight];
+    [layoutConstraintsReportSectionHeight release];
+    
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
     [self setSectionViews: dictionarySections];
     [dictionarySections release];
@@ -390,7 +399,7 @@
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
-        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+        MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
         [collectionView setObjectIdTag:[reportSection objectID]];
         NSString *reuse = [collectionViewReuseId stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
         NSMutableDictionary *lastTouches = [[NSMutableDictionary alloc] init];
@@ -400,6 +409,7 @@
         [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
         [collectionView setTag:[[reportSection identifier] integerValue]];
         [collectionView setDelegate:self];
+        [collectionView setSectionDelegate:self];
         [collectionView setDataSource:self];
         [collectionView setBackgroundColor:[UIColor whiteColor]];
         [collectionView setClipsToBounds:YES];
@@ -409,6 +419,12 @@
         [collectionView setBackgroundView:backgroundView];
         [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[collectionView layer] setCornerRadius:cornerRadius];
+        
+        //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchView:)];
+        //[pinchGesture setDelegate:self];
+        //[collectionView addGestureRecognizer:pinchGesture];
+        //[pinchGesture release];
+
         
         [[self designScrollView] addSubview:collectionView];
 
@@ -433,9 +449,10 @@
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
         
         [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, [[reportSection height] floatValue], - paddingLabel - heightLabel, labelKey, heightLabel];
+        //[stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, - paddingLabel - heightLabel, labelKey, heightLabel];
         
-        NSLayoutConstraint *layoutConstraintCenter = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeCenterX relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeCenterX multiplier: 1.0000f constant: 0.0000f];
-        [[self designScrollView] addConstraint:layoutConstraintCenter];
+        NSLayoutConstraint *layoutConstraintLeft = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeLeft relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeLeft multiplier: 1.0000f constant: paddingBorder];
+        [[self designScrollView] addConstraint:layoutConstraintLeft];
         
         NSLayoutConstraint *layoutConstraintRight = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: paddingLabel];
         [[self designScrollView] addConstraint:layoutConstraintRight];
@@ -466,6 +483,18 @@
                                                                                 options: 0
                                                                                 metrics: nil
                                                                                   views: dictionaryViewsVertical];
+    for (NSLayoutConstraint *layoutConstraint in labelconstraintsVertical) {
+        if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
+            [layoutConstraint secondItem] == nil &&
+            [[layoutConstraint firstItem] isKindOfClass:[MTDocumentSectionView class]]) {
+            NSManagedObjectID *objectId = [[layoutConstraint firstItem] objectIdTag];
+            NSString *key =[[NSString alloc] initWithString: [[objectId URIRepresentation] absoluteString]];
+            NSLayoutConstraint *constraint = [layoutConstraint retain];
+            [[self layoutConstraintsReportSectionHeight] setObject:constraint forKey:key];
+            [constraint release];
+        }
+
+    }
     
     [[self designScrollView] addConstraints:labelconstraintsVertical];
     [[self designScrollView] setScrollEnabled:YES];
@@ -478,6 +507,10 @@
     [sectionEnumerator release];
     [viewRuler release];
 
+}
+
+- (void)updateViewConstraints {
+    [super updateViewConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -575,6 +608,23 @@
         [viewControllerReportViewer setDocumentReport:[AppDelegate activeDocument]];
         
     }
+}
+
+#pragma mark - MTSectionViewDelegate
+
+- (void)didUpdateLayout:(id)sender {
+    MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
+    NSManagedObjectID *objectId = [documentSectionView objectIdTag];
+    NSURL *objectIdUrl = [[objectId URIRepresentation] retain];
+    NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:[objectIdUrl absoluteString]];
+    [layoutConstraint setConstant:[documentSectionView bounds].size.height];
+    [objectIdUrl release];
+    
+    NSManagedObjectContext *managedObjectContect = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[sender objectIdTag] fromObjectContext:managedObjectContect];
+    [documentSection setHeight:@([sender bounds].size.height)];
+    [[AppDelegate activeDocument] saveContext];
+    [[self view] setNeedsUpdateConstraints];
 }
 
 #pragma mark - UIViewControllerToolboxDelegate
@@ -1338,17 +1388,31 @@
 
 - (void)pinchView:(UIPinchGestureRecognizer *)gestureRecognizer {
     NSLog(@"pinchView");
-    gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
-    gestureRecognizer.scale = 1.f;
+    //gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
+    //gestureRecognizer.scale = 1.0f;
     
     switch ([gestureRecognizer state]) {
+        case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
+            break;
+        }
         case UIGestureRecognizerStateBegan: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateBegan
+            if ([gestureRecognizer numberOfTouches] >= 2) {
+                CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+                CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                CGFloat distance = CGDistance(locationStart0, locationStart1);
+                CGFloat differenceY = locationStart0.y - locationStart1.y;
+                NSLog(@"Start difference y = %f", differenceY);
+            }
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateChanged
-            break;
-        }
-        case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
+            if ([gestureRecognizer numberOfTouches] >= 2) {
+                CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+                CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                CGFloat distance = CGDistance(locationStart0, locationStart1);
+                CGFloat differenceY = locationStart0.y - locationStart1.y;
+                NSLog(@"Change difference y = %f", differenceY);
+            }
             break;
         }
         case UIGestureRecognizerStateCancelled: {   // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateCancelled
@@ -1358,6 +1422,10 @@
             break;
         }
         case UIGestureRecognizerStateEnded: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateEnded
+            //CGPoint locationEnd0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+            //CGPoint locationEnd1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+            //CGFloat distance = CGDistance(locationEnd0, locationEnd1);
+            //NSLog(@"End distance %f", distance);
             break;
         }
     }

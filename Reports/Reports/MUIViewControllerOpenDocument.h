@@ -18,6 +18,7 @@ extern NSString * const SEGUE_OPENDOCUMENT;
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
+        UIGestureRecognizerDelegate,
         UIViewControllerTemplateSelectorDelegate,
         MUIViewControllerDelegate,
         MUIViewControllerDelegate>

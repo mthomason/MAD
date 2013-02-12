@@ -26,6 +26,7 @@
 #import "MTCollectionViewLineLayout.h"
 #import "UIViewControllerToolBox.h"
 #import "MTViewRuler.h"
+#import "MTDocumentSectionView.h"
 
 @interface MUIViewControllerReportDesigner : MTViewController
     <UITableViewDataSource,
@@ -37,6 +38,7 @@
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         UINavigationBarDelegate,
+        UIScrollViewDelegate,
         UIViewControllerToolBoxDelegate,
         MTElementViewDelegate,
         MTCollectionViewLineLayoutDelegate,
@@ -44,7 +46,7 @@
         MUIViewControllerDelegate,
         FontSettingsTableViewControllerDelegate,
         UITableViewControllerFontSelectorDelegate,
-        UIScrollViewDelegate>
+        MTDocumentSectionViewDelegate>
 
 - (void)openReport:(NSURL *)url;
 - (void)openTemplate:(NSURL *)url;
