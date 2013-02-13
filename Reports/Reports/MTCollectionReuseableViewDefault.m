@@ -18,28 +18,4 @@
     return self;
 }
 
-/*
- 
-- (void)didTransitionFromLayout:(UICollectionViewLayout *)oldLayout toLayout:(UICollectionViewLayout *)newLayout {
-    [super didTransitionFromLayout:oldLayout toLayout:newLayout];
-}
-- (void)prepareForReuse {
-    [super prepareForReuse];
-}
-
-- (void)willTransitionFromLayout:(UICollectionViewLayout *)oldLayout toLayout:(UICollectionViewLayout *)newLayout {
-    [super willTransitionFromLayout:oldLayout toLayout:newLayout];
-}
- 
-*/
- 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
 @end

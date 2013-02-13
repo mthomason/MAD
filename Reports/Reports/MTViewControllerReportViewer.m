@@ -22,6 +22,12 @@
 
 @property (nonatomic, retain) NSArray *initalViewControllers;
 
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
+
+@property (retain, nonatomic) IBOutletCollection(UIToolbar) NSArray *toolbars;
+
+
 @end
 
 @implementation MTViewControllerReportViewer
@@ -33,6 +39,9 @@
     [_pageController release];
     [_viewContainer release];
     [_viewBackground release];
+    [_toolbarTop release];
+    [_toolbarBottom release];
+    [_toolbars release];
     [super dealloc];
 }
 
@@ -49,21 +58,17 @@
     
     [[self view] setBackgroundColor:[UIColor greenColor]];
     
-    NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    
-    MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
-    NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];    //Returning zero when there are pages!!!!
-    [self setNumberOfPages:numberOfPages];
-    [self setPrintPageRendererReport: prtingPageRendererReport];
-    [prtingPageRendererReport release];
-    
-    MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{}];
+        
+    MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                       navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                                     options:@{}];
     [[pageController view] setBackgroundColor:[UIColor blueColor]];
 
     NSUInteger initalNumberOfPagesRequired = 1;
     NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
+
     MTViewControllerReportPage *pageOne = [[MTViewControllerReportPage alloc] initWithPageNumber:1];
+    [[pageOne view] setBounds:[[self viewContainer] bounds]];
     [pageOne setDelegate:self];
     [initalPages addObject:pageOne];
     [pageOne release];
@@ -82,9 +87,16 @@
     [pageController setDataSource:self];
     [pageController setDelegate:self];
     
-    [[self viewContainer] addSubview:[pageController view]];
+    [[self viewContainer] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    
     [self setPageController:pageController];
     [pageController release];
+
+    NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
+    [self setPrintPageRendererReport: prtingPageRendererReport];
+    [prtingPageRendererReport release];
 
 }
 
@@ -94,6 +106,18 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[[self pageController] view] setFrame:[[self viewContainer] bounds]];
+    [[self viewContainer] addSubview:[[self pageController] view]];
+
+    [[self printPageRendererReport] setPrintableSize:[[self viewContainer] bounds].size];
+    [[self printPageRendererReport] cachePrintPageRenderData];
+    NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
+    [self setNumberOfPages:numberOfPages];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[[self pageController] view] removeFromSuperview];
 }
 
 - (IBAction)done:(id)sender {
@@ -112,6 +136,7 @@
     if (visablePageNumber + 1 <= [self numberOfPages]) {
         result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber + 1];
         [result setDelegate: self];
+        [[result view] setFrame:[[self viewContainer] bounds]];
     }
     return result;
 }
@@ -122,6 +147,7 @@
     if (visablePageNumber - 1 > 0) {
         result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber - 1];
         [result setDelegate: self];
+        [[result view] setFrame:[[self viewContainer] bounds]];
     }
     return result;
 }
@@ -148,4 +174,10 @@
     
 }
 
+- (void)viewDidUnload {
+    [self setToolbarTop:nil];
+    [self setToolbarBottom:nil];
+    [self setToolbars:nil];
+    [super viewDidUnload];
+}
 @end

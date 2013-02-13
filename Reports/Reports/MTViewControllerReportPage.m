@@ -33,7 +33,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] frame]];
+    [[self view] setBackgroundColor:[UIColor purpleColor]];
+    [[self view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[self view] setClipsToBounds:YES];
+    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] bounds]];
+    //[renderedReportView setCenter:[[self view] center]];
+    [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [renderedReportView setBackgroundColor:[UIColor brownColor]];
     [renderedReportView setDelegate:self];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
@@ -43,6 +49,8 @@
     [super viewWillAppear:animated];
     if (![[self renderedReportView] isDescendantOfView:[self view]]) {
         [[self view] addSubview:[self renderedReportView]];
+        [[self renderedReportView] setBounds:[[self view] bounds]];
+        [[self renderedReportView] setCenter:[[self view] center]];
     }
 }
 

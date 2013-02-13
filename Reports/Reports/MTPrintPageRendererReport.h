@@ -17,6 +17,10 @@
 
 @interface MTPrintPageRendererReport : UIPrintPageRenderer <NSCopying>
 
+@property (nonatomic, assign) CGSize printableSize;
+
 - (id)initWithDocument:(RptqDocument *)document;
+- (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
+- (void)cachePrintPageRenderData;
 
 @end
