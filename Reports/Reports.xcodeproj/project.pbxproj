@@ -1572,6 +1572,8 @@
 		4CE8A04914C01EA1007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MUITableViewControllerDatabaseMySqlSetup.m */; };
 		4CE9985F14B69AA80015C8D1 /* UITableViewControllerFontSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */; };
 		4CEEA0D814C559B000BB9ABC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEA0D714C559B000BB9ABC /* README.txt */; };
+		4CF1335116CCB2EE00FD0F0B /* MTSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTSplitViewController.m */; };
+		4CF1335216CCB2EE00FD0F0B /* MTSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTSplitViewController.m */; };
 		4CF339441693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339451693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339461693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
@@ -2390,6 +2392,8 @@
 		4CE9985D14B69AA70015C8D1 /* UITableViewControllerFontSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFontSettings.m; sourceTree = "<group>"; };
 		4CEEA0D714C559B000BB9ABC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Reports/README.txt; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
+		4CF1334F16CCB2E900FD0F0B /* MTSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSplitViewController.h; sourceTree = "<group>"; };
+		4CF1335016CCB2EC00FD0F0B /* MTSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSplitViewController.m; sourceTree = "<group>"; };
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
@@ -3070,6 +3074,8 @@
 		4C8EEC881644E6C000FAB2F3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4CF1334F16CCB2E900FD0F0B /* MTSplitViewController.h */,
+				4CF1335016CCB2EC00FD0F0B /* MTSplitViewController.m */,
 				4C7C8AF516603D3B00F2B88B /* ApplicationSettings.h */,
 				4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */,
 				4CDB624614E38B9600A5389E /* Controllers */,
@@ -5051,6 +5057,7 @@
 				4CC182CC16C60410006FAD93 /* MTViewPrintPageRenderReport.m in Sources */,
 				4CC182D316C6CCC2006FAD93 /* MTPageViewControllerReport.m in Sources */,
 				4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
+				4CF1335216CCB2EE00FD0F0B /* MTSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5491,6 +5498,7 @@
 				4CC182CB16C60410006FAD93 /* MTViewPrintPageRenderReport.m in Sources */,
 				4CC182D216C6CCC2006FAD93 /* MTPageViewControllerReport.m in Sources */,
 				4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
+				4CF1335116CCB2EE00FD0F0B /* MTSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

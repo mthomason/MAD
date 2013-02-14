@@ -10,6 +10,7 @@
 #import "MTViewControllerQueryBuilder.h"
 #import "MUIViewControllerTemplateSelector.h"
 #import "NSFileManager+Reports.h"
+#import "MTSplitViewController.h"
 
 extern NSString * const SEGUE_SHOWADDDOCUMENT;
 extern NSString * const SEGUE_OPENDOCUMENT;
@@ -19,6 +20,7 @@ extern NSString * const SEGUE_OPENDOCUMENT;
         UITableViewDataSource,
         UITableViewDelegate,
         UIGestureRecognizerDelegate,
+        MTSplitViewControllerDelegate,
         UIViewControllerTemplateSelectorDelegate,
         MUIViewControllerDelegate,
         MUIViewControllerDelegate>
