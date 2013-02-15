@@ -322,6 +322,8 @@
 		4C12293116CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; };
 		4C12293616CE239900B69763 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293516CE239900B69763 /* MTSchemaFieldCell.m */; };
 		4C12293716CE239900B69763 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293516CE239900B69763 /* MTSchemaFieldCell.m */; };
+		4C12293A16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293916CE7DC600B69763 /* MTBarButtonItemTitle.m */; };
+		4C12293B16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293916CE7DC600B69763 /* MTBarButtonItemTitle.m */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
@@ -1683,6 +1685,8 @@
 		4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAdvancedSchemaViewController.m; sourceTree = "<group>"; };
 		4C12293416CE239900B69763 /* MTSchemaFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSchemaFieldCell.h; sourceTree = "<group>"; };
 		4C12293516CE239900B69763 /* MTSchemaFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSchemaFieldCell.m; sourceTree = "<group>"; };
+		4C12293816CE7DC600B69763 /* MTBarButtonItemTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarButtonItemTitle.h; sourceTree = "<group>"; };
+		4C12293916CE7DC600B69763 /* MTBarButtonItemTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarButtonItemTitle.m; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
@@ -2648,6 +2652,8 @@
 				4C00816E14B6C4F8003DF437 /* Images */,
 				4C12293416CE239900B69763 /* MTSchemaFieldCell.h */,
 				4C12293516CE239900B69763 /* MTSchemaFieldCell.m */,
+				4C12293816CE7DC600B69763 /* MTBarButtonItemTitle.h */,
+				4C12293916CE7DC600B69763 /* MTBarButtonItemTitle.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -5087,6 +5093,7 @@
 				4CF1335616CD1FE400FD0F0B /* MTQueryBuilderAdvancedViewController.m in Sources */,
 				4C12293116CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */,
 				4C12293716CE239900B69763 /* MTSchemaFieldCell.m in Sources */,
+				4C12293B16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5531,6 +5538,7 @@
 				4CF1335516CD1FE400FD0F0B /* MTQueryBuilderAdvancedViewController.m in Sources */,
 				4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */,
 				4C12293616CE239900B69763 /* MTSchemaFieldCell.m in Sources */,
+				4C12293A16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

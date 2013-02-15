@@ -12,6 +12,8 @@
 
 @property (retain, nonatomic) IBOutlet UITableView *schemaTableViewController;
 @property (retain, nonatomic) NSArray *hasFields;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemTitle;
+@property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
 
 @end
 
@@ -19,6 +21,7 @@
 
 - (void)dealloc {
     [_schemaTableViewController release];
+    [_barButtonItemTitle release];
     [super dealloc];
 }
 
@@ -40,19 +43,26 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    [[self barButtonItemTitle] setEnabled:NO];
+    [[self barButtonItemTitle] setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+    [[[self view] layer] setCornerRadius: 25.0000f];
+    [[self view] setClipsToBounds:YES];
+    [[self view] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"tableObjectId: %@", [self tableObjectId]);
+    NSLog(@"tableObjectId: %@", [self cachedTableObjectId]);
     [[self schemaTableViewController] setDataSource:self];
     [[self schemaTableViewController] setDelegate:self];
     [[self schemaTableViewController] reloadData];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -62,10 +72,25 @@
     [super didReceiveMemoryWarning];
 }
 
+- (NSManagedObjectID *)tableObjecId {
+    return [[[self cachedTableObjectId] retain] autorelease];
+}
+
+- (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
+    [self setCachedTableObjectId:tableObjectId];
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    [[self barButtonItemTitle] setTitle:[table name]];
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 22.0000f;
 }
 
 #pragma mark - Table view datasource
@@ -92,13 +117,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    RptqTable *table = [RptqTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
+    RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [self setHasFields:[[table hasFields] allObjects]];
     return [[self hasFields] count];
 }
 
 - (void)viewDidUnload {
     [self setSchemaFieldCell:nil];
+    [self setBarButtonItemTitle:nil];
     [super viewDidUnload];
 }
 @end

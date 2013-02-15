@@ -10,6 +10,7 @@
 #import "RptqTable+Extras.h"
 #import "RptqDocument+ActiveDocument.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
 

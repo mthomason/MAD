@@ -11,13 +11,20 @@
 @interface MTQueryBuilderAdvancedViewController ()
 
 @property (nonatomic, retain) NSMutableArray *viewControllers;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
+
+@property (nonatomic, assign) NSUInteger tableDisplayCounter;
 
 @end
 
 @implementation MTQueryBuilderAdvancedViewController
 
 - (void)dealloc {
+    [self removeViewControllers:[NSSet setWithArray:_viewControllers]];
     [_viewControllers release];
+    [_toolbarTop release];
+    [_toolbarBottom release];
     [super dealloc];
 }
 
@@ -40,10 +47,20 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] initWithCapacity:2];
+    [self setViewControllers:viewControllers];
+    [viewControllers release];
+    [self setTableDisplayCounter:0];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[self toolbarTop] setTintColor: [UIColor edaBlueDark]];
+    [[self toolbarBottom] setTintColor: [UIColor edaBlueDark]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,10 +75,16 @@
 
 - (void)addViewController:(UIViewController *)viewController {
     [self addChildViewController:viewController];
-    [[viewController view] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 200.0000f)];
+    [[self viewControllers] addObject:viewController];
+    CGFloat originX = 50.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
+    CGFloat originY = originX;
+    [[viewController view] setFrame: CGRectMake(originX,
+                                                originY,
+                                                180.0000f, 200.0000f)];
     [[viewController view] setBackgroundColor:[UIColor blueColor]];
     [[self view] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
+    self.tableDisplayCounter++;
 }
 
 - (void)removeViewControllers:(NSSet *)viewControllers {
@@ -77,6 +100,8 @@
 }
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport {
+    [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
+    [self setTableDisplayCounter:0];
     UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     NSArray *tables = [[RptqDocument tablesForActiveDocument] retain];
     for (RptqTable *table in tables) {
@@ -91,4 +116,9 @@
     [sb release];
 }
 
+- (void)viewDidUnload {
+    [self setToolbarTop:nil];
+    [self setToolbarBottom:nil];
+    [super viewDidUnload];
+}
 @end

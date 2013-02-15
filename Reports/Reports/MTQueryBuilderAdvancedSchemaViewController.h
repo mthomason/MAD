@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
 #import "RptqTable+Extras.h"
 #import "AppDelegate.h"
 #import "MTSchemaFieldCell.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
 
-@property (nonatomic, retain) NSManagedObjectID *tableObjectId;
+
 @property (assign, nonatomic) IBOutlet MTSchemaFieldCell *schemaFieldCell;
+
+- (NSManagedObjectID *)tableObjecId;
+- (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
 
 @end

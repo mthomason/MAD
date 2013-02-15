@@ -646,26 +646,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="684"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="0TB-Np-bEY">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="kWJ-mY-NNR"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="2Ap-Xs-YBR"/>
-                                    <barButtonItem style="plain" id="MiG-7u-gZG">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="mU3-9h-j6B">
-                                            <rect key="frame" x="60" y="7" width="200" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <segments>
-                                                <segment title="Direct"/>
-                                                <segment title="Advanced"/>
-                                                <segment title="Override"/>
-                                            </segments>
-                                        </segmentedControl>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="hGw-D6-Gv9"/>
-                                </items>
-                            </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="IL6-pP-bPX">
                                 <items>
                                     <barButtonItem image="UIImageDocument20.png" style="plain" id="OGJ-es-BmM">
@@ -952,14 +932,11 @@
                                             <outlet property="delegate" destination="4Lk-sQ-AE1" id="Ucq-F1-211"/>
                                         </connections>
                                     </tableView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageClip.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tjc-Bs-Czv"/>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="OzG-h0-uFA" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="LLe-ls-Xdt"/>
-                                    <constraint firstItem="Tjc-Bs-Czv" firstAttribute="top" secondItem="eq6-rf-XQA" secondAttribute="top" constant="23" id="LTM-5c-ki9"/>
                                     <constraint firstItem="OzG-h0-uFA" firstAttribute="leading" secondItem="eq6-rf-XQA" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="P3v-Vb-1FJ"/>
-                                    <constraint firstItem="OzG-h0-uFA" firstAttribute="centerX" secondItem="Tjc-Bs-Czv" secondAttribute="centerX" type="default" id="X0H-9C-dYm"/>
                                     <constraint firstItem="OzG-h0-uFA" firstAttribute="top" secondItem="eq6-rf-XQA" secondAttribute="top" constant="20" symbolic="YES" type="default" id="bfJ-kl-gKI"/>
                                     <constraint firstAttribute="bottom" secondItem="OzG-h0-uFA" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="dq8-cP-jFc"/>
                                 </constraints>
@@ -967,14 +944,12 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="eq6-rf-XQA" firstAttribute="trailing" secondItem="Ee3-Gx-bKf" secondAttribute="trailing" type="default" id="4ch-xi-bg7"/>
                             <constraint firstItem="IL6-pP-bPX" firstAttribute="bottom" secondItem="Ee3-Gx-bKf" secondAttribute="bottom" type="default" id="4r8-88-zTL"/>
+                            <constraint firstItem="IL6-pP-bPX" firstAttribute="trailing" secondItem="Ee3-Gx-bKf" secondAttribute="trailing" type="default" id="7EW-WZ-fgQ"/>
                             <constraint firstItem="eq6-rf-XQA" firstAttribute="leading" secondItem="Ee3-Gx-bKf" secondAttribute="leading" type="default" id="Bu7-i7-YF6"/>
-                            <constraint firstItem="0TB-Np-bEY" firstAttribute="top" secondItem="Ee3-Gx-bKf" secondAttribute="top" type="default" id="Ga8-RS-bkf"/>
                             <constraint firstItem="IL6-pP-bPX" firstAttribute="top" secondItem="eq6-rf-XQA" secondAttribute="bottom" type="default" id="Uhx-0M-SAp"/>
-                            <constraint firstItem="0TB-Np-bEY" firstAttribute="trailing" secondItem="eq6-rf-XQA" secondAttribute="trailing" type="default" id="i5F-3W-mlf"/>
-                            <constraint firstItem="IL6-pP-bPX" firstAttribute="trailing" secondItem="eq6-rf-XQA" secondAttribute="trailing" type="default" id="kFU-c3-WCh"/>
-                            <constraint firstItem="eq6-rf-XQA" firstAttribute="top" secondItem="0TB-Np-bEY" secondAttribute="bottom" type="default" id="lPY-JY-EMP"/>
-                            <constraint firstItem="0TB-Np-bEY" firstAttribute="leading" secondItem="Ee3-Gx-bKf" secondAttribute="leading" type="default" id="nh7-06-a9S"/>
+                            <constraint firstItem="eq6-rf-XQA" firstAttribute="top" secondItem="Ee3-Gx-bKf" secondAttribute="top" type="default" id="rQZ-Kt-Dee"/>
                             <constraint firstItem="IL6-pP-bPX" firstAttribute="leading" secondItem="Ee3-Gx-bKf" secondAttribute="leading" type="default" id="zpN-KK-EnG"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -5217,21 +5192,24 @@
             <objects>
                 <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="KGZ-dG-yzU" customClass="MTQueryBuilderAdvancedSchemaViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="t9N-Zv-XH5">
-                        <rect key="frame" x="0.0" y="20" width="320" height="200"/>
+                        <rect key="frame" x="0.0" y="20" width="180" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="XbC-He-lvJ">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" id="NhJ-P6-oVB" customClass="MTSchemaFieldCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" rowHeight="22" id="NhJ-P6-oVB" customClass="MTSchemaFieldCell">
+                                        <rect key="frame" x="0.0" y="22" width="180" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="180" height="21"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWR-Kt-Uxx">
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="PhK-lS-e2D"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -5239,8 +5217,9 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="iWR-Kt-Uxx" firstAttribute="top" secondItem="NhJ-P6-oVB" secondAttribute="top" constant="11" id="HhV-Gd-bnG"/>
                                             <constraint firstItem="iWR-Kt-Uxx" firstAttribute="leading" secondItem="NhJ-P6-oVB" secondAttribute="leading" constant="20" type="default" id="cJP-Aa-cZc"/>
+                                            <constraint firstAttribute="trailing" secondItem="iWR-Kt-Uxx" secondAttribute="trailing" constant="20" type="default" id="gQS-R4-sTi"/>
+                                            <constraint firstItem="iWR-Kt-Uxx" firstAttribute="top" secondItem="NhJ-P6-oVB" secondAttribute="top" type="default" id="uJG-Qb-IVV"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="detailLabel" destination="iWR-Kt-Uxx" id="gdf-To-IaI"/>
@@ -5248,17 +5227,28 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NPj-z7-jK6">
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="aqe-cs-6D5"/>
+                                    <barButtonItem style="plain" id="vbi-9x-cpg" customClass="MTBarButtonItemTitle"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="p9h-7q-p9c"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="XbC-He-lvJ" firstAttribute="top" secondItem="t9N-Zv-XH5" secondAttribute="top" type="default" id="b1J-7R-fg8"/>
+                            <constraint firstItem="NPj-z7-jK6" firstAttribute="leading" secondItem="t9N-Zv-XH5" secondAttribute="leading" type="default" id="13S-Ew-XmN"/>
+                            <constraint firstItem="XbC-He-lvJ" firstAttribute="top" secondItem="NPj-z7-jK6" secondAttribute="bottom" type="default" id="W5U-Ws-CnX"/>
                             <constraint firstItem="XbC-He-lvJ" firstAttribute="trailing" secondItem="t9N-Zv-XH5" secondAttribute="trailing" type="default" id="iEo-qd-Dp3"/>
+                            <constraint firstItem="XbC-He-lvJ" firstAttribute="bottom" secondItem="t9N-Zv-XH5" secondAttribute="bottom" type="default" id="klo-cf-6Up"/>
+                            <constraint firstItem="NPj-z7-jK6" firstAttribute="top" secondItem="t9N-Zv-XH5" secondAttribute="top" type="default" id="lVq-3Y-2dV"/>
                             <constraint firstItem="XbC-He-lvJ" firstAttribute="leading" secondItem="t9N-Zv-XH5" secondAttribute="leading" type="default" id="rjJ-Xs-XsC"/>
-                            <constraint firstItem="XbC-He-lvJ" firstAttribute="bottom" secondItem="t9N-Zv-XH5" secondAttribute="bottom" type="default" id="sJz-WY-q8T"/>
+                            <constraint firstItem="NPj-z7-jK6" firstAttribute="trailing" secondItem="t9N-Zv-XH5" secondAttribute="trailing" type="default" id="uAC-zS-WQl"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemTitle" destination="vbi-9x-cpg" id="we4-Lx-2yl"/>
                         <outlet property="schemaTableViewController" destination="XbC-He-lvJ" id="4S6-4X-2lI"/>
                     </connections>
                 </viewController>
@@ -5622,10 +5612,30 @@
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="k7W-iN-ehV">
                         <rect key="frame" x="0.0" y="0.0" width="704" height="748"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRM-93-2ol">
+                                <items/>
+                            </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y1s-go-yFq">
+                                <items/>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Y1s-go-yFq" firstAttribute="leading" secondItem="k7W-iN-ehV" secondAttribute="leading" type="default" id="PfC-Ft-3RQ"/>
+                            <constraint firstItem="cRM-93-2ol" firstAttribute="top" secondItem="k7W-iN-ehV" secondAttribute="top" type="default" id="ZvU-mI-TTy"/>
+                            <constraint firstItem="cRM-93-2ol" firstAttribute="trailing" secondItem="k7W-iN-ehV" secondAttribute="trailing" type="default" id="bV9-hA-oYh"/>
+                            <constraint firstItem="Y1s-go-yFq" firstAttribute="bottom" secondItem="k7W-iN-ehV" secondAttribute="bottom" type="default" id="osj-aE-OCp"/>
+                            <constraint firstItem="cRM-93-2ol" firstAttribute="leading" secondItem="k7W-iN-ehV" secondAttribute="leading" type="default" id="ti0-Mn-PzP"/>
+                            <constraint firstItem="Y1s-go-yFq" firstAttribute="trailing" secondItem="k7W-iN-ehV" secondAttribute="trailing" type="default" id="wgp-mG-9rl"/>
+                        </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <toolbarItems/>
+                    <connections>
+                        <outlet property="toolbarBottom" destination="Y1s-go-yFq" id="3oV-h4-1sE"/>
+                        <outlet property="toolbarTop" destination="cRM-93-2ol" id="HOm-fE-p3b"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YAA-DK-m2E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5642,7 +5652,6 @@
         <image name="UIImageArrowDown.png" width="20" height="20"/>
         <image name="UIImageBold20.png" width="20" height="20"/>
         <image name="UIImageBolt20.png" width="20" height="20"/>
-        <image name="UIImageClip.png" width="80" height="26"/>
         <image name="UIImageDocument20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageDocumentsAlt20.png" width="20" height="20"/>
@@ -5662,15 +5671,23 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MTBarButtonItemTitle" superclassName="UIBarButtonItem">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTBarButtonItemTitle.h"/>
+        </class>
         <class className="MTQueryBuilderAdvancedSchemaViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAdvancedSchemaViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="schemaFieldCell" candidateClass="MTSchemaFieldCell"/>
                 <relationship kind="outlet" name="schemaTableViewController" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="MTQueryBuilderAdvancedViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAdvancedViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+            </relationships>
         </class>
         <class className="MTSchemaFieldCell" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSchemaFieldCell.h"/>
