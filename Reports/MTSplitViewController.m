@@ -36,29 +36,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"%@ %@", [[self childViewControllers] objectAtIndex:0], [[self childViewControllers] objectAtIndex:1]);
-	// Do any additional setup after loading the view, typically from a nib.
-//    NSMutableArray *viewControllers = [[NSMutableArray alloc] initWithCapacity:2];
-    
-//    UIStoryboard *sb = [[UIStoryboard storyboardWithName:MTStoryboardSplitViewController bundle:nil] retain];
-    
-//    UIViewController *childViewControllerLeft = [[sb instantiateViewControllerWithIdentifier:MTBlueViewControllerIdentifier] retain];
-//    UIViewController *childViewControllerRight = [[sb instantiateViewControllerWithIdentifier:MTRedViewControllerIdentifier] retain];
-    
-//    [viewControllers addObject:childViewControllerLeft];
-//    [viewControllers addObject:childViewControllerRight];
-    
-//    [self setViewControllers:viewControllers];
-    
-//    [sb release];
-    
-//    [viewControllers release];
+
     [[self delegate] displayContentController:
      [[[[self childViewControllers] objectAtIndex:0] retain] autorelease]];
     
     [[self delegate] displayContentController:
      [[[[self childViewControllers] objectAtIndex:1] retain] autorelease]];
-    
-
     
 }
 
@@ -79,18 +62,6 @@
     
     UIView *leftView = [[self leftView] retain];
     UIView *rightView = [[self rightView] retain];
-
-    //CGFloat leftViewWidth = 320.0000f;
-    //CGRect leftFrame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, leftViewWidth, self.view.frame.size.height);
-    //[leftView setFrame:leftFrame];
-    
-    //CGRect rightFrame = CGRectMake(self.view.frame.origin.x + leftViewWidth, self.view.frame.origin.y, self.view.frame.size.width -leftViewWidth, self.view.frame.size.height);
-    //[rightView setFrame:rightFrame];
-
-    
-    
-    //[leftView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin];
-    //[rightView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin];
 
     [[self view] removeConstraints:[self bogusConstraints]];
 

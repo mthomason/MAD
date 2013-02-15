@@ -31,5 +31,6 @@
 + (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (id)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
++ (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

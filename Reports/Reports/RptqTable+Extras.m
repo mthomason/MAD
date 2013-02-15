@@ -7,6 +7,7 @@
 //
 
 #import "RptqTable+Extras.h"
+#import "RptqDocument+ActiveDocument.h"
 
 @implementation RptqTable (Extras)
 
@@ -58,16 +59,28 @@
 
 #pragma mark - Static
 
-+ (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    NSString *entityName = NSStringFromClass([RptqTable class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    request.predicate = [NSPredicate predicateWithFormat: @"ANY inQuery == %@", [query objectID]];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
+    [request setSortDescriptors: @[sortDescriptor]];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    return results;
+}
+
++ (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                label:(NSString *)label
                                          labelPlural:(NSString *)labelPlural
                                                 name:(NSString *)name
                                          andQueryable:(BOOL)queryable {
 
     NSString *entityName = NSStringFromClass([RptqTable class]);
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
     RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity
-                              insertIntoManagedObjectContext:objectContext];
+                              insertIntoManagedObjectContext:managedObjectContext];
     [rptqTable setLabel: label];
     [rptqTable setLabel_plural: labelPlural];
     [rptqTable setName: name];

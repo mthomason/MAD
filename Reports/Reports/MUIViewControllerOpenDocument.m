@@ -10,6 +10,8 @@
 #import "MNSDocumentReport.h"
 #import "AppDelegate.h"
 #import "MTSplitViewController.h"
+#import "MTQueryBuilderAdvancedViewController.h"
+#import "RptqDocument+ActiveDocument.h"
 
 NSString * const SEGUE_SHOWADDDOCUMENT = @"showAddDocument";
 NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
@@ -167,13 +169,17 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
         UINavigationController *childNavigationController = (UINavigationController *)[contentController retain];
         if ([[childNavigationController topViewController] isKindOfClass:[MTViewControllerQueryBuilder class]]) {
             MTViewControllerQueryBuilder *queryBuilderViewController = (MTViewControllerQueryBuilder *)[[childNavigationController topViewController] retain];
-            [self setupQueryDesignerController:queryBuilderViewController
-                                usingFileAtUrl:[self urlBeingOpended]];
+            [self setupQueryDesignerController: queryBuilderViewController
+                                usingFileAtUrl: [self urlBeingOpended]];
             [queryBuilderViewController release];
         }
         [childNavigationController release];
     }
     [childController release];
+}
+
+- (void)setupAdvancedQueryDesignerController:(MTQueryBuilderAdvancedViewController *)queryBuilder {
+    
 }
 
 - (void)setupQueryDesignerController:(MTViewControllerQueryBuilder *)tvc usingFileAtUrl:(NSURL*)url {
@@ -187,10 +193,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
             NSManagedObjectContext *managedObjectContext = [[document managedDocument] managedObjectContext];
             
             {
-                
-                RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                RptqQuery *query = [[database hasQueries] anyObject];
+                RptqQuery *query = [RptqDocument queryForActiveDocument];
                 
                 NSString *entityName = NSStringFromClass([RptqTable class]);
                 NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];

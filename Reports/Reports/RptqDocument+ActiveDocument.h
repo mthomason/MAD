@@ -11,6 +11,9 @@
 
 @interface RptqDocument (ActiveDocument)
 
++ (RptqDocument *)activeDocument;
++ (RptqQuery *)queryForActiveDocument;
 + (NSString *)sqlStatementForActiveDocument;
++ (NSArray *)tablesForActiveDocument;
 
 @end

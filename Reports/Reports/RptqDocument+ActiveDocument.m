@@ -10,12 +10,27 @@
 
 @implementation RptqDocument (ActiveDocument)
 
-+ (NSString *)sqlStatementForActiveDocument {
++ (RptqDocument *)activeDocument {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    return document;
+}
+
++ (NSString *)sqlStatementForActiveDocument {
+    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    return [[[RptqQuery getSqlForQuery:query] retain] autorelease];
+}
+
++ (RptqQuery *)queryForActiveDocument {
+    RptqDocument *document = [RptqDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    return [RptqQuery getSqlForQuery:query];
+    return query;
+}
+
++ (NSArray *)tablesForActiveDocument {
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    return [[[RptqTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];
 }
 
 @end
