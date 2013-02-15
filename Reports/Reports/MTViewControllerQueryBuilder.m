@@ -794,8 +794,8 @@
 
         // MARK: Display and identify the data source and data sources
         case UIViewControllerSchemaTablesSectionsDatasource: {
-            static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellDataSource";
-            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
+            static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
+            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
             if (!result) {
                 UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellDataSource" bundle:nil];
                 [resultCellNib instantiateWithOwner:self options:nil];

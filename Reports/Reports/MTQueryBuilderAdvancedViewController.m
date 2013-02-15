@@ -58,7 +58,7 @@
 
 - (void)addViewController:(UIViewController *)viewController {
     [self addChildViewController:viewController];
-    [[viewController view] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 50.0000f, 50.0000f)];
+    [[viewController view] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 200.0000f)];
     [[viewController view] setBackgroundColor:[UIColor blueColor]];
     [[self view] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
@@ -77,14 +77,18 @@
 }
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport {
+    UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     NSArray *tables = [[RptqDocument tablesForActiveDocument] retain];
     for (RptqTable *table in tables) {
         NSLog(@"Table: %@", table);
-        UIViewController *viewController = [[UIViewController alloc] init];
+        
+        MTQueryBuilderAdvancedSchemaViewController *viewController = [[sb instantiateViewControllerWithIdentifier:@"MTQueryBuilderAdvancedSchemaViewControllerIdentifier"] retain];
+        [viewController setTableObjectId:[table objectID]];
         [self addViewController:viewController];
         [viewController release];
     }
     [tables release];
+    [sb release];
 }
 
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RptqTable+Extras.h"
 #import "RptqDocument+ActiveDocument.h"
+#import "MTQueryBuilderAdvancedSchemaViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
 
