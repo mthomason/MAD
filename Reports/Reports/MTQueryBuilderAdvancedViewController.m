@@ -44,14 +44,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSArray *tables = [[RptqDocument tablesForActiveDocument] retain];
-    for (RptqTable *table in tables) {
-        NSLog(@"Table: %@", table);
-        UIViewController *viewController = [[UIViewController alloc] init];
-        [self addViewController:viewController];
-        [viewController release];
-    }
-    [tables release];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,6 +59,7 @@
 - (void)addViewController:(UIViewController *)viewController {
     [self addChildViewController:viewController];
     [[viewController view] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 50.0000f, 50.0000f)];
+    [[viewController view] setBackgroundColor:[UIColor blueColor]];
     [[self view] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
 }
@@ -81,6 +74,17 @@
     [viewController willMoveToParentViewController:nil];
     [[viewController view] removeFromSuperview];
     [viewController removeFromParentViewController];
+}
+
+- (void)reloadDocument:(MNSDocumentReport *)documentReport {
+    NSArray *tables = [[RptqDocument tablesForActiveDocument] retain];
+    for (RptqTable *table in tables) {
+        NSLog(@"Table: %@", table);
+        UIViewController *viewController = [[UIViewController alloc] init];
+        [self addViewController:viewController];
+        [viewController release];
+    }
+    [tables release];
 }
 
 @end

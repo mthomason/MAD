@@ -28,6 +28,7 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
+#import "MNSDocumentReport.h"
 
 @interface MTViewControllerQueryBuilder : MTViewController
     <UITableViewDataSource,
@@ -63,6 +64,8 @@
 @property (assign) NSInteger lastSelectedRowNumber;
 
 @property BOOL debug;
+
+- (void)reloadDocument:(MNSDocumentReport *)documentReport;
 
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;

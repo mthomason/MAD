@@ -12,4 +12,6 @@
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
 
+- (void)reloadDocument:(MNSDocumentReport *)documentReport;
+
 @end

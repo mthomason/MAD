@@ -9,6 +9,7 @@
 #import "MTViewControllerQueryBuilder.h"
 #import "AppDelegate.h"
 #import "UIViewClipboard.h"
+#import "RptqDocument+ActiveDocument.h"
 
 #pragma mark - Private Category
 
@@ -1082,6 +1083,76 @@
  
  }
  */
+
+#pragma mark - NSFetchedResultsSetup
+
+- (void)reloadDocument:(MNSDocumentReport *)documentReport {
+    NSManagedObjectContext *managedObjectContext = [[documentReport managedDocument] managedObjectContext];
+    
+    {
+        RptqQuery *query = [RptqDocument queryForActiveDocument];
+        
+        NSString *entityName = NSStringFromClass([RptqTable class]);
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+        [request setSortDescriptors: @[sortDescriptor]];
+        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                              managedObjectContext: managedObjectContext
+                                                                                sectionNameKeyPath: nil
+                                                                                         cacheName: nil];
+        [self setFetchedResultsControllerTables: frc];
+        
+        [frc release];
+        frc = nil;
+    }
+    
+    {
+        NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
+        [request setSortDescriptors: @[sortDescriptor]];
+        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                              managedObjectContext: managedObjectContext
+                                                                                sectionNameKeyPath: nil
+                                                                                         cacheName: nil];
+        [self setFetchedResultsControllerLinks: frc];
+        
+        [frc release];
+        frc = nil;
+    }
+    
+    {
+        NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+        [request setSortDescriptors: @[sortDescriptor]];
+        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                              managedObjectContext: managedObjectContext
+                                                                                sectionNameKeyPath: nil
+                                                                                         cacheName: nil];
+        [self setFetchedResultsControllerGroups: frc];
+        [frc release];
+        frc = nil;
+        
+    }
+    
+    {
+        NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
+        [request setSortDescriptors: @[sortDescriptor]];
+        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                              managedObjectContext: managedObjectContext
+                                                                                sectionNameKeyPath: nil
+                                                                                         cacheName: nil];
+        [self setFetchedResultsControllerPredicates: frc];
+        [frc release];
+        
+        frc = nil;
+    }
+    [[self tableViewQueryBuilder] reloadData];
+}
 
 #pragma mark - NSFetchedResultsControllerDelegate
 
