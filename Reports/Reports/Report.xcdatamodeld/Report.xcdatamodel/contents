@@ -155,6 +155,11 @@
         <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryGroups" inverseEntity="RptqQuery" syncable="YES"/>
     </entity>
     <entity name="RptqQueryLinks" representedClassName="RptqQueryLinks" syncable="YES">
+        <attribute name="designerInitalLayout" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="designerOriginX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerOriginY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeWidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="fieldleft" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fieldright" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
@@ -207,6 +212,11 @@
         <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasRelationships" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <entity name="RptqTable" representedClassName="RptqTable" syncable="YES">
+        <attribute name="designerInitalLayout" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="designerOriginX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerOriginY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeWidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label_plural" optional="YES" attributeType="String" syncable="YES"/>
@@ -247,14 +257,14 @@
         <element name="RptqQuery" positionX="-497" positionY="153" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="99" positionY="128" width="128" height="148"/>
         <element name="RptqQueryGroup" positionX="457" positionY="366" width="128" height="163"/>
-        <element name="RptqQueryLinks" positionX="466" positionY="576" width="128" height="195"/>
+        <element name="RptqQueryLinks" positionX="466" positionY="576" width="128" height="270"/>
         <element name="RptqQueryPredicate" positionX="466" positionY="801" width="128" height="150"/>
+        <element name="RptqQueryResult" positionX="90" positionY="63" width="128" height="103"/>
         <element name="RptqQueryResultFields" positionX="277" positionY="144" width="128" height="118"/>
         <element name="RptqQueryResultValues" positionX="432" positionY="162" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="108" positionY="366" width="128" height="120"/>
         <element name="RptqRelationship" positionX="-873" positionY="309" width="128" height="105"/>
-        <element name="RptqTable" positionX="-882" positionY="465" width="128" height="165"/>
+        <element name="RptqTable" positionX="-882" positionY="465" width="128" height="240"/>
         <element name="RptqUserCredentals" positionX="-1053" positionY="387" width="128" height="270"/>
-        <element name="RptqQueryResult" positionX="90" positionY="63" width="128" height="103"/>
     </elements>
 </model>

@@ -46,7 +46,9 @@
 
 - (void)save:(void (^)(BOOL success))completion {
     [super save: ^(BOOL success) {
-        completion(success);
+        if (completion) {
+            completion(success);
+        }
     }];
 }
 
@@ -62,6 +64,11 @@
     
     [RptqDocument addDatabase:database ToMainDocumentForManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success) {
         completion(success);
+        if (success) {
+            [self save:^(BOOL success) {
+
+            }];
+        }
     }];
     
 }
@@ -76,6 +83,10 @@
     sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 25", sqlSelect];
     [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
                completion: ^(MNSDatabase *database, RptqQueryCache *cache) {
+                   [self save: ^(BOOL success) {
+                       
+                   }];
+                   
     }];
 //    [NSException exceptionWithName: NSInternalInconsistencyException
 //                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]

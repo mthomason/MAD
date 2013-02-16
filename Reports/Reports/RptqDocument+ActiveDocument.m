@@ -16,6 +16,18 @@
     return document;
 }
 
++ (void)saveCurrentContext {
+    NSError *error;
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    if (managedObjectContext != nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            [error presentErrorToUserWithTryAgain:^(BOOL success) {
+                [self saveContext];
+            }];
+        }
+    }
+}
+
 + (NSString *)sqlStatementForActiveDocument {
     RptqQuery *query = [RptqDocument queryForActiveDocument];
     return [[[RptqQuery getSqlForQuery:query] retain] autorelease];

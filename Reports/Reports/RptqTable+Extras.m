@@ -30,7 +30,11 @@
         identifier = [[lastObject identifier] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
-    
+    [self setDesignerOriginX:@(0.0000f)];
+    [self setDesignerOriginY:@(0.0000f)];
+    [self setDesignerSizeHeight:@(0.0000f)];
+    [self setDesignerSizeWidth:@(0.0000f)];
+    [self setDesignerInitalLayout:@(YES)];
 }
 
 - (void)awakeFromFetch {

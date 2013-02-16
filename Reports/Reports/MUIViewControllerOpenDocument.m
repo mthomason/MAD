@@ -253,7 +253,12 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [AppDelegate setActiveDocument: nil];
+    [[AppDelegate activeDocument] saveContext];
+    [[AppDelegate activeDocument] save:^(BOOL success) {
+        if (success) {
+            [AppDelegate setActiveDocument: nil];
+        }
+    }];
 }
 
 - (void)viewControllerDidCancel:(id)sender {

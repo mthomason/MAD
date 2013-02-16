@@ -34,7 +34,7 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
     if (self) {
         // Initialization code
         //[[self layer] setCornerRadius:5.0000f];
-        [self setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
+        //[self setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
     }
     return self;
 }

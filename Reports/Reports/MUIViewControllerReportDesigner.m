@@ -1266,26 +1266,6 @@
     }
 }
 
-#pragma mark - Gesture Recognizers
-
-- (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    CGPoint result = CGPointZero;
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        UIView *piece = gestureRecognizer.view;
-        CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
-        
-        CGPoint anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
-        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-            piece.layer.anchorPoint = anchorPoint;
-            piece.center = locationInSuperview;
-        }
-        result = locationInSuperview;
-    }
-    return result;
-}
-
 #pragma mark - Gesture Recognizer Delegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -1348,7 +1328,7 @@
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     //NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
 
-    CGPoint adjustedCenter = [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     switch ([gestureRecognizer state]) {
             

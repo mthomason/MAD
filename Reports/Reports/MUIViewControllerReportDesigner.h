@@ -27,6 +27,7 @@
 #import "UIViewControllerToolBox.h"
 #import "MTViewRuler.h"
 #import "MTDocumentSectionView.h"
+#import "UIGestureRecognizer+AnchorPoint.h"
 
 @interface MUIViewControllerReportDesigner : MTViewController
     <UITableViewDataSource,

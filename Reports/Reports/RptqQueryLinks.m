@@ -2,7 +2,7 @@
 //  RptqQueryLinks.m
 //  Reports
 //
-//  Created by Michael Thomason on 1/30/13.
+//  Created by Michael Thomason on 2/15/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -20,6 +20,11 @@
 @dynamic jointypeenum;
 @dynamic tableleft;
 @dynamic tableright;
+@dynamic designerOriginX;
+@dynamic designerOriginY;
+@dynamic designerSizeWidth;
+@dynamic designerSizeHeight;
+@dynamic designerInitalLayout;
 @dynamic hasLeftField;
 @dynamic hasRightField;
 @dynamic inQuery;

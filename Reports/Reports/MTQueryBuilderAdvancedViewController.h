@@ -11,8 +11,11 @@
 #import "RptqDocument+ActiveDocument.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "UIColor+EverydayApps.h"
+#import "UIGestureRecognizer+AnchorPoint.h"
+#import "UIView+NSObjectIdTag.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
+    <UIGestureRecognizerDelegate>
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport;
 

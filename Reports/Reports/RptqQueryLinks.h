@@ -2,7 +2,7 @@
 //  RptqQueryLinks.h
 //  Reports
 //
-//  Created by Michael Thomason on 1/30/13.
+//  Created by Michael Thomason on 2/15/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -20,6 +20,11 @@
 @property (nonatomic, retain) NSNumber * jointypeenum;
 @property (nonatomic, retain) NSString * tableleft;
 @property (nonatomic, retain) NSString * tableright;
+@property (nonatomic, retain) NSNumber * designerOriginX;
+@property (nonatomic, retain) NSNumber * designerOriginY;
+@property (nonatomic, retain) NSNumber * designerSizeWidth;
+@property (nonatomic, retain) NSNumber * designerSizeHeight;
+@property (nonatomic, retain) NSNumber * designerInitalLayout;
 @property (nonatomic, retain) RptqField *hasLeftField;
 @property (nonatomic, retain) RptqField *hasRightField;
 @property (nonatomic, retain) RptqQuery *inQuery;

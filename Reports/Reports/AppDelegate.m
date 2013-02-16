@@ -56,7 +56,11 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
-- (void)applicationWillTerminate:(UIApplication *)application { }
+- (void)applicationWillTerminate:(UIApplication *)application {
+    MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
+    [documentReport save:nil];
+    [documentReport release];
+}
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     static NSNumber *isPad;

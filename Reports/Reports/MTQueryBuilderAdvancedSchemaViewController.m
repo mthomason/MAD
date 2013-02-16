@@ -72,11 +72,12 @@
     [super didReceiveMemoryWarning];
 }
 
-- (NSManagedObjectID *)tableObjecId {
+- (NSManagedObjectID *)tableObjectId {
     return [[[self cachedTableObjectId] retain] autorelease];
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
+    [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];

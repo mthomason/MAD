@@ -12,13 +12,14 @@
 #import "RptqTable+Extras.h"
 #import "AppDelegate.h"
 #import "MTSchemaFieldCell.h"
+#import "UIView+NSObjectIdTag.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
 
 
 @property (assign, nonatomic) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-- (NSManagedObjectID *)tableObjecId;
+- (NSManagedObjectID *)tableObjectId;
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
 
 @end
