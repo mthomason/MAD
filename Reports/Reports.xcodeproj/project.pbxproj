@@ -368,6 +368,8 @@
 		4C122ADF16CEB22E00B69763 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122ADD16CEB22E00B69763 /* RptqUserCredentals.m */; };
 		4C122AE216CEB22E00B69763 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE116CEB22E00B69763 /* RptqDocumentObjectLabel.m */; };
 		4C122AE316CEB22E00B69763 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE116CEB22E00B69763 /* RptqDocumentObjectLabel.m */; };
+		4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
+		4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C122AE916D0066B00B69763 /* MTConnectorView.m */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C1A585D14DE348200184445 /* UITableViewControllerSortType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* UITableViewControllerSortType.m */; };
@@ -1733,6 +1735,8 @@
 		4C122ADD16CEB22E00B69763 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
 		4C122AE016CEB22E00B69763 /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
 		4C122AE116CEB22E00B69763 /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
+		4C122AE816D0066B00B69763 /* MTConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectorView.h; sourceTree = "<group>"; };
+		4C122AE916D0066B00B69763 /* MTConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectorView.m; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
 		4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerOpperators.h; sourceTree = "<group>"; };
@@ -2658,6 +2662,8 @@
 				4C12293516CE239900B69763 /* MTSchemaFieldCell.m */,
 				4C12293816CE7DC600B69763 /* MTBarButtonItemTitle.h */,
 				4C12293916CE7DC600B69763 /* MTBarButtonItemTitle.m */,
+				4C122AE816D0066B00B69763 /* MTConnectorView.h */,
+				4C122AE916D0066B00B69763 /* MTConnectorView.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -5101,6 +5107,7 @@
 				4C122ADB16CEB22E00B69763 /* RptqQueryResultValues.m in Sources */,
 				4C122ADF16CEB22E00B69763 /* RptqUserCredentals.m in Sources */,
 				4C122AE316CEB22E00B69763 /* RptqDocumentObjectLabel.m in Sources */,
+				4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5547,6 +5554,7 @@
 				4C122ADA16CEB22E00B69763 /* RptqQueryResultValues.m in Sources */,
 				4C122ADE16CEB22E00B69763 /* RptqUserCredentals.m in Sources */,
 				4C122AE216CEB22E00B69763 /* RptqDocumentObjectLabel.m in Sources */,
+				4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

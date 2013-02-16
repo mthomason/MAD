@@ -185,6 +185,7 @@
     NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
+    //NSUInteger tableCounter = 0;
     [database getTables:^(NSArray *tables) {
         
         for (MNSDatabaseTable *databaseTable in tables) {
@@ -216,11 +217,11 @@
                     }
                 }
              
+                completion(YES);
             }];
             
         }
         
-        completion(YES);
         
     }];
     
