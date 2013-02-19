@@ -1,6 +1,6 @@
 //
 //  FlipsideViewController.m
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
@@ -79,10 +79,9 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
     NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
     [self setAvailableFilesCache: a];
-    [a release];    
+    [a release];
     [[self tableViewQueries] reloadData];
 }
 
@@ -116,6 +115,7 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
                 if ([[navControl topViewController] isKindOfClass:[MUIViewControllerTemplateSelector class]]) {
                     MUIViewControllerTemplateSelector *tvc = (MUIViewControllerTemplateSelector *)[[navControl topViewController] retain];
                     if (tvc) {
+                        [tvc setDelegate:self];
                         [tvc setTemplateSelectorDelegate:self];
                     }
                     [tvc release];
@@ -252,13 +252,24 @@ NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [[AppDelegate activeDocument] saveContext];
-    [[AppDelegate activeDocument] save:^(BOOL success) {
-        if (success) {
-            [AppDelegate setActiveDocument: nil];
-        }
-    }];
+    MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
+    if (documentReport != nil) {
+        [documentReport saveContext];
+        [documentReport save:^(BOOL success) {
+            if (success) {
+                [AppDelegate setActiveDocument: nil];
+                [[self tableViewQueries] reloadData];
+            }
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+    } else {
+        NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
+        [self setAvailableFilesCache: a];
+        [a release];
+        [[self tableViewQueries] reloadData];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    [documentReport release];
 }
 
 - (void)viewControllerDidCancel:(id)sender {

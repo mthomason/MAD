@@ -1,6 +1,6 @@
 //
 //  NSFileManager-Common.m
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 1/6/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
@@ -20,7 +20,7 @@
 		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
 		BOOL isDirectory;
         [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
-        //FIXME
+        // FIXME: Is this correct?
         if (!isDirectory){
             [doc addObject:fileURL];
         }
@@ -71,46 +71,37 @@
 }
 
 + (NSURL *)applicationDocumentsDirectoryUrl {
-    static NSURL *applicationDocumentDirectory;
+    NSURL *applicationDocumentDirectory;
     BOOL directoryGood;
-    if (!applicationDocumentDirectory) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSArray *urlsForDirectory = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-        applicationDocumentDirectory = [urlsForDirectory lastObject];
-        directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationDocumentDirectory];
-    } else {
-        directoryGood = YES;
-    }
-    return directoryGood ? applicationDocumentDirectory : nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *urlsForDirectory = [[NSArray alloc] initWithArray:[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask]];
+    applicationDocumentDirectory = [[urlsForDirectory lastObject] retain];
+    directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationDocumentDirectory];
+    [urlsForDirectory release];
+    return directoryGood ? [applicationDocumentDirectory autorelease] : nil;
 }
 
 + (NSURL *)applicationSupportDirectoryUrl {
-    static NSURL *applicationSupportDirectory;
+    NSURL *applicationSupportDirectory;
     BOOL directoryGood;
-    if (!applicationSupportDirectory) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSArray *urlsForDirectory = [fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
-        applicationSupportDirectory = [urlsForDirectory lastObject];
-        directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationSupportDirectory];
-    } else {
-        directoryGood = YES;
-    }
-    return directoryGood ? applicationSupportDirectory : nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *urlsForDirectory = [[NSArray alloc] initWithArray:[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask]];
+    applicationSupportDirectory = [[urlsForDirectory lastObject] retain];
+    directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationSupportDirectory];
+    [urlsForDirectory release];
+    return directoryGood ? [applicationSupportDirectory autorelease] : nil;
 }
 
 + (NSURL *)applicationLibraryTemplatesDirectoryUrl {
-    static NSURL *applicationLibraryDirectory;
+    NSURL *applicationLibraryDirectory;
     BOOL directoryGood;
-    if (!applicationLibraryDirectory) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSArray *urlsForDirectory = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
-        NSURL *lastObject = [urlsForDirectory lastObject];
-        applicationLibraryDirectory = [lastObject URLByAppendingPathComponent:TEMPLATES];
-        directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationLibraryDirectory];
-    } else {
-        directoryGood = YES;
-    }
-    return directoryGood ? applicationLibraryDirectory : nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *urlsForDirectory = [[NSArray alloc] initWithArray:[fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask]];
+    NSURL *lastObject = [[urlsForDirectory lastObject] retain];
+    applicationLibraryDirectory = [lastObject URLByAppendingPathComponent:TEMPLATES];
+    directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationLibraryDirectory];
+    [urlsForDirectory release];
+    return directoryGood ? [applicationLibraryDirectory autorelease] : nil;
 }
 
 + (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {

@@ -1,12 +1,14 @@
 //
 //  UIVIewControllerTemplateSelector.m
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 1/7/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MUIViewControllerTemplateSelector.h"
+
+NSString * const MTSegueShowChooseDatasourceIdentifier = @"showChooseDatasource";
 
 @interface MUIViewControllerTemplateSelector()
 
@@ -25,8 +27,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
-        self.title = NSLocalizedString(@"Templates", @"Templates");
+        [self setTitle: NSLocalizedString(@"Templates", @"Templates")];
     }
     return self;    
 }
@@ -34,17 +35,13 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
-        self.title = NSLocalizedString(@"Templates", @"Templates");
+        [self setTitle: NSLocalizedString(@"Templates", @"Templates")];
     }
     return self;
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
@@ -57,8 +54,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //[[UINavigationBar appearance] setTintColor:[UIColor clearColor]];
-
     [self setAvailableFilesCache: [NSFileManager contentsOfTemplateDirectoryWithPathExtension:TEMPLATE_PATH_EXTENSION]];
 }
 
@@ -75,20 +70,28 @@
 	[super viewDidDisappear:animated];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:MTSegueShowChooseDatasourceIdentifier]) {
+        [[segue destinationViewController] setDelegate:self];
+    }
+}
+
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self templateSelectorDelegate] viewControllerDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self];
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self templateSelectorDelegate] viewControllerDidCancel:self];
+    [[self delegate] viewControllerDidCancel:self];
 }
 
-#pragma mark - Table View Controller Data Source Delegate
-
 - (void)viewControllerDidFinish:(id)sender {
-    [[self templateSelectorDelegate] viewControllerDidCancel:self];
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (void)viewControllerDidCancel:(id)sender {
+    [[self delegate] viewControllerDidCancel:self];
 }
 
 #pragma mark - Table View Data Source Protocol
@@ -96,12 +99,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
-
-/*
- - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
- 
- }
- */
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 	return NO;
@@ -149,43 +146,6 @@
 	return numberOfRows;
 }
 
-/*
- - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString *result;
-    switch (section) {
-        case 0:
-            result = NSLocalizedString(@"Choose a Template", @"Choose a Template");
-            break;
-        case 1:
-            result = @"";
-            break;
-        default:
-            result = @"";
-            break;
-    }
-    return result;
-}
-
- */
-
-/*
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
-}
-*/
-
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
@@ -200,88 +160,8 @@
     
 }
 
-/*- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}*/
-
-/*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 0.0000f;
-}*/
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [UITableViewCellDocument defaultHeight];
 }
-
-/*
- - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath { }
- */
-
-/*
- - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section { }
- */
-
-/*
- 
- - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
- 
- }
- */
-
-/*
- - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-
-/*
- - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
 
 @end

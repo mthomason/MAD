@@ -1,6 +1,6 @@
 //
 //  NSObject+RptqDocument_Extras.m
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 2/12/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
@@ -187,7 +187,8 @@
     
     //NSUInteger tableCounter = 0;
     [database getTables:^(NSArray *tables) {
-        
+        __block NSUInteger tableCounter = 0;
+        NSUInteger numberOfTables = [tables count];
         for (MNSDatabaseTable *databaseTable in tables) {
             RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
                                                                            andTable: databaseTable];
@@ -217,7 +218,10 @@
                     }
                 }
              
-                completion(YES);
+                if (tableCounter == numberOfTables - 1) {
+                    completion(YES);
+                }
+                tableCounter++;
             }];
             
         }
