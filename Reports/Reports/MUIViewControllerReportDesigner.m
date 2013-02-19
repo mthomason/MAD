@@ -442,7 +442,7 @@
         MUIViewControllerObjectSelector *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
-        //[[AppDelegate activeDocument] refresh];
+        [[AppDelegate activeDocument] refresh];
         //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
         //RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         

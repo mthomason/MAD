@@ -21,6 +21,9 @@
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MNSDatabaseField *)field;
 
++ (id)getFieldForObjectID:(NSManagedObjectID *)objectID
+        fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 - (NSString *)display;
 
 @end

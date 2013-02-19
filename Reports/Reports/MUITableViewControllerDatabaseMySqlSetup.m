@@ -19,7 +19,6 @@
     [_tableViewCellPassword release];
     [_tableViewCellHost release];
     [_tableViewCellPort release];
-    [_tableViewCellTestConnection release];
     [_activityIndicatorTestConnection release];
     [_textFieldUsername release];
     [_textFieldPassword release];

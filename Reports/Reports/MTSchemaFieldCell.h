@@ -8,8 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class MTSchemaFieldCell;
+
+@protocol MTSchemaFieldCellDelegate
+@optional
+- (void)tableViewCell:(MTSchemaFieldCell *)tableViewCell didUpdateAnchorPointLeftTo:(CGPoint)anchorPointLeft andAnchorPointRightTo:(CGPoint)anchorPointRight;
+@end
+
 @interface MTSchemaFieldCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UILabel *detailLabel;
+@property (nonatomic, assign) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
+@property (nonatomic, retain) IBOutlet UILabel *detailLabel;
+@property (nonatomic, retain) IBOutlet UIView *anchorPointView;
+
+@property (nonatomic, retain) UIView *parentContainerView;
 
 @end

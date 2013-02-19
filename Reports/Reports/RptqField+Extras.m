@@ -109,6 +109,16 @@
     return [self toStringHumanReadable];
 }
 
++ (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqField *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

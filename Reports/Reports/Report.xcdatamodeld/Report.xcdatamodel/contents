@@ -245,26 +245,26 @@
     </entity>
     <fetchRequest name="getRptqTableByName" entity="RptqTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
-        <element name="RptqDatabase" positionX="-1046" positionY="207" width="128" height="150"/>
+        <element name="RptqDatabase" positionX="-1073" positionY="126" width="128" height="150"/>
         <element name="RptqDocument" positionX="-1512" positionY="-339" width="128" height="285"/>
         <element name="RptqDocumentObject" positionX="-810" positionY="-531" width="128" height="540"/>
-        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqDocumentObjectLabel" positionX="-675" positionY="45" width="128" height="90"/>
+        <element name="RptqDocumentObjectFormula" positionX="-567" positionY="18" width="128" height="90"/>
+        <element name="RptqDocumentObjectLabel" positionX="-542" positionY="-144" width="128" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="-810" positionY="63" width="128" height="135"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="-189" positionY="-54" width="128" height="105"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="-533" positionY="-45" width="128" height="105"/>
         <element name="RptqDocumentSection" positionX="-1217" positionY="-444" width="128" height="300"/>
-        <element name="RptqField" positionX="-720" positionY="771" width="128" height="255"/>
+        <element name="RptqField" positionX="-306" positionY="636" width="128" height="255"/>
         <element name="RptqQuery" positionX="-497" positionY="153" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="99" positionY="128" width="128" height="148"/>
         <element name="RptqQueryGroup" positionX="457" positionY="366" width="128" height="163"/>
         <element name="RptqQueryLinks" positionX="466" positionY="576" width="128" height="270"/>
         <element name="RptqQueryPredicate" positionX="466" positionY="801" width="128" height="150"/>
-        <element name="RptqQueryResult" positionX="90" positionY="63" width="128" height="103"/>
+        <element name="RptqQueryResult" positionX="234" positionY="18" width="128" height="103"/>
         <element name="RptqQueryResultFields" positionX="277" positionY="144" width="128" height="118"/>
         <element name="RptqQueryResultValues" positionX="432" positionY="162" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="108" positionY="366" width="128" height="120"/>
-        <element name="RptqRelationship" positionX="-873" positionY="309" width="128" height="105"/>
-        <element name="RptqTable" positionX="-882" positionY="465" width="128" height="240"/>
+        <element name="RptqRelationship" positionX="-821" positionY="327" width="128" height="105"/>
+        <element name="RptqTable" positionX="-792" positionY="660" width="128" height="240"/>
         <element name="RptqUserCredentals" positionX="-1053" positionY="387" width="128" height="270"/>
     </elements>
 </model>

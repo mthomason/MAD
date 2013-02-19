@@ -10,9 +10,10 @@
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableView *schemaTableViewController;
-@property (retain, nonatomic) NSArray *hasFields;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemTitle;
+@property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
+//@property (nonatomic, retain) NSArray *hasFields;
+@property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
 @property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
 
 @end
@@ -22,13 +23,17 @@
 - (void)dealloc {
     [_schemaTableViewController release];
     [_barButtonItemTitle release];
+//    [_hasFields release];
+    [_hasFieldsObjectIds release];
     [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
+        NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
+        [self setHasFieldsObjectIds:hasFieldsObjectIds];
+        [hasFieldsObjectIds release];
     }
     return self;
 }
@@ -36,7 +41,9 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
+        NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
+        [self setHasFieldsObjectIds:hasFieldsObjectIds];
+        [hasFieldsObjectIds release];
     }
     return self;
 }
@@ -107,8 +114,12 @@
         result = [self schemaFieldCell];
         [self setSchemaFieldCell:nil];
     }
-    RptqField *field = [[self hasFields] objectAtIndex:[indexPath row]];
-    [[result detailLabel] setText:[field toString]];
+    
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
+    RptqField *field = [RptqField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
+    //RptqField *field = [[self hasFields] objectAtIndex:[indexPath row]];
+    [[result detailLabel] setText:[field name]];
     return result;
 }
 
@@ -118,14 +129,36 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    
     RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
-    [self setHasFields:[[table hasFields] allObjects]];
-    return [[self hasFields] count];
+    [[self hasFieldsObjectIds] removeAllObjects];
+    for (RptqField *field in [table hasFields]) {
+        [[self hasFieldsObjectIds] addObject:[field objectID]];
+    }
+    //[self setHasFields:[[table hasFields] allObjects]];
+    return [[self hasFieldsObjectIds] count];
 }
 
-- (void)viewDidUnload {
-    [self setSchemaFieldCell:nil];
-    [self setBarButtonItemTitle:nil];
-    [super viewDidUnload];
+#pragma mark - Methods
+
+- (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
+    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+    return (MTSchemaFieldCell *)[[self schemaTableViewController] cellForRowAtIndexPath:cellIndexPath];
 }
+
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
+    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+    CGRect rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
+    return [[self schemaTableViewController] convertRect:rectForRow toView:[self view]];
+}
+
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView {
+    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+    CGRect rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
+    return [[self schemaTableViewController] convertRect:rectForRow toView:containerView];
+}
+
 @end

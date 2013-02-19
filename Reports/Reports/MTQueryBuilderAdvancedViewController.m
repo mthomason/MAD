@@ -10,13 +10,14 @@
 
 @interface MTQueryBuilderAdvancedViewController ()
 
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic, retain) NSMutableArray *viewControllers;
 @property (nonatomic, retain) NSMutableSet *tableIds;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
-@property (nonatomic, assign) NSUInteger tableDisplayCounter;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain) NSMutableDictionary *controllersForTableIds;
+@property (nonatomic, retain) NSMutableDictionary *controllersForObjectIds;     //Tables and links
+@property (nonatomic, retain) NSMutableDictionary *controllersForObjectIdsLink; //Only query links
+@property (nonatomic, assign) NSUInteger tableDisplayCounter;
 
 @end
 
@@ -31,6 +32,8 @@
     [_viewControllers release];
     [_toolbarTop release];
     [_toolbarBottom release];
+    [_controllersForObjectIds release];
+    [_controllersForObjectIdsLink release];
     [super dealloc];
 }
 
@@ -39,22 +42,94 @@
     NSArray *insertedObjects = [[notification userInfo] objectForKey: NSInsertedObjectsKey];
     
     for (id insertedObject in insertedObjects) {
-        if ([insertedObject isKindOfClass:[RptqTable class]]) {
-            NSLog(@"Inserted %@", insertedObject);
+        if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
+            RptqQueryLinks *insertedQueryLinks = [insertedObject retain];
+            MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
+            [connectorView setUserInteractionEnabled:NO];
+            NSManagedObjectID *objectId = [[insertedQueryLinks objectID] retain];
+            [connectorView setObjectIdTag:objectId];
+            RptqField *leftField = [insertedQueryLinks hasLeftField];
+            RptqTable *leftTable = [leftField inTable];
+            MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
+            MTSchemaFieldCell *leftCell = [[leftTableViewController cellForFieldWithObjectId:[leftField objectID]] retain];
+            CGRect leftCellFrame = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[self view]];
+            CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrame);
+            UIView *leftTableView = [[leftTableViewController view] retain];
+
+            RptqField *rightField = [insertedQueryLinks hasRightField];
+            RptqTable *rightTable = [rightField inTable];
+            MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
+            MTSchemaFieldCell *rightCell = [[rightTableViewController cellForFieldWithObjectId:[rightField objectID]] retain];
+            CGRect rightCellFrame = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[self view]];
+            CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrame);
+            UIView *rightTableView = [[rightTableViewController view] retain];
+            
+            UIViewController *connectorViewController = [[UIViewController alloc] init];
+            CGRect connectorFrame = CGRectMake(leftCellCenterPoint.x,
+                                               leftCellCenterPoint.y,
+                                               rightCellCenterPoint.x - leftCellCenterPoint.x,
+                                               rightCellCenterPoint.y - leftCellCenterPoint.y);
+            [connectorView setFrame: connectorFrame];
+            [connectorViewController setView:connectorView];
+
+            [self addViewController:connectorViewController];
+            [[self controllersForObjectIds] setObject:connectorViewController forKey:objectId];
+            [[self controllersForObjectIdsLink] setObject:connectorViewController forKey:objectId];
+            [rightCell release];
+            [leftCell release];
+            [leftTableView release];
+            [leftTableViewController release];
+            [rightTableView release];
+            [rightTableViewController release];
+            [connectorViewController release];
+            [connectorView release];
+            [objectId release];
+            [insertedQueryLinks release];
         }
     }
 
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    
+    RptqQuery *updatedQuery = nil;
+    RptqTable *updatedTable = nil;
+    
     for (id updatedObject in updatedObjects) {
         NSLog(@"Updated %@", updatedObject);
-
+        NSLog(@"Changed values %@", [updatedObject changedValues]);
+        NSLog(@"Committed values %@", [updatedObject committedValuesForKeys:@[@"inQuery", @"hasTables"]]);
         if ([updatedObject isKindOfClass:[RptqTable class]]) {
-            RptqTable *updatedTable = updatedObject;
-            if ([updatedTable inQuery] != nil &&
-                [[self tableIds] containsObject: [updatedTable objectID]] == NO) {
-                
-                [self addSchemaViewControllerForTable:updatedTable];
+            updatedTable = [updatedObject retain];
+        } else if ([updatedObject isKindOfClass:[RptqQuery class]]) {
+            updatedQuery = [updatedObject retain];
+        }
+    }
 
+    if (updatedQuery && updatedTable) {
+        if ([[updatedTable inQuery] containsObject:updatedQuery]) {
+            [self addSchemaViewControllerForTable:updatedTable];
+            NSLog(@"Add table");
+        } else {
+            [self removeSchemaViewControllerForTable:updatedTable];
+            NSLog(@"Remove table");
+        }
+    }
+
+    [updatedTable release];
+    [updatedQuery release];
+    
+    
+    
+    NSArray *deletedObjects = [[notification userInfo] objectForKey: NSDeletedObjectsKey];
+    for (id deletedObject in deletedObjects) {
+        NSLog(@"Deleted %@", deletedObject);
+
+        if ([deletedObject isKindOfClass:[RptqTable class]]) {
+            RptqTable *deletedTable = deletedObject;
+            if ([deletedTable inQuery] != nil &&
+                [[self tableIds] containsObject: [deletedTable objectID]] == YES) {
+                
+                [self removeSchemaViewControllerForTable:deletedTable];
+                
             }
         }
     }
@@ -74,8 +149,12 @@
         [tableObjectIds release];
         
         NSMutableDictionary *controllersForTableIds = [[NSMutableDictionary alloc] init];
-        [self setControllersForTableIds:controllersForTableIds];
+        [self setControllersForObjectIds:controllersForTableIds];
         [controllersForTableIds release];
+        
+        NSMutableDictionary *controllersForObjectIdsLink = [[NSMutableDictionary alloc] init];
+        [self setControllersForObjectIdsLink:controllersForObjectIdsLink];
+        [controllersForObjectIdsLink release];
         
         [self setTableDisplayCounter:0];
 
@@ -108,6 +187,16 @@
 }
 
 - (void)addViewController:(UIViewController *)viewController {
+    [viewController retain];
+    [self addChildViewController:viewController];
+    [[self viewControllers] addObject:viewController];
+    [[self view] addSubview:[viewController view]];
+    [viewController didMoveToParentViewController:self];
+    [viewController release];
+}
+
+- (void)addSchemaViewController:(UIViewController *)viewController {
+    [viewController retain];
     [self addChildViewController:viewController];
     [[self viewControllers] addObject:viewController];
     CGRect subviewRect = CGRectZero;
@@ -115,6 +204,7 @@
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqTable *table = [RptqTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
     [[self tableIds] addObject:objectId];
+    [[self controllersForObjectIds] setObject:viewController forKey:objectId];
     [objectId release];
     if ([[table designerInitalLayout] boolValue] == YES) {
         CGFloat originX = 50.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
@@ -138,11 +228,12 @@
     [panGesture setDelegate:self];
     [[viewController view] addGestureRecognizer:panGesture];
     [panGesture release];
-
+    
     
     [[self view] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
     self.tableDisplayCounter++;
+    [viewController release];
 }
 
 - (void)removeViewControllers:(NSSet *)viewControllers {
@@ -182,11 +273,17 @@
     [tables release];
 }
 
+- (void)removeSchemaViewControllerForTable:(RptqTable *)table {
+    UIViewController *viewController = [[[self controllersForObjectIds] objectForKey:[table objectID]] retain];
+    [self removeViewController:viewController];
+    [viewController release];
+}
+
 - (void)addSchemaViewControllerForTable:(RptqTable *)table {
     UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     MTQueryBuilderAdvancedSchemaViewController *viewController = [[sb instantiateViewControllerWithIdentifier:@"MTQueryBuilderAdvancedSchemaViewControllerIdentifier"] retain];
     [viewController setTableObjectId:[table objectID]];
-    [self addViewController:viewController];
+    [self addSchemaViewController:viewController];
     [sb release];
     [viewController release];
 }
@@ -207,6 +304,16 @@
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
             CGPoint newCenter = [gestureRecognizer locationInView:[self view]];
             [[gestureRecognizer view] setCenter: newCenter];
+            
+            RptqTable *table = [RptqTable getTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:[self managedObjectContext]];
+            for (RptqQueryLinks *queryLink in [[[table inQuery] anyObject] hasQueryLinks]) {
+                RptqTable *leftTable = [[queryLink hasLeftField] inTable];
+                RptqTable *rightTable = [[queryLink hasRightField] inTable];
+                if ([leftTable isEqualTo:table] ||
+                    [rightTable isEqualTo:table]) {
+                    [self updateViewControllerForQueryLink:queryLink];
+                }
+            }
             break;
         }
         case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
@@ -234,6 +341,53 @@
         default:
             break;
     }
+}
+
+- (void)updateViewControllerForQueryLink:(RptqQueryLinks *)queryLink {
+    RptqQueryLinks *insertedQueryLinks = [queryLink retain];
+    UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
+    MTConnectorView *connectorView = [(MTConnectorView *)[controller view] retain];
+    RptqField *leftField = [insertedQueryLinks hasLeftField];
+    RptqTable *leftTable = [leftField inTable];
+    MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
+    CGRect leftCellFrame = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[self view]];
+    CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrame);
+    RptqField *rightField = [insertedQueryLinks hasRightField];
+    RptqTable *rightTable = [rightField inTable];
+    MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
+    CGRect rightCellFrame = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[self view]];
+    CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrame);
+
+    if (leftCellCenterPoint.x < rightCellCenterPoint.x) {
+        NSLog(@"leftCellCenterPoint.x < rightCellCenterPoint.x");
+        if (leftCellCenterPoint.y < rightCellCenterPoint.y) {
+            [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"leftCellCenterPoint.y < rightCellCenterPoint.y");
+        } else {
+            [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"leftCellCenterPoint.y >= rightCellCenterPoint.y");
+        }
+    } else {
+        NSLog(@"leftCellCenterPoint.x >= rightCellCenterPoint.x");
+        if (leftCellCenterPoint.y < rightCellCenterPoint.y) {
+            [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"leftCellCenterPoint.y < rightCellCenterPoint.y");
+        } else {
+            [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"leftCellCenterPoint.y >= rightCellCenterPoint.y");
+        }
+    }
+    
+    CGRect connectorFrame = CGRectMake(leftCellCenterPoint.x,
+                                       leftCellCenterPoint.y,
+                                       rightCellCenterPoint.x - leftCellCenterPoint.x,
+                                       rightCellCenterPoint.y - leftCellCenterPoint.y);
+    [connectorView setFrame: connectorFrame];
+    [leftTableViewController release];
+    [rightTableViewController release];
+    [connectorView release];
+    [insertedQueryLinks release];
+    [controller release];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "UIColor+EverydayApps.h"
 #import "UIGestureRecognizer+AnchorPoint.h"
 #import "UIView+NSObjectIdTag.h"
+#import "CGGeometry+Extras.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
     <UIGestureRecognizerDelegate>

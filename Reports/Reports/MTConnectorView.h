@@ -11,6 +11,10 @@
 
 @interface MTConnectorView : UIView
 
+@property (nonatomic, retain) UIView *anchorViewLeft;
+@property (nonatomic, retain) UIView *anchorViewRight;
+@property (nonatomic, retain) NSNumber *topLeftToBottomRight;
+
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
 @end

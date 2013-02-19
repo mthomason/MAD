@@ -13,13 +13,17 @@
 #import "AppDelegate.h"
 #import "MTSchemaFieldCell.h"
 #import "UIView+NSObjectIdTag.h"
+#import "MTConnectorView.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
-
+    <MTSchemaFieldCellDelegate>
 
 @property (assign, nonatomic) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
 - (NSManagedObjectID *)tableObjectId;
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
+- (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
+- (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
 
 @end

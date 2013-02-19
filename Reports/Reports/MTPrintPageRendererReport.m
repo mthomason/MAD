@@ -91,7 +91,7 @@
     CGFloat originX = pageRect.origin.x;
     CGFloat sizeWidth = pageRect.size.width;
 
-    if ([[self cachedResults] count] == 1) {
+    if (index < [[self cachedResults] count]) {
         MTPrintPageRenderReportPageData *data = [[[self cachedResults] objectAtIndex:index] retain];
         NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:[data enumeratePageSections]];
         

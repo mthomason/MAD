@@ -24,7 +24,6 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPassword;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellHost;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPort;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTestConnection;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDatabase;
 
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
