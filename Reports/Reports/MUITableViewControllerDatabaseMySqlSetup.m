@@ -1,6 +1,6 @@
 //
 //  UITableViewControllerDataSourceSetupMySql.m
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
@@ -90,6 +90,8 @@
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
+    [[vc view] setBounds:[[self view] bounds]];
+    [[vc view] setCenter:[[self view] center]];
     [[self view] addSubview: [vc view]];
 
     __block MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initNewFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
@@ -106,6 +108,7 @@
             MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
             [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
                 if (success) {
+                    NSLog(@"Delegate %@", self.delegate);
                     [[vc view] removeFromSuperview];
                     [[self delegate] viewControllerDidFinish: self];
                 }

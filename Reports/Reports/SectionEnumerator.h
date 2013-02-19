@@ -1,6 +1,6 @@
 //
 //  SectionEnumerator.h
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 2/14/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.

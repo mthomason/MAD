@@ -1,6 +1,6 @@
 //
 //  UITableViewControllerPredicateFormat.h
-//  TheReportViewer
+//  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
