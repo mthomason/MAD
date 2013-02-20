@@ -432,17 +432,14 @@
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissViewControllerAnimated:YES completion:nil];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     [[self tableViewQueryBuilder] beginUpdates];
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
 
-    MTManagedDocumentReport *report = [[AppDelegate activeDocument] document];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    
-    [RptqTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
-    //[RptqQueryTables createAndInsertQueryTableFor:table inManagedObjectContext:managedObjectContext];   // FIXME: Depreciated
+    [RptqTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
     
     NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
@@ -481,25 +478,25 @@
     }
     
     [[self tableViewQueryBuilder] endUpdates];
-    
     [newLayoutSectionTypes release];
     [oldLayoutSectionTypes release];
     [oldLayout release];
     [newLayout release];
     
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+
+    [reportDocument saveContext];
+    [reportDocument save:nil];
+    [reportDocument release];
     
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    if (error) {
-        [error presentErrorToUser];
-    }
 }
 
 #pragma mark - Table View Data Source Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [[[[self queryBuilderDataModal] datamodel] objectForKey: KEY_TBL_SEC_HEADERS] count];
+    id queryBuilderDataModel = [[self queryBuilderDataModal] datamodel];
+    NSInteger numberOfSections = [[queryBuilderDataModel objectForKey: KEY_TBL_SEC_HEADERS] count];
+    return numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -573,82 +570,74 @@
                 // MARK: Delete UIViewControllerSchemaTablesSectionsTables
                 case UIViewControllerSchemaTablesSectionsTables: {
                     
-                    NSError *error = nil;
-                    __block MTManagedDocumentReport *activateDocument = [[AppDelegate activeDocument] document];
-                    __block NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                    NSArray *deleteRows = nil;
+                    NSIndexSet *deleteSections = nil;
+                    
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
+                    //[[self tableViewQueryBuilder] beginUpdates];
+
+                    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
+                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
-                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
-                    [[self tableViewQueryBuilder] beginUpdates];
                     
                     NSInteger numberOfTables = [RptqTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
-                    //NSInteger numberOfTables = [RptqQueryTables countForManagedObjectContext: managedObjectContext];
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
-
                     RptqTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
-
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasTablesObject:table];
-                    [managedObjectContext save: &error];
+                    deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
+                    numberOfTables = numberOfTables - 1;
+                    NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
+                    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
+                    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
                     
-                    if (!error) {
-
-                        [[self tableViewQueryBuilder] deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-
-                        [activateDocument saveToURL: [activateDocument fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-                            
-                            NSInteger numberOfTables = [RptqTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
-                            NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [[self queryBuilderDataModal] datamodelForNumberOfTables: numberOfTables]];
-                            NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
-                            NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
-                            
-                            if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
-                                
-                                NSInteger secctr = 0;
-                                BOOL startIndexSet = NO;
-                                NSInteger startIndex = -1;
-                                NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
-                                
-                                for (NSNumber *typenum in oldLayoutSectionTypes) {
-                                    UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
-                                    if (secctr < [newLayoutSectionTypes count]) {
-                                        if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
-                                            secctr++;
-                                        } else {
-                                            if (!startIndexSet) {
-                                                startIndex = secctr;
-                                                startIndexSet = YES;
-                                            }
-                                        }
-                                    } else {
-                                        if (!startIndexSet) {
-                                            startIndex = secctr;
-                                            startIndexSet = YES;
-                                        }
-                                        secctr++;
+                    if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
+                        NSInteger secctr = 0;
+                        BOOL startIndexSet = NO;
+                        NSInteger startIndex = -1;
+                        NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
+                        for (NSNumber *typenum in oldLayoutSectionTypes) {
+                            UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                            if (secctr < [newLayoutSectionTypes count]) {
+                                if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                                    secctr++;
+                                } else {
+                                    if (!startIndexSet) {
+                                        startIndex = secctr;
+                                        startIndexSet = YES;
                                     }
                                 }
-                                
-                                if (startIndex >= 0 && lengtho > 0) {
-                                    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)];
-                                    [[self tableViewQueryBuilder] deleteSections: indexSet
-                                                                withRowAnimation: UITableViewRowAnimationAutomatic];
+                            } else {
+                                if (!startIndexSet) {
+                                    startIndex = secctr;
+                                    startIndexSet = YES;
                                 }
+                                secctr++;
                             }
-                                                        
-                            [[self tableViewQueryBuilder] endUpdates];
-                            
-                            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                        }];
+                        }
                         
-                    } else {
-                        [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                        [[self tableViewQueryBuilder] endUpdates];
-                        [error presentErrorToUser];
+                        if (startIndex >= 0 && lengtho > 0) {
+                            NSRange sectionRange = NSMakeRange(startIndex, lengtho);
+                            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
+                        }
                     }
-
+                    if (deleteSections != nil) {
+                        [tableView beginUpdates];
+                        [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
+                        [tableView endUpdates];
+                    }
+                    [reportDocument saveContext];
+                    [tableView beginUpdates];
+                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [tableView endUpdates];
+                    [reportDocument save:nil];
+                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                    [deleteRows release];
+                    [deleteSections release];
+                    [reportDocument release];
                     [oldTableLayout release];
                     break;
                 }
