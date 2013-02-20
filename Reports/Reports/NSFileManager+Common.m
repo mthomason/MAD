@@ -20,7 +20,6 @@
 		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
 		BOOL isDirectory;
         [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
-        // FIXME: Is this correct?
         if (!isDirectory){
             [doc addObject:fileURL];
         }

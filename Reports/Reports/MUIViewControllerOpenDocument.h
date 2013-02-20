@@ -11,6 +11,8 @@
 #import "MUIViewControllerTemplateSelector.h"
 #import "NSFileManager+Reports.h"
 #import "MTSplitViewController.h"
+#import "MTCollectionViewCellDocument.h"
+#import "UIView+Animations.h"
 
 extern NSString * const SEGUE_SHOWADDDOCUMENT;
 extern NSString * const SEGUE_OPENDOCUMENT;
@@ -19,15 +21,22 @@ extern NSString * const SEGUE_OPENDOCUMENT;
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
+        UICollectionViewDataSource,
+        UICollectionViewDelegate,
+        UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MTSplitViewControllerDelegate,
         UIViewControllerTemplateSelectorDelegate,
         MUIViewControllerDelegate,
         MUIViewControllerDelegate>
 
-@property (strong, nonatomic) UIPopoverController *tableViewControllerDataSourceTypes;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
+@property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;
+
 @property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;
+@property (assign, nonatomic) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
+
+
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 
 - (IBAction)add:(id)sender;

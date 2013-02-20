@@ -11,6 +11,8 @@
 + (id)edaBlackish;
 + (id)edaBlueDark;
 + (id)edaBlueLight;
++ (id)edaBlueDarkSelection;
++ (id)edaBlueLightSelection;
 + (id)edaBlackFiftyPercent;
 + (id)edaBlackTwentyFivePercent;
 + (id)edaOrange;
