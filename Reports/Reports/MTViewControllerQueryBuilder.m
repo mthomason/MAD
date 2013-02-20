@@ -432,14 +432,31 @@
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)table {
     [self dismissViewControllerAnimated:YES completion:nil];
 
-    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    [[self tableViewQueryBuilder] beginUpdates];
+    NSIndexSet *indexSetSections = nil;
+    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
-
     [RptqTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
+
+    //Find the position of the table that was added, so it may be inserted at the right index.
+    RptqQuery *query = [[table inQuery] anyObject];
+    NSSet *tables = [[query hasTables] retain];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *tablesSorted = [[tables sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
+    NSUInteger indexCounter = 0;
+    for (RptqTable *foundTable in tablesSorted) {
+        if ([foundTable objectID] == [table objectID]) {
+            break;
+        }
+        indexCounter++;
+    }
+    NSUInteger sectionPosition = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsTables];
+    NSIndexPath *insertedRowIndexPath = [[NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition] retain];
+    
+    [tablesSorted release];
+    [tables release];
     
     NSDictionary *newLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
@@ -471,23 +488,37 @@
                 }
             }
             if (startIndexSet) {
-                [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(startIndex, lengtho)]
-                                            withRowAnimation: UITableViewRowAnimationAutomatic];
+                NSRange sectionRange = NSMakeRange(startIndex, lengtho);
+                indexSetSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
             }
         }
     }
+
+    if (indexSetSections != nil) {
+        [[self tableViewQueryBuilder] beginUpdates];
+        [[self tableViewQueryBuilder] insertSections: indexSetSections
+                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+        [[self tableViewQueryBuilder] endUpdates];
+    }
     
+    [reportDocument saveContext];
+    
+    [[self tableViewQueryBuilder] beginUpdates];
+    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+                                        withRowAnimation: UITableViewRowAnimationAutomatic];
     [[self tableViewQueryBuilder] endUpdates];
+
+    
+    
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+
     [newLayoutSectionTypes release];
     [oldLayoutSectionTypes release];
     [oldLayout release];
     [newLayout release];
-    
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-
-    [reportDocument saveContext];
-    [reportDocument save:nil];
     [reportDocument release];
+    [indexSetSections release];
+    [insertedRowIndexPath release];
     
 }
 
@@ -574,8 +605,6 @@
                     NSIndexSet *deleteSections = nil;
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
-                    //[[self tableViewQueryBuilder] beginUpdates];
-
                     MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
@@ -624,6 +653,7 @@
                             deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
                         }
                     }
+                    
                     if (deleteSections != nil) {
                         [tableView beginUpdates];
                         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -633,6 +663,7 @@
                     [tableView beginUpdates];
                     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                     [tableView endUpdates];
+                    
                     [reportDocument save:nil];
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                     [deleteRows release];
@@ -764,12 +795,6 @@
         case UIViewControllerSchemaTablesSectionsInstructions: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            if (!result) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellInstruction" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                result = [self tableViewCellInstruction];
-                [self setTableViewCellInstruction:nil];
-            }
             NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
             NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
             NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
@@ -785,13 +810,6 @@
         case UIViewControllerSchemaTablesSectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
-            if (!result) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellDataSource" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                result = [self tableViewCellTableName];
-                [result setIndentationLevel: 1];
-                [self setTableViewCellTableName:nil];
-            }
             NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
             if (connections) {
                 [connections retain];
@@ -813,12 +831,6 @@
         case UIViewControllerSchemaTablesSectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
-            if (!resultR) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellTableName" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                resultR = [self tableViewCellTableName];
-                [self setTableViewCellTableName:nil];
-            }
             RptqTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea name]]];
             [[resultR textLabel] setFont: [self boldSystemFont]];
@@ -834,12 +846,6 @@
         case UIViewControllerSchemaTablesSectionsLinks: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            if (!result) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryLink" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                result = [self tableViewCellQueryLink];
-                [self setTableViewCellQueryLink:nil];
-            }
             RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             
             [[(UITableViewCellQueryLink *)result labelTableLeft] setText:
@@ -856,12 +862,6 @@
         case UIViewControllerSchemaTablesSectionsGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            if (!result) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryGroup" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                result = [self tableViewCellQueryLink];
-                [self setTableViewCellQueryLink:nil];
-            }
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             [[(UITableViewCellQueryGroup *)result labelMain] setText: [group fieldNameNice]];
             [[(UITableViewCellQueryGroup *)result labelDetail] setText: [group sortDisplayNice]];
@@ -872,12 +872,6 @@
         case UIViewControllerSchemaTablesSectionsPredicate: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            if (!result) {
-                UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryPredicate" bundle:nil];
-                [resultCellNib instantiateWithOwner:self options:nil];
-                result = [self tableViewCellQueryLink];
-                [self setTableViewCellQueryLink:nil];
-            }
             RptqQueryPredicate *predicate = [[[self fetchedResultsControllerPredicates] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             
             [[(UITableViewCellQueryPredicate *)result labelMain] setText: [predicate fieldleftpred]];
@@ -891,23 +885,11 @@
                 case 0: {
                     static NSString *MyIdentifierUITableViewCellOverride = @"UITableViewCellOverride";
                     result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellOverride];
-                    if (!result) {
-                        UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellOverride" bundle:nil];
-                        [resultCellNib instantiateWithOwner:self options:nil];
-                        result = [self tableViewCellOverride];
-                        [self setTableViewCellOverride:nil];
-                    }
                     break;
                 }
                 default: {
                     static NSString *MyIdentifierUITableViewCellQueryInput = @"UITableViewCellQueryInput";
                     result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellQueryInput];
-                    if (!result) {
-                        UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellQueryInput" bundle:nil];
-                        [resultCellNib instantiateWithOwner:self options:nil];
-                        result = [self tableViewCellQueryInput];
-                        [self setTableViewCellQueryInput:nil];
-                    }
                     break;
                 }
             }
