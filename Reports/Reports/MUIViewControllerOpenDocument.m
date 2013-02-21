@@ -129,6 +129,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
+#pragma mark - UIMenuController required methods
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    return action == @selector(cut:) ||
+        action == @selector(copy:) ||
+        action == @selector(paste:) ||
+        action == @selector(delete:) ||
+        [super canPerformAction:action withSender:sender];
+}
 
 #pragma mark - UIViewController Overrides
 
@@ -321,6 +334,36 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                 message: message
                       cancelButtonTitle: buttonTitle
                        otherButtonTitle: nil onDismiss: nil onCancel: nil];
+}
+
+- (IBAction)delete:(id)sender {
+    if ([self collectionViewQueries] != nil) {
+        for (NSUInteger section = 0; section < [[self collectionViewQueries] numberOfSections]; section++) {
+            for (NSUInteger item = 0; item < [[self collectionViewQueries] numberOfItemsInSection:section]; item++) {
+                NSIndexPath *selectedCellLocation = [[NSIndexPath indexPathForItem:item inSection:section] retain];
+                MTCollectionViewCellDocument *documentCell = [(MTCollectionViewCellDocument *)[[self collectionViewQueries] cellForItemAtIndexPath:selectedCellLocation] retain];
+                if (documentCell != nil) {
+                    if ([documentCell isSelected]) {
+                        
+                        NSError *error = nil;
+                        [[NSFileManager defaultManager] removeItemAtURL:[[self availableFilesCache] objectAtIndex:item] error:&error];
+                        if (!error) {
+                            if (item < [[self availableFilesCache] count]) {
+                                [[self availableFilesCache] removeObjectAtIndex:item];
+                                [[self collectionViewQueries] deleteItemsAtIndexPaths:@[selectedCellLocation]];
+                            }
+                        } else {
+                            [error presentErrorToUser];
+                        }
+                        
+                        
+                    }
+                }
+                [selectedCellLocation release];
+                [documentCell release];
+            }
+        }
+    }
 }
 
 #pragma mark - Delegates
@@ -549,7 +592,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(73.0000f, 95.0000f);
+    return CGSizeMake(150.0000f, 100.0000f);
 }
 
 @end

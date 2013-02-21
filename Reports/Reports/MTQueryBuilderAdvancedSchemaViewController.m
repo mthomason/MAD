@@ -11,7 +11,6 @@
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
-//@property (nonatomic, retain) NSArray *hasFields;
 @property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
 @property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
@@ -23,7 +22,6 @@
 - (void)dealloc {
     [_schemaTableViewController release];
     [_barButtonItemTitle release];
-//    [_hasFields release];
     [_hasFieldsObjectIds release];
     [super dealloc];
 }

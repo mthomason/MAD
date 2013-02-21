@@ -56,15 +56,15 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
+
 @property (nonatomic, retain) NSMutableSet *selectedObjectIds;
 
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlToolbox;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlToolbox;
 
 @property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
+@property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
-
-@property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
 @end
 
@@ -77,31 +77,23 @@
     [_lastElementViewToShowMenu release];
     [_popoverControllerObjectSelector release];
     [_popoverControllerInformation release];
-
     [_viewControllerToolbox release];
     [_holderForLastTouchesByCollectionView release];
-    
     [_selectedObjectIds release];
-    
     [_toolbarTopItems release];
     [_toolbarBottomItems release];
-    
     [_layoutConstraintsToolboxHidden release];
     [_layoutConstraintsToolboxVisiable release];
-    
     [_navigationItemStyle release];
     [_navigationItemLayout release];
     [_navigationItemFontChooser release];
-    
     [_tableViewControllerTextLayoutSettings release];
     [_tableViewControllerFontSelector release];
-    
     [_toolboxBackgroundView release];
     [_toolboxScrollView release];
     [_toolboxToolbarItemsFontChooser release];
     [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
-
     [_sectionViews release];
     [_settingsPopoverController release];
     [_designScrollView release];
@@ -515,21 +507,15 @@
     }    
 }
 
-- (void)managedObjectContextDidSave:(NSNotification *)notification {
-
-}
+- (void)managedObjectContextDidSave:(NSNotification *)notification { }
 
 #pragma mark - UIMenu Notifications
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
     [self removeBorderToElementView:[self lastElementViewToShowMenu]];
-//    [self deselectAllElementsAnimated:NO];
-    //NSLog(@"didHideMenuNotification %@", [notification object]);
 }
 
-- (void)didShowMenuNotification:(NSNotification *)notification {
-    NSLog(@"didShowMenuNotification %@", [notification object]);
-}
+- (void)didShowMenuNotification:(NSNotification *)notification { }
 
 #pragma mark - Methods
 

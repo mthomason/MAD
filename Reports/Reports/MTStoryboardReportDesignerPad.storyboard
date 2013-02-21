@@ -606,22 +606,22 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="Ndr-bg-UZx" customClass="MTCollectionViewCellDocument">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="Z8h-UH-nuZ">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="64" type="user" id="675-2W-5Dz"/>
                                                         <constraint firstAttribute="height" constant="64" type="user" id="OrW-gQ-T75"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" preferredMaxLayoutWidth="95" translatesAutoresizingMaskIntoConstraints="NO" id="D2B-b0-34y">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label Label Label Label Label " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="7" preferredMaxLayoutWidth="110" translatesAutoresizingMaskIntoConstraints="NO" id="D2B-b0-34y">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="95" id="GZp-yd-Zhj"/>
-                                                        <constraint firstAttribute="height" constant="21" id="UTg-EK-kC0"/>
+                                                        <constraint firstAttribute="width" constant="110" type="user" id="4sH-vU-tLZ"/>
+                                                        <constraint firstAttribute="height" constant="25" id="T4M-CH-GOD"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" type="user" id="dsS-zm-Zrp"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -631,12 +631,14 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="D2B-b0-34y" firstAttribute="leading" secondItem="Ndr-bg-UZx" secondAttribute="leading" constant="20" type="user" id="ENm-BU-1dt"/>
+                                            <constraint firstAttribute="centerX" secondItem="D2B-b0-34y" secondAttribute="centerX" type="user" id="Fg6-ae-NZe"/>
                                             <constraint firstItem="Z8h-UH-nuZ" firstAttribute="top" secondItem="Ndr-bg-UZx" secondAttribute="top" constant="8" id="Oux-D8-Psb"/>
-                                            <constraint firstAttribute="centerX" secondItem="D2B-b0-34y" secondAttribute="centerX" type="user" id="YNq-nu-Wkj"/>
-                                            <constraint firstItem="D2B-b0-34y" firstAttribute="top" secondItem="Ndr-bg-UZx" secondAttribute="top" constant="74" id="gWO-gE-Pa1"/>
-                                            <constraint firstAttribute="centerX" secondItem="Z8h-UH-nuZ" secondAttribute="centerX" type="user" id="vU8-1a-tYq"/>
+                                            <constraint firstAttribute="bottom" secondItem="D2B-b0-34y" secondAttribute="bottom" constant="2" id="d2S-Jo-5I5"/>
+                                            <constraint firstAttribute="centerX" secondItem="Z8h-UH-nuZ" secondAttribute="centerX" type="user" id="hDB-Tm-Han"/>
+                                            <constraint firstItem="Z8h-UH-nuZ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ndr-bg-UZx" secondAttribute="top" constant="8" type="user" id="jmd-IQ-6UU"/>
                                         </constraints>
-                                        <size key="customSize" width="100" height="100"/>
+                                        <size key="customSize" width="150" height="100"/>
                                         <connections>
                                             <outlet property="imagePreview" destination="Z8h-UH-nuZ" id="4Zp-C8-NTX"/>
                                             <outlet property="labelTitle" destination="D2B-b0-34y" id="VeL-vI-1he"/>
@@ -5857,7 +5859,6 @@
         <class className="MUIViewControllerOpenDocument" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerOpenDocument.h"/>
             <relationships>
-                <relationship kind="action" name="about:"/>
                 <relationship kind="action" name="add:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
