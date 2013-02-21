@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     
     UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
+    [[selectedBackground layer] setCornerRadius: 5.0000f];
+    [selectedBackground setClipsToBounds:YES];
+
     [selectedBackground setBackgroundColor:[UIColor edaBlueDarkSelection]];
     [self setSelectedBackgroundView:selectedBackground];
     [selectedBackground release];
