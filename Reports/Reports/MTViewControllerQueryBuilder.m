@@ -1016,6 +1016,8 @@
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
     if (section == UIViewControllerSchemaTablesSectionsSql) {
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
+    } else if (section == UIViewControllerSchemaTablesSectionsGroups) {
+        result = [UITableViewCellOverride defaultHeight] * 1.6;
     } else {
         NSDictionary *tableMetaHeight = [[[self queryBuilderDataModal] datamodel] objectForKey:KEY_TBL_SEC_ROW_HEIGHT];
         if (tableMetaHeight) result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
