@@ -54,10 +54,10 @@
 		NSString *filePath = [[directory stringByAppendingPathComponent:obj] retain];
 		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
 		BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory] &&
-            [[fileURL pathExtension] isEqualToString:extension]) {
-            
-            [result addObject:fileURL];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory]) {
+            if ([[fileURL pathExtension] isEqualToString:extension]) {
+                [result addObject:fileURL];
+            }
 
         }
         

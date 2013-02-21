@@ -48,7 +48,7 @@ NSString * const MYSQLDATABASEDATA_FILENAME         = @"mydata";
 NSString * const QUERYDATA_FILENAME                 = @"query";
 NSString * const TRVDATA_FILENAME                   = @"settings";
 
-NSString * const SCHEMA_PATH_EXTENSION              = @"trvq";
+NSString * const SCHEMA_PATH_EXTENSION              = @"report";
 NSString * const TRVDATA_PATH_EXTENSION             = @"trvp";
 NSString * const REPORT_PATH_EXTENSION              = @"trv";
 NSString * const TEMPLATE_PATH_EXTENSION            = @"trvt";

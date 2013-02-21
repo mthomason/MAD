@@ -13,7 +13,9 @@
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *baseUrl = [[[NSFileManager applicationDocumentsDirectoryUrl] URLByAppendingPathComponent: name] retain];
-    NSURL *applicationFileUrlWithExtention = [[baseUrl URLByAppendingPathExtension: extension] retain];
+    NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
+                                                [[baseUrl URLByAppendingPathExtension: extension] retain] :
+                                                [baseUrl retain];
     [baseUrl release];
     
     NSInteger ctr = 0;

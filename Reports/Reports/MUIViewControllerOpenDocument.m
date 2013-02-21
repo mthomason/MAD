@@ -376,6 +376,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             if (success) {
                 [AppDelegate setActiveDocument: nil];
                 [[self tableViewQueries] reloadData];
+                [[self collectionViewQueries] reloadData];
             }
             [self dismissViewControllerAnimated:YES completion:nil];
         }];
@@ -384,6 +385,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self setAvailableFilesCache: a];
         [a release];
         [[self tableViewQueries] reloadData];
+        [[self collectionViewQueries] reloadData];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
     [documentReport release];
@@ -415,7 +417,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if (row < [[self availableFilesCache] count]) {
         NSURL *url = [[self availableFilesCache] objectAtIndex:row];
         [[result imageThumbnail] setImage:[UITableViewCellDocument defaultThumbnail]];
-        [[result labelH1] setText: [url lastPathComponent]];
+        [[result labelH1] setText: [[url lastPathComponent] stringByDeletingPathExtension]];
         [[result labelH2] setText:NSLocalizedString(@"Fixme Default Text.", @"A subheading.")];
     } else {
         [[result imageThumbnail] setImage:[UITableViewCellDocument defaultThumbnail]];
@@ -557,7 +559,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *url = [[self availableFilesCache] objectAtIndex:[indexPath row]];
         [[result imagePreview] setImage:[UITableViewCellDocument defaultThumbnail]];
-        [[result labelTitle] setText: [url lastPathComponent]];
+        [[result labelTitle] setText: [[url lastPathComponent] stringByDeletingPathExtension]];
     } else {
         [[result imagePreview] setImage:[UITableViewCellDocument defaultThumbnail]];
         [[result labelTitle] setText: @""];
