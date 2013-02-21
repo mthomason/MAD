@@ -37,8 +37,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @implementation MUIViewControllerOpenDocument
 
 - (void)dealloc {
-    [_advancedQueryBuilder release];
-    [_standardQueryBuilder release];
+    [_advancedQueryBuilder release]; _advancedQueryBuilder = nil;
+    [_standardQueryBuilder release]; _standardQueryBuilder = nil;
     [_tapGestureRecognizer release];
     [_longPressGestureRecognizer release];
     [_urlBeingOpended release];
@@ -252,7 +252,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         } else if ([[segue destinationViewController] isKindOfClass:[MTSplitViewController class]]) {
             
             MTSplitViewController *splitViewController = (MTSplitViewController* )[[segue destinationViewController] retain];
-            [splitViewController setDelegate: self];
+            [splitViewController setDelegateContentController: self];
+            [splitViewController setDelegate:self];
+            [splitViewController setDocumentToOpen:url];
             [splitViewController release];
             
         }
@@ -263,21 +265,53 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
+#pragma mark - Delegates
+
+- (void)viewControllerDidFinish:(id)sender {
+    MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
+    if (documentReport != nil) {
+        [documentReport saveContext];
+        [documentReport save:^(BOOL success) {
+            if (success) {
+                [AppDelegate setActiveDocument: nil];
+                [[self tableViewQueries] reloadData];
+                [[self collectionViewQueries] reloadData];
+            }
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+    } else {
+        NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
+        [self setAvailableFilesCache: a];
+        [a release];
+        [[self tableViewQueries] reloadData];
+        [[self collectionViewQueries] reloadData];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    [documentReport release];
+}
+
+- (void)viewControllerDidCancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)displayContentController:(UIViewController *)contentController {
     UIViewController *childController = [contentController retain];
 
     if ([contentController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *childNavigationController = (UINavigationController *)[contentController retain];
+        UINavigationController *childNavigationController = (UINavigationController *)contentController;
         if ([[childNavigationController topViewController] isKindOfClass:[MTViewControllerQueryBuilder class]]) {
             MTViewControllerQueryBuilder *queryBuilderViewController = (MTViewControllerQueryBuilder *)[[childNavigationController topViewController] retain];
             [self setStandardQueryBuilder:queryBuilderViewController];
             [queryBuilderViewController release];
             
         }
-        [childNavigationController release];
     } else if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
         MTQueryBuilderAdvancedViewController *advancedControl = (MTQueryBuilderAdvancedViewController *)contentController;
         [self setAdvancedQueryBuilder:advancedControl];
+    } else if ([contentController isKindOfClass:[MTViewControllerQueryBuilder class]]) {
+        MTViewControllerQueryBuilder *queryBuilder = (MTViewControllerQueryBuilder *)contentController;
+        [self setStandardQueryBuilder:queryBuilder];
+        [queryBuilder setDelegate:self];
     }
     
     if ([self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
@@ -366,34 +400,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
-#pragma mark - Delegates
-
-- (void)viewControllerDidFinish:(id)sender {
-    MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
-    if (documentReport != nil) {
-        [documentReport saveContext];
-        [documentReport save:^(BOOL success) {
-            if (success) {
-                [AppDelegate setActiveDocument: nil];
-                [[self tableViewQueries] reloadData];
-                [[self collectionViewQueries] reloadData];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }];
-    } else {
-        NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
-        [self setAvailableFilesCache: a];
-        [a release];
-        [[self tableViewQueries] reloadData];
-        [[self collectionViewQueries] reloadData];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-    [documentReport release];
-}
-
-- (void)viewControllerDidCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 #pragma mark -
 #pragma mark Table View Data Source Protocol

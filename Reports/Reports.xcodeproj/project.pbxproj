@@ -1599,6 +1599,8 @@
 		4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
 		4CF61CFF163F831D0065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */; };
 		4CF61D01163F83200065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */; };
+		4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
+		4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8D4191685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D41A1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D41B1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
@@ -2433,6 +2435,8 @@
 		4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
 		4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
 		4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
+		4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoLayoutTableViewCell.h; sourceTree = "<group>"; };
+		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
 		4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
 		4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
@@ -2674,6 +2678,8 @@
 				4C122AE916D0066B00B69763 /* MTConnectorView.m */,
 				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
 				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
+				4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */,
+				4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -3779,8 +3785,6 @@
 				4C00818014B6D158003DF437 /* UITableViewControllerFontSelector.m */,
 				4CDF618916B66BA500C80E01 /* UIViewControllerToolBox.h */,
 				4CDF618A16B66BA500C80E01 /* UIViewControllerToolBox.m */,
-				4C6362BC14E6278D005DBBFF /* UINavigationControllerQueryDesigner.h */,
-				4C6362BD14E6278D005DBBFF /* UINavigationControllerQueryDesigner.m */,
 				4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */,
 				4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
@@ -3908,6 +3912,8 @@
 		4CF1329616CA1E5D00FD0F0B /* Query Builder */ = {
 			isa = PBXGroup;
 			children = (
+				4C6362BC14E6278D005DBBFF /* UINavigationControllerQueryDesigner.h */,
+				4C6362BD14E6278D005DBBFF /* UINavigationControllerQueryDesigner.m */,
 				4CF1335316CD1FE200FD0F0B /* MTQueryBuilderAdvancedViewController.h */,
 				4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */,
 				4C12292E16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.h */,
@@ -5130,6 +5136,7 @@
 				4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
+				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5579,6 +5586,7 @@
 				4C122AEA16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
+				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

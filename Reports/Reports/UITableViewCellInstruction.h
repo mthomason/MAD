@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTAutoLayoutTableViewCell.h"
 
-@interface UITableViewCellInstruction : UITableViewCell
+@interface UITableViewCellInstruction : MTAutoLayoutTableViewCell
 
 @property (nonatomic, assign) IBOutlet UILabel *labelGroupType;
 @property (nonatomic, assign) IBOutlet UILabel *labelGroupTypeDetail;

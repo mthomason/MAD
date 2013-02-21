@@ -15,16 +15,18 @@
 
 @interface MTViewControllerQueryBuilder()
 
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
+
 @property (retain, nonatomic) UIFont *boldSystemFont;
-//@property (retain, nonatomic) UIView *cellBackgroundView;
 @property (retain, nonatomic) QueryBuilderDataModal *queryBuilderDataModal;
 @property (retain, nonatomic) NSArray *tableSectionTitles;
-@property (assign) BOOL beganUpdates;
-@property (retain, nonatomic) IBOutlet UIViewClipboard *viewClipboard;
 
-//@property (nonatomic, retain) UIView *sectionHeaderIntroduction;
-//@property (nonatomic, retain) UIView *sectionHeaderDatasource;
-//@property (nonatomic, retain) UIView *sectionHeaderTables;
+@property (nonatomic, retain) IBOutlet UIViewClipboard *viewClipboard;
+
+@property (nonatomic, assign) BOOL beganUpdates;
 
 @end
 
@@ -63,7 +65,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self tableViewQueryBuilder].contentSize = CGSizeMake([self tableViewQueryBuilder].frame.size.height, [self tableViewQueryBuilder].contentSize.height);
+    [self tableViewQueryBuilder].contentSize = CGSizeMake([self tableViewQueryBuilder].frame.size.width, [self tableViewQueryBuilder].contentSize.height);
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -82,7 +84,6 @@
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     [[self tableViewQueryBuilder] setOpaque: YES];
     [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
     
     QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     [self setQueryBuilderDataModal:qbdm];
@@ -863,6 +864,8 @@
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
+//            [result setBackgroundColor:[UIColor whiteColor]];
+            [[result backgroundView] setBackgroundColor:[UIColor whiteColor]];
             [[(UITableViewCellQueryGroup *)result labelMain] setText: [group fieldNameNice]];
             [[(UITableViewCellQueryGroup *)result labelDetail] setText: [group sortDisplayNice]];
             break;
@@ -915,62 +918,67 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
-    MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
-
-    section = [self tableSectionTypeForIndexPathSection: section];
-
-    switch (section) {
-
-        case UIViewControllerSchemaTablesSectionsInstructions: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
-            [[headerView buttonAdd] setHidden:YES];
-            break;
+    UIView *result = nil;
+    if ([AppDelegate isPad] == NO || YES) {
+        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
+//        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, tableView.frame.size.width, 29.0000f)];
+        if ([AppDelegate isPad]) {
+            [headerView setBackgroundColor:[UIColor clearColor]];
         }
-
-        case UIViewControllerSchemaTablesSectionsDatasource: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
-            [[headerView buttonAdd] setHidden:YES];
-            break;
+        section = [self tableSectionTypeForIndexPathSection: section];
+        
+        switch (section) {
+                
+            case UIViewControllerSchemaTablesSectionsInstructions: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
+                [[headerView buttonAdd] setHidden:YES];
+                break;
+            }
+                
+            case UIViewControllerSchemaTablesSectionsDatasource: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
+                [[headerView buttonAdd] setHidden:YES];
+                break;
+            }
+                
+            case UIViewControllerSchemaTablesSectionsTables: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
+                [[headerView buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            }
+                
+            case UIViewControllerSchemaTablesSectionsLinks: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
+                [[headerView buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            }
+                
+            case UIViewControllerSchemaTablesSectionsGroups: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
+                [[headerView buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            }
+                
+            case UIViewControllerSchemaTablesSectionsPredicate: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
+                [[headerView buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            }
+            case UIViewControllerSchemaTablesSectionsSql: {
+                [[headerView labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
+                [[headerView buttonAdd] setHidden:YES];
+                break;
+            }
+            default: {
+                [[headerView labelTitle] setText:@""];
+                [[headerView buttonAdd] setHidden:YES];
+                break;
+            }
+                
         }
-
-        case UIViewControllerSchemaTablesSectionsTables: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
-            [[headerView buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-            break;
-        }
-
-        case UIViewControllerSchemaTablesSectionsLinks: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
-            [[headerView buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-            break;
-        }
-
-        case UIViewControllerSchemaTablesSectionsGroups: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
-            [[headerView buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
-            break;
-        }
-
-        case UIViewControllerSchemaTablesSectionsPredicate: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
-            [[headerView buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
-            break;
-        }
-        case UIViewControllerSchemaTablesSectionsSql: {
-            [[headerView labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
-            [[headerView buttonAdd] setHidden:YES];
-            break;
-        }
-        default: {
-            [[headerView labelTitle] setText:@""];
-            [[headerView buttonAdd] setHidden:YES];
-            break;
-        }
-
+        result = [headerView autorelease];
     }
-
-    return [headerView autorelease];
+    return result;
 }
 
 
@@ -1072,8 +1080,9 @@
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
+        [frc setDelegate:self];
         [self setFetchedResultsControllerTables: frc];
-        
+        [self performFetchTables];
         [frc release];
         frc = nil;
     }
@@ -1087,8 +1096,9 @@
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
+        [frc setDelegate:self];
         [self setFetchedResultsControllerLinks: frc];
-        
+        [self performFetchLinks];
         [frc release];
         frc = nil;
     }
@@ -1102,7 +1112,9 @@
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
+        [frc setDelegate:self];
         [self setFetchedResultsControllerGroups: frc];
+        [self performFetchGroups];
         [frc release];
         frc = nil;
         
@@ -1117,7 +1129,9 @@
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
+        [frc setDelegate:self];
         [self setFetchedResultsControllerPredicates: frc];
+        [self performFetchPredicate];
         [frc release];
         
         frc = nil;
@@ -1128,9 +1142,9 @@
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+    if (![self suspendAutomaticTrackingOfChangesInManagedObjectContext]) {
         [[self tableViewQueryBuilder] beginUpdates];
-        self.beganUpdates = YES;
+        [self setBeganUpdates: YES];
     }
 }
 
@@ -1267,7 +1281,7 @@
     }
     [[self tableViewQueryBuilder] reloadData];
 }
-
+/*
 - (void)setFetchedResultsControllerTables:(NSFetchedResultsController *)newfrc {
     NSFetchedResultsController *oldfrc = _fetchedResultsControllerTables;
     if (newfrc != oldfrc) {
@@ -1288,7 +1302,7 @@
         }
     }
 }
-
+*/
 - (void)performFetchLinks {
     if (self.fetchedResultsControllerLinks) {
         if (self.fetchedResultsControllerLinks.fetchRequest.predicate) {
@@ -1304,7 +1318,7 @@
     }
     [[self tableViewQueryBuilder] reloadData];
 }
-
+/*
 - (void)setFetchedResultsControllerLinks:(NSFetchedResultsController *)newfrc {
     NSFetchedResultsController *oldfrc = _fetchedResultsControllerLinks;
     if (newfrc != oldfrc) {
@@ -1324,7 +1338,7 @@
             [[self tableViewQueryBuilder] reloadData];
         }
     }
-}
+}*/
 
 - (void)performFetchGroups {
     if (self.fetchedResultsControllerGroups) {
@@ -1341,19 +1355,22 @@
     }
     [[self tableViewQueryBuilder] reloadData];
 }
-
+/*
 - (void)setFetchedResultsControllerGroups:(NSFetchedResultsController *)fetchedResultsControllerGroups {
+    
+    
     NSFetchedResultsController *oldfrc = _fetchedResultsControllerGroups;
     if (fetchedResultsControllerGroups != oldfrc) {
+        
         [_fetchedResultsControllerGroups release];
         [fetchedResultsControllerGroups retain];
         _fetchedResultsControllerGroups = fetchedResultsControllerGroups;
+
         fetchedResultsControllerGroups.delegate = self;
         if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {
             self.title = fetchedResultsControllerGroups.fetchRequest.entity.name;
         }
         if (fetchedResultsControllerGroups) {
-            //NSLog(@"Test %@", self.debug ? @"YES" : @"NO");
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetchGroups];
         } else {
@@ -1361,7 +1378,7 @@
             [[self tableViewQueryBuilder] reloadData];
         }
     }
-}
+}*/
 
 - (void)performFetchPredicate {
     if (self.fetchedResultsControllerPredicates) {
@@ -1379,6 +1396,7 @@
     [[self tableViewQueryBuilder] reloadData];
 }
 
+/*
 - (void)setFetchedResultsControllerPredicates:(NSFetchedResultsController *)fetchedResultsControllerPredicates {
     NSFetchedResultsController *oldfrc = _fetchedResultsControllerPredicates;
     if (fetchedResultsControllerPredicates != oldfrc) {
@@ -1399,5 +1417,6 @@
         }
     }
 }
+*/
 
 @end

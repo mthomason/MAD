@@ -43,11 +43,6 @@
         SectionLayoutSettingsDelegate,
         AddPredicateDelegate>
 
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
-
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;

@@ -8,12 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "MTAutoLayoutTableViewCell.h"
 
-@interface UITableViewCellQueryGroup : UITableViewCell
+@interface UITableViewCellQueryGroup : MTAutoLayoutTableViewCell
 
 @property (retain) NSManagedObjectID *tableID;
 
 @property (nonatomic, assign) IBOutlet UILabel *labelDetail;
 @property (nonatomic, assign) IBOutlet UILabel *labelMain;
+
++ (CGFloat)defaultHeight;
 
 @end

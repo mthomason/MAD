@@ -7,13 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTViewController.h"
+#import "MTViewControllerQueryBuilder.h"
+#import "MTQueryBuilderAdvancedSchemaViewController.h"
 
 @protocol MTSplitViewControllerDelegate <NSObject>
 - (void)displayContentController:(UIViewController *)contentController;
 @end
 
-@interface MTSplitViewController : UIViewController
+@interface MTSplitViewController : MTViewController
 
-@property (nonatomic, assign) id <MTSplitViewControllerDelegate> delegate;
+@property (nonatomic, assign) id <MTSplitViewControllerDelegate> delegateContentController;
+@property (nonatomic, retain) NSURL *documentToOpen;
+
+- (MTViewControllerQueryBuilder *)queryBuilderController;
+- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
 
 @end

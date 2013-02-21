@@ -13,15 +13,18 @@
 @property (retain, nonatomic) IBOutlet UIView *leftView;
 @property (retain, nonatomic) IBOutlet UIView *rightView;
 @property (retain, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 
 @end
 
 @implementation MTSplitViewController
 
 - (void)dealloc {
+    [_documentToOpen release];
     [_leftView release];
     [_rightView release];
     [_bogusConstraints release];
+    [_toolbarTop release];
     [super dealloc];
 }
 
@@ -37,11 +40,11 @@
     [super viewDidLoad];
     NSLog(@"%@ %@", [[self childViewControllers] objectAtIndex:0], [[self childViewControllers] objectAtIndex:1]);
 
-    [[self delegate] displayContentController:
-     [[[[self childViewControllers] objectAtIndex:0] retain] autorelease]];
+    [[self delegateContentController] displayContentController:
+     [[self childViewControllers] objectAtIndex:0]];
     
-    [[self delegate] displayContentController:
-     [[[[self childViewControllers] objectAtIndex:1] retain] autorelease]];
+    [[self delegateContentController] displayContentController:
+     [[self childViewControllers] objectAtIndex:1]];
     
 }
 
@@ -78,6 +81,42 @@
     
     [leftView release];
     [rightView release];
+}
+
+- (IBAction)showReportDocumentList:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (IBAction)showReportDesigner:(id)sender {
+    MTViewControllerQueryBuilder *queryBuilderController = [[self queryBuilderController] retain];
+
+    [queryBuilderController release];
+}
+
+- (IBAction)toggleEditModeQueryDesigner:(id)sender {
+    MTViewControllerQueryBuilder *queryBuilderController = [[self queryBuilderController] retain];
+    BOOL isEditing = ![[queryBuilderController tableViewQueryBuilder] isEditing];
+
+    UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                   target: self
+                                                                                   action: @selector(toggleEditModeQueryDesigner:)];
+    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbarTop] items]];
+    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
+    [[self toolbarTop] setItems: tbItems];
+    [tbItems release];
+
+    
+    [[queryBuilderController tableViewQueryBuilder] setEditing:isEditing];
+    [queryBuilderController release];
+}
+
+- (MTViewControllerQueryBuilder *)queryBuilderController {
+    return [[[self rightViewController] retain] autorelease];
+}
+
+- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced {
+    return [[[self leftViewController] retain] autorelease];
 }
 
 @end

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "MTAutoLayoutTableViewCell.h"
 
-@interface UITableViewCellQueryLink : UITableViewCell
+@interface UITableViewCellQueryLink : MTAutoLayoutTableViewCell
 
 @property (retain) NSManagedObjectID *tableID;
 
