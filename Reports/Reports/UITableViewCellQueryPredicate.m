@@ -22,8 +22,8 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         
-        [self setBackgroundView: nil];
-        [self setSelectedBackgroundView: nil];
+        //[self setBackgroundView: nil];
+        //[self setSelectedBackgroundView: nil];
         
     }
     return self;
@@ -34,8 +34,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        [self setBackgroundView: nil];
-        [self setSelectedBackgroundView: nil];
+        //[self setBackgroundView: nil];
+        //[self setSelectedBackgroundView: nil];
         
     }
     return self;

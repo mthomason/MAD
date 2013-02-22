@@ -759,9 +759,6 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" text="Table One" lineBreakMode="middleTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="bS3-mz-AI4">
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="260" id="vVG-qs-3Jy"/>
-                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -773,6 +770,7 @@
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="eRy-bM-sTz">
                                                             <constraints>
+                                                                <constraint firstAttribute="width" constant="227" id="82X-fa-jhj"/>
                                                                 <constraint firstAttribute="height" constant="21" id="dwH-Ua-dxC"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -783,14 +781,14 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <constraints>
-                                                    <constraint firstItem="Yv0-Ru-eLi" firstAttribute="trailing" secondItem="eRy-bM-sTz" secondAttribute="trailing" type="default" id="4xY-O7-4c1"/>
-                                                    <constraint firstItem="eRy-bM-sTz" firstAttribute="leading" secondItem="Yv0-Ru-eLi" secondAttribute="leading" type="default" id="7Yd-0F-9KC"/>
+                                                    <constraint firstItem="Yv0-Ru-eLi" firstAttribute="leading" secondItem="nEf-hQ-bPH" secondAttribute="leading" constant="10" type="user" id="8zD-au-uAY"/>
                                                     <constraint firstItem="eRy-bM-sTz" firstAttribute="top" secondItem="bS3-mz-AI4" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="EEk-zr-Elq"/>
                                                     <constraint firstItem="eRy-bM-sTz" firstAttribute="centerY" secondItem="nEf-hQ-bPH" secondAttribute="centerY" type="default" id="KH8-zS-ZGP"/>
-                                                    <constraint firstItem="eRy-bM-sTz" firstAttribute="centerX" secondItem="nEf-hQ-bPH" secondAttribute="centerX" type="default" id="PVS-9K-SQx"/>
                                                     <constraint firstAttribute="bottom" secondItem="Yv0-Ru-eLi" secondAttribute="bottom" constant="11" id="bkA-QF-8gW"/>
-                                                    <constraint firstItem="eRy-bM-sTz" firstAttribute="trailing" secondItem="bS3-mz-AI4" secondAttribute="trailing" type="default" id="fP9-CO-hkf"/>
-                                                    <constraint firstItem="bS3-mz-AI4" firstAttribute="leading" secondItem="eRy-bM-sTz" secondAttribute="leading" type="default" id="lJT-uN-l1H"/>
+                                                    <constraint firstItem="eRy-bM-sTz" firstAttribute="leading" secondItem="nEf-hQ-bPH" secondAttribute="leading" constant="20" type="user" id="bpg-tl-XwF"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Yv0-Ru-eLi" secondAttribute="trailing" constant="10" type="user" id="cYB-nd-eb2"/>
+                                                    <constraint firstAttribute="trailing" secondItem="bS3-mz-AI4" secondAttribute="trailing" constant="10" type="user" id="eKZ-2d-2eA"/>
+                                                    <constraint firstItem="bS3-mz-AI4" firstAttribute="leading" secondItem="nEf-hQ-bPH" secondAttribute="leading" constant="10" type="user" id="eYa-hf-dbz"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="labelJoinDesc" destination="eRy-bM-sTz" id="qqP-kG-wXU"/>
@@ -852,21 +850,21 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <constraints>
-                                                    <constraint firstItem="ZOV-P5-l2j" firstAttribute="baseline" secondItem="ckK-ot-jWx" secondAttribute="baseline" type="default" id="0Sg-o7-UtT"/>
-                                                    <constraint firstItem="ZOV-P5-l2j" firstAttribute="top" secondItem="QZ4-pa-vsR" secondAttribute="top" constant="11" id="1kN-Mo-nAs"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ckK-ot-jWx" secondAttribute="trailing" constant="14" id="Pup-Zc-0RW"/>
-                                                    <constraint firstItem="ZOV-P5-l2j" firstAttribute="leading" secondItem="QZ4-pa-vsR" secondAttribute="leading" constant="10" id="pec-PV-TMU"/>
+                                                    <constraint firstItem="ckK-ot-jWx" firstAttribute="baseline" secondItem="ZOV-P5-l2j" secondAttribute="baseline" type="default" id="8A0-Yp-XxD"/>
+                                                    <constraint firstItem="ZOV-P5-l2j" firstAttribute="leading" secondItem="QZ4-pa-vsR" secondAttribute="leading" constant="10" type="user" id="FYx-vc-STm"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ckK-ot-jWx" secondAttribute="trailing" constant="10" type="user" id="U2b-HO-KbB"/>
+                                                    <constraint firstItem="ckK-ot-jWx" firstAttribute="top" secondItem="QZ4-pa-vsR" secondAttribute="top" constant="11" type="user" id="V9u-Mn-SBJ"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="labelDetail" destination="ckK-ot-jWx" id="XZJ-g9-O1U"/>
                                                     <outlet property="labelMain" destination="ZOV-P5-l2j" id="ugy-kb-yd7"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" id="4wJ-al-MrD" customClass="UITableViewCellQueryGroup">
-                                                <rect key="frame" x="0.0" y="342" width="280" height="44"/>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" rowHeight="88" id="4wJ-al-MrD" customClass="UITableViewCellQueryGroup">
+                                                <rect key="frame" x="0.0" y="342" width="280" height="88"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="87"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="d0L-bG-GNa">
@@ -879,7 +877,7 @@
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="accending" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="QeN-5q-mPm">
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="82" id="25a-Ua-v0H"/>
+                                                                <constraint firstAttribute="width" constant="123" id="BbB-eg-0Xv"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -889,10 +887,10 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <constraints>
-                                                    <constraint firstItem="d0L-bG-GNa" firstAttribute="baseline" secondItem="QeN-5q-mPm" secondAttribute="baseline" type="default" id="7cV-4y-Vip"/>
-                                                    <constraint firstAttribute="trailing" secondItem="QeN-5q-mPm" secondAttribute="trailing" constant="13" id="9Em-cx-Upy"/>
                                                     <constraint firstItem="d0L-bG-GNa" firstAttribute="leading" secondItem="4wJ-al-MrD" secondAttribute="leading" constant="10" id="Gn4-Dc-Ill"/>
-                                                    <constraint firstItem="d0L-bG-GNa" firstAttribute="top" secondItem="4wJ-al-MrD" secondAttribute="top" constant="11" id="KqO-OR-qK5"/>
+                                                    <constraint firstItem="QeN-5q-mPm" firstAttribute="top" secondItem="4wJ-al-MrD" secondAttribute="top" constant="46" id="Sxh-fe-BmK"/>
+                                                    <constraint firstItem="d0L-bG-GNa" firstAttribute="top" secondItem="4wJ-al-MrD" secondAttribute="top" constant="11" id="Ysg-yO-hPn"/>
+                                                    <constraint firstAttribute="trailing" secondItem="QeN-5q-mPm" secondAttribute="trailing" constant="14" id="ddu-zY-R7E"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="labelDetail" destination="QeN-5q-mPm" id="amc-Hm-LUZ"/>
@@ -900,7 +898,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryInput" rowHeight="100" id="VMa-Un-Qcd" customClass="UITableViewCellQueryInput">
-                                                <rect key="frame" x="0.0" y="386" width="280" height="100"/>
+                                                <rect key="frame" x="0.0" y="430" width="280" height="100"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="280" height="99"/>
@@ -5415,6 +5413,9 @@
         <image name="UIImageWrench20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="MTAutoLayoutTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAutoLayoutTableViewCell.h"/>
+        </class>
         <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
             <relationships>
@@ -5616,27 +5617,28 @@
                 <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="UITableViewCellInstruction" superclassName="UITableViewCell">
+        <class className="UITableViewCellInstruction" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
             <relationships>
                 <relationship kind="outlet" name="labelGroupType" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelGroupTypeDetail" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="UITableViewCellOverride" superclassName="UITableViewCell">
+        <class className="UITableViewCellOverride" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
         </class>
-        <class className="UITableViewCellQueryGroup" superclassName="UITableViewCell">
+        <class className="UITableViewCellQueryGroup" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryGroup.h"/>
             <relationships>
                 <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
             </relationships>
         </class>
-        <class className="UITableViewCellQueryInput" superclassName="UITableViewCell">
+        <class className="UITableViewCellQueryInput" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
         </class>
-        <class className="UITableViewCellQueryLink" superclassName="UITableViewCell">
+        <class className="UITableViewCellQueryLink" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
             <relationships>
                 <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
@@ -5645,7 +5647,7 @@
                 <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="UITableViewCellQueryPredicate" superclassName="UITableViewCell">
+        <class className="UITableViewCellQueryPredicate" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryPredicate.h"/>
             <relationships>
                 <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>

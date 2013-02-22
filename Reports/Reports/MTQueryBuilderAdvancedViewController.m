@@ -10,14 +10,20 @@
 
 @interface MTQueryBuilderAdvancedViewController ()
 
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
+//@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+//@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
+@property (nonatomic, retain) IBOutlet UIView *backgroundContainer;
+@property (nonatomic, retain) MTScrollViewCenter *scrollView;
+@property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, retain) NSMutableArray *viewControllers;
 @property (nonatomic, retain) NSMutableSet *tableIds;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain) NSMutableDictionary *controllersForObjectIds;     //Tables and links
 @property (nonatomic, retain) NSMutableDictionary *controllersForObjectIdsLink; //Only query links
 @property (nonatomic, assign) NSUInteger tableDisplayCounter;
+
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
 
 @end
 
@@ -30,116 +36,19 @@
     [self removeViewControllers:[NSSet setWithArray:_viewControllers]];
     [_managedObjectContext release];
     [_viewControllers release];
-    [_toolbarTop release];
-    [_toolbarBottom release];
     [_controllersForObjectIds release];
     [_controllersForObjectIdsLink release];
+    [_scrollView release];
+    [_contentView release];
+    [_containerViewHeightConstraint release];
+    [_containerViewWidthConstraint release];
+    [_backgroundContainer release];
     [super dealloc];
-}
-
-- (void)managedObjectContextDidSave:(NSNotification *)notification {
-
-    NSArray *insertedObjects = [[notification userInfo] objectForKey: NSInsertedObjectsKey];
-    
-    for (id insertedObject in insertedObjects) {
-        if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
-            RptqQueryLinks *insertedQueryLinks = [insertedObject retain];
-            MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
-            [connectorView setUserInteractionEnabled:NO];
-            NSManagedObjectID *objectId = [[insertedQueryLinks objectID] retain];
-            [connectorView setObjectIdTag:objectId];
-            RptqField *leftField = [insertedQueryLinks hasLeftField];
-            RptqTable *leftTable = [leftField inTable];
-            MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
-            MTSchemaFieldCell *leftCell = [[leftTableViewController cellForFieldWithObjectId:[leftField objectID]] retain];
-            CGRect leftCellFrame = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[self view]];
-            CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrame);
-            UIView *leftTableView = [[leftTableViewController view] retain];
-
-            RptqField *rightField = [insertedQueryLinks hasRightField];
-            RptqTable *rightTable = [rightField inTable];
-            MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
-            MTSchemaFieldCell *rightCell = [[rightTableViewController cellForFieldWithObjectId:[rightField objectID]] retain];
-            CGRect rightCellFrame = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[self view]];
-            CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrame);
-            UIView *rightTableView = [[rightTableViewController view] retain];
-            
-            UIViewController *connectorViewController = [[UIViewController alloc] init];
-            CGRect connectorFrame = CGRectMake(leftCellCenterPoint.x,
-                                               leftCellCenterPoint.y,
-                                               rightCellCenterPoint.x - leftCellCenterPoint.x,
-                                               rightCellCenterPoint.y - leftCellCenterPoint.y);
-            [connectorView setFrame: connectorFrame];
-            [connectorViewController setView:connectorView];
-
-            [self addViewController:connectorViewController];
-            [[self controllersForObjectIds] setObject:connectorViewController forKey:objectId];
-            [[self controllersForObjectIdsLink] setObject:connectorViewController forKey:objectId];
-            [rightCell release];
-            [leftCell release];
-            [leftTableView release];
-            [leftTableViewController release];
-            [rightTableView release];
-            [rightTableViewController release];
-            [connectorViewController release];
-            [connectorView release];
-            [objectId release];
-            [insertedQueryLinks release];
-        }
-    }
-
-    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
-    
-    RptqQuery *updatedQuery = nil;
-    RptqTable *updatedTable = nil;
-    
-    for (id updatedObject in updatedObjects) {
-        NSLog(@"Updated %@", updatedObject);
-        NSLog(@"Changed values %@", [updatedObject changedValues]);
-        NSLog(@"Committed values %@", [updatedObject committedValuesForKeys:@[@"inQuery", @"hasTables"]]);
-        if ([updatedObject isKindOfClass:[RptqTable class]]) {
-            updatedTable = [updatedObject retain];
-        } else if ([updatedObject isKindOfClass:[RptqQuery class]]) {
-            updatedQuery = [updatedObject retain];
-        }
-    }
-
-    if (updatedQuery && updatedTable) {
-        if ([[updatedTable inQuery] containsObject:updatedQuery]) {
-            [self addSchemaViewControllerForTable:updatedTable];
-            NSLog(@"Add table");
-        } else {
-            [self removeSchemaViewControllerForTable:updatedTable];
-            NSLog(@"Remove table");
-        }
-    }
-
-    [updatedTable release];
-    [updatedQuery release];
-    
-    
-    
-    NSArray *deletedObjects = [[notification userInfo] objectForKey: NSDeletedObjectsKey];
-    for (id deletedObject in deletedObjects) {
-        NSLog(@"Deleted %@", deletedObject);
-
-        if ([deletedObject isKindOfClass:[RptqTable class]]) {
-            RptqTable *deletedTable = deletedObject;
-            if ([deletedTable inQuery] != nil &&
-                [[self tableIds] containsObject: [deletedTable objectID]] == YES) {
-                
-                [self removeSchemaViewControllerForTable:deletedTable];
-                
-            }
-        }
-    }
-
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-
         NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
         [self setViewControllers:viewControllers];
         [viewControllers release];
@@ -163,21 +72,206 @@
 }
 
 - (void)awakeFromNib {
+    /*
+    for (NSLayoutConstraint *layoutConstraint in [self bogusConstraints]) {
+        [[self scrollView] removeConstraint:layoutConstraint];
+    }
+    [[self containerViewHeightConstraint] setConstant:[[self view] bounds].size.height];
+    [[self containerViewWidthConstraint] setConstant:[[self view] bounds].size.width];
+    [[self scrollView] setBounds:[[self view] bounds]];*/
     [super awakeFromNib];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
+    NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
+    NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
+    NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
+    
+    [[self scrollView] setBounds:[[self backgroundContainer] bounds]];
+    [[self scrollView] setCenter:[[self backgroundContainer] center]];
+    [[self contentView] setBounds:[[self backgroundContainer] bounds]];
+    [[self contentView] setCenter:[[self backgroundContainer] center]];
+
+
+    
+/*    CGPoint newContentOffset = CGPointMake(
+                                           self.backgroundContainer.center.x - ([[self scrollView] contentSize].width / 2.0000f) - self.backgroundContainer.bounds.origin.x,
+                                           self.backgroundContainer.center.y - ([[self scrollView] contentSize].height / 2.0000f) - self.backgroundContainer.bounds.origin.y);
+    */
+//    [[self scrollView] setContentOffset:newContentOffset];
+
+//    [[self scrollView] setContentSize:[[self view] bounds].size];
+    //NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
+   //NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
+   //NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
+   //NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
+
+    //[[self view] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, [[self scrollView] bounds].size.width, [[self scrollView] bounds].size.height)];
+    /*
+    CGPoint center = CGPointMake([[self scrollView] bounds].size.width / 2.0000f, [[self scrollView] bounds].size.height / 2.0000f);
+    CGPoint newContentOffset = CGPointMake(
+                center.x - ([[self scrollView] contentSize].width / 2.0000f) - self.view.bounds.origin.x,
+                center.y - ([[self scrollView] contentSize].height / 2.0000f) - self.view.bounds.origin.y);
+    NSLog(@"newContentOffset %@", NSStringFromCGPoint(newContentOffset));
+    NSLog(@"contentSize %@", NSStringFromCGSize([[self scrollView] contentSize]));
+    NSLog(@"[[self view] bounds] %@", NSStringFromCGRect([[self scrollView] bounds]));
+    NSLog(@"zoomScale %f", [[self scrollView] zoomScale]);
+    NSLog(@"-----");
+    [[self scrollView] setContentOffset: newContentOffset];
+     */
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
+//    NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
+//    NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
+//    NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
+    
+    UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
+    [containerView setBackgroundColor:[UIColor paperGraphPaper]];
+    [self setContentView:containerView];
+    [containerView release];
+
+    MTScrollViewCenter *scrollView = [[MTScrollViewCenter alloc] initWithFrame:[[self view] bounds]];
+    [scrollView setShowsHorizontalScrollIndicator:YES];
+    [scrollView setShowsVerticalScrollIndicator:YES];
+    [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [scrollView setContentOffset:CGPointZero];
+    [scrollView setMaximumZoomScale:10.0000f];
+    [scrollView setMinimumZoomScale:0.010000f];
+    [scrollView setZoomScale:1.0000f];
+    [scrollView setScrollEnabled:YES];
+    [scrollView setBounces:YES];
+    [scrollView setAlwaysBounceHorizontal:YES];
+    [scrollView setAlwaysBounceVertical:YES];
+    [scrollView setBouncesZoom:YES];
+    [scrollView setDelegate:self];
+    [scrollView setBackgroundColor:[UIColor clearColor]];
+    [scrollView addSubview:[self contentView]];
+    [self setScrollView:scrollView];
+    [scrollView release];
+    
+    [[self backgroundContainer] addSubview:[self scrollView]];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[self toolbarTop] setTintColor: [UIColor edaBlueDark]];
-    [[self toolbarBottom] setTintColor: [UIColor edaBlueDark]];
+
+//    [[self toolbarTop] setTintColor: [UIColor edaBlueDark]];
+//    [[self toolbarBottom] setTintColor: [UIColor edaBlueDark]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[self scrollView] flashScrollIndicators];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)managedObjectContextDidSave:(NSNotification *)notification {
+    
+    NSArray *insertedObjects = [[notification userInfo] objectForKey: NSInsertedObjectsKey];
+    
+    for (id insertedObject in insertedObjects) {
+        if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
+            RptqQueryLinks *insertedQueryLinks = [insertedObject retain];
+            MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
+            [connectorView setUserInteractionEnabled:NO];
+            NSManagedObjectID *objectId = [[insertedQueryLinks objectID] retain];
+            [connectorView setObjectIdTag:objectId];
+            RptqField *leftField = [insertedQueryLinks hasLeftField];
+            RptqTable *leftTable = [leftField inTable];
+            MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
+            MTSchemaFieldCell *leftCell = [[leftTableViewController cellForFieldWithObjectId:[leftField objectID]] retain];
+            CGRect leftCellFrame = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[self view]];
+            CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrame);
+            UIView *leftTableView = [[leftTableViewController view] retain];
+            
+            RptqField *rightField = [insertedQueryLinks hasRightField];
+            RptqTable *rightTable = [rightField inTable];
+            MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
+            MTSchemaFieldCell *rightCell = [[rightTableViewController cellForFieldWithObjectId:[rightField objectID]] retain];
+            CGRect rightCellFrame = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[self view]];
+            CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrame);
+            UIView *rightTableView = [[rightTableViewController view] retain];
+            
+            UIViewController *connectorViewController = [[UIViewController alloc] init];
+            CGRect connectorFrame = CGRectMake(leftCellCenterPoint.x,
+                                               leftCellCenterPoint.y,
+                                               rightCellCenterPoint.x - leftCellCenterPoint.x,
+                                               rightCellCenterPoint.y - leftCellCenterPoint.y);
+            [connectorView setFrame: connectorFrame];
+            [connectorViewController setView:connectorView];
+            
+            [self addViewController:connectorViewController];
+            [[self controllersForObjectIds] setObject:connectorViewController forKey:objectId];
+            [[self controllersForObjectIdsLink] setObject:connectorViewController forKey:objectId];
+            [rightCell release];
+            [leftCell release];
+            [leftTableView release];
+            [leftTableViewController release];
+            [rightTableView release];
+            [rightTableViewController release];
+            [connectorViewController release];
+            [connectorView release];
+            [objectId release];
+            [insertedQueryLinks release];
+        }
+    }
+    
+    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    
+    RptqQuery *updatedQuery = nil;
+    RptqTable *updatedTable = nil;
+    
+    for (id updatedObject in updatedObjects) {
+        NSLog(@"Updated %@", updatedObject);
+        NSLog(@"Changed values %@", [updatedObject changedValues]);
+        NSLog(@"Committed values %@", [updatedObject committedValuesForKeys:@[@"inQuery", @"hasTables"]]);
+        if ([updatedObject isKindOfClass:[RptqTable class]]) {
+            updatedTable = [updatedObject retain];
+        } else if ([updatedObject isKindOfClass:[RptqQuery class]]) {
+            updatedQuery = [updatedObject retain];
+        }
+    }
+    
+    if (updatedQuery && updatedTable) {
+        if ([[updatedTable inQuery] containsObject:updatedQuery]) {
+            [self addSchemaViewControllerForTable:updatedTable];
+            NSLog(@"Add table");
+        } else {
+            [self removeSchemaViewControllerForTable:updatedTable];
+            NSLog(@"Remove table");
+        }
+    }
+    
+    [updatedTable release];
+    [updatedQuery release];
+    
+    
+    
+    NSArray *deletedObjects = [[notification userInfo] objectForKey: NSDeletedObjectsKey];
+    for (id deletedObject in deletedObjects) {
+        NSLog(@"Deleted %@", deletedObject);
+        
+        if ([deletedObject isKindOfClass:[RptqTable class]]) {
+            RptqTable *deletedTable = deletedObject;
+            if ([deletedTable inQuery] != nil &&
+                [[self tableIds] containsObject: [deletedTable objectID]] == YES) {
+                
+                [self removeSchemaViewControllerForTable:deletedTable];
+                
+            }
+        }
+    }
+    
 }
 
 - (void)addViewControllers:(NSSet *)viewControllers {
@@ -190,7 +284,7 @@
     [viewController retain];
     [self addChildViewController:viewController];
     [[self viewControllers] addObject:viewController];
-    [[self view] addSubview:[viewController view]];
+    [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
     [viewController release];
 }
@@ -230,7 +324,7 @@
     [panGesture release];
     
     
-    [[self view] addSubview:[viewController view]];
+    [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
     self.tableDisplayCounter++;
     [viewController release];
@@ -267,7 +361,6 @@
     [self setTableDisplayCounter:0];
     NSArray *tables = [[RptqDocument tablesForActiveDocument] retain];
     for (RptqTable *table in tables) {
-        NSLog(@"Table: %@", table);
         [self addSchemaViewControllerForTable:table];
     }
     [tables release];
@@ -388,6 +481,60 @@
     [connectorView release];
     [insertedQueryLinks release];
     [controller release];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
+    
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+
+}
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+    return YES;
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return [[[self contentView] retain] autorelease];
 }
 
 @end

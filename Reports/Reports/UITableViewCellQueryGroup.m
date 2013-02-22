@@ -12,13 +12,9 @@
 
 @property (retain, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
 
-
 @end
 
 @implementation UITableViewCellQueryGroup
-
-@synthesize labelDetail = _labelDetail, labelMain = _labelMain;
-@synthesize tableID = _tableID;
 
 - (void)dealloc {
     [_tableID release];

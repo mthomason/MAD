@@ -877,8 +877,25 @@
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryPredicate *predicate = [[[self fetchedResultsControllerPredicates] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             
-            [[(UITableViewCellQueryPredicate *)result labelMain] setText: [predicate fieldleftpred]];
-            [[(UITableViewCellQueryPredicate *)result labelDetail] setText: [predicate fieldrightpred]];
+            NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
+            if ([predicate fieldleftpred] != nil) {
+                leftFieldDisplay = [[predicate fieldleftpred] retain];
+            } else {
+                leftFieldDisplay = [[[predicate hasLeftField] toString] retain];
+            }
+            
+            if ([predicate fieldrightpred] != nil) {
+                rightFieldDisplay = [[predicate fieldrightpred] retain];
+            } else {
+                rightFieldDisplay = [[[predicate hasRightField] toString] retain];
+            }
+            
+            
+            [[(UITableViewCellQueryPredicate *)result labelMain] setText: leftFieldDisplay];
+            [[(UITableViewCellQueryPredicate *)result labelDetail] setText: rightFieldDisplay];
+            
+            [leftFieldDisplay release];
+            [rightFieldDisplay release];
             [predicate release];
             break;
         }

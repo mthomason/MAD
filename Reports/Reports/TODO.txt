@@ -1,4 +1,7 @@
 Container views for holding the fields in the report designer.
 Store query results on disk and in file.
-WHERE clause of query.
+Predicate (WHERE clause) of query.
 FORMULAS processed using JavaScript.
+
+
+When table is removed from query, remove its fields from the report design.

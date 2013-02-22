@@ -536,6 +536,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
 
 - (NSString *)printDocumentObject:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
     NSString *result = nil;
+    id value = nil;
     switch ([documentObject getType]) {
         case MNSObjectTypeLabel: {
             
@@ -544,7 +545,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         case MNSObjectTypeLabelDataField: {
             RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
             RptqField *field = [documentObjectDataField referencesField];
-            result = [resultDictionary objectForKey: [field display]];
+            value = [resultDictionary objectForKey: [field display]];
             break;
         }
         case MNSObjectTypeLabelFormula: {
@@ -557,38 +558,25 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
             break;
         }
     }
-    if (result == nil) {
-        result = @"Nil";
+    if ([value isKindOfClass:[NSString class]]) {
+        result = [[NSString alloc] initWithString:value];
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        result = [[NSString alloc] initWithFormat:@"%f", [value floatValue]];
     }
-    return result;
+    
+    if (value == nil) {
+        result = [[NSString alloc] initWithString:@"<null>"];
+    }
+    return [result autorelease];
 }
 
 - (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
-    switch ([documentObject getType]) {
-        case MNSObjectTypeLabel: {
-            
-            break;
-        }
-        case MNSObjectTypeLabelDataField: {
-            RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-            RptqField *field = [documentObjectDataField referencesField];
-            NSString *displayText = [resultDictionary objectForKey: [field display]];
-            if (displayText != nil) {
-                [[result mutableString] setString:displayText];
-            }
-            break;
-        }
-        case MNSObjectTypeLabelFormula: {
-            break;
-        }
-        case MNSObjectTypeLabelLabelLink: {
-            break;
-        }
-        default: {
-            break;
-        }
-    }
+    
+    NSString *displayText = [[self printDocumentObject:documentObject withResultDictionary:resultDictionary] retain];
+    [[result mutableString] setString:displayText];
+    [displayText release];
+    
     NSRange wholeString = NSMakeRange(0, [[result mutableString] length]);
     UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
     NSDictionary *customAttributes = @{NSFontAttributeName : customFont};

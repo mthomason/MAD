@@ -14,9 +14,11 @@
 #import "UIGestureRecognizer+AnchorPoint.h"
 #import "UIView+NSObjectIdTag.h"
 #import "CGGeometry+Extras.h"
+#import "UIColor+PaperPatterns.h"
+#import "MTScrollViewCenter.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
-    <UIGestureRecognizerDelegate>
+    <UIGestureRecognizerDelegate, UIScrollViewDelegate>
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport;
 
