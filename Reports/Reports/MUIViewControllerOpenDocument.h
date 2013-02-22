@@ -13,6 +13,7 @@
 #import "MTSplitViewController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
+#import "MTTitleView.h"
 
 extern NSString * const SEGUE_SHOWADDDOCUMENT;
 extern NSString * const SEGUE_OPENDOCUMENT;

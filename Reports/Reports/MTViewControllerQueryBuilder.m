@@ -80,7 +80,6 @@
 
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
     [[self tableViewQueryBuilder] setOpaque: YES];
     [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -88,12 +87,11 @@
     QueryBuilderDataModal *qbdm = [[QueryBuilderDataModal alloc] initWithManagedDocumentQuery:[[AppDelegate activeDocument] document]];
     [self setQueryBuilderDataModal:qbdm];
     [qbdm release];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    [[self toolbar] setTintColor:[UIColor edaBlueDark]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

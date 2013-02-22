@@ -11,8 +11,10 @@
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
+
 @property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
 
 @end
@@ -21,8 +23,9 @@
 
 - (void)dealloc {
     [_schemaTableViewController release];
-    [_barButtonItemTitle release];
     [_hasFieldsObjectIds release];
+    [_titleView release];
+    [_toolbar release];
     [super dealloc];
 }
 
@@ -48,8 +51,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [[self barButtonItemTitle] setEnabled:NO];
-    [[self barButtonItemTitle] setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
     [[[self view] layer] setCornerRadius: 25.0000f];
     [[self view] setClipsToBounds:YES];
     [[self view] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
@@ -57,10 +58,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"tableObjectId: %@", [self cachedTableObjectId]);
     [[self schemaTableViewController] setDataSource:self];
     [[self schemaTableViewController] setDelegate:self];
     [[self schemaTableViewController] reloadData];
+    [[self toolbar] setTintColor:[UIColor edaGreenDark]];
     
 }
 
@@ -86,7 +87,7 @@
     [self setCachedTableObjectId:tableObjectId];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
-    [[self barButtonItemTitle] setTitle:[table name]];
+    [[[self titleView] label] setText:[table name]];
 }
 
 #pragma mark - Table view delegate
@@ -159,4 +160,9 @@
     return [[self schemaTableViewController] convertRect:rectForRow toView:containerView];
 }
 
+- (void)viewDidUnload {
+    [self setTitleView:nil];
+    [self setToolbar:nil];
+    [super viewDidUnload];
+}
 @end

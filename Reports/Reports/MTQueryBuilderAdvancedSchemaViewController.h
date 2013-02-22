@@ -14,6 +14,7 @@
 #import "MTSchemaFieldCell.h"
 #import "UIView+NSObjectIdTag.h"
 #import "MTConnectorView.h"
+#import "MTTitleView.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
     <MTSchemaFieldCellDelegate>

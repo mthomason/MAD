@@ -10,6 +10,7 @@
 #import "MTViewController.h"
 #import "MTViewControllerQueryBuilder.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import "MTTitleView.h"
 
 @protocol MTSplitViewControllerDelegate <NSObject>
 - (void)displayContentController:(UIViewController *)contentController;

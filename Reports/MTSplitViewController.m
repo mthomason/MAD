@@ -14,6 +14,7 @@
 @property (retain, nonatomic) IBOutlet UIView *rightView;
 @property (retain, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+@property (retain, nonatomic) IBOutlet MTTitleView *titleView;
 
 @end
 
@@ -25,6 +26,7 @@
     [_rightView release];
     [_bogusConstraints release];
     [_toolbarTop release];
+    [_titleView release];
     [super dealloc];
 }
 
@@ -38,7 +40,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"%@ %@", [[self childViewControllers] objectAtIndex:0], [[self childViewControllers] objectAtIndex:1]);
 
     [[self delegateContentController] displayContentController:
      [[self childViewControllers] objectAtIndex:0]];
@@ -46,6 +47,7 @@
     [[self delegateContentController] displayContentController:
      [[self childViewControllers] objectAtIndex:1]];
     
+    [[[self titleView] label] setText:NSLocalizedString(@"Query", @"Query")];
 }
 
 - (id)leftViewController {
@@ -62,7 +64,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    [[self toolbarTop] setTintColor:[UIColor edaBlueDark]];
+
     UIView *leftView = [[self leftView] retain];
     UIView *rightView = [[self rightView] retain];
 
@@ -119,4 +123,8 @@
     return [[[self leftViewController] retain] autorelease];
 }
 
+- (void)viewDidUnload {
+    [self setTitleView:nil];
+    [super viewDidUnload];
+}
 @end

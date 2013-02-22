@@ -10,8 +10,7 @@
 
 @interface MTQueryBuilderAdvancedViewController ()
 
-//@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
-//@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
 @property (nonatomic, retain) IBOutlet UIView *backgroundContainer;
 @property (nonatomic, retain) MTScrollViewCenter *scrollView;
 @property (nonatomic, retain) UIView *contentView;
@@ -43,6 +42,7 @@
     [_containerViewHeightConstraint release];
     [_containerViewWidthConstraint release];
     [_backgroundContainer release];
+    [_toolbarBottom release];
     [super dealloc];
 }
 
@@ -72,65 +72,19 @@
 }
 
 - (void)awakeFromNib {
-    /*
-    for (NSLayoutConstraint *layoutConstraint in [self bogusConstraints]) {
-        [[self scrollView] removeConstraint:layoutConstraint];
-    }
-    [[self containerViewHeightConstraint] setConstant:[[self view] bounds].size.height];
-    [[self containerViewWidthConstraint] setConstant:[[self view] bounds].size.width];
-    [[self scrollView] setBounds:[[self view] bounds]];*/
     [super awakeFromNib];
 }
 
 - (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
-    NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
-    NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
-    NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
-    
     [[self scrollView] setBounds:[[self backgroundContainer] bounds]];
     [[self scrollView] setCenter:[[self backgroundContainer] center]];
     [[self contentView] setBounds:[[self backgroundContainer] bounds]];
     [[self contentView] setCenter:[[self backgroundContainer] center]];
-
-
-    
-/*    CGPoint newContentOffset = CGPointMake(
-                                           self.backgroundContainer.center.x - ([[self scrollView] contentSize].width / 2.0000f) - self.backgroundContainer.bounds.origin.x,
-                                           self.backgroundContainer.center.y - ([[self scrollView] contentSize].height / 2.0000f) - self.backgroundContainer.bounds.origin.y);
-    */
-//    [[self scrollView] setContentOffset:newContentOffset];
-
-//    [[self scrollView] setContentSize:[[self view] bounds].size];
-    //NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
-   //NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
-   //NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
-   //NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
-
-    //[[self view] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, [[self scrollView] bounds].size.width, [[self scrollView] bounds].size.height)];
-    /*
-    CGPoint center = CGPointMake([[self scrollView] bounds].size.width / 2.0000f, [[self scrollView] bounds].size.height / 2.0000f);
-    CGPoint newContentOffset = CGPointMake(
-                center.x - ([[self scrollView] contentSize].width / 2.0000f) - self.view.bounds.origin.x,
-                center.y - ([[self scrollView] contentSize].height / 2.0000f) - self.view.bounds.origin.y);
-    NSLog(@"newContentOffset %@", NSStringFromCGPoint(newContentOffset));
-    NSLog(@"contentSize %@", NSStringFromCGSize([[self scrollView] contentSize]));
-    NSLog(@"[[self view] bounds] %@", NSStringFromCGRect([[self scrollView] bounds]));
-    NSLog(@"zoomScale %f", [[self scrollView] zoomScale]);
-    NSLog(@"-----");
-    [[self scrollView] setContentOffset: newContentOffset];
-     */
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    NSLog(@"Frame %@", NSStringFromCGRect([[self view] frame]));
-//    NSLog(@"Bounds %@", NSStringFromCGRect([[self view] bounds]));
-//    NSLog(@"Frame %@", NSStringFromCGRect([[self backgroundContainer] frame]));
-//    NSLog(@"Bounds %@", NSStringFromCGRect([[self backgroundContainer] bounds]));
-    
+
     UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
     [containerView setBackgroundColor:[UIColor paperGraphPaper]];
     [self setContentView:containerView];
@@ -161,9 +115,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-//    [[self toolbarTop] setTintColor: [UIColor edaBlueDark]];
-//    [[self toolbarBottom] setTintColor: [UIColor edaBlueDark]];
+    [[self toolbarBottom] setTintColor:[UIColor edaBlueDark]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -1603,6 +1603,8 @@
 		4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */; };
 		4CF8670E16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */; };
+		4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
+		4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
 		4CF8D4191685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D41A1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
 		4CF8D41B1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */; };
@@ -2441,6 +2443,8 @@
 		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTScrollViewCenter.h; sourceTree = "<group>"; };
 		4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTScrollViewCenter.m; sourceTree = "<group>"; };
+		4CF8671316D8259300F716A8 /* MTTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTitleView.h; sourceTree = "<group>"; };
+		4CF8671416D8259400F716A8 /* MTTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTitleView.m; sourceTree = "<group>"; };
 		4CF8D4181685027200357B1E /* MTCollectionViewCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCollectionViewCellElement.xib; sourceTree = "<group>"; };
 		4CF8D41E168502D700357B1E /* MTCollectionViewCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellElement.h; sourceTree = "<group>"; };
 		4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellElement.m; sourceTree = "<group>"; };
@@ -2686,6 +2690,8 @@
 				4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */,
 				4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */,
 				4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */,
+				4CF8671316D8259300F716A8 /* MTTitleView.h */,
+				4CF8671416D8259400F716A8 /* MTTitleView.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -5144,6 +5150,7 @@
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4CF8670E16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
+				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5595,6 +5602,7 @@
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
+				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,6 +31,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureRecognizer;
 
 @property (nonatomic, assign) BOOL editModeEnabled;
+@property (retain, nonatomic) IBOutlet MTTitleView *titleView;
 
 @end
 
@@ -47,6 +48,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_toolbar release];
     [_barButtonItemTitle release];
     [_collectionViewQueries release];
+    [_titleView release];
     [super dealloc];
 }
 
@@ -62,11 +64,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [[self collectionViewQueries] registerClass: [MTCollectionViewCellDocument class]
-                         forCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier];
-        
-        [self setEditModeEnabled:NO];
-
+        [self initalize];
     }
     return self;    
 }
@@ -74,14 +72,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
-        [[self collectionViewQueries] registerClass: [MTCollectionViewCellDocument class]
-                         forCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier];
-        
-        [self setEditModeEnabled:NO];
-
+        [self initalize];
     }
     return self;
+}
+
+- (void)initalize {
+    [[self collectionViewQueries] registerClass: [MTCollectionViewCellDocument class]
+                     forCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier];
+    
+    [self setEditModeEnabled:NO];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -158,6 +158,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self collectionViewQueries] addGestureRecognizer:tapGestureRecognizer];
     [self setTapGestureRecognizer:tapGestureRecognizer];
     [tapGestureRecognizer release];
+    
+    [[[self titleView] label] setText:NSLocalizedString(@"Reports", @"Reports")];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -603,4 +606,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return CGSizeMake(150.0000f, 100.0000f);
 }
 
+- (void)viewDidUnload {
+    [self setTitleView:nil];
+    [super viewDidUnload];
+}
 @end

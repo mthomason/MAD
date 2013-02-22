@@ -5,3 +5,4 @@ FORMULAS processed using JavaScript.
 
 
 When table is removed from query, remove its fields from the report design.
+Add links when opening query document.
