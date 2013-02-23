@@ -231,7 +231,7 @@
     if ([[table designerInitalLayout] boolValue] == YES) {
         CGFloat originX = 50.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
         CGFloat originY = originX;
-        subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
+        subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
         [table setDesignerSizeWidth:@(subviewRect.size.width)];
         [table setDesignerOriginY:@(subviewRect.origin.x)];

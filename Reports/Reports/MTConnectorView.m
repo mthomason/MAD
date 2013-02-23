@@ -112,8 +112,11 @@
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(currentContext, 5.0000f);
     
+    CGContextSetShadow(currentContext, CGSizeMake(5.0000f, 5.0000f), 20.0000f);
+    
+    CGContextSetLineWidth(currentContext, 5.0000f);
+
     if ([[self topLeftToBottomRight] boolValue]) {
         [[UIColor greenColor] set];
         CGPoint origin = CGPointMake(rect.origin.x, rect.origin.y);

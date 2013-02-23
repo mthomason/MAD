@@ -77,6 +77,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    NSLog(@"%@", NSStringFromCGRect([self view].bounds));
 }
 
 - (void)didReceiveMemoryWarning {
@@ -115,7 +116,6 @@
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqField *field = [RptqField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
-    //RptqField *field = [[self hasFields] objectAtIndex:[indexPath row]];
     [[result detailLabel] setText:[field name]];
     return result;
 }

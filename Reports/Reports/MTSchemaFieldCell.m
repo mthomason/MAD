@@ -24,7 +24,6 @@
 
 - (void)dealloc {
     [_detailLabel release];
-    [_anchorPointView release];
     [_parentContainerView release];
     [super dealloc];
 }

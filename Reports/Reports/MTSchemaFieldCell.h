@@ -19,8 +19,6 @@
 
 @property (nonatomic, assign) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
 @property (nonatomic, retain) IBOutlet UILabel *detailLabel;
-@property (nonatomic, retain) IBOutlet UIView *anchorPointView;
-
 @property (nonatomic, retain) UIView *parentContainerView;
 
 @end
