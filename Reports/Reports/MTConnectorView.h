@@ -14,6 +14,9 @@
 @property (nonatomic, retain) UIView *anchorViewLeft;
 @property (nonatomic, retain) UIView *anchorViewRight;
 @property (nonatomic, retain) NSNumber *topLeftToBottomRight;
+@property (nonatomic, retain) NSString *linkDescription;
+
+@property (nonatomic, assign) BOOL leftViewIsInital;
 
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 

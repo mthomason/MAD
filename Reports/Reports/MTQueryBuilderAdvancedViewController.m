@@ -279,6 +279,7 @@
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
     [connectorView setUserInteractionEnabled:NO];
     [connectorView setObjectIdTag:objectId];
+
     RptqField *leftField = [link hasLeftField];
     RptqTable *leftTable = [leftField inTable];
     MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
@@ -357,21 +358,21 @@
     
     if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
         leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
-        NSLog(@"P1");
+        //NSLog(@"P1");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
-        NSLog(@"P2");
+        //NSLog(@"P2");
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
-        NSLog(@"P3");
+        //NSLog(@"P3");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     } else {
-        NSLog(@"P4");
+        //NSLog(@"P4");
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     }
@@ -379,24 +380,26 @@
     if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"CF1");
+            NSLog(@"left");
         } else {
             [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"CF2");
+            NSLog(@"left");
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
+        [connectorView setLeftViewIsInital:YES];
     } else {
         extraInset = -20.0000f;
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"CF3");
+            NSLog(@"right");
         } else {
             [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"CF4");
+            NSLog(@"right");
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
+        [connectorView setLeftViewIsInital:NO];
     }
 
     connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
