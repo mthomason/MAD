@@ -41,5 +41,6 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
                        andJoinType:(MNSLinkType)joinType;
 
 + (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

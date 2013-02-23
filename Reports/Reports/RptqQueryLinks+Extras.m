@@ -8,6 +8,7 @@
 
 #import "RptqQueryLinks+Extras.h"
 #import "AppDelegate.h"
+#import "RptqDocument+ActiveDocument.h"
 
 @implementation RptqQueryLinks (Extras)
 
@@ -63,6 +64,18 @@
 }
 
 #pragma mark - Static
+
++ (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    request.predicate = [NSPredicate predicateWithFormat: @"ANY inQuery == %@", [query objectID]];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
+    [request setSortDescriptors: @[sortDescriptor]];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    return results;
+}
 
 + (id)getQueryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];

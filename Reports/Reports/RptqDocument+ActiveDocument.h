@@ -13,8 +13,9 @@
 
 + (RptqDocument *)activeDocument;
 + (RptqQuery *)queryForActiveDocument;
-+ (NSString *)sqlStatementForActiveDocument;
++ (NSArray *)queryLinksForActiveDocument;
 + (NSArray *)tablesForActiveDocument;
++ (NSString *)sqlStatementForActiveDocument;
 + (void)saveContext;
 
 @end

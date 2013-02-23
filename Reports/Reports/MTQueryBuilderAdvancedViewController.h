@@ -18,7 +18,7 @@
 #import "MTScrollViewCenter.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
-    <UIGestureRecognizerDelegate, UIScrollViewDelegate>
+    <UIGestureRecognizerDelegate, UIScrollViewDelegate, MTQueryBuilderAdvancedSchemaViewControllerDelegate>
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport;
 

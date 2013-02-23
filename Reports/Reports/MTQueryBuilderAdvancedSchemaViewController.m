@@ -10,7 +10,7 @@
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, retain, readwrite) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, retain) IBOutlet MTTitleView *titleView;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
@@ -165,4 +165,11 @@
     [self setToolbar:nil];
     [super viewDidUnload];
 }
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [[self delegate] didMoveFieldRect:self];
+}
+
 @end
