@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
 
 @property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
+@property (nonatomic, retain) IBOutlet UIView *containerView;
 
 @end
 
@@ -26,6 +27,7 @@
     [_hasFieldsObjectIds release];
     [_titleView release];
     [_toolbar release];
+    [_containerView release];
     [super dealloc];
 }
 
@@ -51,9 +53,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [[[self view] layer] setCornerRadius: 25.0000f];
-    [[self view] setClipsToBounds:YES];
-    [[self view] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
 }
 
 - (void)viewDidLoad {
@@ -62,7 +61,13 @@
     [[self schemaTableViewController] setDelegate:self];
     [[self schemaTableViewController] reloadData];
     [[self toolbar] setTintColor:[UIColor edaGreenDark]];
-    
+    [[[self containerView] layer] setCornerRadius: 25.0000f];
+    [[self containerView] setClipsToBounds: YES];
+    [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
+    [[[self view] layer] setShadowOpacity:9.0000f];
+    [[[self view] layer] setShadowRadius:5.0000f];
+    [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -106,14 +111,7 @@
     //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     //RptqTable *table = [RptqTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
-    MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
-    if (!result) {
-        UINib *resultCellNib = [UINib nibWithNibName:MyIdentifierMTSchemaFieldCell bundle:nil];
-        [resultCellNib instantiateWithOwner:self options:nil];
-        result = [self schemaFieldCell];
-        [self setSchemaFieldCell:nil];
-    }
-    
+    MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];    
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqField *field = [RptqField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
@@ -131,9 +129,13 @@
     
     RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[self hasFieldsObjectIds] removeAllObjects];
-    for (RptqField *field in [table hasFields]) {
+    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *fields = [[NSArray alloc] initWithArray: [[table hasFields] sortedArrayUsingDescriptors:@[namesAccending]]];
+    for (RptqField *field in fields) {
         [[self hasFieldsObjectIds] addObject:[field objectID]];
     }
+    [fields release];
+    [namesAccending release];
     //[self setHasFields:[[table hasFields] allObjects]];
     return [[self hasFieldsObjectIds] count];
 }
@@ -163,6 +165,7 @@
 - (void)viewDidUnload {
     [self setTitleView:nil];
     [self setToolbar:nil];
+    [self setContainerView:nil];
     [super viewDidUnload];
 }
 

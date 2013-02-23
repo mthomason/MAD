@@ -242,7 +242,7 @@
         subviewRect = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
     }
     [[viewController view] setFrame: subviewRect];
-    [[viewController view] setBackgroundColor:[UIColor blueColor]];
+    //[[viewController view] setBackgroundColor:[UIColor blueColor]];
     
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
@@ -317,6 +317,7 @@
     RptqQueryLinks *insertedQueryLinks = [queryLink retain];
     UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
     MTConnectorView *connectorView = [(MTConnectorView *)[controller view] retain];
+    CGFloat paddingLeft = 75.0000f;
     RptqField *leftField = [insertedQueryLinks hasLeftField];
     RptqTable *leftTable = [leftField inTable];
     MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
@@ -331,7 +332,7 @@
     }
     CGRect leftCellFrameInView = [[self view] convertRect:leftCellFrameInTable fromView:[leftTableViewController view]];
     CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrameInView);
-
+    
     RptqField *rightField = [insertedQueryLinks hasRightField];
     RptqTable *rightTable = [rightField inTable];
     MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
@@ -346,7 +347,14 @@
     }
     CGRect rightCellFrameInView = [[self view] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
     CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);
-    
+
+    if (leftCellCenterPoint.x > rightCellCenterPoint.x) {
+        leftCellCenterPoint.x = leftCellCenterPoint.x - paddingLeft;
+        rightCellCenterPoint.x = rightCellCenterPoint.x + paddingLeft;
+    } else {
+        leftCellCenterPoint.x = leftCellCenterPoint.x + paddingLeft;
+        rightCellCenterPoint.x = rightCellCenterPoint.x - paddingLeft;
+    }
     
     if (leftCellCenterPoint.x < rightCellCenterPoint.x) {
         if (leftCellCenterPoint.y < rightCellCenterPoint.y) {
