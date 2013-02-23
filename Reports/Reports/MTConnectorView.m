@@ -44,6 +44,9 @@
         
         [anchorLeft release];
         [anchorRight release];
+        
+        [self setClipsToBounds:NO];
+        [[self layer] setMasksToBounds:NO];
     }
     return self;
 }
@@ -111,24 +114,42 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    rect = CGRectInset(rect, 10.0000f, 10.0000f);
+    
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     
-    CGContextSetShadow(currentContext, CGSizeMake(5.0000f, 5.0000f), 20.0000f);
+    CGContextSetShadow(currentContext, CGSizeMake(5.0000f, 5.0000f), 5.0000f);
     
     CGContextSetLineWidth(currentContext, 5.0000f);
 
     if ([[self topLeftToBottomRight] boolValue]) {
-        [[UIColor greenColor] set];
+        
+        [(UIColor *)[UIColor edaBlueDark] set];
+        
         CGPoint origin = CGPointMake(rect.origin.x, rect.origin.y);
         CGPoint destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+        CGRect connectorNobRectOrigin = CGRectMake(origin.x - 5.0000f, origin.y - 5.0000f, 10.0000f, 10.0000f);
+        CGRect connectorNobRectDestination = CGRectMake(destination.x - 5.0000f, destination.y - 5.0000f, 10.0000f, 10.0000f);
+
+        CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
+        CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
         CGContextMoveToPoint(currentContext, origin.x, origin.y);
-        CGContextAddLineToPoint(currentContext, destination.x, destination.y);
+        CGContextAddCurveToPoint(currentContext, rect.origin.x, rect.origin.y + rect.size.height, rect.origin.x + rect.size.width, rect.origin.y, destination.x, destination.y);
+
     } else {
-        [[UIColor redColor] set];
+        //[(UIColor *)[UIColor edaBlueLight] set];
+        [(UIColor *)[UIColor edaBlueDark] set];
+
         CGPoint origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
         CGPoint destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
+        CGRect connectorNobRectOrigin = CGRectMake(origin.x - 5.0000f, origin.y - 5.0000f, 10.0000f, 10.0000f);
+        CGRect connectorNobRectDestination = CGRectMake(destination.x - 5.0000f, destination.y - 5.0000f, 10.0000f, 10.0000f);
+
+        CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
+        CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
         CGContextMoveToPoint(currentContext, origin.x, origin.y);
-        CGContextAddLineToPoint(currentContext, destination.x, destination.y);
+        CGContextAddCurveToPoint(currentContext, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height, rect.origin.x, rect.origin.y, destination.x, destination.y);
+
     }
     
     CGContextStrokePath(currentContext);

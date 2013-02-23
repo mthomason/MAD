@@ -136,11 +136,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return action == @selector(cut:) ||
-        action == @selector(copy:) ||
-        action == @selector(paste:) ||
-        action == @selector(delete:) ||
-        [super canPerformAction:action withSender:sender];
+    return [self respondsToSelector:action] || [super canPerformAction:action withSender:sender];
 }
 
 #pragma mark - UIViewController Overrides
@@ -371,6 +367,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                 message: message
                       cancelButtonTitle: buttonTitle
                        otherButtonTitle: nil onDismiss: nil onCancel: nil];
+}
+
+- (void)cut:(id)sender {
+    [super cut:sender];
+}
+
+- (void)copy:(id)sender {
+    [super copy:sender];
+}
+
+- (void)paste:(id)sender {
+    [super paste:sender];
 }
 
 - (IBAction)delete:(id)sender {
@@ -606,8 +614,4 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return CGSizeMake(150.0000f, 100.0000f);
 }
 
-- (void)viewDidUnload {
-    [self setTitleView:nil];
-    [super viewDidUnload];
-}
 @end

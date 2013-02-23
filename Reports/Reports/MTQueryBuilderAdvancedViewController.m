@@ -346,37 +346,65 @@
         rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableFrame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
     }
     CGRect rightCellFrameInView = [[self view] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
-    CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);
+    CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);    
 
-    if (leftCellCenterPoint.x > rightCellCenterPoint.x) {
-        leftCellCenterPoint.x = leftCellCenterPoint.x - paddingLeft;
-        rightCellCenterPoint.x = rightCellCenterPoint.x + paddingLeft;
+    CGRect connectorFrame;
+    
+    CGFloat extraInset = 0.0000f;
+    
+    CGPoint leftCellAnchorPoint = leftCellCenterPoint;
+    CGPoint rightCellAnchorPoint = rightCellCenterPoint;
+    
+    if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
+        leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
+        NSLog(@"P1");
+        leftCellAnchorPoint.x += paddingLeft;
+        rightCellAnchorPoint.x -= paddingLeft;
+    } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
+               leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
+        NSLog(@"P2");
+        leftCellAnchorPoint.x -= paddingLeft;
+        rightCellAnchorPoint.x -= paddingLeft;
+    } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
+               leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
+        NSLog(@"P3");
+        leftCellAnchorPoint.x += paddingLeft;
+        rightCellAnchorPoint.x += paddingLeft;
     } else {
-        leftCellCenterPoint.x = leftCellCenterPoint.x + paddingLeft;
-        rightCellCenterPoint.x = rightCellCenterPoint.x - paddingLeft;
+        NSLog(@"P4");
+        leftCellAnchorPoint.x -= paddingLeft;
+        rightCellAnchorPoint.x += paddingLeft;
     }
     
-    if (leftCellCenterPoint.x < rightCellCenterPoint.x) {
-        if (leftCellCenterPoint.y < rightCellCenterPoint.y) {
+    if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
+        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"CF1");
         } else {
             [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"CF2");
+            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
+            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
     } else {
-        if (leftCellCenterPoint.y < rightCellCenterPoint.y) {
+        extraInset = -20.0000f;
+        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"CF3");
         } else {
             [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"CF4");
+            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
+            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
         }
     }
-    
-    CGRect connectorFrame = CGRectMake(leftCellCenterPoint.x,
-                                       leftCellCenterPoint.y,
-                                       rightCellCenterPoint.x - leftCellCenterPoint.x,
-                                       rightCellCenterPoint.y - leftCellCenterPoint.y);
+
+    connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
+                                leftCellAnchorPoint.y - 10.0000f,
+                                rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
+                                rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
     
     [connectorView setFrame: connectorFrame];
-    
     
     [leftTableViewController release];
     [rightTableViewController release];
