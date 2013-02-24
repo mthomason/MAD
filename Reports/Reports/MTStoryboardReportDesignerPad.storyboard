@@ -639,13 +639,6 @@
                                     <constraint firstAttribute="width" constant="320" type="user" id="lXY-Sg-8yq"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem image="UIImageBolt20.png" style="plain" id="dZO-zT-gnG">
-                                        <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <segue destination="SeT-Hl-V2y" kind="modal" identifier="showReportViewerFromQuery" id="k76-5g-D9d"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="cFW-eM-K4P"/>
                                     <barButtonItem title="SQL" id="D6Z-M9-31R">
                                         <connections>
                                             <segue destination="CS8-UT-bFG" kind="modal" identifier="MNSSegueShowSql" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="T6Q-GV-VzM"/>
@@ -685,7 +678,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="center" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="eP3-jO-AZa" detailTextLabel="9CN-Kj-SB9" style="IBUITableViewCellStyleValue1" id="Utj-lp-k8o" customClass="UITableViewCellInstruction">
+                                    <tableViewCell contentMode="center" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="eP3-jO-AZa" detailTextLabel="9CN-Kj-SB9" style="IBUITableViewCellStyleValue1" id="Utj-lp-k8o" customClass="UITableViewCellInstruction">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5906,9 +5899,6 @@
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
-        </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
         </class>
@@ -6185,7 +6175,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="SZe-fX-9Gn"/>
-        <segue reference="k76-5g-D9d"/>
         <segue reference="Mlr-1g-y8b"/>
         <segue reference="MI1-uS-Vvj"/>
     </inferredMetricsTieBreakers>
