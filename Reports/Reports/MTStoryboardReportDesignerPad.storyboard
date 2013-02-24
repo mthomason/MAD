@@ -289,18 +289,18 @@
             <objects>
                 <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oy5-et-qFd" customClass="MUIViewControllerReportDesigner" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uh3-7g-fPO">
-                        <rect key="frame" x="0.0" y="20" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS" customClass="UIScrollViewSection"/>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-v2-HyI">
                                 <items>
-                                    <barButtonItem title="Reports" id="Ph0-RK-UQf">
+                                    <barButtonItem title="Reports" width="66" id="Ph0-RK-UQf">
                                         <connections>
                                             <action selector="doneReports:" destination="oy5-et-qFd" id="tfP-pm-vdf"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Query" id="FWg-Ni-c6x">
+                                    <barButtonItem title="Query" width="66" id="FWg-Ni-c6x">
                                         <connections>
                                             <action selector="done:" destination="oy5-et-qFd" id="Avw-j3-2ef"/>
                                         </connections>
@@ -320,7 +320,7 @@
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="7gg-k5-haz"/>
                                     <barButtonItem style="plain" id="zqg-zW-jFS">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="wHt-KR-9Qo">
-                                            <rect key="frame" x="290" y="12" width="18" height="20"/>
+                                            <rect key="frame" x="994" y="12" width="18" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <state key="normal">
@@ -420,7 +420,7 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemInfo" destination="zqg-zW-jFS" id="eLI-r9-X2a"/>
                         <outlet property="barButtonItemObjects" destination="Jgg-su-8FN" id="bBA-KX-tW6"/>
@@ -511,7 +511,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dm9-l4-59o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1652" y="1430"/>
+            <point key="canvasLocation" x="-516" y="2622"/>
         </scene>
         <!--View Controller Open Document-->
         <scene sceneID="Vfa-NU-wS3">
@@ -2405,12 +2405,12 @@
                                     <constraint firstAttribute="height" constant="44" type="user" id="Dlq-ZL-CCo"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="Reports" id="8iR-qX-Hsr">
+                                    <barButtonItem title="Reports" width="66" id="8iR-qX-Hsr">
                                         <connections>
                                             <action selector="showReportDocumentList:" destination="p7o-3U-Nna" id="SBE-Sr-h8p"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Layout" id="msA-br-ar6">
+                                    <barButtonItem title="Layout" width="66" id="msA-br-ar6">
                                         <connections>
                                             <action selector="showReportDesigner:" destination="p7o-3U-Nna" id="KUe-8Z-j0N"/>
                                             <segue destination="oy5-et-qFd" kind="modal" identifier="MTSegueIdentifierShowReportDesigerFromSplitView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="SZe-fX-9Gn"/>

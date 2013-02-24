@@ -69,11 +69,14 @@
 
     MTViewControllerReportPage *pageOne = [[MTViewControllerReportPage alloc] initWithPageNumber:1];
     [[pageOne view] setBounds:[[self viewContainer] bounds]];
+    [[pageOne view] setCenter:[[self viewContainer] center]];
     [pageOne setDelegate:self];
     [initalPages addObject:pageOne];
     [pageOne release];
     if (initalNumberOfPagesRequired == 2) {
         MTViewControllerReportPage *pageTwo = [[MTViewControllerReportPage alloc] initWithPageNumber:2];
+        [[pageTwo view] setBounds:[[self viewContainer] bounds]];
+        [[pageTwo view] setCenter:[[self viewContainer] center]];
         [pageTwo setDelegate:self];
         [initalPages addObject:pageTwo];
         [pageTwo release];
