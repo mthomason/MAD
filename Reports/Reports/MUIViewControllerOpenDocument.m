@@ -31,7 +31,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureRecognizer;
 
 @property (nonatomic, assign) BOOL editModeEnabled;
-@property (retain, nonatomic) IBOutlet MTTitleView *titleView;
+@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
+
+@property (nonatomic, assign) BOOL bothContentControllersDisplayed;
 
 @end
 
@@ -302,18 +304,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MTViewControllerQueryBuilder *queryBuilderViewController = (MTViewControllerQueryBuilder *)[[childNavigationController topViewController] retain];
             [self setStandardQueryBuilder:queryBuilderViewController];
             [queryBuilderViewController release];
-            
+            [self setBothContentControllersDisplayed:NO];
         }
     } else if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
         MTQueryBuilderAdvancedViewController *advancedControl = (MTQueryBuilderAdvancedViewController *)contentController;
         [self setAdvancedQueryBuilder:advancedControl];
+        [self setBothContentControllersDisplayed:NO];
     } else if ([contentController isKindOfClass:[MTViewControllerQueryBuilder class]]) {
         MTViewControllerQueryBuilder *queryBuilder = (MTViewControllerQueryBuilder *)contentController;
         [self setStandardQueryBuilder:queryBuilder];
         [queryBuilder setDelegate:self];
+        [self setBothContentControllersDisplayed:YES];
     }
     
-    if ([self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
+    if ([self bothContentControllersDisplayed] && [self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
 
         [[self standardQueryBuilder] setDelegate: self];
         MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initExistingExistingFileWithUrl:[self urlBeingOpended] completion:^(BOOL success, id document) {

@@ -41,11 +41,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[self delegateContentController] displayContentController:
-     [[self childViewControllers] objectAtIndex:0]];
+    [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:0]];
+    [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:1]];
     
-    [[self delegateContentController] displayContentController:
-     [[self childViewControllers] objectAtIndex:1]];
     
     [[[self titleView] label] setText:NSLocalizedString(@"Query", @"Query")];
 }

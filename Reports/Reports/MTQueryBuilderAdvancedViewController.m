@@ -24,8 +24,10 @@
 @property (nonatomic, retain) NSMutableDictionary *controllersForObjectIdsLink; //Only query links
 @property (nonatomic, assign) NSUInteger tableDisplayCounter;
 
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
+@property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
+@property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
+
+@property (nonatomic, assign) BOOL didRemoveViewControllers;
 
 @end
 
@@ -124,6 +126,18 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[self scrollView] flashScrollIndicators];
+    if ([self didRemoveViewControllers]) {
+        [self addViewControllers:[NSSet setWithArray:[self viewControllers]]];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if ([[self viewControllers] count] > 0) {
+        [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
+        [self setDidRemoveViewControllers:YES];
+    }
+    NSLog(@"View Controller Count %d", [[self viewControllers] count]);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -212,24 +226,28 @@
     CGPoint desiredCenter = [[viewController view] center];
     CGAffineTransform desiredTransform = [[viewController view] transform];
     NSUInteger animationType = 0;
+    CGAffineTransform swingTransform = CGAffineTransformIdentity;
+    swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
 
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
-
+        desiredFrame = [self desiredFrameForTableId:[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId]];
+        desiredCenter = CGCenterOfRect(desiredFrame);
         animationType = 1;
         [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
 
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
-
-        animationType = 2;
-        CGAffineTransform swingTransform = CGAffineTransformIdentity;
-        swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
         [[viewController view] setBounds:CGRectZero];
         [[viewController view] setCenter:desiredCenter];
         [[viewController view] setTransform:swingTransform];
+
+        animationType = 2;
     }
-    
+
+
     [self addChildViewController:viewController];
-    [[self viewControllers] addObject:viewController];
+    if ([[self viewControllers] containsObject:viewController] == NO) {
+        [[self viewControllers] addObject:viewController];
+    }
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
 
@@ -238,6 +256,7 @@
 
             [UIView animateWithDuration:animationDuration delay:0.2000f options:UIViewAnimationCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
+                //[[viewController view] setTransform:desiredTransform];
             } completion:nil];
 
             break;
@@ -274,7 +293,7 @@
         CGPoint center = CGPointMakeRandomOffscreen();
         [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
             [[viewController view] setCenter:center];
-            [[viewController view] setTransform:swingTransform];
+            //[[viewController view] setTransform:swingTransform];
         } completion:^(BOOL finished) {
             [viewController willMoveToParentViewController:nil];
             [[viewController view] removeFromSuperview];
@@ -297,6 +316,12 @@
 }
 
 #pragma mark View Controller Container Custom Handlers
+
+- (CGRect)desiredFrameForTableId:(NSManagedObjectID *)objectId {
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqTable *table = [RptqTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
+    return CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
+}
 
 - (void)addSchemaViewController:(UIViewController *)viewController {
     [viewController retain];
