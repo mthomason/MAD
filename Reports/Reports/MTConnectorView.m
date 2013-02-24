@@ -123,7 +123,6 @@
     CGRect connectorNobRectOrigin;
     CGRect connectorNobRectDestination;
 
-    CGSize largeCircleSize = CGSizeMake(6.0000f, 6.0000f);
     CGFloat largeCircleRadius = 3.0000f;
     CGSize smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
     CGFloat smallCircleRadius = 2.0000f;
@@ -149,7 +148,6 @@
         tangent[1] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
 
     } else {
-        //[(UIColor *)[UIColor edaBlueLight] set];
         [(UIColor *)[UIColor edaBlueDark] set];
 
         origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
@@ -165,23 +163,9 @@
         tangent[0] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
         tangent[1] = CGPointMake(rect.origin.x, rect.origin.y);
     }
-  /*
-    if ([self leftViewIsInital] == YES) {   //origin is the back point of the arrow
-        connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-        connectorNobRectDestination = CGRectMake(destination.x - largeCircleRadius, destination.y - largeCircleRadius, largeCircleSize.width, largeCircleSize.height);
-    } else {
-        connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
-        connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, largeCircleSize.width, largeCircleSize.height);
-    }
-*/
-    
-//    [(UIColor *)[UIColor yellowColor] set];
-    CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
-//    CGContextStrokePath(currentContext);
 
-//    [(UIColor *)[UIColor edaGreenDark] set];
+    CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
     CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
-//    CGContextStrokePath(currentContext);
 
     [(UIColor *)[UIColor edaBlueDark] set];
     CGContextMoveToPoint(currentContext, origin.x, origin.y);
@@ -224,12 +208,8 @@
         }
     }
     
-    //[[UIColor redColor] set];
     [path setLineWidth:3.0000f];
     [path stroke];
-    
-    //CGContextMoveToPoint(currentContext, connectorNobRectDestination.origin.x, connectorNobRectDestination.origin.y);
-    //CGPathAddLineToPoint(<#CGMutablePathRef path#>, <#const CGAffineTransform *m#>, <#CGFloat x#>, <#CGFloat y#>);
 
 }
 

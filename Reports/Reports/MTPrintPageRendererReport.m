@@ -409,8 +409,10 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
             groupedRows:(NSDictionary *)groupedRows
 printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+    
     BOOL detailPrinted = NO;
     NSUInteger groupedRowsLevel = 0;
+    
     [self printGroupLevel: queryGroup
 printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
         numberOfPagesUsed: numberOfPagesUsed

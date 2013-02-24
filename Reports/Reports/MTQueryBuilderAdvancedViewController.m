@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0000f * M_PI)
+#define RADIANS_TO_DEGREES(radians) ((radians) * (180.00000f / M_PI))
+
 #import "MTQueryBuilderAdvancedViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController ()
@@ -160,10 +163,8 @@
     if (updatedQuery && updatedTable) {
         if ([[updatedTable inQuery] containsObject:updatedQuery]) {
             [self addSchemaViewControllerForTable:updatedTable];
-            //NSLog(@"Add table");
         } else {
             [self removeSchemaViewControllerForTable:updatedTable];
-            //NSLog(@"Remove table");
         }
     }
     
@@ -174,7 +175,7 @@
     
     NSArray *deletedObjects = [[notification userInfo] objectForKey: NSDeletedObjectsKey];
     for (id deletedObject in deletedObjects) {
-        //NSLog(@"Deleted %@", deletedObject);
+        NSLog(@"Deleted %@", deletedObject);
         
         if ([deletedObject isKindOfClass:[RptqTable class]]) {
             RptqTable *deletedTable = deletedObject;
@@ -182,7 +183,14 @@
                 [[self tableIds] containsObject: [deletedTable objectID]] == YES) {
                 [self removeSchemaViewControllerForTable:deletedTable];
             }
+        } else if ([deletedObject isKindOfClass:[RptqQueryLinks class]]) {
+            RptqQueryLinks *deletedLink = deletedObject;
+            UIViewController *linkViewController = [[self controllersForObjectIdsLink] objectForKey: [deletedLink objectID]];
+            if (linkViewController != nil) {
+                [self removeLinkViewControllerForQueryLink:deletedLink];
+            }
         }
+
     }
 }
 
@@ -195,11 +203,57 @@
 }
 
 - (void)addViewController:(UIViewController *)viewController {
+    NSLog(@"%@", [viewController view]);
+
     [viewController retain];
+    
+    CGFloat animationDuration = 1.0000f;
+    CGRect desiredFrame = [[viewController view] frame];
+    CGPoint desiredCenter = [[viewController view] center];
+    CGAffineTransform desiredTransform = [[viewController view] transform];
+    NSUInteger animationType = 0;
+
+    if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+
+        animationType = 1;
+        [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
+
+    } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
+
+        animationType = 2;
+        CGAffineTransform swingTransform = CGAffineTransformIdentity;
+        swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
+        [[viewController view] setBounds:CGRectZero];
+        [[viewController view] setCenter:desiredCenter];
+        [[viewController view] setTransform:swingTransform];
+    }
+    
     [self addChildViewController:viewController];
     [[self viewControllers] addObject:viewController];
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
+
+    switch (animationType) {
+        case 1:
+
+            [UIView animateWithDuration:animationDuration delay:0.2000f options:UIViewAnimationCurveEaseInOut animations:^{
+                [[viewController view] setFrame:desiredFrame];
+            } completion:nil];
+
+            break;
+        case 2:
+            
+            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+                [[viewController view] setFrame:desiredFrame];
+                [[viewController view] setTransform:desiredTransform];
+            } completion:nil];
+            
+            break;
+            
+        default:
+            break;
+    }
+
     [viewController release];
 }
 
@@ -210,17 +264,42 @@
 }
 
 - (void)removeViewController:(UIViewController *)viewController {
-    [viewController willMoveToParentViewController:nil];
-    [[viewController view] removeFromSuperview];
-    [viewController removeFromParentViewController];
+    NSLog(@"%@", [viewController view]);
+    CGFloat animationDuration = 1.0000f;
+    CGAffineTransform swingTransform = CGAffineTransformIdentity;
+    swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
+
+    if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+
+        CGPoint center = CGPointMakeRandomOffscreen();
+        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+            [[viewController view] setCenter:center];
+            [[viewController view] setTransform:swingTransform];
+        } completion:^(BOOL finished) {
+            [viewController willMoveToParentViewController:nil];
+            [[viewController view] removeFromSuperview];
+            [viewController removeFromParentViewController];
+        }];
+        
+    } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
+        
+        CGPoint center = [viewController view].center;
+        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+            [[viewController view] setBounds:CGRectZero];
+            [[viewController view] setCenter:center];
+            [[viewController view] setTransform:swingTransform];
+        } completion:^(BOOL finished) {
+            [viewController willMoveToParentViewController:nil];
+            [[viewController view] removeFromSuperview];
+            [viewController removeFromParentViewController];
+        }];
+    }
 }
 
 #pragma mark View Controller Container Custom Handlers
 
 - (void)addSchemaViewController:(UIViewController *)viewController {
     [viewController retain];
-    [self addChildViewController:viewController];
-    [[self viewControllers] addObject:viewController];
     CGRect subviewRect = CGRectZero;
     NSManagedObjectID *objectId = [[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] retain];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
@@ -251,9 +330,14 @@
     [[viewController view] addGestureRecognizer:panGesture];
     [panGesture release];
     
-    
+    [self addViewController:viewController];
+/*
+    [self addChildViewController:viewController];
+    [[self viewControllers] addObject:viewController];
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
+    */
+    
     self.tableDisplayCounter++;
     [viewController release];
 }
