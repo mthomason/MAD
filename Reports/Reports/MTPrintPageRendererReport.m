@@ -112,7 +112,12 @@
                 [[UIColor whiteColor] set];
                 [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                 
-                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+                id obj = [pageSection objectForKey:MTReportSectionValues];
+                if ([obj isKindOfClass:[NSDictionary class]]) {
+                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                } else if ([obj isKindOfClass:[NSArray class]]) {
+                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                }
                 [self printDocumentElementsForSection:detailSection atHeight:originY withResults:reportSectionValues];
                 originY += sizeHeight;
                 
@@ -125,7 +130,12 @@
                 [[UIColor yellowColor] set];
                 [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                 
-                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+                id obj = [pageSection objectForKey:MTReportSectionValues];
+                if ([obj isKindOfClass:[NSDictionary class]]) {
+                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                } else if ([obj isKindOfClass:[NSArray class]]) {
+                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                }
                 [self printDocumentElementsForSection:pageHeaderSection atHeight:originY withResults:reportSectionValues];
                 originY += sizeHeight;
                 
@@ -138,7 +148,12 @@
                 [[UIColor yellowColor] set];
                 [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                 
-                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+                id obj = [pageSection objectForKey:MTReportSectionValues];
+                if ([obj isKindOfClass:[NSDictionary class]]) {
+                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                } else if ([obj isKindOfClass:[NSArray class]]) {
+                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                }
                 [self printDocumentElementsForSection:pageFooterSection atHeight:originY withResults:reportSectionValues];
                 originY += sizeHeight;
                 
@@ -151,7 +166,12 @@
                 [[UIColor greenColor] set];
                 [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                 
-                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+                id obj = [pageSection objectForKey:MTReportSectionValues];
+                if ([obj isKindOfClass:[NSDictionary class]]) {
+                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                } else if ([obj isKindOfClass:[NSArray class]]) {
+                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                }
                 [self printDocumentElementsForSection:reportHeaderSection atHeight:originY withResults:reportSectionValues];
                 originY += [[reportHeaderSection height] floatValue];
                 
@@ -164,7 +184,12 @@
                 [[UIColor greenColor] set];
                 [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                 
-                reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
+                id obj = [pageSection objectForKey:MTReportSectionValues];
+                if ([obj isKindOfClass:[NSDictionary class]]) {
+                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                } else if ([obj isKindOfClass:[NSArray class]]) {
+                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                }
                 [self printDocumentElementsForSection:reportFooterSection atHeight:originY withResults:reportSectionValues];
                 originY += sizeHeight;
                 
@@ -221,16 +246,29 @@
 
 }
 
-- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(NSDictionary *)results {
-    CGFloat originX = CGPointZero.x;
-    for (RptqDocumentObject *documentObject in [section hasObjects]) {
-        NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
-        CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
-        CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-        CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-        [attributedString drawInRect:elementCanvasRect];
-        NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
-        originX += sizeWidth;
+- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
+    if ([results isKindOfClass:[NSDictionary class]]) {
+        CGFloat originX = CGPointZero.x;
+        for (RptqDocumentObject *documentObject in [section hasObjects]) {
+            NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
+            CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
+            CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
+            CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+            [attributedString drawInRect:elementCanvasRect];
+            NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+            originX += sizeWidth;
+        }
+    } else if ([results isKindOfClass:[NSArray class]]) {
+        CGFloat originX = CGPointZero.x;
+        for (RptqDocumentObject *documentObject in [section hasObjects]) {
+            //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
+            CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
+            CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
+            CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+            //[attributedString drawInRect:elementCanvasRect];
+            NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+            originX += sizeWidth;
+        }
     }
 }
 
@@ -353,57 +391,6 @@ printPageRenderReportPageData:&printPageRenderReportPageData];
 
 }
 
-//Roll through the groups
-//Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).
-- (id)groupedResults:(NSArray *)sortedResults level:(NSUInteger)level
-     sortDescriptors:(NSArray *)sortedSortDescriptorsGroup {
-    
-    BOOL detailLevel = level == [sortedSortDescriptorsGroup count];
-    
-    id returnValue = nil;
-    
-    if (detailLevel) {
-        //MTLog(@"Detail Level %@", sortedResults);
-        returnValue = [sortedResults copy];
-    } else {
-        NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
-        NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
-        NSSortDescriptor *sortDescriptor = detailLevel ? nil : [sortedSortDescriptorsGroup objectAtIndex:level];
-        NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
-        id valueForField = nil, lastValueForField = nil;
-        //MTLog(@"Group Level %d (%@)", level, sortFieldName);
-        for (NSDictionary *result in sortedResults) {
-            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
-            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
-                //MTLog(@" -Group Level %d (%@)", level, lastValueForField);
-                
-                id resultOfNextGroup = [self groupedResults: resultsForGroup
-                                                      level: (level + 1)
-                                            sortDescriptors: sortedSortDescriptorsGroup];
-                [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
-                [resultsForGroup removeAllObjects];
-            }
-            [resultsForGroup addObject:result];
-            lastValueForField = valueForField;
-        }
-        NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
-        if (valueForField != nil) {
-            //MTLog(@" -Group Level %d (%@)", level, valueForField);
-            id resultOfNextGroup = [self groupedResults: resultsForGroup
-                                                  level: (level + 1)
-                                        sortDescriptors: sortedSortDescriptorsGroup];
-            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            [resultsDictionary setObject:resultOfNextGroup forKey:key];
-        }
-        [resultsCopy release];
-        [resultsForGroup removeAllObjects];
-        returnValue = [resultsDictionary retain];
-        [resultsDictionary release];
-        [resultsForGroup release];
-    }
-    return [returnValue autorelease];
-}
-
 - (void)printGroupLevel:(RptqQueryGroup *)queryGroup
 printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
@@ -431,7 +418,7 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
           detailPrinted:(BOOL *)detailPrinted
 printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
     
-    if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if not results are returned, and no groupings preformed.
+    if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
         for (id key in [groupedRows keyEnumerator]) {
             id obj = [[groupedRows objectForKey:key] retain];
             
@@ -481,32 +468,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                 [containerDetails release];
             } else {
                 NSArray *containerDetails = [obj retain];
-                RptqDocumentSection *detailSection = [[self document] hasDetailSection];
-                for (NSDictionary *resultDictionary in containerDetails) {
-                    
-                    [self printPageBreakWithNextItemHeight: [[detailSection height] floatValue]
-                              printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
-                                         numberOfPagesUsed: numberOfPagesUsed
-                                               groupedRows: groupedRows
-                             printPageRenderReportPageData: printPageRenderReportPageData];
-                    
-                    [*printPageRenderReportPageData addDetailWithValueDictionary:resultDictionary];
-                    
-                    *printableSpaceUsedPageHeight += [[detailSection height] floatValue];
-                    NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
-                    NSUInteger documentObjectCounter = 0;
-                    for (RptqDocumentObject *documentObject in [detailSection hasObjects]) {
-                        if (documentObjectCounter > 0) {
-                            [mutableStringToPrint appendString:@", "];
-                        }
-                        NSString *stringToPrint = [self printDocumentObject:documentObject
-                                                       withResultDictionary:resultDictionary];
-                        [mutableStringToPrint appendString:stringToPrint];
-                    }
-                    NSLog(@"Detail: (%@)", mutableStringToPrint);
-                    [mutableStringToPrint release];
-                    documentObjectCounter++;
-                }
+                [self printDetailLevelWithDetails:containerDetails printableSpaceUsedPageHeight:printableSpaceUsedPageHeight numberOfPagesUsed:numberOfPagesUsed groupedRows:groupedRows printPageRenderReportPageData:printPageRenderReportPageData];
                 [containerDetails release];
             }
             
@@ -532,8 +494,93 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
             [*printPageRenderReportPageData addGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
             [obj release];
         }
+    } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
+        [self printDetailLevelWithDetails:(NSArray *)groupedRows printableSpaceUsedPageHeight:printableSpaceUsedPageHeight numberOfPagesUsed:numberOfPagesUsed groupedRows:groupedRows printPageRenderReportPageData:printPageRenderReportPageData];
     }
+}
+
+- (void)printDetailLevelWithDetails:(NSArray *)containerDetails
+       printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
+                  numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
+                        groupedRows:(NSDictionary *)groupedRows
+      printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+    RptqDocumentSection *detailSection = [[self document] hasDetailSection];
+    for (NSDictionary *resultDictionary in containerDetails) {
+        
+        [self printPageBreakWithNextItemHeight: [[detailSection height] floatValue]
+                  printableSpaceUsedPageHeight: printableSpaceUsedPageHeight
+                             numberOfPagesUsed: numberOfPagesUsed
+                                   groupedRows: groupedRows
+                 printPageRenderReportPageData: printPageRenderReportPageData];
+        
+        [*printPageRenderReportPageData addDetailWithValueDictionary:resultDictionary];
+        
+        *printableSpaceUsedPageHeight += [[detailSection height] floatValue];
+        NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
+        NSUInteger documentObjectCounter = 0;
+        for (RptqDocumentObject *documentObject in [detailSection hasObjects]) {
+            if (documentObjectCounter > 0) {
+                [mutableStringToPrint appendString:@", "];
+            }
+            NSString *stringToPrint = [self printDocumentObject:documentObject
+                                           withResultDictionary:resultDictionary];
+            [mutableStringToPrint appendString:stringToPrint];
+        }
+        NSLog(@"Detail: (%@)", mutableStringToPrint);
+        [mutableStringToPrint release];
+        documentObjectCounter++;
+    }
+}
+
+//Roll through the groups
+//Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).
+- (id)groupedResults:(NSArray *)sortedResults level:(NSUInteger)level
+     sortDescriptors:(NSArray *)sortedSortDescriptorsGroup {
     
+    BOOL detailLevel = level == [sortedSortDescriptorsGroup count];
+    
+    id returnValue = nil;
+    
+    if (detailLevel) {
+        //MTLog(@"Detail Level %@", sortedResults);
+        returnValue = [sortedResults copy];
+    } else {
+        NSMutableDictionary *resultsDictionary = [[NSMutableDictionary alloc] init];
+        NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
+        NSSortDescriptor *sortDescriptor = detailLevel ? nil : [sortedSortDescriptorsGroup objectAtIndex:level];
+        NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
+        id valueForField = nil, lastValueForField = nil;
+        //MTLog(@"Group Level %d (%@)", level, sortFieldName);
+        for (NSDictionary *result in sortedResults) {
+            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
+            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
+                //MTLog(@" -Group Level %d (%@)", level, lastValueForField);
+                
+                id resultOfNextGroup = [self groupedResults: resultsForGroup
+                                                      level: (level + 1)
+                                            sortDescriptors: sortedSortDescriptorsGroup];
+                [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
+                [resultsForGroup removeAllObjects];
+            }
+            [resultsForGroup addObject:result];
+            lastValueForField = valueForField;
+        }
+        NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
+        if (valueForField != nil) {
+            //MTLog(@" -Group Level %d (%@)", level, valueForField);
+            id resultOfNextGroup = [self groupedResults: resultsForGroup
+                                                  level: (level + 1)
+                                        sortDescriptors: sortedSortDescriptorsGroup];
+            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
+            [resultsDictionary setObject:resultOfNextGroup forKey:key];
+        }
+        [resultsCopy release];
+        [resultsForGroup removeAllObjects];
+        returnValue = [resultsDictionary retain];
+        [resultsDictionary release];
+        [resultsForGroup release];
+    }
+    return [returnValue autorelease];
 }
 
 - (NSString *)printDocumentObject:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
