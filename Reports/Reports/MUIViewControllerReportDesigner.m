@@ -737,7 +737,15 @@
 
 - (IBAction)done:(id)sender {
     if (![self dismissAllPopovers]) {
-        [[self delegate] viewControllerDidFinish:self];
+        [[self delegate] viewControllerDidFinish:@(NO)];
+    } else {
+        [self deselectAllElements];
+    }
+}
+
+- (IBAction)doneReports:(id)sender {
+    if (![self dismissAllPopovers]) {
+        [[self delegate] viewControllerDidFinish:@(YES) animated:NO];
     } else {
         [self deselectAllElements];
     }

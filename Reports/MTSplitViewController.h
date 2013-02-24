@@ -17,6 +17,7 @@
 @end
 
 @interface MTSplitViewController : MTViewController
+    <MUIViewControllerDelegate>
 
 @property (nonatomic, assign) id <MTSplitViewControllerDelegate> delegateContentController;
 @property (nonatomic, retain) NSURL *documentToOpen;

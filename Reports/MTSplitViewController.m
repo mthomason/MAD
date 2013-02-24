@@ -48,12 +48,12 @@
     [[[self titleView] label] setText:NSLocalizedString(@"Query", @"Query")];
 }
 
-- (id)leftViewController {
-    return [[[[self childViewControllers] objectAtIndex:0] retain] autorelease];
-}
-
-- (id)rightViewController {
-    return [[[[self childViewControllers] objectAtIndex:1] retain] autorelease];
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
+        if ([[segue destinationViewController] isKindOfClass: [MUIViewControllerReportDesigner class]]) {
+            [[segue destinationViewController] setDelegate: self];
+        }
+    }    
 }
 
 - (void)awakeFromNib {
@@ -85,13 +85,21 @@
     [rightView release];
 }
 
+- (id)leftViewController {
+    return [[[[self childViewControllers] objectAtIndex:0] retain] autorelease];
+}
+
+- (id)rightViewController {
+    return [[[[self childViewControllers] objectAtIndex:1] retain] autorelease];
+}
+
 - (IBAction)showReportDocumentList:(id)sender {
     [[self delegate] viewControllerDidFinish:self];
 }
 
 - (IBAction)showReportDesigner:(id)sender {
     MTViewControllerQueryBuilder *queryBuilderController = [[self queryBuilderController] retain];
-
+//    [queryBuilderController show]
     [queryBuilderController release];
 }
 
@@ -121,8 +129,19 @@
     return [[[self leftViewController] retain] autorelease];
 }
 
-- (void)viewDidUnload {
-    [self setTitleView:nil];
-    [super viewDidUnload];
+- (void)viewControllerDidFinish:(id)controller {
+    [self viewControllerDidFinish:controller animated:YES];
 }
+
+- (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
+    [self dismissViewControllerAnimated:animated completion:^{
+        if ([sender isKindOfClass:[NSNumber class]]) {
+            if ([sender boolValue] == YES) {
+                [[self delegate] viewControllerDidFinish:self animated:YES];
+            }
+        }
+    }];
+
+}
+
 @end

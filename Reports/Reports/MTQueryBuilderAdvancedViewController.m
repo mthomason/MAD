@@ -254,7 +254,7 @@
     switch (animationType) {
         case 1:
 
-            [UIView animateWithDuration:animationDuration delay:0.2000f options:UIViewAnimationCurveEaseInOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
                 //[[viewController view] setTransform:desiredTransform];
             } completion:nil];

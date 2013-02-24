@@ -297,7 +297,12 @@
                                 <items>
                                     <barButtonItem title="Reports" id="Ph0-RK-UQf">
                                         <connections>
-                                            <action selector="done:" destination="oy5-et-qFd" id="nNy-kI-l91"/>
+                                            <action selector="doneReports:" destination="oy5-et-qFd" id="tfP-pm-vdf"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Query" id="FWg-Ni-c6x">
+                                        <connections>
+                                            <action selector="done:" destination="oy5-et-qFd" id="Avw-j3-2ef"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="334-Me-wnr"/>
@@ -445,7 +450,7 @@
                 </navigationItem>
                 <navigationItem title="Layout" id="cR7-dw-oOi"/>
             </objects>
-            <point key="canvasLocation" x="653" y="3003"/>
+            <point key="canvasLocation" x="-1083" y="711"/>
         </scene>
         <!--View Controller Report Viewer-->
         <scene sceneID="3nK-bo-OeN">
@@ -634,13 +639,6 @@
                                     <constraint firstAttribute="width" constant="320" type="user" id="lXY-Sg-8yq"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem image="UIImageDocument20.png" style="plain" id="OGJ-es-BmM">
-                                        <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <segue destination="oy5-et-qFd" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="CeE-Qi-dEy"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="5Te-B7-wIm"/>
                                     <barButtonItem image="UIImageBolt20.png" style="plain" id="dZO-zT-gnG">
                                         <color key="tintColor" red="0.7254902124" green="0.87843137979999997" blue="0.96862745289999996" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
@@ -687,11 +685,11 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="eP3-jO-AZa" detailTextLabel="9CN-Kj-SB9" style="IBUITableViewCellStyleValue1" id="Utj-lp-k8o" customClass="UITableViewCellInstruction">
+                                    <tableViewCell contentMode="center" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="eP3-jO-AZa" detailTextLabel="9CN-Kj-SB9" style="IBUITableViewCellStyleValue1" id="Utj-lp-k8o" customClass="UITableViewCellInstruction">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="eP3-jO-AZa">
@@ -702,7 +700,7 @@
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="9CN-Kj-SB9">
-                                                    <rect key="frame" x="226" y="11" width="44" height="21"/>
+                                                    <rect key="frame" x="246" y="11" width="44" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -2422,6 +2420,7 @@
                                     <barButtonItem title="Layout" id="msA-br-ar6">
                                         <connections>
                                             <action selector="showReportDesigner:" destination="p7o-3U-Nna" id="KUe-8Z-j0N"/>
+                                            <segue destination="oy5-et-qFd" kind="modal" identifier="MTSegueIdentifierShowReportDesigerFromSplitView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="SZe-fX-9Gn"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="bch-Rv-RFN"/>
@@ -5357,7 +5356,7 @@
                 <navigationItem title="Layout" id="Pn4-fc-4RN"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rsx-fG-ESg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="77" y="3062"/>
+            <point key="canvasLocation" x="-1149" y="1610"/>
         </scene>
         <!--Table View Controller Font Settings-->
         <scene sceneID="vsD-Q7-7Hg">
@@ -5618,9 +5617,7 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rvx-IX-0B2">
-                                <items>
-                                    <barButtonItem title="Item" id="l1h-WL-Ydg"/>
-                                </items>
+                                <items/>
                             </toolbar>
                         </subviews>
                         <constraints>
@@ -5642,7 +5639,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YAA-DK-m2E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1207" y="1176"/>
+            <point key="canvasLocation" x="-1931" y="1602"/>
         </scene>
     </scenes>
     <resources>
@@ -5655,7 +5652,6 @@
         <image name="UIImageArrowDown.png" width="20" height="20"/>
         <image name="UIImageBold20.png" width="20" height="20"/>
         <image name="UIImageBolt20.png" width="20" height="20"/>
-        <image name="UIImageDocument20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageExportTypeAppEngine.png" width="64" height="64"/>
         <image name="UIImageExportTypeCSV.png" width="64" height="64"/>
@@ -5854,6 +5850,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="doneReports:"/>
                 <relationship kind="action" name="info:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
@@ -5908,6 +5905,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
@@ -6184,7 +6184,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="CeE-Qi-dEy"/>
+        <segue reference="SZe-fX-9Gn"/>
         <segue reference="k76-5g-D9d"/>
         <segue reference="Mlr-1g-y8b"/>
         <segue reference="MI1-uS-Vvj"/>

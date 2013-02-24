@@ -1004,7 +1004,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == UIViewControllerSchemaTablesSectionsInstructions) {
+    if (section == UIViewControllerSchemaTablesSectionsInstructions && [AppDelegate isPad] == NO) {
         [self setLastSelectedRowNumber: [indexPath row]];
         [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
     }

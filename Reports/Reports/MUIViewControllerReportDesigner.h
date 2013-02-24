@@ -49,6 +49,7 @@
         UITableViewControllerFontSelectorDelegate,
         MTDocumentSectionViewDelegate>
 
+- (IBAction)doneReports:(id)sender;
 - (void)openReport:(NSURL *)url;
 - (void)openTemplate:(NSURL *)url;
 - (IBAction)done:(id)sender;

@@ -269,6 +269,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - Delegates
 
 - (void)viewControllerDidFinish:(id)sender {
+    [self viewControllerDidFinish:sender animated:YES];
+}
+
+- (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
     MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
     if (documentReport != nil) {
         [documentReport saveContext];
@@ -278,7 +282,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 [[self tableViewQueries] reloadData];
                 [[self collectionViewQueries] reloadData];
             }
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self dismissViewControllerAnimated:animated completion:nil];
         }];
     } else {
         NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
@@ -286,10 +290,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [a release];
         [[self tableViewQueries] reloadData];
         [[self collectionViewQueries] reloadData];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:animated completion:nil];
     }
     [documentReport release];
 }
+
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
