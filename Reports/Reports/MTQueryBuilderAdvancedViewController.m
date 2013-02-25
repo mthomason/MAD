@@ -419,109 +419,6 @@
     [viewController release];
 }
 
-- (CGRect)frameForQueryLink:(RptqQueryLinks *)queryLink {
-    RptqQueryLinks *insertedQueryLinks = [queryLink retain];
-    UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
-    MTConnectorView *connectorView = [(MTConnectorView *)[controller view] retain];
-    CGFloat paddingLeft = 75.0000f;
-    RptqField *leftField = [insertedQueryLinks hasLeftField];
-    RptqTable *leftTable = [leftField inTable];
-    MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
-    
-    CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[leftTableViewController view]];
-    CGRect leftTableFrame = [[leftTableViewController schemaTableViewController] frame];
-    CGFloat leftTableBottomY = leftTableFrame.origin.y + leftTableFrame.size.height;
-    if (leftCellFrameInTable.origin.y + leftCellFrameInTable.size.height > leftTableBottomY) {
-        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableBottomY - leftCellFrameInTable.size.height, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
-    } else if (leftCellFrameInTable.origin.y < leftTableFrame.origin.y) {
-        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableFrame.origin.y, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
-    }
-    CGRect leftCellFrameInView = [[self view] convertRect:leftCellFrameInTable fromView:[leftTableViewController view]];
-    CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrameInView);
-    
-    RptqField *rightField = [insertedQueryLinks hasRightField];
-    RptqTable *rightTable = [rightField inTable];
-    MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
-    
-    CGRect rightCellFrameInTable = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[rightTableViewController view]];
-    CGRect rightTableFrame = [[rightTableViewController schemaTableViewController] frame];
-    CGFloat rightTableBottomY = rightTableFrame.origin.y + rightTableFrame.size.height;
-    if (rightCellFrameInTable.origin.y + rightCellFrameInTable.size.height > rightTableBottomY) {
-        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableBottomY - rightCellFrameInTable.size.height, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
-    } else if (rightCellFrameInTable.origin.y < rightTableFrame.origin.y) {
-        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableFrame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
-    }
-    CGRect rightCellFrameInView = [[self view] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
-    CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);
-    
-    CGRect connectorFrame;
-    
-    CGFloat extraInset = 0.0000f;
-    
-    CGPoint leftCellAnchorPoint = leftCellCenterPoint;
-    CGPoint rightCellAnchorPoint = rightCellCenterPoint;
-    
-    if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
-        leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
-        //NSLog(@"P1");
-        leftCellAnchorPoint.x += paddingLeft;
-        rightCellAnchorPoint.x -= paddingLeft;
-    } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
-               leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
-        //NSLog(@"P2");
-        leftCellAnchorPoint.x -= paddingLeft;
-        rightCellAnchorPoint.x -= paddingLeft;
-    } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
-               leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
-        //NSLog(@"P3");
-        leftCellAnchorPoint.x += paddingLeft;
-        rightCellAnchorPoint.x += paddingLeft;
-    } else {
-        //NSLog(@"P4");
-        leftCellAnchorPoint.x -= paddingLeft;
-        rightCellAnchorPoint.x += paddingLeft;
-    }
-    
-    if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
-        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"left");
-        } else {
-            [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"left");
-            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
-            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
-        }
-        [connectorView setLeftViewIsInital:YES];
-    } else {
-        extraInset = -20.0000f;
-        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"right");
-        } else {
-            [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"right");
-            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
-            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
-        }
-        [connectorView setLeftViewIsInital:NO];
-    }
-    
-    connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
-                                leftCellAnchorPoint.y - 10.0000f,
-                                rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
-                                rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
-    
-    [connectorView setFrame: connectorFrame];
-    
-    [leftTableViewController release];
-    [rightTableViewController release];
-    [connectorView release];
-    [insertedQueryLinks release];
-    [controller release];
-    return connectorFrame;
-}
-
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
     RptqQueryLinks *insertedQueryLinks = [queryLink retain];
     UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
@@ -564,58 +461,72 @@
     CGPoint leftCellAnchorPoint = leftCellCenterPoint;
     CGPoint rightCellAnchorPoint = rightCellCenterPoint;
     
+    MNSConnectorPosition lastConnectorPositionB = [connectorView connectorPositionB];
     if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
         leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
-        //NSLog(@"P1");
+        [connectorView setConnectorPositionB:MNSConnectorPositionA];
+        NSLog(@"P1");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
-        //NSLog(@"P2");
+        [connectorView setConnectorPositionB:MNSConnectorPositionB];
+        NSLog(@"P2");
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
-        //NSLog(@"P3");
+        [connectorView setConnectorPositionB:MNSConnectorPositionC];
+        NSLog(@"P3");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     } else {
-        //NSLog(@"P4");
+        NSLog(@"P4");
+        [connectorView setConnectorPositionB:MNSConnectorPositionD];
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     }
     
+    MNSConnectorPosition lastConnectorPosition = [connectorView connectorPosition];
     if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"left");
+            [connectorView setConnectorPosition:MNSConnectorPositionA];
         } else {
             [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"left");
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
+            [connectorView setConnectorPosition:MNSConnectorPositionB];
         }
         [connectorView setLeftViewIsInital:YES];
     } else {
         extraInset = -20.0000f;
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
             [connectorView setTopLeftToBottomRight:@(NO)];
-            NSLog(@"right");
+            [connectorView setConnectorPosition:MNSConnectorPositionC];
         } else {
             [connectorView setTopLeftToBottomRight:@(YES)];
-            NSLog(@"right");
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
+            [connectorView setConnectorPosition:MNSConnectorPositionD];
         }
         [connectorView setLeftViewIsInital:NO];
     }
-
     connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
                                 leftCellAnchorPoint.y - 10.0000f,
                                 rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
                                 rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
-    
-    [connectorView setFrame: [self frameForQueryLink:queryLink]];
+    if (lastConnectorPosition == [connectorView connectorPosition] &&
+        lastConnectorPositionB == [connectorView connectorPositionB]) {
+        [connectorView setFrame: connectorFrame];
+    } else {
+        [UIView animateWithDuration:0.5000f delay:0.0000f options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [connectorView setFrame: connectorFrame];
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+    }
     
     [leftTableViewController release];
     [rightTableViewController release];

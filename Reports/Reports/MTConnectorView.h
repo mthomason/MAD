@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "UIColor+EverydayApps.h"
 
+typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
+	MNSConnectorPositionA = 1,
+	MNSConnectorPositionB = 2,
+	MNSConnectorPositionC = 3,
+	MNSConnectorPositionD = 4
+};
+
 @interface MTConnectorView : UIView
 
 @property (nonatomic, retain) UIView *anchorViewLeft;
@@ -17,6 +24,8 @@
 @property (nonatomic, retain) NSString *linkDescription;
 
 @property (nonatomic, assign) BOOL leftViewIsInital;
+@property (nonatomic, assign) MNSConnectorPosition connectorPosition;
+@property (nonatomic, assign) MNSConnectorPosition connectorPositionB;
 
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
