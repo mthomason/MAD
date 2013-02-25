@@ -94,6 +94,7 @@
     [self setField:field];
     [self setFieldName:fieldName];
     [[[self tableViewCellField] detailTextLabel] setText: [fieldName lowercaseString]];
+    NSLog(@"%@", NSStringFromCGRect([[self tableViewCellField] detailTextLabel].frame));
     [fieldName release];
 }
 

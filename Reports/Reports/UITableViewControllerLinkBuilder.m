@@ -230,8 +230,9 @@
     [[self navigationController] popToViewController: self animated: YES];
     
     RptqTable *tableName = [field inTable];
-    NSString *fieldName = [field name];
-    NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
+    //NSString *fieldName = [field name];
+    //NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
+    NSString *tableFieldName = [[field toString] retain];
     switch ([self currentlyEditingPart]) {
         case MNSLinkLeft:
             [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
@@ -240,7 +241,10 @@
             [self setFirstTableFieldName:tableFieldName];
 
             [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
-            [[[self tableViewCellTableFieldTwo] textLabel] setTextColor:[UIColor darkTextColor]];
+            [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:YES];
+            [[[self tableViewCellTableFieldTwo] detailTextLabel] setEnabled:YES];
+            
+            //[[[self tableViewCellTableFieldTwo] textLabel] setTextColor:[UIColor darkTextColor]];
             NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: required];
             [[self tableViewCellTableFieldTwo] setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -254,6 +258,8 @@
         default:
             break;
     }
+    //NSLog(@"%@", NSStringFromCGRect([[self tableViewCellTableFieldOne] detailTextLabel].frame));
+    //[[[self tableViewCellFieldOne] detailTextLabel] setNeedsLayout];
     [tableFieldName release];
 }
 
