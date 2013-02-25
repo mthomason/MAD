@@ -29,6 +29,8 @@
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
+@property (nonatomic, retain) MNSDocumentReport *reportDocument;
+
 @end
 
 @implementation MTQueryBuilderAdvancedViewController
@@ -127,7 +129,7 @@
     [super viewDidAppear:animated];
     [[self scrollView] flashScrollIndicators];
     if ([self didRemoveViewControllers]) {
-        [self addViewControllers:[NSSet setWithArray:[self viewControllers]]];
+        [self reloadDocument:[self reportDocument]];
     }
 }
 
@@ -135,6 +137,7 @@
     [super viewWillDisappear:animated];
     if ([[self viewControllers] count] > 0) {
         [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
+        [[self viewControllers] removeAllObjects];
         [self setDidRemoveViewControllers:YES];
     }
     NSLog(@"View Controller Count %d", [[self viewControllers] count]);
@@ -236,6 +239,7 @@
         [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
 
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
+        
         [[viewController view] setBounds:CGRectZero];
         [[viewController view] setCenter:desiredCenter];
         [[viewController view] setTransform:swingTransform];
@@ -346,8 +350,6 @@
         subviewRect = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
     }
     [[viewController view] setFrame: subviewRect];
-    //[[viewController view] setBackgroundColor:[UIColor blueColor]];
-    
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
     [panGesture setMaximumNumberOfTouches:1];
@@ -356,12 +358,6 @@
     [panGesture release];
     
     [self addViewController:viewController];
-/*
-    [self addChildViewController:viewController];
-    [[self viewControllers] addObject:viewController];
-    [[self contentView] addSubview:[viewController view]];
-    [viewController didMoveToParentViewController:self];
-    */
     
     self.tableDisplayCounter++;
     [viewController release];
@@ -421,6 +417,109 @@
     UIViewController *viewController = [[[self controllersForObjectIds] objectForKey:[link objectID]] retain];
     [self removeViewController:viewController];
     [viewController release];
+}
+
+- (CGRect)frameForQueryLink:(RptqQueryLinks *)queryLink {
+    RptqQueryLinks *insertedQueryLinks = [queryLink retain];
+    UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
+    MTConnectorView *connectorView = [(MTConnectorView *)[controller view] retain];
+    CGFloat paddingLeft = 75.0000f;
+    RptqField *leftField = [insertedQueryLinks hasLeftField];
+    RptqTable *leftTable = [leftField inTable];
+    MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
+    
+    CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[leftTableViewController view]];
+    CGRect leftTableFrame = [[leftTableViewController schemaTableViewController] frame];
+    CGFloat leftTableBottomY = leftTableFrame.origin.y + leftTableFrame.size.height;
+    if (leftCellFrameInTable.origin.y + leftCellFrameInTable.size.height > leftTableBottomY) {
+        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableBottomY - leftCellFrameInTable.size.height, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
+    } else if (leftCellFrameInTable.origin.y < leftTableFrame.origin.y) {
+        leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableFrame.origin.y, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
+    }
+    CGRect leftCellFrameInView = [[self view] convertRect:leftCellFrameInTable fromView:[leftTableViewController view]];
+    CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrameInView);
+    
+    RptqField *rightField = [insertedQueryLinks hasRightField];
+    RptqTable *rightTable = [rightField inTable];
+    MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[[self controllersForObjectIds] objectForKey:[rightTable objectID]] retain];
+    
+    CGRect rightCellFrameInTable = [rightTableViewController rectForFieldWithObjectId:[rightField objectID] inView:[rightTableViewController view]];
+    CGRect rightTableFrame = [[rightTableViewController schemaTableViewController] frame];
+    CGFloat rightTableBottomY = rightTableFrame.origin.y + rightTableFrame.size.height;
+    if (rightCellFrameInTable.origin.y + rightCellFrameInTable.size.height > rightTableBottomY) {
+        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableBottomY - rightCellFrameInTable.size.height, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
+    } else if (rightCellFrameInTable.origin.y < rightTableFrame.origin.y) {
+        rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableFrame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
+    }
+    CGRect rightCellFrameInView = [[self view] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
+    CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);
+    
+    CGRect connectorFrame;
+    
+    CGFloat extraInset = 0.0000f;
+    
+    CGPoint leftCellAnchorPoint = leftCellCenterPoint;
+    CGPoint rightCellAnchorPoint = rightCellCenterPoint;
+    
+    if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
+        leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
+        //NSLog(@"P1");
+        leftCellAnchorPoint.x += paddingLeft;
+        rightCellAnchorPoint.x -= paddingLeft;
+    } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
+               leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
+        //NSLog(@"P2");
+        leftCellAnchorPoint.x -= paddingLeft;
+        rightCellAnchorPoint.x -= paddingLeft;
+    } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
+               leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
+        //NSLog(@"P3");
+        leftCellAnchorPoint.x += paddingLeft;
+        rightCellAnchorPoint.x += paddingLeft;
+    } else {
+        //NSLog(@"P4");
+        leftCellAnchorPoint.x -= paddingLeft;
+        rightCellAnchorPoint.x += paddingLeft;
+    }
+    
+    if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
+        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
+            [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"left");
+        } else {
+            [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"left");
+            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
+            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
+        }
+        [connectorView setLeftViewIsInital:YES];
+    } else {
+        extraInset = -20.0000f;
+        if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
+            [connectorView setTopLeftToBottomRight:@(NO)];
+            NSLog(@"right");
+        } else {
+            [connectorView setTopLeftToBottomRight:@(YES)];
+            NSLog(@"right");
+            leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
+            rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
+        }
+        [connectorView setLeftViewIsInital:NO];
+    }
+    
+    connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
+                                leftCellAnchorPoint.y - 10.0000f,
+                                rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
+                                rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
+    
+    [connectorView setFrame: connectorFrame];
+    
+    [leftTableViewController release];
+    [rightTableViewController release];
+    [connectorView release];
+    [insertedQueryLinks release];
+    [controller release];
+    return connectorFrame;
 }
 
 - (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
@@ -516,7 +615,7 @@
                                 rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
                                 rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
     
-    [connectorView setFrame: connectorFrame];
+    [connectorView setFrame: [self frameForQueryLink:queryLink]];
     
     [leftTableViewController release];
     [rightTableViewController release];
@@ -529,6 +628,10 @@
 
 - (void)reloadDocument:(MNSDocumentReport *)documentReport {
     
+    MNSDocumentReport *reportDocument = [documentReport retain];
+    [self setReportDocument:reportDocument];
+    [reportDocument release];
+
     NSManagedObjectContext *managedObjectContext = [[documentReport managedObjectContext] retain];
     [self setManagedObjectContext:managedObjectContext];
     [managedObjectContext release];

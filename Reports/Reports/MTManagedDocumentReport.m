@@ -16,6 +16,7 @@
 - (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
     NSLog(@"Auto-Saving Document");
     id result = [super contentsForType:typeName error:outError];
+    NSLog(@"Auto-Saving document with error: %@", *outError);
     return result;
 }
 
