@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ApplicationSettings.h"
 #import "UIManagedDocumentPreferencesUser.h"
-#import "MNSDocumentReport.h"
+#import "MTReportDocument.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-+ (MNSDocumentReport *)activeDocument;
-+ (void)setActiveDocument:(MNSDocumentReport *)activeDocument;
++ (MTReportDocument *)activeDocument;
++ (void)setActiveDocument:(MTReportDocument *)activeDocument;
 + (BOOL)isPad;
 + (NSString *)storyboardName;
 

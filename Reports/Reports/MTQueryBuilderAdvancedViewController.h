@@ -20,6 +20,6 @@
 @interface MTQueryBuilderAdvancedViewController : UIViewController
     <UIGestureRecognizerDelegate, UIScrollViewDelegate, MTQueryBuilderAdvancedSchemaViewControllerDelegate>
 
-- (void)reloadDocument:(MNSDocumentReport *)documentReport;
+- (void)reloadDocument:(MTReportDocument *)documentReport;
 
 @end

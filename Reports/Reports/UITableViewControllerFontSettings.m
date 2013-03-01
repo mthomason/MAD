@@ -727,7 +727,7 @@
 }
 
 - (IBAction)controlValueChanged:(id)sender {
-    MNSDocumentReport *activeDocument = [AppDelegate activeDocument];
+    MTReportDocument *activeDocument = [AppDelegate activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction;

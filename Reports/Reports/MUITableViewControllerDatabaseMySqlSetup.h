@@ -11,7 +11,7 @@
 #import "Constants.h"
 
 #import "MNSDatabaseConnection.h"
-#import "MNSDocumentReport.h"
+#import "MTReportDocument.h"
 #import "MNSDatabaseMySql.h"
 #import "UIAlertView+Blocks.h"
 #import "AppDelegate.h"

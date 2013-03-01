@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UIColor+EverydayApps.h"
 
-@interface UIViewGradient : UIView
+@interface MTGradientView : UIView
 
 @property (assign) BOOL highlight;
 

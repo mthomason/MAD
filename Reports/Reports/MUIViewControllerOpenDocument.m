@@ -7,7 +7,7 @@
 //
 
 #import "MUIViewControllerOpenDocument.h"
-#import "MNSDocumentReport.h"
+#import "MTReportDocument.h"
 #import "AppDelegate.h"
 #import "MTSplitViewController.h"
 #import "MTQueryBuilderAdvancedViewController.h"
@@ -273,7 +273,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    MNSDocumentReport *documentReport = [[AppDelegate activeDocument] retain];
+    MTReportDocument *documentReport = [[AppDelegate activeDocument] retain];
     if (documentReport != nil) {
         [documentReport saveContext];
         [documentReport save:^(BOOL success) {
@@ -325,7 +325,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self bothContentControllersDisplayed] && [self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
 
         [[self standardQueryBuilder] setDelegate: self];
-        MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initExistingExistingFileWithUrl:[self urlBeingOpended] completion:^(BOOL success, id document) {
+        MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:[self urlBeingOpended] completion:^(BOOL success, id document) {
             if (success) {
                 [AppDelegate setActiveDocument: document];
                 [[self standardQueryBuilder] reloadDocument:document];
@@ -339,7 +339,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)setupQueryDesignerController:(MTViewControllerQueryBuilder *)tvc usingFileAtUrl:(NSURL*)url {
     [tvc setDelegate: self];
-    MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
+    MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
         if (success) {
             [AppDelegate setActiveDocument: document];
             [tvc reloadDocument:document];

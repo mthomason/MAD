@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MNSDocument.h"
+#import "MTDocument.h"
 #import "MTManagedDocumentReport.h"
 
 #import "MNSDatabase.h"
@@ -24,7 +24,7 @@
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryResultFields+Extras.h"
 
-@interface MNSDocumentReport : MNSDocument
+@interface MTReportDocument : MTDocument
 
 //Create a new file
 - (id)initNewFileWithName: (NSString *)name

@@ -434,7 +434,7 @@
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSIndexSet *indexSetSections = nil;
-    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
+    MTReportDocument *reportDocument = [[AppDelegate activeDocument] retain];
     NSDictionary *oldLayout = [[[self queryBuilderDataModal] datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
     [RptqTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
@@ -604,7 +604,7 @@
                     NSIndexSet *deleteSections = nil;
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
-                    MNSDocumentReport *reportDocument = [[AppDelegate activeDocument] retain];
+                    MTReportDocument *reportDocument = [[AppDelegate activeDocument] retain];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
@@ -687,7 +687,7 @@
                 // MARK: Delete UIViewControllerSchemaTablesSectionsGroups
                 case UIViewControllerSchemaTablesSectionsGroups: {
                     
-                    MNSDocumentReport *activateDocument = [AppDelegate activeDocument];
+                    MTReportDocument *activateDocument = [AppDelegate activeDocument];
                     NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -1082,7 +1082,7 @@
 
 #pragma mark - NSFetchedResultsSetup
 
-- (void)reloadDocument:(MNSDocumentReport *)documentReport {
+- (void)reloadDocument:(MTReportDocument *)documentReport {
     NSManagedObjectContext *managedObjectContext = [[documentReport managedDocument] managedObjectContext];
     
     {

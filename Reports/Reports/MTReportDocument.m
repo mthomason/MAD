@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MNSDocumentReport.h"
+#import "MTReportDocument.h"
 
-@interface MNSDocumentReport ()
+@interface MTReportDocument ()
 
 @end
 
-@implementation MNSDocumentReport
+@implementation MTReportDocument
 
 - (void)dealloc {
     [super dealloc];

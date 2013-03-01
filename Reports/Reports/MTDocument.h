@@ -17,7 +17,7 @@
 #import "UIManagedDocument+FileOperations.h"
 #import "NSError+UserInterface.h"
 
-@interface MNSDocument : NSObject
+@interface MTDocument : NSObject
 
 @property (assign) Class managedDocumentType;
 @property (retain, nonatomic) id managedDocument;

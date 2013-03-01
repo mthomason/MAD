@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MNSDocument.h"
+#import "MTDocument.h"
 
-@interface MNSDocument ()
+@interface MTDocument ()
 
 @end
 
-@implementation MNSDocument
+@implementation MTDocument
 
 - (void)dealloc {
     [_managedDocument release];

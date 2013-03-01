@@ -28,7 +28,7 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
-#import "MNSDocumentReport.h"
+#import "MTReportDocument.h"
 
 @interface MTViewControllerQueryBuilder : MTViewController
     <UITableViewDataSource,
@@ -60,7 +60,7 @@
 
 @property BOOL debug;
 
-- (void)reloadDocument:(MNSDocumentReport *)documentReport;
+- (void)reloadDocument:(MTReportDocument *)documentReport;
 
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;

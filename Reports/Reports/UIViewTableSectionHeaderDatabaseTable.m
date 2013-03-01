@@ -7,65 +7,70 @@
 //
 
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+@interface UIViewTableSectionHeaderDatabaseTable ()
+
+@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, retain) UIButton *disclosureButton;
+@property (nonatomic, assign) NSInteger section;
+@property (nonatomic, assign) id <SectionHeaderViewDelegate> delegate;
+
+@end
 
 @implementation UIViewTableSectionHeaderDatabaseTable
 
-@synthesize titleLabel=_titleLabel, disclosureButton=_disclosureButton, delegate=_delegate, section=_section;
+- (void)dealloc {
+    [_titleLabel release];
+    [_disclosureButton release];
+    [super dealloc];
+}
 
-//+ (Class)layerClass {
-//    return [CAGradientLayer class];
-//}
-
--(id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
+- (id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
     
     self = [super initWithFrame:frame];
     
-    if (self != nil) {
+    if (self) {
         
         // Set up the tap gesture recognizer.
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
         [self addGestureRecognizer:tapGesture];
         [tapGesture release];
         
-        _delegate = delegate;        
-        self.userInteractionEnabled = YES;
+        [self setDelegate: delegate];
+        [self setUserInteractionEnabled: YES];
         
-        
-        // Create and configure the title label.
-        _section = sectionNumber;
-        CGRect titleLabelFrame = self.bounds;
-        titleLabelFrame.origin.x += 35.0;
-        titleLabelFrame.size.width -= 35.0;
-        CGRectInset(titleLabelFrame, 0.0, 5.0);
+        [self setSection: sectionNumber];
+        CGRect titleLabelFrame = [self bounds];
+        titleLabelFrame.origin.x += 35.00000f;
+        titleLabelFrame.size.width -= 35.0000f;
+        CGRectInset(titleLabelFrame, 0.0000f, 5.0000f);
+
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
-        label.text = title;
-        label.font = [UIFont boldSystemFontOfSize:17.0];
+        [label setText: title];
+        [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
         label.textColor = [UIColor whiteColor];
         label.backgroundColor = [UIColor clearColor];
         [self addSubview:label];
-        _titleLabel = label;
+        [self setTitleLabel: label];
+        [label release];
         
-        
-        // Create and configure the disclosure button.
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(0.0, 5.0, 35.0, 35.0);
+        button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
         [button setImage:[UIImage imageNamed:@"carat.png"] forState:UIControlStateNormal];
         [button setImage:[UIImage imageNamed:@"carat-open.png"] forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
-        _disclosureButton = button;
+        [self setDisclosureButton: button];
+        [button release];
         
-        
-        // Set the colors for the gradient layer.
         static NSMutableArray *colors = nil;
         if (colors == nil) {
             colors = [[NSMutableArray alloc] initWithCapacity:3];
             UIColor *color = nil;
-            color = [UIColor colorWithRed:0.82 green:0.84 blue:0.87 alpha:1.0];
+            color = [UIColor colorWithRed:0.8200f green:0.8400f blue:0.8700f alpha:1.000f];
             [colors addObject:(id)[color CGColor]];
-            color = [UIColor colorWithRed:0.41 green:0.41 blue:0.59 alpha:1.0];
+            color = [UIColor colorWithRed:0.4100f green:0.4100f blue:0.5900f alpha:1.000f];
             [colors addObject:(id)[color CGColor]];
-            color = [UIColor colorWithRed:0.41 green:0.41 blue:0.59 alpha:1.0];
+            color = [UIColor colorWithRed:0.4100f green:0.4100f blue:0.5900f alpha:1.000f];
             [colors addObject:(id)[color CGColor]];
         }
         
@@ -74,32 +79,30 @@
     return self;
 }
 
--(IBAction)toggleOpen:(id)sender {
+- (IBAction)toggleOpen:(id)sender {
     [self toggleOpenWithUserAction:YES];
 }
 
 
--(void)toggleOpenWithUserAction:(BOOL)userAction {
+- (void)toggleOpenWithUserAction:(BOOL)userAction {
     
-    // Toggle the disclosure button state.
-    self.disclosureButton.selected = !self.disclosureButton.selected;
+    [[self disclosureButton] setSelected: ![[self disclosureButton] isSelected]];
     
-    // If this was a user action, send the delegate the appropriate message.
     if (userAction) {
-        if (self.disclosureButton.selected) {
-            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
-                [self.delegate sectionHeaderView:self sectionOpened:self.section];
+        if ([[self disclosureButton] isSelected]) {
+            if ([[self delegate] respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
+                [[self delegate] sectionHeaderView:self sectionOpened:[self section]];
             }
         }
         else {
-            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
-                [self.delegate sectionHeaderView:self sectionClosed:self.section];
+            if ([[self delegate] respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
+                [[self delegate] sectionHeaderView:self sectionClosed:[self section]];
             }
         }
     }
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { 
     [self setHighlight: YES];
     [[self titleLabel] setTextColor:[UIColor darkTextColor]];
 }

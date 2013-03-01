@@ -94,7 +94,7 @@
     [[vc view] setCenter:[[self view] center]];
     [[self view] addSubview: [vc view]];
 
-    __block MNSDocumentReport *documentReport = [[MNSDocumentReport alloc] initNewFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
+    __block MTReportDocument *documentReport = [[MTReportDocument alloc] initNewFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
         
         if (success) {
             
@@ -108,7 +108,7 @@
             MNSDatabaseMySql *databaseMySql = [[MNSDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
             [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success) {
                 if (success) {
-                    NSLog(@"Delegate %@", self.delegate);
+                    NSLog(@"Delegate %@", [self delegate]);
                     [[vc view] removeFromSuperview];
                     [[self delegate] viewControllerDidFinish: self];
                 }

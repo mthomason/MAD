@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIViewGradient.h"
+#import "MTGradientView.h"
 
-@implementation UIViewGradient
+@implementation MTGradientView
 
 @synthesize highlight = _hidden;
 

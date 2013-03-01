@@ -29,7 +29,7 @@
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
-@property (nonatomic, retain) MNSDocumentReport *reportDocument;
+@property (nonatomic, retain) MTReportDocument *reportDocument;
 
 @end
 
@@ -537,9 +537,9 @@
 
 #pragma mark Reload document view controllers
 
-- (void)reloadDocument:(MNSDocumentReport *)documentReport {
+- (void)reloadDocument:(MTReportDocument *)documentReport {
     
-    MNSDocumentReport *reportDocument = [documentReport retain];
+    MTReportDocument *reportDocument = [documentReport retain];
     [self setReportDocument:reportDocument];
     [reportDocument release];
 
