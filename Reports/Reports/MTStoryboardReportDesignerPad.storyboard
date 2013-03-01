@@ -626,10 +626,10 @@
             </objects>
             <point key="canvasLocation" x="-3577" y="-1088"/>
         </scene>
-        <!--View Controller Query Builder - Query Builder-->
+        <!--Query Builder View Controller - Query Builder-->
         <scene sceneID="35Y-hI-pQy">
             <objects>
-                <viewController id="4Lk-sQ-AE1" customClass="MTViewControllerQueryBuilder" sceneMemberID="viewController">
+                <viewController id="4Lk-sQ-AE1" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ee3-Gx-bKf">
                         <rect key="frame" x="0.0" y="20" width="320" height="684"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3701,10 +3701,10 @@
             </objects>
             <point key="canvasLocation" x="2344" y="-120"/>
         </scene>
-        <!--Table View Controller Schema Add Group - Add Group-->
+        <!--Query Builder Add Group View Controller - Add Group-->
         <scene sceneID="0uB-Ld-rhN">
             <objects>
-                <tableViewController id="YHt-pf-g4j" customClass="UITableViewControllerSchemaAddGroup" sceneMemberID="viewController">
+                <tableViewController id="YHt-pf-g4j" customClass="MTQueryBuilderAddGroupViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="eTz-Uo-MH6">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5728,25 +5728,6 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="MTViewControllerQueryBuilder" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerQueryBuilder.h"/>
-            <relationships>
-                <relationship kind="action" name="addLink:"/>
-                <relationship kind="action" name="addTable:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
-                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
-                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
-                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
-                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
-                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="viewClipboard" candidateClass="UIViewClipboard"/>
-            </relationships>
-        </class>
         <class className="MTViewControllerReportViewer" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerReportViewer.h"/>
             <relationships>
@@ -6064,16 +6045,6 @@
                 <relationship kind="outlet" name="addPredicateDelegate"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerSchemaAddGroup" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSchemaAddGroup.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellField" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellSort" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
         <class className="UITableViewControllerSchemaAddPredicate" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSchemaAddPredicate.h"/>
             <relationships>
@@ -6113,9 +6084,6 @@
             <relationships>
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
-        </class>
-        <class className="UIViewClipboard" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewClipboard.h"/>
         </class>
         <class className="UIViewControllerSchemaAddLinkFirstField" superclassName="UITableViewControllerCoreDataResults">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstField.h"/>

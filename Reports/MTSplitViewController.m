@@ -98,13 +98,13 @@
 }
 
 - (IBAction)showReportDesigner:(id)sender {
-    MTViewControllerQueryBuilder *queryBuilderController = [[self queryBuilderController] retain];
+    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
 //    [queryBuilderController show]
     [queryBuilderController release];
 }
 
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
-    MTViewControllerQueryBuilder *queryBuilderController = [[self queryBuilderController] retain];
+    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
     BOOL isEditing = ![[queryBuilderController tableViewQueryBuilder] isEditing];
 
     UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
@@ -121,7 +121,7 @@
     [queryBuilderController release];
 }
 
-- (MTViewControllerQueryBuilder *)queryBuilderController {
+- (MTQueryBuilderViewController *)queryBuilderController {
     return [[[self rightViewController] retain] autorelease];
 }
 

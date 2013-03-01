@@ -25,7 +25,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
 
 @property (nonatomic, retain) MTQueryBuilderAdvancedViewController *advancedQueryBuilder;
-@property (nonatomic, retain) MTViewControllerQueryBuilder *standardQueryBuilder;
+@property (nonatomic, retain) MTQueryBuilderViewController *standardQueryBuilder;
 
 @property (nonatomic, retain) UILongPressGestureRecognizer *longPressGestureRecognizer;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureRecognizer;
@@ -236,8 +236,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             if ([navControl topViewController]) {
                 if (row < [[self availableFilesCache] count]) {
                     
-                    if ([[navControl topViewController] isKindOfClass:[MTViewControllerQueryBuilder class]]) {
-                        MTViewControllerQueryBuilder *tvc = [(MTViewControllerQueryBuilder *)[navControl topViewController] retain];
+                    if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+                        MTQueryBuilderViewController *tvc = [(MTQueryBuilderViewController *)[navControl topViewController] retain];
                         if (tvc) {
                             [self setupQueryDesignerController:tvc usingFileAtUrl:url];
                         } else {
@@ -305,8 +305,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
     if ([contentController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *childNavigationController = (UINavigationController *)contentController;
-        if ([[childNavigationController topViewController] isKindOfClass:[MTViewControllerQueryBuilder class]]) {
-            MTViewControllerQueryBuilder *queryBuilderViewController = (MTViewControllerQueryBuilder *)[[childNavigationController topViewController] retain];
+        if ([[childNavigationController topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[childNavigationController topViewController] retain];
             [self setStandardQueryBuilder:queryBuilderViewController];
             [queryBuilderViewController release];
             [self setBothContentControllersDisplayed:NO];
@@ -315,8 +315,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTQueryBuilderAdvancedViewController *advancedControl = (MTQueryBuilderAdvancedViewController *)contentController;
         [self setAdvancedQueryBuilder:advancedControl];
         [self setBothContentControllersDisplayed:NO];
-    } else if ([contentController isKindOfClass:[MTViewControllerQueryBuilder class]]) {
-        MTViewControllerQueryBuilder *queryBuilder = (MTViewControllerQueryBuilder *)contentController;
+    } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
+        MTQueryBuilderViewController *queryBuilder = (MTQueryBuilderViewController *)contentController;
         [self setStandardQueryBuilder:queryBuilder];
         [queryBuilder setDelegate:self];
         [self setBothContentControllersDisplayed:YES];
@@ -337,7 +337,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [childController release];
 }
 
-- (void)setupQueryDesignerController:(MTViewControllerQueryBuilder *)tvc usingFileAtUrl:(NSURL*)url {
+- (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
     [tvc setDelegate: self];
     MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
         if (success) {

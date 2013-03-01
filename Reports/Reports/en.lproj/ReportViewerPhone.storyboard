@@ -484,10 +484,10 @@
             </objects>
             <point key="canvasLocation" x="807" y="624"/>
         </scene>
-        <!--View Controller Query Builder - Query Builder-->
+        <!--Query Builder View Controller - Query Builder-->
         <scene sceneID="m5M-pU-hVe">
             <objects>
-                <viewController id="6Ud-Rv-UQO" customClass="MTViewControllerQueryBuilder" sceneMemberID="viewController">
+                <viewController id="6Ud-Rv-UQO" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KGO-Qx-zB3">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3231,10 +3231,10 @@
             </objects>
             <point key="canvasLocation" x="2802" y="41"/>
         </scene>
-        <!--Table View Controller Schema Add Group - Add Group-->
+        <!--Query Builder Add Group View Controller - Add Group-->
         <scene sceneID="RCn-aj-ZyM">
             <objects>
-                <tableViewController id="eop-L6-mkF" customClass="UITableViewControllerSchemaAddGroup" sceneMemberID="viewController">
+                <tableViewController id="eop-L6-mkF" customClass="MTQueryBuilderAddGroupViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="QbH-9x-aBz">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTViewControllerQueryBuilder.h"
+#import "MTQueryBuilderViewController.h"
 #import "MUIViewControllerTemplateSelector.h"
 #import "NSFileManager+Reports.h"
 #import "MTSplitViewController.h"

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
-#import "MTViewControllerQueryBuilder.h"
+#import "MTQueryBuilderViewController.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTTitleView.h"
 
@@ -22,7 +22,7 @@
 @property (nonatomic, assign) id <MTSplitViewControllerDelegate> delegateContentController;
 @property (nonatomic, retain) NSURL *documentToOpen;
 
-- (MTViewControllerQueryBuilder *)queryBuilderController;
+- (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
 
 @end
