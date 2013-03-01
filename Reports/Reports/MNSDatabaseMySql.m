@@ -322,10 +322,10 @@
             //[queryCache removeHasValues:[queryCache hasQueryResults]];
             NSUInteger resultCounter = 0;
             for (NSDictionary *result in results) {
-                NSLog(@"%@", result);
+                //NSLog(@"%@", result);
                 
                 for (NSString *key in [result keyEnumerator]) {
-                    NSLog(@"Field %@", key);
+                    //NSLog(@"Field %@", key);
                     id object = [result objectForKey:key];
 
                     RptqQueryResult *queryResult = [RptqQueryResult initObjectForManagedObjectContext:managedObjectContext];
@@ -342,7 +342,7 @@
                 if (resultCounter == 0) {
                     NSUInteger fieldCounter = 0;
                     for (NSString *key in [result keyEnumerator]) {
-                        NSLog(@"Field %@", key);
+                        //NSLog(@"Field %@", key);
                         RptqQueryResultFields *queryResultField = [RptqQueryResultFields initObjectForManagedObjectContext:managedObjectContext];
                         [queryResultField setFieldname:key];
                         [queryResultField setResultOrder:@(fieldCounter)];

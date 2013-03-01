@@ -47,7 +47,7 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-    NSLog(@"%@Prepare layout", self);
+    //NSLog(@"%@Prepare layout", self);
 
     NSUInteger numberOfSections = [[self collectionView] numberOfSections];
     [self setNumberOfSections:numberOfSections];
@@ -130,13 +130,13 @@
 }
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
-    NSLog(@"Appearing %@", itemIndexPath);
+    //NSLog(@"Appearing %@", itemIndexPath);
     UICollectionViewLayoutAttributes *layoutAttributes = [[[[self layoutArray] objectAtIndex:itemIndexPath.section] objectAtIndex:itemIndexPath.item] copy];
     return [layoutAttributes autorelease];
 }
 
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
-    NSLog(@"Disappearing %@", itemIndexPath);
+    //NSLog(@"Disappearing %@", itemIndexPath);
     [super layoutAttributesForItemAtIndexPath:itemIndexPath];
     UICollectionViewLayoutAttributes *layoutAttributes = [[[self invalidatedLayoutArray] objectAtIndex:itemIndexPath.section] objectAtIndex: itemIndexPath.item];
     return layoutAttributes;

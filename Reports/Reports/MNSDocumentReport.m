@@ -80,7 +80,7 @@
     RptqQuery *query = [[database hasQueries] anyObject];
     MNSDatabase *mnsDatabase = [MNSDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
-    sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 2500", sqlSelect];
+    sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
     [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
                completion: ^(MNSDatabase *database, RptqQueryCache *cache) {
                    [self save: ^(BOOL success) {

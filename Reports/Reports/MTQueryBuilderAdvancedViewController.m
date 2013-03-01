@@ -465,23 +465,23 @@
     if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
         leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
         [connectorView setConnectorPositionB:MNSConnectorPositionA];
-        NSLog(@"P1");
+        //NSLog(@"P1");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
         [connectorView setConnectorPositionB:MNSConnectorPositionB];
-        NSLog(@"P2");
+        //NSLog(@"P2");
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
         [connectorView setConnectorPositionB:MNSConnectorPositionC];
-        NSLog(@"P3");
+        //NSLog(@"P3");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     } else {
-        NSLog(@"P4");
+        //NSLog(@"P4");
         [connectorView setConnectorPositionB:MNSConnectorPositionD];
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;

@@ -3347,10 +3347,10 @@
 		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
 			isa = PBXGroup;
 			children = (
+				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,
 				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
-				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
 				4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */,
 				4CDBCB6416AF91B000E08FAD /* RptqDocument+ActiveDocument.h */,

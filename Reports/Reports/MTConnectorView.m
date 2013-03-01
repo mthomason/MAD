@@ -180,13 +180,13 @@
     pathOrigin.y += 3.0000f;
     if ([[self topLeftToBottomRight] boolValue]) {
         if ([self leftViewIsInital] == YES) {
-            NSLog(@"A");
+            //NSLog(@"A");
             pathOrigin.x -= 5.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
             [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
             [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
         } else {
-            NSLog(@"B");
+            //NSLog(@"B");
             pathOrigin.x += 10.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
             [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
@@ -194,13 +194,13 @@
         }
     } else {
         if ([self leftViewIsInital] == YES) {
-            NSLog(@"C");
+            //NSLog(@"C");
             pathOrigin.x -= 5.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
             [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];
             [path addLineToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y + arrowRadius)];
         } else {
-            NSLog(@"D");
+            //NSLog(@"D");
             pathOrigin.x += 10.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y - arrowRadius)];
             [path addLineToPoint:CGPointMake(pathOrigin.x, pathOrigin.y)];

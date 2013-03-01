@@ -428,7 +428,7 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
 printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
     @try {
 
-        NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
+        //NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
         
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
@@ -565,7 +565,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                 [mutableStringToPrint appendString:stringToPrint];
             }
         }
-        NSLog(@"Detail: (%@)", mutableStringToPrint);
+        //NSLog(@"Detail: (%@)", mutableStringToPrint);
         [mutableStringToPrint release];
         documentObjectCounter++;
     }
@@ -673,7 +673,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
     } else if ([value isKindOfClass:[NSNumber class]]) {
         result = [[NSString alloc] initWithFormat:@"%f", [value floatValue]];
     } else {
-        NSLog(@"Value: %@", value);
+        //NSLog(@"Value: %@", value);
         result = [[NSString alloc] initWithString: @"<Unknown type>"];
     }
     
