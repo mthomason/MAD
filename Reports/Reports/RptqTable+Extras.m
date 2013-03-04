@@ -93,7 +93,7 @@
 }
 
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andTable:(MNSDatabaseTable *)table {
+                                            andTable:(MTDatabaseTable *)table {
     NSString *entityName = NSStringFromClass([RptqTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqTable *rptqTable = [[RptqTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];

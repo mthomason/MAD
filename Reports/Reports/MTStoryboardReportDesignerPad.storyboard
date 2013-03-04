@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--View Controller Template Selector - Templates-->
+        <!--Template Selector View Controller - Templates-->
         <scene sceneID="TMb-VN-6ej">
             <objects>
-                <viewController id="5LH-bH-jcr" customClass="MUIViewControllerTemplateSelector" sceneMemberID="viewController">
+                <viewController id="5LH-bH-jcr" customClass="MTTemplateSelectorViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BrJ-YZ-l1o">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -16,7 +16,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3nL-Du-DlL">
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="6sB-Nb-KpQ" customClass="UITableViewCellDocument">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="6sB-Nb-KpQ" customClass="MTDocumentTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="540" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -97,10 +97,10 @@
             </objects>
             <point key="canvasLocation" x="-608" y="-3067"/>
         </scene>
-        <!--View Controller Store Templates-->
+        <!--Store Templates View Controller-->
         <scene sceneID="3G7-RQ-Cwk">
             <objects>
-                <viewController id="jYc-ai-Xfo" customClass="MUIViewControllerStoreTemplates" sceneMemberID="viewController">
+                <viewController id="jYc-ai-Xfo" customClass="MTStoreTemplatesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hga-yr-4TG">
                         <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -223,10 +223,10 @@
             </objects>
             <point key="canvasLocation" x="1426" y="-4565"/>
         </scene>
-        <!--View Controller Show Sql-->
+        <!--Show Sql View Controller-->
         <scene sceneID="ZID-aL-I3K">
             <objects>
-                <viewController id="CS8-UT-bFG" customClass="MUIViewControllerShowSql" sceneMemberID="viewController">
+                <viewController id="CS8-UT-bFG" customClass="MTShowSqlViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="63o-3Q-Pek">
                         <rect key="frame" x="0.0" y="20" width="540" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -284,10 +284,10 @@
             </objects>
             <point key="canvasLocation" x="667" y="1157"/>
         </scene>
-        <!--View Controller Report Designer-->
+        <!--Report Designer View Controller-->
         <scene sceneID="raX-g6-TgL">
             <objects>
-                <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oy5-et-qFd" customClass="MUIViewControllerReportDesigner" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oy5-et-qFd" customClass="MTReportDesignerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uh3-7g-fPO">
                         <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -452,10 +452,10 @@
             </objects>
             <point key="canvasLocation" x="-1083" y="711"/>
         </scene>
-        <!--View Controller Report Viewer-->
+        <!--Report Viewer View Controller-->
         <scene sceneID="3nK-bo-OeN">
             <objects>
-                <viewController id="SeT-Hl-V2y" customClass="MTViewControllerReportViewer" sceneMemberID="viewController">
+                <viewController id="SeT-Hl-V2y" customClass="MTReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RZN-fd-Qgk">
                         <rect key="frame" x="0.0" y="20" width="768" height="748"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -934,10 +934,10 @@
             </objects>
             <point key="canvasLocation" x="-1074" y="-150"/>
         </scene>
-        <!--Table View Controller Settings - Tools-->
+        <!--Settings View Controller - Tools-->
         <scene sceneID="yBq-MN-8Rb">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerSettings" id="uV6-lX-Cgv" customClass="UITableViewControllerSettings" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerSettings" id="uV6-lX-Cgv" customClass="MTSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="c2H-I8-JGx">
                         <rect key="frame" x="0.0" y="44" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1507,10 +1507,10 @@
             </objects>
             <point key="canvasLocation" x="4163" y="3715"/>
         </scene>
-        <!--View Controller Object Selector-->
+        <!--Report Designer Object Selector View Controller-->
         <scene sceneID="Z6h-D5-sds">
             <objects>
-                <viewController id="huR-Hj-JfS" customClass="MUIViewControllerObjectSelector" sceneMemberID="viewController">
+                <viewController id="huR-Hj-JfS" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8ZR-Iq-qcn">
                         <rect key="frame" x="0.0" y="20" width="540" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1569,10 +1569,10 @@
             </objects>
             <point key="canvasLocation" x="1740" y="4399"/>
         </scene>
-        <!--Table View Controller Database My Sql Setup - MySQL Setup-->
+        <!--Database Driver Selector My Sql View Controller - MySQL Setup-->
         <scene sceneID="anf-Zf-9az">
             <objects>
-                <tableViewController id="Y5P-d4-fMD" customClass="MUITableViewControllerDatabaseMySqlSetup" sceneMemberID="viewController">
+                <tableViewController id="Y5P-d4-fMD" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9ST-bk-lwM">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2102,10 +2102,10 @@
             </objects>
             <point key="canvasLocation" x="1920" y="2855"/>
         </scene>
-        <!--Table View Controller Database Driver Selector - New Report-->
+        <!--Database Driver Selector View Controller - New Report-->
         <scene sceneID="rWu-ZR-NOl">
             <objects>
-                <tableViewController id="Jmw-bq-GVM" customClass="MUITableViewControllerDatabaseDriverSelector" sceneMemberID="viewController">
+                <tableViewController id="Jmw-bq-GVM" customClass="MTDatabaseDriverSelectorViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="VjW-aA-ScY">
                         <rect key="frame" x="0.0" y="94" width="540" height="526"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2377,10 +2377,10 @@
             </objects>
             <point key="canvasLocation" x="1402" y="-3121"/>
         </scene>
-        <!--Split View Controller-->
+        <!--Query Builder Container Controller-->
         <scene sceneID="Yeg-pW-w89">
             <objects>
-                <viewController id="p7o-3U-Nna" customClass="MTSplitViewController" sceneMemberID="viewController">
+                <viewController id="p7o-3U-Nna" customClass="MTQueryBuilderContainerController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cWR-xv-ege">
                         <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2483,10 +2483,10 @@
             </objects>
             <point key="canvasLocation" x="704" y="-1759"/>
         </scene>
-        <!--View Controller Store Templates-->
+        <!--Store Templates View Controller-->
         <scene sceneID="tFV-Z9-qRf">
             <objects>
-                <viewController id="Vp7-kw-tdW" customClass="MUIViewControllerStoreTemplates" sceneMemberID="viewController">
+                <viewController id="Vp7-kw-tdW" customClass="MTStoreTemplatesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lZJ-J5-mhi">
                         <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2658,10 +2658,10 @@
             </objects>
             <point key="canvasLocation" x="-902" y="3776"/>
         </scene>
-        <!--Table View Controller Database Salesforce Setup - New Report-->
+        <!--Database Driver Selector Salesforce View Controller - New Report-->
         <scene sceneID="CGF-bU-4kw">
             <objects>
-                <tableViewController id="mRr-kJ-O1k" customClass="MUITableViewControllerDatabaseSalesforceSetup" sceneMemberID="viewController">
+                <tableViewController id="mRr-kJ-O1k" customClass="MTDatabaseDriverSelectorSalesforceViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Tub-bb-aEd">
                         <rect key="frame" x="0.0" y="94" width="320" height="348"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2934,10 +2934,10 @@
             </objects>
             <point key="canvasLocation" x="3034" y="1804"/>
         </scene>
-        <!--View Controller Schema Add Link First Table - Select First Table-->
+        <!--Query Builder Add Link First Table View Controller - Select First Table-->
         <scene sceneID="Hzv-78-iQ2">
             <objects>
-                <viewController id="92y-k6-ICR" customClass="UIViewControllerSchemaAddLinkFirstTable" sceneMemberID="viewController">
+                <viewController id="92y-k6-ICR" customClass="MTQueryBuilderAddLinkFirstTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="hcg-O1-jzz">
                         <rect key="frame" x="0.0" y="64" width="320" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2996,10 +2996,10 @@
             </objects>
             <point key="canvasLocation" x="688" y="186"/>
         </scene>
-        <!--Table View Controller Section Layout Settings - Layout Settings-->
+        <!--Report Designer Section Layout Settings View Controller - Layout Settings-->
         <scene sceneID="7dN-g9-S8h">
             <objects>
-                <tableViewController id="jXi-5j-ahn" customClass="UITableViewControllerSectionLayoutSettings" sceneMemberID="viewController">
+                <tableViewController id="jXi-5j-ahn" customClass="MTReportDesignerSectionLayoutSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="1uV-Gr-oXO">
                         <rect key="frame" x="0.0" y="20" width="540" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3092,10 +3092,10 @@
             </objects>
             <point key="canvasLocation" x="674" y="1932"/>
         </scene>
-        <!--Table View Controller Link Builder - Link Builder-->
+        <!--Query Builder Link Builder View Controller - Link Builder-->
         <scene sceneID="WDC-G1-KxC">
             <objects>
-                <tableViewController id="X1E-qj-gYa" customClass="UITableViewControllerLinkBuilder" sceneMemberID="viewController">
+                <tableViewController id="X1E-qj-gYa" customClass="MTQueryBuilderLinkBuilderViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="V2Y-fY-WQM">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3359,10 +3359,10 @@
             </objects>
             <point key="canvasLocation" x="712" y="-767"/>
         </scene>
-        <!--View Controller Schema Add Table - Add Table-->
+        <!--Query Builder Add Table View Controller - Add Table-->
         <scene sceneID="ov8-qB-u8x">
             <objects>
-                <tableViewController id="UQe-jE-75d" customClass="UIViewControllerSchemaAddTable" sceneMemberID="viewController">
+                <tableViewController id="UQe-jE-75d" customClass="MTQueryBuilderAddTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ULN-Ru-Az8">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3588,10 +3588,10 @@
             </objects>
             <point key="canvasLocation" x="4725" y="-1898"/>
         </scene>
-        <!--Table View Controller Choose Field - Select Field-->
+        <!--Query Builder Choose Field - Select Field-->
         <scene sceneID="w9A-4w-0eg">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="kFB-gS-wRk" customClass="UITableViewControllerChooseField" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="kFB-gS-wRk" customClass="MTQueryBuilderChooseField" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ROj-GE-1s2">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3636,10 +3636,10 @@
             </objects>
             <point key="canvasLocation" x="2478" y="-949"/>
         </scene>
-        <!--Table View Controller Sort Type - Sort Orders-->
+        <!--Query Builder Sort Type View Controller - Sort Orders-->
         <scene sceneID="rSg-gt-N1P">
             <objects>
-                <tableViewController id="KiK-e9-Nml" customClass="UITableViewControllerSortType" sceneMemberID="viewController">
+                <tableViewController id="KiK-e9-Nml" customClass="MTQueryBuilderSortTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="GAS-Nh-12I">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3801,10 +3801,10 @@
             </objects>
             <point key="canvasLocation" x="1495" y="-775"/>
         </scene>
-        <!--Table View Controller Predicate Format - Predicate Format-->
+        <!--Query Builder Predicate Format View Controller - Predicate Format-->
         <scene sceneID="Kvg-nH-DrX">
             <objects>
-                <tableViewController id="P39-f4-Shy" customClass="UITableViewControllerPredicateFormat" sceneMemberID="viewController">
+                <tableViewController id="P39-f4-Shy" customClass="MTQueryBuilderPredicateFormatViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="SFv-kH-qD3">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3878,10 +3878,10 @@
             </objects>
             <point key="canvasLocation" x="1501" y="-1707"/>
         </scene>
-        <!--Table View Controller Schema Add Predicate - Add Predicate-->
+        <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="tEH-C3-5m3">
             <objects>
-                <tableViewController id="MhF-Cc-4Fp" customClass="UITableViewControllerSchemaAddPredicate" sceneMemberID="viewController">
+                <tableViewController id="MhF-Cc-4Fp" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="UYj-1l-FVR">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4003,10 +4003,10 @@
             </objects>
             <point key="canvasLocation" x="3497" y="-893"/>
         </scene>
-        <!--View Controller Schema Add Link First Field - Select First Field-->
+        <!--Query Builder Add Link First Field View Controller - Select First Field-->
         <scene sceneID="AaQ-ks-3UK">
             <objects>
-                <viewController id="zqj-ox-lYn" customClass="UIViewControllerSchemaAddLinkFirstField" sceneMemberID="viewController">
+                <viewController id="zqj-ox-lYn" customClass="MTQueryBuilderAddLinkFirstFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Xy2-vY-ZCH">
                         <rect key="frame" x="0.0" y="64" width="320" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4048,10 +4048,10 @@
             </objects>
             <point key="canvasLocation" x="6121" y="1627"/>
         </scene>
-        <!--View Controller Schema Add Link Second Table - Select Second Table-->
+        <!--Query Builder Add Link Second Table View Controller - Select Second Table-->
         <scene sceneID="Cqz-Oe-Joz">
             <objects>
-                <viewController id="OM0-Eh-l1C" customClass="UIViewControllerSchemaAddLinkSecondTable" sceneMemberID="viewController">
+                <viewController id="OM0-Eh-l1C" customClass="MTQueryBuilderAddLinkSecondTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="JIO-xY-eBv">
                         <rect key="frame" x="0.0" y="64" width="320" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4086,10 +4086,10 @@
             </objects>
             <point key="canvasLocation" x="6154" y="2288"/>
         </scene>
-        <!--View Controller Schema Add Link Second Field - Select Second Field-->
+        <!--Query Builder Add Link Second Field View Controller - Select Second Field-->
         <scene sceneID="nLu-fe-GbD">
             <objects>
-                <viewController id="2hL-Ee-FGp" customClass="UIViewControllerSchemaAddLinkSecondField" sceneMemberID="viewController">
+                <viewController id="2hL-Ee-FGp" customClass="MTQueryBuilderAddLinkSecondFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="qdr-bQ-KOV">
                         <rect key="frame" x="0.0" y="64" width="320" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4131,10 +4131,10 @@
             </objects>
             <point key="canvasLocation" x="6149" y="2823"/>
         </scene>
-        <!--View Controller Schema Add Link Join Type - Select Join Type-->
+        <!--Query Builder Add Link Join Type View Controller - Select Join Type-->
         <scene sceneID="CII-uK-3bR">
             <objects>
-                <tableViewController id="DnE-gV-b6V" customClass="UIViewControllerSchemaAddLinkJoinType" sceneMemberID="viewController">
+                <tableViewController id="DnE-gV-b6V" customClass="MTQueryBuilderAddLinkJoinTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="JDJ-aP-src">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4449,10 +4449,10 @@
             </objects>
             <point key="canvasLocation" x="-1336" y="3775"/>
         </scene>
-        <!--Table View Controller Schema Add Predicate - Add Predicate-->
+        <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="Y6F-Vc-zg4">
             <objects>
-                <tableViewController id="KbB-EQ-goh" customClass="UITableViewControllerSchemaAddPredicate" sceneMemberID="viewController">
+                <tableViewController id="KbB-EQ-goh" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Phn-mw-Jqx">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4607,10 +4607,10 @@
             </objects>
             <point key="canvasLocation" x="-902" y="4141"/>
         </scene>
-        <!--Table View Controller Font Settings-->
+        <!--Report Designer Font Settings View Controller-->
         <scene sceneID="sBH-UF-9iP">
             <objects>
-                <tableViewController storyboardIdentifier="FontSettingsTableViewControllerLayout" id="wqR-Af-Oy3" customClass="UITableViewControllerFontSettings" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FontSettingsTableViewControllerLayout" id="wqR-Af-Oy3" customClass="MTReportDesignerFontSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="hri-CA-1Sa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4917,10 +4917,10 @@
             </objects>
             <point key="canvasLocation" x="-1336" y="2796"/>
         </scene>
-        <!--Table View Controller Font Selector-->
+        <!--Report Designer Font Selector View Controller-->
         <scene sceneID="Pg0-kN-Elh">
             <objects>
-                <tableViewController storyboardIdentifier="FontListSettingsTableViewController" id="IUh-Ve-Cvy" customClass="UITableViewControllerFontSelector" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FontListSettingsTableViewController" id="IUh-Ve-Cvy" customClass="MTReportDesignerFontSelectorViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Bes-Et-IEg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5284,10 +5284,10 @@
             </objects>
             <point key="canvasLocation" x="-560" y="3948"/>
         </scene>
-        <!--View Controller Tool Box-->
+        <!--Report Designer Tool Box View Controller-->
         <scene sceneID="YzC-uu-Dqh">
             <objects>
-                <viewController storyboardIdentifier="ViewControllerToolBox" id="dfi-Af-2GI" customClass="UIViewControllerToolBox" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewControllerToolBox" id="dfi-Af-2GI" customClass="MTReportDesignerToolBoxViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oE6-2z-Rwu">
                         <rect key="frame" x="0.0" y="20" width="320" height="320"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5353,10 +5353,10 @@
             </objects>
             <point key="canvasLocation" x="-1149" y="1610"/>
         </scene>
-        <!--Table View Controller Font Settings-->
+        <!--Report Designer Font Settings View Controller-->
         <scene sceneID="vsD-Q7-7Hg">
             <objects>
-                <tableViewController storyboardIdentifier="FontSettingsTableViewControllerStyle" id="SNn-qs-hnu" customClass="UITableViewControllerFontSettings" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FontSettingsTableViewControllerStyle" id="SNn-qs-hnu" customClass="MTReportDesignerFontSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="cmU-dY-CYA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5700,22 +5700,6 @@
                 <relationship kind="outlet" name="detailLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="MTSplitViewController" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSplitViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="leftView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="rightView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
-            </relationships>
-        </class>
-        <class className="MTTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
         <class className="MTTitleView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
             <relationships>
@@ -5726,59 +5710,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MTViewControllerReportViewer" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerReportViewer.h"/>
-            <relationships>
-                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
-                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
-                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
-            </relationships>
-        </class>
-        <class className="MUITableViewControllerDatabaseDriverSelector" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseDriverSelector.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-            </relationships>
-        </class>
-        <class className="MUITableViewControllerDatabaseMySqlSetup" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseMySqlSetup.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="hostDidEndOnExit:"/>
-                <relationship kind="action" name="passwordDidEndOnExit:"/>
-                <relationship kind="action" name="portDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="action" name="usernameDidEndOnExit:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="tableViewCellDatabase" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldDatabase" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldReportName" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="MUITableViewControllerDatabaseSalesforceSetup" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUITableViewControllerDatabaseSalesforceSetup.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="nicknameDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="MUIViewControllerDatabaseSchema" superclassName="MTViewController">
@@ -5794,19 +5725,6 @@
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
-        <class className="MUIViewControllerObjectSelector" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerObjectSelector.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="segmentedControlSelectorTypeValueChanged:"/>
-                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="objectSelectorDelegate"/>
-                <relationship kind="outlet" name="segmentedControlSelectorType" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="toolbarMain" candidateClass="UIToolbar"/>
-            </relationships>
-        </class>
         <class className="MUIViewControllerOpenDocument" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerOpenDocument.h"/>
             <relationships>
@@ -5819,54 +5737,6 @@
                 <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerReportDesigner" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerReportDesigner.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="doneReports:"/>
-                <relationship kind="action" name="info:"/>
-                <relationship kind="action" name="showObjects:"/>
-                <relationship kind="action" name="showSettings:"/>
-                <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="navigationBarToolbox" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="navigationItemFontChooser" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="segmentedControlToolbox" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolboxContainerView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="toolboxView" candidateClass="UIView"/>
-                <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerShowSql" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerShowSql.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerStoreTemplates" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerStoreTemplates.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-            </relationships>
-        </class>
-        <class className="MUIViewControllerTemplateSelector" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerTemplateSelector.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="templateSelectorDelegate"/>
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="UITableViewCellDocument"/>
             </relationships>
         </class>
@@ -5939,16 +5809,6 @@
         <class className="UITableViewCellTableName" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
         </class>
-        <class className="UITableViewControllerChooseField" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerChooseField.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
-        </class>
         <class className="UITableViewControllerEnterString" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
             <relationships>
@@ -5957,184 +5817,10 @@
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="UITableViewControllerFontSelector" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerFontSelector.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellFontAmericanTypewriter" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontArial" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontCourier" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontCourierNew" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontGeorgia" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontHelvetica" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontHelveticaNeue" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontTimesNewRoman" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontTrebuchet" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontVerdana" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFontZapfino" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerFontSettings" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerFontSettings.h"/>
-            <relationships>
-                <relationship kind="action" name="controlValueChanged:"/>
-                <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="buttonUnderline" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="fontLabelTableViewCell" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="labelFontName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelFontSize" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelMarginBottom" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelMarginLeft" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelMarginRight" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelMarginTop" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelPaddingBottom" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelPaddingLeft" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelPaddingRight" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelPaddingTop" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelSizeHeight" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelSizeWidth" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelTest" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="segControlFontStyle" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="segmentedControlHorizontalAlignment" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="segmentedControlVerticalAlignment" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="stepperFontSize" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperMarginBottom" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperMarginLeft" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperMarginRight" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperMarginTop" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperPaddingBottom" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperPaddingLeft" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperPaddingRight" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperPaddingTop" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperSizeHeight" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="stepperSizeWidth" candidateClass="UIStepper"/>
-                <relationship kind="outletCollection" name="groupTableViewCellLayout" candidateClass="UITableViewCell"/>
-                <relationship kind="outletCollection" name="groupTableViewCellStyle" candidateClass="UITableViewCell"/>
-                <relationship kind="outletCollection" name="steppers" candidateClass="UIStepper"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerLinkBuilder" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerLinkBuilder.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableFieldOne" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableFieldTwo" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
         <class className="UITableViewControllerOpperators" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerOpperators.h"/>
             <relationships>
                 <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerPredicateFormat" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerPredicateFormat.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="addPredicateDelegate"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerSchemaAddPredicate" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSchemaAddPredicate.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="tableViewCellLeftSide" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellOperator" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellRightSide" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerSectionLayoutSettings" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSectionLayoutSettings.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerSettings" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSettings.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="UITableViewControllerSortType" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerSortType.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkFirstField" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstField.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkFirstTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkFirstTable.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkJoinType" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkJoinType.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkSecondField" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkSecondField.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddLinkSecondTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddLinkSecondTable.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerSchemaAddTable" superclassName="UITableViewControllerCoreDataResults">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerSchemaAddTable.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="UIViewControllerToolBox" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIViewControllerToolBox.h"/>
-            <relationships>
-                <relationship kind="action" name="valueChanged:"/>
-                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="navigationItemFontSelector" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
-                <relationship kind="outlet" name="sceneSelector" candidateClass="UISegmentedControl"/>
             </relationships>
         </class>
     </classes>

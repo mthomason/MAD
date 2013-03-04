@@ -16,15 +16,15 @@
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
 
-@protocol MTQueryBuilderAdvancedSchemaViewControllerDelegate
+@protocol MTQueryBuilderAdvancedSchemaDelegate
 - (void)didMoveFieldRect:(id)sender;
 @end
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
     <MTSchemaFieldCellDelegate>
 
-@property (nonatomic, retain, readonly) IBOutlet UITableView *schemaTableViewController;
-@property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaViewControllerDelegate> delegate;
+@property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
 - (NSManagedObjectID *)tableObjectId;

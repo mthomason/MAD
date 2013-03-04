@@ -12,8 +12,8 @@
 
 @property (retain) MTReportDocument *documentReport;
 @property (retain) MTManagedDocumentReport *managedDocumentQuery;
-@property (retain) UIManagedDocumentPreferencesApplication *applicationPreferences;
-@property (retain) UIManagedDocumentPreferencesUser *openReport;
+@property (retain) MTManagedDocumentPreferencesApplication *applicationPreferences;
+@property (retain) MTManagedDocumentPreferencesUser *openReport;
 
 @end
 

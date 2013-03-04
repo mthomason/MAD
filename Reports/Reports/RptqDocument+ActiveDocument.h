@@ -16,6 +16,5 @@
 + (NSArray *)queryLinksForActiveDocument;
 + (NSArray *)tablesForActiveDocument;
 + (NSString *)sqlStatementForActiveDocument;
-+ (void)saveContext;
 
 @end

@@ -65,9 +65,9 @@
         RptqDatabase *db = [[doc hasDatabaseSchemas] anyObject];
         if (db) {
             NSString *driverType = [[db database_driver_type] retain];
-            if ([driverType isEqualToString: [MNSDatabaseMySql identifier]]) {
+            if ([driverType isEqualToString: [MTDatabaseMySql identifier]]) {
 
-            } else if ([driverType isEqualToString: [MNSDatabaseSalesForce identifier]]) {
+            } else if ([driverType isEqualToString: [MTDatabaseSalesForce identifier]]) {
                 
             }
             [driverType release];
@@ -148,7 +148,7 @@
     return doc;
 }
 
-+ (void)addDatabase: (MNSDatabase *)database ToMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (void)addDatabase: (MTDatabase *)database ToMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext
          completion: (void (^)(BOOL success))completion {
     
     RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
@@ -165,8 +165,8 @@
     
     [userCredentals setDatabase_driver_type: [database identifier]];
     
-    if ([[database identifier] isEqualToString:[MNSDatabaseMySql identifier]]) {
-        MNSDatabaseConnection *connectionSettings = [database connectionSettings];
+    if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
+        MTDatabaseConnection *connectionSettings = [database connectionSettings];
         if (connectionSettings != nil) {
             [userCredentals setMysql_host:[connectionSettings server]];
             [userCredentals setMysql_database:[connectionSettings database]];
@@ -174,7 +174,7 @@
             [userCredentals setMysql_username:[connectionSettings username]];
             [userCredentals setMysql_password:[connectionSettings password]];
         }
-    } else if ([[database identifier] isEqualToString:[MNSDatabaseSalesForce identifier]]) {
+    } else if ([[database identifier] isEqualToString:[MTDatabaseSalesForce identifier]]) {
         
     }
     
@@ -189,7 +189,7 @@
     [database getTables:^(NSArray *tables) {
         __block NSUInteger tableCounter = 0;
         NSUInteger numberOfTables = [tables count];
-        for (MNSDatabaseTable *databaseTable in tables) {
+        for (MTDatabaseTable *databaseTable in tables) {
             RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
                                                                            andTable: databaseTable];
             
@@ -200,7 +200,7 @@
             
             [database getFieldsForTable:rptqTable completion:^(NSArray *fields) {
                 
-                for (MNSDatabaseField *objField in fields) {
+                for (MTDatabaseField *objField in fields) {
                     RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                          withConnecitonId: connectionId];
                     

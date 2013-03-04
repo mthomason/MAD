@@ -8,7 +8,7 @@
 
 #import "MTQueryBuilderViewController.h"
 #import "AppDelegate.h"
-#import "UIViewClipboard.h"
+#import "MTClipboardView.h"
 #import "RptqDocument+ActiveDocument.h"
 
 #pragma mark - Private Category
@@ -23,7 +23,7 @@
 @property (retain, nonatomic) UIFont *boldSystemFont;
 @property (retain, nonatomic) NSArray *tableSectionTitles;
 
-@property (nonatomic, retain) IBOutlet UIViewClipboard *viewClipboard;
+@property (nonatomic, retain) IBOutlet MTClipboardView *viewClipboard;
 
 @property (nonatomic, assign) BOOL beganUpdates;
 
@@ -187,8 +187,8 @@
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MUITableViewControllerDatabaseDriverSelector class]]) {
-                    MUITableViewControllerDatabaseDriverSelector *tvc = (MUITableViewControllerDatabaseDriverSelector *)[[navControl topViewController] retain];
+                if ([[navControl topViewController] isKindOfClass:[MTDatabaseDriverSelectorViewController class]]) {
+                    MTDatabaseDriverSelectorViewController *tvc = (MTDatabaseDriverSelectorViewController *)[[navControl topViewController] retain];
                     if (tvc) [tvc setDelegate:self];
                     [tvc release];
                 }
@@ -205,9 +205,9 @@
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UIViewControllerSchemaAddTable class]]) {
+                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
                     
-                    UIViewControllerSchemaAddTable *tvc = (UIViewControllerSchemaAddTable *)[navControl topViewController];
+                    MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)[navControl topViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
                     }
@@ -240,9 +240,9 @@
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerLinkBuilder class]]) {
+                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
                     
-                    UITableViewControllerLinkBuilder *tvc = (UITableViewControllerLinkBuilder *)[navControl topViewController];
+                    MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)[navControl topViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
                     }
@@ -255,8 +255,8 @@
             UINavigationController *navControl = [[segue destinationViewController] retain];
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[UITableViewControllerPredicateFormat class]]) {
-                    UITableViewControllerPredicateFormat *tvc = (UITableViewControllerPredicateFormat *)[navControl topViewController];
+                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
+                    MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)[navControl topViewController];
                     if (tvc) {
                         //NSLog(@"Setting add predicate log");
                         [tvc setAddPredicateDelegate: self];
@@ -281,26 +281,22 @@
             [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
-                if ([[segue destinationViewController] isKindOfClass:[UITableViewControllerSectionLayoutSettings class]]) {
-                    UITableViewControllerSectionLayoutSettings *tvc = (UITableViewControllerSectionLayoutSettings *)[segue destinationViewController];
+                if ([[segue destinationViewController] isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
+                    MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)[segue destinationViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
-                        //NSLog(@"Last selected row: %d", [self lastSelectedRowNumber]);
                         NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
                         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
                         RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
                                                                                              forQuery: query];
-                        //NSLog(@"About to show section: %@", section);                        
-                        //NSLog(@"Inital height: %@", [section height]);
-                        //NSLog(@"Inital visibility: %@", [section visibility]);
                         [tvc setInitalStepperValue:([[section height] floatValue] * 2)];
                         [tvc setInitalSwitchValue:[[section visibility] boolValue]];
                     }
                 }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportLayout]) {
-        if ([[segue destinationViewController] isKindOfClass: [MUIViewControllerReportDesigner class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
             [[segue destinationViewController] setDelegate: self];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
@@ -438,7 +434,7 @@
     [[AppDelegate activeDocument] saveContext];
 }
 
-- (void)addPredicateDidCancel:(UITableViewControllerPredicateFormat *)controller {
+- (void)addPredicateDidCancel:(MTQueryBuilderPredicateFormatViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -449,11 +445,11 @@
     [[AppDelegate activeDocument] saveContext];
 }
 
-- (void)viewControllerSchemaAddLinkDidFinish:(UIViewControllerSchemaAddLinkFirstTable *)controller {
+- (void)viewControllerSchemaAddLinkDidFinish:(MTQueryBuilderAddLinkFirstTableViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)viewControllerSchemaAddTableDidFinish:(UIViewControllerSchemaAddTable *)controller {
+- (void)viewControllerSchemaAddTableDidFinish:(MTQueryBuilderAddTableViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -461,7 +457,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)uITableViewControllerSchemaAddPredicateDidFinish:(UITableViewControllerSchemaAddPredicate *)controller {
+- (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

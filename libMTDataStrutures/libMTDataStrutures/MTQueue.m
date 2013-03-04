@@ -84,7 +84,7 @@
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", [self destination]];
+    return nil;
 }
 
 @end

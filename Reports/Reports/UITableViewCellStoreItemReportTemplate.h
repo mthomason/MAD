@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UITableViewCellDocument.h"
+#import "MTDocumentTableViewCell.h"
 
-@interface UITableViewCellStoreItemReportTemplate : UITableViewCellDocument
+@interface UITableViewCellStoreItemReportTemplate : MTDocumentTableViewCell
 
 @property (nonatomic, assign) IBOutlet UIButton *buyNow;
 

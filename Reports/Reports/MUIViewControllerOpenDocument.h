@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderViewController.h"
-#import "MUIViewControllerTemplateSelector.h"
+#import "MTTemplateSelectorViewController.h"
 #import "NSFileManager+Reports.h"
-#import "MTSplitViewController.h"
+#import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
 #import "MTTitleView.h"
 
-extern NSString * const SEGUE_SHOWADDDOCUMENT;
-extern NSString * const SEGUE_OPENDOCUMENT;
+extern NSString * const MTSegueShowAddDocument;
+extern NSString * const MTSegueShowOpenDocument;
 
 @interface MUIViewControllerOpenDocument : UIViewController
     <UIPopoverControllerDelegate,
@@ -26,15 +26,15 @@ extern NSString * const SEGUE_OPENDOCUMENT;
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
-        MTSplitViewControllerDelegate,
-        UIViewControllerTemplateSelectorDelegate,
-        MUIViewControllerDelegate,
-        MUIViewControllerDelegate>
+        MTQueryBuilderContainerDelegate,
+        MTTemplateSelectorDelegate,
+        MUIViewControllerProtocol,
+        MUIViewControllerProtocol>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;
 
-@property (assign, nonatomic) IBOutlet UITableViewCellDocument *uITableViewCellDocument;
+@property (assign, nonatomic) IBOutlet MTDocumentTableViewCell *uITableViewCellDocument;
 @property (assign, nonatomic) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 
 

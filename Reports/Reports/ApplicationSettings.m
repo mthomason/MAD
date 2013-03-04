@@ -12,7 +12,7 @@ NSString * const FILENAME = @"appsettings.asd";
 
 @interface ApplicationSettings()
 
-@property (nonatomic, retain) UIManagedDocumentPreferencesApplication *managedDocumentTrvApplicationData;
+@property (nonatomic, retain) MTManagedDocumentPreferencesApplication *managedDocumentTrvApplicationData;
 
 @end
 

@@ -1,0 +1,52 @@
+//
+//  UITableViewControllerDataSourceTypes.m
+//  Reports
+//
+//  Created by Michael Thomason on 1/13/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTDatabaseDriverSelectorViewController.h"
+
+NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
+
+@implementation MTDatabaseDriverSelectorViewController
+
+//@synthesize delegate = _delegate;
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
+    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
+    [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier] ||
+        [[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
+        [[segue destinationViewController] setDelegate:self];
+    }
+}
+
+- (IBAction)done:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (IBAction)cancel:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (void)viewControllerDidFinish:(id)sender {
+    [[self delegate] viewControllerDidFinish:self];
+}
+
+- (void)viewControllerDidCancel:(id)sender {
+    [[self delegate] viewControllerDidCancel:self];
+}
+
+- (void)dealloc {
+    [super dealloc];
+}
+
+@end

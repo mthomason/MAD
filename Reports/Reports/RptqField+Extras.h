@@ -7,7 +7,7 @@
 //
 
 #import "RptqField.h"
-#import "MNSDatabaseField.h"
+#import "MTDatabaseField.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
@@ -19,7 +19,7 @@
                                          andDatatype:(NSString *)dataType;
 
 + (RptqField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andField:(MNSDatabaseField *)field;
+                                            andField:(MTDatabaseField *)field;
 
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID
         fromObjectContext:(NSManagedObjectContext *)managedObjectContext;

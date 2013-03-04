@@ -11,6 +11,6 @@
 
 @interface MTViewController : UIViewController
 
-@property (assign, nonatomic) IBOutlet id <MUIViewControllerDelegate> delegate;
+@property (assign, nonatomic) IBOutlet id <MUIViewControllerProtocol> delegate;
 
 @end

@@ -22,7 +22,9 @@
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             [error presentErrorToUserWithTryAgain:^(BOOL success) {
-                [self saveContext];
+                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                NSError *error = nil;
+                [managedObjectContext save:&error];
             }];
         }
     }

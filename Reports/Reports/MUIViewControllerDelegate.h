@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MUIViewControllerDelegate
+@protocol MUIViewControllerProtocol
 @optional
 - (void)viewControllerDidFinish:(id)sender;
 - (void)viewControllerDidCancel:(id)sender;

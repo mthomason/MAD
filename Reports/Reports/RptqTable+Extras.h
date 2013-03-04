@@ -9,7 +9,7 @@
 #import "RptqTable.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase+Extras.h"
-#import "MNSDatabaseTable.h"
+#import "MTDatabaseTable.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
@@ -22,7 +22,7 @@
                                         andQueryable:(BOOL)queryable;
 
 + (RptqTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andTable:(MNSDatabaseTable *)table;
+                                            andTable:(MTDatabaseTable *)table;
 
 + (RptqTable *)getTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                       database:(RptqDatabase *)database

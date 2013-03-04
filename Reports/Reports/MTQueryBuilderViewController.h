@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIViewControllerSchemaAddTable.h"
+#import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
-#import "UITableViewControllerPredicateFormat.h"
+#import "MTQueryBuilderPredicateFormatViewController.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
@@ -17,10 +17,10 @@
 #import "UITableViewCellQueryInput.h"
 #import "UITableViewCellQueryGroup.h"
 #import "UITableViewCellQueryPredicate.h"
-#import "MUITableViewControllerDatabaseDriverSelector.h"
-#import "UITableViewControllerLinkBuilder.h"
-#import "UITableViewControllerSectionLayoutSettings.h"
-#import "MUIViewControllerReportDesigner.h"
+#import "MTDatabaseDriverSelectorViewController.h"
+#import "MTQueryBuilderLinkBuilderViewController.h"
+#import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "MTReportDesignerViewController.h"
 #import "UIColor+PaperPatterns.h"
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryGroup+Extras.h"
@@ -33,14 +33,14 @@
     <UITableViewDataSource,
         UITableViewDelegate,
         NSFetchedResultsControllerDelegate,
-        UIViewControllerSchemaAddLinkDelegate,
-        UIViewControllerSchemaAddTableDelegate,
-        UITableViewControllerSchemaAddGroupDelegate,
-        MUIViewControllerDelegate,
-        UITableViewControllerLinkBuilderDelegate,
-        MUIViewControllerDelegate,
-        SectionLayoutSettingsDelegate,
-        AddPredicateDelegate>
+        MTQueryBuilderAddLinkFirstTableDelegate,
+        MTQueryBuilderAddTableDelegate,
+        MTQueryBuilderAddGroupDelegate,
+        MUIViewControllerProtocol,
+        MTQueryBuilderLinkBuilderDelegate,
+        MUIViewControllerProtocol,
+        MTReportDesignerSectionLayoutSettingsDelegate,
+        MTQueryBuilderPredicateFormatDelegate>
 
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;

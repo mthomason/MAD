@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "UIViewResizeHandle.h"
-#import "MTViewBordered.h"
+#import "MTResizeHandleView.h"
+#import "MTBorderedView.h"
 
 @class MTElementView;
 

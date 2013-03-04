@@ -7,25 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UITableViewControllerSortType.h"
-#import "UITableViewControllerChooseField.h"
+#import "MTQueryBuilderSortTypeViewController.h"
+#import "MTQueryBuilderChooseField.h"
 #import "RptqQueryGroup.h"
 #import "RptqField.h"
 #import "MTManagedDocumentReport.h"
 
 @class MTQueryBuilderAddGroupViewController;
 
-@protocol UITableViewControllerSchemaAddGroupDelegate
+@protocol MTQueryBuilderAddGroupDelegate
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller;
 - (void)addGroupDidAddGroupWithField:(RptqField *)fieldName andSort:(MNSSortOrder)sortOrder;
 @end
 
 @interface MTQueryBuilderAddGroupViewController : UITableViewController
     <UITableViewDelegate,
-        UITableViewControllerSortTypeDelegate,
-        UITableViewControllerChooseFieldDelegate>
+        MTQueryBuilderSortTypeDelegate,
+        MTQueryBuilderChooseFieldDelegate>
 
-@property (assign) IBOutlet id <UITableViewControllerSchemaAddGroupDelegate> delegate;
+@property (assign) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
 
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;

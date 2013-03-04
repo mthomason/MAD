@@ -10,7 +10,6 @@
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain, readwrite) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, retain) IBOutlet MTTitleView *titleView;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;

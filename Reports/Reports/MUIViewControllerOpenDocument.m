@@ -9,12 +9,12 @@
 #import "MUIViewControllerOpenDocument.h"
 #import "MTReportDocument.h"
 #import "AppDelegate.h"
-#import "MTSplitViewController.h"
+#import "MTQueryBuilderContainerController.h"
 #import "MTQueryBuilderAdvancedViewController.h"
 #import "RptqDocument+ActiveDocument.h"
 
-NSString * const SEGUE_SHOWADDDOCUMENT = @"showAddDocument";
-NSString * const SEGUE_OPENDOCUMENT = @"openDocument";
+NSString * const MTSegueShowAddDocument = @"showAddDocument";
+NSString * const MTSegueShowOpenDocument = @"openDocument";
 
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
@@ -194,12 +194,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
 
-    if ([[segue identifier] isEqualToString:SEGUE_SHOWADDDOCUMENT]) {
+    if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MUIViewControllerTemplateSelector class]]) {
-                    MUIViewControllerTemplateSelector *tvc = (MUIViewControllerTemplateSelector *)[[navControl topViewController] retain];
+                if ([[navControl topViewController] isKindOfClass:[MTTemplateSelectorViewController class]]) {
+                    MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[[navControl topViewController] retain];
                     if (tvc) {
                         [tvc setDelegate:self];
                         [tvc setTemplateSelectorDelegate:self];
@@ -212,13 +212,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         [[segue destinationViewController] setDelegate:self];
         
-    } else if ([[segue identifier] isEqualToString:SEGUE_OPENDOCUMENT]) {
+    } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
         
         NSUInteger row = 0;
         NSURL *url = nil;
-        if ([sender isKindOfClass:[UITableViewCellDocument class]]) {
+        if ([sender isKindOfClass:[MTDocumentTableViewCell class]]) {
             
-            UITableViewCellDocument *senderCell = sender;
+            MTDocumentTableViewCell *senderCell = sender;
             row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
             
             url = [[[self availableFilesCache] objectAtIndex: row] retain];
@@ -250,9 +250,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
             }
             [navControl release];
-        } else if ([[segue destinationViewController] isKindOfClass:[MTSplitViewController class]]) {
+        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
             
-            MTSplitViewController *splitViewController = (MTSplitViewController* )[[segue destinationViewController] retain];
+            MTQueryBuilderContainerController *splitViewController = (MTQueryBuilderContainerController* )[[segue destinationViewController] retain];
             [splitViewController setDelegateContentController: self];
             [splitViewController setDelegate:self];
             [splitViewController setDocumentToOpen:url];
@@ -439,14 +439,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
     static NSString *MyIdentifier = @"UITableViewCellDocument";
-    UITableViewCellDocument *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    MTDocumentTableViewCell *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (row < [[self availableFilesCache] count]) {
         NSURL *url = [[self availableFilesCache] objectAtIndex:row];
-        [[result imageThumbnail] setImage:[UITableViewCellDocument defaultThumbnail]];
+        [[result imageThumbnail] setImage:[MTDocumentTableViewCell defaultThumbnail]];
         [[result labelH1] setText: [[url lastPathComponent] stringByDeletingPathExtension]];
         [[result labelH2] setText:NSLocalizedString(@"Fixme Default Text.", @"A subheading.")];
     } else {
-        [[result imageThumbnail] setImage:[UITableViewCellDocument defaultThumbnail]];
+        [[result imageThumbnail] setImage:[MTDocumentTableViewCell defaultThumbnail]];
         [[result labelH1] setText: @""];    
         [[result labelH2] setText: @""];
     }
@@ -521,7 +521,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [UITableViewCellDocument defaultHeight];
+    return [MTDocumentTableViewCell defaultHeight];
 }
 
 #pragma mark -
@@ -584,10 +584,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                                                                       forIndexPath:indexPath] retain];
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *url = [[self availableFilesCache] objectAtIndex:[indexPath row]];
-        [[result imagePreview] setImage:[UITableViewCellDocument defaultThumbnail]];
+        [[result imagePreview] setImage:[MTDocumentTableViewCell defaultThumbnail]];
         [[result labelTitle] setText: [[url lastPathComponent] stringByDeletingPathExtension]];
     } else {
-        [[result imagePreview] setImage:[UITableViewCellDocument defaultThumbnail]];
+        [[result imagePreview] setImage:[MTDocumentTableViewCell defaultThumbnail]];
         [[result labelTitle] setText: @""];
     }
     return [result autorelease];

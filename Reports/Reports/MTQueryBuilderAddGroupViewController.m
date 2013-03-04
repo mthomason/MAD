@@ -68,13 +68,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showGroupSortOrders"]) {
-        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerSortType class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
             [[segue destinationViewController] setDelegate:self];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
-        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerChooseField class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseField class]]) {
             
-            UITableViewControllerChooseField *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
                 //[dvc setManagedDocumentQuery:[self managedDocumentQuery]];
@@ -88,7 +88,7 @@
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(UITableViewControllerChooseField *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseField *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     [self setField:field];
@@ -130,7 +130,7 @@
 
 #pragma mark - Table View Sort Type Delegate
 
-- (void)uITableViewControllerSortTypeDidFinish:(UITableViewControllerSortType *)controller {
+- (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller {
     [[self navigationController] popToViewController:self animated:YES];
 }
 

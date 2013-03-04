@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "NSFileManager+Common.h"
 #import "UIManagedDocument+FileOperations.h"
-#import "UIManagedDocumentPreferencesApplication.h"
+#import "MTManagedDocumentPreferencesApplication.h"
 
 @interface ApplicationSettings : NSObject
 

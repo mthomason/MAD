@@ -11,9 +11,9 @@
 #import "MTDocument.h"
 #import "MTManagedDocumentReport.h"
 
-#import "MNSDatabase.h"
-#import "MNSDatabaseTable.h"
-#import "MNSDatabaseField.h"
+#import "MTDatabase.h"
+#import "MTDatabaseTable.h"
+#import "MTDatabaseField.h"
 
 #import "RptqDocument+Extras.h"
 #import "RptqTable.h"
@@ -42,7 +42,7 @@
        completion: (void (^)(BOOL success))completion;
 
 //Add a new connection to the report
-- (void)addDatasourceToReport: (MNSDatabase *)database
+- (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success))completion;
 
 //Refresh the data inside the currently opened managed document

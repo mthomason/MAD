@@ -8,7 +8,7 @@
 
 #import "RptqQuery.h"
 #import "RptqDatabase.h"
-#import "MNSDatabase.h"
+#import "MTDatabase.h"
 #import "MTGraph.h"
 #import "MTProtocolCompare.h"
 
@@ -16,8 +16,6 @@
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query;
 + (NSString *)getSqlForQuery:(RptqQuery *)query;
-
-+ (void)cacheQueryForDatabase:(RptqDatabase *)database progress:(void (^)(NSNumber *percentage))progress completion:(void (^)(BOOL success))completion;
 
 - (RptqQueryGroup *)firstQueryGroup;
 

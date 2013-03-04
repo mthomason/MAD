@@ -91,54 +91,14 @@
         [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
         
     }
-    
-    NSError *error = nil;
-    MTLinkedList *topologicalSort = [graph topologicalSort:[vertices anyObject] error:&error];
-    if (!error) {
-        for (MTPair *pair in topologicalSort) {
-            MTVertex *queryTable = [pair former];
-            NSManagedObjectID *objectID = [queryTable object];
-
-            RptqTable *table = [RptqTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
-            
-            
-            
-            
-        };
-    }
-    
-    [graph toStringHumanReadable];
-    
-    [graph breadthFirstSearch:[vertices anyObject]];
-    
     [vertices release];
     
     return  [graph autorelease];
 }
 
 + (NSString *)getSqlForQuery:(RptqQuery *)query {
-    MNSDatabase *databaseHandler = [MNSDatabase databaseObjectForRptqDatabase:[query inDatabase]];
+    MTDatabase *databaseHandler = [MTDatabase databaseObjectForRptqDatabase:[query inDatabase]];
     return [databaseHandler getSqlForQuery: query];
-}
-
-+ (void)cacheQueryForDatabase:(RptqDatabase *)database progress:(void (^)(NSNumber *percentage))progress completion:(void (^)(BOOL success))completion {
-#warning incomplete
-    
-    /*
-     NSString *prefixString = @"MyFilename";
-     
-     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
-     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
-     
-     NSLog(@"uniqueFileName: '%@'", uniqueFileName);
-     */
-    BOOL success = YES;
-
-    for (RptqQuery *query in [database hasQueries]) {
-        NSString *queryString = [RptqQuery getSqlForQuery: query];
-
-    }
-    completion(success);
 }
 
 - (RptqQueryGroup *)firstQueryGroup {

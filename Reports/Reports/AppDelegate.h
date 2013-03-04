@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ApplicationSettings.h"
-#import "UIManagedDocumentPreferencesUser.h"
+#import "MTManagedDocumentPreferencesUser.h"
 #import "MTReportDocument.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

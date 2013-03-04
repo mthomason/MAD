@@ -56,11 +56,11 @@
 }
 
 - (NSString *)toString {
-    return nil;
+    return [self toStringHumanReadable];
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", [self destination]];
+    return [self toStringHumanReadable];
 }
 
 @end

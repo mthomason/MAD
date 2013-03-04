@@ -59,7 +59,7 @@
 }
 
 //Add a new connection to the report
-- (void)addDatasourceToReport: (MNSDatabase *)database
+- (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success))completion {
     
     [RptqDocument addDatabase:database ToMainDocumentForManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success) {
@@ -78,11 +78,11 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    MNSDatabase *mnsDatabase = [MNSDatabase databaseForRptqDatabase: database];
+    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
     [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
-               completion: ^(MNSDatabase *database, RptqQueryCache *cache) {
+               completion: ^(MTDatabase *database, RptqQueryCache *cache) {
                    [self save: ^(BOOL success) {
                        
                    }];

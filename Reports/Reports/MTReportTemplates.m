@@ -19,7 +19,7 @@
 
 //Array of NSURLs
 + (NSArray *)ApplicationBundleTemplates {
-    
+    return [[[NSArray array] retain] autorelease];
 }
 
 //Name must exist in the app bundle

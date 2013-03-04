@@ -9,7 +9,7 @@
 #import "MTElementView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CGGeometry+Extras.h"
-#import "UIViewResizeHandle.h"
+#import "MTResizeHandleView.h"
 #import "UIView+NSObjectIdTag.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectLabelDataField.h"

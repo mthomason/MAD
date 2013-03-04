@@ -1,0 +1,24 @@
+//
+//  UITableViewCellDocument.m
+//  Reports
+//
+//  Created by Michael Thomason on 1/7/12.
+//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTDocumentTableViewCell.h"
+#import "Constants.h"
+
+@implementation MTDocumentTableViewCell
+
+@synthesize labelH1, labelH2, imageThumbnail;
+
++ (UIImage *)defaultThumbnail {
+    return [UIImage imageNamed:UIIMAGEDOCUMENTBLANK];
+}
+
++ (CGFloat)defaultHeight {
+    return MNSDocumentHeight;
+}
+
+@end

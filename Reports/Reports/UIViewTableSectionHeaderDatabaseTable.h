@@ -15,8 +15,8 @@
 
 @protocol SectionHeaderViewDelegate <NSObject>
 @optional
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable*)sectionHeaderView sectionOpened:(NSInteger)section;
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable*)sectionHeaderView sectionClosed:(NSInteger)section;
+-(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)section;
+-(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)section;
 @end
 
 @interface UIViewTableSectionHeaderDatabaseTable : MTGradientView 
