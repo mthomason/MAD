@@ -6,16 +6,16 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTViewControllerReportPage.h"
+#import "MTReportViewerReportPageViewController.h"
 
-@interface MTViewControllerReportPage ()
+@interface MTReportViewerReportPageViewController ()
 
 @property (nonatomic, assign, readwrite) NSUInteger pageNumber;
-@property (atomic, retain) MTViewPrintPageRenderReport *renderedReportView;
+@property (atomic, retain) MTReportViewerReportPageView *renderedReportView;
 
 @end
 
-@implementation MTViewControllerReportPage
+@implementation MTReportViewerReportPageViewController
 
 - (void)dealloc {
     [_document release];
@@ -36,7 +36,7 @@
     [[self view] setBackgroundColor:[UIColor purpleColor]];
     [[self view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] setClipsToBounds:YES];
-    MTViewPrintPageRenderReport *renderedReportView = [[MTViewPrintPageRenderReport alloc] initWithFrame:[[self view] bounds]];
+    MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:[[self view] bounds]];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [renderedReportView setBackgroundColor:[UIColor brownColor]];
     [renderedReportView setDelegate:self];

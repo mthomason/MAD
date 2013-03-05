@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
-#import "MTViewControllerReportPage.h"
+#import "MTReportViewerReportPageViewController.h"
 #import "MTReportDocument.h"
-#import "MTPageViewControllerReport.h"
+#import "MTReportViewerReportViewController.h"
 #import "MTPrintingProtocol.h"
 
 @interface MTReportViewerViewController : MTViewController

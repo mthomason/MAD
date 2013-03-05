@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MTPrintPageRendererReport.h"
-#import "MTViewPrintPageRenderReport.h"
+#import "MTReportViewerReportPageView.h"
 #import "MTPrintingProtocol.h"
 
-@interface MTViewControllerReportPage : UIViewController
+@interface MTReportViewerReportPageViewController : UIViewController
     <MTPrintingProtocol>
 
 @property (nonatomic, retain) RptqDocument *document;

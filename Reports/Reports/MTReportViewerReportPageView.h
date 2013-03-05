@@ -11,7 +11,7 @@
 #import "MTPrintingProtocol.h"
 
 
-@interface MTViewPrintPageRenderReport : UIView
+@interface MTReportViewerReportPageView : UIView
 
 - (id)initWithFrame:(CGRect)frame;
 

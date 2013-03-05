@@ -15,7 +15,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewBackground;
 @property (retain, nonatomic) IBOutlet UIView *viewContainer;
 
-@property (nonatomic, retain) MTPageViewControllerReport *pageController;
+@property (nonatomic, retain) MTReportViewerReportViewController *pageController;
 
 @property (assign) NSUInteger numberOfPages;
 @property (assign) NSUInteger currentPageIndex;
@@ -58,8 +58,7 @@
     
     [[self view] setBackgroundColor:[UIColor greenColor]];
     
-        
-    MTPageViewControllerReport *pageController = [[MTPageViewControllerReport alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+    MTReportViewerReportViewController *pageController = [[MTReportViewerReportViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
                                                                                        navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                                                                                      options:@{}];
     [[pageController view] setBackgroundColor:[UIColor blueColor]];
@@ -67,14 +66,14 @@
     NSUInteger initalNumberOfPagesRequired = 1;
     NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
 
-    MTViewControllerReportPage *pageOne = [[MTViewControllerReportPage alloc] initWithPageNumber:1];
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1];
     [[pageOne view] setBounds:[[self viewContainer] bounds]];
     [[pageOne view] setCenter:[[self viewContainer] center]];
     [pageOne setDelegate:self];
     [initalPages addObject:pageOne];
     [pageOne release];
     if (initalNumberOfPagesRequired == 2) {
-        MTViewControllerReportPage *pageTwo = [[MTViewControllerReportPage alloc] initWithPageNumber:2];
+        MTReportViewerReportPageViewController *pageTwo = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:2];
         [[pageTwo view] setBounds:[[self viewContainer] bounds]];
         [[pageTwo view] setCenter:[[self viewContainer] center]];
         [pageTwo setDelegate:self];
@@ -83,8 +82,9 @@
     }
     
     [pageController setViewControllers:initalPages direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-        
+    
     }];
+
     [initalPages release];
     
     [pageController setDataSource:self];
@@ -134,10 +134,10 @@
 #pragma mark - UIPageViewControllerDataSrouce
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    NSUInteger visablePageNumber = [(MTViewControllerReportPage *)viewController pageNumber];
-    MTViewControllerReportPage *result = nil;
+    NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+    MTReportViewerReportPageViewController *result = nil;
     if (visablePageNumber + 1 <= [self numberOfPages]) {
-        result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber + 1];
+        result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1];
         [result setDelegate: self];
         [[result view] setFrame:[[self viewContainer] bounds]];
     }
@@ -145,10 +145,10 @@
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    NSUInteger visablePageNumber = [(MTViewControllerReportPage *)viewController pageNumber];
-    MTViewControllerReportPage *result = nil;
+    NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+    MTReportViewerReportPageViewController *result = nil;
     if (visablePageNumber - 1 > 0) {
-        result = [[MTViewControllerReportPage alloc] initWithPageNumber:visablePageNumber - 1];
+        result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1];
         [result setDelegate: self];
         [[result view] setFrame:[[self viewContainer] bounds]];
     }

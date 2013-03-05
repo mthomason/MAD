@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTPageViewControllerReport : UIPageViewController
+@interface MTReportViewerReportViewController : UIPageViewController
 
 @end

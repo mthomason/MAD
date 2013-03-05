@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTPageViewControllerReport.h"
+#import "MTReportViewerReportViewController.h"
 
-@interface MTPageViewControllerReport ()
+@interface MTReportViewerReportViewController ()
 
 @end
 
-@implementation MTPageViewControllerReport
+@implementation MTReportViewerReportViewController
 
 @end

@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTViewPrintPageRenderReport.h"
+#import "MTReportViewerReportPageView.h"
 
-@interface MTViewPrintPageRenderReport ()
+@interface MTReportViewerReportPageView ()
 
 @end
 
-@implementation MTViewPrintPageRenderReport
+@implementation MTReportViewerReportPageView
 
 - (void)dealloc {
     [super dealloc];
