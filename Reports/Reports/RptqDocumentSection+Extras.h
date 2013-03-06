@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentSection_Extras_h
+#define Reports_RptqDocumentSection_Extras_h
+
 #import "RptqDocumentSection.h"
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
@@ -44,3 +47,5 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
 
 @end
+
+#endif

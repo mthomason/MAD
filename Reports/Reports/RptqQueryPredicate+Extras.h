@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryPredicate_Extras_h
+#define Reports_RptqQueryPredicate_Extras_h
+
 #import "RptqQueryPredicate.h"
 #import "RptqDocument+Extras.h"
 #import "UITableViewControllerOpperators.h"
@@ -36,3 +39,5 @@
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
+
+#endif

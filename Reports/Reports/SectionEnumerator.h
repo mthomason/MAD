@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_SectionEnumerator_h
+#define Reports_SectionEnumerator_h
+
 #import <Foundation/Foundation.h>
 #import "MTManagedDocumentReport.h"
 #import "RptqDocumentSection+Extras.h"
@@ -23,3 +26,5 @@
 - (NSInteger)count;
 
 @end
+
+#endif

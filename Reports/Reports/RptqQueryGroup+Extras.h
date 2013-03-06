@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryGroup_Extras_h
+#define Reports_RptqQueryGroup_Extras_h
+
 #import "RptqQueryGroup.h"
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
@@ -24,3 +27,5 @@
 - (NSString *)sortDisplayNice;
 
 @end
+
+#endif

@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseSalesForce_h
+#define Reports_MTDatabaseSalesForce_h
+
 #import "MTDatabase.h"
 #import "Constants.h"
 #import "SFRestAPI.h"
@@ -36,3 +39,5 @@
 - (id)connectionSettings;
 
 @end
+
+#endif

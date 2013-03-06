@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocument_Extras_h
+#define Reports_RptqDocument_Extras_h
+
 #import <Foundation/Foundation.h>
 #import "RptqDocument.h"
 #import <CoreData/CoreData.h>
@@ -32,3 +35,5 @@
          completion: (void (^)(BOOL success))completion;
 
 @end
+
+#endif

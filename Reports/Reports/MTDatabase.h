@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabase_h
+#define Reports_MTDatabase_h
+
 #import <Foundation/Foundation.h>
 #import "RptqTable.h"
 #import "RptqQuery+Extras.h"
@@ -43,3 +46,5 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (id)connectionSettings;
 
 @end
+
+#endif

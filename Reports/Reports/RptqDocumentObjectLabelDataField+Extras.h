@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentObjectLabelDataField_Extras_h
+#define Reports_RptqDocumentObjectLabelDataField_Extras_h
+
 #import "RptqDocumentObjectLabelDataField.h"
 #import "MTProtocolCompare.h"
 #import "RptqDocument.h"
@@ -17,3 +20,5 @@
 @interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare, RptqDocumentObjectFactory>
 
 @end
+
+#endif

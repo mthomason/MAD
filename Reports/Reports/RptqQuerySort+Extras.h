@@ -6,9 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQuerySort_Extras_h
+#define Reports_RptqQuerySort_Extras_h
+
 #import "RptqQuerySort.h"
 #import "MTProtocolCompare.h"
 
 @interface RptqQuerySort (Extras) <MTProtocolCompare>
 
 @end
+
+#endif

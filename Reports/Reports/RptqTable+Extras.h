@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqTable_Extras_h
+#define Reports_RptqTable_Extras_h
+
 #import "RptqTable.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase+Extras.h"
@@ -34,3 +37,5 @@
 + (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
+
+#endif

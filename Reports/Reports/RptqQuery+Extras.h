@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQuery_Extras_h
+#define Reports_RptqQuery_Extras_h
+
 #import "RptqQuery.h"
 #import "RptqDatabase.h"
 #import "MTDatabase.h"
@@ -20,3 +23,5 @@
 - (RptqQueryGroup *)firstQueryGroup;
 
 @end
+
+#endif

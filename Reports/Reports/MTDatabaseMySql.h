@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseMySql_h
+#define Reports_MTDatabaseMySql_h
+
 #import "MTDatabase.h"
 #import <MySqlClientObjectiveC/MysqlConnection.h>
 #import <MySqlClientObjectiveC/MysqlServer.h>
@@ -45,3 +48,5 @@
 - (id)connectionSettings;
 
 @end
+
+#endif

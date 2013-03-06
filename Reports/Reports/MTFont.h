@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTFont_h
+#define Reports_MTFont_h
+
 #import <Foundation/Foundation.h>
 
 extern NSString * const MTFontFamilyAmericanTypewriter;
@@ -40,3 +43,5 @@ extern NSString * const MTFontFamilyZapfino;
 + (CGFloat)defaultSize;
 
 @end
+
+#endif

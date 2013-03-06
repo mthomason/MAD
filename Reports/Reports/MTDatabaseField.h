@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseField_h
+#define Reports_MTDatabaseField_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTDatabaseField : NSObject
@@ -17,3 +20,5 @@
 @property (copy) NSString *datatype;
 
 @end
+
+#endif

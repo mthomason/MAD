@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseTable_h
+#define Reports_MTDatabaseTable_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTDatabaseTable : NSObject
@@ -18,3 +21,5 @@
 @property (assign) BOOL queryable;
 
 @end
+
+#endif

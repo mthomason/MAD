@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqDocumentObject_Extras_h
+#define Reports_RptqDocumentObject_Extras_h
+
 #import "RptqDocumentObject.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
@@ -25,3 +28,5 @@ typedef NS_ENUM(NSUInteger, MNSSectionType) {
 - (CGSize)viewSize;
 
 @end
+
+#endif

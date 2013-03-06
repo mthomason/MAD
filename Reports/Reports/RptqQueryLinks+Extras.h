@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryLinks_Extras_h
+#define Reports_RptqQueryLinks_Extras_h
+
 #import "RptqQueryLinks.h"
 #import <CoreData/CoreData.h>
 #import "RptqDocument+Extras.h"
@@ -44,3 +47,5 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 + (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
+
+#endif

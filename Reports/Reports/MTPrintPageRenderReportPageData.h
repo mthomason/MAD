@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTPrintPageRenderReportPageData_h
+#define Reports_MTPrintPageRenderReportPageData_h
+
 #import <Foundation/Foundation.h>
 
 extern const NSString *MTReportSectionType;
@@ -35,3 +38,5 @@ extern const NSString *MTReportGroupFooter;
 - (NSArray *)enumeratePageSections;
 
 @end
+
+#endif

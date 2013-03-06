@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseConnection_h
+#define Reports_MTDatabaseConnection_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTDatabaseConnection : NSObject
@@ -17,3 +20,5 @@
 @property (assign) NSInteger port;
 
 @end
+
+#endif

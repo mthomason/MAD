@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTPrintPageRendererReport_h
+#define Reports_MTPrintPageRendererReport_h
+
 #import <UIKit/UIKit.h>
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentObject+Extras.h"
@@ -22,3 +25,5 @@
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
 
 @end
+
+#endif

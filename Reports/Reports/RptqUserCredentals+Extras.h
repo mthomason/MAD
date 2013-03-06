@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqUserCredentals_Extras_h
+#define Reports_RptqUserCredentals_Extras_h
+
 #import "RptqUserCredentals.h"
 #import "NSError+UserInterface.h"
 #import "MTProtocolCompare.h"
@@ -16,3 +19,5 @@
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 @end
+
+#endif

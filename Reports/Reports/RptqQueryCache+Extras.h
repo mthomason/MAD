@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqQueryCache_Extras_h
+#define Reports_RptqQueryCache_Extras_h
+
 #import "RptqQueryCache.h"
 #import "MTProtocolCompare.h"
 
@@ -14,3 +17,5 @@
 + (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
+
+#endif

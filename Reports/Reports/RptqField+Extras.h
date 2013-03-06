@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqField_Extras_h
+#define Reports_RptqField_Extras_h
+
 #import "RptqField.h"
 #import "MTDatabaseField.h"
 #import "MTProtocolLog.h"
@@ -27,3 +30,5 @@
 - (NSString *)display;
 
 @end
+
+#endif

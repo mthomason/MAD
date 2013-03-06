@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDocument_h
+#define Reports_MTReportDocument_h
+
 #import <Foundation/Foundation.h>
 
 #import "MTDocument.h"
@@ -52,3 +55,5 @@
 - (void)sendTo;
 
 @end
+
+#endif
