@@ -8,47 +8,24 @@
 
 #import "MTDatabaseDriverSelectorSalesforceViewController.h"
 
-@interface MTDatabaseDriverSelectorSalesforceViewController() {
-@private
-    NSMutableString *inputNickname;
-    
-    //rsltBlk_loginComplete blockCompleteLogin;
-    //rsltBlk_tblNames blockCompleteTable;
-    
-    //MNSReportDocumentSalesForce *db;
-
-}
+@interface MTDatabaseDriverSelectorSalesforceViewController()
 
 @property (retain) NSMutableString *inputNickname;
-//@property (retain) MNSReportDocumentSalesForce *db;
 
 @end
 
 @implementation MTDatabaseDriverSelectorSalesforceViewController
 
-@synthesize tableViewCellNickname;
-@synthesize tableViewCellConnectionCreate;
-@synthesize saveButton;
-@synthesize activityIndicatorTestConnection;
-@synthesize textFieldNickname;
-//@synthesize db;
-@synthesize inputNickname;
-
 typedef void (^loginComplete)(id *database, BOOL complete);
 typedef void (^tablesComplete)(id *database, NSArray *tables);
 
 - (void)dealloc {
-
-    //if (db != nil) {
-    //    [db logout];
-    //    [db release];
-    //    db = nil;
-    //}
-    
-    [inputNickname release];
-    [activityIndicatorTestConnection release];
-    [textFieldNickname release];
-    [saveButton release];
+    [_tableViewCellNickname release];
+    [_tableViewCellConnectionCreate release];
+    [_inputNickname release];
+    [_activityIndicatorTestConnection release];
+    [_textFieldNickname release];
+    [_saveButton release];
     [super dealloc];
 }
 

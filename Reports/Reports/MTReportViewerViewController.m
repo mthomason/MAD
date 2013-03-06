@@ -10,8 +10,6 @@
 
 @interface MTReportViewerViewController ()
 
-@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
-
 @property (retain, nonatomic) IBOutlet UIView *viewBackground;
 @property (retain, nonatomic) IBOutlet UIView *viewContainer;
 
@@ -27,6 +25,7 @@
 
 @property (retain, nonatomic) IBOutletCollection(UIToolbar) NSArray *toolbars;
 
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 
 @end
 
@@ -42,6 +41,7 @@
     [_toolbarTop release];
     [_toolbarBottom release];
     [_toolbars release];
+    [_barButtonItemRefresh release];
     [super dealloc];
 }
 
@@ -90,32 +90,41 @@
     [pageController setDataSource:self];
     [pageController setDelegate:self];
     
-    [[self viewContainer] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    //[[self viewContainer] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     
     [self setPageController:pageController];
     [pageController release];
-
+    
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
-
+    
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [[[self pageController] view] setFrame:[[self viewContainer] bounds]];
+    [self reloadReportView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[[self pageController] view] setFrame:[[self viewContainer] bounds]];
     [[self viewContainer] addSubview:[[self pageController] view]];
+    [self reloadReportView];
+}
 
-    [[self printPageRendererReport] setPrintableSize:[[self viewContainer] bounds].size];
-    [[self printPageRendererReport] cachePrintPageRenderData];
-    NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
-    [self setNumberOfPages:numberOfPages];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -130,6 +139,22 @@
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
     [[self printPageRendererReport] drawPageAtIndex:pageIndex inRect:printableRect];
 }
+
+#pragma mark - Actions
+
+- (IBAction)refresh:(id)sender {
+    [[self documentReport] refresh];
+    [self reloadReportView];
+}
+
+- (void)reloadReportView {
+    NSLog(@"Bounds %@", NSStringFromCGRect([[self viewContainer] bounds]));
+    [[self printPageRendererReport] setPrintableSize:[[self viewContainer] bounds].size];
+    [[self printPageRendererReport] cachePrintPageRenderData];
+    NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
+    [self setNumberOfPages:numberOfPages];
+}
+
 
 #pragma mark - UIPageViewControllerDataSrouce
 
@@ -177,4 +202,8 @@
     
 }
 
+- (void)viewDidUnload {
+    [self setBarButtonItemRefresh:nil];
+    [super viewDidUnload];
+}
 @end

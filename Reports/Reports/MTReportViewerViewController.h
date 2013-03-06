@@ -17,5 +17,6 @@
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource, MTPrintingProtocol>
 
 @property (nonatomic, retain) MTReportDocument *documentReport;
+@property (nonatomic, retain) MTPrintPageRendererReport *printPageRendererReport;
 
 @end

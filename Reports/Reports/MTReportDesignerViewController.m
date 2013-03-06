@@ -434,14 +434,9 @@
         MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
-        [[AppDelegate activeDocument] refresh];
-        //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-        //RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-        
-        //MTPrintPageRendererReport *prtingPageRendererReport = [[MTPrintPageRendererReport alloc] initWithDocument:document];
-        //[prtingPageRendererReport setPaperRect:CGRectZero];
-        //NSUInteger numberOfPages = [prtingPageRendererReport numberOfPages];
-        //[prtingPageRendererReport drawPageAtIndex:1 inRect:CGRectMake(CGPointZero.x, CGPointZero.y, CGFloatPointsForInches(8.5000f), CGFloatPointsForInches(11.0000f))];
+
+//        [[AppDelegate activeDocument] refresh];
+
         MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
         [viewControllerReportViewer setDocumentReport:[AppDelegate activeDocument]];

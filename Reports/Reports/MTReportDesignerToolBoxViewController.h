@@ -21,7 +21,6 @@
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
-- (void)setFontDelegates:(id)delegate;
 - (IBAction)valueChanged:(id)sender;
 - (CGFloat)contentHeight;
 

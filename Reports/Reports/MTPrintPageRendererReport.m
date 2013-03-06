@@ -253,7 +253,7 @@
             CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
             CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             [attributedString drawInRect:elementCanvasRect];
-            NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+            //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
             originX += sizeWidth;
         }
     } else if ([results isKindOfClass:[NSArray class]]) {
@@ -262,9 +262,9 @@
             //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
             CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
             CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-            CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+            //CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             //[attributedString drawInRect:elementCanvasRect];
-            NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+            //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
             originX += sizeWidth;
         }
     }
@@ -297,6 +297,8 @@
     RptqQueryCache *queryCache = [query hasQueryCache];    
     
     //NSMutableDictionary *resultsByRow = [[NSMutableDictionary alloc] init];
+    
+    [[self cachedResults] removeAllObjects];
     
     NSSet *hasQueryResults = [queryCache hasQueryResults];
     for (RptqQueryResult *queryResult in hasQueryResults) {
@@ -367,11 +369,11 @@
     MTPrintPageRenderReportPageData *printPageRenderReportPageData  = [[MTPrintPageRenderReportPageData alloc] init];
     
     printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
-    NSLog(@"Page Header One");
+    //NSLog(@"Page Header One");
     [printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
     
     printableSpaceUsedPageHeight += [[[[self document] hasReportHeaderSection] height] floatValue];
-    NSLog(@"Report Header");
+    //NSLog(@"Report Header");
     [printPageRenderReportPageData addReportHeaderWithValueDictionary:groupedRows];
     
     [self printGroupLevel:[query firstQueryGroup]
@@ -381,11 +383,11 @@ printableSpaceUsedPageHeight:&printableSpaceUsedPageHeight
 printPageRenderReportPageData:&printPageRenderReportPageData];
     
     printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
-    NSLog(@"Report Footer Last");
+    //NSLog(@"Report Footer Last");
     [printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
     
     printableSpaceUsedPageHeight += [[[[self document] hasPageFooterSection] height] floatValue];
-    NSLog(@"Page Footer Last");
+    //NSLog(@"Page Footer Last");
     [printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
 
     [groupedRows release];
@@ -472,7 +474,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                         NSSortDescriptor *sortDescriptor = [[self sortedSortDescriptorsGroup] objectAtIndex:groupNumber];
                         NSString *sortOrderDescription = [sortDescriptor ascending] ?
                         NSLocalizedString(@"Ascending", @"Ascending") : NSLocalizedString(@"Decending", @"Decending");
-                        NSLog(@"Group Header %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
+                        //NSLog(@"Group Header %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
                         break;
                     }
                 }
@@ -511,7 +513,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
                         NSSortDescriptor *sortDescriptor = [[self sortedSortDescriptorsGroup] objectAtIndex:groupNumber];
                         NSString *sortOrderDescription = [sortDescriptor ascending] ?
                         NSLocalizedString(@"Ascending", @"Ascending") : NSLocalizedString(@"Decending", @"Decending");
-                        NSLog(@"Group Footer %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
+                        //NSLog(@"Group Footer %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
                         break;
                     }
                 }
@@ -711,7 +713,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
     }
     
     if (*printableSpaceUsedPageHeight + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
-        NSLog(@"Page Footer");
+        //NSLog(@"Page Footer");
         *printableSpaceUsedPageHeight += pageFooterSectionHeight;
         [*printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
@@ -725,7 +727,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         
         *numberOfPagesUsed = *numberOfPagesUsed + 1;
         *printableSpaceUsedPageHeight = 0.0000f;
-        NSLog(@"Page Header");
+        //NSLog(@"Page Header");
         *printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
         [*printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
     }
