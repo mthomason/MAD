@@ -47,6 +47,7 @@
         
         [self setClipsToBounds:NO];
         [[self layer] setMasksToBounds:NO];
+        [self setContentMode:UIViewContentModeScaleAspectFit];
     }
     return self;
 }
@@ -56,6 +57,7 @@
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
         [self setOriginPoint:originPoint andDestinationPoint:destinationPoint];
+        [self setContentMode:UIViewContentModeScaleAspectFit];
     }
     return self;
 }
