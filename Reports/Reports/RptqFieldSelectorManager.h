@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_RptqFieldSelectorManager_h
+#define Reports_RptqFieldSelectorManager_h
+
 #import <Foundation/Foundation.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "RptqTable.h"
@@ -30,3 +33,5 @@
 - (void)replaceRowHeightsAtIndexes:(NSIndexSet *)indexes withRowHeights:(NSArray *)rowHeightArray;
 
 @end
+
+#endif
