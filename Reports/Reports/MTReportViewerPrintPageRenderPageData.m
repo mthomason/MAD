@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTPrintPageRenderReportPageData.h"
+#import "MTReportViewerPrintPageRenderPageData.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -20,16 +20,16 @@ const NSString *MTReportFooter = @"MTReportFooter";
 const NSString *MTReportGroupHeader = @"MTReportGroupHeader";
 const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
-@interface MTPrintPageRenderReportPageData()
+@interface MTReportViewerPrintPageRenderPageData()
 
 @property (nonatomic, retain) NSMutableArray *cachedPageData;
 
 @end
 
-@implementation MTPrintPageRenderReportPageData
+@implementation MTReportViewerPrintPageRenderPageData
 
 - (id)copyWithZone:(NSZone *)zone {
-    MTPrintPageRenderReportPageData *copy = [[MTPrintPageRenderReportPageData alloc] init];
+    MTReportViewerPrintPageRenderPageData *copy = [[MTReportViewerPrintPageRenderPageData alloc] init];
     if (copy) {
         NSMutableArray *cachedPageData = [[NSMutableArray alloc] initWithArray:[self cachedPageData]];
         [copy setCachedPageData: cachedPageData];

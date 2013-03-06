@@ -16,9 +16,9 @@
 #import "RptqQueryGroup+Extras.h"
 #import "RptqQuery+Extras.h"
 #import "CGGeometry+Extras.h"
-#import "MTPrintPageRenderReportPageData.h"
+#import "MTReportViewerPrintPageRenderPageData.h"
 
-@interface MTPrintPageRendererReport : UIPrintPageRenderer <NSCopying>
+@interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
 
 - (id)initWithDocument:(RptqDocument *)document;
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;

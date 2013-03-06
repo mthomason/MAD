@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTPrintPageRendererReport.h"
+#import "MTReportViewerPrintPageRenderer.h"
 
-@interface MTPrintPageRendererReport ()
+@interface MTReportViewerPrintPageRenderer ()
 
 @property (nonatomic, assign) CGSize printableSize;
 
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation MTPrintPageRendererReport
+@implementation MTReportViewerPrintPageRenderer
 
 - (oneway void)release {
     [_resultsByRow release];
@@ -40,7 +40,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MTPrintPageRendererReport *copy = [[MTPrintPageRendererReport alloc] initWithDocument:[self document]];
+    MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:[self document]];
     if (copy) {
         NSMutableArray *cachedResults = [[NSMutableArray alloc] initWithArray: [self cachedResults] copyItems:YES];
         [copy setCachedResults: cachedResults];
@@ -88,7 +88,7 @@
     CGFloat sizeWidth = pageRect.size.width;
 
     if (index < [[self cachedResults] count]) {
-        MTPrintPageRenderReportPageData *data = [[[self cachedResults] objectAtIndex:index] retain];
+        MTReportViewerPrintPageRenderPageData *data = [[[self cachedResults] objectAtIndex:index] retain];
         NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:[data enumeratePageSections]];
         
         CGRect sectionRect = CGRectZero;
@@ -353,7 +353,7 @@
         CGFloat printableSpaceUsedPageHeight = 0.0000f;
         NSUInteger numberOfPagesUsed = 0;
         
-        MTPrintPageRenderReportPageData *printPageRenderReportPageData  = [[MTPrintPageRenderReportPageData alloc] init];
+        MTReportViewerPrintPageRenderPageData *printPageRenderReportPageData  = [[MTReportViewerPrintPageRenderPageData alloc] init];
         
         printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
         //NSLog(@"Page Header One");
@@ -390,7 +390,7 @@ printPageRenderReportPageData:&printPageRenderReportPageData];
 printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
       numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
             groupedRows:(NSDictionary *)groupedRows
-printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
     
     BOOL detailPrinted = NO;
     NSUInteger groupedRowsLevel = 0;
@@ -411,7 +411,7 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
             groupedRows:(NSDictionary *)groupedRows
        groupedRowsLevel:(NSUInteger)groupedRowsLevel
           detailPrinted:(BOOL *)detailPrinted
-printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
     @try {
 
         //NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
@@ -524,7 +524,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
        printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
                   numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
                         groupedRows:(NSDictionary *)groupedRows
-      printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+      printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
     RptqDocumentSection *detailSection = [[self document] hasDetailSection];
     for (NSDictionary *resultDictionary in containerDetails) {
         
@@ -687,7 +687,7 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
             printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
                        numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
                              groupedRows:(NSDictionary *)groupedRows
-printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRenderReportPageData {
+printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
     CGRect pageRect;
     CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] height] floatValue];
     if (CGRectIsEmpty([self printableRect])) {
@@ -701,13 +701,13 @@ printPageRenderReportPageData:(MTPrintPageRenderReportPageData **)printPageRende
         *printableSpaceUsedPageHeight += pageFooterSectionHeight;
         [*printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
-        MTPrintPageRenderReportPageData *pageData = [*printPageRenderReportPageData copy];
+        MTReportViewerPrintPageRenderPageData *pageData = [*printPageRenderReportPageData copy];
         [[self cachedResults] addObject:pageData];
         [pageData release];
         
         [*printPageRenderReportPageData release];
         *printPageRenderReportPageData = nil;
-        *printPageRenderReportPageData  = [[MTPrintPageRenderReportPageData alloc] init];
+        *printPageRenderReportPageData  = [[MTReportViewerPrintPageRenderPageData alloc] init];
         
         *numberOfPagesUsed = *numberOfPagesUsed + 1;
         *printableSpaceUsedPageHeight = 0.0000f;

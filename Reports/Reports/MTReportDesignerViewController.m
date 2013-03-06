@@ -8,7 +8,7 @@
 
 #import "MTReportDesignerViewController.h"
 
-#import "MTPrintPageRendererReport.h"
+#import "MTReportViewerPrintPageRenderer.h"
 
 @interface MTReportDesignerViewController()
     <MTReportDesignerFontSettingsDelegate,

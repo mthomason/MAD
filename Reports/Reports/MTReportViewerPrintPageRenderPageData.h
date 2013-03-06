@@ -23,7 +23,7 @@ extern const NSString *MTReportFooter;
 extern const NSString *MTReportGroupHeader;
 extern const NSString *MTReportGroupFooter;
 
-@interface MTPrintPageRenderReportPageData : NSObject
+@interface MTReportViewerPrintPageRenderPageData : NSObject
 
 - (id)init;
 

@@ -479,8 +479,8 @@
 		4C507B1414D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */; };
 		4C50DF8F16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; };
 		4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */; };
-		4C50DF9316B8F9A500CD8BC0 /* MTPrintPageRendererReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF9216B8F9A400CD8BC0 /* MTPrintPageRendererReport.m */; };
-		4C50DF9416B8F9A500CD8BC0 /* MTPrintPageRendererReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF9216B8F9A400CD8BC0 /* MTPrintPageRendererReport.m */; };
+		4C50DF9316B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */; };
+		4C50DF9416B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */; };
 		4C5F02D414B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */; };
 		4C5F02D814B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
@@ -1069,11 +1069,11 @@
 		4CB653E0164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4CB653E1164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
-		4CC182C216C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */; };
-		4CC182C316C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */; };
-		4CC182C416C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */; };
-		4CC182C516C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */; };
-		4CC182C616C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */; };
+		4CC182C216C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */; };
+		4CC182C316C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */; };
+		4CC182C416C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */; };
+		4CC182C516C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */; };
+		4CC182C616C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */; };
 		4CC182CB16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC182CD16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
@@ -1831,8 +1831,8 @@
 		4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkSecondTableViewController.m; sourceTree = "<group>"; };
 		4C50DF8D16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageViewController.h; sourceTree = "<group>"; };
 		4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageViewController.m; sourceTree = "<group>"; };
-		4C50DF9116B8F9A400CD8BC0 /* MTPrintPageRendererReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPrintPageRendererReport.h; sourceTree = "<group>"; };
-		4C50DF9216B8F9A400CD8BC0 /* MTPrintPageRendererReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPrintPageRendererReport.m; sourceTree = "<group>"; };
+		4C50DF9116B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
+		4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C5482741672D4A800CA24EB /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = Reports/TODO.txt; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentPreferencesApplication.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTManagedDocumentPreferencesApplication.m; sourceTree = "<group>"; };
@@ -2142,8 +2142,8 @@
 		4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerDatabaseSchema.m; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorSalesforceViewController.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorSalesforceViewController.m; sourceTree = "<group>"; };
-		4CC182C016C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPrintPageRenderReportPageData.h; sourceTree = "<group>"; };
-		4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPrintPageRenderReportPageData.m; sourceTree = "<group>"; };
+		4CC182C016C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderPageData.h; sourceTree = "<group>"; };
+		4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderPageData.m; sourceTree = "<group>"; };
 		4CC182C916C6040F006FAD93 /* MTReportViewerReportPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageView.h; sourceTree = "<group>"; };
 		4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageView.m; sourceTree = "<group>"; };
 		4CC182D016C6CCC1006FAD93 /* MTReportViewerReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportViewController.h; sourceTree = "<group>"; };
@@ -2751,10 +2751,6 @@
 				4CF339431693E5B400390B3A /* MTFont.m */,
 				4C0AFC3816B1C2750007964D /* MTSqlite3.h */,
 				4C0AFC3916B1C2750007964D /* MTSqlite3.m */,
-				4C50DF9116B8F9A400CD8BC0 /* MTPrintPageRendererReport.h */,
-				4C50DF9216B8F9A400CD8BC0 /* MTPrintPageRendererReport.m */,
-				4CC182C016C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.h */,
-				4CC182C116C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -3913,6 +3909,10 @@
 				4CC182D116C6CCC1006FAD93 /* MTReportViewerReportViewController.m */,
 				4C50DF8D16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.h */,
 				4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */,
+				4C50DF9116B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.h */,
+				4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */,
+				4CC182C016C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.h */,
+				4CC182C116C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m */,
 			);
 			name = "Report Viewer";
 			path = Reports;
@@ -5119,9 +5119,9 @@
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
-				4C50DF9416B8F9A500CD8BC0 /* MTPrintPageRendererReport.m in Sources */,
+				4C50DF9416B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */,
 				4C8ECD8A16BA1FF6003D3B30 /* RptqQueryResult+Extras.m in Sources */,
-				4CC182C316C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
+				4CC182C316C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */,
 				4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CC182D316C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */,
 				4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
@@ -5287,7 +5287,7 @@
 				4C0AFCD016B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD716B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 				4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */,
-				4CC182C516C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
+				4CC182C516C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */,
 				4CC182CE16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CC182D516C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */,
 			);
@@ -5419,7 +5419,7 @@
 				4C0AFCCF16B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD616B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 				4C0AFCE716B5EC820007964D /* MTViewTableHeader.m in Sources */,
-				4CC182C416C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
+				4CC182C416C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */,
 				4CC182CD16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CC182D416C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */,
 			);
@@ -5561,9 +5561,9 @@
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C50DF8F16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
-				4C50DF9316B8F9A500CD8BC0 /* MTPrintPageRendererReport.m in Sources */,
+				4C50DF9316B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */,
 				4C8ECD8916BA1FF6003D3B30 /* RptqQueryResult+Extras.m in Sources */,
-				4CC182C216C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
+				4CC182C216C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */,
 				4CC182CB16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CC182D216C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */,
 				4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
@@ -5729,7 +5729,7 @@
 				4C0AFCD116B4AE6F0007964D /* RptqQueryResultFields+Extras.m in Sources */,
 				4C0AFCD816B4AEE10007964D /* RptqQueryResultValues+Extras.m in Sources */,
 				4C0AFCE916B5EC820007964D /* MTViewTableHeader.m in Sources */,
-				4CC182C616C4A2D2006FAD93 /* MTPrintPageRenderReportPageData.m in Sources */,
+				4CC182C616C4A2D2006FAD93 /* MTReportViewerPrintPageRenderPageData.m in Sources */,
 				4CC182CF16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CC182D616C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */,
 			);

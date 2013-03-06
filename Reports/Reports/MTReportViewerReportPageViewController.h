@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTPrintPageRendererReport.h"
+#import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
 #import "MTPrintingProtocol.h"
 
