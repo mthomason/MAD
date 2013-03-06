@@ -1220,18 +1220,15 @@
 
     if (document) {
         
-        
         UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
-            RptqDocumentObject *documentObject = [RptqDocumentObjectLabelDataField addNewLabelDataFeildForField:field
-                                                 toDetailSectionOfDocument:document
-                                                  withManagedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:field toDocument:document];
             
-            // MARK: Get a permanent id on insert.  Who gives a fuck if it's slow on insert.  Let's make sure it's correct.
+            // MARK: Get a permanent id on insert.  Let's make sure it's correct.
             if ([[documentObject objectID] isTemporaryID]) {
                 NSError *error = nil;
                 [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];

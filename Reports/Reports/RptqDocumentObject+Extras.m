@@ -9,6 +9,11 @@
 #import "RptqDocumentObject+Extras.h"
 #import "MTFont.h"
 #import "Constants.h"
+#import "RptqField.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocumentObjectLabel+Extras.h"
+#import "RptqDocumentObjectLabelLink+Extras.h"
+#import "RptqDocumentObjectFormula.h"
 
 @implementation RptqDocumentObject (Extras)
 
@@ -99,8 +104,10 @@
 #pragma mark - Static
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
+
     NSError *error = nil;
     NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
     RptqDocumentObject *result = nil;
@@ -112,6 +119,16 @@
 
 - (MNSSectionType)getType {
     return [[self type] integerValue];
+}
+
+#pragma mark - RptqDocumentObjectFactory
+
++ (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
+    RptqDocumentObject *result = nil;
+    if ([object isKindOfClass:[RptqField class]]) {
+        result = [RptqDocumentObjectLabelDataField addDocumentObject:object toDocument:document];
+    }
+    return result;
 }
 
 #pragma mark - MTProtocolCompare

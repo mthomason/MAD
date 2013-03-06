@@ -58,48 +58,49 @@
 
 #pragma mark - Static
 
-
-+ (id)getLabelDataFieldForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
++ (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelDataField class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objectId]];
     NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
     RptqDocumentObjectLabelDataField *result = nil;
     if (results) result = [results lastObject];
     return result;
 }
 
-+ (RptqDocumentObject *)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document withManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
+
+    RptqField *field = object;
+    
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: managedObjectContext];
+                                                                       inManagedObjectContext: [document managedObjectContext]];
     NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
-                                                                                     inManagedObjectContext: managedObjectContext];
+                                                                                     inManagedObjectContext: [document managedObjectContext]];
     
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: managedObjectContext];
+                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
     
     
     RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
-                                                                               insertIntoManagedObjectContext: managedObjectContext];
+                                                                               insertIntoManagedObjectContext: [document managedObjectContext]];
 
-    dataObject.isLabelDataField = reportObject;
+    [dataObject setIsLabelDataField: reportObject];
     
-    dataObject.isLabelDataField.text = [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]];
-    dataObject.isLabelDataField.referencesField = field;
-    dataObject.originx = @(CGPointZero.x);
-    dataObject.originy = @(CGPointZero.y);
-    dataObject.sizewidth = @(200.0000f);
-    dataObject.sizeheight = @(44.0000f);
-    dataObject.type = @(MNSObjectTypeLabelDataField);
+    [[dataObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
+    [[dataObject isLabelDataField] setReferencesField: field];
+    [dataObject setOriginx: @(CGPointZero.x)];
+    [dataObject setOriginy: @(CGPointZero.y)];
+    [dataObject setSizewidth: @(200.0000f)];
+    [dataObject setSizeheight: @(44.0000f)];
+    [dataObject setType: @(MNSObjectTypeLabelDataField)];
     
-    reportObject.referencesField = field;
-    //dataObject.isLabelDataField = reportObject;
+    [reportObject setReferencesField: field];
+
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [[document hasDetailSection] setHasObjects:hasObjects];
-    //RptqDocumentSection *detailSection = [document hasDetailSection];
-    //[detailSection addHasObjectsObjectFixed:dataObject];
     [reportObject release];
+    
     return [dataObject autorelease];
 }
 

@@ -1859,6 +1859,7 @@
 		4C68B71216600245002682CB /* MTDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnection.h; sourceTree = "<group>"; };
 		4C68B71316600245002682CB /* MTDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnection.m; sourceTree = "<group>"; };
 		4C6B943A16E67992007795F6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFactory.h; sourceTree = "<group>"; };
 		4C6CDFB214B84BA700DABF86 /* MTTemplateSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTemplateSelectorViewController.h; sourceTree = "<group>"; };
 		4C6CDFC214B85BFC00DABF86 /* MTDocumentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentTableViewCell.h; sourceTree = "<group>"; };
 		4C6CDFC314B85BFD00DABF86 /* MTDocumentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentTableViewCell.m; sourceTree = "<group>"; };
@@ -3318,6 +3319,7 @@
 		4C8F7DE414CFFA13006171A7 /* Rptq */ = {
 			isa = PBXGroup;
 			children = (
+				4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */,
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,

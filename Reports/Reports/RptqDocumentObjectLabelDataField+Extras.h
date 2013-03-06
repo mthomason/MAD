@@ -12,10 +12,8 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqField.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqDocumentObjectFactory.h"
 
-@interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare>
-
-+ (id)getLabelDataFieldForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-+ (RptqDocumentObject *)addNewLabelDataFeildForField:(RptqField *)field toDetailSectionOfDocument:(RptqDocument *)document withManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+@interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare, RptqDocumentObjectFactory>
 
 @end
