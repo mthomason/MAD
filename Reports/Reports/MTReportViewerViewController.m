@@ -27,6 +27,8 @@
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 
+@property (nonatomic, assign) CGRect lastLayoutBounds;
+
 @end
 
 @implementation MTReportViewerViewController
@@ -90,8 +92,6 @@
     [pageController setDataSource:self];
     [pageController setDelegate:self];
     
-    //[[self viewContainer] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    
     [self setPageController:pageController];
     [pageController release];
     
@@ -120,7 +120,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[self viewContainer] addSubview:[[self pageController] view]];
-    [self reloadReportView];
+    //[self reloadReportView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -149,8 +149,7 @@
 
 - (void)reloadReportView {
     NSLog(@"Bounds %@", NSStringFromCGRect([[self viewContainer] bounds]));
-    [[self printPageRendererReport] setPrintableSize:[[self viewContainer] bounds].size];
-    [[self printPageRendererReport] cachePrintPageRenderData];
+    [[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self viewContainer] bounds].size];
     NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
     [self setNumberOfPages:numberOfPages];
 }

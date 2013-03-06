@@ -10,14 +10,14 @@
 
 @interface MTPrintPageRendererReport ()
 
+@property (nonatomic, assign) CGSize printableSize;
+
 @property (nonatomic, assign) NSUInteger cachedNumberOfPages;
 
-@property (nonatomic, retain) RptqDocument *document;
+@property (nonatomic, assign) RptqDocument *document;
 @property (nonatomic, retain) NSMutableArray *cachedResults;
 @property (nonatomic, retain) NSMutableArray *sortedSortDescriptorsGroup;
 @property (nonatomic, retain) NSMutableDictionary *resultsByRow;
-
-@property (nonatomic, assign) CGFloat working;
 
 @end
 
@@ -28,8 +28,6 @@
     [_sortedSortDescriptorsGroup release];
     [_cachedResults release];
 }
-
-// ???: Why am I overriding fucking retain?
 
 - (id)retain {
     self = [super retain];
@@ -290,116 +288,102 @@
 #pragma mark - Object methods
 
 
-- (void)cachePrintPageRenderData {
-    
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqQueryCache *queryCache = [query hasQueryCache];    
-    
-    //NSMutableDictionary *resultsByRow = [[NSMutableDictionary alloc] init];
-    
-    [[self cachedResults] removeAllObjects];
-    
-    NSSet *hasQueryResults = [queryCache hasQueryResults];
-    for (RptqQueryResult *queryResult in hasQueryResults) {
-        
-        NSMutableDictionary *resultDictionary = [[[self resultsByRow] objectForKey:[queryResult rowid]] retain];
+- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
+    if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {
+        [self setPrintableSize:printableSize];
 
-        id results = [[self resultsByRow] objectForKey:[queryResult rowid]];
-        if (results == nil) {
-            [resultDictionary release];
-            resultDictionary = nil;
-            resultDictionary = [[NSMutableDictionary alloc] init];
-        } else {
-            [resultDictionary retain];
-        }
+        RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+        RptqQuery *query = [[database hasQueries] anyObject];
+        RptqQueryCache *queryCache = [query hasQueryCache];
         
-        id queryResultValue = [[queryResult value] retain];
-        /*
-        if (![queryResultValue respondsToSelector:@selector(compare:)]) {
+        [[self cachedResults] removeAllObjects];
+        
+        NSSet *hasQueryResults = [queryCache hasQueryResults];
+        for (RptqQueryResult *queryResult in hasQueryResults) {
             
-            NSString *testString = [[NSString alloc] initWithData:queryResultValue encoding:NSUTF8StringEncoding];
-            NSLog(@"WTF %@ is kind of class %@ or %@", queryResultValue, [queryResultValue class], testString);
-            [testString release];
+            NSMutableDictionary *resultDictionary = [[[self resultsByRow] objectForKey:[queryResult rowid]] retain];
+            
+            id results = [[self resultsByRow] objectForKey:[queryResult rowid]];
+            if (results == nil) {
+                [resultDictionary release];
+                resultDictionary = nil;
+                resultDictionary = [[NSMutableDictionary alloc] init];
+            } else {
+                [resultDictionary retain];
+            }
+            
+            id queryResultValue = [[queryResult value] retain];
+
+            NSString *fieldName = [[NSString alloc] initWithString:[queryResult fieldname]];
+            
+            [resultDictionary setObject:queryResultValue forKey:fieldName];
+            
+            [fieldName release];
             [queryResultValue release];
-            queryResultValue = @"<WAS GARBAGE VALUE>";
-            [queryResultValue retain];
+            
+            NSNumber *rowId = [[queryResult rowid] retain];
+            NSMutableDictionary *d = [resultDictionary retain];
+            [[self resultsByRow] setObject:d forKey:rowId];
+            [d release];
+            [rowId release];
+            
+            [resultDictionary release];
         }
-         */
-        NSString *fieldName = [[NSString alloc] initWithString:[queryResult fieldname]];
         
-        [resultDictionary setObject:queryResultValue forKey:fieldName];
+        NSSet *resultsByRowSet = [[NSSet setWithArray:[[self resultsByRow] allValues]] retain];
+        NSSet *hasQueryGroups = [query hasQueryGroups];
         
-        [fieldName release];
-        [queryResultValue release];
+        NSSortDescriptor *sortd = [[NSSortDescriptor alloc] initWithKey:@"weight" ascending:YES];
+        NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortd]];
+        for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
+            
+            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
+            NSString *fieldNameNice = [[NSString alloc] initWithString:[queryGroup fieldNameNice]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: fieldNameNice
+                                                                           ascending: sortAscending];
+            [[self sortedSortDescriptorsGroup] addObject:sortDescriptor];
+            [fieldNameNice release];
+            [sortDescriptor release];
+        }
+        NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self sortedSortDescriptorsGroup]];
+        sortedResultsByRow = [sortedResultsByRow retain];
         
-        NSNumber *rowId = [[queryResult rowid] retain];
-        NSMutableDictionary *d = [resultDictionary retain];
-        [[self resultsByRow] setObject:d forKey:rowId];
-        [d release];
-        [rowId release];
+        id groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:[self sortedSortDescriptorsGroup]] retain];
         
-        [resultDictionary release];
-    }
-    
-    NSSet *resultsByRowSet = [[NSSet setWithArray:[[self resultsByRow] allValues]] retain];
-    NSSet *hasQueryGroups = [query hasQueryGroups];
-    
-    NSSortDescriptor *sortd = [[NSSortDescriptor alloc] initWithKey:@"weight" ascending:YES];
-    //NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortd, nil];
-    NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortd]];
-    for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
-
-        BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-        NSString *fieldNameNice = [[NSString alloc] initWithString:[queryGroup fieldNameNice]];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: fieldNameNice
-                                                                       ascending: sortAscending];
-        [[self sortedSortDescriptorsGroup] addObject:sortDescriptor];
-        [fieldNameNice release];
-        [sortDescriptor release];
-    }
-    NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self sortedSortDescriptorsGroup]];
-    sortedResultsByRow = [sortedResultsByRow retain];
-    
-    id groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:[self sortedSortDescriptorsGroup]] retain];
-    
-    CGFloat printableSpaceUsedPageHeight = 0.0000f;
-    NSUInteger numberOfPagesUsed = 0;
-    
-    MTPrintPageRenderReportPageData *printPageRenderReportPageData  = [[MTPrintPageRenderReportPageData alloc] init];
-    
-    printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
-    //NSLog(@"Page Header One");
-    [printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
-    
-    printableSpaceUsedPageHeight += [[[[self document] hasReportHeaderSection] height] floatValue];
-    //NSLog(@"Report Header");
-    [printPageRenderReportPageData addReportHeaderWithValueDictionary:groupedRows];
-    
-    [self printGroupLevel:[query firstQueryGroup]
-printableSpaceUsedPageHeight:&printableSpaceUsedPageHeight
-        numberOfPagesUsed:&numberOfPagesUsed
-              groupedRows:groupedRows
+        CGFloat printableSpaceUsedPageHeight = 0.0000f;
+        NSUInteger numberOfPagesUsed = 0;
+        
+        MTPrintPageRenderReportPageData *printPageRenderReportPageData  = [[MTPrintPageRenderReportPageData alloc] init];
+        
+        printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
+        //NSLog(@"Page Header One");
+        [printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
+        
+        printableSpaceUsedPageHeight += [[[[self document] hasReportHeaderSection] height] floatValue];
+        //NSLog(@"Report Header");
+        [printPageRenderReportPageData addReportHeaderWithValueDictionary:groupedRows];
+        
+        [self printGroupLevel:[query firstQueryGroup]
+ printableSpaceUsedPageHeight:&printableSpaceUsedPageHeight
+            numberOfPagesUsed:&numberOfPagesUsed
+                  groupedRows:groupedRows
 printPageRenderReportPageData:&printPageRenderReportPageData];
-    
-    printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
-    //NSLog(@"Report Footer Last");
-    [printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
-    
-    printableSpaceUsedPageHeight += [[[[self document] hasPageFooterSection] height] floatValue];
-    //NSLog(@"Page Footer Last");
-    [printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
-
-    [groupedRows release];
-    [sortedResultsByRow release];
-    [resultsByRowSet release];
-//    [resultsByRow release];
-    //[sortDescriptors release];
-    [sortd release];
-
-    [self setCachedNumberOfPages: numberOfPagesUsed];
-//    [sortedSortDescriptorsGroup release];
-
+        
+        printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
+        //NSLog(@"Report Footer Last");
+        [printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
+        
+        printableSpaceUsedPageHeight += [[[[self document] hasPageFooterSection] height] floatValue];
+        //NSLog(@"Page Footer Last");
+        [printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
+        
+        [groupedRows release];
+        [sortedResultsByRow release];
+        [resultsByRowSet release];
+        [sortd release];
+        
+        [self setCachedNumberOfPages: numberOfPagesUsed];
+    }
 }
 
 - (void)printGroupLevel:(RptqQueryGroup *)queryGroup
