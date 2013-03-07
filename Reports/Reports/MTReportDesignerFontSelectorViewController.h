@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerFontSelectorViewController_h
+#define Reports_MTReportDesignerFontSelectorViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTFont.h"
 
@@ -34,3 +37,5 @@
 - (void)setSelectedFont:(MTFont *)font;
 
 @end
+
+#endif

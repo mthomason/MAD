@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerToolBoxViewController_h
+#define Reports_MTReportDesignerToolBoxViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "MTReportDesignerFontSelectorViewController.h"
@@ -25,3 +28,5 @@
 - (CGFloat)contentHeight;
 
 @end
+
+#endif

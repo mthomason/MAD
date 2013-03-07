@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerFontSettingsViewController_h
+#define Reports_MTReportDesignerFontSettingsViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTFont.h"
 
@@ -40,3 +43,5 @@
 - (void)displayStyleSettings;
 
 @end
+
+#endif

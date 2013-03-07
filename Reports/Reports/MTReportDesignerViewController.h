@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerViewController_h
+#define Reports_MTReportDesignerViewController_h
+
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "MTSettingsViewController.h"
@@ -65,3 +68,5 @@
 - (void)delete:(id)sender;
 
 @end
+
+#endif

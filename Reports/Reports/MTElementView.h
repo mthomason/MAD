@@ -1,10 +1,13 @@
 //
-//  DataObject.h
+//  MTElementView.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTElementView_h
+#define Reports_MTElementView_h
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
@@ -38,3 +41,5 @@
 - (void)updateDisplayLabel;
 
 @end
+
+#endif

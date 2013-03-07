@@ -6,8 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerSectionView_h
+#define Reports_MTReportDesignerSectionView_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTReportDesignerSectionView : UICollectionView
 
 @end
+
+#endif

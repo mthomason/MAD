@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerSectionLayoutSettingsViewController_h
+#define Reports_MTReportDesignerSectionLayoutSettingsViewController_h
+
 #import <UIKit/UIKit.h>
 
 @class MTReportDesignerSectionLayoutSettingsViewController;
@@ -31,3 +34,5 @@
 - (double)stepperValueNormalized;
 
 @end
+
+#endif

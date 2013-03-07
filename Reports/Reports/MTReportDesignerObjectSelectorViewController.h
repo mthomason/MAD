@@ -1,10 +1,13 @@
 //
-//  UIViewControllerObjectSelector.h
+//  MTReportDesignerObjectSelectorViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/15/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTReportDesignerObjectSelectorViewController_h
+#define Reports_MTReportDesignerObjectSelectorViewController_h
 
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
@@ -40,3 +43,5 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 - (void)showObjectSelector;
 
 @end
+
+#endif

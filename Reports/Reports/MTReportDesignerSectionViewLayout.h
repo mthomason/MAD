@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTReportDesignerSectionViewLayout_h
+#define Reports_MTReportDesignerSectionViewLayout_h
+
 #import <UIKit/UIKit.h>
 
 @class MTReportDesignerSectionViewLayout;
@@ -20,3 +23,5 @@
 @property (assign, nonatomic) id <MTReportDesignerSectionViewLayoutDelegate> delegate;
 
 @end
+
+#endif
