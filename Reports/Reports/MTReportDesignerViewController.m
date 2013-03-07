@@ -596,8 +596,13 @@
             UICollectionView *collectionView = (UICollectionView *)subview;
             for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
                 for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
-                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView];
-                    [results addObject:elementView];
+                    MTElementView *elementView = [[self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView] retain];
+                    if (elementView != nil) {
+                        [results addObject:elementView];
+                    } else {
+                        NSLog(@"Nil element view!  WTF");
+                    }
+                    [elementView release];
                 }
             }
         }
