@@ -29,8 +29,24 @@
 
 @implementation MTReportDesignerToolBoxViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (void)dealloc {
+    [_selectedObjectIds release];
+    [_navigationBar release];
+    [_navigationItemStyle release];
+    [_navigationItemFontSelector release];
+    [_navigationItemLayout release];
+    [_backgroundView release];
+    [_contentView release];
+    [_sceneSelector release];
+    [super dealloc];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (id)init {
+    self = [super init];
     if (self) {
         [self initialize];
     }
@@ -45,8 +61,8 @@
     return self;
 }
 
-- (id)init {
-    self = [super init];
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self initialize];
     }
@@ -54,15 +70,15 @@
 }
 
 - (void)initialize {
-    UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     
-    MTReportDesignerFontSettingsViewController *tb1 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
-    [tb1 setDelegate:self];
-    [self setTableViewControllerTextLayoutSettings:tb1];
+    MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
+    [reportDesignerFontSettingsViewController setDelegate:self];
+    [self setTableViewControllerTextLayoutSettings:reportDesignerFontSettingsViewController];
     
-    MTReportDesignerFontSelectorViewController *tb2 = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
-    [tb2 setDelegate:self];
-    [self setTableViewControllerFontSelector:tb2];
+    MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
+    [reportDesignerFontSelectorViewController setDelegate:self];
+    [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
 }
 
 - (void)viewDidLoad {
@@ -79,22 +95,6 @@
 
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void)dealloc {
-    [_selectedObjectIds release];
-    [_navigationBar release];
-    [_navigationItemStyle release];
-    [_navigationItemFontSelector release];
-    [_navigationItemLayout release];
-    [_backgroundView release];
-    [_contentView release];
-    [_sceneSelector release];
-    [super dealloc];
-}
-
 - (CGFloat)contentHeight {
     CGFloat newHeight = 320.0000f;
     if ([[self sceneSelector] selectedSegmentIndex] == 0) {
@@ -108,18 +108,8 @@
 }
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds {
-    //[self setToolboxIsVisible:YES];
-    //[[self informationButton] setEnabled: NO];
     [self setSelectedObjectIds:objectIds];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:objectIds];
-    
-    
-    //[[self view] layoutIfNeeded];
-    //[UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-    //    [self setWantsFullScreenLayout:YES];
-    //    [[self view] layoutIfNeeded];
-    //} completion:nil];
-
 }
 
 - (void)hideToolbox {
@@ -132,11 +122,9 @@
     id newViewController = nil;
     if ([sender selectedSegmentIndex] == 0) {
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Style", @"Style")];
-        //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsStyle" bundle:nil];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     } else  if ([sender selectedSegmentIndex] == 1) {
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Layout", @"Layout")];
-        //newViewController = [[UITableViewControllerFontSettings alloc] initWithNibName:@"MTTableViewFontSettingsLayout" bundle:nil];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
     }
     [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
@@ -144,22 +132,18 @@
     
     [[newViewController tableView] setBounds: [[self contentView] bounds]];
     [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+
     [UIView animateWithDuration:0.3000f animations:^{
+
         [[[self tableViewControllerTextLayoutSettings] view] removeFromSuperview];
         [self setTableViewControllerTextLayoutSettings:newViewController];
-
         [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
     
     } completion:^(BOOL finished) {
+    
         [[self delegate] heightChanged:[self contentHeight]];
-        //[self setContentSizeForViewInPopover:CGSizeMake(320.0000f, [self contentHeight])];
-        //[[self view] setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [self contentHeight])];
-        //[[self backgroundView] setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [self contentHeight])];
-
-  //      [newViewController retain];
-//        [self setTableViewControllerTextLayoutSettings:newViewController];
-        //[newViewController release];
         [sender setEnabled:YES];
+
     }];
 }
 

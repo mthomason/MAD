@@ -1255,7 +1255,20 @@
     }
 }
 
-- (void)insertDocumentObjectLabelText:(NSString *)text {
+- (void)dismissObjectSelectorViewController {
+    if ([AppDelegate isPad]) {
+        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
+            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)insertDocumentObjectNewLabel {
+    [self dismissObjectSelectorViewController];
+    /*
+    NSString *labelText = @"Label";
     if ([AppDelegate isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
@@ -1271,11 +1284,11 @@
         UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
-
+            
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:text toDocument:document];
-
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:labelText toDocument:document];
+            
             // MARK: Get a permanent id on insert.  Let's make sure it's correct.
             if ([[documentObject objectID] isTemporaryID]) {
                 NSError *error = nil;
@@ -1295,8 +1308,17 @@
         } completion:^(BOOL finished) {
             
         }];
-    }
+    }*/
+}
+- (void)insertDocumentObjectNewFormula {
+    [self dismissObjectSelectorViewController];
+}
 
+- (void)insertDocumentObjectNewChart {
+    [self dismissObjectSelectorViewController];
+}
+- (void)insertDocumentObjectNewHyperlink {
+    [self dismissObjectSelectorViewController];
 }
 
 #pragma mark - Gesture Recognizer Delegate

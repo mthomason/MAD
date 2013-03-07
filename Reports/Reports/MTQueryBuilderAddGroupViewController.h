@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderSortTypeViewController.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryGroup.h"
 #import "RptqField.h"
 #import "MTManagedDocumentReport.h"

@@ -107,7 +107,7 @@
 		4C0E7769163B5AEC003B951E /* MTQueryBuilderSortTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */; };
 		4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
 		4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
-		4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */; };
+		4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; };
 		4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
@@ -373,7 +373,7 @@
 		4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
 		4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
-		4C1A586F14E2658500184445 /* MTQueryBuilderChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */; };
+		4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */; };
 		4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */; };
@@ -619,7 +619,7 @@
 		4C860B2C167EDE7000AC1904 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
-		4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */; };
+		4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4C860B31167EDE7000AC1904 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C860B32167EDE7000AC1904 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4C860B34167EDE7000AC1904 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
@@ -976,7 +976,7 @@
 		4CA16418167EB90D00540A14 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
-		4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */; };
+		4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4CA1641D167EB90D00540A14 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4CA1641E167EB90D00540A14 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4CA16420167EB90D00540A14 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
@@ -993,7 +993,7 @@
 		4CA1643B167EB90F00540A14 /* MUIViewControllerDatabaseSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB653DF164A43710050CD03 /* MUIViewControllerDatabaseSchema.m */; };
 		4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
-		4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */; };
+		4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4CA16440167EB90F00540A14 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4CA16441167EB90F00540A14 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4CA16443167EB90F00540A14 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
@@ -1741,9 +1741,9 @@
 		4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderDatabaseTable.m; sourceTree = "<group>"; };
 		4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqFieldSelectorManager.h; sourceTree = "<group>"; };
 		4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqFieldSelectorManager.m; sourceTree = "<group>"; };
-		4C1A586814E240BF00184445 /* MTQueryBuilderChooseField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderChooseField.h; sourceTree = "<group>"; };
+		4C1A586814E240BF00184445 /* MTQueryBuilderChooseFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderChooseFieldViewController.h; sourceTree = "<group>"; };
 		4C1A586B14E247C700184445 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderChooseField.m; sourceTree = "<group>"; };
+		4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderChooseFieldViewController.m; sourceTree = "<group>"; };
 		4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MySqlClientTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C1B7A5A163E0D9400E331AA /* MySqlClientTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MySqlClientTest-Info.plist"; sourceTree = "<group>"; };
 		4C1B7A5C163E0D9400E331AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3953,8 +3953,8 @@
 				4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */,
 				4C1A585B14DE348200184445 /* MTQueryBuilderSortTypeViewController.h */,
 				4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */,
-				4C1A586814E240BF00184445 /* MTQueryBuilderChooseField.h */,
-				4C1A586E14E2658500184445 /* MTQueryBuilderChooseField.m */,
+				4C1A586814E240BF00184445 /* MTQueryBuilderChooseFieldViewController.h */,
+				4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */,
 			);
 			name = "Query Builder";
 			path = Reports;
@@ -5037,7 +5037,7 @@
 				4C0E7769163B5AEC003B951E /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
-				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseField.m in Sources */,
+				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */,
 				4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */,
@@ -5253,7 +5253,7 @@
 				4CA16418167EB90D00540A14 /* MUIViewControllerDatabaseSchema.m in Sources */,
 				4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */,
-				4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseField.m in Sources */,
+				4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CA1641D167EB90D00540A14 /* RptqFieldSelectorManager.m in Sources */,
 				4CA1641E167EB90D00540A14 /* MTQueryBuilderViewController.m in Sources */,
 				4CA16420167EB90D00540A14 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
@@ -5385,7 +5385,7 @@
 				4CA1643B167EB90F00540A14 /* MUIViewControllerDatabaseSchema.m in Sources */,
 				4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */,
-				4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseField.m in Sources */,
+				4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CA16440167EB90F00540A14 /* RptqFieldSelectorManager.m in Sources */,
 				4CA16441167EB90F00540A14 /* MTQueryBuilderViewController.m in Sources */,
 				4CA16443167EB90F00540A14 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
@@ -5479,7 +5479,7 @@
 				4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C1A586614E23DDB00184445 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */,
-				4C1A586F14E2658500184445 /* MTQueryBuilderChooseField.m in Sources */,
+				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4CDB61F614E33BF400A5389E /* UITableViewControllerEnterString.m in Sources */,
 				4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */,
@@ -5694,7 +5694,7 @@
 				4C860B2C167EDE7000AC1904 /* MUIViewControllerDatabaseSchema.m in Sources */,
 				4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */,
-				4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseField.m in Sources */,
+				4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C860B31167EDE7000AC1904 /* RptqFieldSelectorManager.m in Sources */,
 				4C860B32167EDE7000AC1904 /* MTQueryBuilderViewController.m in Sources */,
 				4C860B34167EDE7000AC1904 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,

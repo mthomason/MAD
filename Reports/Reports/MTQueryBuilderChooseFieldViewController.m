@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 
 #pragma mark -
@@ -14,7 +14,7 @@
 
 
 // Private TableViewController properties and methods.
-@interface MTQueryBuilderChooseField ()
+@interface MTQueryBuilderChooseFieldViewController ()
 
 @property (retain) NSMutableArray* sectionInfoArray;
 @property (retain) NSIndexPath* pinchedIndexPath;
@@ -31,7 +31,7 @@
 #define DEFAULT_ROW_HEIGHT 44
 #define HEADER_HEIGHT 45
 
-@implementation MTQueryBuilderChooseField
+@implementation MTQueryBuilderChooseFieldViewController
 
 @synthesize dataTables=plays_, sectionInfoArray=sectionInfoArray_, fieldCells=newsCell_, pinchedIndexPath=pinchedIndexPath_, uniformRowHeight=rowHeight_, openSectionIndex=openSectionIndex_, initialPinchHeight=initialPinchHeight_;
 @synthesize delegate = _delegate;

@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryBuilderAddPredicateViewController.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
 #import "RptqTable.h"
 #import "AppDelegate.h"
@@ -64,9 +64,9 @@
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFovLeftSide"] ||
                [[segue identifier] isEqualToString:@"showAddPredicateFofLeftSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateLeft];
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseField class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
 
-            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
                 [dvc setDelegate: self];
@@ -77,8 +77,8 @@
                [[segue identifier] isEqualToString:@"showAddPredicateFofRightSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseField class]]) {
-            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
+        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
                 [dvc setDelegate: self];
@@ -133,7 +133,7 @@
     [[self navigationController] popToViewController:self animated:YES];
 }
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseField *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: nil];

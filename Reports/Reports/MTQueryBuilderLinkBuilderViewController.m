@@ -187,7 +187,7 @@
             
             [self setCurrentlyEditingPart: MNSLinkLeft];
             
-            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self secondTableName] name] ? [NSArray arrayWithObject:[[self secondTableName] name]] : [NSArray array])];
                 [dvc setDelegate: self];
@@ -197,7 +197,7 @@
             
             [self setCurrentlyEditingPart: MNSLinkRight];
             
-            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self firstTableName] name] ? [NSArray arrayWithObject:[[self firstTableName] name]] : [NSArray array])];
                 [dvc setDelegate: self];
@@ -225,7 +225,7 @@
 
 #pragma mark - Delegate callbacks
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseField *)controller
+- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqField *)field {
     [[self navigationController] popToViewController: self animated: YES];
     

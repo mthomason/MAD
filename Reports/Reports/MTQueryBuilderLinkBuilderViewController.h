@@ -13,7 +13,7 @@
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryLinks+Extras.h"
 
 @class MTQueryBuilderLinkBuilderViewController;

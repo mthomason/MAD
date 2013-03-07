@@ -72,9 +72,9 @@
             [[segue destinationViewController] setDelegate:self];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseField class]]) {
+        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             
-            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
                 //[dvc setManagedDocumentQuery:[self managedDocumentQuery]];
@@ -88,7 +88,7 @@
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseField *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     [self setField:field];

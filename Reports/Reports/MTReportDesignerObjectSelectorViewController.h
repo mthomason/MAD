@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 
 typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
@@ -22,13 +22,19 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqField *)field;
+- (void)insertDocumentObjectNewLabel;
+- (void)insertDocumentObjectNewFormula;
+- (void)insertDocumentObjectNewChart;
+- (void)insertDocumentObjectNewHyperlink;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
 @interface MTReportDesignerObjectSelectorViewController : MTViewController
     <MTQueryBuilderChooseFieldDelegate,
         UINavigationControllerDelegate,
-        UIImagePickerControllerDelegate>
+        UIImagePickerControllerDelegate,
+        UICollectionViewDataSource,
+        UICollectionViewDelegateFlowLayout>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;

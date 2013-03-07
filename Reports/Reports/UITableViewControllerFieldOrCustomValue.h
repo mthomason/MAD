@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "RptqField.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 
 @class UITableViewControllerFieldOrCustomValue;
 
-@interface UITableViewControllerFieldOrCustomValue : MTQueryBuilderChooseField
+@interface UITableViewControllerFieldOrCustomValue : MTQueryBuilderChooseFieldViewController
     <UITableViewDataSource, UITableViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlDisplayType;

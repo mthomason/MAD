@@ -14,13 +14,13 @@
 #import "RptqFieldSelectorManager.h"
 #import "RptqTable+Extras.h"
 
-@class MTQueryBuilderChooseField;
+@class MTQueryBuilderChooseFieldViewController;
 
 @protocol MTQueryBuilderChooseFieldDelegate
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseField *)controller withField:(RptqField *)field;
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field;
 @end
 
-@interface MTQueryBuilderChooseField : UITableViewController
+@interface MTQueryBuilderChooseFieldViewController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         SectionHeaderViewDelegate>

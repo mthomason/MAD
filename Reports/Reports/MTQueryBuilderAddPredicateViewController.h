@@ -10,7 +10,7 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "MTManagedDocumentReport.h"
-#import "MTQueryBuilderChooseField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
