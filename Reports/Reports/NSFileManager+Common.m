@@ -97,7 +97,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *urlsForDirectory = [[NSArray alloc] initWithArray:[fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask]];
     NSURL *lastObject = [[urlsForDirectory lastObject] retain];
-    applicationLibraryDirectory = [lastObject URLByAppendingPathComponent:TEMPLATES];
+    applicationLibraryDirectory = [[lastObject URLByAppendingPathComponent:TEMPLATES] retain];
     directoryGood = [NSFileManager createDirectoryForUrlIfItDoesNotExist:applicationLibraryDirectory];
     [urlsForDirectory release];
     return directoryGood ? [applicationLibraryDirectory autorelease] : nil;

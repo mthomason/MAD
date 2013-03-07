@@ -12,8 +12,15 @@
 #import "RptqDocumentObject.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
-#import "RptqDocument.h"
 #import "RptqDocumentObjectFactory.h"
+#import "RptqDocument.h"
+#import "MTFont.h"
+#import "Constants.h"
+#import "RptqField.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocumentObjectLabel+Extras.h"
+#import "RptqDocumentObjectLabelLink+Extras.h"
+#import "RptqDocumentObjectFormula.h"
 
 typedef NS_ENUM(NSUInteger, MNSSectionType) {
 	MNSObjectTypeLabel = 1,

@@ -78,16 +78,14 @@
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseField class]]) {
-            MTQueryBuilderChooseField *dvc = [[segue destinationViewController] retain];
+            MTQueryBuilderChooseField *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
                 [dvc setDelegate: self];
             }
-            [dvc release];
         } else if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerEnterString class]]) {
-            UITableViewControllerEnterString *tvcEnterString = [[segue destinationViewController] retain];
+            UITableViewControllerEnterString *tvcEnterString = [segue destinationViewController];
             [tvcEnterString setEnterStringDelegate: self];
-            [tvcEnterString release];
         }
     }
 }

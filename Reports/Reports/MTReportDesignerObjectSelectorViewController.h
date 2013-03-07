@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 };
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
-- (void)didSelectDataField:(RptqField *)field;
+- (void)insertDocumentObjectDataField:(RptqField *)field;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 

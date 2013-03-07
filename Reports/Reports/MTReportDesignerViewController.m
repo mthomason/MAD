@@ -429,7 +429,9 @@
         NSLog(@"Sender :%@", sender);
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
-            [self setPopoverControllerObjectSelector:[popoverSegue popoverController]];
+            UIPopoverController *popoverController = [[popoverSegue popoverController] retain];
+            [self setPopoverControllerObjectSelector:popoverController];
+            [popoverController release];
         }
         MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
@@ -1206,7 +1208,7 @@
     }
 }
 
-- (void)didSelectDataField:(RptqField *)field {
+- (void)insertDocumentObjectDataField:(RptqField *)field {
     if ([AppDelegate isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
@@ -1250,6 +1252,50 @@
 
         }];
     }
+}
+
+- (void)insertDocumentObjectLabelText:(NSString *)text {
+    if ([AppDelegate isPad]) {
+        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
+            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    
+    if (document) {
+        
+        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        
+        [detailSection performBatchUpdates:^{
+
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:text toDocument:document];
+
+            // MARK: Get a permanent id on insert.  Let's make sure it's correct.
+            if ([[documentObject objectID] isTemporaryID]) {
+                NSError *error = nil;
+                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                if (error != nil) {
+                    error = nil;
+                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                    if (error != nil) {
+                        [error presentErrorToUser];
+                    }
+                }
+            }
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
+            [[AppDelegate activeDocument] saveContext];
+            
+            [detailSection insertItemsAtIndexPaths:indexPaths];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+
 }
 
 #pragma mark - Gesture Recognizer Delegate

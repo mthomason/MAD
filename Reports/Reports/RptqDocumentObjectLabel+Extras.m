@@ -56,6 +56,46 @@
     }
 }
 
+#pragma mark - RptqDocumentObjectFactory
+
++ (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabel class])];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objectId]];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqDocumentObjectLabel *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
++ (id)addDocumentObject:(id)object toDocument:(id)document {
+    
+    NSString *labelText = object;
+    
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                                       inManagedObjectContext: [document managedObjectContext]];
+    NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
+                                                                                     inManagedObjectContext: [document managedObjectContext]];
+    
+    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
+    
+    RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
+                                                                               insertIntoManagedObjectContext: [document managedObjectContext]];
+    
+    [dataObject setIsLabel: reportObject];
+    
+    [[dataObject isLabel] setText: labelText];
+    [dataObject setType: @(MNSObjectTypeLabelDataField)];
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+    [hasObjects insertObject:dataObject atIndex:0];
+    [[document hasDetailSection] setHasObjects:hasObjects];
+    [reportObject release];
+    
+    return [dataObject autorelease];
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

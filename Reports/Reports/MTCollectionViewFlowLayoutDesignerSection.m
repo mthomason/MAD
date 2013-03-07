@@ -28,7 +28,7 @@
     }
     */
 
-    return results;
+    return [results autorelease];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {

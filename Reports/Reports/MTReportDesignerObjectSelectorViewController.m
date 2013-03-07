@@ -132,7 +132,7 @@
 #pragma mark UITableViewControllerChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseField *)controller withField:(RptqField *)field {
-    [[self objectSelectorDelegate] didSelectDataField: field];
+    [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
 }
 
 #pragma mark UIImagePickerControllerDelegate

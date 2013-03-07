@@ -56,7 +56,7 @@
     }
 }
 
-#pragma mark - Static
+#pragma mark - RptqDocumentObjectFactory
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelDataField class])];
@@ -88,10 +88,6 @@
     
     [[dataObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
     [[dataObject isLabelDataField] setReferencesField: field];
-    [dataObject setOriginx: @(CGPointZero.x)];
-    [dataObject setOriginy: @(CGPointZero.y)];
-    [dataObject setSizewidth: @(200.0000f)];
-    [dataObject setSizeheight: @(44.0000f)];
     [dataObject setType: @(MNSObjectTypeLabelDataField)];
     
     [reportObject setReferencesField: field];

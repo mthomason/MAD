@@ -7,13 +7,6 @@
 //
 
 #import "RptqDocumentObject+Extras.h"
-#import "MTFont.h"
-#import "Constants.h"
-#import "RptqField.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocumentObjectLabel+Extras.h"
-#import "RptqDocumentObjectLabelLink+Extras.h"
-#import "RptqDocumentObjectFormula.h"
 
 @implementation RptqDocumentObject (Extras)
 
@@ -101,20 +94,6 @@
     return [self marginViewSize];
 }
 
-#pragma mark - Static
-
-+ (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
-
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDocumentObject *result = nil;
-    if (results) result = [results lastObject];
-    return result;
-}
-
 #pragma mark - Member
 
 - (MNSSectionType)getType {
@@ -125,9 +104,30 @@
 
 + (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
     RptqDocumentObject *result = nil;
+
     if ([object isKindOfClass:[RptqField class]]) {
         result = [RptqDocumentObjectLabelDataField addDocumentObject:object toDocument:document];
+    } else if ([object isKindOfClass:[RptqField class]]) {
+        result = [RptqDocumentObjectLabel addDocumentObject:object toDocument:document];
     }
+
+    [result setOriginx: @(CGPointZero.x)];
+    [result setOriginy: @(CGPointZero.y)];
+    [result setSizewidth: @(200.0000f)];
+    [result setSizeheight: @(44.0000f)];
+
+    return result;
+}
+
++ (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
+    
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqDocumentObject *result = nil;
+    if (results) result = [results lastObject];
     return result;
 }
 
