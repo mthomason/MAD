@@ -133,12 +133,13 @@
         MTReportDesignerToolBoxViewController *viewControllerToolbox = [[MTReportDesignerToolBoxViewController alloc] initWithNibName:@"MTViewToolbox" bundle:nil];
         [viewControllerToolbox setDelegate:self];
         [self setViewControllerToolbox:viewControllerToolbox];
-        [viewControllerToolbox release];
         
         UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:[self viewControllerToolbox]];
         [popoverControllerInformation setDelegate:self];
         [self setPopoverControllerInformation:popoverControllerInformation];
         [popoverControllerInformation release];
+
+        [viewControllerToolbox release];
 
     } else {
     
