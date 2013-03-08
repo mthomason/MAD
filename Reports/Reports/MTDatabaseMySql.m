@@ -210,10 +210,10 @@
 
 - (void)getTables: (void (^)(NSArray *tables))completion {
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(queuePriorityBackground, ^{
+    //    dispatch_async(dispatch_get_main_queue(), ^{
             
             MysqlServer *serv = [[MysqlServer alloc] init];
             
@@ -244,8 +244,8 @@
             }
             
             completion(results);
-        });
-    });
+    //    });
+    //});
     
 }
 
