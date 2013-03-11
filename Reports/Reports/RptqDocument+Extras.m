@@ -148,8 +148,8 @@
     return doc;
 }
 
-+ (void)addDatabase: (MTDatabase *)database ToMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext
-         completion: (void (^)(BOOL success))completion {
++ (void)addDatabase: (MTDatabase *)database toManagedObjectContext:(NSManagedObjectContext *)objectContext
+         completion: (void (^)(BOOL success, NSError *error))completion {
     
     RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
     
@@ -186,45 +186,53 @@
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     //NSUInteger tableCounter = 0;
-    [database getTables:^(NSArray *tables) {
-        __block NSUInteger tableCounter = 0;
-        NSUInteger numberOfTables = [tables count];
-        for (MTDatabaseTable *databaseTable in tables) {
-            RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
-                                                                           andTable: databaseTable];
-            
-            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                 withConnecitonId: connectionId];
-            
-            if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
-            
-            [database getFieldsForTable:rptqTable completion:^(NSArray *fields) {
+    [database getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        if (success) {
+            __block NSUInteger tableCounter = 0;
+            NSUInteger numberOfTables = [tables count];
+            for (MTDatabaseTable *databaseTable in tables) {
+                RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
+                                                                               andTable: databaseTable];
                 
-                for (MTDatabaseField *objField in fields) {
-                    RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                         withConnecitonId: connectionId];
-                    
-                    RptqTable *rptqTableOrigional = [RptqTable getTableForManagedObjectContext: objectContext
-                                                                                      database: currentDatabase
-                                                                                  andTableName: [databaseTable name]];
-                    
-                    RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
-                                                                                   andField: objField];
-                    [rptqTableOrigional addHasFieldsObject: rptqField];
-                    NSError *error = nil;
-                    [[rptqField managedObjectContext] save:&error];
-                    if (error) {
-                        NSLog(@"%@", [error localizedDescription]);
+                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                     withConnecitonId: connectionId];
+                
+                if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                
+                [database getFieldsForTable:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
+                    if (success) {
+                        for (MTDatabaseField *objField in fields) {
+                            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                                 withConnecitonId: connectionId];
+                            
+                            RptqTable *rptqTableOrigional = [RptqTable getTableForManagedObjectContext: objectContext
+                                                                                              database: currentDatabase
+                                                                                          andTableName: [databaseTable name]];
+                            
+                            RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
+                                                                                           andField: objField];
+                            [rptqTableOrigional addHasFieldsObject: rptqField];
+                            NSError *saveError = nil;
+                            [[rptqField managedObjectContext] save:&saveError];
+                            if (saveError) {
+                                NSLog(@"%@", [saveError localizedDescription]);
+                            }
+                        }
+                        if (tableCounter == numberOfTables - 1) {
+                            completion(YES, nil);
+                        }
+                        tableCounter++;
+                    } else {
+                        completion(NO, error);
                     }
-                }
-             
-                if (tableCounter == numberOfTables - 1) {
-                    completion(YES);
-                }
-                tableCounter++;
-            }];
-            
+                }];
+                
+            }
+
+        } else {
+            completion(success, error);
         }
+        
         
         
     }];

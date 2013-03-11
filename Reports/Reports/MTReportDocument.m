@@ -60,10 +60,10 @@
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success))completion {
+                   completion: (void (^)(BOOL success, NSError *error))completion {
     
-    [RptqDocument addDatabase:database ToMainDocumentForManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success) {
-        completion(success);
+    [RptqDocument addDatabase:database toManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success, NSError *error) {
+        completion(success, error);
         if (success) {
             [self save:^(BOOL success) {
 

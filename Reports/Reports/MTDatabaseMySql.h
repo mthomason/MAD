@@ -34,10 +34,10 @@
 
 - (id)initWithConnectionSettings: (MTDatabaseConnection *)connectionSettings;
 
-- (void)getTables: (void (^)(NSArray *tables))completion;
+- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
 - (void)getFieldsForTable: (RptqTable *)table
-               completion: (void (^)(NSArray *fields))completion;
+               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;

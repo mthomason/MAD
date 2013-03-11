@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
 #import "Constants.h"
+#import "UIAlertView+Blocks.h"
+#import "NSError+UserInterface.h"
 
 #import "MTDatabaseConnection.h"
 #import "MTReportDocument.h"
@@ -16,9 +18,12 @@
 #import "UIAlertView+Blocks.h"
 #import "AppDelegate.h"
 
+#import "MTAlertView.h"
+
+
 @interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
     <UITableViewDelegate,
-        UITextFieldDelegate>
+        UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellUsername;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPassword;

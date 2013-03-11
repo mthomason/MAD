@@ -46,7 +46,7 @@
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success))completion;
+                   completion: (void (^)(BOOL success, NSError *error))completion;
 
 //Refresh the data inside the currently opened managed document
 - (void)refresh;

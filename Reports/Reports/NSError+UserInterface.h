@@ -9,11 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "UIAlertView+Blocks.h"
 #import "Constants.h"
+#import "MTAlertView.h"
 
 @interface NSError (UserInterface)
 
 - (void)presentErrorToUser;
 - (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain;
 - (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain andCompletion:(void (^)(BOOL success))completion;
+- (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion;
 
 @end

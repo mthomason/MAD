@@ -208,12 +208,14 @@
     return [result autorelease];
 }
 
-- (void)getTables: (void (^)(NSArray *tables))completion {
+- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    //dispatch_async(queuePriorityBackground, ^{
-    //    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *error = nil;
             
             MysqlServer *serv = [[MysqlServer alloc] init];
             
@@ -222,10 +224,11 @@
             [serv setPassword:  [[self databaseConnection] password]];
             [serv setSchema:    [[self databaseConnection] database]];
             
-            MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+            MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
             NSMutableArray *results = nil;
+            BOOL success = conn != nil;
             
-            if (conn) {
+            if (success) {
                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
                 if (fetch) {
                     if ([[fetch fields] count] > 0) {
@@ -243,14 +246,14 @@
                 }
             }
             
-            completion(results);
-    //    });
-    //});
+            completion(success, error, results);
+        });
+    });
     
 }
 
 - (void)getFieldsForTable: (RptqTable *)table
-               completion: (void (^)(NSArray *fields))completion {
+               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
@@ -263,12 +266,14 @@
             [serv setUser:      [[self databaseConnection] username]];
             [serv setPassword:  [[self databaseConnection] password]];
             [serv setSchema:    [[self databaseConnection] database]];
-            
-            MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+
+            NSError *error = nil;
+            MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
             
             NSMutableArray *results = nil;
+            BOOL success = conn != nil;
             
-            if (conn) {
+            if (success) {
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [table name]];
                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
                 if (fetch) {
@@ -285,9 +290,11 @@
                         }
                     }
                 }
+            } else {
+                [error presentErrorToUser];
             }
             
-            completion(results);
+            completion(success, error, results);
         });
     });
     
@@ -305,7 +312,8 @@
     [serv setPassword:  [[self databaseConnection] password]];
     [serv setSchema:    [[self databaseConnection] database]];
     
-    MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+    NSError *error = nil;
+    MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
     if (conn) {
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn extendedNames:YES];
         
@@ -365,9 +373,8 @@
         [results release];
         NSError *error = nil;
         [managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"Error: %@", error);
-        }
+    } else {
+        [error presentErrorToUser];
     }
     completion(self, queryCache);
 }

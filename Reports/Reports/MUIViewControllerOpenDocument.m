@@ -372,10 +372,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSString *title = NSLocalizedString(@"About Reports", @"About Reports");
     NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.", @"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.");
     NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
+
+    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: title
+                                                        message: message
+                                              cancelButtonTitle: buttonTitle
+                                               otherButtonTitle: nil onDismiss:nil onCancel:nil];
+    [alertView show];
+    [alertView autorelease];
+/*
     [UIAlertView showAlertViewWithTitle: title
                                 message: message
                       cancelButtonTitle: buttonTitle
-                       otherButtonTitle: nil onDismiss: nil onCancel: nil];
+                       otherButtonTitle: nil onDismiss: nil onCancel: nil];*/
 }
 
 - (void)cut:(id)sender {

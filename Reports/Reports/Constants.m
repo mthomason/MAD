@@ -20,7 +20,7 @@ NSString * const MNSStringInterfaceButtonTitleContinueDesc  = @"Continue Button 
 NSString * const MNSStringInterfaceButtonTitleTryAgain      = @"Try Again";
 NSString * const MNSStringInterfaceButtonTitleTryAgainDesc  = @"Try Again Button Title";
 
-NSString * const MNSStringInterfaceButtonTitleAbort         = @"Abort";
+NSString * const MNSStringInterfaceButtonTitleAbort         = @"Abort Application";
 NSString * const MNSStringInterfaceButtonTitleAbortDesc     = @"Abort Button Title";
 
 NSString * const MTStoryboardReportDesigner = @"MTStoryboardReportDesigner";

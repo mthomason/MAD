@@ -55,7 +55,7 @@
                                  userInfo: nil];
 }
 
-- (void)getTables: (void (^)(NSArray *tables))completion {
+- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
@@ -70,7 +70,7 @@
 }
 
 - (void)getFieldsForTable: (RptqTable *)table
-               completion: (void (^)(NSArray *fields))completion {
+               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

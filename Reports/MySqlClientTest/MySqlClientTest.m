@@ -21,8 +21,9 @@
 - (void)testMySqlApiObjC {
 
     MysqlServer *serv = [[MysqlServer alloc] init];
-    
-    MysqlConnection *conn = [MysqlConnection connectToServer: serv];
+    NSError *error = nil;
+
+    MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
     
     NSInteger colctr = 0;
     
@@ -123,9 +124,9 @@
             }
         }
     }
-    
     [serv release];
     
+    STAssertTrue(error != nil, [NSString stringWithFormat:@"Error %@", [error localizedDescription]]);
     STAssertTrue(colctr > 0, @"Unit test to show column failed.");
 }
 

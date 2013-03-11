@@ -9,8 +9,8 @@
 #import "MTDatabaseSalesForce.h"
 
 typedef void (^rsltBlk_tblNames)(MTDatabaseSalesForce *database, NSArray *tables);
-typedef void (^rsltBlkGetTables)(NSArray *tables);
-typedef void (^rsltBlkGetFields)(NSArray *fields);
+typedef void (^rsltBlkGetTables)(BOOL success, NSError *error, NSArray *tables);
+typedef void (^rsltBlkGetFields)(BOOL success, NSError *error, NSArray *fields);
 typedef void (^rsltBlk_fldNames)(MTDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
 typedef void (^rsltBlk_results)(MTDatabaseSalesForce *database, RptqQueryCache *results);
 typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
@@ -41,7 +41,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 #warning Not implemented.
 }
 
-- (void)getTables: (void (^)(NSArray *tables))completion {
+- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     [self setCurrentQueryType: MTDatabaseQueryTypeGetTables];
     
     [self setResultBlockGetTables: completion];
@@ -51,7 +51,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 }
 
 - (void)getFieldsForTable: (RptqTable *)table
-               completion: (void (^)(NSArray *fields))completion {
+               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
     [self setCurrentQueryType: MTDatabaseQueryTypeGetFields];
     
@@ -116,7 +116,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
                         [resultTables addObject:databaseTable];
                         [databaseTable release];
                     }
-                    self.resultBlockGetTables(resultTables);
+                    self.resultBlockGetTables(YES, nil, resultTables);
                     [resultTables release];
                 }
                 
@@ -146,7 +146,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
                         [resultFields addObject:databaseField];
                         [databaseField release];
                     }
-                    self.resultBlockGetFields(resultFields);
+                    self.resultBlockGetFields(YES, nil, resultFields);
                     [resultFields release];
                 }
             }];
@@ -268,6 +268,22 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
     }
     else {
         // show alert and retry
+        
+        MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Salesforce Error", @"Salesforce Error")
+                                                            message: [NSString stringWithFormat:@"Can't connect to salesforce: %@", error]
+                                                  cancelButtonTitle: NSLocalizedString(@"Retry", @"Retry")
+                                                   otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
+                                                       
+                                                   } onCancel:^{
+                                                       [self login:^(MTDatabaseSalesForce *database, BOOL complete) {
+                                                           
+                                                       }];
+                                                   }];
+        [alertView show];
+        [alertView autorelease];
+        
+/*
+        
         [UIAlertView showAlertViewWithTitle:@"Salesforce Error" message:[NSString stringWithFormat:@"Can't connect to salesforce: %@", error] cancelButtonTitle:@"Retry" otherButtonTitle:nil onDismiss:^(int buttonIndex) {
             
         } onCancel:^{
@@ -275,6 +291,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
                 
             }];
         }];
+ */
     }
     self.resultBlockComplete(self, NO);
     
