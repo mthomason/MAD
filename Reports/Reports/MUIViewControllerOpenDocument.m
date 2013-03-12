@@ -383,7 +383,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [UIAlertView showAlertViewWithTitle: title
                                 message: message
                       cancelButtonTitle: buttonTitle
-                       otherButtonTitle: nil onDismiss: nil onCancel: nil];*/
+                       otherButtonTitle: nil onDismiss: nil onCancel: nil];
+ */
 }
 
 - (void)cut:(id)sender {

@@ -634,7 +634,6 @@
 		4C860B38167EDE7000AC1904 /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
 		4C860B39167EDE7000AC1904 /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
 		4C860B3A167EDE7000AC1904 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
-		4C860B3B167EDE7000AC1904 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */; };
 		4C860B3C167EDE7000AC1904 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4C860B3D167EDE7000AC1904 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4C860B3E167EDE7000AC1904 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
@@ -785,8 +784,6 @@
 		4C8EC0B0167A953C00F37DA7 /* NSManagedObjectID+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EC0AC167A953C00F37DA7 /* NSManagedObjectID+Extras.m */; };
 		4C8ECD8916BA1FF6003D3B30 /* RptqQueryResult+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8ECD8816BA1FF6003D3B30 /* RptqQueryResult+Extras.m */; };
 		4C8ECD8A16BA1FF6003D3B30 /* RptqQueryResult+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8ECD8816BA1FF6003D3B30 /* RptqQueryResult+Extras.m */; };
-		4C8EEC861644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */; };
-		4C8EEC871644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */; };
 		4C8EEC8C1644E8D100FAB2F3 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9962F516401CF800B7BACC /* libMySqlClientObjectiveC.a */; };
 		4C8EEDFD1644EB7500FAB2F3 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
 		4C8EEDFE1644EB7500FAB2F3 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
@@ -1044,8 +1041,6 @@
 		4CA16476167EBE3600540A14 /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
 		4CA16477167EBE3A00540A14 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4CA16478167EBE3B00540A14 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
-		4CA16479167EBE3F00540A14 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */; };
-		4CA1647A167EBE4000540A14 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */; };
 		4CA1647B167EBE4300540A14 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CA1647C167EBE4400540A14 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CA1647D167EBE4700540A14 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
@@ -1941,8 +1936,6 @@
 		4C8ECD8716BA1FF6003D3B30 /* RptqQueryResult+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryResult+Extras.h"; sourceTree = "<group>"; };
 		4C8ECD8816BA1FF6003D3B30 /* RptqQueryResult+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryResult+Extras.m"; sourceTree = "<group>"; };
 		4C8ECDE216BF64D3003D3B30 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolEnumerator.h; sourceTree = "<group>"; };
-		4C8EEC841644E06700FAB2F3 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
-		4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		4C8EED0A1644EB7500FAB2F3 /* CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreData.h; sourceTree = "<group>"; };
 		4C8EED0B1644EB7500FAB2F3 /* Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Errors.h; sourceTree = "<group>"; };
 		4C8EED0C1644EB7500FAB2F3 /* FileMD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileMD5Hash.h; sourceTree = "<group>"; };
@@ -3828,8 +3821,6 @@
 				4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */,
 				4CFF3F1F164D76270070E880 /* NSURL+Document.h */,
 				4CFF3F20164D76270070E880 /* NSURL+Document.m */,
-				4C8EEC841644E06700FAB2F3 /* UIAlertView+Blocks.h */,
-				4C8EEC851644E06700FAB2F3 /* UIAlertView+Blocks.m */,
 				4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */,
 				4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */,
 				4CCD8DB6150386CB002B9E77 /* UIColor+PaperPatterns.h */,
@@ -5076,7 +5067,6 @@
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C316423D7300A562B9 /* MTTableViewController.m in Sources */,
-				4C8EEC871644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D781644FC5700F890D2 /* MTTemplateSelectorViewController.m in Sources */,
 				4CB653E1164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */,
 				4CFF3E7E164CD75D0070E880 /* MTReportDocument.m in Sources */,
@@ -5276,7 +5266,6 @@
 				4CA16473167EBE3100540A14 /* UIManagedDocument+FileOperations.m in Sources */,
 				4CA16475167EBE3500540A14 /* UIColor+PaperPatterns.m in Sources */,
 				4CA16477167EBE3A00540A14 /* UIColor+EverydayApps.m in Sources */,
-				4CA16479167EBE3F00540A14 /* UIAlertView+Blocks.m in Sources */,
 				4CA1647B167EBE4300540A14 /* NSURL+Document.m in Sources */,
 				4CA1647D167EBE4700540A14 /* NSString+Extras.m in Sources */,
 				4CA1647F167EBE5000540A14 /* NSFileManager+Reports.m in Sources */,
@@ -5408,7 +5397,6 @@
 				4CA16474167EBE3200540A14 /* UIManagedDocument+FileOperations.m in Sources */,
 				4CA16476167EBE3600540A14 /* UIColor+PaperPatterns.m in Sources */,
 				4CA16478167EBE3B00540A14 /* UIColor+EverydayApps.m in Sources */,
-				4CA1647A167EBE4000540A14 /* UIAlertView+Blocks.m in Sources */,
 				4CA1647C167EBE4400540A14 /* NSURL+Document.m in Sources */,
 				4CA1647E167EBE4800540A14 /* NSString+Extras.m in Sources */,
 				4CA16480167EBE5100540A14 /* NSFileManager+Reports.m in Sources */,
@@ -5519,7 +5507,6 @@
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C216423D7300A562B9 /* MTTableViewController.m in Sources */,
-				4C8EEC861644E06700FAB2F3 /* UIAlertView+Blocks.m in Sources */,
 				4C955D771644FC5700F890D2 /* MTTemplateSelectorViewController.m in Sources */,
 				4CB653E0164A43710050CD03 /* MUIViewControllerDatabaseSchema.m in Sources */,
 				4CFF3E7D164CD75D0070E880 /* MTReportDocument.m in Sources */,
@@ -5718,7 +5705,6 @@
 				4C860B38167EDE7000AC1904 /* UIManagedDocument+FileOperations.m in Sources */,
 				4C860B39167EDE7000AC1904 /* UIColor+PaperPatterns.m in Sources */,
 				4C860B3A167EDE7000AC1904 /* UIColor+EverydayApps.m in Sources */,
-				4C860B3B167EDE7000AC1904 /* UIAlertView+Blocks.m in Sources */,
 				4C860B3C167EDE7000AC1904 /* NSURL+Document.m in Sources */,
 				4C860B3D167EDE7000AC1904 /* NSString+Extras.m in Sources */,
 				4C860B3E167EDE7000AC1904 /* NSFileManager+Reports.m in Sources */,

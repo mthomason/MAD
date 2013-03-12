@@ -129,4 +129,11 @@
              }];
 }
 
+- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:[[self document] fileURL] error:&error];
+    BOOL success = error == nil;
+    if (completion != nil) completion(success);
+}
+
 @end

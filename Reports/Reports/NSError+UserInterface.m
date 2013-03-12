@@ -19,7 +19,9 @@
                                                         message: [self localizedFailureReason]
                                               cancelButtonTitle: continueButtonTitle
                                                otherButtonTitle: otherButtonTitles onDismiss:^(NSInteger buttonIndex) {
+                                                   
                                                    exit(0);
+                                               
                                                } onCancel:nil];
     [alertView show];
     [alertView autorelease];
@@ -51,8 +53,9 @@
                                                         message: [self localizedFailureReason]
                                               cancelButtonTitle: continueButtonTitle
                                                otherButtonTitle: otherButtonTitles onDismiss:^(NSInteger buttonIndex) {
+
                                                    switch (buttonIndex) {
-                                                       case 0:             //FIXME: Allow try again block.
+                                                       case 0:
                                                            tryAgain(YES);
                                                            break;
                                                        case 1:             //Abort applicaiton
@@ -61,6 +64,7 @@
                                                        default:
                                                            break;
                                                    }
+
                                                } onCancel:^(){
                                                    completion(YES);
                                                }];
@@ -77,9 +81,13 @@
                                               cancelButtonTitle: continueButtonTitle
                                                otherButtonTitle: otherButtonTitles
                                                       onDismiss:^(NSInteger buttonIndex) {
+
                                                           exit(0);
+
                                                       } onCancel:^(){
+
                                                           completion(YES);
+
                                                       }];
     [alertView show];
     [alertView autorelease];

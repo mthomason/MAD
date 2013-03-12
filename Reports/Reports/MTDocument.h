@@ -39,6 +39,7 @@
 
 - (void)save:(void (^)(BOOL success))completion;
 - (void)saveToUrl:(NSURL *)url completion:(void (^)(BOOL success))completion;
+- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
 - (NSManagedObjectModel *)managedObjectModel;
 - (NSManagedObjectContext *) managedObjectContext;

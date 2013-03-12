@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIAlertView+Blocks.h"
 #import "Constants.h"
 #import "MTAlertView.h"
 

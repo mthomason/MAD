@@ -9,13 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
 #import "Constants.h"
-#import "UIAlertView+Blocks.h"
 #import "NSError+UserInterface.h"
 
 #import "MTDatabaseConnection.h"
 #import "MTReportDocument.h"
 #import "MTDatabaseMySql.h"
-#import "UIAlertView+Blocks.h"
 #import "AppDelegate.h"
 
 #import "MTAlertView.h"

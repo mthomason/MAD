@@ -106,54 +106,50 @@
             [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
             
             MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+
             [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success, NSError *error) {
+
                 if (success) {
                     [[vc view] removeFromSuperview];
-                    NSLog(@"Delegate %@", [self delegate]);
                     [[self delegate] viewControllerDidFinish: self];
                 } else {
+                    
+                    [documentReport deleteFromDiskCompletion:nil];
+                    
                     if (error) {
+
                         [error presentErrorToUserWithCompletion:^(BOOL success) {
+                            
                             [[vc view] removeFromSuperview];
+                            
                         }];
+
                     } else {
+
                         MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Connection Problem", @"Connection Problem")
-                                                                            message:NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.")
-                                                                  cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
+                                                                            message: NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.")
+                                                                  cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
+                                                                  
                                                                       [[vc view] removeFromSuperview];
+
                                                                   } onCancel:^{
+                                                                  
                                                                       [[vc view] removeFromSuperview];
+
                                                                   }];
                         [alertView show];
                         [alertView autorelease];
-/*
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Connection Problem", @"Connection Problem")
-                                                                            message: NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.")
-                                                                           delegate: self
-                                                                  cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel")
-                                                                  otherButtonTitles: nil];
-                        [alertView show];
-                        [alertView autorelease];
-
-                        [UIAlertView showAlertViewWithTitle: NSLocalizedString(@"Connection Problem", @"Connection Problem")
-                                                    message: NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.")
-                                          cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel")
-                                           otherButtonTitle: nil
-                                                  onDismiss: ^(int buttonIndex) {
-                                                      [[vc view] removeFromSuperview];
-                        } onCancel:^{
-                            [[vc view] removeFromSuperview];
-                        }];
- */
                         
                     }
                 }
+
             }];
             
             [databaseMySql release];
             [databaseConnection release];
             
         } else {
+
             MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
                                                                 message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
                                                       cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
