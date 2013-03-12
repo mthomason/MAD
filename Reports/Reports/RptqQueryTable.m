@@ -8,11 +8,13 @@
 
 #import "RptqQueryTable.h"
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqQuery.h"
 
 
 @implementation RptqQueryTable
 
 @dynamic identifier;
 @dynamic fromDatabaseSchemaTable;
+@dynamic inQuery;
 
 @end

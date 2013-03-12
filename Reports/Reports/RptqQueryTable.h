@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabaseSchemaTable;
+@class RptqDatabaseSchemaTable, RptqQuery;
 
 @interface RptqQueryTable : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqDatabaseSchemaTable *fromDatabaseSchemaTable;
+@property (nonatomic, retain) RptqQuery *inQuery;
 
 @end

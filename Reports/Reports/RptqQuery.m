@@ -15,6 +15,7 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryPredicate.h"
 #import "RptqQuerySort.h"
+#import "RptqQueryTable.h"
 
 
 @implementation RptqQuery
@@ -31,5 +32,6 @@
 @dynamic hasQuerySort;
 @dynamic hasTables;
 @dynamic inDatabase;
+@dynamic hasQueryTables;
 
 @end

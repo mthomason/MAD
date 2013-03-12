@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqDatabaseSchemaTable, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqDatabaseSchemaTable, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
 @interface RptqQuery : NSManagedObject
 
@@ -25,6 +25,7 @@
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nonatomic, retain) NSSet *hasTables;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, retain) NSSet *hasQueryTables;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)
@@ -53,5 +54,10 @@
 - (void)removeHasTablesObject:(RptqDatabaseSchemaTable *)value;
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
+
+- (void)addHasQueryTablesObject:(RptqQueryTable *)value;
+- (void)removeHasQueryTablesObject:(RptqQueryTable *)value;
+- (void)addHasQueryTables:(NSSet *)values;
+- (void)removeHasQueryTables:(NSSet *)values;
 
 @end
