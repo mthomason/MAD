@@ -15,8 +15,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-+ (MTReportDocument *)activeDocument;
-+ (void)setActiveDocument:(MTReportDocument *)activeDocument;
 + (BOOL)isPad;
 + (NSString *)storyboardName;
 

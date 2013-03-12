@@ -101,7 +101,7 @@
                 if (tvc) {
                     [tvc setDelegate:self];
                     
-                    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
@@ -110,9 +110,9 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[AppDelegate activeDocument] managedObjectContext]);
+                    NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]);
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[AppDelegate activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -130,7 +130,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self firstTableName] name]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[AppDelegate activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -144,7 +144,7 @@
                 if (vcFf) {                
                     [vcFf setDelegate:self];                    
 
-                    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
@@ -156,7 +156,7 @@
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [[self firstTableName] name]];
                     [request setPredicate: predicate];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[AppDelegate activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -176,7 +176,7 @@
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[AppDelegate activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];

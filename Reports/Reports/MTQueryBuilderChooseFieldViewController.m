@@ -56,7 +56,7 @@
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
 
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSArray *rptqQueryTables = [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
     //NSArray *rptqQueryTables = [RptqQueryTables namesForManagedObjectContext: managedObjectContext];
     NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: rptqQueryTables];
@@ -71,7 +71,7 @@
         [request setPredicate: predicate];
         
         NSError *error = nil;
-        NSArray *tablesResults = [[[AppDelegate activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
+        NSArray *tablesResults = [[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
         [self setDataTables: (!error ? tablesResults : [NSArray array]) ]; 
 
     } else {

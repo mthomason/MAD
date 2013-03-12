@@ -14,6 +14,7 @@
 #import "RptqDocument+Extras.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
+#import "MTActiveDocument.h"
 
 typedef NS_ENUM(NSUInteger, MNSLinkType) {
 	MNSLinkTypeInnerJoin = 0,

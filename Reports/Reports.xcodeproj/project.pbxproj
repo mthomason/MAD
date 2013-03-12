@@ -1572,6 +1572,8 @@
 		4CE9BC1E16EEFACF00B0808C /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC1C16EEFACF00B0808C /* RptqDocument.m */; };
 		4CE9BC2116EEFAD000B0808C /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC2016EEFAD000B0808C /* RptqDocumentObjectLabel.m */; };
 		4CE9BC2216EEFAD000B0808C /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC2016EEFAD000B0808C /* RptqDocumentObjectLabel.m */; };
+		4CE9BC2516EF59CC00B0808C /* MTActiveDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */; };
+		4CE9BC2616EF59CC00B0808C /* MTActiveDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */; };
 		4CF1335116CCB2EE00FD0F0B /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */; };
 		4CF1335216CCB2EE00FD0F0B /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */; };
 		4CF1335516CD1FE400FD0F0B /* MTQueryBuilderAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */; };
@@ -2411,6 +2413,8 @@
 		4CE9BC1C16EEFACF00B0808C /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocument.m; sourceTree = "<group>"; };
 		4CE9BC1F16EEFAD000B0808C /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
 		4CE9BC2016EEFAD000B0808C /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
+		4CE9BC2316EF59CB00B0808C /* MTActiveDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTActiveDocument.h; sourceTree = "<group>"; };
+		4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActiveDocument.m; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1334F16CCB2E900FD0F0B /* MTQueryBuilderContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryBuilderContainerController.h; path = ../MTQueryBuilderContainerController.h; sourceTree = "<group>"; };
 		4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryBuilderContainerController.m; path = ../MTQueryBuilderContainerController.m; sourceTree = "<group>"; };
@@ -2757,6 +2761,8 @@
 				4CF339431693E5B400390B3A /* MTFont.m */,
 				4C0AFC3816B1C2750007964D /* MTSqlite3.h */,
 				4C0AFC3916B1C2750007964D /* MTSqlite3.m */,
+				4CE9BC2316EF59CB00B0808C /* MTActiveDocument.h */,
+				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -5168,6 +5174,7 @@
 				4CE9BC1A16EEFACF00B0808C /* RptqDocumentSection.m in Sources */,
 				4CE9BC1E16EEFACF00B0808C /* RptqDocument.m in Sources */,
 				4CE9BC2216EEFAD000B0808C /* RptqDocumentObjectLabel.m in Sources */,
+				4CE9BC2616EF59CC00B0808C /* MTActiveDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5609,6 +5616,7 @@
 				4CE9BC1916EEFACF00B0808C /* RptqDocumentSection.m in Sources */,
 				4CE9BC1D16EEFACF00B0808C /* RptqDocument.m in Sources */,
 				4CE9BC2116EEFAD000B0808C /* RptqDocumentObjectLabel.m in Sources */,
+				4CE9BC2516EF59CC00B0808C /* MTActiveDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 #import "MTManagedDocumentReport.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
+#import "MTActiveDocument.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,

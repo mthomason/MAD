@@ -95,7 +95,7 @@
 - (IBAction)save:(id)sender {
     
     RptqQueryPredicate *queryPredicate = nil;
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     if ([self leftValue] == nil) {
         if ([self rightValue] == nil) {

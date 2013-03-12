@@ -90,7 +90,7 @@
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[[self titleView] label] setText:[table name]];
 }
@@ -108,11 +108,11 @@
 #pragma mark - Table view datasource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    //NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     //RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];    
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
     [[result detailLabel] setText:[field name]];
@@ -124,7 +124,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[self hasFieldsObjectIds] removeAllObjects];

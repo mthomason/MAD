@@ -174,7 +174,7 @@
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
     
-    NSManagedObjectContext *managedObjectContect = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:managedObjectContect];
 
@@ -360,7 +360,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
     [defaultCenter addObserver: self
@@ -390,7 +390,7 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
     [defaultCenter removeObserver:self
@@ -438,11 +438,11 @@
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
 
-//        [[AppDelegate activeDocument] refresh];
+//        [[[MTActiveDocument sharedDocument] activeDocument] refresh];
 
         MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
-        [viewControllerReportViewer setDocumentReport:[AppDelegate activeDocument]];
+        [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
         
     }
 }
@@ -457,10 +457,10 @@
     [layoutConstraint setConstant:[documentSectionView bounds].size.height];
     [objectIdUrl release];
     
-    NSManagedObjectContext *managedObjectContect = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[sender objectIdTag] fromObjectContext:managedObjectContect];
     [documentSection setHeight:@([sender bounds].size.height)];
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
     [[self view] setNeedsUpdateConstraints];
 }
 
@@ -589,7 +589,7 @@
 
 - (NSSet *)elementViews {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -612,7 +612,7 @@
 
 - (NSSet *)selectedElementViews {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -902,7 +902,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger row = [indexPath row];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -931,7 +931,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [documentSection hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
@@ -998,7 +998,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
     return [objects count];
 }
@@ -1078,7 +1078,7 @@
 
 - (NSSet *)selectedObjectIdsCalculated {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
         if ([subview isKindOfClass:[UICollectionView class]]) {
@@ -1174,7 +1174,7 @@
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
     NSInteger row = [indexPath row];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [documentSection hasObjects];
 
@@ -1223,7 +1223,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
 
     if (document) {
@@ -1250,7 +1250,7 @@
             }
             
             NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
-            [[AppDelegate activeDocument] saveContext];
+            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
             
             [detailSection insertItemsAtIndexPaths:indexPaths];
          
@@ -1281,7 +1281,7 @@
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
     if (document) {
@@ -1307,7 +1307,7 @@
                 }
             }
             NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
-            [[AppDelegate activeDocument] saveContext];
+            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
             
             [detailSection insertItemsAtIndexPaths:indexPaths];
         } completion:^(BOOL finished) {
@@ -1410,7 +1410,7 @@
 
             //[[self designScrollView] addSubview: [gestureRecognizer view]];
             {
-                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
                 RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
                 
@@ -1436,7 +1436,7 @@
                         [svSection performBatchUpdates:^{
                             [hasObjects removeObjectAtIndex:deleteIndex];
                             [documentSection setHasObjects:hasObjects];
-                            [[AppDelegate activeDocument] saveContext];
+                            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                             //UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
@@ -1506,7 +1506,7 @@
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
                                 
-                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag]
                                                                              fromObjectContext:managedObjectContext];
@@ -1544,7 +1544,7 @@
                         NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
                         [hasObjects insertObject:documentObject atIndex:[indexPath item]];
                         [documentSection setHasObjects:hasObjects];
-                        [[AppDelegate activeDocument] saveContext];
+                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                         [hasObjects release];
                         
                         [newParent insertItemsAtIndexPaths:indexPaths];
@@ -1630,7 +1630,7 @@
     if ([item isEqual:[self navigationItemFontChooser]]) {
         shouldPushItem = YES;
 
-        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
         NSString *frontName = @"";
         for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];

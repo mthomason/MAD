@@ -14,6 +14,7 @@
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
 #import "MTTitleView.h"
+#import "MTActiveDocument.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;

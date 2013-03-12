@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MTActiveDocument.h"
 
 @interface AppDelegate()
 
@@ -22,16 +23,6 @@
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"%@", exception);
-}
-
-+ (MTReportDocument *)activeDocument {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate documentReport];
-}
-
-+ (void)setActiveDocument:(MTReportDocument *)activeDocument {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate setDocumentReport:activeDocument];
 }
 
 - (void)dealloc {
@@ -57,7 +48,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MTReportDocument *documentReport = [[AppDelegate activeDocument] retain];
+    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [documentReport save:nil];
     [documentReport release];
 }

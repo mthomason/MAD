@@ -273,12 +273,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    MTReportDocument *documentReport = [[AppDelegate activeDocument] retain];
+    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     if (documentReport != nil) {
         [documentReport saveContext];
         [documentReport save:^(BOOL success) {
             if (success) {
-                [AppDelegate setActiveDocument: nil];
+                [[MTActiveDocument sharedDocument] setActiveDocument: nil];
                 [[self tableViewQueries] reloadData];
                 [[self collectionViewQueries] reloadData];
             }
@@ -327,7 +327,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[self standardQueryBuilder] setDelegate: self];
         MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:[self urlBeingOpended] completion:^(BOOL success, id document) {
             if (success) {
-                [AppDelegate setActiveDocument: document];
+                [[MTActiveDocument sharedDocument] setActiveDocument: document];
                 [[self standardQueryBuilder] reloadDocument:document];
                 [[self advancedQueryBuilder] reloadDocument:document];
             }
@@ -341,7 +341,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [tvc setDelegate: self];
     MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
         if (success) {
-            [AppDelegate setActiveDocument: document];
+            [[MTActiveDocument sharedDocument] setActiveDocument: nil];
             [tvc reloadDocument:document];
         }
     }];

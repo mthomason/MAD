@@ -17,7 +17,7 @@
 
 - (NSString *)toStringHumanReadable {
     NSString *result = nil;
-    MTManagedDocumentReport *document = [[AppDelegate activeDocument] document];
+    MTManagedDocumentReport *document = [[[MTActiveDocument sharedDocument] activeDocument] document];
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
     NSError *error = nil;
     id existingObject = [managedObjectContext existingObjectWithID:self error:&error];

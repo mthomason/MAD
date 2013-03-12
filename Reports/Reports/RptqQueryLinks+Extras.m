@@ -117,10 +117,10 @@
 + (id)createQueryLinkWithLeftField:(RptqDatabaseSchemaField *)fieldLeft
                          rightField:(RptqDatabaseSchemaField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {
-    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     
     RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
-                                         insertIntoManagedObjectContext: [[AppDelegate activeDocument] managedObjectContext]];
+                                         insertIntoManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     
     [queryLinks setHasLeftField:    fieldLeft];
     [queryLinks setHasRightField:   fieldRight];

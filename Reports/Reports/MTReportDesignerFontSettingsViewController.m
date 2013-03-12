@@ -323,7 +323,7 @@
         NSInteger numberBold = 0, numberItalic = 0, numberStrike = 0, numberUnderline = 0;
         NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
         
-        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
 
@@ -612,12 +612,12 @@
     [[self labelFontName] setFont:[font font]];
     [[self labelFontName] setText:[font name]];
     [[self labelFontName] setAttributedText:[self boldSystemString:[font name] ofSize:[[[self labelFontName] font] pointSize]]];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         [documentObject setFontname:[font name]];
     }
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 
 }
 
@@ -639,13 +639,13 @@
     }
     [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
     
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL boldOn = [self controlStateBold] == MTControlStateOn ? YES : NO;
         [documentObject setBold:@(boldOn)];
     }
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -665,13 +665,13 @@
     }
     [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
     
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL italicOn = [self controlStateItalic] == MTControlStateOn ? YES : NO;
         [documentObject setItalic:@(italicOn)];
     }
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -691,13 +691,13 @@
     }
     [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
     
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL strikeOn = [self controlStateStrike] == MTControlStateOn ? YES : NO;
         [documentObject setStrike:@(strikeOn)];
     }
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (IBAction)toggleUnderline:(id)sender {
@@ -717,17 +717,17 @@
     }
     [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
     
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL underlineOn = [self controlStateUnderline] == MTControlStateOn ? YES : NO;
         [documentObject setUnderline:@(underlineOn)];
     }
-    [[AppDelegate activeDocument] saveContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (IBAction)controlValueChanged:(id)sender {
-    MTReportDocument *activeDocument = [AppDelegate activeDocument];
+    MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction;

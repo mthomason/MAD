@@ -322,7 +322,7 @@
 #pragma mark View Controller Container Custom Handlers
 
 - (CGRect)desiredFrameForTableId:(NSManagedObjectID *)objectId {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
     return CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
 }
@@ -331,7 +331,7 @@
     [viewController retain];
     CGRect subviewRect = CGRectZero;
     NSManagedObjectID *objectId = [[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] retain];
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
     [[self tableIds] addObject:objectId];
     [[self controllersForObjectIds] setObject:viewController forKey:objectId];
@@ -630,7 +630,7 @@
             CGPoint newCenter = [gestureRecognizer locationInView:[self view]];
             [[gestureRecognizer view] setCenter: newCenter];
             
-            NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+            NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
             RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
             [table setDesignerSizeHeight:@([[gestureRecognizer view] frame].size.height)];
             [table setDesignerSizeWidth:@([[gestureRecognizer view] frame].size.width)];

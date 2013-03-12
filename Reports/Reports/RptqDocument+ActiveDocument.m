@@ -11,18 +11,18 @@
 @implementation RptqDocument (ActiveDocument)
 
 + (RptqDocument *)activeDocument {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     return document;
 }
 
 + (void)saveCurrentContext {
     NSError *error;
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             [error presentErrorToUserWithTryAgain:^(BOOL success) {
-                NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 NSError *error = nil;
                 [managedObjectContext save:&error];
             }];
@@ -43,12 +43,12 @@
 }
 
 + (NSArray *)tablesForActiveDocument {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     return [[[RptqDatabaseSchemaTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];
 }
 
 + (NSArray *)queryLinksForActiveDocument {
-    NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     return [[[RptqQueryLinks queriesForManagedObjectContext:managedObjectContext] retain] autorelease];
 }
 

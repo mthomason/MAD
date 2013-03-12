@@ -195,7 +195,7 @@
     if ([item isEqual:[self navigationItemFontSelector]]) {
         shouldPushItem = YES;
         
-        NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
         NSString *frontName = @"";
         for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];

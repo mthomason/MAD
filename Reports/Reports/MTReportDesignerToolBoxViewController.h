@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "MTReportDesignerFontSelectorViewController.h"
+#import "MTActiveDocument.h"
 
 @protocol MTReportDesignerToolBoxDelegate
 - (void)heightChanged:(CGFloat)newHeight;
