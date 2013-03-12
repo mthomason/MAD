@@ -2,13 +2,13 @@
 //  RptqRelationship.m
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqRelationship.h"
 #import "RptqDatabase.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
 
 
 @implementation RptqRelationship

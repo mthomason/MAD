@@ -1,12 +1,13 @@
 //
-//  RptqField.m
+//  RptqDatabaseSchemaField.m
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqQuery.h"
 #import "RptqQueryGroup.h"
@@ -14,10 +15,9 @@
 #import "RptqQueryPredicate.h"
 #import "RptqQuerySort.h"
 #import "RptqRelationship.h"
-#import "RptqTable.h"
 
 
-@implementation RptqField
+@implementation RptqDatabaseSchemaField
 
 @dynamic datatype;
 @dynamic identifier;

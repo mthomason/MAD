@@ -1,17 +1,17 @@
 //
-//  RptqField.h
+//  RptqDatabaseSchemaField.h
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObjectLabelDataField, RptqQuery, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqRelationship, RptqTable;
+@class RptqDatabaseSchemaTable, RptqDocumentObjectLabelDataField, RptqQuery, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqRelationship;
 
-@interface RptqField : NSManagedObject
+@interface RptqDatabaseSchemaField : NSManagedObject
 
 @property (nonatomic, retain) NSString * datatype;
 @property (nonatomic, retain) NSNumber * identifier;
@@ -25,11 +25,11 @@
 @property (nonatomic, retain) NSSet *inQueryPredicateRight;
 @property (nonatomic, retain) NSSet *inQuerySort;
 @property (nonatomic, retain) NSSet *inRelationships;
-@property (nonatomic, retain) RptqTable *inTable;
+@property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;
 @property (nonatomic, retain) NSSet *referenceedByDataObject;
 @end
 
-@interface RptqField (CoreDataGeneratedAccessors)
+@interface RptqDatabaseSchemaField (CoreDataGeneratedAccessors)
 
 - (void)addInQueryObject:(RptqQuery *)value;
 - (void)removeInQueryObject:(RptqQuery *)value;

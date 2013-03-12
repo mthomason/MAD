@@ -2,14 +2,14 @@
 //  RptqRelationship.h
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqField;
+@class RptqDatabase, RptqDatabaseSchemaField;
 
 @interface RptqRelationship : NSManagedObject
 
@@ -21,8 +21,8 @@
 
 @interface RptqRelationship (CoreDataGeneratedAccessors)
 
-- (void)addHasFieldsObject:(RptqField *)value;
-- (void)removeHasFieldsObject:(RptqField *)value;
+- (void)addHasFieldsObject:(RptqDatabaseSchemaField *)value;
+- (void)removeHasFieldsObject:(RptqDatabaseSchemaField *)value;
 - (void)addHasFields:(NSSet *)values;
 - (void)removeHasFields:(NSSet *)values;
 

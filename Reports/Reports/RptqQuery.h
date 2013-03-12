@@ -2,14 +2,14 @@
 //  RptqQuery.h
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqField, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqTable;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqDatabaseSchemaTable, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort;
 
 @interface RptqQuery : NSManagedObject
 
@@ -29,8 +29,8 @@
 
 @interface RptqQuery (CoreDataGeneratedAccessors)
 
-- (void)addHasFieldsObject:(RptqField *)value;
-- (void)removeHasFieldsObject:(RptqField *)value;
+- (void)addHasFieldsObject:(RptqDatabaseSchemaField *)value;
+- (void)removeHasFieldsObject:(RptqDatabaseSchemaField *)value;
 - (void)addHasFields:(NSSet *)values;
 - (void)removeHasFields:(NSSet *)values;
 
@@ -49,8 +49,8 @@
 - (void)addHasQueryPredicate:(NSSet *)values;
 - (void)removeHasQueryPredicate:(NSSet *)values;
 
-- (void)addHasTablesObject:(RptqTable *)value;
-- (void)removeHasTablesObject:(RptqTable *)value;
+- (void)addHasTablesObject:(RptqDatabaseSchemaTable *)value;
+- (void)removeHasTablesObject:(RptqDatabaseSchemaTable *)value;
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
 

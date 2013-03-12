@@ -2,14 +2,14 @@
 //  RptqQueryPredicate.h
 //  Reports
 //
-//  Created by Michael Thomason on 2/15/13.
+//  Created by Michael Thomason on 3/12/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqField, RptqQuery;
+@class RptqDatabaseSchemaField, RptqQuery;
 
 @interface RptqQueryPredicate : NSManagedObject
 
@@ -17,8 +17,8 @@
 @property (nonatomic, retain) NSString * fieldleftpred;
 @property (nonatomic, retain) NSString * fieldrightpred;
 @property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqField *hasLeftField;
-@property (nonatomic, retain) RptqField *hasRightField;
+@property (nonatomic, retain) RptqDatabaseSchemaField *hasLeftField;
+@property (nonatomic, retain) RptqDatabaseSchemaField *hasRightField;
 @property (nonatomic, retain) RptqQuery *inQuery;
 
 @end
