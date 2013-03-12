@@ -199,7 +199,7 @@
                 
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
                 
-                [database getFieldsForTable:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
+                [database getFieldsForTableSchema:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
                     if (success) {
                         for (MTDatabaseField *objField in fields) {
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument

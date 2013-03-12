@@ -252,7 +252,7 @@
     
 }
 
-- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
+- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);

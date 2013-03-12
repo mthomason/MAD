@@ -8,7 +8,6 @@
 //
 
 #import "MTQueryBuilderAddGroupViewController.h"
-#import "RptqDatabaseSchemaTable.h"
 
 @interface MTQueryBuilderAddGroupViewController ()
 

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "MTManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 
 @class MTQueryBuilderAddLinkFirstFieldViewController;

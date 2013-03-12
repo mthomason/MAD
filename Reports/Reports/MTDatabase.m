@@ -61,7 +61,7 @@
                                  userInfo: nil];
 }
 
-- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
+- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]

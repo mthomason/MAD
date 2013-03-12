@@ -29,8 +29,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
-               completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
+- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
+                     completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
