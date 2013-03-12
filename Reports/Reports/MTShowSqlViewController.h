@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTShowSqlViewController_h
+#define Reports_MTShowSqlViewController_h
+
 #import "MTViewController.h"
 #import "RptqDocument+ActiveDocument.h"
 
@@ -16,3 +19,5 @@
 - (IBAction)done:(id)sender;
 
 @end
+
+#endif

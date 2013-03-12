@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTViewControllerOpenDocument_h
+#define Reports_MTViewControllerOpenDocument_h
+
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderViewController.h"
 #import "MTTemplateSelectorViewController.h"
@@ -13,13 +16,12 @@
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
-#import "MTTitleView.h"
-#import "MTActiveDocument.h"
+#import "MTQueryBuilderAdvancedViewController.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
 
-@interface MUIViewControllerOpenDocument : UIViewController
+@interface MTViewControllerOpenDocument : UIViewController
     <UIPopoverControllerDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
@@ -46,3 +48,5 @@ extern NSString * const MTSegueShowOpenDocument;
 - (IBAction)edit:(id)sender;
 
 @end
+
+#endif

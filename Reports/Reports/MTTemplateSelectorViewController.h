@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTTemplateSelectorViewController_h
+#define Reports_MTTemplateSelectorViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
 #import "MTDocumentTableViewCell.h"
@@ -32,3 +35,5 @@
 - (IBAction)cancel:(id)sender;
 
 @end
+
+#endif

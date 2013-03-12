@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTTableViewController_h
+#define Reports_MTTableViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 
@@ -14,3 +17,5 @@
 @property (assign, nonatomic) IBOutlet id <MUIViewControllerProtocol> delegate;
 
 @end
+
+#endif

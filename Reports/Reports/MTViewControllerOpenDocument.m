@@ -6,19 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MUIViewControllerOpenDocument.h"
-#import "MTReportDocument.h"
-#import "AppDelegate.h"
-#import "MTQueryBuilderContainerController.h"
-#import "MTQueryBuilderAdvancedViewController.h"
-#import "RptqDocument+ActiveDocument.h"
+#import "MTViewControllerOpenDocument.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
 
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
-@interface MUIViewControllerOpenDocument()
+@interface MTViewControllerOpenDocument()
 
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
@@ -37,7 +32,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @end
 
-@implementation MUIViewControllerOpenDocument
+@implementation MTViewControllerOpenDocument
 
 - (void)dealloc {
     [_advancedQueryBuilder release]; _advancedQueryBuilder = nil;

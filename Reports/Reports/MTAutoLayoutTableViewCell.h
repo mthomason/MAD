@@ -6,8 +6,13 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTAutoLayoutTableViewCell_h
+#define Reports_MTAutoLayoutTableViewCell_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTAutoLayoutTableViewCell : UITableViewCell
 
 @end
+
+#endif

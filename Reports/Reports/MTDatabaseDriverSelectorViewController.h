@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseDriverSelectorViewController_h
+#define Reports_MTDatabaseDriverSelectorViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
 
@@ -15,3 +18,5 @@
 - (IBAction)cancel:(id)sender;
 
 @end
+
+#endif

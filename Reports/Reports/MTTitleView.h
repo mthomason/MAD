@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTTitleView_h
+#define Reports_MTTitleView_h
+
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -14,3 +17,5 @@
 @property (nonatomic, retain) IBOutlet UILabel *label;
 
 @end
+
+#endif

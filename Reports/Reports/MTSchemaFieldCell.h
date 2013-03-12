@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTSchemaFieldCell_h
+#define Reports_MTSchemaFieldCell_h
+
 #import <UIKit/UIKit.h>
 
 @class MTSchemaFieldCell;
@@ -22,3 +25,5 @@
 @property (nonatomic, retain) UIView *parentContainerView;
 
 @end
+
+#endif

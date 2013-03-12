@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTAlertView_h
+#define Reports_MTAlertView_h
+
 #import <UIKit/UIKit.h>
 
 typedef void (^MTAlertViewDismissBlock)(NSInteger buttonIndex);
@@ -21,3 +24,5 @@ typedef void (^MTAlertViewCancelBlock)();
            onCancel:(MTAlertViewCancelBlock)cancelled;
 
 @end
+
+#endif

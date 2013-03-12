@@ -6,8 +6,13 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTBarButtonItemTitle_h
+#define Reports_MTBarButtonItemTitle_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTBarButtonItemTitle : UIBarButtonItem
 
 @end
+
+#endif

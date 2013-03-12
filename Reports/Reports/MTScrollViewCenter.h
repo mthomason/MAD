@@ -6,8 +6,13 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTScrollViewCenter_h
+#define Reports_MTScrollViewCenter_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTScrollViewCenter : UIScrollView
 
 @end
+
+#endif

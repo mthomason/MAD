@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTCollectionViewCellDocument_h
+#define Reports_MTCollectionViewCellDocument_h
+
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+EverydayApps.h"
@@ -16,3 +19,5 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imagePreview;
 
 @end
+
+#endif

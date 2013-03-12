@@ -6,16 +6,17 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseDriverSelectorSalesforceViewController_h
+#define Reports_MTDatabaseDriverSelectorSalesforceViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
-//#import "MNSReportDocumentSalesForce.h"
 #import "Constants.h"
 #import "UIColor+EverydayApps.h"
 
 @interface MTDatabaseDriverSelectorSalesforceViewController : MTTableViewController
     <UITableViewDelegate,
-        UITextFieldDelegate/*,
-        NSDatabaseSalesForceDelegate*/>
+        UITextFieldDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellNickname;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellConnectionCreate;
@@ -31,3 +32,5 @@
 - (IBAction)nicknameDidEndOnExit:(id)sender;
 
 @end
+
+#endif

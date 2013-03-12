@@ -76,7 +76,7 @@
 		4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638414BAD7C30025009E /* UIViewEntityRelationshipLink.m */; };
 		4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0638D14BAEC000025009E /* UIViewEntityRelationshipTable.m */; };
 		4C0E773C163B5AEC003B951E /* Report.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */; };
-		4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
+		4C0E773D163B5AEC003B951E /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
 		4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
 		4C0E7742163B5AEC003B951E /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
@@ -574,7 +574,7 @@
 		4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
-		4C860B27167EDE7000AC1904 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
+		4C860B27167EDE7000AC1904 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4C860B28167EDE7000AC1904 /* MTTemplateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */; };
 		4C860B29167EDE7000AC1904 /* MTStoreTemplatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MTStoreTemplatesViewController.m */; };
 		4C860B2A167EDE7000AC1904 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
@@ -928,7 +928,7 @@
 		4CA16410167EB90D00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CA16411167EB90D00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
-		4CA16413167EB90D00540A14 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
+		4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CA16414167EB90D00540A14 /* MTTemplateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */; };
 		4CA16415167EB90D00540A14 /* MTStoreTemplatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MTStoreTemplatesViewController.m */; };
 		4CA16416167EB90D00540A14 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
@@ -945,7 +945,7 @@
 		4CA16433167EB90F00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CA16434167EB90F00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
-		4CA16436167EB90F00540A14 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
+		4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CA16437167EB90F00540A14 /* MTTemplateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */; };
 		4CA16438167EB90F00540A14 /* MTStoreTemplatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MTStoreTemplatesViewController.m */; };
 		4CA16439167EB90F00540A14 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
@@ -1524,7 +1524,7 @@
 		4CE8A03F14C019B4007C8345 /* UIImageDocuments20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */; };
 		4CE8A04014C019B4007C8345 /* UIImageDocumentsAlt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */; };
 		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
-		4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */; };
+		4CE8A04314C01ABB007C8345 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CE8A04614C01C7B007C8345 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
 		4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
 		4CE9985F14B69AA80015C8D1 /* MTReportDesignerFontSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MTReportDesignerFontSettingsViewController.m */; };
@@ -1761,7 +1761,7 @@
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Reports/AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3B14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardReportDesigner.storyboard; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
-		4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerOpenDocument.h; sourceTree = "<group>"; };
+		4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTViewControllerOpenDocument.h; sourceTree = "<group>"; };
 		4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
@@ -2362,7 +2362,7 @@
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
-		4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUIViewControllerOpenDocument.m; sourceTree = "<group>"; };
+		4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerOpenDocument.m; sourceTree = "<group>"; };
 		4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorViewController.h; sourceTree = "<group>"; };
 		4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorViewController.m; sourceTree = "<group>"; };
 		4CE8A04714C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorMySqlViewController.h; sourceTree = "<group>"; };
@@ -3039,8 +3039,8 @@
 		4C6DF38E16D5F5D500BDC0C1 /* Open Document */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E4314B29789007B4F48 /* MUIViewControllerOpenDocument.h */,
-				4CE8A04214C01ABB007C8345 /* MUIViewControllerOpenDocument.m */,
+				4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */,
+				4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */,
 			);
 			name = "Open Document";
 			path = Reports;
@@ -3786,11 +3786,11 @@
 		4CDB624614E38B9600A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
 				4C9F94BB1642280500A562B9 /* MTViewController.h */,
 				4C9F94BC1642280500A562B9 /* MTViewController.m */,
 				4C9F94C016423D7300A562B9 /* MTTableViewController.h */,
 				4C9F94C116423D7300A562B9 /* MTTableViewController.m */,
-				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
 				4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */,
 				4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */,
 				4C6CDFB214B84BA700DABF86 /* MTTemplateSelectorViewController.h */,
@@ -5021,7 +5021,7 @@
 				4C0E7737163B5AEC003B951E /* UIViewEntityRelationshipLink.m in Sources */,
 				4C0E773A163B5AEC003B951E /* UIViewEntityRelationshipTable.m in Sources */,
 				4C0E773C163B5AEC003B951E /* Report.xcdatamodeld in Sources */,
-				4C0E773D163B5AEC003B951E /* MUIViewControllerOpenDocument.m in Sources */,
+				4C0E773D163B5AEC003B951E /* MTViewControllerOpenDocument.m in Sources */,
 				4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4C0E7742163B5AEC003B951E /* MTReportDesignerObjectSelectorViewController.m in Sources */,
@@ -5262,7 +5262,7 @@
 				4CA16410167EB90D00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CA16411167EB90D00540A14 /* MTViewController.m in Sources */,
 				4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */,
-				4CA16413167EB90D00540A14 /* MUIViewControllerOpenDocument.m in Sources */,
+				4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */,
 				4CA16414167EB90D00540A14 /* MTTemplateSelectorViewController.m in Sources */,
 				4CA16415167EB90D00540A14 /* MTStoreTemplatesViewController.m in Sources */,
 				4CA16416167EB90D00540A14 /* MTQueryBuilderNavigationController.m in Sources */,
@@ -5393,7 +5393,7 @@
 				4CA16433167EB90F00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CA16434167EB90F00540A14 /* MTViewController.m in Sources */,
 				4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */,
-				4CA16436167EB90F00540A14 /* MUIViewControllerOpenDocument.m in Sources */,
+				4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */,
 				4CA16437167EB90F00540A14 /* MTTemplateSelectorViewController.m in Sources */,
 				4CA16438167EB90F00540A14 /* MTStoreTemplatesViewController.m in Sources */,
 				4CA16439167EB90F00540A14 /* MTQueryBuilderNavigationController.m in Sources */,
@@ -5463,7 +5463,7 @@
 				4CA0638514BAD7C30025009E /* UIViewEntityRelationshipLink.m in Sources */,
 				4CA0638E14BAEC000025009E /* UIViewEntityRelationshipTable.m in Sources */,
 				4CE8A03914BFF744007C8345 /* Report.xcdatamodeld in Sources */,
-				4CE8A04314C01ABB007C8345 /* MUIViewControllerOpenDocument.m in Sources */,
+				4CE8A04314C01ABB007C8345 /* MTViewControllerOpenDocument.m in Sources */,
 				4CE8A04614C01C7B007C8345 /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4CE7B77514C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
@@ -5703,7 +5703,7 @@
 				4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */,
 				4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */,
-				4C860B27167EDE7000AC1904 /* MUIViewControllerOpenDocument.m in Sources */,
+				4C860B27167EDE7000AC1904 /* MTViewControllerOpenDocument.m in Sources */,
 				4C860B28167EDE7000AC1904 /* MTTemplateSelectorViewController.m in Sources */,
 				4C860B29167EDE7000AC1904 /* MTStoreTemplatesViewController.m in Sources */,
 				4C860B2A167EDE7000AC1904 /* MTQueryBuilderNavigationController.m in Sources */,

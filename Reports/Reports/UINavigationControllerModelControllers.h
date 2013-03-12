@@ -6,9 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UINavigationControllerModelControllers_h
+#define Reports_UINavigationControllerModelControllers_h
+
 #import <UIKit/UIKit.h>
 #import "UIColor+EverydayApps.h"
 
 @interface UINavigationControllerModelControllers : UINavigationController
 
 @end
+
+#endif

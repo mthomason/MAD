@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MUIViewControllerProtocol_h
+#define Reports_MUIViewControllerProtocol_h
+
 #import <Foundation/Foundation.h>
 
 @protocol MUIViewControllerProtocol
@@ -15,3 +18,5 @@
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated;
 - (void)viewControllerDidCancel:(id)sender animated:(BOOL)animated;
 @end
+
+#endif

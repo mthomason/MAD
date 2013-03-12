@@ -6,11 +6,12 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseDriverSelectorMySqlViewController_h
+#define Reports_MTDatabaseDriverSelectorMySqlViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
-#import "Constants.h"
 #import "NSError+UserInterface.h"
-
 #import "MTDatabaseConnection.h"
 #import "MTReportDocument.h"
 #import "MTDatabaseMySql.h"
@@ -46,3 +47,5 @@
 - (IBAction)portDidEndOnExit:(id)sender;
 
 @end
+
+#endif

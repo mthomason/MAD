@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTConnectorView_h
+#define Reports_MTConnectorView_h
+
 #import <UIKit/UIKit.h>
 #import "UIColor+EverydayApps.h"
 
@@ -30,3 +33,5 @@ typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
 - (void)setOriginPoint:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint;
 
 @end
+
+#endif
