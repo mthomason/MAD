@@ -8,11 +8,11 @@
 //
 
 #import "MTQueryBuilderAddGroupViewController.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @interface MTQueryBuilderAddGroupViewController ()
 
-@property (nonatomic, retain) RptqField *field;
+@property (nonatomic, retain) RptqDatabaseSchemaField *field;
 
 @end
 
@@ -88,7 +88,7 @@
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
     [self setField:field];

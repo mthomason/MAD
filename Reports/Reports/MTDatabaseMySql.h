@@ -24,8 +24,8 @@
 #import "RptqQueryCache+Extras.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryLinks+Extras.h"
-#import "RptqTable+Extras.h"
-#import "RptqField+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryResultFields+Extras.h"
 #import "RptqQueryResultValues+Extras.h"
 #import "RptqQueryResult+Extras.h"
@@ -36,7 +36,7 @@
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-- (void)getFieldsForTable: (RptqTable *)table
+- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

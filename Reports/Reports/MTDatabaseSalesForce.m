@@ -11,7 +11,7 @@
 typedef void (^rsltBlk_tblNames)(MTDatabaseSalesForce *database, NSArray *tables);
 typedef void (^rsltBlkGetTables)(BOOL success, NSError *error, NSArray *tables);
 typedef void (^rsltBlkGetFields)(BOOL success, NSError *error, NSArray *fields);
-typedef void (^rsltBlk_fldNames)(MTDatabaseSalesForce *database, RptqTable *originTable, NSArray *fields);
+typedef void (^rsltBlk_fldNames)(MTDatabaseSalesForce *database, RptqDatabaseSchemaTable *originTable, NSArray *fields);
 typedef void (^rsltBlk_results)(MTDatabaseSalesForce *database, RptqQueryCache *results);
 typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 
@@ -50,7 +50,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
     [[SFRestAPI sharedInstance] send:request delegate:self];
 }
 
-- (void)getFieldsForTable: (RptqTable *)table
+- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
     [self setCurrentQueryType: MTDatabaseQueryTypeGetFields];

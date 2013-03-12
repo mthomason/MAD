@@ -10,14 +10,14 @@
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "MTManagedDocumentReport.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqFieldSelectorManager.h"
-#import "RptqTable+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 
 @class MTQueryBuilderChooseFieldViewController;
 
 @protocol MTQueryBuilderChooseFieldDelegate
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field;
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field;
 @end
 
 @interface MTQueryBuilderChooseFieldViewController : UITableViewController

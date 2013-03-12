@@ -191,7 +191,7 @@
             __block NSUInteger tableCounter = 0;
             NSUInteger numberOfTables = [tables count];
             for (MTDatabaseTable *databaseTable in tables) {
-                RptqTable *rptqTable = [RptqTable createNewTableForManagedObjectContext: objectContext
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext
                                                                                andTable: databaseTable];
                 
                 RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
@@ -205,11 +205,11 @@
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                                  withConnecitonId: connectionId];
                             
-                            RptqTable *rptqTableOrigional = [RptqTable getTableForManagedObjectContext: objectContext
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForManagedObjectContext: objectContext
                                                                                               database: currentDatabase
                                                                                           andTableName: [databaseTable name]];
                             
-                            RptqField *rptqField = [RptqField createNewFieldForManagedObjectContext: objectContext
+                            RptqDatabaseSchemaField *rptqField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
                                                                                            andField: objField];
                             [rptqTableOrigional addHasFieldsObject: rptqField];
                             NSError *saveError = nil;

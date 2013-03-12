@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RptqTable+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDocument+ActiveDocument.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "UIColor+EverydayApps.h"

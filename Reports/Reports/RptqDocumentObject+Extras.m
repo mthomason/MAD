@@ -105,9 +105,9 @@
 + (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
     RptqDocumentObject *result = nil;
 
-    if ([object isKindOfClass:[RptqField class]]) {
+    if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
         result = [RptqDocumentObjectLabelDataField addDocumentObject:object toDocument:document];
-    } else if ([object isKindOfClass:[RptqField class]]) {
+    } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
         result = [RptqDocumentObjectLabel addDocumentObject:object toDocument:document];
     }
 

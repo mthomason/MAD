@@ -70,7 +70,7 @@
     MTGraph *graph = [[MTGraph alloc] init];
 
     // MARK: Create vertex in the graph for each query table.
-    for (RptqTable *table in hasTables) {
+    for (RptqDatabaseSchemaTable *table in hasTables) {
         [graph addVertexWithObject:[table objectID]];
     }
     
@@ -78,8 +78,8 @@
     NSSet *hasQueryLinks = [query hasQueryLinks];
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
  
-        RptqTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
-        RptqTable *tableDestination =   [[queryLink hasRightField] inTable];
+        RptqDatabaseSchemaTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
+        RptqDatabaseSchemaTable *tableDestination =   [[queryLink hasRightField] inTable];
 
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];

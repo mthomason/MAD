@@ -57,13 +57,13 @@
     openSectionIndex_ = NSNotFound;
 
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    NSArray *rptqQueryTables = [RptqTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
+    NSArray *rptqQueryTables = [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
     //NSArray *rptqQueryTables = [RptqQueryTables namesForManagedObjectContext: managedObjectContext];
     NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: rptqQueryTables];
     [tableNames removeObjectsInArray:[self excludeTables]];
 
     if ([tableNames count] > 0) {
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
         request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
@@ -90,9 +90,9 @@
 		
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
-		for (RptqTable *table in self.dataTables) {
+		for (RptqDatabaseSchemaTable *table in self.dataTables) {
 			
-			RptqFieldSelectorManager *sectionInfo = [[RptqFieldSelectorManager alloc] initWithTable: table];			
+			RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: table];			
 			sectionInfo.table = table;
 			sectionInfo.open = NO;
 			
@@ -122,7 +122,7 @@
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
     
-	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
 	NSInteger numStoriesInSection = [[sectionInfo.table hasFields] count];
 	
     return sectionInfo.open ? numStoriesInSection : 0;
@@ -144,8 +144,8 @@
         
     }
     
-    RptqFieldSelectorManager *table = (RptqFieldSelectorManager *)[self.sectionInfoArray objectAtIndex:indexPath.section];
-    RptqField *field = [[table fields] objectAtIndex:indexPath.row];
+    RptqDatabaseSchemaFieldSelectorManager *table = (RptqDatabaseSchemaFieldSelectorManager *)[self.sectionInfoArray objectAtIndex:indexPath.section];
+    RptqDatabaseSchemaField *field = [[table fields] objectAtIndex:indexPath.row];
     if (field) {
         [[cell textLabel] setText: [field name]];
         [[cell detailTextLabel] setText: [[field datatype] lowercaseString]];
@@ -156,7 +156,7 @@
 
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
-	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
     if (!sectionInfo.headerView) {
 		NSString *playName = sectionInfo.table.name;
         UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, HEADER_HEIGHT) title:playName section:section delegate:self];
@@ -169,7 +169,7 @@
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
     
-	RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:indexPath.section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:indexPath.section];
     return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
     // Alternatively, return rowHeight.
 }
@@ -177,9 +177,9 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:[indexPath section]];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:[indexPath section]];
     if ([[sectionInfo fields] count] > [indexPath row]) {
-        RptqField *field = [[sectionInfo fields] objectAtIndex: [indexPath row]];
+        RptqDatabaseSchemaField *field = [[sectionInfo fields] objectAtIndex: [indexPath row]];
         [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: field];
     }
 }
@@ -189,7 +189,7 @@
 
 - (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)sectionOpened {
 	
-	RptqFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:sectionOpened];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:sectionOpened];
 	
 	[sectionInfo setOpen: YES];
     
@@ -210,7 +210,7 @@
     NSInteger previousOpenSectionIndex = self.openSectionIndex;
     if (previousOpenSectionIndex != NSNotFound) {
 		
-		RptqFieldSelectorManager *previousOpenSection = [self.sectionInfoArray objectAtIndex:previousOpenSectionIndex];
+		RptqDatabaseSchemaFieldSelectorManager *previousOpenSection = [self.sectionInfoArray objectAtIndex:previousOpenSectionIndex];
         previousOpenSection.open = NO;
         [previousOpenSection.headerView toggleOpenWithUserAction:NO];
         NSInteger countOfRowsToDelete = [previousOpenSection.fields count];
@@ -249,7 +249,7 @@
     /*
      Create an array of the index paths of the rows in the section that was closed, then delete those rows from the table view.
      */
-	RptqFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:sectionClosed];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:sectionClosed];
 	
 	[sectionInfo setOpen: NO];
 

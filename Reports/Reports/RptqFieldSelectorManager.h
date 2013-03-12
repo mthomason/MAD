@@ -1,27 +1,27 @@
 //
-//  RptqFieldSelectorManager.h
+//  RptqDatabaseSchemaFieldSelectorManager.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqFieldSelectorManager_h
-#define Reports_RptqFieldSelectorManager_h
+#ifndef Reports_RptqDatabaseSchemaFieldSelectorManager_h
+#define Reports_RptqDatabaseSchemaFieldSelectorManager_h
 
 #import <Foundation/Foundation.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
-@interface RptqFieldSelectorManager : NSObject 
+@interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 
 @property (assign) BOOL open;
-@property (retain) RptqTable *table;
+@property (retain) RptqDatabaseSchemaTable *table;
 @property (retain) NSArray *fields;
 @property (retain) UIViewTableSectionHeaderDatabaseTable* headerView;
 @property (nonatomic, retain) NSMutableArray *rowHeights;
 
-- (id)initWithTable:(RptqTable *)sectionTable;
+- (id)initWithTable:(RptqDatabaseSchemaTable *)sectionTable;
 
 - (NSUInteger)countOfRowHeights;
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx;

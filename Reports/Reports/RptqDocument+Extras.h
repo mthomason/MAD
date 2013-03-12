@@ -20,8 +20,8 @@
 
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
-#import "RptqTable+Extras.h"
-#import "RptqField+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 

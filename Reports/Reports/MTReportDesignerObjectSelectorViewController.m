@@ -134,7 +134,7 @@
 
 #pragma mark UITableViewControllerChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
     [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
 }
 

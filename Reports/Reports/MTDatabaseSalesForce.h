@@ -12,7 +12,7 @@
 #import "MTDatabase.h"
 #import "Constants.h"
 #import "SFRestAPI.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
@@ -29,7 +29,7 @@
 - (NSString *)getSqlForQuery:(RptqQuery *)query;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
-- (void)getFieldsForTable: (RptqTable *)table
+- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

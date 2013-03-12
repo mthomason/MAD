@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "AppDelegate.h"
 
 @implementation MTQueryBuilderAddLinkJoinTypeViewController

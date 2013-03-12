@@ -10,7 +10,7 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqQuery+Extras.h"
 #import "MTDatabaseTable.h"
 
@@ -27,12 +27,12 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
 + (id)databaseForRptqDatabase:(RptqDatabase *)database;
 
-- (void)fieldsInDatabase: (NSString *)database andTable:(RptqTable *)table
-              completion: (void (^)(MTDatabase *database, RptqTable *originTable, NSArray *fields))completion;
+- (void)fieldsInDatabase: (NSString *)database andTable:(RptqDatabaseSchemaTable *)table
+              completion: (void (^)(MTDatabase *database, RptqDatabaseSchemaTable *originTable, NSArray *fields))completion;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-- (void)getFieldsForTable: (RptqTable *)table
+- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

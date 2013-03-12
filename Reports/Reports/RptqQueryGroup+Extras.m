@@ -68,7 +68,7 @@
 }
 
 // MARK: Creating group. Updates document sections to reflect new group.
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqQueryGroup *)createQueryGroupFor:(RptqDatabaseSchemaField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
                                                                    inManagedObjectContext:managedObjectContext];

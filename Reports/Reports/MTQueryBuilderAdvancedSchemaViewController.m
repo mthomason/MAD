@@ -91,7 +91,7 @@
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[[self titleView] label] setText:[table name]];
 }
 
@@ -109,12 +109,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    //RptqTable *table = [RptqTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
+    //RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];    
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
-    RptqField *field = [RptqField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
+    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
     [[result detailLabel] setText:[field name]];
     return result;
 }
@@ -126,11 +126,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
     
-    RptqTable *table = [RptqTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[self hasFieldsObjectIds] removeAllObjects];
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *fields = [[NSArray alloc] initWithArray: [[table hasFields] sortedArrayUsingDescriptors:@[namesAccending]]];
-    for (RptqField *field in fields) {
+    for (RptqDatabaseSchemaField *field in fields) {
         [[self hasFieldsObjectIds] addObject:[field objectID]];
     }
     [fields release];

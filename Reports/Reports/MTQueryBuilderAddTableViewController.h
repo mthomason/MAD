@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
 #import "MTManagedDocumentReport.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @class MTQueryBuilderAddTableViewController;
 
 @protocol MTQueryBuilderAddTableDelegate
 - (void)viewControllerSchemaAddTableDidFinish:(MTQueryBuilderAddTableViewController *)controller;
-- (void)viewControllerSchemaAddTableDidSelectTable:(RptqTable *)controller;
+- (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)controller;
 @end
 
 @interface MTQueryBuilderAddTableViewController : UITableViewControllerCoreDataResults

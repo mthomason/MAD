@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "MTManagedDocumentReport.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkFirstTableViewController;
 
 @protocol MTQueryBuilderAddLinkFirstTableDelegate
 @optional
-- (void)viewControllerDidFinishWithTable:(RptqTable *)result;
+- (void)viewControllerDidFinishWithTable:(RptqDatabaseSchemaTable *)result;
 @end
 
 @interface MTQueryBuilderAddLinkFirstTableViewController : UITableViewControllerCoreDataResults

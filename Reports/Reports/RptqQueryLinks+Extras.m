@@ -82,7 +82,7 @@
     request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
     NSError *error = nil;
     NSArray *results = [moc executeFetchRequest:request error:&error];
-    RptqTable *result = nil;
+    RptqDatabaseSchemaTable *result = nil;
     if (results) result = [results lastObject];
     return result;
 }
@@ -114,8 +114,8 @@
     [doc release];
 }
 
-+ (id)createQueryLinkWithLeftField:(RptqField *)fieldLeft
-                         rightField:(RptqField *)fieldRight
++ (id)createQueryLinkWithLeftField:(RptqDatabaseSchemaField *)fieldLeft
+                         rightField:(RptqDatabaseSchemaField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[AppDelegate activeDocument] managedObjectContext]];
     

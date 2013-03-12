@@ -10,14 +10,14 @@
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryGroup.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MTManagedDocumentReport.h"
 
 @class MTQueryBuilderAddGroupViewController;
 
 @protocol MTQueryBuilderAddGroupDelegate
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller;
-- (void)addGroupDidAddGroupWithField:(RptqField *)fieldName andSort:(MNSSortOrder)sortOrder;
+- (void)addGroupDidAddGroupWithField:(RptqDatabaseSchemaField *)fieldName andSort:(MNSSortOrder)sortOrder;
 @end
 
 @interface MTQueryBuilderAddGroupViewController : UITableViewController

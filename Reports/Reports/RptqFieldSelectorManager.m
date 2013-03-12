@@ -1,5 +1,5 @@
 //
-//  RptqFieldSelectorManager.m
+//  RptqDatabaseSchemaFieldSelectorManager.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -8,7 +8,7 @@
 
 #import "RptqFieldSelectorManager.h"
 
-@implementation RptqFieldSelectorManager
+@implementation RptqDatabaseSchemaFieldSelectorManager
 
 @synthesize open, rowHeights, table, fields, headerView;
 
@@ -16,7 +16,7 @@
     [super dealloc];
 }
 
-- (id)initWithTable:(RptqTable *)sectionTable {
+- (id)initWithTable:(RptqDatabaseSchemaTable *)sectionTable {
 	self = [super init];
 	if (self) {
 

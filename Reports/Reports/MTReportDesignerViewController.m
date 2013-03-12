@@ -1214,7 +1214,7 @@
     }
 }
 
-- (void)insertDocumentObjectDataField:(RptqField *)field {
+- (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field {
     if ([AppDelegate isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];

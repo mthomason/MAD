@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MTManagedDocumentReport.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 
 @class MTQueryBuilderAddLinkSecondTableViewController;
 
 @protocol MTQueryBuilderAddLinkSecondTableDelegate
-- (void)viewControllerDidFinishWithSecondTable:(RptqTable *)result;
+- (void)viewControllerDidFinishWithSecondTable:(RptqDatabaseSchemaTable *)result;
 @end
 
 @interface MTQueryBuilderAddLinkSecondTableViewController : UITableViewControllerCoreDataResults

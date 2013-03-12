@@ -44,8 +44,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @property (assign) MNSPredicateOperator predicateOperator;
 @property (copy) NSString *leftValue;
 @property (copy) NSString *rightValue;
-@property (nonatomic, retain) RptqField *fieldLeft;
-@property (nonatomic, retain) RptqField *fieldRight;
+@property (nonatomic, retain) RptqDatabaseSchemaField *fieldLeft;
+@property (nonatomic, retain) RptqDatabaseSchemaField *fieldRight;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

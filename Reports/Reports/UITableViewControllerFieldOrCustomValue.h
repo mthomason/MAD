@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 @class UITableViewControllerFieldOrCustomValue;

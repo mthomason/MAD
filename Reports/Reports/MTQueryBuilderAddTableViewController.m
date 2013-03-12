@@ -7,7 +7,7 @@
 //
 
 #import "MTQueryBuilderAddTableViewController.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation MTQueryBuilderAddTableViewController
 
@@ -42,7 +42,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
     }
     
-    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [tablea name]];
     [tablea release];
     
@@ -54,7 +54,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerSchemaAddTableDidSelectTable: tablea];
     [tablea release];
 }

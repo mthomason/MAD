@@ -622,7 +622,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 case MNSDocumentSectionTypeBody: {
 
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqField *field = [documentObjectDataField referencesField];
+                    RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
                     value = [resultDictionary objectForKey: [field display]];
         
                     break;
@@ -635,7 +635,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 } default: {
 
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqField *field = [documentObjectDataField referencesField];
+                    RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
                     value = [resultDictionary objectForKey: [field display]];
 
                     break;

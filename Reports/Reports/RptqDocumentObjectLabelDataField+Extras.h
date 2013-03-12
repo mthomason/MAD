@@ -13,7 +13,7 @@
 #import "MTProtocolCompare.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentObjectFactory.h"
 

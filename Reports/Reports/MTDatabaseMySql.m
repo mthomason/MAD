@@ -39,7 +39,7 @@
     NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasTables count]];
     
     // MARK: Create vertex in the graph for each query table.
-    for (RptqTable *table in hasTables) {
+    for (RptqDatabaseSchemaTable *table in hasTables) {
         [graph addVertexWithObject:[table objectID]];
     }
     
@@ -47,8 +47,8 @@
     NSSet *hasQueryLinks = [query hasQueryLinks];
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
         
-        RptqTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
-        RptqTable *tableDestination =   [[queryLink hasRightField] inTable];
+        RptqDatabaseSchemaTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
+        RptqDatabaseSchemaTable *tableDestination =   [[queryLink hasRightField] inTable];
         
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
@@ -79,11 +79,11 @@
             if (queryTable) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 NSManagedObjectID *objectID = [queryTable object];
-                RptqTable *table = [RptqTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
+                RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
                 NSString *tableAlias = [[table name] stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
-                for (RptqField *field in [table hasFields]) {
+                for (RptqDatabaseSchemaField *field in [table hasFields]) {
                     if (fieldCounter != 0)  [result appendString:@",\n"];
                     NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
                     [result appendFormat: @"\t%@", fieldAlias];
@@ -127,7 +127,7 @@
                 NSArray *incidentEdges = [vertexTable incidentEdges];
                 if (tableCounter > 0) [result appendString:@",\n"];
                 NSManagedObjectID *objectID = [vertexTable object];
-                RptqTable *table = [RptqTable getTableForObjectID:objectID fromObjectContext:managedObjectContext];
+                RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:managedObjectContext];
                 NSString *tname = [table name];
                 [result appendString:tname];
 
@@ -170,13 +170,13 @@
                                         break;
                                 }
                                 
-                                RptqField *rightField = [queryLink hasRightField];
-                                RptqTable *rightTable = [rightField inTable];
+                                RptqDatabaseSchemaField *rightField = [queryLink hasRightField];
+                                RptqDatabaseSchemaTable *rightTable = [rightField inTable];
                                 
                                 [result appendString:[rightTable name]];
                                 [result appendString:@" ON "];
                                 
-                                RptqField *leftField = [queryLink hasLeftField];
+                                RptqDatabaseSchemaField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
                                     [result appendString: [leftField toStringHumanReadable]];
                                 }
@@ -252,7 +252,7 @@
     
 }
 
-- (void)getFieldsForTable: (RptqTable *)table
+- (void)getFieldsForTable: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);

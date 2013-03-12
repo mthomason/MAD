@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
-#import "RptqTable+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 #import "AppDelegate.h"
 #import "MTSchemaFieldCell.h"
 #import "UIView+NSObjectIdTag.h"

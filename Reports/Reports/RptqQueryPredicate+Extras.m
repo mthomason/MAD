@@ -58,9 +58,9 @@
 
 #pragma mark - Static
 
-+ (id)createPredicateWithLeftField:(RptqField *)leftField
++ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqField *)rightField
+                     andRightField:(RptqDatabaseSchemaField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
@@ -72,7 +72,7 @@
     return [queryPredicate autorelease];
 }
 
-+ (id)createPredicateWithLeftField:(RptqField *)leftField
++ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
                      andRightValue:(NSString *)rightUserValue
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -102,7 +102,7 @@
 
 + (id)createPredicateWithLeftValue:(NSString *)leftUserValue
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqField *)rightField
+                     andRightField:(RptqDatabaseSchemaField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];

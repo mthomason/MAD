@@ -70,7 +70,7 @@
 
 + (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
 
-    RptqField *field = object;
+    RptqDatabaseSchemaField *field = object;
     
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
                                                                        inManagedObjectContext: [document managedObjectContext]];

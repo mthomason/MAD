@@ -7,8 +7,8 @@
 //
 
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
-#import "RptqTable.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
 
 @implementation MTQueryBuilderAddLinkFirstTableViewController
@@ -46,7 +46,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
     }
     
-    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [tablea name]];
     [[cell detailTextLabel] setText: @""];
     [tablea release];
@@ -56,21 +56,21 @@
             break;
         }
         case 1: {
-            RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
             [[cell textLabel] setText: [field name]];
             [[cell detailTextLabel] setText: [[field inTable] name]];
             [field release];
             break;
         }
         case 2: {
-            RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
             [[cell textLabel] setText: [tablea name]];
             [[cell detailTextLabel] setText: @""];
             [tablea release];
             break;
         }
         case 3: {
-            RptqField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+            RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
             [[cell textLabel] setText: [field name]];
             [[cell detailTextLabel] setText: [[field inTable] name]];
             [field release];
@@ -88,7 +88,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerDidFinishWithTable:tablea];
     [tablea release];
 }

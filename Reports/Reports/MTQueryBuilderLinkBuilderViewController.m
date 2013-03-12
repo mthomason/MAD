@@ -7,16 +7,16 @@
 //
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
-#import "RptqTable.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 #import "AppDelegate.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 
-@property (nonatomic, retain) RptqTable *firstTableName;
-@property (nonatomic, retain) RptqTable *secondTableName;
-@property (nonatomic, retain) RptqField *firstFieldName;
-@property (nonatomic, retain) RptqField *secondFieldName;
+@property (nonatomic, retain) RptqDatabaseSchemaTable *firstTableName;
+@property (nonatomic, retain) RptqDatabaseSchemaTable *secondTableName;
+@property (nonatomic, retain) RptqDatabaseSchemaField *firstFieldName;
+@property (nonatomic, retain) RptqDatabaseSchemaField *secondFieldName;
 
 @end
 
@@ -106,7 +106,7 @@
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
                     request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
@@ -125,7 +125,7 @@
                 MTQueryBuilderAddLinkFirstFieldViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {
                     [vcFf setDelegate:self];                    
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self firstTableName] name]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
@@ -149,7 +149,7 @@
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
 
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqTable class])];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
                     request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", query];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
@@ -170,7 +170,7 @@
                 if (vcFf) {                
                     [vcFf setDelegate:self];
                     
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqField class])];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self secondTableName] name]];
                     request.predicate = predicate;
@@ -226,10 +226,10 @@
 #pragma mark - Delegate callbacks
 
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
-                                      withField: (RptqField *)field {
+                                      withField: (RptqDatabaseSchemaField *)field {
     [[self navigationController] popToViewController: self animated: YES];
     
-    RptqTable *tableName = [field inTable];
+    RptqDatabaseSchemaTable *tableName = [field inTable];
     //NSString *fieldName = [field name];
     //NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
     NSString *tableFieldName = [[field toString] retain];
@@ -263,25 +263,25 @@
     [tableFieldName release];
 }
 
-- (void)viewControllerDidFinishWithTable:(RptqTable *)result {
+- (void)viewControllerDidFinishWithTable:(RptqDatabaseSchemaTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellTableOne] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setFirstTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqField *)result {
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqDatabaseSchemaField *)result {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellFieldOne] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setFirstFieldName: result];
 }
 
-- (void)viewControllerDidFinishWithSecondTable:(RptqTable *)result {
+- (void)viewControllerDidFinishWithSecondTable:(RptqDatabaseSchemaTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellTableTwo] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setSecondTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqField *)result {
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqDatabaseSchemaField *)result {
     [[self navigationController] popToViewController: self animated: YES];
     [[[self tableViewCellFieldTwo] detailTextLabel] setText: [[result name] lowercaseString]];
     [self setSecondFieldName: result];

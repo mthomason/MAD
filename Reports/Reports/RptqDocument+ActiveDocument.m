@@ -44,7 +44,7 @@
 
 + (NSArray *)tablesForActiveDocument {
     NSManagedObjectContext *managedObjectContext = [[AppDelegate activeDocument] managedObjectContext];
-    return [[[RptqTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];
+    return [[[RptqDatabaseSchemaTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];
 }
 
 + (NSArray *)queryLinksForActiveDocument {

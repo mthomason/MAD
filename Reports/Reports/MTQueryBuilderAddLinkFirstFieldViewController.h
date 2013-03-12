@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MTManagedDocumentReport.h"
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqTable.h"
-#import "RptqField.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 
 @class MTQueryBuilderAddLinkFirstFieldViewController;
 
 @protocol MTQueryBuilderAddLinkFirstFieldDelegate
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqField *)result;
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqDatabaseSchemaField *)result;
 @end
 
 @interface MTQueryBuilderAddLinkFirstFieldViewController : UITableViewControllerCoreDataResults

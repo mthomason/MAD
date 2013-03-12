@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 };
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
-- (void)insertDocumentObjectDataField:(RptqField *)field;
+- (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
 - (void)insertDocumentObjectNewLabel;
 - (void)insertDocumentObjectNewFormula;
 - (void)insertDocumentObjectNewChart;

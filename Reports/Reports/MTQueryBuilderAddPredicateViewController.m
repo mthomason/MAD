@@ -9,7 +9,7 @@
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
-#import "RptqTable.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "AppDelegate.h"
 
 @implementation MTQueryBuilderAddPredicateViewController
@@ -133,7 +133,7 @@
     [[self navigationController] popToViewController:self animated:YES];
 }
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
     [[self navigationController] popToViewController:self animated:YES];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: nil];
