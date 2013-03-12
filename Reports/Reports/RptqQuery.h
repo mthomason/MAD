@@ -25,7 +25,7 @@
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nonatomic, retain) NSSet *hasTables;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
-@property (nonatomic, retain) NSSet *hasQueryTables;
+@property (nonatomic, retain) NSOrderedSet *hasQueryTables;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)
@@ -55,9 +55,14 @@
 - (void)addHasTables:(NSSet *)values;
 - (void)removeHasTables:(NSSet *)values;
 
+- (void)insertObject:(RptqQueryTable *)value inHasQueryTablesAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromHasQueryTablesAtIndex:(NSUInteger)idx;
+- (void)insertHasQueryTables:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeHasQueryTablesAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInHasQueryTablesAtIndex:(NSUInteger)idx withObject:(RptqQueryTable *)value;
+- (void)replaceHasQueryTablesAtIndexes:(NSIndexSet *)indexes withHasQueryTables:(NSArray *)values;
 - (void)addHasQueryTablesObject:(RptqQueryTable *)value;
 - (void)removeHasQueryTablesObject:(RptqQueryTable *)value;
-- (void)addHasQueryTables:(NSSet *)values;
-- (void)removeHasQueryTables:(NSSet *)values;
-
+- (void)addHasQueryTables:(NSOrderedSet *)values;
+- (void)removeHasQueryTables:(NSOrderedSet *)values;
 @end
