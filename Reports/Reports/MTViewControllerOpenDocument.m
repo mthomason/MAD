@@ -215,11 +215,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
             MTDocumentTableViewCell *senderCell = sender;
             row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
-            
             url = [[[self availableFilesCache] objectAtIndex: row] retain];
             [self setUrlBeingOpended:url];
             
         } else if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+            
             MTCollectionViewCellDocument *senderCell = sender;
             row = [[[self collectionViewQueries] indexPathForCell:senderCell] row];
             url = [[[self availableFilesCache] objectAtIndex: row] retain];
@@ -336,8 +336,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [tvc setDelegate: self];
     MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
         if (success) {
+            
+            [[MTActiveDocument sharedDocument] setActiveDocument: document];
+            [tvc reloadDocument:document];
+/*
             [[MTActiveDocument sharedDocument] setActiveDocument: nil];
             [tvc reloadDocument:document];
+ */
         }
     }];
     [documentReport release];

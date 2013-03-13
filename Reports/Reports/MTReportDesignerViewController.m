@@ -131,7 +131,6 @@
     if ([AppDelegate isPad]) {
         
         MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
-
         [viewControllerToolbox setDelegate:self];
         [self setViewControllerToolbox:viewControllerToolbox];
         
@@ -142,8 +141,16 @@
 
         [viewControllerToolbox release];
 
+        [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
+
     } else {
-    
+/*
+        MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
+        [viewControllerToolbox setDelegate:self];
+        [[self toolboxView] addSubview:[viewControllerToolbox view]];
+        [self setViewControllerToolbox:viewControllerToolbox];
+        
+*/
         MTReportDesignerFontSettingsViewController *fontSettingsTableViewController = [[storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
         [fontSettingsTableViewController setDelegate: self];
         [self setTableViewControllerTextLayoutSettings:fontSettingsTableViewController];
@@ -153,11 +160,11 @@
         [fontListSettingsTableViewController setDelegate: self];
         [self setTableViewControllerFontSelector:fontListSettingsTableViewController];
         [fontListSettingsTableViewController release];
-        
+/*
+        [viewControllerToolbox release];
+*/
     }
     
-    [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
-
     NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
     [self setHolderForLastTouchesByCollectionView:holderForLastTouchesByCollectionView];
     [holderForLastTouchesByCollectionView release];
@@ -781,12 +788,15 @@
 - (IBAction)showToolbox:(id)sender {
     
     if ([AppDelegate isPad]) {
+        
         [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
         [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
                                                     permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                     animated:YES];
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+
     } else {
+
         if (![self toolboxIsVisible]) {
             [self setToolboxIsVisible:YES];
             [[self informationButton] setEnabled: NO];
@@ -807,10 +817,7 @@
                 [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[self view] layoutIfNeeded];
             } completion:nil];
-            
         }
-
-        
     }
 }
 
