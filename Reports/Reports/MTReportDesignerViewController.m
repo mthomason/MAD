@@ -126,11 +126,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIStoryboard *sbFontTableView = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+
     if ([AppDelegate isPad]) {
         
-        MTReportDesignerToolBoxViewController *viewControllerToolbox = [[MTReportDesignerToolBoxViewController alloc] initWithNibName:@"MTViewToolbox" bundle:nil];
+        MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
+
         [viewControllerToolbox setDelegate:self];
         [self setViewControllerToolbox:viewControllerToolbox];
         
@@ -143,17 +144,18 @@
 
     } else {
     
-        MTReportDesignerFontSettingsViewController *tb1 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
-        [tb1 setDelegate: self];
-        [self setTableViewControllerTextLayoutSettings:tb1];
-        [tb1 release];
+        MTReportDesignerFontSettingsViewController *fontSettingsTableViewController = [[storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
+        [fontSettingsTableViewController setDelegate: self];
+        [self setTableViewControllerTextLayoutSettings:fontSettingsTableViewController];
+        [fontSettingsTableViewController release];
         
-        MTReportDesignerFontSelectorViewController *tb2 = [[sbFontTableView instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
-        [tb2 setDelegate: self];
-        [self setTableViewControllerFontSelector:tb2];
-        [tb2 release];
+        MTReportDesignerFontSelectorViewController *fontListSettingsTableViewController = [[storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
+        [fontListSettingsTableViewController setDelegate: self];
+        [self setTableViewControllerFontSelector:fontListSettingsTableViewController];
+        [fontListSettingsTableViewController release];
         
     }
+    
     [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
 
     NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
