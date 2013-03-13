@@ -339,10 +339,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
             [[MTActiveDocument sharedDocument] setActiveDocument: document];
             [tvc reloadDocument:document];
-/*
-            [[MTActiveDocument sharedDocument] setActiveDocument: nil];
-            [tvc reloadDocument:document];
- */
+
         }
     }];
     [documentReport release];

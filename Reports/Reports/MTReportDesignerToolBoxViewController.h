@@ -23,7 +23,7 @@
     <UINavigationBarDelegate, MTReportDesignerFontSettingsDelegate,
         MTReportDesignerFontSelectorDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
 - (IBAction)valueChanged:(id)sender;

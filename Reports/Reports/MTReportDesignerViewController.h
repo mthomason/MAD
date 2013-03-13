@@ -48,8 +48,6 @@
         MTReportDesignerSectionViewLayoutDelegate,
         MTReportDesignerObjectSelectorDelegate,
         MUIViewControllerProtocol,
-        MTReportDesignerFontSettingsDelegate,
-        MTReportDesignerFontSelectorDelegate,
         MTDocumentSectionViewDelegate>
 
 - (IBAction)doneReports:(id)sender;

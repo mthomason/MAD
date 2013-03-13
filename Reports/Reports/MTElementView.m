@@ -34,7 +34,6 @@
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
-@property (assign) BOOL displaySelected;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
@@ -336,7 +335,7 @@
 }
 
 - (BOOL)toggleSelected {
-    [self setDisplaySelected:![self displaySelected]];
+    [self setDisplaySelected:[self displaySelected] == NO];
     return [self displaySelected];
 }
 

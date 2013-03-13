@@ -116,6 +116,12 @@
     
 }
 
+- (IBAction)userDidRequestFinish:(id)sender {
+    if ([self delegate] != nil) {
+        [[self delegate] hideToolbox];
+    }
+}
+
 - (IBAction)valueChanged:(id)sender {
     [sender setEnabled:NO];
     UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];

@@ -25,7 +25,9 @@
 
 @interface MTElementView : UIView;
 
-@property (assign, nonatomic) id <MTElementViewDelegate> delegate;
+@property (nonatomic, assign) id <MTElementViewDelegate> delegate;
+
+@property (nonatomic, assign) BOOL displaySelected;
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;

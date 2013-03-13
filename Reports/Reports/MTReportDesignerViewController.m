@@ -11,15 +11,13 @@
 #import "MTReportViewerPrintPageRenderer.h"
 
 @interface MTReportDesignerViewController()
-    <MTReportDesignerFontSettingsDelegate,
-        MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
 
 @property (nonatomic, retain) UIPopoverController *popoverControllerInformation;
 @property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
 
-@property (assign) BOOL toolboxIsVisible;
+@property (nonatomic, assign) BOOL toolboxIsVisible;
 @property (nonatomic, retain) MTElementView *lastElementViewToShowMenu;
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
 
@@ -29,8 +27,6 @@
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
 @property (nonatomic, retain) UIView *toolboxBackgroundView;
 @property (nonatomic, retain) UIScrollView *toolboxScrollView;
-@property (nonatomic, retain) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
-@property (nonatomic, retain) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
 
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
@@ -42,7 +38,6 @@
 @property (nonatomic, retain) NSMutableDictionary *collectionViewReuseIdentifiers;
 
 @property (nonatomic, retain) IBOutlet UIView *toolboxView;
-@property (nonatomic, retain) IBOutlet UIView *toolboxContainerView;
 
 @property (nonatomic, retain) IBOutlet UIButton *informationButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemInfo;
@@ -52,14 +47,7 @@
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
 
-@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBarToolbox;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontChooser;
-
 @property (nonatomic, retain) NSMutableSet *selectedObjectIds;
-
-@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlToolbox;
 
 @property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
@@ -84,11 +72,6 @@
     [_toolbarBottomItems release];
     [_layoutConstraintsToolboxHidden release];
     [_layoutConstraintsToolboxVisiable release];
-    [_navigationItemStyle release];
-    [_navigationItemLayout release];
-    [_navigationItemFontChooser release];
-    [_tableViewControllerTextLayoutSettings release];
-    [_tableViewControllerFontSelector release];
     [_toolboxBackgroundView release];
     [_toolboxScrollView release];
     [_toolboxToolbarItemsFontChooser release];
@@ -104,10 +87,7 @@
     [_toolbarBottom release];
     [_toolbarTop release];
     [_toolboxView release];
-    [_toolboxContainerView release];
-    [_navigationBarToolbox release];
     [_layoutConstraintsToRemove release];
-    [_segmentedControlToolbox release];
     [super dealloc];
 }
 
@@ -128,43 +108,27 @@
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
 
+    MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
+    [viewControllerToolbox setDelegate:self];
+
     if ([AppDelegate isPad]) {
         
-        MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
-        [viewControllerToolbox setDelegate:self];
-        [self setViewControllerToolbox:viewControllerToolbox];
-        
-        UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:[self viewControllerToolbox]];
+        UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:viewControllerToolbox];
         [popoverControllerInformation setDelegate:self];
+        [popoverControllerInformation setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
         [self setPopoverControllerInformation:popoverControllerInformation];
         [popoverControllerInformation release];
 
-        [viewControllerToolbox release];
-
-        [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
-
     } else {
-/*
-        MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
-        [viewControllerToolbox setDelegate:self];
+
+        [[viewControllerToolbox view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
+        [[viewControllerToolbox view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self toolboxView] addSubview:[viewControllerToolbox view]];
-        [self setViewControllerToolbox:viewControllerToolbox];
-        
-*/
-        MTReportDesignerFontSettingsViewController *fontSettingsTableViewController = [[storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewController"] retain];
-        [fontSettingsTableViewController setDelegate: self];
-        [self setTableViewControllerTextLayoutSettings:fontSettingsTableViewController];
-        [fontSettingsTableViewController release];
-        
-        MTReportDesignerFontSelectorViewController *fontListSettingsTableViewController = [[storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"] retain];
-        [fontListSettingsTableViewController setDelegate: self];
-        [self setTableViewControllerFontSelector:fontListSettingsTableViewController];
-        [fontListSettingsTableViewController release];
-/*
-        [viewControllerToolbox release];
-*/
     }
     
+    [self setViewControllerToolbox:viewControllerToolbox];
+    [viewControllerToolbox release];
+
     NSMutableDictionary *holderForLastTouchesByCollectionView = [[NSMutableDictionary alloc] init];
     [self setHolderForLastTouchesByCollectionView:holderForLastTouchesByCollectionView];
     [holderForLastTouchesByCollectionView release];
@@ -447,8 +411,6 @@
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
 
-//        [[[MTActiveDocument sharedDocument] activeDocument] refresh];
-
         MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
         [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
@@ -698,14 +660,6 @@
     NSLog(@"custom action! %@", sender);
 }
 
-- (IBAction)segmentedControlToolboxValueChanged:(id)sender {
-    if ([sender selectedSegmentIndex] == 0) {
-        [[self tableViewControllerTextLayoutSettings] displayStyleSettings];
-    } else  if ([sender selectedSegmentIndex] == 1) {
-        [[self tableViewControllerTextLayoutSettings] displayLayoutSettings];
-    }
-}
-
 - (void)openReport:(NSURL *)url {
     MTManagedDocumentPreferencesUser *trvFile = [[MTManagedDocumentPreferencesUser alloc] initWithFileURL:url];
     
@@ -793,23 +747,20 @@
         [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
                                                     permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                     animated:YES];
+        
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
 
     } else {
 
-        if (![self toolboxIsVisible]) {
+        if ([self toolboxIsVisible] == NO) {
             [self setToolboxIsVisible:YES];
             [[self informationButton] setEnabled: NO];
-            
-            [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: [[self toolboxContainerView] bounds]];
-            [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self toolboxContainerView] bounds]];
-            [[self tableViewControllerTextLayoutSettings] initalizeDocumentObjects:[self selectedObjectIds]];
-            
-            [[self toolboxContainerView] addSubview:[[self tableViewControllerTextLayoutSettings] tableView]];
             
             [[self toolbarBottom] setItems:nil animated:YES];
             [[self toolbarTop] setItems:nil animated:YES];
             
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+
             [[self view] layoutIfNeeded];
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [self setWantsFullScreenLayout:YES];
@@ -825,7 +776,10 @@
     if ([AppDelegate isPad]) {
         if ([[self popoverControllerInformation] isPopoverVisible]) {
             [[self popoverControllerInformation] dismissPopoverAnimated:YES];
+            [self deselectAllElementsAnimated:YES];
         }
+    } else {
+        [self hideToolbox:self];
     }
 }
 
@@ -842,7 +796,6 @@
         } completion:^(BOOL finished) {
             [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
             [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
-            [[[self tableViewControllerTextLayoutSettings] tableView] removeFromSuperview];
             [[self informationButton] setEnabled: YES];
         }];
     }
@@ -1076,9 +1029,7 @@
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             if ([cell isSelected]) {
                 MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-                //if ([elementView isSelected]) {
-                    [result addObject:[elementView objectIdTag]];
-                //}
+                [result addObject:[elementView objectIdTag]];
             }
         }
     }
@@ -1100,83 +1051,15 @@
     return [results autorelease];
 }
 
-/*
- 
- - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
- - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
- 
- }
- 
-*/
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    //[elementView setSelected:NO];
-    [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
-    [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-    [[elementView layer] setBorderWidth:0.0000f];
-    MTLog(@"Deselect");
-     */
-}
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    [elementView setHighlight:YES];
-    MTLog(@"Highlight");
-     */
-}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    //[elementView setSelected:YES];
-    [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-   [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
-    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[elementView layer] setBorderWidth:3.0000f];
-    MTLog(@"Select");
-     */
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    [elementView setHighlight:NO];
-    MTLog(@"Unhighlight");
-    */
-}
-
-//- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    BOOL isSelected = [[collectionView cellForItemAtIndexPath:indexPath] isSelected];
-//    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    //MTLog(@"Should deselect?\t%@", [elementView isSelected] ? @"YES" : @"NO");
-    //return YES;
-//    NSLog(@"shouldDeselectItemAtIndexPath: %@", isSelected ? @"YES" : @"NO");
-
-//    return isSelected;
-//}
-
-//- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    //MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    //MTLog(@"Should highlight?\t%@", ![elementView highlight] ? @"YES" : @"NO");
-//    return YES;
-//}
-
-//- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    //MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    //MTLog(@"Should select?\t%@", ![elementView isSelected] ? @"YES" : @"NO");
-//    NSLog(@"shouldSelectItemAtIndexPath: %@", @"YES");
-//    return YES;
-//}
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    //NSLog(@"Can Perform Action %@?  %@", NSStringFromSelector(action), [self respondsToSelector:action] ? @"YES" : @"NO");
     return [self respondsToSelector:action];
 }
 
@@ -1350,9 +1233,6 @@
 }
 
 - (void)pinchView:(UIPinchGestureRecognizer *)gestureRecognizer {
-    NSLog(@"pinchView");
-    //gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
-    //gestureRecognizer.scale = 1.0f;
     
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
@@ -1362,7 +1242,6 @@
             if ([gestureRecognizer numberOfTouches] >= 2) {
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-                //CGFloat distance = CGDistance(locationStart0, locationStart1);
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
                 NSLog(@"Start difference y = %f", differenceY);
             }
@@ -1372,7 +1251,6 @@
             if ([gestureRecognizer numberOfTouches] >= 2) {
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-                //CGFloat distance = CGDistance(locationStart0, locationStart1);
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
                 NSLog(@"Change difference y = %f", differenceY);
             }
@@ -1385,17 +1263,12 @@
             break;
         }
         case UIGestureRecognizerStateEnded: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateEnded
-            //CGPoint locationEnd0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-            //CGPoint locationEnd1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-            //CGFloat distance = CGDistance(locationEnd0, locationEnd1);
-            //NSLog(@"End distance %f", distance);
             break;
         }
     }
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    //NSLog(@"panPiece %@, %@", gestureRecognizer.delaysTouchesBegan ? @"YES" : @"NO", gestureRecognizer.delaysTouchesEnded ? @"YES" : @"NO");
 
     CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
@@ -1410,14 +1283,8 @@
             newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [self setScrollersEnabled: NO];
 
-            
-            //[[gestureRecognizer view] retain];
-            //[[gestureRecognizer view] removeFromSuperview];
-
-            
             [[gestureRecognizer view] setCenter: newCenter];
 
-            //[[self designScrollView] addSubview: [gestureRecognizer view]];
             {
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
@@ -1446,19 +1313,14 @@
                             [hasObjects removeObjectAtIndex:deleteIndex];
                             [documentSection setHasObjects:hasObjects];
                             [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                            //UICollectionView *svSection = [self getCollectionViewForRptqSection:documentSection];
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                         } completion:^(BOOL finished) {
-                            //[[gestureRecognizer view] setHidden:NO];
                             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
                             [[gestureRecognizer view] setCenter: newCenter];
                             [[self designScrollView] addSubview: [gestureRecognizer view]];
 
-                            //[[gestureRecognizer view] setCenter: newCenter];
-                            //[[self designScrollView] addSubview: [gestureRecognizer view]];
                             [svSection setDelegate:self];
-                            //[[gestureRecognizer view] release];
                         }];
                     }
                 }
@@ -1534,13 +1396,11 @@
                     
                     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[newParent objectIdTag]
                                                                                             fromObjectContext:managedObjectContext];
-                    //NSIndexPath *indexPath = [newParent indexPathForItemAtPoint:newCenter];
-                    //if (indexPath == nil) {
-                        NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
-                        if (indexPath == nil) {
-                            indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
-                        }
-                    //}
+
+                    NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
+                    if (indexPath == nil) {
+                        indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
+                    }
                     
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
                     
@@ -1573,10 +1433,6 @@
     }
 }
 
-- (NSIndexPath *)insertPathForItemWithCenterPoint:(CGPoint)center {
-    
-}
-
 - (void)setScrollersEnabled:(BOOL)enabled {
     @synchronized([self designScrollView]) {
         if ([[self designScrollView] respondsToSelector:@selector(setScrollEnabled:)]) {
@@ -1592,118 +1448,22 @@
     }
 }
 
-#pragma mark - UINavigationBarDelegate
-
-- (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
-
-    if ([item isEqual:[self navigationItemFontChooser]]) {
-    } else if ([item isEqual:[self navigationItemLayout]]) {
-    } else if ([item isEqual:[self navigationItemStyle]]) {
-    }
-    
-}
-
-- (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-
-}
-
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
-    BOOL shouldPopItem = NO;
-
-    if ([item isEqual:[self navigationItemFontChooser]]) {
-        shouldPopItem = YES;
-        
-        CGRect offScreen = CGRectMake([[[self tableViewControllerFontSelector] tableView] frame].origin.x + [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y,
-                                      [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
-        
-        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self toolboxContainerView] bounds]];
-        
-        
-        [UIView animateWithDuration:0.3000f animations:^{
-            [[[self tableViewControllerFontSelector] tableView] setFrame: offScreen];
-        } completion:^(BOOL finished) {
-            [[[self tableViewControllerFontSelector] tableView] removeFromSuperview];
-        }];
-    } else if ([item isEqual:[self navigationItemLayout]]) {
-
-    } else if ([item isEqual:[self navigationItemStyle]]) {
-    
-    }
-    
-    return shouldPopItem;
-}
-
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item {
-    BOOL shouldPushItem = NO;
-    
-    if ([item isEqual:[self navigationItemFontChooser]]) {
-        shouldPushItem = YES;
-
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-        NSString *frontName = @"";
-        for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-            frontName = [documentObject fontname];
-            break;
-        }
-        [[self tableViewControllerFontSelector] setSelectedFont:[MTFont fontWithFamilyName:frontName]];
-
-        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self toolboxContainerView] bounds]];
-        [[[self tableViewControllerFontSelector] tableView] setBounds: [[self toolboxContainerView] bounds]];
-        CGRect newRect = [[[self tableViewControllerFontSelector] tableView] frame];
-        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[self toolboxContainerView] bounds].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y, [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
-        
-        [[[self tableViewControllerFontSelector] tableView] setFrame: newRectOffscreen];
-        [[self toolboxContainerView] addSubview:[[self tableViewControllerFontSelector] tableView]];
-
-        
-        [UIView animateWithDuration:0.3000f animations:^{
-            [[[self tableViewControllerFontSelector] tableView] setFrame:newRect];
-        } completion:^(BOOL finished) {
-            
-        }];
-    } else if ([item isEqual:[self navigationItemLayout]]) {
-    } else if ([item isEqual:[self navigationItemStyle]]) {
-    }
-    return shouldPushItem;
-}
-
-#pragma mark - UITableViewControllerFontSelectorDelegate
-
-- (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
-    CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
-    
-    MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
-
-
-    [[self tableViewControllerTextLayoutSettings] chooseFont:font];
-    
-    [font release];
-    [[self navigationBarToolbox] popNavigationItemAnimated:YES];
-}
-
-#pragma mark - FontSettingsTableViewControllerDelegate
-
-- (void)fontSettingsTableViewControllerDidSelectFontList:(MTReportDesignerFontSettingsViewController *)controller {
-    [[self navigationBarToolbox] pushNavigationItem:[self navigationItemFontChooser] animated:YES];
-}
-
 #pragma mark - MTElementViewDelegate
 
 - (void)didSelectElementView:(id)sender {
     if ([sender isKindOfClass:[MTElementView class]]) {
         MTElementView *elementView = sender;
         [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
         [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
         [[elementView layer] setBorderWidth:3.0000f];
-        
+        [elementView setDisplaySelected:YES];
+
+        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
         if ([AppDelegate isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
             [passThroughViews addObject:elementView];
             [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
             [passThroughViews release];
             
             CGRect popoverRect;
@@ -1730,9 +1490,6 @@
                 popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
             }
             [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-            //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
-            
-            
         }
     }
 }
@@ -1741,23 +1498,20 @@
     if ([sender isKindOfClass:[MTElementView class]]) {
         MTElementView *elementView = sender;
         [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
-        [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:[self selectedObjectIds]];
         [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
         [[elementView layer] setBorderWidth:0.0000f];
-        
+        [elementView setDisplaySelected:NO];
+        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
         if ([AppDelegate isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
             [passThroughViews removeObject:elementView];
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
             [passThroughViews release];
             
             if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
                 if ([[self selectedObjectIds] count] > 0) {
                     CGRect popoverRect = [self rectForSelectedElements];
                     [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
-                    //[[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, [[self viewControllerToolbox] contentHeight])];
-                    
                 } else {
                     [[self popoverControllerInformation] dismissPopoverAnimated:animated];
                 }
