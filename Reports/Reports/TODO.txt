@@ -5,9 +5,7 @@ Report Designer
     Formula type will use a sub set of JavaScript, since JavaScript is widely known, and there is a processor for it  built into Safari which is always running on iOS.
 
 Report Viewer
-    Read cached query results instead of refreshing every time viewer is opened.
-    Provide refresh button.
-    Provide print button (print functionallity is built into rendering).
+    Provide print button.
     Save image of rendered report for thumbnail.
     Render font style changes in rendering of report (size and margin are already implemented).
 
@@ -25,11 +23,10 @@ Query Builder
     Make sure the predicates are added correctly to the table view, because in some cases they can't be deleted.
 
 File Type
-    The software is using Apple's UIManagedDocuemnt and core data.
     Implement the UIManagedDocument iCloud features.
     Add encryption while writing to the file.
 
-Export (only need a few to launch)
+Export
     Add the ability to export to many file types.  I believe exporting to PDF, and image types may be free.  Exporting to rich text may be easy.  Word or Excel may be hard.  HTML, test, and other types maybe time consuming.
 
 Future
