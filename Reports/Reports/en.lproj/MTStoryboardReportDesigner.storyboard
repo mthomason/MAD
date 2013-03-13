@@ -13,7 +13,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8ak-PQ-eRf">
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="NjH-tx-gYJ" customClass="MTDocumentTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="73"/>
@@ -117,7 +117,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <color key="shadowColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -581,7 +581,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="y1z-I5-jq9"/>
                                     <barButtonItem style="plain" id="h7K-BX-Chp">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="aXL-Ux-ed8">
-                                            <rect key="frame" x="60" y="8" width="200" height="30"/>
+                                            <rect key="frame" x="60" y="8" width="200" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Direct"/>
@@ -1504,9 +1504,9 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="PX3-7C-CJs">
                                 <items>
                                     <navigationItem prompt="Choose a data field to add to the report." id="rVi-iu-NBp">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="cjM-Dy-5Ql">
+                                        <barButtonItem key="leftBarButtonItem" id="cjM-Dy-5Ql">
                                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="RDr-VG-h6Z">
-                                                <rect key="frame" x="5" y="37" width="169" height="30"/>
+                                                <rect key="frame" x="5" y="37" width="169" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <segments>
                                                     <segment title="Data"/>
@@ -1559,7 +1559,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="WtT-L0-6MH">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection headerTitle="Report Settings" id="jPC-LR-YYd">
                                 <cells>
@@ -2405,7 +2405,7 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <color key="shadowColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -2563,7 +2563,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="McJ-nn-a7d">
                         <rect key="frame" x="0.0" y="94" width="320" height="348"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="6cw-3H-8w4">
                                 <cells>
@@ -2895,7 +2895,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="DG0-3B-f9T">
                         <rect key="frame" x="0.0" y="94" width="320" height="386"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="RUw-k9-4DF">
                                 <cells>
@@ -4477,7 +4477,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="314-jm-I3B">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="PcU-m7-gcE">
                                 <cells>
@@ -4641,7 +4641,6 @@
                                                         <segment title="" image="UIImageAlignRight20.png"/>
                                                         <segment title="" image="UIImageJustified20.png"/>
                                                     </segments>
-                                                    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="Y1d-3k-cly" eventType="valueChanged" id="qdi-ev-Sr6"/>
                                                     </connections>
@@ -4988,7 +4987,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Yr0-cZ-9SU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="5fH-BD-Lgl">
                                 <cells>
@@ -5229,7 +5228,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bezeled" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="76V-pw-dgD">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="76V-pw-dgD">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="219" id="eWF-fV-pU6"/>
                                 </constraints>
@@ -5425,7 +5424,7 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="oS4-ua-EcL">
                                 <items>
                                     <navigationItem title="Style" id="Jdj-Ok-868">
-                                        <barButtonItem key="leftBarButtonItem" width="6" style="plain" id="8Yk-ki-t3m">
+                                        <barButtonItem key="leftBarButtonItem" width="6" id="8Yk-ki-t3m">
                                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="MFi-Pc-pvV">
                                                 <rect key="frame" x="5" y="7" width="112" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5491,7 +5490,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nEZ-nL-QMR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="THX-cK-fpM">
                                 <cells>
@@ -5801,7 +5800,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="HXN-S5-Znu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
                             <tableViewSection id="LwF-3X-VXq">
                                 <cells>
@@ -5965,7 +5964,6 @@
                                                         <segment title="" image="UIImageAlignRight20.png"/>
                                                         <segment title="" image="UIImageJustified20.png"/>
                                                     </segments>
-                                                    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="w2d-Ru-Prz" eventType="valueChanged" id="6yO-nx-ldq"/>
                                                     </connections>
@@ -6353,11 +6351,9 @@
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="doneReports:"/>
-                <relationship kind="action" name="hideToolbox:"/>
                 <relationship kind="action" name="info:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
-                <relationship kind="action" name="showToolbox:"/>
                 <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>

@@ -14,7 +14,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3nL-Du-DlL">
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="6sB-Nb-KpQ" customClass="MTDocumentTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="540" height="73"/>
@@ -121,7 +120,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <color key="shadowColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -1328,7 +1327,7 @@
                     <navigationItem key="navigationItem" title="Sources" id="GRE-Ow-xet">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="zdW-5M-tg3">
                             <connections>
-                                <segue destination="3Mx-Bn-2hp" kind="modal" id="GZh-i8-iBO"/>
+                                <segue destination="3Mx-Bn-2hp" kind="modal" identifier="MUIViewControllerDatabaseSources" id="GZh-i8-iBO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1486,9 +1485,9 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="9hL-Yu-nZ8">
                                 <items>
                                     <navigationItem prompt="Choose a data field to add to the report." id="xq3-Wt-H8Q">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="TsH-6X-EMX">
+                                        <barButtonItem key="leftBarButtonItem" id="TsH-6X-EMX">
                                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CDQ-N9-bII">
-                                                <rect key="frame" x="7" y="37" width="169" height="30"/>
+                                                <rect key="frame" x="7" y="37" width="169" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <segments>
                                                     <segment title="Data"/>
@@ -2334,7 +2333,7 @@
                         <barButtonItem key="backBarButtonItem" title="Templates" id="jZY-cq-fHX"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="YgA-Ip-FbD">
                             <connections>
-                                <segue destination="Vp7-kw-tdW" kind="modal" id="IGk-Hc-Pc4"/>
+                                <segue destination="Vp7-kw-tdW" kind="modal" identifier="MTSegueShowPurchaseNewDataSourceIdentifier" id="IGk-Hc-Pc4"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2473,7 +2472,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <color key="shadowColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
@@ -2589,9 +2588,9 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="dbX-HU-7JI">
                                 <items>
                                     <navigationItem title="Style" id="rha-D2-4ja">
-                                        <barButtonItem key="leftBarButtonItem" width="6" style="plain" id="Y6w-0C-jcG">
+                                        <barButtonItem key="leftBarButtonItem" width="6" id="Y6w-0C-jcG">
                                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="E5I-wM-boO">
-                                                <rect key="frame" x="7" y="7" width="112" height="30"/>
+                                                <rect key="frame" x="7" y="7" width="112" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <segments>
                                                     <segment title="Style"/>
@@ -5449,7 +5448,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bezeled" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BVG-TM-2hn">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BVG-TM-2hn">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="219" id="EKy-ve-OyM"/>
                                 </constraints>
@@ -5485,7 +5484,7 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="3Lg-x0-vTY">
                                 <items>
                                     <navigationItem title="Style" id="GEZ-bD-Wrc">
-                                        <barButtonItem key="leftBarButtonItem" width="6" style="plain" id="qcH-Y1-xgm">
+                                        <barButtonItem key="leftBarButtonItem" width="6" id="qcH-Y1-xgm">
                                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Gsd-Ys-TJG">
                                                 <rect key="frame" x="7" y="7" width="112" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5541,7 +5540,7 @@
                 <navigationItem title="Layout" id="Pn4-fc-4RN"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rsx-fG-ESg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1149" y="1610"/>
+            <point key="canvasLocation" x="-1093" y="1995"/>
         </scene>
         <!--Report Designer Font Settings View Controller-->
         <scene sceneID="vsD-Q7-7Hg">
@@ -5714,7 +5713,6 @@
                                                         <segment title="" image="UIImageAlignRight20.png"/>
                                                         <segment title="" image="UIImageJustified20.png"/>
                                                     </segments>
-                                                    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="SNn-qs-hnu" eventType="valueChanged" id="AxQ-O0-ci0"/>
                                                     </connections>
@@ -6161,11 +6159,9 @@
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="doneReports:"/>
-                <relationship kind="action" name="hideToolbox:"/>
                 <relationship kind="action" name="info:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
-                <relationship kind="action" name="showToolbox:"/>
                 <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
@@ -6361,7 +6357,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="SZe-fX-9Gn"/>
-        <segue reference="gHU-nl-MSa"/>
         <segue reference="Etx-kq-xDK"/>
+        <segue reference="gHU-nl-MSa"/>
     </inferredMetricsTieBreakers>
 </document>
