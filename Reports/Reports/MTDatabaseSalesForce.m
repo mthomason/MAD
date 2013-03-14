@@ -39,6 +39,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
 #warning Not implemented.
+    return @"";
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
