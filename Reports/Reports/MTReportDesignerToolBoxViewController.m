@@ -129,9 +129,15 @@
     if ([sender selectedSegmentIndex] == 0) {
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Style", @"Style")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
-    } else  if ([sender selectedSegmentIndex] == 1) {
+    } else if ([sender selectedSegmentIndex] == 1) {
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Layout", @"Layout")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
+    } else if ([sender selectedSegmentIndex] == 2) {
+        [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Format", @"Format")];
+        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerFormat"];
+    } else if ([sender selectedSegmentIndex] == 3) {
+        [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Grouping", @"Grouping")];
+        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerGrouping"];
     }
     [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
     [newViewController setDelegate:self];
@@ -199,6 +205,7 @@
     BOOL shouldPushItem = NO;
     
     if ([item isEqual:[self navigationItemFontSelector]]) {
+    
         shouldPushItem = YES;
         
         NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
@@ -212,18 +219,19 @@
         
         [[[self tableViewControllerFontSelector] tableView] setFrame: [[self contentView] bounds]];
         [[[self tableViewControllerFontSelector] tableView] setBounds: [[self contentView] bounds]];
+
         CGRect newRect = [[[self tableViewControllerFontSelector] tableView] frame];
         CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[self contentView] bounds].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y, [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
         
         [[[self tableViewControllerFontSelector] tableView] setFrame: newRectOffscreen];
-        [[self contentView] addSubview:[[self tableViewControllerFontSelector] tableView]];
-        
+        [[self contentView] addSubview:[[self tableViewControllerFontSelector] tableView]];        
         
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self tableViewControllerFontSelector] tableView] setFrame:newRect];
         } completion:^(BOOL finished) {
             
         }];
+        
     } else if ([item isEqual:[self navigationItemLayout]]) {
     } else if ([item isEqual:[self navigationItemStyle]]) {
     }

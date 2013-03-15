@@ -20,6 +20,15 @@ typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
 	MNSSegmentedControlOptionsMedia = 2,
 };
 
+typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
+	MTDocumentObjectTypeLabelData = 0,
+	MTDocumentObjectTypeLabel = 1,
+	MTDocumentObjectTypeImage = 2,
+    MTDocumentObjectTypeChart = 3,
+    MTDocumentObjectTypeFormula = 4,
+    MTDocumentObjectTypeAggregate = 5
+};
+
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
 - (void)insertDocumentObjectNewLabel;
