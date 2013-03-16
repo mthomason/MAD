@@ -34,13 +34,10 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 @implementation MTReportDesignerObjectSelectorViewController
 
-@synthesize visableViewController = _visableViewController;
-
 - (void)dealloc {
     [_viewControllerToPush release];
     if (_visableViewController) [_visableViewController release];
     [_childDisplayedView release];
-    [_segmentedControlSelectorType release];
     [_containerView release];
     [_toolbarMain release];
     [_navigationBar release];
@@ -74,23 +71,12 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    BOOL imagePickerAvailable = [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary];
-    
-    [[self segmentedControlSelectorType] setSelectedSegmentIndex: MNSSegmentedControlOptionsData];
-
-    [[self segmentedControlSelectorType] setEnabled: imagePickerAvailable
-                                  forSegmentAtIndex: MNSSegmentedControlOptionsMedia];
-    [[self segmentedControlSelectorType] setEnabled: YES
-                                  forSegmentAtIndex: MNSSegmentedControlOptionsData];
-    [[self segmentedControlSelectorType] setEnabled: YES
-                                  forSegmentAtIndex: MNSSegmentedControlOptionsObjects];
+        
     [self showObjectSelector];
     [[self navigationBar] setDelegate:self];
     
     UIViewController *childViewController = [[UIViewController alloc] init];
     [[childViewController view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-//    [[childViewController view] setFrame:[[self containerView] frame]];
     [self setChildViewController:childViewController];
     [childViewController release];
     
@@ -108,75 +94,8 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 #pragma mark - Actions
 
-- (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender {
-    [self showObjectSelector];
-}
-
 - (IBAction)done:(id)sender {
     [[self objectSelectorDelegate] viewControllerDidFinish: self];
-}
-
-
-- (void)showObjectSelectorOfType:(MTDocumentObjectType)objectType {
-    UIViewController *hidingView = nil;
-    if ([self visableViewController] != nil) {
-        hidingView = [[self visableViewController] retain];
-    }
-    
-    switch (objectType) {
-        case MNSSegmentedControlOptionsData: {
-
-            [[self navigationItemMain] setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
-            UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-            MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
-            [queryBuilderChooseFieldViewController setExcludeTables:[NSArray array]];
-            [queryBuilderChooseFieldViewController setDelegate: self];
-            [self setVisableViewController: queryBuilderChooseFieldViewController];
-            [queryBuilderChooseFieldViewController release];
-            [storyboard release];
-            
-            break;
-        }
-        case MNSSegmentedControlOptionsMedia: {
-
-            [[self navigationItemMain] setPrompt: NSLocalizedString(@"Choose an image to add to the report.", @"Prompt to choose an image.")];
-            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
-                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-                [imagePicker setDelegate: self];
-                [self setVisableViewController: imagePicker];
-                [imagePicker release];
-            }
-
-            break;
-        }
-        case MNSSegmentedControlOptionsObjects: {
-
-            [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
-            UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-            UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
-            [[documentObjectSelectorViewController collectionView] setDelegate:self];
-            [[documentObjectSelectorViewController collectionView] setDataSource:self];
-            [self setVisableViewController: documentObjectSelectorViewController];
-            [self setDocumentObjectSelectorViewController:documentObjectSelectorViewController];
-            [documentObjectSelectorViewController release];
-            [storyboard release];
-            
-            break;
-        }
-        default:
-            break;
-    }
-    
-    [[[self visableViewController] view] setFrame:[[self containerView] bounds]];
-    [UIView animateWithDuration:0.20000f animations:^{
-        if (hidingView) [[hidingView view] removeFromSuperview];
-        if ([self visableViewController]) {
-            [[self containerView] addSubview:[[self visableViewController] view]];
-        }
-    } completion:^(BOOL finished) {
-        if (hidingView) [hidingView release];
-    }];
 }
 
 - (void)showObjectSelector {
@@ -224,6 +143,8 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
     if (selectedImage) {
         [selectedImage retain];
 
+
+        
         
         
         [selectedImage release];
@@ -358,11 +279,9 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
                     break;
                 case MTDocumentObjectTypeImage:
                     navigationItemTitle = NSLocalizedString(@"Image", @"Image");
-                    //[self showObjectSelectorOfType:MTDocumentObjectTypeImage];
                     break;
                 case MTDocumentObjectTypeAggregate:
                     navigationItemTitle = NSLocalizedString(@"Aggregate", @"Aggregate");
-                    //[self showObjectSelectorOfType:MTDocumentObjectTypeAggregate];
                     break;
                 default:
                     break;
@@ -462,6 +381,7 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
         UIViewController *viewControllerToAdd = nil;
         
         switch ([self typeOfObjectToPush]) {
+
             case MTDocumentObjectTypeLabelData: {
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
@@ -470,9 +390,9 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
                 [queryBuilderChooseFieldViewController setDelegate: self];
                 viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
                 [queryBuilderChooseFieldViewController release];
-                
                 break;
             }
+            
             case MTDocumentObjectTypeImage: {
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Image"];
@@ -483,13 +403,11 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
                     viewControllerToAdd = [imagePicker retain];
                     [imagePicker release];
                 }
-                
-                
                 break;
             }
+            
             default: {
                 [item setPrompt: @""];
-
                 break;
             }
         }
@@ -512,7 +430,7 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
         [[[self visableViewController] view] bringSubviewToFront:[[self childViewController] view]];
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self childViewController] view] setFrame:newRect];
-            NSLog(@"Child view controller frame: %@", NSStringFromCGRect(self.childViewController.view.frame));
+            NSLog(@"Child view controller frame: %@", NSStringFromCGRect([[self childViewController] view].frame));
         } completion:^(BOOL finished) {
             
         }];
@@ -524,11 +442,6 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
         [viewControllerToAdd release];
     
     }
-
-    
-
-    
-    
     
     return pushIt;
 }

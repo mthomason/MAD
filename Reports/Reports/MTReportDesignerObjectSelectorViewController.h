@@ -14,12 +14,6 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 
-typedef NS_ENUM(NSUInteger, MNSSegmentedControlOptions) {
-	MNSSegmentedControlOptionsData = 0,
-	MNSSegmentedControlOptionsObjects = 1,
-	MNSSegmentedControlOptionsMedia = 2,
-};
-
 typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
 	MTDocumentObjectTypeLabelData = 0,
 	MTDocumentObjectTypeLabel = 1,
@@ -46,13 +40,11 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         UICollectionViewDelegateFlowLayout>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlSelectorType;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarMain;
 @property (retain, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemMain;
 
-- (IBAction)segmentedControlSelectorTypeValueChanged:(id)sender;
 - (IBAction)done:(id)sender;
 
 - (void)showObjectSelector;
