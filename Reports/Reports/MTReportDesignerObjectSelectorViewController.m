@@ -15,20 +15,33 @@ NSString * const MTIdentiferDocumentObjectAggregateCollectionViewCell = @"MTIden
 NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentiferDocumentObjectDataCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
 
+typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
+	MTDocumentObjectTypeLabelData = 0,
+	MTDocumentObjectTypeLabel = 1,
+	MTDocumentObjectTypeImage = 2,
+    MTDocumentObjectTypeChart = 3,
+    MTDocumentObjectTypeFormula = 4,
+    MTDocumentObjectTypeAggregate = 5
+};
+
 @interface MTReportDesignerObjectSelectorViewController ()
 
-@property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
+@property (nonatomic, retain) IBOutlet UIView *containerView;
+@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemMain;
 
-@property (nonatomic, retain) UIViewController *visableViewController;
-@property (nonatomic, retain) UIViewController *childViewController;
 @property (nonatomic, retain) UICollectionViewController *documentObjectSelectorViewController;
+@property (nonatomic, retain) UIViewController *visibleViewController;
+@property (nonatomic, retain) UIViewController *childViewController;
+@property (nonatomic, retain) UIViewController *viewControllerToPush;
 @property (nonatomic, retain) UIView *childDisplayedView;
 
-@property (nonatomic, retain) UIViewController *viewControllerToPush;
-
+@property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
 
 - (BOOL)childViewControllerIsVisable;
+- (IBAction)done:(id)sender;
+
 
 @end
 
@@ -36,10 +49,9 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)dealloc {
     [_viewControllerToPush release];
-    if (_visableViewController) [_visableViewController release];
+    [_visibleViewController release];
     [_childDisplayedView release];
     [_containerView release];
-    [_toolbarMain release];
     [_navigationBar release];
     [_navigationItemMain release];
     [_documentObjectSelectorViewController release];
@@ -71,8 +83,21 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
-    [self showObjectSelector];
+
+    // MARK: Add collection view contorller.
+    [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
+    UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+    UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
+    [[documentObjectSelectorViewController collectionView] setDelegate:self];
+    [[documentObjectSelectorViewController collectionView] setDataSource:self];
+    [self setVisibleViewController: documentObjectSelectorViewController];
+    [documentObjectSelectorViewController release];
+    [storyboard release];
+    [[[self visibleViewController] view] setFrame:[[self containerView] bounds]];
+    if ([self visibleViewController]) {
+        [[self containerView] addSubview:[[self visibleViewController] view]];
+    }
+    
     [[self navigationBar] setDelegate:self];
     
     UIViewController *childViewController = [[UIViewController alloc] init];
@@ -96,29 +121,6 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (IBAction)done:(id)sender {
     [[self objectSelectorDelegate] viewControllerDidFinish: self];
-}
-
-- (void)showObjectSelector {
-
-    [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
-    UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-    UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
-    [[documentObjectSelectorViewController collectionView] setDelegate:self];
-    [[documentObjectSelectorViewController collectionView] setDataSource:self];
-    [self setVisableViewController: documentObjectSelectorViewController];
-    [documentObjectSelectorViewController release];
-    [storyboard release];
-
-    
-    [[[self visableViewController] view] setFrame:[[self containerView] bounds]];
-    [UIView animateWithDuration:0.20000f animations:^{
-        if ([self visableViewController]) {
-            [[self containerView] addSubview:[[self visableViewController] view]];
-        }
-    } completion:^(BOOL finished) {
-
-    }];
-
 }
 
 - (BOOL)childViewControllerIsVisable {
@@ -426,8 +428,8 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
                                              [[[self childViewController] view] frame].size.height);
         
         [[[self childViewController] view] setFrame:newRectOffscreen];
-        [[[self visableViewController] view] addSubview:[[self childViewController] view]];
-        [[[self visableViewController] view] bringSubviewToFront:[[self childViewController] view]];
+        [[[self visibleViewController] view] addSubview:[[self childViewController] view]];
+        [[[self visibleViewController] view] bringSubviewToFront:[[self childViewController] view]];
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self childViewController] view] setFrame:newRect];
             NSLog(@"Child view controller frame: %@", NSStringFromCGRect([[self childViewController] view].frame));

@@ -14,15 +14,6 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 
-typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelData = 0,
-	MTDocumentObjectTypeLabel = 1,
-	MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5
-};
-
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
 - (void)insertDocumentObjectNewLabel;
@@ -40,14 +31,6 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         UICollectionViewDelegateFlowLayout>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
-@property (retain, nonatomic) IBOutlet UIView *containerView;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarMain;
-@property (retain, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemMain;
-
-- (IBAction)done:(id)sender;
-
-- (void)showObjectSelector;
 
 @end
 
