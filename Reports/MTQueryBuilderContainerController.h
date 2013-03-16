@@ -20,9 +20,7 @@
     <MUIViewControllerProtocol>
 
 @property (nonatomic, assign) id <MTQueryBuilderContainerDelegate> delegateContentController;
-@property (nonatomic, retain) NSURL *documentToOpen;
 
-- (MTQueryBuilderViewController *)queryBuilderController;
-- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
+@property (nonatomic, retain) NSURL *documentToOpen;
 
 @end

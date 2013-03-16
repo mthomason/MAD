@@ -16,6 +16,9 @@
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet MTTitleView *titleView;
 
+- (MTQueryBuilderViewController *)queryBuilderController;
+- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
+
 @end
 
 @implementation MTQueryBuilderContainerController

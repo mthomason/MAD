@@ -1011,6 +1011,10 @@
 		4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
+		4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
+		4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
+		4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */; };
+		4CB0FF6E16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */; };
 		4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; };
 		4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
@@ -2051,6 +2055,11 @@
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
 		4CAB178F150FE38400BA0A9B /* MTRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTRulerView.h; sourceTree = "<group>"; };
 		4CAB1790150FE38400BA0A9B /* MTRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTRulerView.m; sourceTree = "<group>"; };
+		4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
+		4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
+		4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTToolboxViewControllerProtocol.h; path = Reports/MTToolboxViewControllerProtocol.h; sourceTree = "<group>"; };
+		4CB0FF6B16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerDocumentObjectFormat.h; sourceTree = "<group>"; };
+		4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerDocumentObjectFormat.m; sourceTree = "<group>"; };
 		4CB12C9C14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderLinkBuilderViewController.h; sourceTree = "<group>"; };
 		4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
 		4CB42DC6166A339300CE1876 /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
@@ -3131,7 +3140,6 @@
 		4C8EEC881644E6C000FAB2F3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4CBD621316E63F7B00ACB729 /* User Settings */,
 				4CBD621216E63F6F00ACB729 /* Application Settings */,
 				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
 				4CF1329416CA1E4900FD0F0B /* Report Desinger */,
@@ -3144,6 +3152,7 @@
 				4C00818414B738E9003DF437 /* Model */,
 				4CDB624B14E38C8400A5389E /* Categories */,
 				4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */,
+				4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -3556,13 +3565,6 @@
 			name = "Application Settings";
 			sourceTree = "<group>";
 		};
-		4CBD621316E63F7B00ACB729 /* User Settings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "User Settings";
-			sourceTree = "<group>";
-		};
 		4CCD8CF1150385A5002B9E77 /* Patterns */ = {
 			isa = PBXGroup;
 			children = (
@@ -3855,6 +3857,8 @@
 				4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */,
 				4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */,
 				4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */,
+				4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */,
+				4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -3908,6 +3912,8 @@
 				4CE9985D14B69AA70015C8D1 /* MTReportDesignerFontSettingsViewController.m */,
 				4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */,
 				4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */,
+				4CB0FF6B16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.h */,
+				4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */,
 			);
 			name = "Report Desinger";
 			path = Reports;
@@ -5176,6 +5182,8 @@
 				4CE9BCD216EF715E00B0808C /* RptqUserCredentals.m in Sources */,
 				4CE9BCD616EF715E00B0808C /* RptqDocumentObjectFormula.m in Sources */,
 				4CE9BCDA16EF715E00B0808C /* RptqDocumentObjectLabel.m in Sources */,
+				4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
+				4CB0FF6E16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5619,6 +5627,8 @@
 				4CE9BCD116EF715E00B0808C /* RptqUserCredentals.m in Sources */,
 				4CE9BCD516EF715E00B0808C /* RptqDocumentObjectFormula.m in Sources */,
 				4CE9BCD916EF715E00B0808C /* RptqDocumentObjectLabel.m in Sources */,
+				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
+				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

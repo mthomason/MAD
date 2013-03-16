@@ -15,65 +15,118 @@
 
 @interface MTReportDesignerFontSettingsViewController()
 
-@property (nonatomic, retain) NSSet *userSelectedObjectIds;
-
-@property (retain, nonatomic) IBOutlet UILabel *labelPaddingTop;
-@property (retain, nonatomic) IBOutlet UILabel *labelPaddingBottom;
-@property (retain, nonatomic) IBOutlet UILabel *labelPaddingLeft;
-@property (retain, nonatomic) IBOutlet UILabel *labelPaddingRight;
-
-@property (retain, nonatomic) IBOutlet UILabel *labelMarginTop;
-@property (retain, nonatomic) IBOutlet UILabel *labelMarginBottom;
-@property (retain, nonatomic) IBOutlet UILabel *labelMarginLeft;
-@property (retain, nonatomic) IBOutlet UILabel *labelMarginRight;
-@property (retain, nonatomic) IBOutlet UILabel *labelSizeWidth;
-@property (retain, nonatomic) IBOutlet UILabel *labelSizeHeight;
-
-@property (retain, nonatomic) IBOutlet UIStepper *stepperPaddingTop;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperPaddingBottom;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperPaddingLeft;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperPaddingRight;
-
-@property (retain, nonatomic) IBOutlet UIStepper *stepperMarginTop;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperMarginBottom;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperMarginLeft;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperMarginRight;
-
-@property (retain, nonatomic) IBOutlet UIStepper *stepperSizeWidth;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperSizeHeight;
-
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
-
-@property (retain, nonatomic) IBOutlet UILabel *labelTest;
 @property (assign) MTControlState controlStateBold;
 @property (assign) MTControlState controlStateItalic;
 @property (assign) MTControlState controlStateStrike;
 @property (assign) MTControlState controlStateUnderline;
 
-@property (retain, nonatomic) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
-@property (retain, nonatomic) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
+@property (nonatomic, retain) NSSet *userSelectedObjectIds;
 
-@property (retain, nonatomic) IBOutletCollection(UIStepper) NSArray *steppers;
+@property (nonatomic, retain) IBOutlet UITableViewCell *fontLabelTableViewCell;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segControlFontStyle;
+@property (nonatomic, retain) IBOutlet UILabel *labelFontSize;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperFontSize;
+@property (nonatomic, retain) IBOutlet UIButton *buttonBold;
+@property (nonatomic, retain) IBOutlet UIButton *buttonItalic;
+@property (nonatomic, retain) IBOutlet UIButton *buttonStrike;
+@property (nonatomic, retain) IBOutlet UIButton *buttonUnderline;
+
+@property (nonatomic, retain) IBOutlet UILabel *labelPaddingTop;
+@property (nonatomic, retain) IBOutlet UILabel *labelPaddingBottom;
+@property (nonatomic, retain) IBOutlet UILabel *labelPaddingLeft;
+@property (nonatomic, retain) IBOutlet UILabel *labelPaddingRight;
+
+@property (nonatomic, retain) IBOutlet UILabel *labelMarginTop;
+@property (nonatomic, retain) IBOutlet UILabel *labelMarginBottom;
+@property (nonatomic, retain) IBOutlet UILabel *labelMarginLeft;
+@property (nonatomic, retain) IBOutlet UILabel *labelMarginRight;
+@property (nonatomic, retain) IBOutlet UILabel *labelSizeWidth;
+@property (nonatomic, retain) IBOutlet UILabel *labelSizeHeight;
+
+@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingTop;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingBottom;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingLeft;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingRight;
+
+@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginTop;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginBottom;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginLeft;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginRight;
+
+@property (nonatomic, retain) IBOutlet UIStepper *stepperSizeWidth;
+@property (nonatomic, retain) IBOutlet UIStepper *stepperSizeHeight;
+
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
+
+@property (nonatomic, retain) IBOutlet UILabel *labelTest;
+
+@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
+@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
+
+@property (nonatomic, retain) IBOutletCollection(UIStepper) NSArray *steppers;
+
+- (IBAction)controlValueChanged:(id)sender;
 
 @end
 
 @implementation MTReportDesignerFontSettingsViewController
 
-@synthesize delegate;
 
-@synthesize fontLabelTableViewCell;
-@synthesize labelFontName;
-@synthesize segControlFontStyle;
-@synthesize labelFontSize;
-@synthesize stepperFontSize;
+- (void)dealloc {
+    [_userSelectedObjectIds release];
+    [_labelFontName release];
+    [_segControlFontStyle release];
+    [_fontLabelTableViewCell release];
+    [_labelFontSize release];
+    [_stepperFontSize release];
+    [_buttonBold release];
+    [_buttonItalic release];
+    [_buttonStrike release];
+    [_buttonUnderline release];
+    [_segmentedControlHorizontalAlignment release];
+    
+    [_labelPaddingTop release];
+    [_labelPaddingBottom release];
+    [_labelPaddingLeft release];
+    [_labelPaddingRight release];
+    
+    [_stepperPaddingTop release];
+    [_stepperPaddingBottom release];
+    [_stepperPaddingLeft release];
+    [_stepperPaddingRight release];
+    
+    [_stepperMarginTop release];
+    [_stepperMarginBottom release];
+    [_stepperMarginLeft release];
+    [_stepperMarginRight release];
+    
+    [_labelMarginTop release];
+    [_labelMarginBottom release];
+    [_labelMarginLeft release];
+    [_labelMarginRight release];
+    
+    [_segmentedControlVerticalAlignment release];
+    [_steppers release];
+    [_stepperSizeWidth release];
+    [_stepperSizeHeight release];
+    
+    [_labelSizeWidth release];
+    [_labelSizeHeight release];
+    [_groupTableViewCellStyle release];
+    [_groupTableViewCellLayout release];
+    [_labelTest release];
+    [super dealloc];
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
+
     self = [super initWithCoder:aDecoder];
     if (self) {
         
     }
     return self;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,8 +137,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
+
     [[self tableView] setDelegate:self];
     UIImage *imageButton = [UIImage imageNamed:@"UIButton"];
     UIImage *imageButtonHighlighted = [UIImage imageNamed:@"UIButtonHighlighted"];
@@ -130,75 +182,13 @@
     return YES;
 }
 
-- (void)displayLayoutSettings {
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
-        [tableViewCell setHidden:NO];
-    }
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
-        [tableViewCell setHidden:YES];
-    }
-}
-
-- (void)displayStyleSettings {
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellStyle]) {
-        [tableViewCell setHidden:NO];
-    }
-    for (UITableViewCell *tableViewCell in [self groupTableViewCellLayout]) {
-        [tableViewCell setHidden:YES];
-    }
-}
-
-- (void)dealloc {
-    [_userSelectedObjectIds release];
-    [labelFontName release];
-    [segControlFontStyle release];
-    [fontLabelTableViewCell release];
-    [labelFontSize release];
-    [stepperFontSize release];
-    [_buttonBold release];
-    [_buttonItalic release];
-    [_buttonStrike release];
-    [_buttonUnderline release];
-    [_segmentedControlHorizontalAlignment release];
-
-    [_labelPaddingTop release];
-    [_labelPaddingBottom release];
-    [_labelPaddingLeft release];
-    [_labelPaddingRight release];
-
-    [_stepperPaddingTop release];
-    [_stepperPaddingBottom release];
-    [_stepperPaddingLeft release];
-    [_stepperPaddingRight release];
-    
-    [_stepperMarginTop release];
-    [_stepperMarginBottom release];
-    [_stepperMarginLeft release];
-    [_stepperMarginRight release];
-    
-    [_labelMarginTop release];
-    [_labelMarginBottom release];
-    [_labelMarginLeft release];
-    [_labelMarginRight release];
-    
-    [_segmentedControlVerticalAlignment release];
-    [_steppers release];
-    [_stepperSizeWidth release];
-    [_stepperSizeHeight release];
-    
-    [_labelSizeWidth release];
-    [_labelSizeHeight release];
-    [_groupTableViewCellStyle release];
-    [_groupTableViewCellLayout release];
-    [_labelTest release];
-    [super dealloc];
-}
-
 #pragma mark -
 #pragma mark Actions
 
 - (void)setStateInControl:(UIControl *)control forState:(MTControlState)state {
+    
     BOOL select, highlight;
+    
     switch (state) {
         case MTControlStateOn:
             select = NO;
@@ -217,20 +207,20 @@
             highlight = NO;
             break;
     }
+    
     [control setSelected:select];
     [control setHighlighted:highlight];
+    
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
+    
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [control setSelected:select];
             [control setHighlighted:highlight];
         }];
+
     });
     
-}
-
-- (void)initalizeDocumentObjects:(NSSet *)objectIds {
-    [self setUserSelectedObjectIds:objectIds];
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
@@ -275,7 +265,6 @@
             [stepper setUserInteractionEnabled:NO];
         }
         
-        
         self.labelSizeHeight.attributedText = [self sizeHeightForValue:nil andFontSize:[[[self labelSizeHeight] font] pointSize]];
         self.labelSizeWidth.attributedText = [self sizeWidthForValue:nil andFontSize:[[[self labelSizeWidth] font] pointSize]];
 
@@ -289,9 +278,8 @@
         self.labelPaddingLeft.attributedText = [self marginLeftForValue:nil andFontSize:[[[self labelPaddingLeft] font] pointSize]];
         self.labelPaddingRight.attributedText = [self marginRightForValue:nil andFontSize:[[[self labelPaddingRight] font] pointSize]];
 
-        
-        
     } else {
+        
         for (UIStepper *stepper in [self steppers]) {
             [stepper setUserInteractionEnabled:YES];
         }
@@ -576,8 +564,8 @@
 }
 
 - (NSAttributedString *)fontSizeStringForSizeInPoints:(CGFloat)points {
-    UIFont *boldFont = [UIFont boldSystemFontOfSize:[[labelFontSize font] pointSize]];
-    UIFont *systemFont = [UIFont systemFontOfSize:[[labelFontSize font] pointSize]];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:[[[self labelFontSize] font] pointSize]];
+    UIFont *systemFont = [UIFont systemFontOfSize:[[[self labelFontSize] font] pointSize]];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
 

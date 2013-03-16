@@ -15,6 +15,9 @@
 
 @interface MTQueryBuilderViewController()
 
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
 @property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
@@ -30,6 +33,11 @@
 @property (nonatomic, retain) NSMutableDictionary *modelWithZeroTables;
 @property (nonatomic, retain) NSMutableDictionary *modelWithOneTable;
 @property (nonatomic, retain) NSMutableDictionary *modelWithTwoOrMoreTables;
+
+@property (assign) NSInteger lastSelectedRowNumber;
+
+- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
+- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
 
 @end
 
@@ -49,7 +57,6 @@
     [_tableSectionTitles release];
     [_tableViewQueryBuilder release];
     [_toolbar release];
-    [_navigationItemMain release];
     [_viewClipboard release];
     [_toolbarTop release];
     [super dealloc];
@@ -1014,10 +1021,10 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *result = nil;
-    if ([AppDelegate isPad] == NO || YES) {
+    if ([UIDevice isPad] == NO || YES) {
         MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
 //        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, tableView.frame.size.width, 29.0000f)];
-        if ([AppDelegate isPad]) {
+        if ([UIDevice isPad]) {
             [headerView setBackgroundColor:[UIColor clearColor]];
         }
         section = [self tableSectionTypeForIndexPathSection: section];
@@ -1084,7 +1091,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == UIViewControllerSchemaTablesSectionsInstructions && [AppDelegate isPad] == NO) {
+    if (section == UIViewControllerSchemaTablesSectionsInstructions && [UIDevice isPad] == NO) {
         [self setLastSelectedRowNumber: [indexPath row]];
         [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
     }

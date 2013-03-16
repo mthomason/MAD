@@ -8,19 +8,18 @@
 
 #import "MTReportDesignerToolBoxViewController.h"
 #import "AppDelegate.h"
-#import "RptqDocumentObject+Extras.h"
 
 @interface MTReportDesignerToolBoxViewController ()
 
 @property (nonatomic, copy) NSSet *selectedObjectIds;
 
-@property (retain, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemStyle;
-@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemFontSelector;
-@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemLayout;
-@property (retain, nonatomic) IBOutlet UIView *backgroundView;
-@property (retain, nonatomic) IBOutlet UIView *contentView;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *sceneSelector;
+@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontSelector;
+@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
+@property (nonatomic, retain) IBOutlet UIView *backgroundView;
+@property (nonatomic, retain) IBOutlet UIView *contentView;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *sceneSelector;
 
 @property (nonatomic, retain) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
 @property (nonatomic, retain) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
@@ -125,22 +124,35 @@
 - (IBAction)valueChanged:(id)sender {
     [sender setEnabled:NO];
     UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+
     id newViewController = nil;
     if ([sender selectedSegmentIndex] == 0) {
+    
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Style", @"Style")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
+    
+        [newViewController setDelegate:self];
+
     } else if ([sender selectedSegmentIndex] == 1) {
+    
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Layout", @"Layout")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
+    
+        [newViewController setDelegate:self];
+
     } else if ([sender selectedSegmentIndex] == 2) {
+    
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Format", @"Format")];
-        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerFormat"];
+        newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
+    
     } else if ([sender selectedSegmentIndex] == 3) {
+    
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Grouping", @"Grouping")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerGrouping"];
+    
     }
+    
     [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
-    [newViewController setDelegate:self];
     
     [[newViewController tableView] setBounds: [[self contentView] bounds]];
     [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];

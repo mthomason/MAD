@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerFontSettingsViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MTToolboxViewControllerProtocol.h"
 #import "MTFont.h"
 
 @class MTReportDesignerFontSettingsViewController;
@@ -19,28 +20,13 @@
 @end
 
 @interface MTReportDesignerFontSettingsViewController : UITableViewController
-    <UITableViewDelegate>
+    <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSettingsDelegate> delegate;
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *fontLabelTableViewCell;
 @property (retain, nonatomic) IBOutlet UILabel *labelFontName;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segControlFontStyle;
-@property (retain, nonatomic) IBOutlet UILabel *labelFontSize;
-@property (retain, nonatomic) IBOutlet UIStepper *stepperFontSize;
-@property (retain, nonatomic) IBOutlet UIButton *buttonBold;
-@property (retain, nonatomic) IBOutlet UIButton *buttonItalic;
-@property (retain, nonatomic) IBOutlet UIButton *buttonStrike;
-@property (retain, nonatomic) IBOutlet UIButton *buttonUnderline;
 
 - (void)chooseFont:(MTFont *)font;
-- (void)initalizeDocumentObjects:(NSSet *)objectIds;    //Call this before you add view to super.
-- (void)setSelectedDocumentObjects:(NSSet *)objectIds;  //This is called on viewWillAppear... only call on change.
-
-- (IBAction)controlValueChanged:(id)sender;
-
-- (void)displayLayoutSettings;
-- (void)displayStyleSettings;
 
 @end
 

@@ -31,6 +31,8 @@
 #import "MTRulerView.h"
 #import "MTDocumentSectionView.h"
 #import "UIGestureRecognizer+AnchorPoint.h"
+#import "UIDevice+Hack.h"
+#import "MTReportViewerPrintPageRenderer.h"
 
 @interface MTReportDesignerViewController : MTViewController
     <UITableViewDataSource,

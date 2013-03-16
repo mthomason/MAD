@@ -2590,7 +2590,7 @@
                                                 </connections>
                                             </segmentedControl>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="scc-U5-SCc">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="scc-U5-SCc">
                                             <connections>
                                                 <action selector="userDidRequestFinish:" destination="cxh-jj-Xjt" id="O87-za-EZI"/>
                                             </connections>
@@ -2634,7 +2634,7 @@
                 </navigationItem>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NFA-xa-RX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-867" y="2930"/>
+            <point key="canvasLocation" x="-938" y="2796"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Ujm-VS-oAD">
@@ -5775,6 +5775,96 @@
             </objects>
             <point key="canvasLocation" x="-1336" y="2496"/>
         </scene>
+        <!--Report Designer Document Object Format-->
+        <scene sceneID="W5c-WE-9NP">
+            <objects>
+                <tableViewController storyboardIdentifier="MTReportDesignerDocumentObjectFormatIdentifier" id="hCx-v7-4my" customClass="MTReportDesignerDocumentObjectFormat" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="U5z-2f-Jh2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Numeric" id="J8n-u6-isD">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="i7Y-ip-07L">
+                                        <rect key="frame" x="0.0" y="34" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Decimals" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Jl-3W-6o8">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="dHC-om-TX9"/>
+                                                        <constraint firstAttribute="width" constant="158" id="oRu-9K-Bbn"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Rpw-FM-8pH"/>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="Rpw-FM-8pH" firstAttribute="centerY" secondItem="4Jl-3W-6o8" secondAttribute="centerY" type="default" id="4k3-Ky-3sW"/>
+                                            <constraint firstItem="Rpw-FM-8pH" firstAttribute="centerY" secondItem="i7Y-ip-07L" secondAttribute="centerY" type="default" id="DkA-c5-cGb"/>
+                                            <constraint firstItem="4Jl-3W-6o8" firstAttribute="leading" secondItem="i7Y-ip-07L" secondAttribute="leading" constant="20" type="default" id="c1M-vE-Lje"/>
+                                            <constraint firstAttribute="trailing" secondItem="Rpw-FM-8pH" secondAttribute="trailing" constant="30" id="y2W-Pd-uBQ"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="eW2-RD-SqW" style="IBUITableViewCellStyleDefault" id="iLW-HZ-DYE">
+                                        <rect key="frame" x="0.0" y="79" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eW2-RD-SqW">
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Zwa-bT-3Xk" detailTextLabel="NN7-MU-5ah" style="IBUITableViewCellStyleValue1" id="g9e-lg-z4q">
+                                        <rect key="frame" x="0.0" y="123" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Currency Local" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zwa-bT-3Xk">
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="en" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NN7-MU-5ah">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.2196078431372549" green="0.32941176470588235" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="hCx-v7-4my" id="fcC-9p-RIC"/>
+                            <outlet property="delegate" destination="hCx-v7-4my" id="3fK-Me-2gY"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rub-of-fOK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-938" y="2496"/>
+        </scene>
         <!--Query Builder Advanced View Controller-->
         <scene sceneID="dXq-EV-Zeo">
             <objects>
@@ -6034,7 +6124,6 @@
                 <relationship kind="action" name="addTable:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
                 <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
                 <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
@@ -6045,6 +6134,9 @@
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="viewClipboard" candidateClass="MTClipboardView"/>
             </relationships>
+        </class>
+        <class className="MTReportDesignerDocumentObjectFormat" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerDocumentObjectFormat.h"/>
         </class>
         <class className="MTReportDesignerFontSelectorViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSelectorViewController.h"/>
@@ -6067,6 +6159,10 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSettingsViewController.h"/>
             <relationships>
                 <relationship kind="action" name="controlValueChanged:"/>
+                <relationship kind="action" name="toggleBold:"/>
+                <relationship kind="action" name="toggleItalic:"/>
+                <relationship kind="action" name="toggleStrikeThrough:"/>
+                <relationship kind="action" name="toggleUnderline:"/>
                 <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
@@ -6109,13 +6205,10 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerObjectSelectorViewController.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="segmentedControlSelectorTypeValueChanged:"/>
                 <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
                 <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="objectSelectorDelegate"/>
-                <relationship kind="outlet" name="segmentedControlSelectorType" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="toolbarMain" candidateClass="UIToolbar"/>
             </relationships>
         </class>
         <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">

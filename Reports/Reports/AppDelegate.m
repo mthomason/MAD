@@ -64,18 +64,10 @@ void uncaughtExceptionHandler(NSException *exception) {
 #pragma mark - Actions
 
 + (NSString *)storyboardName {
-    NSString *storyboardName = [AppDelegate isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+    NSString *storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
     NSLog(@"Storyboard name: %@", storyboardName);
     return storyboardName;
 
-}
-
-+ (BOOL)isPad {
-    static NSNumber *isPad;
-    if (!isPad) {
-        isPad = @([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-    }
-    return [isPad boolValue];
 }
 
 @end

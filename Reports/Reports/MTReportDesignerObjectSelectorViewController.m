@@ -26,7 +26,6 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
 
 @interface MTReportDesignerObjectSelectorViewController ()
 
-@property (nonatomic, retain) IBOutlet UIView *containerView;
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemMain;
 
@@ -34,6 +33,7 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
 @property (nonatomic, retain) UIViewController *visibleViewController;
 @property (nonatomic, retain) UIViewController *childViewController;
 @property (nonatomic, retain) UIViewController *viewControllerToPush;
+@property (nonatomic, retain) IBOutlet UIView *containerView;
 @property (nonatomic, retain) UIView *childDisplayedView;
 
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;

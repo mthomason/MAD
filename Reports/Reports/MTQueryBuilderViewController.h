@@ -28,6 +28,7 @@
 #import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
 #import "MTReportDocument.h"
+#import "UIDevice+Hack.h"
 
 @interface MTQueryBuilderViewController : MTViewController
     <UITableViewDataSource,
@@ -42,8 +43,6 @@
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueryBuilder;
 
 @property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;
@@ -52,10 +51,7 @@
 @property (assign, nonatomic) IBOutlet UITableViewCellOverride      *tableViewCellOverride;
 @property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *tableViewCellQueryInput;
 
-@property (retain, nonatomic) IBOutlet UINavigationItem *navigationItemMain;
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
-
-@property (assign) NSInteger lastSelectedRowNumber;
 
 @property BOOL debug;
 
@@ -65,8 +61,5 @@
 - (IBAction)addTable:(id)sender;
 - (IBAction)addLink:(id)sender;
 - (IBAction)edit:(id)sender;
-
-- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
-- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
 
 @end

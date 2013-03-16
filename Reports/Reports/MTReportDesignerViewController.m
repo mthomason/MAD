@@ -8,8 +8,6 @@
 
 #import "MTReportDesignerViewController.h"
 
-#import "MTReportViewerPrintPageRenderer.h"
-
 @interface MTReportDesignerViewController()
 
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
@@ -111,7 +109,7 @@
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
 
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         
         UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:viewControllerToolbox];
         [popoverControllerInformation setDelegate:self];
@@ -542,7 +540,7 @@
 
 - (BOOL)dismissAllPopovers {
     BOOL result = NO;
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
         if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
         if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
@@ -741,7 +739,7 @@
 
 - (IBAction)showToolbox:(id)sender {
     
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         
         [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
         [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
@@ -773,7 +771,7 @@
 }
 
 - (void)hideToolbox {
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         if ([[self popoverControllerInformation] isPopoverVisible]) {
             [[self popoverControllerInformation] dismissPopoverAnimated:YES];
             [self deselectAllElementsAnimated:YES];
@@ -1094,7 +1092,7 @@
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else if ([sender isKindOfClass:[MTReportDesignerObjectSelectorViewController class]]) {
-        if ([AppDelegate isPad]) {
+        if ([UIDevice isPad]) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
             }
@@ -1107,7 +1105,7 @@
 }
 
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field {
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
         }
@@ -1153,7 +1151,7 @@
 }
 
 - (void)dismissObjectSelectorViewController {
-    if ([AppDelegate isPad]) {
+    if ([UIDevice isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
         }
@@ -1459,7 +1457,7 @@
         [elementView setDisplaySelected:YES];
 
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-        if ([AppDelegate isPad]) {
+        if ([UIDevice isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
             [passThroughViews addObject:elementView];
@@ -1502,7 +1500,7 @@
         [[elementView layer] setBorderWidth:0.0000f];
         [elementView setDisplaySelected:NO];
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-        if ([AppDelegate isPad]) {
+        if ([UIDevice isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
             [passThroughViews removeObject:elementView];

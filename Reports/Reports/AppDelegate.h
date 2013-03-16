@@ -10,12 +10,12 @@
 #import "ApplicationSettings.h"
 #import "MTManagedDocumentPreferencesUser.h"
 #import "MTReportDocument.h"
+#import "UIDevice+Hack.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-+ (BOOL)isPad;
 + (NSString *)storyboardName;
 
 @end
