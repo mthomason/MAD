@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="rXC-zu-Zf5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="rXC-zu-Zf5">
     <dependencies>
         <development version="4500" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
@@ -1484,21 +1484,7 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="9hL-Yu-nZ8">
                                 <items>
-                                    <navigationItem prompt="Choose a data field to add to the report." id="xq3-Wt-H8Q">
-                                        <barButtonItem key="leftBarButtonItem" id="TsH-6X-EMX">
-                                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CDQ-N9-bII">
-                                                <rect key="frame" x="7" y="37" width="169" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <segments>
-                                                    <segment title="Data"/>
-                                                    <segment title="Objects"/>
-                                                    <segment title="Media"/>
-                                                </segments>
-                                                <connections>
-                                                    <action selector="segmentedControlSelectorTypeValueChanged:" destination="huR-Hj-JfS" eventType="valueChanged" id="fma-AN-XWg"/>
-                                                </connections>
-                                            </segmentedControl>
-                                        </barButtonItem>
+                                    <navigationItem title="Document Objects" prompt="Choose a data field to add to the report." id="xq3-Wt-H8Q">
                                         <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="diu-8G-Jyh">
                                             <connections>
                                                 <action selector="done:" destination="huR-Hj-JfS" id="xAS-U7-XYK"/>
@@ -1514,22 +1500,24 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="9hL-Yu-nZ8" firstAttribute="leading" secondItem="8ZR-Iq-qcn" secondAttribute="leading" type="default" id="92J-fw-PBy"/>
-                            <constraint firstItem="1RM-ql-eGS" firstAttribute="leading" secondItem="8ZR-Iq-qcn" secondAttribute="leading" type="default" id="F5C-KT-UNs"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="leading" secondItem="8ZR-Iq-qcn" secondAttribute="leading" type="user" id="F5C-KT-UNs"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="trailing" secondItem="8ZR-Iq-qcn" secondAttribute="trailing" type="user" id="GAm-x3-Upn"/>
                             <constraint firstItem="1RM-ql-eGS" firstAttribute="top" secondItem="9hL-Yu-nZ8" secondAttribute="bottom" type="default" id="cTc-wS-aip"/>
                             <constraint firstItem="9hL-Yu-nZ8" firstAttribute="trailing" secondItem="8ZR-Iq-qcn" secondAttribute="trailing" type="default" id="cg1-eA-ejd"/>
-                            <constraint firstItem="1RM-ql-eGS" firstAttribute="bottom" secondItem="8ZR-Iq-qcn" secondAttribute="bottom" type="default" id="e3t-nO-JlA"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="bottom" secondItem="8ZR-Iq-qcn" secondAttribute="bottom" type="user" id="e3t-nO-JlA"/>
                             <constraint firstItem="9hL-Yu-nZ8" firstAttribute="top" secondItem="8ZR-Iq-qcn" secondAttribute="top" type="default" id="e49-Wu-6nh"/>
-                            <constraint firstItem="1RM-ql-eGS" firstAttribute="trailing" secondItem="8ZR-Iq-qcn" secondAttribute="trailing" type="default" id="hk4-1e-gnw"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="trailing" secondItem="8ZR-Iq-qcn" secondAttribute="trailing" type="user" id="hk4-1e-gnw"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="leading" secondItem="8ZR-Iq-qcn" secondAttribute="leading" type="user" id="mVz-1d-pxW"/>
+                            <constraint firstItem="1RM-ql-eGS" firstAttribute="bottom" secondItem="8ZR-Iq-qcn" secondAttribute="bottom" type="user" id="vZo-US-7PN"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="containerView" destination="1RM-ql-eGS" id="zeT-i8-fzf"/>
+                        <outlet property="containerView" destination="1RM-ql-eGS" id="F2r-Z8-77v"/>
                         <outlet property="navigationBar" destination="9hL-Yu-nZ8" id="llG-7z-QEc"/>
                         <outlet property="navigationItemMain" destination="xq3-Wt-H8Q" id="9RW-qT-rMb"/>
-                        <outlet property="segmentedControlSelectorType" destination="CDQ-N9-bII" id="vSf-RH-7Zs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yB2-Y9-lPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4971,7 +4959,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Data Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GDM-wp-kTA">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GDM-wp-kTA">
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -4997,7 +4985,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectLabelCollectionViewCell" id="ss8-Gf-IXM">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectLabelCollectionViewCell" id="ss8-Gf-IXM">
                                 <rect key="frame" x="195" y="0.0" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5030,7 +5018,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="9KQ-yv-po3">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="9KQ-yv-po3">
                                 <rect key="frame" x="390" y="0.0" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5063,7 +5051,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectChartCollectionViewCell" id="tQZ-hF-Zvp">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectChartCollectionViewCell" id="tQZ-hF-Zvp">
                                 <rect key="frame" x="0.0" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5096,7 +5084,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectAggregateCollectionViewCell" id="xB3-At-UEl">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="5" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectAggregateCollectionViewCell" id="xB3-At-UEl">
                                 <rect key="frame" x="195" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5129,7 +5117,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="oXE-G3-il5">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="oXE-G3-il5">
                                 <rect key="frame" x="390" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">

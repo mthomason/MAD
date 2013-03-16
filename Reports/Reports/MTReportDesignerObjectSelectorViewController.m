@@ -22,6 +22,9 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 @property (nonatomic, retain) UIViewController *visableViewController;
 @property (nonatomic, retain) UIViewController *childViewController;
 @property (nonatomic, retain) UICollectionViewController *documentObjectSelectorViewController;
+@property (nonatomic, retain) UIView *childDisplayedView;
+
+@property (nonatomic, retain) UIViewController *viewControllerToPush;
 
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
 
@@ -34,7 +37,9 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 @synthesize visableViewController = _visableViewController;
 
 - (void)dealloc {
+    [_viewControllerToPush release];
     if (_visableViewController) [_visableViewController release];
+    [_childDisplayedView release];
     [_segmentedControlSelectorType release];
     [_containerView release];
     [_toolbarMain release];
@@ -69,6 +74,7 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     BOOL imagePickerAvailable = [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary];
     
     [[self segmentedControlSelectorType] setSelectedSegmentIndex: MNSSegmentedControlOptionsData];
@@ -83,10 +89,21 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
     [[self navigationBar] setDelegate:self];
     
     UIViewController *childViewController = [[UIViewController alloc] init];
+    [[childViewController view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+//    [[childViewController view] setFrame:[[self containerView] frame]];
     [self setChildViewController:childViewController];
     [childViewController release];
     
     [self setRootSelectorControllerIsVisable:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    CGRect rect = CGRectMake(CGPointZero.x,
+                             CGPointZero.y + [[self navigationBar] frame].size.height,
+                             [[self view] frame].size.width,
+                             [[self view] frame].size.height - [[self navigationBar] frame].size.height);
+    [[[self childViewController] view] setFrame: rect];
 }
 
 #pragma mark - Actions
@@ -164,58 +181,23 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)showObjectSelector {
 
-    UIViewController *hidingView = nil;
-    if ([self visableViewController] != nil) {
-        hidingView = [[self visableViewController] retain];
-    }
+    [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
+    UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+    UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
+    [[documentObjectSelectorViewController collectionView] setDelegate:self];
+    [[documentObjectSelectorViewController collectionView] setDataSource:self];
+    [self setVisableViewController: documentObjectSelectorViewController];
+    [documentObjectSelectorViewController release];
+    [storyboard release];
 
-    switch (MNSSegmentedControlOptionsObjects) {
-        case MNSSegmentedControlOptionsData: {
-            [[self navigationItemMain] setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
-            
-            UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-            MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
-            [queryBuilderChooseFieldViewController setExcludeTables:[NSArray array]];
-            [queryBuilderChooseFieldViewController setDelegate: self];
-            [self setVisableViewController: queryBuilderChooseFieldViewController];
-            [queryBuilderChooseFieldViewController release];
-            [storyboard release];
-            
-            break;
-        }
-        case MNSSegmentedControlOptionsMedia: {
-            [[self navigationItemMain] setPrompt: NSLocalizedString(@"Choose an image to add to the report.", @"Prompt to choose an image.")];
-            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
-                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-                [imagePicker setDelegate: self];
-                [self setVisableViewController: imagePicker];
-                [imagePicker release];
-            }
-            break;
-        }
-        case MNSSegmentedControlOptionsObjects:
-            [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
-            UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
-            UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
-            [[documentObjectSelectorViewController collectionView] setDelegate:self];
-            [[documentObjectSelectorViewController collectionView] setDataSource:self];
-            [self setVisableViewController: documentObjectSelectorViewController];
-            [documentObjectSelectorViewController release];
-            [storyboard release];
-            break;
-        default:
-            break;
-    }
     
     [[[self visableViewController] view] setFrame:[[self containerView] bounds]];
     [UIView animateWithDuration:0.20000f animations:^{
-        if (hidingView) [[hidingView view] removeFromSuperview];
         if ([self visableViewController]) {
             [[self containerView] addSubview:[[self visableViewController] view]];
         }
     } completion:^(BOOL finished) {
-        if (hidingView) [hidingView release];
+
     }];
 
 }
@@ -258,31 +240,38 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *result = nil;
     NSString *cellIdentifier = nil;
+    NSUInteger tag = 0;
     switch ([indexPath section]) {
         case 0: {
             switch ([indexPath row]) {
                 case 0: {
                     cellIdentifier = MTIdentiferDocumentObjectLabelCollectionViewCell;
+                    tag = MTDocumentObjectTypeLabel;
                     break;
                 }
                 case 1: {
                     cellIdentifier = MTIdentiferDocumentObjectFormulaCollectionViewCell;
+                    tag = MTDocumentObjectTypeFormula;
                     break;
                 }
                 case 2: {
                     cellIdentifier = MTIdentiferDocumentObjectImageCollectionViewCell;
+                    tag = MTDocumentObjectTypeImage;
                     break;
                 }
                 case 3: {
                     cellIdentifier = MTIdentiferDocumentObjectChartCollectionViewCell;
+                    tag = MTDocumentObjectTypeChart;
                     break;
                 }
                 case 4: {
                     cellIdentifier = MTIdentiferDocumentObjectAggregateCollectionViewCell;
+                    tag = MTDocumentObjectTypeAggregate;
                     break;
                 }
                 case 5: {
                     cellIdentifier = MTIdentiferDocumentObjectDataCollectionViewCell;
+                    tag = MTDocumentObjectTypeLabelData;
                     break;
                 }
                 default: {
@@ -303,6 +292,7 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
         [result setSelectedBackgroundView:selectedBackgroundView];
         [selectedBackgroundView release];
     }
+    [[result contentView] setTag: tag];
     return result;
 }
 
@@ -349,21 +339,18 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 
     NSString *navigationItemTitle = nil;
-    MTDocumentObjectType objectType = [indexPath row];
-    
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    MTDocumentObjectType objectType = [[cell contentView] tag];
     [self setTypeOfObjectToPush: objectType];
-//    [collectionView setAllowsSelection: NO];
 
     switch ([indexPath section]) {
         case 0: {
             switch (objectType) {
                 case MTDocumentObjectTypeLabel:
                     navigationItemTitle = NSLocalizedString(@"Label", @"Label");
-                    //[[self objectSelectorDelegate] insertDocumentObjectNewLabel];
                     break;
                 case MTDocumentObjectTypeLabelData:
                     navigationItemTitle = NSLocalizedString(@"Data", @"Data");
-                    //[[self objectSelectorDelegate] insertDocumentObjectNewFormula];
                     break;
                 case MTDocumentObjectTypeChart:
                     navigationItemTitle = NSLocalizedString(@"Chart", @"Chart");
@@ -371,11 +358,11 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
                     break;
                 case MTDocumentObjectTypeImage:
                     navigationItemTitle = NSLocalizedString(@"Image", @"Image");
-                    [self showObjectSelectorOfType:MTDocumentObjectTypeImage];
+                    //[self showObjectSelectorOfType:MTDocumentObjectTypeImage];
                     break;
                 case MTDocumentObjectTypeAggregate:
                     navigationItemTitle = NSLocalizedString(@"Aggregate", @"Aggregate");
-                    [self showObjectSelectorOfType:MTDocumentObjectTypeAggregate];
+                    //[self showObjectSelectorOfType:MTDocumentObjectTypeAggregate];
                     break;
                 default:
                     break;
@@ -396,7 +383,6 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
     
     [backButton release];
-    //[itemToPush release];
     
 }
 
@@ -434,81 +420,116 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
  
-    CGRect offScreen = CGRectMake([[[self childViewController] view] frame].origin.x + [[[self childViewController] view] frame].size.width,
-                                  [[[self childViewController] view] frame].origin.y,
-                                  [[[self childViewController] view] frame].size.width,
-                                  [[[self childViewController] view] frame].size.height);
-
-    [UIView animateWithDuration:0.3000f animations:^{
-        [[[self childViewController] view] setFrame: offScreen];
-    } completion:^(BOOL finished) {
-        [[[self childViewController] view] removeFromSuperview];
-        [[[self documentObjectSelectorViewController] collectionView] setAllowsSelection: YES];
-    }];
-
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
     
-    [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
-
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-    UIView *viewToAdd = nil;
-
-    switch ([self typeOfObjectToPush]) {
-        case MTDocumentObjectTypeLabelData: {
-
-            MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
-            [queryBuilderChooseFieldViewController setExcludeTables: [NSArray array]];
-            [queryBuilderChooseFieldViewController setDelegate: self];
-            viewToAdd = [[queryBuilderChooseFieldViewController tableView] retain];
-            [queryBuilderChooseFieldViewController release];
-
-            break;
-        }
-        default: {
-
-            break;
-        }
-    }
-
-    [viewToAdd setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [viewToAdd setBounds:[[[self childViewController] view] bounds]];
-    [[[self childViewController] view] addSubview:viewToAdd];
-
-    CGRect newRect = [[[self visableViewController] view] frame];
-    CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[[self childViewController] view] bounds].size.width,
-                                         [[[self childViewController] view] frame].origin.y,
-                                         [[[self childViewController] view] frame].size.width,
-                                         [[[self childViewController] view] frame].size.height);
-    
-    [[[self childViewController] view] setFrame:newRectOffscreen];
-    [[[self visableViewController] view] addSubview:[[self childViewController] view]];
-    [[[self visableViewController] view] bringSubviewToFront:[[self childViewController] view]];
-    [UIView animateWithDuration:0.3000f animations:^{
-        [[[self childViewController] view] setFrame:newRect];
-    } completion:^(BOOL finished) {
-        
-    }];
-
-    [viewToAdd release];
-
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
+
     BOOL popIt = [self rootSelectorControllerIsVisable] == NO;
     if (popIt) {
+
         [self setRootSelectorControllerIsVisable:YES];
         [[[self documentObjectSelectorViewController] collectionView] setAllowsSelection: YES];
+        
+        CGRect offScreen = CGRectMake([[[self childViewController] view] frame].origin.x + [[[self childViewController] view] frame].size.width,
+                                      [[[self childViewController] view] frame].origin.y,
+                                      [[[self childViewController] view] frame].size.width,
+                                      [[[self childViewController] view] frame].size.height);
+        
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self childViewController] view] setFrame: offScreen];
+        } completion:^(BOOL finished) {
+            [[self childDisplayedView] removeFromSuperview];
+            [[[self childViewController] view] removeFromSuperview];
+            [[[self documentObjectSelectorViewController] collectionView] setAllowsSelection: YES];
+        }];
+
     }
+    
     return popIt;
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item {
     BOOL pushIt = [self rootSelectorControllerIsVisable];
+
     if (pushIt) {
         [self setRootSelectorControllerIsVisable:NO];
+            
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+        UIViewController *viewControllerToAdd = nil;
+        
+        switch ([self typeOfObjectToPush]) {
+            case MTDocumentObjectTypeLabelData: {
+                [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
+                [item setTitle:@"Label Data"];
+                MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
+                [queryBuilderChooseFieldViewController setExcludeTables: [NSArray array]];
+                [queryBuilderChooseFieldViewController setDelegate: self];
+                viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
+                [queryBuilderChooseFieldViewController release];
+                
+                break;
+            }
+            case MTDocumentObjectTypeImage: {
+                [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
+                [item setTitle:@"Image"];
+                if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
+                    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                    [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                    [imagePicker setDelegate: self];
+                    viewControllerToAdd = [imagePicker retain];
+                    [imagePicker release];
+                }
+                
+                
+                break;
+            }
+            default: {
+                [item setPrompt: @""];
+
+                break;
+            }
+        }
+        
+        [[viewControllerToAdd view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [[viewControllerToAdd view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, [[[self childViewController] view] frame].size.width, [[[self childViewController] view] frame].size.height)];
+        [[[self childViewController] view] addSubview:[viewControllerToAdd view]];
+        
+        CGRect newRect = CGRectMake(CGPointZero.x,
+                                    CGPointZero.y,
+                                    [[[self childViewController] view] frame].size.width,
+                                    [[[self childViewController] view] frame].size.height);
+        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[[self childViewController] view] bounds].size.width,
+                                             [[[self childViewController] view] frame].origin.y,
+                                             [[[self childViewController] view] frame].size.width,
+                                             [[[self childViewController] view] frame].size.height);
+        
+        [[[self childViewController] view] setFrame:newRectOffscreen];
+        [[[self visableViewController] view] addSubview:[[self childViewController] view]];
+        [[[self visableViewController] view] bringSubviewToFront:[[self childViewController] view]];
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self childViewController] view] setFrame:newRect];
+            NSLog(@"Child view controller frame: %@", NSStringFromCGRect(self.childViewController.view.frame));
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+        [self setChildDisplayedView:[viewControllerToAdd view]];
+        
+        [self setViewControllerToPush:viewControllerToAdd];
+        
+        [viewControllerToAdd release];
+    
     }
+
+    
+
+    
+    
+    
     return pushIt;
 }
 

@@ -51,8 +51,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Set up default values.
-    self.tableView.sectionHeaderHeight = HEADER_HEIGHT;
+    [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
+
     rowHeight_ = DEFAULT_ROW_HEIGHT;
     openSectionIndex_ = NSNotFound;
 
@@ -83,14 +83,13 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	
 	[super viewWillAppear:animated]; 
 	
 	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != [self numberOfSectionsInTableView:[self tableView]])) {
 		
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
-		for (RptqDatabaseSchemaTable *table in self.dataTables) {
+		for (RptqDatabaseSchemaTable *table in [self dataTables]) {
 			
 			RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: table];			
 			sectionInfo.table = table;
@@ -122,7 +121,7 @@
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
     
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:section];
 	NSInteger numStoriesInSection = [[sectionInfo.table hasFields] count];
 	
     return sectionInfo.open ? numStoriesInSection : 0;
@@ -144,7 +143,7 @@
         
     }
     
-    RptqDatabaseSchemaFieldSelectorManager *table = (RptqDatabaseSchemaFieldSelectorManager *)[self.sectionInfoArray objectAtIndex:indexPath.section];
+    RptqDatabaseSchemaFieldSelectorManager *table = (RptqDatabaseSchemaFieldSelectorManager *)[[self sectionInfoArray] objectAtIndex:indexPath.section];
     RptqDatabaseSchemaField *field = [[table fields] objectAtIndex:indexPath.row];
     if (field) {
         [[cell textLabel] setText: [field name]];
@@ -156,7 +155,7 @@
 
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:section];
     if (!sectionInfo.headerView) {
 		NSString *playName = sectionInfo.table.name;
         UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, HEADER_HEIGHT) title:playName section:section delegate:self];
@@ -169,7 +168,7 @@
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
     
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:indexPath.section];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:indexPath.section];
     return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
     // Alternatively, return rowHeight.
 }
@@ -177,7 +176,7 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self.sectionInfoArray objectAtIndex:[indexPath section]];
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:[indexPath section]];
     if ([[sectionInfo fields] count] > [indexPath row]) {
         RptqDatabaseSchemaField *field = [[sectionInfo fields] objectAtIndex: [indexPath row]];
         [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: field];
