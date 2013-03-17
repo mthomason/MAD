@@ -271,6 +271,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewControllerDidFinish:(id)sender {
     [self viewControllerDidFinish:sender animated:YES];
+    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
