@@ -76,7 +76,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSLog(@"%@", NSStringFromCGRect([self view].bounds));
+    //NSLog(@"%@", NSStringFromCGRect([self view].bounds));
 }
 
 - (void)didReceiveMemoryWarning {

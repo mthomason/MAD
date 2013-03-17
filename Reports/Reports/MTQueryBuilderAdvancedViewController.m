@@ -140,7 +140,7 @@
         [[self viewControllers] removeAllObjects];
         [self setDidRemoveViewControllers:YES];
     }
-    NSLog(@"View Controller Count %d", [[self viewControllers] count]);
+    //NSLog(@"View Controller Count %d", [[self viewControllers] count]);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -192,7 +192,7 @@
     
     NSArray *deletedObjects = [[notification userInfo] objectForKey: NSDeletedObjectsKey];
     for (id deletedObject in deletedObjects) {
-        NSLog(@"Deleted %@", deletedObject);
+        //NSLog(@"Deleted %@", deletedObject);
         
         if ([deletedObject isKindOfClass:[RptqDatabaseSchemaTable class]]) {
             RptqDatabaseSchemaTable *deletedTable = deletedObject;
@@ -220,7 +220,7 @@
 }
 
 - (void)addViewController:(UIViewController *)viewController {
-    NSLog(@"%@", [viewController view]);
+    //NSLog(@"%@", [viewController view]);
 
     [viewController retain];
     
@@ -287,7 +287,7 @@
 }
 
 - (void)removeViewController:(UIViewController *)viewController {
-    NSLog(@"%@", [viewController view]);
+    //NSLog(@"%@", [viewController view]);
     CGFloat animationDuration = 1.0000f;
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
     swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));

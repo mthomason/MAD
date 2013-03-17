@@ -49,7 +49,7 @@
 }
 
 - (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {
-    NSLog(@"pinchView");
+    //NSLog(@"pinchView");
     //gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
     //gestureRecognizer.scale = 1.0f;
     
@@ -64,7 +64,7 @@
                 CGFloat differenceY = fabsf(locationStart1.y - locationStart0.y);
                 [self setResizeHeightDifferenceInital:differenceY];
                 [self setResizeHeightBoundsHeightInital:[self bounds].size.width];
-                NSLog(@"Start difference y = %f", differenceY);
+                //NSLog(@"Start difference y = %f", differenceY);
             }
             break;
         }
@@ -73,11 +73,11 @@
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
-                NSLog(@"Change difference y = %f", differenceY);
+                //NSLog(@"Change difference y = %f", differenceY);
                 CGFloat newHeight = [self resizeHeightDifferenceInital] + differenceY - [self resizeHeightDifferenceInital];
                 CGRect newBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [self bounds].size.width, newHeight);
                 [self setBounds: newBounds];
-                NSLog(@"New bounds %@", NSStringFromCGRect(newBounds));
+                //NSLog(@"New bounds %@", NSStringFromCGRect(newBounds));
                 [[self sectionDelegate] didUpdateLayout:self];
             }
             break;

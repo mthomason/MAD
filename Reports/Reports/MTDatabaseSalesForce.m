@@ -129,7 +129,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
         case MTDatabaseQueryTypeGetResults: {
             NSDictionary *response = [jsonResponse retain];
             [response enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                NSLog(@"Keys '%@' and fields '%@.'", key, obj);
+                //NSLog(@"Keys '%@' and fields '%@.'", key, obj);
 #warning FIXME: Not yet implemented
             }];
             break;
