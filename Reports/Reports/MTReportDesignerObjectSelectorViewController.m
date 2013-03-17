@@ -432,7 +432,7 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         [[[self visibleViewController] view] bringSubviewToFront:[[self childViewController] view]];
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self childViewController] view] setFrame:newRect];
-            NSLog(@"Child view controller frame: %@", NSStringFromCGRect([[self childViewController] view].frame));
+            //NSLog(@"Child view controller frame: %@", NSStringFromCGRect([[self childViewController] view].frame));
         } completion:^(BOOL finished) {
             
         }];

@@ -97,7 +97,7 @@
             
             NSString *pageSectionId = [[NSString alloc] initWithString:[pageSection objectForKey: MTReportSectionType]];
             id reportSectionValues = nil;
-            NSLog(@"%@ (%@): %@", pageSectionId, data, NSStringFromCGRect(sectionRect));
+            //NSLog(@"%@ (%@): %@", pageSectionId, data, NSStringFromCGRect(sectionRect));
             
             if ([MTPageDetail isEqualToString:pageSectionId]) {
                 
@@ -512,7 +512,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"Exception %@", exception);
+        //NSLog(@"Exception %@", exception);
     }
     @finally {
 

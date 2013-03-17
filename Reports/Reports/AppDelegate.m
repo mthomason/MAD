@@ -22,7 +22,7 @@
 
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
-    NSLog(@"%@", exception);
+    //NSLog(@"%@", exception);
 }
 
 - (void)dealloc {
@@ -65,7 +65,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 + (NSString *)storyboardName {
     NSString *storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-    NSLog(@"Storyboard name: %@", storyboardName);
+    //NSLog(@"Storyboard name: %@", storyboardName);
     return storyboardName;
 
 }

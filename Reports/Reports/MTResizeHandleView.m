@@ -56,8 +56,8 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
-    NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));
+    //NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
+    //NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));
     [self setHighlighted: YES];
 }
 
@@ -66,7 +66,7 @@
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));    
+    //NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));    
         
     CGPoint pointAfterMove = [self center];
     switch ([self type]) {

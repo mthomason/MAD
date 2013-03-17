@@ -398,7 +398,7 @@
         }
         [navController release];
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
-        NSLog(@"Sender :%@", sender);
+        //NSLog(@"Sender :%@", sender);
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [[popoverSegue popoverController] retain];
@@ -436,7 +436,7 @@
 #pragma mark - UIViewControllerToolboxDelegate
 
 - (void)heightChanged:(CGFloat)newHeight {
-    NSLog(@"Height changed to %f", newHeight);
+    //NSLog(@"Height changed to %f", newHeight);
     CGSize newSize = CGSizeMake(320.0000f, newHeight);
     [[self popoverControllerInformation] setPopoverContentSize:newSize animated:YES];
     [[[self popoverControllerInformation] contentViewController] setContentSizeForViewInPopover: newSize];
@@ -569,7 +569,7 @@
                     if (elementView != nil) {
                         [results addObject:elementView];
                     } else {
-                        NSLog(@"Nil element view!  WTF");
+                        //NSLog(@"Nil element view!  WTF");
                     }
                     [elementView release];
                 }
@@ -608,41 +608,41 @@
 }
 
 - (void)cut:(id)sender {
-    NSLog(@"Fake a cut.");
+    //NSLog(@"Fake a cut.");
 }
 
 - (void)copy:(id)sender {
-    NSLog(@"Fake a copy.");
+    //NSLog(@"Fake a copy.");
 }
 
 - (void)select:(id)sender {
-    NSLog(@"Fake a select.");
+    //NSLog(@"Fake a select.");
 }
 
 - (void)selectAll:(id)sender {
-    NSLog(@"Fake a select all.");
+    //NSLog(@"Fake a select all.");
 }
 
 - (void)paste:(id)sender {
-    NSLog(@"Fake a paste.");
+    //NSLog(@"Fake a paste.");
 }
 
 - (void)delete:(id)sender {
-    NSLog(@"Fake a delete.");
+    //NSLog(@"Fake a delete.");
 }
 
 - (void)toggleUnderline:(id)sender {
-    NSLog(@"Fake a delete.");
+    //NSLog(@"Fake a delete.");
     
 }
 
 - (void)toggleItalics:(id)sender {
-    NSLog(@"Fake a delete.");
+    //NSLog(@"Fake a delete.");
     
 }
 
 - (void)toggleBoldface:(id)sender {
-    NSLog(@"Fake a delete.");
+    //NSLog(@"Fake a delete.");
     
 }
 
@@ -655,7 +655,7 @@
 }
 
 - (void)customAction:(id)sender {
-    NSLog(@"custom action! %@", sender);
+    //NSLog(@"custom action! %@", sender);
 }
 
 - (void)openReport:(NSURL *)url {
@@ -816,7 +816,7 @@
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    NSLog(@"Action %@ with %@", NSStringFromSelector(action), sender);
+    //NSLog(@"Action %@ with %@", NSStringFromSelector(action), sender);
     return action == @selector(cut:) ||
             action == @selector(copy:) ||
             action == @selector(paste:) ||
@@ -877,7 +877,7 @@
     } else {
         result = CGSizeZero;
     }
-    NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
+    //NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
     return result;
 }
 
@@ -1010,7 +1010,7 @@
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     MTElementView *result = nil;
     for (id elementView in [[cell contentView] subviews]) {
-        NSLog(@"%@", [[cell contentView] subviews]);
+        //NSLog(@"%@", [[cell contentView] subviews]);
         if ([elementView isKindOfClass:[MTElementView class]]) {
             result = [elementView retain];
             break;
@@ -1062,7 +1062,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
+    //NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
@@ -1241,7 +1241,7 @@
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
-                NSLog(@"Start difference y = %f", differenceY);
+                //NSLog(@"Start difference y = %f", differenceY);
             }
             break;
         }
@@ -1250,7 +1250,7 @@
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
-                NSLog(@"Change difference y = %f", differenceY);
+                //NSLog(@"Change difference y = %f", differenceY);
             }
             break;
         }

@@ -61,7 +61,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [[self cachedPageData] removeAllObjects];
     
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageHeader forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -72,7 +72,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addPageFooterWithValueDictionary:(NSDictionary *)values {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageFooter forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -83,7 +83,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addReportHeaderWithValueDictionary:(NSDictionary *)values {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportHeader forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -94,7 +94,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addReportFooterWithValueDictionary:(NSDictionary *)values {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportFooter forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -105,7 +105,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportGroupHeader forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -119,7 +119,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTReportGroupFooter forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];
@@ -133,7 +133,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)addDetailWithValueDictionary:(NSDictionary *)values {
     id newValue = [values copy];
-    NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageDetail forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];

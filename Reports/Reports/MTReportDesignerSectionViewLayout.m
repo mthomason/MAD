@@ -154,25 +154,25 @@
     for (UICollectionViewUpdateItem *updateItem in updateItems) {
         switch ([updateItem updateAction]) {
             case UICollectionUpdateActionNone:
-                NSLog(@"%@%@%@", @"UICollectionUpdateActionNone", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
+                //NSLog(@"%@%@%@", @"UICollectionUpdateActionNone", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
                 break;
             case UICollectionUpdateActionInsert:
-                NSLog(@"%@%@%@", @"UICollectionUpdateActionInsert", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
+                //NSLog(@"%@%@%@", @"UICollectionUpdateActionInsert", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
                 UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:updateItem.indexPathAfterUpdate];
                 layoutAttributes.size = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:updateItem.indexPathAfterUpdate];
                 layoutAttributes.center = [[self delegate] collectionView:[self collectionView] layout:self initialLayoutCenterPointForIndexPath:updateItem.indexPathAfterUpdate];
                 [[disappearingAttributes objectAtIndex:updateItem.indexPathAfterUpdate.section] insertObject:layoutAttributes atIndex:updateItem.indexPathAfterUpdate.item];
                 break;
             case UICollectionUpdateActionDelete:
-                NSLog(@"%@%@%@", @"UICollectionUpdateActionDelete", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
+                //NSLog(@"%@%@%@", @"UICollectionUpdateActionDelete", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:updateItem.indexPathBeforeUpdate.item];
                 [[disappearingAttributes objectAtIndex:updateItem.indexPathBeforeUpdate.section] removeObjectsAtIndexes:indexSet];
                 break;
             case UICollectionUpdateActionReload:
-                NSLog(@"%@%@%@", @"UICollectionUpdateActionReload", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
+                //NSLog(@"%@%@%@", @"UICollectionUpdateActionReload", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
                 break;
             case UICollectionUpdateActionMove:
-                NSLog(@"%@%@%@", @"UICollectionUpdateActionMove", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
+                //NSLog(@"%@%@%@", @"UICollectionUpdateActionMove", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
                 break;
             default:
                 break;

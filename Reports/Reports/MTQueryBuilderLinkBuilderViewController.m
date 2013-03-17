@@ -83,7 +83,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showSelectJoinType"]) {
-        NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+        //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
         
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
             MTQueryBuilderAddLinkJoinTypeViewController *vcFf = [segue destinationViewController];
@@ -95,7 +95,7 @@
     } else {
         
         if ([[segue identifier] isEqualToString:@"showSelectTableOne"]) {
-            NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkFirstTableViewController class]]) {
                 MTQueryBuilderAddLinkFirstTableViewController *tvc = [segue destinationViewController];
                 if (tvc) {
@@ -110,7 +110,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]);
+                    //NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]);
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
@@ -120,7 +120,7 @@
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectFieldOne"]) {
-            NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkFirstFieldViewController class]]) {
                 MTQueryBuilderAddLinkFirstFieldViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {
@@ -138,7 +138,7 @@
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectTableTwo"]) {
-            NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkSecondTableViewController class]]) {
                 MTQueryBuilderAddLinkSecondTableViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {                
@@ -164,7 +164,7 @@
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectFieldTwo"]) {
-            NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkSecondFieldViewController class]]) {
                 MTQueryBuilderAddLinkSecondFieldViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {                

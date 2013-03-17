@@ -106,7 +106,7 @@
                 }
             }
         } else {
-            NSLog(@"Could not find item to delete.  This is a bug.  :(");
+            //NSLog(@"Could not find item to delete.  This is a bug.  :(");
         }
         [results release];                            
         

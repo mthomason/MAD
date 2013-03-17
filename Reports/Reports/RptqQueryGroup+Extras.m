@@ -99,7 +99,7 @@
     [queryGroup addHasSectionObject:dsFooter];
     [dsFooter release];
     
-    NSLog(@"QueryGroup: %@", queryGroup);
+    //NSLog(@"QueryGroup: %@", queryGroup);
     return [queryGroup autorelease];
 
 }

@@ -166,9 +166,9 @@ typedef void (^tablesComplete)(id *database, NSArray *tables);
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
     
     if ([[tableView cellForRowAtIndexPath: indexPath] isEqual: [self tableViewCellConnectionCreate]]) {
-        NSLog(@"Test connection!!!");
+        //NSLog(@"Test connection!!!");
         [self test:nil];
-        NSLog(@"Did finish test connection");
+        //NSLog(@"Did finish test connection");
     }
     
 }

@@ -86,7 +86,7 @@
                      } completion:^(BOOL finished) {
                          UIScrollView *newParent = nil;
                          for (UIView *view in [[self designerView] subviews]) {
-                             NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
+                             //NSLog(@"%@ inside %@?", NSStringFromCGPoint([self center]), NSStringFromCGRect([view frame]));
                              if (CGRectContainsPoint([view frame], [self center]) && ![view isEqual:self]) {
                                  newParent = (UIScrollView *)[[view retain] autorelease];    //These should be the section views.
                              }

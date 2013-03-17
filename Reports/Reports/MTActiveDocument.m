@@ -33,7 +33,7 @@ static MTActiveDocument *sharedSingleton = nil;
 }
 
 + (MTActiveDocument *)sharedDocument {
-    NSLog(@"%@", sharedSingleton);
+    //NSLog(@"%@", sharedSingleton);
     return sharedSingleton;
 }
 
