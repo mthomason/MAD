@@ -62,8 +62,9 @@ typedef void (^tablesComplete)(id *database, NSArray *tables);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+    if ([UIDevice isPad] == NO) {
+        [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+    }
     [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
 
     [[self textFieldNickname] selectAll: self];

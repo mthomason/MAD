@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
+#import "UIDevice+Hack.h"
 
 @interface MTDatabaseDriverSelectorViewController : MTTableViewController
 

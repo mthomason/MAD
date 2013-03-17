@@ -58,15 +58,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
-    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = YES;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+    if ([UIDevice isPad] == NO) {
+        [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+    }
+    [self setTitle: NSLocalizedString(@"Inital Settings", @"Inital Settings")];
+    [self setClearsSelectionOnViewWillAppear: YES];
+ }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

@@ -14,6 +14,7 @@
 #import "MTDocumentTableViewCell.h"
 #import "NSFileManager+Common.h"
 #import "Constants.h"
+#import "UIDevice+Hack.h"
 
 @class MTTemplateSelectorViewController;
 

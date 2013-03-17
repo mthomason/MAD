@@ -59,7 +59,9 @@ NSString * const MTSegueShowChooseDatasourceIdentifier = @"showChooseDatasource"
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self navigationItem] setPrompt: NSLocalizedString(@"Choose A Template", @"Choose A Template")];
+    if ([UIDevice isPad] == NO) {
+        [[self navigationItem] setPrompt: NSLocalizedString(@"Choose A Template", @"Choose A Template")];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

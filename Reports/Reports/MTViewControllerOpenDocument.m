@@ -15,6 +15,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @interface MTViewControllerOpenDocument()
 
+@property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
+
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
@@ -46,6 +48,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_barButtonItemTitle release];
     [_collectionViewQueries release];
     [_titleView release];
+    [_openDocumentPopoverController release];
     [super dealloc];
 }
 
@@ -194,6 +197,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTTemplateSelectorViewController class]]) {
+                    if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                        [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
+                    }
                     MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[[navControl topViewController] retain];
                     if (tvc) {
                         [tvc setDelegate:self];
@@ -293,6 +299,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
 }
 
 - (void)displayContentController:(UIViewController *)contentController {

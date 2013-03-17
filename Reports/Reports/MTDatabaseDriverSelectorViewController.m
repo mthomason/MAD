@@ -17,8 +17,12 @@ NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowS
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
-    [self setTitle: NSLocalizedString(@"New Report", @"New Report")];
+    
+    if ([UIDevice isPad] == NO) {
+        [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
+    }
+
+    [self setTitle: NSLocalizedString(@"Datasource Selector", @"Datasource Selector")];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
 }
 
