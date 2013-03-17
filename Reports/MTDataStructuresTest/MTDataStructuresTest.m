@@ -38,10 +38,10 @@
     [graph addEdgeWithOrigin:vertexY destination:vertexX object:@"Y->X" andWeight:@(1)];
     [graph addEdgeWithOrigin:vertexU destination:vertexX object:@"U->X" andWeight:@(1)];
     
-    NSLog(@"%@", [graph toStringHumanReadable]);
+    //NSLog(@"%@", [graph toStringHumanReadable]);
 
     MTLinkedList *dfsResultsU = [[graph depthFirstSearch:vertexU] retain];
-    NSLog(@"U:\t%@", [dfsResultsU toStringHumanReadable]);
+    //NSLog(@"U:\t%@", [dfsResultsU toStringHumanReadable]);
 
     [dfsResultsU release];
     
@@ -80,12 +80,12 @@
     [graph addEdgeWithOrigin:vertexShirt destination:vertexTie object:@"Shirt->Tie" andWeight:@(1)];
     [graph addEdgeWithOrigin:vertexSocks destination:vertexShoes object:@"Socks->Shoes" andWeight:@(1)];
 
-    NSLog(@"%@", [graph toStringHumanReadable]);
+    //NSLog(@"%@", [graph toStringHumanReadable]);
     
     NSError *error = nil;
     MTLinkedList *topologicalSort = [[graph topologicalSort:vertexShoes error:&error] retain];
     
-    NSLog(@"%@", [topologicalSort toStringHumanReadable]);
+    //NSLog(@"%@", [topologicalSort toStringHumanReadable]);
     
     [topologicalSort release];
     [graph release];
