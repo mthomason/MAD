@@ -64,7 +64,7 @@
     if (doc) {
         RptqDatabase *db = [[doc hasDatabaseSchemas] anyObject];
         if (db) {
-            NSString *driverType = [[db database_driver_type] retain];
+            NSString *driverType = [[db databaseDriverType] retain];
             if ([driverType isEqualToString: [MTDatabaseMySql identifier]]) {
 
             } else if ([driverType isEqualToString: [MTDatabaseSalesForce identifier]]) {
@@ -124,7 +124,7 @@
     [[document hasPageFooterSection] setVisibility:@YES];
     [[document hasDetailSection] setVisibility:@YES];
 
-    NSLog(@"Document, %@", document);
+    //NSLog(@"Document, %@", document);
    return [document autorelease];
 }
 
@@ -137,7 +137,7 @@
     if (!error) {
         doc = [documents lastObject];
     } else {
-        NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+        //NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
     }
 
     //Create the document if it does not exist.
@@ -198,7 +198,8 @@
                                                                      withConnecitonId: connectionId];
                 
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
-                
+                NSError *error = nil;
+                [[currentDatabase managedObjectContext] save:&error];
                 [database getFieldsForTableSchema:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
                     if (success) {
                         for (MTDatabaseField *objField in fields) {
@@ -210,12 +211,12 @@
                                                                                           andTableName: [databaseTable name]];
                             
                             RptqDatabaseSchemaField *rptqField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
-                                                                                           andField: objField];
+                                                                                                                       andField: objField];
                             [rptqTableOrigional addHasFieldsObject: rptqField];
                             NSError *saveError = nil;
                             [[rptqField managedObjectContext] save:&saveError];
                             if (saveError) {
-                                NSLog(@"%@", [saveError localizedDescription]);
+                                //NSLog(@"%@", [saveError localizedDescription]);
                             }
                         }
                         if (tableCounter == numberOfTables - 1) {
