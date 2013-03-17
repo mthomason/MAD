@@ -273,6 +273,8 @@
             NSMutableArray *results = nil;
             BOOL success = conn != nil;
             
+            NSMutableDictionary *resultsDictionary = nil;
+            
             if (success) {
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [table name]];
                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
@@ -281,20 +283,130 @@
                         
                         MysqlFetchField *fieldMetaData = [[fetch fields] objectAtIndex:0];
                         results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
+                        resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:[[fetch results] count]];
                         
                         for (NSDictionary *field in [fetch results]) {
-                            NSString *fn = [field objectForKey:[fieldMetaData name]];
-                            MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fn];
+                            NSString *fieldName = [field objectForKey:[fieldMetaData name]];
+                            
+                            MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
+                            [databaseField setDatatype:[field objectForKey:@"Type"]];
                             [results addObject: databaseField];
+                            [resultsDictionary setObject:databaseField forKey:fieldName];
                             [databaseField release];
                         }
                     }
                 }
+/*
+                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [table name]];
+                MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
+                if (fetch) {
+                    //NSLog(@"Fetch %@", fetch);
+                    if ([[fetch2 fields] count] > 0) {
+                        
+                        for (MysqlFetchField *field in [fetch2 fields]) {
+                            
+                            MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
+                            [databaseField setFieldTypeNative:[field fieldType]];
+                            switch ([field fieldType]) {
+                                case MAX_NO_FIELD_TYPES:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_BIT:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_BLOB:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_DATE:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_DATETIME:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_DECIMAL:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_DOUBLE:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_ENUM:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_FLOAT:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_GEOMETRY:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_INT24:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_LONG:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_LONG_BLOB:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_LONGLONG:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_MEDIUM_BLOB:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_NEWDATE:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_NEWDECIMAL:
+                                    [databaseField setFieldType: MTDataTypeNumber];
+                                    break;
+                                case MYSQL_TYPE_NULL:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_SET:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_SHORT:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_STRING:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_TIME:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_TIMESTAMP:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_TINY:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_TINY_BLOB:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_VAR_STRING:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_VARCHAR:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                case MYSQL_TYPE_YEAR:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                                default:
+                                    [databaseField setFieldType: MTDataTypeString];
+                                    break;
+                            }
+                            [databaseField release];
+                        }
+                    }
+                }
+                */
             } else {
                 [error presentErrorToUser];
             }
-            
-            completion(success, error, results);
+            [resultsDictionary autorelease];
+//            [results release];
+            completion(success, error, [results autorelease]);
         });
     });
     

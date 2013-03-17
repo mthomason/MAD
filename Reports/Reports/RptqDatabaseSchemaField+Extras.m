@@ -59,25 +59,13 @@
 #pragma mark - Static
 
 + (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                               label:(NSString *)label name:(NSString *)name
-                                         andDatatype:(NSString *)dataType {
-    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class]) inManagedObjectContext: objectContext];
-    RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
-                              insertIntoManagedObjectContext: objectContext];
-    [rptqField setLabel:    label];
-    [rptqField setName:     name];
-    [rptqField setDatatype: dataType];
-    return [rptqField autorelease];
-}
-
-+ (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field {
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class]) inManagedObjectContext: objectContext];
     RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
                               insertIntoManagedObjectContext: objectContext];
     [rptqField setLabel:    [field label]];
     [rptqField setName:     [field name]];
-    [rptqField setDatatype: [field datatype]];
+    [rptqField setDataType: @([field fieldType])];
     return [rptqField autorelease];
 }
 
@@ -130,6 +118,27 @@
         result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
+}
+
+- (NSString *)fieldTypeDisplay {
+
+    NSString *result = nil;
+    switch ([[self dataType] integerValue]) {
+        case MTDataTypeImage:
+            result = [[NSString alloc] initWithString:@"Image"];
+            break;
+        case MTDataTypeNumber:
+            result = [[NSString alloc] initWithString:@"Number"];
+            break;
+        case MTDataTypeString:
+            result = [[NSString alloc] initWithString:@"String"];
+            break;
+        default:
+            result = [[NSString alloc] initWithString:@""];
+            break;
+    }
+    
+    return [result autorelease];
 }
 
 @end

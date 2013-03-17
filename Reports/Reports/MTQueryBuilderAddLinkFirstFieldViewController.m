@@ -42,7 +42,7 @@
     
     RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[cell textLabel] setText: [field name]];
-    [[cell detailTextLabel] setText: [field datatype]];
+    [[cell detailTextLabel] setText: [field fieldTypeDisplay]];
     [field release];
     
     return cell;

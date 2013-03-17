@@ -147,7 +147,7 @@
     RptqDatabaseSchemaField *field = [[table fields] objectAtIndex:indexPath.row];
     if (field) {
         [[cell textLabel] setText: [field name]];
-        [[cell detailTextLabel] setText: [[field datatype] lowercaseString]];
+        [[cell detailTextLabel] setText: [[field fieldTypeDisplay] lowercaseString]];
     }
     
     return cell;

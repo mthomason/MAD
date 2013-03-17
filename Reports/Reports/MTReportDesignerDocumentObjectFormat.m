@@ -8,9 +8,24 @@
 
 #import "MTReportDesignerDocumentObjectFormat.h"
 
+@interface MTReportDesignerDocumentObjectFormat ()
+
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDecimals;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellCurrency;
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
+
+
+@property (retain, nonatomic) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
+@property (nonatomic, retain) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
+@end
+
 @implementation MTReportDesignerDocumentObjectFormat
 
 - (void)dealloc {
+    [_tableViewCellDecimals release];
+    [_tableViewCellCurrency release];
+    [_tableViewCellCurrencyLocation release];
+    [_viewsToDisableNumeric release];
     [super dealloc];
 }
 
@@ -27,7 +42,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
 
 #pragma mark - View lifecycle
 
@@ -56,6 +70,24 @@
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
+    
+    BOOL numericTypeInSet = NO;
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+
+    for (NSManagedObjectID *objectId in objectIds) {
+
+        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+        if (MTDataTypeNumber == [[[[documentObject isLabelDataField] referencesField] dataType] integerValue]) {
+            numericTypeInSet = YES;
+            break;
+        }
+    }
+    for (UIView *view in [self viewsToDisableNumeric]) {
+        [view setUserInteractionEnabled:numericTypeInSet];
+        if ([view isKindOfClass:[UIControl class]]) {
+            [(UIControl *)view setEnabled:numericTypeInSet];
+        }
+    }
 
 }
 
@@ -78,4 +110,9 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)viewDidUnload {
+    [self setViewsToDisableNumeric:nil];
+    [self setViewsToDisableNumeric:nil];
+    [super viewDidUnload];
+}
 @end

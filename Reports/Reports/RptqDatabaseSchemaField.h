@@ -2,7 +2,7 @@
 //  RptqDatabaseSchemaField.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/12/13.
+//  Created by Michael Thomason on 3/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,10 +13,14 @@
 
 @interface RptqDatabaseSchemaField : NSManagedObject
 
-@property (nonatomic, retain) NSString * datatype;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber *dataType;
+@property (nonatomic, retain) NSNumber *identifier;
+@property (nonatomic, retain) NSNumber *dataTypeNative;
+
+@property (nonatomic, retain) NSString *label;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *dataTypeNativeDescription;
+
 @property (nonatomic, retain) NSSet *inQuery;
 @property (nonatomic, retain) NSSet *inQueryGroup;
 @property (nonatomic, retain) NSSet *inQueryLinkLeft;
@@ -25,8 +29,10 @@
 @property (nonatomic, retain) NSSet *inQueryPredicateRight;
 @property (nonatomic, retain) NSSet *inQuerySort;
 @property (nonatomic, retain) NSSet *inRelationships;
-@property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;
 @property (nonatomic, retain) NSSet *referenceedByDataObject;
+
+@property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;
+
 @end
 
 @interface RptqDatabaseSchemaField (CoreDataGeneratedAccessors)

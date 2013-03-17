@@ -9,15 +9,27 @@
 #ifndef Reports_MTDatabaseField_h
 #define Reports_MTDatabaseField_h
 
+typedef NS_ENUM(NSUInteger, MTDataType) {
+	MTDataTypeString = 0,
+	MTDataTypeNumber = 1,
+	MTDataTypeImage = 2,
+};
+
 #import <Foundation/Foundation.h>
 
 @interface MTDatabaseField : NSObject
 
 - (id)initWithName:(NSString *)name;
 
-@property (copy) NSString *label;
-@property (copy) NSString *name;
-@property (copy) NSString *datatype;
+@property (nonatomic, retain) NSString *label;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *datatype;
+
+@property (nonatomic, assign) MTDataType fieldType;
+@property (nonatomic, assign) NSInteger fieldTypeNative;
+@property (nonatomic, assign) NSUInteger width;
+@property (nonatomic, assign) NSUInteger decimals;
+@property (nonatomic, assign) BOOL primaryKey;
 
 @end
 

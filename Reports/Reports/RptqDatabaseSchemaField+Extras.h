@@ -17,17 +17,13 @@
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                               label:(NSString *)label
-                                                name:(NSString *)name
-                                         andDatatype:(NSString *)dataType;
-
-+ (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field;
 
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID
         fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)display;
+- (NSString *)fieldTypeDisplay;
 
 @end
 

@@ -2,7 +2,7 @@
 //  RptqDocumentObjectLabelDataField.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/12/13.
+//  Created by Michael Thomason on 3/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,6 +17,9 @@
 @dynamic identifier;
 @dynamic table;
 @dynamic text;
+@dynamic formatNumericCurrency;
+@dynamic formatNumericDecimals;
+@dynamic formatNumericCurrencyLocal;
 @dynamic parentObjectLabelDataField;
 @dynamic referencesField;
 

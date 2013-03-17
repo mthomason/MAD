@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12D78" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
-        <attribute name="database_driver_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="databaseDriverType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="databaseDriverTypeEnum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <relationship name="hasQueries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="inDatabase" inverseEntity="RptqQuery" syncable="YES"/>
         <relationship name="hasRelationships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqRelationship" inverseName="inDatabase" inverseEntity="RptqRelationship" syncable="YES"/>
@@ -10,7 +11,9 @@
         <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqUserCredentals" inverseName="inDatabase" inverseEntity="RptqUserCredentals" syncable="YES"/>
     </entity>
     <entity name="RptqDatabaseSchemaField" representedClassName="RptqDatabaseSchemaField" syncable="YES">
-        <attribute name="datatype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dataType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="dataTypeNative" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="dataTypeNativeDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -106,6 +109,9 @@
     </entity>
     <entity name="RptqDocumentObjectLabelDataField" representedClassName="RptqDocumentObjectLabelDataField" syncable="YES">
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="formatNumericCurrency" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="formatNumericCurrencyLocal" optional="YES" attributeType="String" defaultValueString="en" syncable="YES"/>
+        <attribute name="formatNumericDecimals" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
@@ -252,14 +258,14 @@
     </entity>
     <fetchRequest name="getRptqDatabaseSchemaTableByName" entity="RptqDatabaseSchemaTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
-        <element name="RptqDatabase" positionX="-1386" positionY="-657" width="128" height="150"/>
-        <element name="RptqDatabaseSchemaField" positionX="-936" positionY="-459" width="182" height="253"/>
+        <element name="RptqDatabase" positionX="-1386" positionY="-657" width="128" height="165"/>
+        <element name="RptqDatabaseSchemaField" positionX="-936" positionY="-459" width="182" height="285"/>
         <element name="RptqDatabaseSchemaTable" positionX="-1242" positionY="-423" width="198" height="253"/>
         <element name="RptqDocument" positionX="-1820" positionY="-270" width="128" height="285"/>
         <element name="RptqDocumentObject" positionX="-1224" positionY="-72" width="218" height="540"/>
         <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="-884" positionY="144" width="218" height="90"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="-855" positionY="297" width="225" height="135"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="-855" positionY="297" width="225" height="180"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-855" positionY="489" width="225" height="105"/>
         <element name="RptqDocumentSection" positionX="-1620" positionY="204" width="198" height="300"/>
         <element name="RptqQuery" positionX="-272" positionY="-846" width="128" height="238"/>
@@ -271,8 +277,8 @@
         <element name="RptqQueryResultFields" positionX="324" positionY="-765" width="128" height="118"/>
         <element name="RptqQueryResultValues" positionX="495" positionY="-738" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="34" positionY="-261" width="128" height="120"/>
+        <element name="RptqQueryTable" positionX="-504" positionY="-441" width="128" height="88"/>
         <element name="RptqRelationship" positionX="-1170" positionY="-564" width="128" height="105"/>
         <element name="RptqUserCredentals" positionX="-1406" positionY="-441" width="128" height="270"/>
-        <element name="RptqQueryTable" positionX="-504" positionY="-441" width="128" height="88"/>
     </elements>
 </model>

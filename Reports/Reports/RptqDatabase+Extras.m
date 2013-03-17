@@ -82,7 +82,7 @@
 
     RptqDatabase *database = [[RptqDatabase alloc] initWithEntity:databaseEntity
                                    insertIntoManagedObjectContext:objectContext];
-    [database setDatabase_driver_type: driverIdentifier];
+    [database setDatabaseDriverType: driverIdentifier];
     [database setIdentifier:connectionId];
     return [database autorelease];
 }
