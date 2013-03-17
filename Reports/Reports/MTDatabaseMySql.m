@@ -296,7 +296,7 @@
                         }
                     }
                 }
-/*
+
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [table name]];
                 MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
                 if (fetch) {
@@ -400,13 +400,14 @@
                         }
                     }
                 }
-                */
             } else {
                 [error presentErrorToUser];
             }
-            [resultsDictionary autorelease];
-//            [results release];
-            completion(success, error, [results autorelease]);
+//            [resultsDictionary autorelease];
+            [results release];
+            NSArray *resultsArray = [[resultsDictionary allValues] retain];
+            [resultsDictionary release];
+            completion(success, error, [resultsArray autorelease]);
         });
     });
     
