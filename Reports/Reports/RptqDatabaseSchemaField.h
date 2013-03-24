@@ -2,25 +2,24 @@
 //  RptqDatabaseSchemaField.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 3/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabaseSchemaTable, RptqDocumentObjectLabelDataField, RptqQuery, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqRelationship;
+@class RptqDatabaseSchemaTable, RptqDocumentObjectAggregate, RptqDocumentObjectLabelDataField, RptqQuery, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqRelationship;
 
 @interface RptqDatabaseSchemaField : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *dataType;
-@property (nonatomic, retain) NSNumber *identifier;
-@property (nonatomic, retain) NSNumber *dataTypeNative;
-
-@property (nonatomic, retain) NSString *label;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *dataTypeNativeDescription;
-
+@property (nonatomic, retain) NSNumber * dataType;
+@property (nonatomic, retain) NSNumber * dataTypeNative;
+@property (nonatomic, retain) NSString * dataTypeNativeDescription;
+@property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSString * label;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) RptqDocumentObjectAggregate *includedInAggregateObject;
 @property (nonatomic, retain) NSSet *inQuery;
 @property (nonatomic, retain) NSSet *inQueryGroup;
 @property (nonatomic, retain) NSSet *inQueryLinkLeft;
@@ -29,10 +28,8 @@
 @property (nonatomic, retain) NSSet *inQueryPredicateRight;
 @property (nonatomic, retain) NSSet *inQuerySort;
 @property (nonatomic, retain) NSSet *inRelationships;
-@property (nonatomic, retain) NSSet *referenceedByDataObject;
-
 @property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;
-
+@property (nonatomic, retain) NSSet *referenceedByDataObject;
 @end
 
 @interface RptqDatabaseSchemaField (CoreDataGeneratedAccessors)

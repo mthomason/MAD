@@ -2,12 +2,16 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 3/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentObject.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectChart.h"
 #import "RptqDocumentObjectFormula.h"
+#import "RptqDocumentObjectGroupKey.h"
+#import "RptqDocumentObjectImage.h"
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelLink.h"
@@ -21,6 +25,9 @@
 @dynamic color;
 @dynamic fontname;
 @dynamic fontsize;
+@dynamic formatNumericCurrency;
+@dynamic formatNumericCurrencyLocal;
+@dynamic formatNumericDecimals;
 @dynamic horizontalAlignment;
 @dynamic identifier;
 @dynamic italic;
@@ -45,7 +52,11 @@
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
 @dynamic inSection;
+@dynamic isAggregate;
+@dynamic isChart;
 @dynamic isFormula;
+@dynamic isGroupKey;
+@dynamic isImage;
 @dynamic isLabel;
 @dynamic isLabelDataField;
 @dynamic isLabelLink;

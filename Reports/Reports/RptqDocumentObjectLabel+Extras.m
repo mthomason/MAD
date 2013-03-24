@@ -68,9 +68,9 @@
     return result;
 }
 
-+ (id)addDocumentObject:(id)object toDocument:(id)document {
++ (id)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(id)document {
     
-    NSString *labelText = object;
+    NSString *labelText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
     
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
                                                                        inManagedObjectContext: [document managedObjectContext]];
@@ -86,7 +86,7 @@
     [dataObject setIsLabel: reportObject];
     
     [[dataObject isLabel] setText: labelText];
-    [dataObject setType: @(MNSObjectTypeLabelDataField)];
+    [dataObject setType: @(MTDocumentObjectTypeLabelDynamic)];
     
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];

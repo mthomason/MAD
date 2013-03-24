@@ -2,14 +2,14 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 3/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObjectFormula, RptqDocumentObjectLabel, RptqDocumentObjectLabelDataField, RptqDocumentObjectLabelLink, RptqDocumentSection;
+@class RptqDocumentObjectAggregate, RptqDocumentObjectChart, RptqDocumentObjectFormula, RptqDocumentObjectGroupKey, RptqDocumentObjectImage, RptqDocumentObjectLabel, RptqDocumentObjectLabelDataField, RptqDocumentObjectLabelLink, RptqDocumentSection;
 
 @interface RptqDocumentObject : NSManagedObject
 
@@ -18,6 +18,9 @@
 @property (nonatomic, retain) id color;
 @property (nonatomic, retain) NSString * fontname;
 @property (nonatomic, retain) NSNumber * fontsize;
+@property (nonatomic, retain) NSNumber * formatNumericCurrency;
+@property (nonatomic, retain) NSString * formatNumericCurrencyLocal;
+@property (nonatomic, retain) NSNumber * formatNumericDecimals;
 @property (nonatomic, retain) NSNumber * horizontalAlignment;
 @property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSNumber * italic;
@@ -42,7 +45,11 @@
 @property (nonatomic, retain) NSNumber * verticalAlignment;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
 @property (nonatomic, retain) RptqDocumentSection *inSection;
+@property (nonatomic, retain) RptqDocumentObjectAggregate *isAggregate;
+@property (nonatomic, retain) RptqDocumentObjectChart *isChart;
 @property (nonatomic, retain) RptqDocumentObjectFormula *isFormula;
+@property (nonatomic, retain) RptqDocumentObjectGroupKey *isGroupKey;
+@property (nonatomic, retain) RptqDocumentObjectImage *isImage;
 @property (nonatomic, retain) RptqDocumentObjectLabel *isLabel;
 @property (nonatomic, retain) RptqDocumentObjectLabelDataField *isLabelDataField;
 @property (nonatomic, retain) RptqDocumentObjectLabelLink *isLabelLink;
