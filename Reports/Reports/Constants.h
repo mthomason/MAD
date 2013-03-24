@@ -82,6 +82,21 @@ typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderDecending
 };
 
+typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
+	MTDocumentObjectTypeLabelDynamic = 0,
+	MTDocumentObjectTypeLabelStatic = 1,
+	MTDocumentObjectTypeImage = 2,
+    MTDocumentObjectTypeChart = 3,
+    MTDocumentObjectTypeFormula = 4,
+    MTDocumentObjectTypeAggregate = 5,
+    MTDocumentObjectTypeGroupKey = 6
+};
+
+typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
+    MTDocumentObjectBuilderType,
+    MTDocumentObjectBuilderValue
+};
+
 typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
 	UIViewControllerSchemaTablesSectionsInstructions = 0,
     UIViewControllerSchemaTablesSectionsDatasource = 1,

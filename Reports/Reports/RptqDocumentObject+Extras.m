@@ -8,6 +8,9 @@
 
 #import "RptqDocumentObject+Extras.h"
 
+NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
+NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
+
 @implementation RptqDocumentObject (Extras)
 
 #pragma mark - Overrides
@@ -96,19 +99,27 @@
 
 #pragma mark - Member
 
-- (MNSSectionType)getType {
+- (MTDocumentObjectType)getType {
     return [[self type] integerValue];
 }
 
 #pragma mark - RptqDocumentObjectFactory
 
-+ (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
-    RptqDocumentObject *result = nil;
++ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
-    if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
-        result = [RptqDocumentObjectLabelDataField addDocumentObject:object toDocument:document];
-    } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
-        result = [RptqDocumentObjectLabel addDocumentObject:object toDocument:document];
+    RptqDocumentObject *result = nil;
+    MTDocumentObjectType objectType = [[documentObjectDefination objectForKey:MTDocumentObjectDefinationType] integerValue];
+    //id object = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+    
+    switch (objectType) {
+        case MTDocumentObjectTypeLabelDynamic:
+            result = [RptqDocumentObjectLabelDataField addDocumentObject:documentObjectDefination toDocument:document];
+            break;
+        case MTDocumentObjectTypeLabelStatic:
+            result = [RptqDocumentObjectLabel addDocumentObject:documentObjectDefination toDocument:document];
+            break;
+        default:
+            break;
     }
 
     [result setOriginx: @(CGPointZero.x)];

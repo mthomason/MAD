@@ -17,7 +17,7 @@
 @required
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document;
++ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document;
 
 @optional
 

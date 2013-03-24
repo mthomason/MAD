@@ -68,27 +68,29 @@
     return result;
 }
 
-+ (RptqDocumentObject *)addDocumentObject:(id)object toDocument:(RptqDocument *)document {
++ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
-    RptqDatabaseSchemaField *field = object;
-    
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
                                                                        inManagedObjectContext: [document managedObjectContext]];
-    NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+    NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
                                                                                      inManagedObjectContext: [document managedObjectContext]];
     
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                                  insertIntoManagedObjectContext: [document managedObjectContext]];
     
+    NSManagedObjectID *fieldObjectId = [documentObjectDefination objectForKey: MTDocumentObjectDefinationObject];
+    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: fieldObjectId
+                                                                fromObjectContext: [document managedObjectContext]];
     
-    RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
+    RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                                insertIntoManagedObjectContext: [document managedObjectContext]];
 
     [dataObject setIsLabelDataField: reportObject];
     
     [[dataObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
     [[dataObject isLabelDataField] setReferencesField: field];
-    [dataObject setType: @(MNSObjectTypeLabelDataField)];
+    
+    [dataObject setType: @(MTDocumentObjectTypeLabelDynamic)];
     
     [reportObject setReferencesField: field];
 

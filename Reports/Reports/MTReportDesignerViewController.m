@@ -905,11 +905,11 @@
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
-            case MNSObjectTypeLabel: {
+            case MTDocumentObjectTypeLabelStatic: {
                 
                 break;
             }
-            case MNSObjectTypeLabelDataField: {
+            case MTDocumentObjectTypeLabelDynamic: {
                 
                 for (UIView *subview in [[cell contentView] subviews]) {
                     [subview removeFromSuperview];
@@ -941,10 +941,7 @@
                 
                 break;
             }
-            case MNSObjectTypeLabelFormula: {
-                break;
-            }
-            case MNSObjectTypeLabelLabelLink: {
+            case MTDocumentObjectTypeFormula: {
                 break;
             }
             default: {
@@ -1124,7 +1121,10 @@
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:field toDocument:document];
+            NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+                                                       MTDocumentObjectDefinationObject : [field objectID]};
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
             
             // MARK: Get a permanent id on insert.  Let's make sure it's correct.
             if ([[documentObject objectID] isTemporaryID]) {
@@ -1160,17 +1160,17 @@
     }
 }
 
-- (void)insertDocumentObjectNewLabel {
+- (void)insertDocumentObjectNewLabel:(NSString *)labelText {
     [self dismissObjectSelectorViewController];
-    /*
-    NSString *labelText = @"Label";
-    if ([AppDelegate isPad]) {
+
+    if ([UIDevice isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
         }
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
@@ -1182,7 +1182,10 @@
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:labelText toDocument:document];
+            NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelStatic),
+                                                       MTDocumentObjectDefinationObject : labelText};
+
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
             
             // MARK: Get a permanent id on insert.  Let's make sure it's correct.
             if ([[documentObject objectID] isTemporaryID]) {
@@ -1203,7 +1206,7 @@
         } completion:^(BOOL finished) {
             
         }];
-    }*/
+    }
 }
 - (void)insertDocumentObjectNewFormula {
     [self dismissObjectSelectorViewController];

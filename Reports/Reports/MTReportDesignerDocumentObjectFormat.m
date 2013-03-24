@@ -65,10 +65,6 @@
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
     
     BOOL numericTypeInSet = NO;
@@ -110,9 +106,4 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)viewDidUnload {
-    [self setViewsToDisableNumeric:nil];
-    [self setViewsToDisableNumeric:nil];
-    [super viewDidUnload];
-}
 @end

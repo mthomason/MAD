@@ -613,11 +613,11 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
     id value = nil;
     
     switch ([documentObject getType]) {
-        case MNSObjectTypeLabel: {
+        case MTDocumentObjectTypeLabelStatic: {
             
             break;
         }
-        case MNSObjectTypeLabelDataField: {
+        case MTDocumentObjectTypeLabelDynamic: {
             switch ([[[documentObject inSection] type] integerValue]) {
                 case MNSDocumentSectionTypeBody: {
 
@@ -644,10 +644,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             
             
         }
-        case MNSObjectTypeLabelFormula: {
-            break;
-        }
-        case MNSObjectTypeLabelLabelLink: {
+        case MTDocumentObjectTypeFormula: {
             break;
         }
         default: {

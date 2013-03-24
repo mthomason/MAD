@@ -20,18 +20,18 @@
 #import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "RptqDocumentObjectLabel+Extras.h"
 #import "RptqDocumentObjectLabelLink+Extras.h"
-#import "RptqDocumentObjectFormula.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentObjectChart+Extras.h"
+#import "RptqDocumentObjectGroupKey+Extras.h"
+#import "RptqDocumentObjectImage+Extras.h"
+#import "RptqDocumentObjectFormula+Extras.h"
 
-typedef NS_ENUM(NSUInteger, MNSSectionType) {
-	MNSObjectTypeLabel = 1,
-	MNSObjectTypeLabelDataField = 2,
-	MNSObjectTypeLabelFormula= 3,
-	MNSObjectTypeLabelLabelLink = 4,
-};
+extern NSString * const MTDocumentObjectDefinationType;
+extern NSString * const MTDocumentObjectDefinationObject;
 
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
-- (MNSSectionType)getType;
+- (MTDocumentObjectType)getType;
 - (CGSize)viewSize;
 
 @end

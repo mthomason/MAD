@@ -185,6 +185,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return YES;
 }
 
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
+}
+
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 
 }
@@ -265,6 +269,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [url release];
         
     }
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    BOOL shouldPerformSegueWithIdentifier = YES;
+    if ([identifier isEqualToString:@""]) {
+
+    }
+    return shouldPerformSegueWithIdentifier;
 }
 
 #pragma mark - Delegates

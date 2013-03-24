@@ -13,10 +13,11 @@
 #import "MTViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
+#import "MTDocumentObjectNewStaticLabelViewController.h"
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
-- (void)insertDocumentObjectNewLabel;
+- (void)insertDocumentObjectNewLabel:(NSString *)labelText;
 - (void)insertDocumentObjectNewFormula;
 - (void)insertDocumentObjectNewChart;
 - (void)insertDocumentObjectNewHyperlink;

@@ -14,15 +14,7 @@ NSString * const MTIdentiferDocumentObjectChartCollectionViewCell = @"MTIdentife
 NSString * const MTIdentiferDocumentObjectAggregateCollectionViewCell = @"MTIdentiferDocumentObjectAggregateCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentiferDocumentObjectDataCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
-
-typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelData = 0,
-	MTDocumentObjectTypeLabel = 1,
-	MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5
-};
+NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
 
 @interface MTReportDesignerObjectSelectorViewController ()
 
@@ -85,7 +77,8 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
     [super viewDidLoad];
 
     // MARK: Add collection view contorller.
-    [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose an object to add to the report.", @"Prompt to choose an object.")];
+    [[self navigationItemMain] setTitle:NSLocalizedString(@"Add a Document Object", @"Add a Document Object")];
+    [[self navigationItemMain] setPrompt:NSLocalizedString(@"Choose the type of object you would like to add to the report.", @"Prompt to choose an object.")];
     UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     UICollectionViewController *documentObjectSelectorViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectSelectorViewControllerIdentifier"] retain];
     [[documentObjectSelectorViewController collectionView] setDelegate:self];
@@ -169,7 +162,7 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
             switch ([indexPath row]) {
                 case 0: {
                     cellIdentifier = MTIdentiferDocumentObjectLabelCollectionViewCell;
-                    tag = MTDocumentObjectTypeLabel;
+                    tag = MTDocumentObjectTypeLabelStatic;
                     break;
                 }
                 case 1: {
@@ -194,8 +187,12 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
                 }
                 case 5: {
                     cellIdentifier = MTIdentiferDocumentObjectDataCollectionViewCell;
-                    tag = MTDocumentObjectTypeLabelData;
+                    tag = MTDocumentObjectTypeLabelDynamic;
                     break;
+                }
+                case 6: {
+                    cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
+                    tag = MTDocumentObjectTypeGroupKey;
                 }
                 default: {
                     break;
@@ -269,10 +266,10 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
     switch ([indexPath section]) {
         case 0: {
             switch (objectType) {
-                case MTDocumentObjectTypeLabel:
+                case MTDocumentObjectTypeLabelStatic:
                     navigationItemTitle = NSLocalizedString(@"Label", @"Label");
                     break;
-                case MTDocumentObjectTypeLabelData:
+                case MTDocumentObjectTypeLabelDynamic:
                     navigationItemTitle = NSLocalizedString(@"Data", @"Data");
                     break;
                 case MTDocumentObjectTypeChart:
@@ -285,6 +282,8 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
                 case MTDocumentObjectTypeAggregate:
                     navigationItemTitle = NSLocalizedString(@"Aggregate", @"Aggregate");
                     break;
+                case MTDocumentObjectTypeGroupKey:
+                    navigationItemTitle = NSLocalizedString(@"Group Key", @"Group Key");
                 default:
                     break;
             }
@@ -295,15 +294,18 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         }
     }
 
-    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle:navigationItemTitle];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                target:self
-                                                                                action:@selector(pressedBackButton:)];
+    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
 
-    [itemToPush setBackBarButtonItem:backButton];
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
+                                                                                target: self
+                                                                                action: @selector(pressedSaveButton:)];
+    
+    [itemToPush setRightBarButtonItem:saveButton];
+    
     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
     
-    [backButton release];
+    [saveButton release];
+    [itemToPush release];
     
 }
 
@@ -329,6 +331,29 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
+}
+
+- (void)pressedSaveButton:(id)sender {
+    switch ([self typeOfObjectToPush]) {
+        case MTDocumentObjectTypeAggregate:
+            break;
+        case MTDocumentObjectTypeChart:
+            break;
+        case MTDocumentObjectTypeFormula:
+            break;
+        case MTDocumentObjectTypeGroupKey:
+            break;
+        case MTDocumentObjectTypeImage:
+            break;
+        case MTDocumentObjectTypeLabelDynamic:
+            break;
+        case MTDocumentObjectTypeLabelStatic:
+            [[self objectSelectorDelegate] insertDocumentObjectNewLabel:@"Test"];
+            break;
+        default:
+            break;
+    }
+    [[self navigationBar] popNavigationItemAnimated:YES];
 }
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
@@ -384,7 +409,7 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         
         switch ([self typeOfObjectToPush]) {
 
-            case MTDocumentObjectTypeLabelData: {
+            case MTDocumentObjectTypeLabelDynamic: {
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
                 MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
@@ -407,7 +432,29 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
                 }
                 break;
             }
-            
+                
+            case MTDocumentObjectTypeGroupKey: {
+                break;
+            }
+            case MTDocumentObjectTypeAggregate: {
+                break;
+            }
+            case MTDocumentObjectTypeChart: {
+                break;
+            }
+            case MTDocumentObjectTypeFormula: {
+                break;
+            }
+            case MTDocumentObjectTypeLabelStatic: {
+                [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
+                [item setTitle:@"Label Data"];
+                MTDocumentObjectNewStaticLabelViewController *documentObjectNewStaticLabelViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectNewStaticLabelViewControllerIdentifier"] retain];
+//                [documentObjectNewStaticLabelViewController setExcludeTables: [NSArray array]];
+//                [documentObjectNewStaticLabelViewController setDelegate: self];
+                viewControllerToAdd = [documentObjectNewStaticLabelViewController retain];
+                [documentObjectNewStaticLabelViewController release];
+                break;
+            }
             default: {
                 [item setPrompt: @""];
                 break;
@@ -438,7 +485,6 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
         }];
         
         [self setChildDisplayedView:[viewControllerToAdd view]];
-        
         [self setViewControllerToPush:viewControllerToAdd];
         
         [viewControllerToAdd release];

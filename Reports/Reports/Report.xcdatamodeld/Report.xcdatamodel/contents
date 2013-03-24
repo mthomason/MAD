@@ -17,6 +17,7 @@
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="aggregateField" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
         <relationship name="inQuery" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasFields" inverseEntity="RptqQuery" syncable="YES"/>
         <relationship name="inQueryGroup" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="hasField" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="inQueryLinkLeft" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="hasLeftField" inverseEntity="RptqQueryLinks" syncable="YES"/>
@@ -68,7 +69,10 @@
         <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fontname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fontsize" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="horizontalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="formatNumericCurrency" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="formatNumericCurrencyLocal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="formatNumericDecimals" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="horizontalAlignment" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="italic" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
@@ -92,15 +96,43 @@
         <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="inSection" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasObjects" inverseEntity="RptqDocumentSection" syncable="YES"/>
+        <relationship name="isAggregate" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="parentObject" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
+        <relationship name="isChart" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectChart" inverseName="parentObject" inverseEntity="RptqDocumentObjectChart" syncable="YES"/>
         <relationship name="isFormula" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectFormula" inverseName="parentObjectFormula" inverseEntity="RptqDocumentObjectFormula" syncable="YES"/>
+        <relationship name="isGroupKey" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectGroupKey" inverseName="parentObject" inverseEntity="RptqDocumentObjectGroupKey" syncable="YES"/>
+        <relationship name="isImage" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectImage" inverseName="parentObject" inverseEntity="RptqDocumentObjectImage" syncable="YES"/>
         <relationship name="isLabel" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabel" inverseName="parentObjectLabel" inverseEntity="RptqDocumentObjectLabel" syncable="YES"/>
         <relationship name="isLabelDataField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabelDataField" inverseName="parentObjectLabelDataField" inverseEntity="RptqDocumentObjectLabelDataField" syncable="YES"/>
         <relationship name="isLabelLink" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabelLink" inverseName="parentObjectLinkLabel" inverseEntity="RptqDocumentObjectLabelLink" syncable="YES"/>
     </entity>
+    <entity name="RptqDocumentObjectAggregate" representedClassName="RptqDocumentObjectAggregate" syncable="YES">
+        <attribute name="function" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="groupType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaField" inverseName="includedInAggregateObject" inverseEntity="RptqDatabaseSchemaField" syncable="YES"/>
+        <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentObjectFormula" syncable="YES"/>
+        <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isAggregate" inverseEntity="RptqDocumentObject" syncable="YES"/>
+    </entity>
+    <entity name="RptqDocumentObjectChart" representedClassName="RptqDocumentObjectChart" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isChart" inverseEntity="RptqDocumentObject" syncable="YES"/>
+    </entity>
     <entity name="RptqDocumentObjectFormula" representedClassName="RptqDocumentObjectFormula" syncable="YES">
         <attribute name="formulaSource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
         <relationship name="parentObjectFormula" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isFormula" inverseEntity="RptqDocumentObject" syncable="YES"/>
+    </entity>
+    <entity name="RptqDocumentObjectGroupKey" representedClassName="RptqDocumentObjectGroupKey" syncable="YES">
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isGroupKey" inverseEntity="RptqDocumentObject" syncable="YES"/>
+    </entity>
+    <entity name="RptqDocumentObjectImage" representedClassName="RptqDocumentObjectImage" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isImage" inverseEntity="RptqDocumentObject" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentObjectLabel" representedClassName="RptqDocumentObjectLabel" syncable="YES">
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
@@ -109,9 +141,6 @@
     </entity>
     <entity name="RptqDocumentObjectLabelDataField" representedClassName="RptqDocumentObjectLabelDataField" syncable="YES">
         <attribute name="field" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="formatNumericCurrency" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="formatNumericCurrencyLocal" optional="YES" attributeType="String" defaultValueString="en" syncable="YES"/>
-        <attribute name="formatNumericDecimals" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
@@ -259,13 +288,17 @@
     <fetchRequest name="getRptqDatabaseSchemaTableByName" entity="RptqDatabaseSchemaTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
         <element name="RptqDatabase" positionX="-1386" positionY="-657" width="128" height="165"/>
-        <element name="RptqDatabaseSchemaField" positionX="-936" positionY="-459" width="182" height="285"/>
+        <element name="RptqDatabaseSchemaField" positionX="-936" positionY="-459" width="182" height="300"/>
         <element name="RptqDatabaseSchemaTable" positionX="-1242" positionY="-423" width="198" height="253"/>
         <element name="RptqDocument" positionX="-1820" positionY="-270" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="-1224" positionY="-72" width="218" height="540"/>
-        <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="90"/>
+        <element name="RptqDocumentObject" positionX="-1224" positionY="-72" width="218" height="645"/>
+        <element name="RptqDocumentObjectAggregate" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="RptqDocumentObjectChart" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="105"/>
+        <element name="RptqDocumentObjectGroupKey" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="RptqDocumentObjectImage" positionX="160" positionY="192" width="128" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="-884" positionY="144" width="218" height="90"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="-855" positionY="297" width="225" height="180"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="-855" positionY="297" width="225" height="135"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-855" positionY="489" width="225" height="105"/>
         <element name="RptqDocumentSection" positionX="-1620" positionY="204" width="198" height="300"/>
         <element name="RptqQuery" positionX="-272" positionY="-846" width="128" height="238"/>
