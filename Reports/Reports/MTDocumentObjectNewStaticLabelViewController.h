@@ -11,4 +11,6 @@
 @interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
     <UITableViewDelegate>
 
+- (NSString *)userInputedText;
+
 @end

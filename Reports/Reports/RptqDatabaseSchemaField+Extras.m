@@ -69,6 +69,16 @@
     return [rptqField autorelease];
 }
 
++ (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqDatabaseSchemaField *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
 - (NSString *)display {
     return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]] lowercaseString];
 }
@@ -83,7 +93,7 @@
 }
 */
 
-// MARK: MTProtocolLog
+#pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
     return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]];
@@ -94,17 +104,7 @@
 }
 
 - (NSString *)toStringDebug {
-    return [self toStringHumanReadable];
-}
-
-+ (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDatabaseSchemaField *result = nil;
-    if (results) result = [results lastObject];
-    return result;
+    return [NSString stringWithFormat:@"%@", self];
 }
 
 #pragma mark - MTProtocolCompare

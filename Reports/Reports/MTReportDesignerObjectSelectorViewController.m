@@ -31,6 +31,9 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
 
+@property (atomic, assign) BOOL shouldDismissThis;
+@property (atomic, assign) BOOL pressedSaveButton;
+
 - (BOOL)childViewControllerIsVisable;
 - (IBAction)done:(id)sender;
 
@@ -97,7 +100,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
     [[childViewController view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self setChildViewController:childViewController];
     [childViewController release];
-    
+    [self setShouldDismissThis:NO];
     [self setRootSelectorControllerIsVisable:YES];
 }
 
@@ -124,6 +127,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
     [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
+    [[self objectSelectorDelegate] viewControllerDidFinish:self];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -334,6 +338,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 }
 
 - (void)pressedSaveButton:(id)sender {
+    
     switch ([self typeOfObjectToPush]) {
         case MTDocumentObjectTypeAggregate:
             break;
@@ -347,13 +352,23 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
             break;
         case MTDocumentObjectTypeLabelDynamic:
             break;
-        case MTDocumentObjectTypeLabelStatic:
-            [[self objectSelectorDelegate] insertDocumentObjectNewLabel:@"Test"];
+        case MTDocumentObjectTypeLabelStatic: {
+
+            MTDocumentObjectNewStaticLabelViewController *childViewController = [(MTDocumentObjectNewStaticLabelViewController *)[self viewControllerToPush] retain];
+            NSString *userInputtedText = [childViewController userInputedText];
+            [[self objectSelectorDelegate] insertDocumentObjectNewLabel:userInputtedText];
+            [childViewController release];
+            
+            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+
             break;
+        }
         default:
             break;
     }
+    /*
     [[self navigationBar] popNavigationItemAnimated:YES];
+     */
 }
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
@@ -365,7 +380,11 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
- 
+    if ([self shouldDismissThis]) {
+        [self setShouldDismissThis: NO];
+        [[self objectSelectorDelegate] viewControllerDidFinish:self];
+    }
+    [self setShouldDismissThis: NO];
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
@@ -384,7 +403,6 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
                                       [[[self childViewController] view] frame].origin.y,
                                       [[[self childViewController] view] frame].size.width,
                                       [[[self childViewController] view] frame].size.height);
-        
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self childViewController] view] setFrame: offScreen];
         } completion:^(BOOL finished) {
@@ -393,6 +411,8 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
             [[[self documentObjectSelectorViewController] collectionView] setAllowsSelection: YES];
         }];
 
+        [self setShouldDismissThis:[self pressedSaveButton]];
+        [self setPressedSaveButton:NO];
     }
     
     return popIt;

@@ -22,7 +22,7 @@
 
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
-    //NSLog(@"%@", exception);
+    NSLog(@"%@", exception);
 }
 
 - (void)dealloc {

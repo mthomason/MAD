@@ -33,6 +33,7 @@ extern NSString * const MTDocumentObjectDefinationObject;
 
 - (MTDocumentObjectType)getType;
 - (CGSize)viewSize;
+- (NSString *)designerRepresentationText;
 
 @end
 

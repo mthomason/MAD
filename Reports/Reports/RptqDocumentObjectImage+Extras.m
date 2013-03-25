@@ -92,6 +92,7 @@
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [[document hasDetailSection] setHasObjects:hasObjects];
+    [hasObjects release];
     [reportObject release];
     
     return [dataObject autorelease];

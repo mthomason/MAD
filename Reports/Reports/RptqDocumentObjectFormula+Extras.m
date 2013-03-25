@@ -83,16 +83,31 @@
     
     [dataObject setIsFormula: reportObject];
     
-    [[dataObject isFormula] setFormulaSource:formulaText];
+    [[dataObject isFormula] setSource:formulaText];
     
     [dataObject setType: @(MTDocumentObjectTypeFormula)];
     
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [[document hasDetailSection] setHasObjects:hasObjects];
+    [hasObjects release];
     [reportObject release];
     
     return [dataObject autorelease];
+}
+
+#pragma mark - MTProtocolLog
+
+- (NSString *)toStringHumanReadable {
+    return [self name];
+}
+
+- (NSString *)toString {
+    return [self toStringHumanReadable];
+}
+
+- (NSString *)toStringDebug {
+    return [NSString stringWithFormat:@"%@", self];
 }
 
 @end

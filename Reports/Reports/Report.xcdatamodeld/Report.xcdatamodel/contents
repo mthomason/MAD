@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12D78" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
         <attribute name="databaseDriverType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="databaseDriverTypeEnum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -119,8 +119,9 @@
         <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isChart" inverseEntity="RptqDocumentObject" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentObjectFormula" representedClassName="RptqDocumentObjectFormula" syncable="YES">
-        <attribute name="formulaSource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
         <relationship name="parentObjectFormula" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isFormula" inverseEntity="RptqDocumentObject" syncable="YES"/>
     </entity>
@@ -294,7 +295,7 @@
         <element name="RptqDocumentObject" positionX="-1224" positionY="-72" width="218" height="645"/>
         <element name="RptqDocumentObjectAggregate" positionX="160" positionY="192" width="128" height="150"/>
         <element name="RptqDocumentObjectChart" positionX="160" positionY="192" width="128" height="75"/>
-        <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="105"/>
+        <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="120"/>
         <element name="RptqDocumentObjectGroupKey" positionX="160" positionY="192" width="128" height="90"/>
         <element name="RptqDocumentObjectImage" positionX="160" positionY="192" width="128" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="-884" positionY="144" width="218" height="90"/>

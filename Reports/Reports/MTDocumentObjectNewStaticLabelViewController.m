@@ -39,6 +39,10 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [super didReceiveMemoryWarning];
 }
 
+- (NSString *)userInputedText {
+    return [[self labelTextTextbox] text];
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {

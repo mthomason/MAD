@@ -11,6 +11,11 @@
 #import "RptqDocumentObjectFactory.h"
 #import "RptqDocumentObject+Extras.h"
 
+typedef NS_ENUM(NSUInteger, MTAggregateGroupType) {
+	MTAggregateGroupTypeField = 1,
+	MTAggregateGroupTypeFormula = 2
+};
+
 @interface RptqDocumentObjectAggregate (Extras) <RptqDocumentObjectFactory>
 
 @end

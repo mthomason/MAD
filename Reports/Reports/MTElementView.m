@@ -228,7 +228,8 @@
         }
     }
     
-    NSString *string = [[documentObject isLabelDataField] text];
+    NSString *string = [documentObject designerRepresentationText];
+    
     NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     

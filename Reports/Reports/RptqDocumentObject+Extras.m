@@ -103,6 +103,72 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
     return [[self type] integerValue];
 }
 
+- (NSString *)designerRepresentationText {
+
+    NSString *result = nil;
+    
+    switch ([[self type] integerValue]) {
+    
+        case MTDocumentObjectTypeAggregate: {
+            NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
+                                                                         numberStyle: NSNumberFormatterSpellOutStyle];
+            
+            MTAggregateGroupType groupType = [[[self isAggregate] groupType] integerValue];
+            switch (groupType) {
+                case MTAggregateGroupTypeField: {
+                    NSString *aggregateFormatString = NSLocalizedString(@"Group on section %@ with field %@.", @"Group on section section-number with field field-name.");
+                    result = [NSString stringWithFormat:aggregateFormatString, [groupNumberText lowercaseString], [[[self isAggregate] aggregateField] toStringHumanReadable]];
+                    break;
+                }
+                case MTAggregateGroupTypeFormula: {
+                    NSString *aggregateFormatString = NSLocalizedString(@"Group on section %@ with formula %@.", @"Group on section section-number with formula formula-name.");
+                    result = [NSString stringWithFormat:aggregateFormatString, [groupNumberText lowercaseString], [[[self isAggregate] aggregateFunction] toStringHumanReadable]];
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+
+        case MTDocumentObjectTypeChart:
+            result = @"chart";
+            break;
+
+        case MTDocumentObjectTypeFormula:
+            result = [[self isFormula] source];
+            break;
+        
+        case MTDocumentObjectTypeGroupKey: {
+            NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
+                                                                         numberStyle: NSNumberFormatterSpellOutStyle];
+            NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
+            result = [NSString stringWithFormat:gorupFormatString, [groupNumberText uppercaseString]];
+            break;
+        }
+        
+        case MTDocumentObjectTypeImage:
+            result = @"image";
+            break;
+        
+        case MTDocumentObjectTypeLabelDynamic:
+            result = [[self isLabelDataField] text];
+            break;
+        
+        case MTDocumentObjectTypeLabelStatic:
+            result = [[self isLabel] text];
+            break;
+        
+        default:
+            break;
+    
+    }
+
+    return result;
+}
+
 #pragma mark - RptqDocumentObjectFactory
 
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
@@ -158,7 +224,8 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
 #pragma mark - MTProtocolLog
 
 - (NSString *)toString {
-    return nil;
+    NSString *result = nil;
+    return result;
 }
 
 - (NSString *)toStringDebug {

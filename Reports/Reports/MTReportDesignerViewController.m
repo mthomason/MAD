@@ -302,6 +302,7 @@
             NSString *key =[[NSString alloc] initWithString: [[objectId URIRepresentation] absoluteString]];
             NSLayoutConstraint *constraint = [layoutConstraint retain];
             [[self layoutConstraintsReportSectionHeight] setObject:constraint forKey:key];
+            [key release];
             [constraint release];
         }
 
@@ -576,6 +577,7 @@
             }
         }
     }
+    [enumerator release];
     return [results autorelease];
 }
 
@@ -596,6 +598,7 @@
             }
         }
     }
+    [enumerator release];
     return [results autorelease];
 }
 
@@ -905,20 +908,17 @@
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
-            case MTDocumentObjectTypeLabelStatic: {
-                
-                break;
-            }
-            case MTDocumentObjectTypeLabelDynamic: {
-                
+            case MTDocumentObjectTypeFormula:
+            case MTDocumentObjectTypeLabelStatic:
+            case MTDocumentObjectTypeLabelDynamic:
+            default: {
+
                 for (UIView *subview in [[cell contentView] subviews]) {
                     [subview removeFromSuperview];
                 }
                 
-                RptqDocumentObjectLabelDataField *documentObjectCast = documentObject.isLabelDataField;
-
                 MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
-                                                                  inObjectContext:managedObjectContext];
+                                                                     inObjectContext:managedObjectContext];
                 
                 [elementView setDelegate:self];
                 [cell setBackgroundColor:[UIColor clearColor]];
@@ -931,20 +931,13 @@
                 [elementView addGestureRecognizer:panGesture];
                 [panGesture release];
                 
-                [cell setTag:[[[documentObjectCast parentObjectLabelDataField] identifier] integerValue] + 3838];
+                [cell setTag:[[documentObject identifier] integerValue] + 3838];
                 [cell setObjectIdTag:[documentObject objectID]];
                 [cell setFrame: cellFrame];
                 [cell setUserInteractionEnabled:YES];
                 [[cell contentView] addSubview:elementView];
-
-                [elementView release];
                 
-                break;
-            }
-            case MTDocumentObjectTypeFormula: {
-                break;
-            }
-            default: {
+                [elementView release];
                 break;
             }
         }
@@ -957,6 +950,7 @@
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [documentSection hasObjects];
+    NSLog(@"Number of items: %d", [objects count]);
     return [objects count];
 }
 
@@ -1088,27 +1082,20 @@
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
-    } else if ([sender isKindOfClass:[MTReportDesignerObjectSelectorViewController class]]) {
+    } else {
         if ([UIDevice isPad]) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+            } else {
+                [self dismissViewControllerAnimated:YES completion:nil];
             }
         } else {
             [self dismissViewControllerAnimated:YES completion:nil];
         }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field {
-    if ([UIDevice isPad]) {
-        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
-            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
-        }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
@@ -1161,8 +1148,8 @@
 }
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
-    [self dismissObjectSelectorViewController];
-
+//    [self dismissObjectSelectorViewController];
+/*
     if ([UIDevice isPad]) {
         if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
@@ -1170,7 +1157,7 @@
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-
+*/
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
@@ -1324,6 +1311,7 @@
                             [svSection setDelegate:self];
                         }];
                     }
+                    [hasObjects release];
                 }
             }
             break;
@@ -1490,7 +1478,10 @@
                 }
                 popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
             }
-            [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
+                                                                 inView: [self designScrollView]
+                                               permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                               animated: YES];
         }
     }
 }
