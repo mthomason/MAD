@@ -16,6 +16,11 @@ NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentifer
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
 
+NSInteger const MTViewTagAggregateFunctions = 2003;
+NSInteger const MTViewTagGroupByOptions = 2011;
+NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
+NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
+
 @interface MTReportDesignerObjectSelectorViewController ()
 
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
@@ -27,6 +32,10 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 @property (nonatomic, retain) UIViewController *viewControllerToPush;
 @property (nonatomic, retain) IBOutlet UIView *containerView;
 @property (nonatomic, retain) UIView *childDisplayedView;
+
+@property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
+@property (nonatomic, assign) BOOL *showAggregateFunctionsViewController;
+
 
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
@@ -51,6 +60,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
     [_navigationItemMain release];
     [_documentObjectSelectorViewController release];
     [_childViewController release];
+    [_aggregateFunctionsViewController release];
     [super dealloc];
 }
 
@@ -61,15 +71,6 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-
     }
     return self;
 }
@@ -102,6 +103,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
     [childViewController release];
     [self setShouldDismissThis:NO];
     [self setRootSelectorControllerIsVisable:YES];
+    [self setShowAggregateFunctionsViewController:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -366,9 +368,6 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
         default:
             break;
     }
-    /*
-    [[self navigationBar] popNavigationItemAnimated:YES];
-     */
 }
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
@@ -392,9 +391,26 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
-
-    BOOL popIt = [self rootSelectorControllerIsVisable] == NO;
-    if (popIt) {
+    
+    BOOL popIt = YES;
+    
+    if ([self showAggregateFunctionsViewController]) {
+        
+        CGRect offScreen = CGRectMake([[[self aggregateFunctionsViewController] view] frame].origin.x + [[[self aggregateFunctionsViewController] view] frame].size.width,
+                                      [[[self aggregateFunctionsViewController] view] frame].origin.y,
+                                      [[[self aggregateFunctionsViewController] view] frame].size.width,
+                                      [[[self aggregateFunctionsViewController] view] frame].size.height);
+        
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self aggregateFunctionsViewController] view] setFrame: offScreen];
+        } completion:^(BOOL finished) {
+            [[[self aggregateFunctionsViewController] view] removeFromSuperview];
+            [self setAggregateFunctionsViewController: nil];
+        }];
+        
+        [self setShowAggregateFunctionsViewController:NO];
+        
+    } else if ([self rootSelectorControllerIsVisable] == NO) {
 
         [self setRootSelectorControllerIsVisable:YES];
         [[[self documentObjectSelectorViewController] collectionView] setAllowsSelection: YES];
@@ -422,6 +438,7 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
     BOOL pushIt = [self rootSelectorControllerIsVisable];
 
     if (pushIt) {
+
         [self setRootSelectorControllerIsVisable:NO];
             
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
@@ -457,6 +474,9 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
                 break;
             }
             case MTDocumentObjectTypeAggregate: {
+                MTDocumentObjectNewAggregateViewController *documentObjectNewAggregateViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier];
+                [[documentObjectNewAggregateViewController tableView] setDelegate:self];
+                viewControllerToAdd = [documentObjectNewAggregateViewController retain];
                 break;
             }
             case MTDocumentObjectTypeChart: {
@@ -468,11 +488,8 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
             case MTDocumentObjectTypeLabelStatic: {
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
-                MTDocumentObjectNewStaticLabelViewController *documentObjectNewStaticLabelViewController = [[storyboard instantiateViewControllerWithIdentifier:@"MTDocumentObjectNewStaticLabelViewControllerIdentifier"] retain];
-//                [documentObjectNewStaticLabelViewController setExcludeTables: [NSArray array]];
-//                [documentObjectNewStaticLabelViewController setDelegate: self];
+                MTDocumentObjectNewStaticLabelViewController *documentObjectNewStaticLabelViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewStaticLabelViewControllerIdentifier];
                 viewControllerToAdd = [documentObjectNewStaticLabelViewController retain];
-                [documentObjectNewStaticLabelViewController release];
                 break;
             }
             default: {
@@ -509,9 +526,107 @@ NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdent
         
         [viewControllerToAdd release];
     
+    } else {
+        pushIt = YES;
+        UIViewController *viewControllerToAdd = nil;
+        if ([self showAggregateFunctionsViewController]) {
+            //[item setPrompt: NSLocalizedString(@"Choose an aggregate function.", @"Choose an aggregate function.")];
+            //[item setTitle:@"Aggregate Functions"];
+
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+            MTAggregateFunctionsViewController *aggregateFunctionsViewController = [[storyboard instantiateViewControllerWithIdentifier:MTAggregateFunctionsViewControllerIdentifier] retain];
+            viewControllerToAdd = [aggregateFunctionsViewController retain];
+            [self setAggregateFunctionsViewController:aggregateFunctionsViewController];
+            [aggregateFunctionsViewController release];
+        }
+        
+        CGRect newRect = CGRectMake([[self containerView] frame].origin.x, [[self containerView] frame].origin.y,
+                                    [[self containerView] frame].size.width,
+                                    [[self containerView] frame].size.height);
+        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[self containerView] bounds].size.width,
+                                             [[self containerView] frame].origin.y,
+                                             [[self containerView] frame].size.width,
+                                             [[self containerView] frame].size.height);
+
+        [[viewControllerToAdd view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [[viewControllerToAdd view] setFrame:newRectOffscreen];
+
+        [[self view] addSubview:[viewControllerToAdd view]];
+        
+        [[viewControllerToAdd view] setFrame:newRectOffscreen];
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[viewControllerToAdd view] setFrame:newRect];
+        } completion:^(BOOL finished) {
+            
+        }];
+        [viewControllerToAdd release];
+
     }
     
     return pushIt;
+}
+
+- (void)pushOnScreen:(UIViewController *)viewController {
+    [[viewController view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, [[[self childViewController] view] frame].size.width, [[[self childViewController] view] frame].size.height)];
+    [[[self childViewController] view] addSubview:[viewController view]];
+    
+    CGRect newRect = CGRectMake(CGPointZero.x,
+                                CGPointZero.y,
+                                [[[self childViewController] view] frame].size.width,
+                                [[[self childViewController] view] frame].size.height);
+    CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[[self childViewController] view] bounds].size.width,
+                                         [[[self childViewController] view] frame].origin.y,
+                                         [[[self childViewController] view] frame].size.width,
+                                         [[[self childViewController] view] frame].size.height);
+    
+    [[[self childViewController] view] setFrame:newRectOffscreen];
+    [[[self visibleViewController] view] addSubview:[[self childViewController] view]];
+    [[[self visibleViewController] view] bringSubviewToFront:[[self childViewController] view]];
+    [UIView animateWithDuration:0.3000f animations:^{
+        [[[self childViewController] view] setFrame:newRect];
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+#pragma mark -
+#pragma mark Table View Delegate Protocol
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+	
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    switch ([tableView tag]) {
+        case MTViewTagAggregateFunctions:
+            break;
+        case MTViewTagDocumentObjectNewAggregate: {
+            NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
+            UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+            
+            [self setShowAggregateFunctionsViewController:YES];
+            [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+            [itemToPush release];
+            break;
+        }
+        case MTViewTagDocumentObjectNewLabelStatic:
+            break;
+        case MTViewTagGroupByOptions:
+            break;
+        default:
+            break;
+    }
 }
 
 @end

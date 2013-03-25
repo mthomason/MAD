@@ -13,6 +13,7 @@
 #import "MTViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
+#import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
@@ -29,7 +30,8 @@
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate,
         UICollectionViewDataSource,
-        UICollectionViewDelegateFlowLayout>
+        UICollectionViewDelegateFlowLayout,
+        UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
 

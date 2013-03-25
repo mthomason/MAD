@@ -26,13 +26,11 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    
     self = [super initWithCoder:aDecoder];
     if (self) {
         
     }
     return self;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,10 +82,4 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-
-- (void)viewDidUnload {
-    [self setLabelTextLabel:nil];
-    [self setLabelTextTextbox:nil];
-    [super viewDidUnload];
-}
 @end

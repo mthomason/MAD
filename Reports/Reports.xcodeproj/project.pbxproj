@@ -488,6 +488,10 @@
 		4C7C8B0216606F8400F2B88B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C8155BA16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */; };
 		4C8155BB16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */; };
+		4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; };
+		4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; };
+		4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */; };
+		4C8155C517009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */; };
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C85C6AA14FF72F3003785AC /* MTReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MTReportViewerViewController.m */; };
@@ -1876,6 +1880,10 @@
 		4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationSettings.m; path = Reports/ApplicationSettings.m; sourceTree = "<group>"; };
 		4C8155B816FF980700D5330E /* RptqDocumentObjectFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFormula.h; sourceTree = "<group>"; };
 		4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectFormula.m; sourceTree = "<group>"; };
+		4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewAggregateViewController.h; sourceTree = "<group>"; };
+		4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewAggregateViewController.m; sourceTree = "<group>"; };
+		4C8155C217009E7000D5330E /* MTAggregateFunctionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionsViewController.h; sourceTree = "<group>"; };
+		4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAggregateFunctionsViewController.m; sourceTree = "<group>"; };
 		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
 		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -3972,8 +3980,12 @@
 				4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */,
 				4CB0FF6B16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.h */,
 				4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */,
+				4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */,
+				4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */,
 				4C8BF42D16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.h */,
 				4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */,
+				4C8155C217009E7000D5330E /* MTAggregateFunctionsViewController.h */,
+				4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */,
 			);
 			name = "Report Desinger";
 			path = Reports;
@@ -5254,6 +5266,8 @@
 				4C9F406B16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */,
 				4C9F406F16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */,
 				4C8155BB16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */,
+				4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
+				4C8155C517009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5709,6 +5723,8 @@
 				4C9F406A16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */,
 				4C9F406E16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */,
 				4C8155BA16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */,
+				4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
+				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
