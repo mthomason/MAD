@@ -173,59 +173,80 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
 
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
-    RptqDocumentObject *documentObject = nil;
-    MTDocumentObjectType objectType = [[documentObjectDefination objectForKey:MTDocumentObjectDefinationType] integerValue];
+    NSManagedObjectContext *mangedObjectContext = [document managedObjectContext];
     
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: [document managedObjectContext]];
+    MTDocumentObjectType objectType = [[documentObjectDefination objectForKey:MTDocumentObjectDefinationType] integerValue];
 
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                                       inManagedObjectContext: mangedObjectContext];
+    
+    RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                 insertIntoManagedObjectContext: mangedObjectContext];
+
+    NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
+    
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+
             NSManagedObjectID *fieldObjectId = [documentObjectDefination objectForKey: MTDocumentObjectDefinationObject];
             RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: fieldObjectId
-                                                                        fromObjectContext: [document managedObjectContext]];
-
-            NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
-                                                                                      inManagedObjectContext: [document managedObjectContext]];
-            
-            documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                         insertIntoManagedObjectContext: [document managedObjectContext]];
+                                                                        fromObjectContext: mangedObjectContext];
             
             
             RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                                       insertIntoManagedObjectContext: [document managedObjectContext]];
+                                                                                       insertIntoManagedObjectContext: mangedObjectContext];
             
             [documentObject setIsLabelDataField: reportObject];
             
             [[documentObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
             [[documentObject isLabelDataField] setReferencesField: field];
             
+            [reportObject setReferencesField: field];
+
             [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
             
-            [reportObject setReferencesField: field];
-            
             [reportObject release];
-
+            
             break;
         }
         case MTDocumentObjectTypeLabelStatic: {
-            
+
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
+                                                                 inManagedObjectContext: [document managedObjectContext]];
+
             NSString *labelText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
             
-            NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
-                                                                                             inManagedObjectContext: [document managedObjectContext]];
-            
-            documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                         insertIntoManagedObjectContext: [document managedObjectContext]];
-            
-            RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
+            RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                      insertIntoManagedObjectContext: [document managedObjectContext]];
             
             [documentObject setIsLabel: reportObject];
             [[documentObject isLabel] setText: labelText];
             
             [documentObject setType: @(MTDocumentObjectTypeLabelStatic)];
+            
+            [reportObject release];
+            
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectAggregate class])
+                                                                 inManagedObjectContext: [document managedObjectContext]];
+            
+            NSDictionary *aggregateOptions = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+            
+            RptqDocumentObjectAggregate *reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                             insertIntoManagedObjectContext: [document managedObjectContext]];
+            [documentObject setIsAggregate: reportObject];
+            
+            [[documentObject isAggregate] setGroupNumber:   [aggregateOptions objectForKey: MTAggregateTypeKeyGroupNumber]];
+            [[documentObject isAggregate] setGroupType:     [aggregateOptions objectForKey: MTAggregateTypeKeyGroupType]];
+            [[documentObject isAggregate] setFunction:      [aggregateOptions objectForKey: MTAggregateTypeKeyFunctionType]];
+
+            [documentObject setType: @(MTDocumentObjectTypeAggregate)];
             
             [reportObject release];
 
