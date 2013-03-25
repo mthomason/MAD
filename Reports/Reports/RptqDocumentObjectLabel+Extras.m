@@ -68,35 +68,6 @@
     return result;
 }
 
-+ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(id)document {
-    
-    NSString *labelText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
-    
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: [document managedObjectContext]];
-    NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
-                                                                                     inManagedObjectContext: [document managedObjectContext]];
-    
-    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
-    
-    RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
-                                                                               insertIntoManagedObjectContext: [document managedObjectContext]];
-    
-    [dataObject setIsLabel: reportObject];
-    
-    [[dataObject isLabel] setText: labelText];
-    [dataObject setType: @(MTDocumentObjectTypeLabelStatic)];
-    
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
-    [hasObjects insertObject:dataObject atIndex:0];
-    [[document hasDetailSection] setHasObjects:hasObjects];
-    [hasObjects release];
-    [reportObject release];
-    
-    return [dataObject autorelease];
-}
-
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

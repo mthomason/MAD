@@ -68,41 +68,6 @@
     return result;
 }
 
-+ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
-
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: [document managedObjectContext]];
-    NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
-                                                                                     inManagedObjectContext: [document managedObjectContext]];
-    
-    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
-    
-    NSManagedObjectID *fieldObjectId = [documentObjectDefination objectForKey: MTDocumentObjectDefinationObject];
-    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: fieldObjectId
-                                                                fromObjectContext: [document managedObjectContext]];
-    
-    RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                               insertIntoManagedObjectContext: [document managedObjectContext]];
-
-    [dataObject setIsLabelDataField: reportObject];
-    
-    [[dataObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
-    [[dataObject isLabelDataField] setReferencesField: field];
-    
-    [dataObject setType: @(MTDocumentObjectTypeLabelDynamic)];
-    
-    [reportObject setReferencesField: field];
-
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
-    [hasObjects insertObject:dataObject atIndex:0];
-    [[document hasDetailSection] setHasObjects:hasObjects];
-    [hasObjects release];
-    [reportObject release];
-    
-    return [dataObject autorelease];
-}
-
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

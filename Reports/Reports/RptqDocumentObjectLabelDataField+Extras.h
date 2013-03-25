@@ -15,9 +15,8 @@
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDocumentObjectFactory.h"
 
-@interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare, RptqDocumentObjectFactory>
+@interface RptqDocumentObjectLabelDataField (Extras) <MTProtocolCompare>
 
 @end
 

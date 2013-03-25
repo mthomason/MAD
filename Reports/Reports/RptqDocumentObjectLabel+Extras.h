@@ -11,10 +11,9 @@
 
 #import "RptqDocumentObjectLabel.h"
 #import "MTProtocolCompare.h"
-#import "RptqDocumentObjectFactory.h"
 #import "RptqDocumentObject+Extras.h"
 
-@interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare, RptqDocumentObjectFactory>
+@interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>
 
 @end
 

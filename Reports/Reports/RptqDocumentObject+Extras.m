@@ -173,27 +173,79 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
 
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
 
-    RptqDocumentObject *result = nil;
+    RptqDocumentObject *documentObject = nil;
     MTDocumentObjectType objectType = [[documentObjectDefination objectForKey:MTDocumentObjectDefinationType] integerValue];
-    //id object = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
     
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                                       inManagedObjectContext: [document managedObjectContext]];
+
     switch (objectType) {
-        case MTDocumentObjectTypeLabelDynamic:
-            result = [RptqDocumentObjectLabelDataField addDocumentObject:documentObjectDefination toDocument:document];
+        case MTDocumentObjectTypeLabelDynamic: {
+            
+            NSManagedObjectID *fieldObjectId = [documentObjectDefination objectForKey: MTDocumentObjectDefinationObject];
+            RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: fieldObjectId
+                                                                        fromObjectContext: [document managedObjectContext]];
+
+            NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+                                                                                      inManagedObjectContext: [document managedObjectContext]];
+            
+            documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                                         insertIntoManagedObjectContext: [document managedObjectContext]];
+            
+            
+            RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                                       insertIntoManagedObjectContext: [document managedObjectContext]];
+            
+            [documentObject setIsLabelDataField: reportObject];
+            
+            [[documentObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
+            [[documentObject isLabelDataField] setReferencesField: field];
+            
+            [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
+            
+            [reportObject setReferencesField: field];
+            
+            [reportObject release];
+
             break;
-        case MTDocumentObjectTypeLabelStatic:
-            result = [RptqDocumentObjectLabel addDocumentObject:documentObjectDefination toDocument:document];
+        }
+        case MTDocumentObjectTypeLabelStatic: {
+            
+            NSString *labelText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+            
+            NSEntityDescription *entityDescriptionDocumentObjectLabelDataField = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
+                                                                                             inManagedObjectContext: [document managedObjectContext]];
+            
+            documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                                         insertIntoManagedObjectContext: [document managedObjectContext]];
+            
+            RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectLabelDataField
+                                                                     insertIntoManagedObjectContext: [document managedObjectContext]];
+            
+            [documentObject setIsLabel: reportObject];
+            [[documentObject isLabel] setText: labelText];
+            
+            [documentObject setType: @(MTDocumentObjectTypeLabelStatic)];
+            
+            [reportObject release];
+
             break;
+        }
         default:
             break;
     }
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+    [hasObjects insertObject:documentObject atIndex:0];
+    [[document hasDetailSection] setHasObjects:hasObjects];
+    [hasObjects release];
 
-    [result setOriginx: @(CGPointZero.x)];
-    [result setOriginy: @(CGPointZero.y)];
-    [result setSizewidth: @(200.0000f)];
-    [result setSizeheight: @(44.0000f)];
+    [documentObject setOriginx: @(CGPointZero.x)];
+    [documentObject setOriginy: @(CGPointZero.y)];
+    [documentObject setSizewidth: @(200.0000f)];
+    [documentObject setSizeheight: @(44.0000f)];
 
-    return result;
+    return [documentObject autorelease];
 }
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

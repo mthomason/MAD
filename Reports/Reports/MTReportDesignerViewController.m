@@ -1276,43 +1276,39 @@
             {
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
-                RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
                 
-                if (datafield) {
-                    
-                    RptqDocumentSection *section = [documentObject inSection];
-                    UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
-                    
-                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
-                    
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [documentSection hasObjects]];
-                    NSUInteger deleteIndex = 0;
-                    
-                    BOOL found = NO;
-                    for (RptqDocumentObject *object in hasObjects) {
-                        if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
-                            found = YES;
-                            break;
-                        }
-                        deleteIndex++;
+                RptqDocumentSection *section = [documentObject inSection];
+                UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
+                
+                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+                
+                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [documentSection hasObjects]];
+                NSUInteger deleteIndex = 0;
+                
+                BOOL found = NO;
+                for (RptqDocumentObject *object in hasObjects) {
+                    if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
+                        found = YES;
+                        break;
                     }
-                    if (found) {
-                        [svSection performBatchUpdates:^{
-                            [hasObjects removeObjectAtIndex:deleteIndex];
-                            [documentSection setHasObjects:hasObjects];
-                            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                            NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
-                            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-                        } completion:^(BOOL finished) {
-                            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
-                            [[gestureRecognizer view] setCenter: newCenter];
-                            [[self designScrollView] addSubview: [gestureRecognizer view]];
-
-                            [svSection setDelegate:self];
-                        }];
-                    }
-                    [hasObjects release];
+                    deleteIndex++;
                 }
+                if (found) {
+                    [svSection performBatchUpdates:^{
+                        [hasObjects removeObjectAtIndex:deleteIndex];
+                        [documentSection setHasObjects:hasObjects];
+                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                        NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
+                        [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+                    } completion:^(BOOL finished) {
+                        CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        [[self designScrollView] addSubview: [gestureRecognizer view]];
+                        
+                        [svSection setDelegate:self];
+                    }];
+                }
+                [hasObjects release];
             }
             break;
         }
@@ -1368,49 +1364,46 @@
                                 
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 
-                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag]
-                                                                             fromObjectContext:managedObjectContext];
+                NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
+                                                                             fromObjectContext: managedObjectContext];
                 
-                RptqDocumentObjectLabelDataField *datafield = [documentObject isLabelDataField];
+                [documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
+                [documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
+                [documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
+                [documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
                 
-                if (datafield) {
-                    
-                    documentObject.originx = @([gestureRecognizer view].frame.origin.x);
-                    documentObject.originy = @([gestureRecognizer view].frame.origin.y);
-                    documentObject.sizewidth = @([gestureRecognizer view].frame.size.width);
-                    documentObject.sizeheight = @([gestureRecognizer view].frame.size.height);
-                    
-                    CGPoint newCenter = [[gestureRecognizer view] center];
-                    [[gestureRecognizer view] removeFromSuperview];
-                    
-                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[newParent objectIdTag]
-                                                                                            fromObjectContext:managedObjectContext];
-
-                    NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
-                    if (indexPath == nil) {
-                        indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
-                    }
-                    
-                    NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
-                    
-                    for (NSIndexPath *indexPath in indexPaths) {
-                        [[[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])] setObject:[NSValue valueWithCGPoint:newCenter] forKey:indexPath];
-                    }
-                    
-                    // MARK: Add this to the data context and to the container for the sections collection view.
-                    [newParent performBatchUpdates:^{
-                        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
-                        [hasObjects insertObject:documentObject atIndex:[indexPath item]];
-                        [documentSection setHasObjects:hasObjects];
-                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                        [hasObjects release];
-                        
-                        [newParent insertItemsAtIndexPaths:indexPaths];
-                        
-                    } completion:^(BOOL finished) {
-                    }];
-                    
+                CGPoint newCenter = [[gestureRecognizer view] center];
+                [[gestureRecognizer view] removeFromSuperview];
+                
+                objectId = [newParent objectIdTag];
+                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
+                                                                                        fromObjectContext: managedObjectContext];
+                
+                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
+                if (indexPath == nil) {
+                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
                 }
+                
+                NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+                
+                for (NSIndexPath *indexPath in indexPaths) {
+                    NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])];
+                    [holderForLastTouches setObject:[NSValue valueWithCGPoint:newCenter] forKey:indexPath];
+                }
+                
+                // MARK: Add this to the data context and to the container for the sections collection view.
+                [newParent performBatchUpdates:^{
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
+                    [hasObjects insertObject:documentObject atIndex:[indexPath item]];
+                    [documentSection setHasObjects:hasObjects];
+                    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                    [hasObjects release];
+                    
+                    [newParent insertItemsAtIndexPaths:indexPaths];
+                    
+                } completion:^(BOOL finished) {
+                }];
                 
             }
             [self setScrollersEnabled:YES];
