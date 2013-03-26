@@ -36,6 +36,8 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 @property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
 @property (nonatomic, assign) BOOL *showAggregateFunctionsViewController;
 
+@property (nonatomic, retain) MTGroupByViewController *groupByViewController;
+@property (nonatomic, assign) BOOL *showGroupByViewController;
 
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
@@ -103,6 +105,7 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
     [childViewController release];
     [self setShouldDismissThis:NO];
     [self setRootSelectorControllerIsVisable:YES];
+    [self setShowGroupByViewController:NO];
     [self setShowAggregateFunctionsViewController:NO];
 }
 
@@ -409,6 +412,22 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
         }];
         
         [self setShowAggregateFunctionsViewController:NO];
+
+    } else if ([self showGroupByViewController]) {
+        
+        CGRect offScreen = CGRectMake([[[self groupByViewController] view] frame].origin.x + [[[self groupByViewController] view] frame].size.width,
+                                      [[[self groupByViewController] view] frame].origin.y,
+                                      [[[self groupByViewController] view] frame].size.width,
+                                      [[[self groupByViewController] view] frame].size.height);
+        
+        [UIView animateWithDuration:0.3000f animations:^{
+            [[[self groupByViewController] view] setFrame: offScreen];
+        } completion:^(BOOL finished) {
+            [[[self groupByViewController] view] removeFromSuperview];
+            [self setGroupByViewController: nil];
+        }];
+        
+        [self setShowGroupByViewController:NO];
         
     } else if ([self rootSelectorControllerIsVisable] == NO) {
 
@@ -527,17 +546,26 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
         [viewControllerToAdd release];
     
     } else {
+        
         pushIt = YES;
         UIViewController *viewControllerToAdd = nil;
+
         if ([self showAggregateFunctionsViewController]) {
-            //[item setPrompt: NSLocalizedString(@"Choose an aggregate function.", @"Choose an aggregate function.")];
-            //[item setTitle:@"Aggregate Functions"];
 
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
             MTAggregateFunctionsViewController *aggregateFunctionsViewController = [[storyboard instantiateViewControllerWithIdentifier:MTAggregateFunctionsViewControllerIdentifier] retain];
             viewControllerToAdd = [aggregateFunctionsViewController retain];
             [self setAggregateFunctionsViewController:aggregateFunctionsViewController];
             [aggregateFunctionsViewController release];
+            
+        } else if ([self showGroupByViewController]) {
+            
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+            MTGroupByViewController *groupByViewController = [[storyboard instantiateViewControllerWithIdentifier:MTGroupByViewControllerIdentifier] retain];
+            viewControllerToAdd = [groupByViewController retain];
+            [self setGroupByViewController:groupByViewController];
+            [groupByViewController release];
+            
         }
         
         CGRect newRect = CGRectMake([[self containerView] frame].origin.x, [[self containerView] frame].origin.y,
@@ -612,12 +640,33 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
         case MTViewTagAggregateFunctions:
             break;
         case MTViewTagDocumentObjectNewAggregate: {
-            NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
-            UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
             
-            [self setShowAggregateFunctionsViewController:YES];
-            [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-            [itemToPush release];
+            switch ([indexPath row]) {
+                case 0: {
+
+                    NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
+                    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+                    [self setShowAggregateFunctionsViewController:YES];
+                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [itemToPush release];
+                    break;
+                    
+                }
+                case 1: {
+                    break;
+                }
+                case 2: {
+                    NSString *navigationItemTitle = NSLocalizedString(@"Group By Selector", @"Group By Selector");
+                    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+                    [self setShowGroupByViewController:YES];
+                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [itemToPush release];
+                    break;
+                }
+                default:
+                    break;
+            }
+
             break;
         }
         case MTViewTagDocumentObjectNewLabelStatic:

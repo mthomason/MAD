@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
+#import "MTGroupByViewController.h"
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
