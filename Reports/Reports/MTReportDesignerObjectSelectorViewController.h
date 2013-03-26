@@ -34,7 +34,7 @@
         UICollectionViewDelegateFlowLayout,
         UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
+@property (nonatomic, assign) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
 
 @end
 

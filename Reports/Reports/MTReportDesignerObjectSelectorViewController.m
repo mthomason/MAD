@@ -16,10 +16,13 @@ NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentifer
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
 
+NSString * const MTFieldOrFormulaViewControllerIdentifier = @"MTFieldOrFormulaViewControllerIdentifier";
+
 NSInteger const MTViewTagAggregateFunctions = 2003;
 NSInteger const MTViewTagGroupByOptions = 2011;
 NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
 NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
+NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @interface MTReportDesignerObjectSelectorViewController ()
 
@@ -34,10 +37,19 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 @property (nonatomic, retain) UIView *childDisplayedView;
 
 @property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
-@property (nonatomic, assign) BOOL *showAggregateFunctionsViewController;
+@property (nonatomic, assign) BOOL showAggregateFunctionsViewController;
 
 @property (nonatomic, retain) MTGroupByViewController *groupByViewController;
-@property (nonatomic, assign) BOOL *showGroupByViewController;
+@property (nonatomic, assign) BOOL showGroupByViewController;
+
+@property (nonatomic, retain) UITableViewController *fieldOrFormulaViewController;
+@property (nonatomic, assign) BOOL showFieldOrFormulaViewController;
+
+@property (nonatomic, retain) MTQueryBuilderChooseFieldViewController *fieldOrFormulaFieldPickerViewController;
+@property (nonatomic, assign) BOOL showFieldOrFormulaFieldPickerViewController;
+
+@property (nonatomic, retain) UITableViewController *fieldOrFormulaFormulaPickerViewController;
+@property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
 
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
 @property (atomic, assign) BOOL rootSelectorControllerIsVisable;
@@ -47,7 +59,6 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 
 - (BOOL)childViewControllerIsVisable;
 - (IBAction)done:(id)sender;
-
 
 @end
 
@@ -62,7 +73,11 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
     [_navigationItemMain release];
     [_documentObjectSelectorViewController release];
     [_childViewController release];
+    [_groupByViewController release];
+    [_fieldOrFormulaViewController release];
     [_aggregateFunctionsViewController release];
+    [_fieldOrFormulaFieldPickerViewController release];
+    [_fieldOrFormulaFormulaPickerViewController release];
     [super dealloc];
 }
 
@@ -73,6 +88,7 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        
     }
     return self;
 }
@@ -107,6 +123,9 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
     [self setRootSelectorControllerIsVisable:YES];
     [self setShowGroupByViewController:NO];
     [self setShowAggregateFunctionsViewController:NO];
+    [self setShowFieldOrFormulaViewController:NO];
+    [self setShowFieldOrFormulaFieldPickerViewController:NO];
+    [self setShowFieldOrFormulaFormulaPickerViewerController:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -429,6 +448,67 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
         
         [self setShowGroupByViewController:NO];
         
+    } else if ([self showFieldOrFormulaViewController]) {
+        
+        if ([self showFieldOrFormulaFieldPickerViewController] == NO &&
+            [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
+            
+            CGRect offScreen = CGRectMake([[[self fieldOrFormulaViewController] view] frame].origin.x + [[[self fieldOrFormulaViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaViewController] view] frame].origin.y,
+                                          [[[self fieldOrFormulaViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaViewController] view] frame].size.height);
+            
+            [UIView animateWithDuration:0.3000f animations:^{
+                [[[self fieldOrFormulaViewController] view] setFrame: offScreen];
+            } completion:^(BOOL finished) {
+                [[[self fieldOrFormulaViewController] view] removeFromSuperview];
+                [self setFieldOrFormulaViewController: nil];
+            }];
+            
+            [self setShowFieldOrFormulaViewController:NO];
+            
+        } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+                   [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
+
+            CGRect offScreen = CGRectMake([[[self fieldOrFormulaFieldPickerViewController] view] frame].origin.x + [[[self fieldOrFormulaFieldPickerViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaFieldPickerViewController] view] frame].origin.y,
+                                          [[[self fieldOrFormulaFieldPickerViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaFieldPickerViewController] view] frame].size.height);
+            
+            [UIView animateWithDuration:0.3000f animations:^{
+                [[[self fieldOrFormulaFieldPickerViewController] view] setFrame: offScreen];
+            } completion:^(BOOL finished) {
+                [[[self fieldOrFormulaFieldPickerViewController] view] removeFromSuperview];
+                [self setFieldOrFormulaFieldPickerViewController: nil];
+            }];
+            
+            [self setShowFieldOrFormulaFieldPickerViewController:NO];
+
+        } else if ([self showFieldOrFormulaFormulaPickerViewerController] == YES &&
+                   [self showFieldOrFormulaFieldPickerViewController] == NO) {
+            
+            CGRect offScreen = CGRectMake([[[self fieldOrFormulaFormulaPickerViewController] view] frame].origin.x + [[[self fieldOrFormulaFormulaPickerViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaFormulaPickerViewController] view] frame].origin.y,
+                                          [[[self fieldOrFormulaFormulaPickerViewController] view] frame].size.width,
+                                          [[[self fieldOrFormulaFormulaPickerViewController] view] frame].size.height);
+            
+            [UIView animateWithDuration:0.3000f animations:^{
+                [[[self fieldOrFormulaFormulaPickerViewController] view] setFrame: offScreen];
+            } completion:^(BOOL finished) {
+                [[[self fieldOrFormulaFormulaPickerViewController] view] removeFromSuperview];
+                [self setFieldOrFormulaFormulaPickerViewController: nil];
+            }];
+            
+            [self setShowFieldOrFormulaFormulaPickerViewerController:NO];
+
+        } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+                   [self showFieldOrFormulaFormulaPickerViewerController] == YES) {
+            
+            @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                           reason: [NSString stringWithFormat:@"Both view controllers can't be open at the same time: %@.", NSStringFromSelector(_cmd)]
+                                         userInfo: nil];
+        }
+        
     } else if ([self rootSelectorControllerIsVisable] == NO) {
 
         [self setRootSelectorControllerIsVisable:YES];
@@ -466,6 +546,7 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
         switch ([self typeOfObjectToPush]) {
 
             case MTDocumentObjectTypeLabelDynamic: {
+
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
                 MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
@@ -474,9 +555,10 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
                 viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
                 [queryBuilderChooseFieldViewController release];
                 break;
+
             }
-            
             case MTDocumentObjectTypeImage: {
+
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Image"];
                 if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
@@ -487,16 +569,18 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
                     [imagePicker release];
                 }
                 break;
+
             }
-                
             case MTDocumentObjectTypeGroupKey: {
                 break;
             }
             case MTDocumentObjectTypeAggregate: {
+
                 MTDocumentObjectNewAggregateViewController *documentObjectNewAggregateViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier];
                 [[documentObjectNewAggregateViewController tableView] setDelegate:self];
                 viewControllerToAdd = [documentObjectNewAggregateViewController retain];
                 break;
+
             }
             case MTDocumentObjectTypeChart: {
                 break;
@@ -565,6 +649,48 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
             viewControllerToAdd = [groupByViewController retain];
             [self setGroupByViewController:groupByViewController];
             [groupByViewController release];
+            
+        } else if ([self showFieldOrFormulaViewController]) {
+
+            if ([self showFieldOrFormulaFieldPickerViewController] == NO &&
+                [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
+
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                UITableViewController *fieldOrFormulaViewController = [[storyboard instantiateViewControllerWithIdentifier:MTFieldOrFormulaViewControllerIdentifier] retain];
+                [[fieldOrFormulaViewController tableView] setDelegate:self];
+                viewControllerToAdd = [fieldOrFormulaViewController retain];
+                [self setFieldOrFormulaViewController:fieldOrFormulaViewController];
+                [fieldOrFormulaViewController release];
+
+            } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+                       [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
+            
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
+                [queryBuilderChooseFieldViewController setExcludeTables: [NSArray array]];
+                [queryBuilderChooseFieldViewController setDelegate: self];
+                viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
+                [self setFieldOrFormulaFieldPickerViewController:queryBuilderChooseFieldViewController];
+                [queryBuilderChooseFieldViewController release];
+                
+
+            } else if ([self showFieldOrFormulaFormulaPickerViewerController] == YES &&
+                       [self showFieldOrFormulaFieldPickerViewController] == NO) {
+
+#warning Implement me when you implement fomulas.
+                @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                               reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
+                                             userInfo: nil];
+
+                
+            } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+                       [self showFieldOrFormulaFormulaPickerViewerController] == YES) {
+                
+                @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                               reason: [NSString stringWithFormat:@"Both view controllers can't be open at the same time: %@.", NSStringFromSelector(_cmd)]
+                                             userInfo: nil];
+
+            }
             
         }
         
@@ -637,12 +763,42 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     switch ([tableView tag]) {
+        case MTViewTagFieldOrFormulaSelector:
+
+            switch ([indexPath row]) {
+                
+                case 0: {   // Group by a Field
+                    
+                    NSString *navigationItemTitle = NSLocalizedString(@"Field Selector", @"Field Selector");
+                    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+                    [self setShowFieldOrFormulaFieldPickerViewController:YES];
+                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [itemToPush release];
+                    break;
+
+                }
+                case 1: {   // Group by a Formula
+
+                    NSString *navigationItemTitle = NSLocalizedString(@"Formula Selector", @"Formula Selector");
+                    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+                    [self setShowFieldOrFormulaFormulaPickerViewerController:YES];
+                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [itemToPush release];
+                    break;
+
+                }
+                default:
+                    break;
+            }
+            
+            break;
         case MTViewTagAggregateFunctions:
             break;
         case MTViewTagDocumentObjectNewAggregate: {
             
             switch ([indexPath row]) {
-                case 0: {
+
+                case 0: {   // Aggrage Function *f(x)*
 
                     NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
@@ -652,10 +808,17 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
                     break;
                     
                 }
-                case 1: {
+                case 1: {   // Input *x*
+                    
+                    NSString *navigationItemTitle = NSLocalizedString(@"Data Object Selector", @"Data Object Selector");
+                    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+                    [self setShowFieldOrFormulaViewController:YES];
+                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [itemToPush release];
+                    
                     break;
                 }
-                case 2: {
+                case 2: {   //Group By *For Each*
                     NSString *navigationItemTitle = NSLocalizedString(@"Group By Selector", @"Group By Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowGroupByViewController:YES];
