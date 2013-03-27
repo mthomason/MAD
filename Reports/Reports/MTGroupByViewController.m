@@ -12,7 +12,10 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @interface MTGroupByViewController ()
 
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
+
+@property (nonatomic, assign, readonly) MTGroupByType aggregateGroupType;
+@property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
 
 @end
 
@@ -54,6 +57,20 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     [super didReceiveMemoryWarning];
 }
 
+- (NSIndexPath *)updatedIndexPath:(NSIndexPath *)indexPath {
+    return [NSIndexPath indexPathForRow:[indexPath row] - 2 inSection:[indexPath section]];
+}
+
+- (void)setGroupType:(MTGroupByType)groupType {
+    _aggregateGroupNumber = 0;
+    _aggregateGroupType = groupType;
+}
+
+- (void)setGroupTypeSectionWithNumber:(NSUInteger)sectionNumber {
+    _aggregateGroupNumber = sectionNumber;
+    _aggregateGroupType = MTGroupByTypeSection;
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -92,6 +109,27 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    switch ([indexPath row]) {
+        
+        case 0:
+            [self setGroupType:MTGroupByTypePage];
+            [[self delegate] didSelectGroupByPage];
+            break;
+        
+        case 1:
+            [self setGroupType:MTGroupByTypeReport];
+            [[self delegate] didSelectGroupByReport];
+            break;
+        
+        default: {
+            NSUInteger groupNumber = [indexPath row] -2;
+            [self setGroupTypeSectionWithNumber: groupNumber];
+            [[self delegate] didSelectGroupBySectionNumber: groupNumber];
+            break;
+        }
+            
+    }
 }
 
 #pragma mark - Table View Datasource Protocol
@@ -102,18 +140,35 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[[self fetchedResultsControllerGroups] sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    return [sectionInfo numberOfObjects] + 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *MyIdentifierUITableViewCellInstruction = @"MTGroupByTableViewCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-    RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:indexPath];
-    NSString *textLabel = [NSString stringWithFormat:@"Section: %d", [[queryGroup weight] integerValue]];
-    [[cell textLabel] setText:textLabel];
-    // Configure the cell with data from the managed object.
-    return cell;
+    static NSString *tableViewCellIdentifier = @"MTGroupByTableViewCell";
+    UITableViewCell *cell = [[tableView dequeueReusableCellWithIdentifier: tableViewCellIdentifier] retain];
+
+    switch ([indexPath row]) {
+
+        case 0:
+            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypePage]];
+            break;
+        
+        case 1:
+            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeReport]];
+            break;
+        
+        default: {
+            RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:[self updatedIndexPath:indexPath]];
+            NSString *sectionNumber = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeSection];
+            NSString *textLabel = [NSString stringWithFormat:sectionNumber, [[queryGroup weight] integerValue]];
+            [[cell textLabel] setText:textLabel];
+            break;
+        }
+
+    }
+    
+    return [cell autorelease];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

@@ -31,6 +31,7 @@
 @interface MTReportDesignerObjectSelectorViewController : MTViewController
     <MTQueryBuilderChooseFieldDelegate,
         MTAggregateFunctionsViewControllerDelegate,
+        MTGroupByViewControllerDelegate,
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate,
         UICollectionViewDataSource,

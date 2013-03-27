@@ -24,12 +24,6 @@ NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
 NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
-typedef NS_ENUM(NSUInteger, MTGroupByType) {
-    MTGroupByTypePage = 2,
-    MTGroupByTypeReport = 3,
-    MTGroupByTypeSection = 5,
-};
-
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     MTAggregateFunctionInputTypeField = 2,
     MTAggregateFunctionInputTypeFormula = 3,
@@ -71,8 +65,10 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 @property (atomic, assign) BOOL shouldDismissThis;
 @property (atomic, assign) BOOL pressedSaveButton;
 
-@property (nonatomic, retain) RptqDatabaseSchemaField *aggregateInputField;
-@property (nonatomic, retain) RptqDocumentObjectFormula *aggregateInputFormula;
+@property (nonatomic, retain) NSManagedObjectID *aggregateInputField;
+@property (atomic, assign) BOOL fieldSelectionPopPartOneOfTwo;
+
+@property (nonatomic, retain) NSManagedObjectID *aggregateInputFormula;
 @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
 @property (nonatomic, assign) MTAggregateFunctionInputType  aggregateFunctionInputType;
 @property (nonatomic, assign) MTGroupByType aggregateGroupByType;
@@ -102,6 +98,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     [_aggregateInputFormula release];
     [_aggregateInputField release];
     [_newAggregateViewController release];
+    [_aggregateInputField release];
     [super dealloc];
 }
 
@@ -155,6 +152,8 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     [self displaySelectedFunction:[self aggregateFunctionType]];
     
     [self setAggregateFunctionInputType:MTAggregateFunctionInputTypeField];
+    [self setAggregateInputField:nil];
+    [self setFieldSelectionPopPartOneOfTwo:YES];
     //[self displaySelectedFunctionInputType:[self aggregateFunctionInputType]];
 }
 
@@ -175,29 +174,6 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 
 - (BOOL)childViewControllerIsVisable {
     return ![self rootSelectorControllerIsVisable];
-}
-
-#pragma mark - UITableViewControllerChooseFieldDelegate
-
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
-
-    switch ([[controller view] tag]) {
-
-        case MTDocumentObjectTypeLabelDynamic:
-        
-            [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
-            [[self objectSelectorDelegate] viewControllerDidFinish:self];
-            break;
-        
-        case MTViewTagFieldOrFormulaSelector:
-            
-            break;
-
-        default:
-            break;
-    
-    }
-    
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -447,6 +423,19 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
+    
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            if ([self fieldSelectionPopPartOneOfTwo] == YES) {
+                [self setFieldSelectionPopPartOneOfTwo:NO];
+                [[self navigationBar] popNavigationItemAnimated:YES];
+            }
+
+        });
+    });
+    
     if ([self shouldDismissThis]) {
         [self setShouldDismissThis: NO];
         [[self objectSelectorDelegate] viewControllerDidFinish:self];
@@ -455,7 +444,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-    
+
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
@@ -696,6 +685,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
             
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
             MTGroupByViewController *groupByViewController = [[storyboard instantiateViewControllerWithIdentifier:MTGroupByViewControllerIdentifier] retain];
+            [groupByViewController setDelegate:self];
             viewControllerToAdd = [groupByViewController retain];
             [self setGroupByViewController:groupByViewController];
             [groupByViewController release];
@@ -796,7 +786,8 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 }
 
 #pragma mark
-#pragma mark - MTAggregate Functions View Controller Delegate Protocol
+#pragma mark - Aggregate Functions View Controller Delegate Protocol
+
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType {
     [self setAggregateFunctionType: functionType];
 
@@ -813,14 +804,92 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     }
 }
 
-/*
-- (void)displaySelectedFunctionInputType:(MTAggregateFunctionInputType)inputType {
-    if ([self newAggregateViewController]) {
-        NSString *functionName = [RptqDocumentObjectAggregate displayStringForInputType:inputType];
-        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
-        [[[[self newAggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+#pragma mark
+#pragma mark - UITableViewControllerChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
+    
+    switch ([[controller view] tag]) {
+            
+        case MTDocumentObjectTypeLabelDynamic:
+            
+            [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
+            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            break;
+            
+        case MTViewTagFieldOrFormulaSelector: {
+            [self setAggregateFunctionInputType: MTAggregateFunctionInputTypeField];
+            NSManagedObjectID *objectId = [[field objectID] retain];
+            [self setAggregateInputField: objectId];
+            [objectId release];
+            NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+            NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
+            [[[[self newAggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+            [self setFieldSelectionPopPartOneOfTwo:YES];
+            [[self navigationBar] popNavigationItemAnimated:YES];
+            break;
+        }
+        default:
+            break;
+            
     }
-}*/
+    
+}
+
+#pragma mark
+#pragma mark - Group By Functions View Controller Delegate Protocol
+
+- (void)didSelectGroupByPage {
+    [self setAggregateGroupByType: MTGroupByTypePage];
+    [self setAggregateGroupBySectionNumber: 0];
+    [self displaySelectedGroupByType];
+    [[self navigationBar] popNavigationItemAnimated:YES];
+}
+
+- (void)didSelectGroupByReport {
+    [self setAggregateGroupByType: MTGroupByTypeReport];
+    [self setAggregateGroupBySectionNumber: 0];
+    [self displaySelectedGroupByType];
+    [[self navigationBar] popNavigationItemAnimated:YES];
+}
+
+- (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
+    [self setAggregateGroupByType: MTGroupByTypeSection];
+    [self setAggregateGroupBySectionNumber: groupNumber];
+    [self displaySelectedGroupByType];
+    [[self navigationBar] popNavigationItemAnimated:YES];
+}
+
+- (void)displaySelectedGroupByType {
+    if ([self newAggregateViewController]) {
+        switch ([self aggregateGroupByType]) {
+            case MTGroupByTypeSection: {
+
+                NSString *detailText = [NSString stringWithFormat:[RptqDocumentObjectAggregate displayStringForGroupByType:MTGroupByTypeSection], [self aggregateGroupBySectionNumber]];
+                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                break;
+                
+            }
+            case MTGroupByTypeReport: {
+
+                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeReport];
+                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                break;
+                
+            }
+            case MTGroupByTypePage: {
+
+                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypePage];
+                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                break;
+                
+            }
+            default:
+                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+                break;
+        }
+    }
+}
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol
