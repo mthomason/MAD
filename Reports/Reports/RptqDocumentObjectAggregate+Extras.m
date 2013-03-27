@@ -70,4 +70,38 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     return result;
 }
 
++ (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
+    
+    NSString *result = nil;
+    
+    switch (aggregateFunctionType) {
+        case MTAggregateFunctionTypeCount:
+            result = @"Count";
+            break;
+        case MTAggregateFunctionTypeFirst:
+            result = @"First";
+            break;
+        case MTAggregateFunctionTypeLast:
+            result = @"Last";
+            break;
+        case MTAggregateFunctionTypeMax:
+            result = @"Maximum";
+            break;
+        case MTAggregateFunctionTypeMean:
+            result = @"Mean";
+            break;
+        case MTAggregateFunctionTypeMin:
+            result = @"Minimum";
+            break;
+        case MTAggregateFunctionTypeSum:
+            result = @"Sum";
+            break;
+        default:
+            break;
+    }
+    
+    return result;
+    
+}
+
 @end

@@ -12,11 +12,16 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @interface MTAggregateFunctionsViewController ()
 
+@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+
+@property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
+
 @end
 
 @implementation MTAggregateFunctionsViewController
 
 - (void)dealloc {
+    [_tableViewCells release];
     [super dealloc];
 }
 
@@ -30,6 +35,25 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType {
+    _selectedFunctionType = selectedFunctionType;
+    
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            for (UITableViewCell *tableViewCell in [self tableViewCells]) {
+                if ([tableViewCell tag] == selectedFunctionType) {
+                    [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+                }
+            }
+
+        });
+    });
+    
 }
 
 #pragma mark - View lifecycle
@@ -70,7 +94,20 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    for (UITableViewCell *tableViewCell in [self tableViewCells]) {
+        [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
+    }
+    
+    UITableViewCell *tableViewCell = [[tableView cellForRowAtIndexPath:indexPath] retain];
+    [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+    _selectedFunctionType = [tableViewCell tag];
+    [tableViewCell release];
+    
+    [[self delegate] didSelectFunction: [self selectedFunctionType]];
+
 }
 
 @end

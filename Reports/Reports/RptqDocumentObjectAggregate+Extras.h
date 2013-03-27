@@ -16,17 +16,21 @@ typedef NS_ENUM(NSUInteger, MTAggregateGroupType) {
 };
 
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
-    MTAggregateFunctionTypeSum = 1,
-    MTAggregateFunctionTypeMean = 2,
-    MTAggregateFunctionTypeFirst = 3,
-    MTAggregateFunctionTypeLast = 4
+    MTAggregateFunctionTypeSum = 2,
+    MTAggregateFunctionTypeMean = 3,
+    MTAggregateFunctionTypeFirst = 5,
+    MTAggregateFunctionTypeLast = 7,
+    MTAggregateFunctionTypeCount = 11,
+    MTAggregateFunctionTypeMin = 13,
+    MTAggregateFunctionTypeMax = 17,
 };
 
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;
 
-
 @interface RptqDocumentObjectAggregate (Extras)
+
++ (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType;
 
 @end

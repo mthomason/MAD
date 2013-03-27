@@ -16,6 +16,8 @@
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTGroupByViewController.h"
+#import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
 
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
@@ -28,6 +30,7 @@
 
 @interface MTReportDesignerObjectSelectorViewController : MTViewController
     <MTQueryBuilderChooseFieldDelegate,
+        MTAggregateFunctionsViewControllerDelegate,
         UINavigationControllerDelegate,
         UIImagePickerControllerDelegate,
         UICollectionViewDataSource,

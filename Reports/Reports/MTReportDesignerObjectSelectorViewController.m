@@ -24,6 +24,17 @@ NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
 NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
+typedef NS_ENUM(NSUInteger, MTGroupByType) {
+    MTGroupByTypePage = 2,
+    MTGroupByTypeReport = 3,
+    MTGroupByTypeSection = 5,
+};
+
+typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
+    MTAggregateFunctionInputTypeField = 2,
+    MTAggregateFunctionInputTypeFormula = 3,
+};
+
 @interface MTReportDesignerObjectSelectorViewController ()
 
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
@@ -38,6 +49,9 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
 @property (nonatomic, assign) BOOL showAggregateFunctionsViewController;
+
+@property (nonatomic, retain) MTDocumentObjectNewAggregateViewController *newAggregateViewController;
+@property (nonatomic, assign) BOOL showNewAggregateViewController;
 
 @property (nonatomic, retain) MTGroupByViewController *groupByViewController;
 @property (nonatomic, assign) BOOL showGroupByViewController;
@@ -56,6 +70,13 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @property (atomic, assign) BOOL shouldDismissThis;
 @property (atomic, assign) BOOL pressedSaveButton;
+
+@property (nonatomic, retain) RptqDatabaseSchemaField *aggregateInputField;
+@property (nonatomic, retain) RptqDocumentObjectFormula *aggregateInputFormula;
+@property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
+@property (nonatomic, assign) MTAggregateFunctionInputType  aggregateFunctionInputType;
+@property (nonatomic, assign) MTGroupByType aggregateGroupByType;
+@property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 
 - (BOOL)childViewControllerIsVisable;
 - (IBAction)done:(id)sender;
@@ -78,6 +99,9 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [_aggregateFunctionsViewController release];
     [_fieldOrFormulaFieldPickerViewController release];
     [_fieldOrFormulaFormulaPickerViewController release];
+    [_aggregateInputFormula release];
+    [_aggregateInputField release];
+    [_newAggregateViewController release];
     [super dealloc];
 }
 
@@ -126,6 +150,12 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [self setShowFieldOrFormulaViewController:NO];
     [self setShowFieldOrFormulaFieldPickerViewController:NO];
     [self setShowFieldOrFormulaFormulaPickerViewerController:NO];
+
+    [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
+    [self displaySelectedFunction:[self aggregateFunctionType]];
+    
+    [self setAggregateFunctionInputType:MTAggregateFunctionInputTypeField];
+    //[self displaySelectedFunctionInputType:[self aggregateFunctionInputType]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -150,8 +180,24 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark - UITableViewControllerChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
-    [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
-    [[self objectSelectorDelegate] viewControllerDidFinish:self];
+
+    switch ([[controller view] tag]) {
+
+        case MTDocumentObjectTypeLabelDynamic:
+        
+            [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
+            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            break;
+        
+        case MTViewTagFieldOrFormulaSelector:
+            
+            break;
+
+        default:
+            break;
+    
+    }
+    
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -552,6 +598,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
                 [queryBuilderChooseFieldViewController setExcludeTables: [NSArray array]];
                 [queryBuilderChooseFieldViewController setDelegate: self];
+                [[queryBuilderChooseFieldViewController view] setTag:MTDocumentObjectTypeLabelDynamic];
                 viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
                 [queryBuilderChooseFieldViewController release];
                 break;
@@ -578,6 +625,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
                 MTDocumentObjectNewAggregateViewController *documentObjectNewAggregateViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier];
                 [[documentObjectNewAggregateViewController tableView] setDelegate:self];
+                [self setNewAggregateViewController:documentObjectNewAggregateViewController];
                 viewControllerToAdd = [documentObjectNewAggregateViewController retain];
                 break;
 
@@ -638,6 +686,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
             MTAggregateFunctionsViewController *aggregateFunctionsViewController = [[storyboard instantiateViewControllerWithIdentifier:MTAggregateFunctionsViewControllerIdentifier] retain];
+            [aggregateFunctionsViewController setDelegate: self];
+            [aggregateFunctionsViewController setSelectedFunctionType:[self aggregateFunctionType]];
             viewControllerToAdd = [aggregateFunctionsViewController retain];
             [self setAggregateFunctionsViewController:aggregateFunctionsViewController];
             [aggregateFunctionsViewController release];
@@ -669,6 +719,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 MTQueryBuilderChooseFieldViewController *queryBuilderChooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier:@"UITableViewControllerChooseField"] retain];
                 [queryBuilderChooseFieldViewController setExcludeTables: [NSArray array]];
                 [queryBuilderChooseFieldViewController setDelegate: self];
+                [[queryBuilderChooseFieldViewController view] setTag:MTViewTagFieldOrFormulaSelector];
                 viewControllerToAdd = [queryBuilderChooseFieldViewController retain];
                 [self setFieldOrFormulaFieldPickerViewController:queryBuilderChooseFieldViewController];
                 [queryBuilderChooseFieldViewController release];
@@ -743,6 +794,33 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         
     }];
 }
+
+#pragma mark
+#pragma mark - MTAggregate Functions View Controller Delegate Protocol
+- (void)didSelectFunction:(MTAggregateFunctionType)functionType {
+    [self setAggregateFunctionType: functionType];
+
+    [self displaySelectedFunction:functionType];
+    
+    [[self navigationBar] popNavigationItemAnimated:YES];
+}
+
+- (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
+    if ([self newAggregateViewController]) {
+        NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:functionType];
+        NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
+        [[[[self newAggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+    }
+}
+
+/*
+- (void)displaySelectedFunctionInputType:(MTAggregateFunctionInputType)inputType {
+    if ([self newAggregateViewController]) {
+        NSString *functionName = [RptqDocumentObjectAggregate displayStringForInputType:inputType];
+        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
+        [[[[self newAggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+    }
+}*/
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol

@@ -17,6 +17,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 @implementation MTDocumentObjectNewAggregateViewController
 
 - (void)dealloc {
+    [_tableViewCellAggrageFunction release];
+    [_tableViewCellAggregateInput release];
+    [_tableViewCellAggregateGroupBy release];
     [super dealloc];
 }
 
@@ -77,5 +80,6 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 	[[self navigationController] pushViewController:aggregateFunctionsViewControllerIdentifier animated:YES];
 
 }
+
 
 @end

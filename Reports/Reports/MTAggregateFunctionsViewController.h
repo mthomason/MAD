@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RptqDocumentObject+Extras.h"
 
 extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
+@protocol MTAggregateFunctionsViewControllerDelegate
+- (void)didSelectFunction:(MTAggregateFunctionType)functionType;
+@end
+
 @interface MTAggregateFunctionsViewController : UITableViewController
+
+@property (nonatomic, assign) id <MTAggregateFunctionsViewControllerDelegate> delegate;
+
+- (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end
