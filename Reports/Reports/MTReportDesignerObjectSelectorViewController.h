@@ -25,6 +25,11 @@
 - (void)insertDocumentObjectNewFormula;
 - (void)insertDocumentObjectNewChart;
 - (void)insertDocumentObjectNewHyperlink;
+- (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                               inputType:(MTAggregateFunctionInputType)inputType
+                                             inputObject:(NSManagedObjectID *)inputObject
+                                               groupType:(MTGroupByType)groupType
+                                             groupNumber:(NSNumber *)groupNumber;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 

@@ -202,13 +202,13 @@
 }
 
 - (void)updateDisplayLabel {
+    
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
 
     [[self marginView] setFrame:[self marginViewFrame]];
     [[self visibleView] setFrame:[self paddingViewFrame]];
     [[self paddingView] setFrame:[self elementViewFrame]];
 
-    
     NSString *fontName = [documentObject fontname];
     CGFloat pointSize = [[documentObject fontsize] floatValue];
     

@@ -78,54 +78,81 @@ MTPaddingMakeQuick(CGFloat p) {
 }
 
 typedef NS_ENUM(NSUInteger, MNSSortOrder) {
-	MNSSortOrderAccending = 0,
-	MNSSortOrderDecending
+	MNSSortOrderAccending = 2003,
+	MNSSortOrderDecending = 2011
+};
+
+typedef NS_ENUM(NSUInteger, MTGroupByType) {
+    MTGroupByTypePage = 2,
+    MTGroupByTypeReport = 3,
+    MTGroupByTypeSection = 5,
+};
+
+/*
+typedef NS_ENUM(NSUInteger, MTAggregateGroupType) {
+	MTAggregateGroupTypeField = 1,
+	MTAggregateGroupTypeFormula = 2
+};*/
+
+typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
+    MTAggregateFunctionTypeSum = 2,
+    MTAggregateFunctionTypeMean = 3,
+    MTAggregateFunctionTypeFirst = 5,
+    MTAggregateFunctionTypeLast = 7,
+    MTAggregateFunctionTypeCount = 11,
+    MTAggregateFunctionTypeMin = 13,
+    MTAggregateFunctionTypeMax = 17,
+};
+
+typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
+    MTAggregateFunctionInputTypeField = 2,
+    MTAggregateFunctionInputTypeFormula = 3,
 };
 
 typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelDynamic = 0,
-	MTDocumentObjectTypeLabelStatic = 1,
-	MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5,
-    MTDocumentObjectTypeGroupKey = 6,
-    MTDocumentObjectTypeAggregateFunctionList = 7
+	MTDocumentObjectTypeLabelDynamic = 2003,
+	MTDocumentObjectTypeLabelStatic = 2011,
+	MTDocumentObjectTypeImage = 2017,
+    MTDocumentObjectTypeChart = 2027,
+    MTDocumentObjectTypeFormula = 2029,
+    MTDocumentObjectTypeAggregate = 2039,
+    MTDocumentObjectTypeGroupKey = 2053,
+    MTDocumentObjectTypeAggregateFunctionList = 2063
 };
 
 typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
-    MTDocumentObjectBuilderType,
-    MTDocumentObjectBuilderValue
+    MTDocumentObjectBuilderType = 2003,
+    MTDocumentObjectBuilderValue = 2011
 };
 
 typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
-	UIViewControllerSchemaTablesSectionsInstructions = 0,
-    UIViewControllerSchemaTablesSectionsDatasource = 1,
-	UIViewControllerSchemaTablesSectionsTables = 2,
-	UIViewControllerSchemaTablesSectionsLinks = 3,
-	UIViewControllerSchemaTablesSectionsGroups = 4,
-	UIViewControllerSchemaTablesSectionsPredicate = 5,
-    UIViewControllerSchemaTablesSectionsSql = 6
+	UIViewControllerSchemaTablesSectionsInstructions = 2003,
+    UIViewControllerSchemaTablesSectionsDatasource = 2011,
+	UIViewControllerSchemaTablesSectionsTables = 2017,
+	UIViewControllerSchemaTablesSectionsLinks = 2027,
+	UIViewControllerSchemaTablesSectionsGroups = 2029,
+	UIViewControllerSchemaTablesSectionsPredicate = 2053,
+    UIViewControllerSchemaTablesSectionsSql = 2063
 };
 
 typedef NS_ENUM(NSUInteger, MTControlState) {
-	MTControlStateOff = 0,
-	MTControlStateOn,
-    MTControlStateAmbiguous
+	MTControlStateOff = 2003,
+	MTControlStateOn = 2011,
+    MTControlStateAmbiguous = 2017
 };
 
 typedef NS_ENUM(NSUInteger, MTVerticalAlignment) {
-	MTVerticalAlignmentTop = 0,
-	MTVerticalAlignmentCenter = 1,
-	MTVerticalAlignmentBottom = 2
+	MTVerticalAlignmentTop = 2003,
+	MTVerticalAlignmentCenter = 2011,
+	MTVerticalAlignmentBottom = 2017
 };
 
 typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
-	MTHorizontalAlignmentLeft = 0,
-	MTHorizontalAlignmentCenter = 1,
-	MTHorizontalAlignmentRight = 2,
-	MTHorizontalAlignmentJustified = 3,
-	MTHorizontalAlignmentNatrual = 4
+	MTHorizontalAlignmentLeft = 3001,
+	MTHorizontalAlignmentCenter = 3011,
+	MTHorizontalAlignmentRight = 3019,
+	MTHorizontalAlignmentJustified = 3023,
+	MTHorizontalAlignmentNatrual = 3037
 };
 
 extern NSString * const MTCollectionElementKindSectionLabel;

@@ -30,6 +30,12 @@
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;
 
+extern NSString * const MTDocumentObjectDefinationAggregateType;
+extern NSString * const MTDocumentObjectDefinationAggregatePivotNumber;
+extern NSString * const MTDocumentObjectDefinationAggregatePivotType;
+extern NSString * const MTDocumentObjectDefinationAggregateObjectId;
+extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
+
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
 - (MTDocumentObjectType)getType;

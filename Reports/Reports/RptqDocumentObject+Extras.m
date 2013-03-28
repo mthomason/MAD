@@ -11,6 +11,13 @@
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
 
+NSString * const MTDocumentObjectDefinationAggregateType = @"MTDocumentObjectDefinationAggregateType";
+NSString * const MTDocumentObjectDefinationAggregatePivotNumber = @"MTDocumentObjectDefinationAggregatePivotNumber";
+NSString * const MTDocumentObjectDefinationAggregatePivotType = @"MTDocumentObjectDefinationAggregatePivotType";
+NSString * const MTDocumentObjectDefinationAggregateObjectId = @"MTDocumentObjectDefinationAggregateObjectId";
+NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocumentObjectDefinationAggregateFunctionInputType";
+
+
 @implementation RptqDocumentObject (Extras)
 
 #pragma mark - Overrides
@@ -110,25 +117,18 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
     switch ([[self type] integerValue]) {
     
         case MTDocumentObjectTypeAggregate: {
-            NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
-            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
-                                                                         numberStyle: NSNumberFormatterSpellOutStyle];
+            //NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
+            //NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
+            //                                                             numberStyle: NSNumberFormatterSpellOutStyle];
             
-            MTAggregateGroupType groupType = [[[self isAggregate] groupType] integerValue];
-            switch (groupType) {
-                case MTAggregateGroupTypeField: {
-                    NSString *aggregateFormatString = NSLocalizedString(@"Group on section %@ with field %@.", @"Group on section section-number with field field-name.");
-                    result = [NSString stringWithFormat:aggregateFormatString, [groupNumberText lowercaseString], [[[self isAggregate] aggregateField] toStringHumanReadable]];
-                    break;
-                }
-                case MTAggregateGroupTypeFormula: {
-                    NSString *aggregateFormatString = NSLocalizedString(@"Group on section %@ with formula %@.", @"Group on section section-number with formula formula-name.");
-                    result = [NSString stringWithFormat:aggregateFormatString, [groupNumberText lowercaseString], [[[self isAggregate] aggregateFunction] toStringHumanReadable]];
-                    break;
-                }
-                default:
-                    break;
+            RptqDocumentObjectAggregate *aggregateObject = [self isAggregate];
+            //MTGroupByType groupType = [[aggregateObject groupType] integerValue];
+            if ([aggregateObject aggregateField] != nil) {
+                result = [NSString stringWithFormat:@"Aggregate: %@", [[aggregateObject aggregateField] toStringHumanReadable]];
+            } else if ([aggregateObject aggregateFunction] != nil) {
+                result = @"Aggregate function";
             }
+            
             break;
         }
 
@@ -215,12 +215,12 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
         case MTDocumentObjectTypeLabelStatic: {
 
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
-                                                                 inManagedObjectContext: [document managedObjectContext]];
+                                                                 inManagedObjectContext: mangedObjectContext];
 
             NSString *labelText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
             
             RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                     insertIntoManagedObjectContext: [document managedObjectContext]];
+                                                                     insertIntoManagedObjectContext: mangedObjectContext];
             
             [documentObject setIsLabel: reportObject];
             [[documentObject isLabel] setText: labelText];
@@ -234,19 +234,41 @@ NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefination
         case MTDocumentObjectTypeAggregate: {
 
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectAggregate class])
-                                                                 inManagedObjectContext: [document managedObjectContext]];
+                                                                 inManagedObjectContext: mangedObjectContext];
             
             NSDictionary *aggregateOptions = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
             
             RptqDocumentObjectAggregate *reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                              insertIntoManagedObjectContext: [document managedObjectContext]];
             [documentObject setIsAggregate: reportObject];
-            
-            [[documentObject isAggregate] setGroupNumber:   [aggregateOptions objectForKey: MTAggregateTypeKeyGroupNumber]];
-            [[documentObject isAggregate] setGroupType:     [aggregateOptions objectForKey: MTAggregateTypeKeyGroupType]];
-            [[documentObject isAggregate] setFunction:      [aggregateOptions objectForKey: MTAggregateTypeKeyFunctionType]];
-
             [documentObject setType: @(MTDocumentObjectTypeAggregate)];
+
+            NSNumber *groupTypeContainer = [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotType];
+            NSNumber *functionInputType = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateFunctionInputType];
+
+            MTAggregateFunctionInputType functionType = [functionInputType integerValue];
+            [[documentObject isAggregate] setGroupNumber:[aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
+            [[documentObject isAggregate] setGroupType:     groupTypeContainer];
+            [[documentObject isAggregate] setFunction:      [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregateType]];
+
+            NSManagedObjectID *objectId = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateObjectId];
+
+            switch (functionType) {
+                case MTAggregateFunctionInputTypeField: {
+                    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
+                    [[documentObject isAggregate] setAggregateField:field];
+                    [[documentObject isAggregate] setAggregateFunction:nil];
+                    break;
+                }
+                case MTAggregateFunctionInputTypeFormula: {
+                    RptqDocumentObjectFormula *formula = [RptqDocumentObjectFormula getElementForObjectID:objectId fromObjectContext:mangedObjectContext];
+                    [[documentObject isAggregate] setAggregateField:nil];
+                    [[documentObject isAggregate] setAggregateFunction:formula];
+                    break;
+                }
+                default:
+                    break;
+            }
             
             [reportObject release];
 

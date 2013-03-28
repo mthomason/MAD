@@ -802,6 +802,16 @@
     }
 }
 
+- (void)dismissObjectSelectorViewController {
+    if ([UIDevice isPad]) {
+        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
+            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - UIPopoverControllerDelegate
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -911,6 +921,7 @@
             case MTDocumentObjectTypeFormula:
             case MTDocumentObjectTypeLabelStatic:
             case MTDocumentObjectTypeLabelDynamic:
+            case MTDocumentObjectTypeAggregate:
             default: {
 
                 for (UIView *subview in [[cell contentView] subviews]) {
@@ -938,6 +949,7 @@
                 [[cell contentView] addSubview:elementView];
                 
                 [elementView release];
+
                 break;
             }
         }
@@ -1076,7 +1088,6 @@
 }
 
 #pragma mark - Delegates
-
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -1137,27 +1148,59 @@
     }
 }
 
-- (void)dismissObjectSelectorViewController {
-    if ([UIDevice isPad]) {
-        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
-            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
-        }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
+- (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                               inputType:(MTAggregateFunctionInputType)inputType
+                                             inputObject:(NSManagedObjectID *)inputObject
+                                               groupType:(MTGroupByType)groupType
+                                             groupNumber:(NSNumber *)groupNumber {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    
+    if (document) {
+        
+        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        
+        [detailSection performBatchUpdates:^{
+            
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            
+            NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
+                                                       MTDocumentObjectDefinationObject :  @{MTDocumentObjectDefinationAggregateType : @(functionType),
+                                                                                             MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
+                                                                                             MTDocumentObjectDefinationAggregatePivotType : @(groupType),
+                                                                                             MTDocumentObjectDefinationAggregateObjectId : inputObject,
+                                                                                             MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)}};
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
+            
+            // MARK: Get a permanent id on insert.  Let's make sure it's correct.
+            if ([[documentObject objectID] isTemporaryID]) {
+                NSError *error = nil;
+                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                if (error != nil) {
+                    error = nil;
+                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                    if (error != nil) {
+                        [error presentErrorToUser];
+                    }
+                }
+            }
+            
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
+            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+            
+            [detailSection insertItemsAtIndexPaths:indexPaths];
+            
+        } completion:^(BOOL finished) {
+            
+        }];
     }
+    
 }
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
-//    [self dismissObjectSelectorViewController];
-/*
-    if ([UIDevice isPad]) {
-        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
-            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
-        }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-*/
+
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     

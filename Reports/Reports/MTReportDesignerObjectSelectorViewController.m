@@ -24,11 +24,6 @@ NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
 NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
-typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
-    MTAggregateFunctionInputTypeField = 2,
-    MTAggregateFunctionInputTypeFormula = 3,
-};
-
 @interface MTReportDesignerObjectSelectorViewController ()
 
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
@@ -390,29 +385,50 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 - (void)pressedSaveButton:(id)sender {
     
     switch ([self typeOfObjectToPush]) {
-        case MTDocumentObjectTypeAggregate:
-            break;
-        case MTDocumentObjectTypeChart:
-            break;
-        case MTDocumentObjectTypeFormula:
-            break;
-        case MTDocumentObjectTypeGroupKey:
-            break;
-        case MTDocumentObjectTypeImage:
-            break;
-        case MTDocumentObjectTypeLabelDynamic:
-            break;
-        case MTDocumentObjectTypeLabelStatic: {
+        case MTDocumentObjectTypeAggregate: {
+            
+            NSManagedObjectID *aggregateDataObjectID = nil;
 
+            if ([self aggregateFunctionInputType] == MTAggregateFunctionInputTypeField) {
+                aggregateDataObjectID = [self aggregateInputField];
+            } else if ([self aggregateFunctionInputType] == MTAggregateFunctionInputTypeFormula) {
+                aggregateDataObjectID = [self aggregateInputFormula];
+            }
+
+            [[self objectSelectorDelegate] insertDocumentObjectNewAggregateFunctionWithType: [self aggregateFunctionType]
+                                                                                  inputType: [self aggregateFunctionInputType]
+                                                                                inputObject: aggregateDataObjectID
+                                                                                  groupType: [self aggregateGroupByType]
+                                                                                groupNumber: @([self aggregateGroupBySectionNumber])];
+            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+
+            break;
+        }
+        case MTDocumentObjectTypeLabelStatic: {
+            
             MTDocumentObjectNewStaticLabelViewController *childViewController = [(MTDocumentObjectNewStaticLabelViewController *)[self viewControllerToPush] retain];
             NSString *userInputtedText = [childViewController userInputedText];
             [[self objectSelectorDelegate] insertDocumentObjectNewLabel:userInputtedText];
             [childViewController release];
             
             [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
 
             break;
         }
+        case MTDocumentObjectTypeLabelDynamic: {
+
+            break;
+        }
+        case MTDocumentObjectTypeChart:
+            break;
+        case MTDocumentObjectTypeFormula:
+            break;
+        case MTDocumentObjectTypeGroupKey:
+            break;
         default:
             break;
     }
@@ -587,6 +603,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
         switch ([self typeOfObjectToPush]) {
 
             case MTDocumentObjectTypeLabelDynamic: {
+                [[self saveButton] setEnabled:YES];
 
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
@@ -600,6 +617,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 
             }
             case MTDocumentObjectTypeImage: {
+                [[self saveButton] setEnabled:YES];
 
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Image"];
@@ -617,7 +635,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
                 break;
             }
             case MTDocumentObjectTypeAggregate: {
-
+                [[self saveButton] setEnabled:NO];
                 MTDocumentObjectNewAggregateViewController *documentObjectNewAggregateViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier];
                 [[documentObjectNewAggregateViewController tableView] setDelegate:self];
                 [self setNewAggregateViewController:documentObjectNewAggregateViewController];
@@ -632,6 +650,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
                 break;
             }
             case MTDocumentObjectTypeLabelStatic: {
+                [[self saveButton] setEnabled:YES];
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Label Data"];
                 MTDocumentObjectNewStaticLabelViewController *documentObjectNewStaticLabelViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewStaticLabelViewControllerIdentifier];
