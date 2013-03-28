@@ -74,6 +74,8 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 @property (nonatomic, assign) MTGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 
+@property (nonatomic, retain) UIBarButtonItem *saveButton;
+
 - (BOOL)childViewControllerIsVisable;
 - (IBAction)done:(id)sender;
 
@@ -82,6 +84,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 @implementation MTReportDesignerObjectSelectorViewController
 
 - (void)dealloc {
+    [_saveButton release];
     [_viewControllerToPush release];
     [_visibleViewController release];
     [_childDisplayedView release];
@@ -153,7 +156,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     
     [self setAggregateFunctionInputType:MTAggregateFunctionInputTypeField];
     [self setAggregateInputField:nil];
-    [self setFieldSelectionPopPartOneOfTwo:YES];
+    [self setFieldSelectionPopPartOneOfTwo:NO];
     //[self displaySelectedFunctionInputType:[self aggregateFunctionInputType]];
 }
 
@@ -351,7 +354,8 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
                                                                                 action: @selector(pressedSaveButton:)];
     
     [itemToPush setRightBarButtonItem:saveButton];
-    
+    [saveButton setEnabled:NO];
+    [self setSaveButton:saveButton];
     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
     
     [saveButton release];
@@ -424,18 +428,20 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+    if ([self fieldSelectionPopPartOneOfTwo] == YES) {
 
-            if ([self fieldSelectionPopPartOneOfTwo] == YES) {
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
                 [self setFieldSelectionPopPartOneOfTwo:NO];
                 [[self navigationBar] popNavigationItemAnimated:YES];
-            }
-
+                
+            });
         });
-    });
-    
+        
+    }
+
     if ([self shouldDismissThis]) {
         [self setShouldDismissThis: NO];
         [[self objectSelectorDelegate] viewControllerDidFinish:self];
@@ -815,9 +821,11 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
             
             [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
             [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            
             break;
             
         case MTViewTagFieldOrFormulaSelector: {
+            
             [self setAggregateFunctionInputType: MTAggregateFunctionInputTypeField];
             NSManagedObjectID *objectId = [[field objectID] retain];
             [self setAggregateInputField: objectId];
@@ -827,7 +835,11 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
             [[[[self newAggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
             [self setFieldSelectionPopPartOneOfTwo:YES];
             [[self navigationBar] popNavigationItemAnimated:YES];
+
+            [[self saveButton] setEnabled:YES];
+            
             break;
+            
         }
         default:
             break;
@@ -865,8 +877,10 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
         switch ([self aggregateGroupByType]) {
             case MTGroupByTypeSection: {
 
-                NSString *detailText = [NSString stringWithFormat:[RptqDocumentObjectAggregate displayStringForGroupByType:MTGroupByTypeSection], [self aggregateGroupBySectionNumber]];
-                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                NSUInteger group = [self aggregateGroupBySectionNumber];
+                NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeSection];
+                NSString *detail = [NSString stringWithFormat:format, group];
+                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
                 break;
                 
             }
