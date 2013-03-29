@@ -8,9 +8,8 @@
 
 #import "RptqDocumentObjectImage.h"
 #import "RptqDocument.h"
-#import "RptqDocumentObjectFactory.h"
 #import "RptqDocumentObject+Extras.h"
 
-@interface RptqDocumentObjectImage (Extras) <RptqDocumentObjectFactory>
+@interface RptqDocumentObjectImage (Extras)
 
 @end

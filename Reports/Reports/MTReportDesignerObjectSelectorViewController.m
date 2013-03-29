@@ -186,7 +186,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     UIImage *selectedImage = [info objectForKey:UIImagePickerControllerEditedImage];
-    if (!selectedImage) {
+
+    if (selectedImage == nil) {
         selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
     }
     
@@ -194,12 +195,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         [selectedImage retain];
 
 
-        
+        [[self objectSelectorDelegate] insertDocumentObjectNewImage:selectedImage];
         
         
         [selectedImage release];
     }
-    
+
+    [[self objectSelectorDelegate] viewControllerDidFinish:self];
+
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -471,7 +474,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             break;
         }
         case MTDocumentObjectTypeImage: {
-
             break;
         }
         case MTDocumentObjectTypeLabelDynamic: {

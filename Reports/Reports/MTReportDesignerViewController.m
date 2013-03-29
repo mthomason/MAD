@@ -1217,7 +1217,6 @@
 
             RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
             
-            // MARK: Get a permanent id on insert.  Let's make sure it's correct.
             if ([[documentObject objectID] isTemporaryID]) {
                 NSError *error = nil;
                 [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
@@ -1238,6 +1237,47 @@
         }];
     }
 }
+
+- (void)insertDocumentObjectNewImage:(UIImage *)image {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    
+    if (document) {
+        
+        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        
+        [detailSection performBatchUpdates:^{
+            
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            
+            NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
+                                                       MTDocumentObjectDefinationObject : image};
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
+            
+            if ([[documentObject objectID] isTemporaryID]) {
+                NSError *error = nil;
+                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                if (error != nil) {
+                    error = nil;
+                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
+                    if (error != nil) {
+                        [error presentErrorToUser];
+                    }
+                }
+            }
+            NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
+            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+            
+            [detailSection insertItemsAtIndexPaths:indexPaths];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
+}
+
 - (void)insertDocumentObjectNewFormula {
     [self dismissObjectSelectorViewController];
 }

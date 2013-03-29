@@ -22,6 +22,7 @@
 @protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field;
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+- (void)insertDocumentObjectNewImage:(UIImage *)image;
 - (void)insertDocumentObjectNewFormula;
 - (void)insertDocumentObjectNewChart;
 - (void)insertDocumentObjectNewHyperlink;

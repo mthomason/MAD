@@ -68,35 +68,4 @@
     return result;
 }
 
-+ (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {
-    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-                                                                       inManagedObjectContext: [document managedObjectContext]];
-    NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
-                                                                              inManagedObjectContext: [document managedObjectContext]];
-    
-    RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-                                                 insertIntoManagedObjectContext: [document managedObjectContext]];
-    
-    //NSString *formulaText = object;
-    
-    RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                   insertIntoManagedObjectContext: [document managedObjectContext]];
-    
-    [dataObject setIsImage: reportObject];
-    
-    UIImage *image = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
-    [[dataObject isImage] setImage:image];
-    
-    [dataObject setType: @(MTDocumentObjectTypeImage)];
-    
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
-    [hasObjects insertObject:dataObject atIndex:0];
-    [[document hasDetailSection] setHasObjects:hasObjects];
-    [hasObjects release];
-    [reportObject release];
-    
-    return [dataObject autorelease];
-
-}
-
 @end

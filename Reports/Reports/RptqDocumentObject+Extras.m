@@ -247,7 +247,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             NSNumber *functionInputType = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateFunctionInputType];
 
             MTAggregateFunctionInputType functionType = [functionInputType integerValue];
-            [[documentObject isAggregate] setGroupNumber:[aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
+            [[documentObject isAggregate] setGroupNumber:   [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
             [[documentObject isAggregate] setGroupType:     groupTypeContainer];
             [[documentObject isAggregate] setFunction:      [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregateType]];
 
@@ -272,6 +272,58 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             
             [reportObject release];
 
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
+            
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+            
+            UIImage *image = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+            
+            RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                     insertIntoManagedObjectContext: mangedObjectContext];
+            
+            [documentObject setIsImage: reportObject];
+            [[documentObject isImage] setImage: image];
+            [documentObject setSizeheight:@([image size].height)];
+            [documentObject setSizewidth:@([image size].width)];
+            [documentObject setType: @(MTDocumentObjectTypeImage)];
+            
+            [reportObject release];
+            
+            
+            
+            
+            /*
+             NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+             inManagedObjectContext: [document managedObjectContext]];
+             NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
+             inManagedObjectContext: [document managedObjectContext]];
+             
+             RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+             insertIntoManagedObjectContext: [document managedObjectContext]];
+             
+             //NSString *formulaText = object;
+             
+             RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+             insertIntoManagedObjectContext: [document managedObjectContext]];
+             
+             [dataObject setIsImage: reportObject];
+             
+             UIImage *image = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+             [[dataObject isImage] setImage:image];
+             
+             [dataObject setType: @(MTDocumentObjectTypeImage)];
+             
+             NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+             [hasObjects insertObject:dataObject atIndex:0];
+             [[document hasDetailSection] setHasObjects:hasObjects];
+             [hasObjects release];
+             [reportObject release];
+             
+             return [dataObject autorelease];
+             */
             break;
         }
         default:
