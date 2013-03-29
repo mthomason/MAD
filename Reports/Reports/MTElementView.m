@@ -26,7 +26,7 @@
 @interface MTElementView ()
 
 // This element view is made of four total views.
-
+@property (nonatomic, retain) UIImageView *imageView;   //Display image preview for image objects
 @property (nonatomic, retain) UILabel *displayLabel;    //Display label floats in the padding
 @property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
 @property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
@@ -51,6 +51,7 @@
     [_visibleView release];
     [_displayLabel release];
     [_paddingView release];
+    [_imageView release];
     [_managedObjectContext release];
 	[super dealloc];
 }
@@ -110,6 +111,13 @@
         [self setPaddingView:labelBackground];
         [labelBackground release];
         
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[self paddingView] frame]];
+        [imageView setBackgroundColor:[UIColor lightGrayColor]];
+        [imageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [[self paddingView] addSubview:imageView];
+        [self setImageView:imageView];
+        [imageView release];
+        
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         //[label setUserInteractionEnabled:NO];
         [label setBackgroundColor:[UIColor whiteColor]];
@@ -118,8 +126,8 @@
         [self setDisplayLabel:label];
         [label release];
 
-        [self updateDisplayLabel];
-        
+        [self initalDisplaySettings];
+                
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver:self
                           selector:@selector(managedObjectContextDidSave:)
@@ -201,14 +209,29 @@
 
 }
 
+- (void)initalDisplaySettings {
+    
+    // MARK: Display settings that should only run once.
+    // This is a bit of a performance hack.  Right now, I'm redisplaying the whole label
+    //   instead of only the changed parts.  That's cool, but should I reset the image, when
+    //   there is currently no UI to change the image?  No!
+    // TODO: Update image when changed.
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    [[self imageView] setImage:[[documentObject isImage] image]];
+    
+    [self updateDisplayLabel];
+
+}
+
 - (void)updateDisplayLabel {
     
+    // TODO: Only update specific properties when they change.
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
 
     [[self marginView] setFrame:[self marginViewFrame]];
     [[self visibleView] setFrame:[self paddingViewFrame]];
     [[self paddingView] setFrame:[self elementViewFrame]];
-
+    
     NSString *fontName = [documentObject fontname];
     CGFloat pointSize = [[documentObject fontsize] floatValue];
     

@@ -193,21 +193,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     
     if (selectedImage) {
         [selectedImage retain];
-
-
         [[self objectSelectorDelegate] insertDocumentObjectNewImage:selectedImage];
-        
-        
         [selectedImage release];
     }
 
     [[self objectSelectorDelegate] viewControllerDidFinish:self];
-
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-
-}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker { }
 
 #pragma mark - UICollectionViewDataSource
 
@@ -379,27 +372,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         }
     }
 
-    UINavigationItem *itemToPush;
-    
-//    if (objectType == MTDocumentObjectTypeImage) {
-/*
-        if ([self imagePicker] == nil) {
-            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
-                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-                [imagePicker setDelegate: self];
-                [self setImagePicker:imagePicker];
-                [imagePicker release];
-            }
-        }
-*/
-//        itemToPush = [[[self imagePicker] navigationItem] retain];
-
-//    } else {
-
-//    }
-    
-    itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
     [itemToPush setRightBarButtonItem: rightBarButtonItem];
 
     [self setSaveButton:rightBarButtonItem];

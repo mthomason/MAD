@@ -183,6 +183,11 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                  insertIntoManagedObjectContext: mangedObjectContext];
 
+    [documentObject setOriginx: @(CGPointZero.x)];
+    [documentObject setOriginy: @(CGPointZero.y)];
+    [documentObject setSizewidth: @(200.0000f)];
+    [documentObject setSizeheight: @(44.0000f)];
+
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
     switch (objectType) {
@@ -334,11 +339,10 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [hasObjects insertObject:documentObject atIndex:0];
     [[document hasDetailSection] setHasObjects:hasObjects];
     [hasObjects release];
-
-    [documentObject setOriginx: @(CGPointZero.x)];
-    [documentObject setOriginy: @(CGPointZero.y)];
-    [documentObject setSizewidth: @(200.0000f)];
-    [documentObject setSizeheight: @(44.0000f)];
+    
+    if ([[[document hasDetailSection] height] floatValue] < [[documentObject sizeheight] floatValue]) {
+        [[document hasDetailSection] setHeight:@([[documentObject sizeheight] floatValue] + 10.0000f)];
+    }
 
     return [documentObject autorelease];
 }

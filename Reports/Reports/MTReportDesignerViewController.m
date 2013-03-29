@@ -468,11 +468,10 @@
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
                     UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
                     [[section collectionViewLayout] invalidateLayout];
-                    MTLog(@"Change that size.");
                 }
             }
         }
-    }    
+    }
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification { }
