@@ -1481,7 +1481,7 @@
                             <navigationBar contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="9hL-Yu-nZ8">
                                 <items>
                                     <navigationItem title="Document Objects" prompt="Choose a data field to add to the report." id="xq3-Wt-H8Q">
-                                        <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="diu-8G-Jyh">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="diu-8G-Jyh">
                                             <connections>
                                                 <action selector="done:" destination="huR-Hj-JfS" id="xAS-U7-XYK"/>
                                             </connections>

@@ -69,6 +69,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @property (nonatomic, assign) MTGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 
+@property (nonatomic, retain) UIImagePickerController *imagePicker;
+
 @property (nonatomic, retain) UIBarButtonItem *saveButton;
 
 - (BOOL)childViewControllerIsVisable;
@@ -97,6 +99,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [_aggregateInputField release];
     [_newAggregateViewController release];
     [_aggregateInputField release];
+    [_imagePicker release];
     [super dealloc];
 }
 
@@ -164,6 +167,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [[[self childViewController] view] setFrame: rect];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
@@ -208,37 +215,37 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     switch ([indexPath section]) {
         case 0: {
             switch ([indexPath row]) {
-                case 0: {
+                case 1: {
                     cellIdentifier = MTIdentiferDocumentObjectLabelCollectionViewCell;
                     tag = MTDocumentObjectTypeLabelStatic;
                     break;
                 }
-                case 1: {
+                case 5: {
                     cellIdentifier = MTIdentiferDocumentObjectFormulaCollectionViewCell;
                     tag = MTDocumentObjectTypeFormula;
                     break;
                 }
-                case 2: {
+                case 3: {
                     cellIdentifier = MTIdentiferDocumentObjectImageCollectionViewCell;
                     tag = MTDocumentObjectTypeImage;
                     break;
                 }
-                case 3: {
+                case 6: {
                     cellIdentifier = MTIdentiferDocumentObjectChartCollectionViewCell;
                     tag = MTDocumentObjectTypeChart;
                     break;
                 }
-                case 4: {
+                case 2: {
                     cellIdentifier = MTIdentiferDocumentObjectAggregateCollectionViewCell;
                     tag = MTDocumentObjectTypeAggregate;
                     break;
                 }
-                case 5: {
+                case 0: {
                     cellIdentifier = MTIdentiferDocumentObjectDataCollectionViewCell;
                     tag = MTDocumentObjectTypeLabelDynamic;
                     break;
                 }
-                case 6: {
+                case 4: {
                     cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
                     tag = MTDocumentObjectTypeGroupKey;
                 }
@@ -268,7 +275,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSInteger result = 0;
     switch (section) {
         case 0:
-            result = 6;
+            result = 4;
             break;
         default:
             break;
@@ -305,6 +312,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    UIBarButtonItem *rightBarButtonItem = nil;
 
     NSString *navigationItemTitle = nil;
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
@@ -312,26 +321,51 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [self setTypeOfObjectToPush: objectType];
 
     switch ([indexPath section]) {
+
         case 0: {
+        
             switch (objectType) {
+
                 case MTDocumentObjectTypeLabelStatic:
                     navigationItemTitle = NSLocalizedString(@"Label", @"Label");
+                    rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
+                                                                                                target: self
+                                                                                                action: @selector(pressedSaveButton:)];
+                    [rightBarButtonItem setEnabled:NO];
                     break;
+                
                 case MTDocumentObjectTypeLabelDynamic:
                     navigationItemTitle = NSLocalizedString(@"Data", @"Data");
+                    rightBarButtonItem = nil;
                     break;
+                
                 case MTDocumentObjectTypeChart:
                     navigationItemTitle = NSLocalizedString(@"Chart", @"Chart");
                     [[self objectSelectorDelegate] insertDocumentObjectNewChart];
+                    rightBarButtonItem = nil;
                     break;
+                
                 case MTDocumentObjectTypeImage:
                     navigationItemTitle = NSLocalizedString(@"Image", @"Image");
+                    rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
+                                                                                       target: self
+                                                                                       action: @selector(pressedCancelButton:)];
+                    [rightBarButtonItem setEnabled:NO];
                     break;
+                
                 case MTDocumentObjectTypeAggregate:
                     navigationItemTitle = NSLocalizedString(@"Aggregate", @"Aggregate");
+                    rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
+                                                                                       target: self
+                                                                                       action: @selector(pressedSaveButton:)];
+                    [rightBarButtonItem setEnabled:NO];
                     break;
+                
                 case MTDocumentObjectTypeGroupKey:
                     navigationItemTitle = NSLocalizedString(@"Group Key", @"Group Key");
+                    rightBarButtonItem = nil;
+                    break;
+                    
                 default:
                     break;
             }
@@ -342,18 +376,35 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         }
     }
 
-    UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
-                                                                                target: self
-                                                                                action: @selector(pressedSaveButton:)];
+    UINavigationItem *itemToPush;
     
-    [itemToPush setRightBarButtonItem:saveButton];
-    [saveButton setEnabled:NO];
-    [self setSaveButton:saveButton];
+//    if (objectType == MTDocumentObjectTypeImage) {
+/*
+        if ([self imagePicker] == nil) {
+            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                [imagePicker setDelegate: self];
+                [self setImagePicker:imagePicker];
+                [imagePicker release];
+            }
+        }
+*/
+//        itemToPush = [[[self imagePicker] navigationItem] retain];
+
+//    } else {
+
+//    }
+    
+    itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+    [itemToPush setRightBarButtonItem: rightBarButtonItem];
+
+    [self setSaveButton:rightBarButtonItem];
+    [rightBarButtonItem release];
+    
+    
     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
     
-    [saveButton release];
     [itemToPush release];
     
 }
@@ -380,6 +431,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
+}
+
+- (void)pressedCancelButton:(id)sender {
+    [[self objectSelectorDelegate] viewControllerDidFinish: self];
 }
 
 - (void)pressedSaveButton:(id)sender {
@@ -621,6 +676,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
                 [item setPrompt: NSLocalizedString(@"Choose a data field to add to the report.", @"Prompt to choose a data field.")];
                 [item setTitle:@"Image"];
+                //viewControllerToAdd = [[self imagePicker] retain];
+                
                 if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                     [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -827,6 +884,11 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
         [[[[self newAggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
     }
+}
+
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [[[viewController navigationController] navigationBar] setHidden:YES];
 }
 
 #pragma mark
