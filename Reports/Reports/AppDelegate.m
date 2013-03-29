@@ -7,14 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "MTActiveDocument.h"
 
 @interface AppDelegate()
-
-@property (retain) MTReportDocument *documentReport;
-@property (retain) MTManagedDocumentReport *managedDocumentQuery;
-@property (retain) MTManagedDocumentPreferencesApplication *applicationPreferences;
-@property (retain) MTManagedDocumentPreferencesUser *openReport;
 
 @end
 
@@ -26,10 +20,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)dealloc {
-    [_documentReport release];
-    [_applicationPreferences release];
-    [_managedDocumentQuery release];
-    [_openReport release];
     [_window release];
     [super dealloc];
 }
@@ -65,9 +55,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 + (NSString *)storyboardName {
     NSString *storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-    //NSLog(@"Storyboard name: %@", storyboardName);
     return storyboardName;
-
 }
 
 @end

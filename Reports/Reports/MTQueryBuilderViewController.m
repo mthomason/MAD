@@ -116,10 +116,10 @@
     NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellInstruction defaultHeight])];
     NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
-    NSDictionary *tableOutline = @{KEY_TBL_SEC_SECTIONS : sections,
-                                   KEY_TBL_SEC_HEADERS : headersSectionDictionary,
-                                   KEY_TBL_SEC_ROW_COUNT : countRowsForSectionDictionary,
-                                   KEY_TBL_SEC_ROW_HEIGHT: heightRowsForSectionDictionaryDictionary};
+    NSDictionary *tableOutline = @{MTTableSectionSectionsKey : sections,
+                                   MTTableHeaderSectionKey : headersSectionDictionary,
+                                   MTTableSectionRowKey : countRowsForSectionDictionary,
+                                   MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
     
     [self setModelWithZeroTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
     
@@ -141,10 +141,10 @@
                              @(44.0000f), @(44.0000f), @([UITableViewCellInstruction defaultHeight])];
     heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
-    tableOutline = @{KEY_TBL_SEC_SECTIONS : sections,
-                     KEY_TBL_SEC_HEADERS : headersSectionDictionary,
-                     KEY_TBL_SEC_ROW_COUNT : countRowsForSectionDictionary,
-                     KEY_TBL_SEC_ROW_HEIGHT: heightRowsForSectionDictionaryDictionary};
+    tableOutline = @{MTTableSectionSectionsKey : sections,
+                     MTTableHeaderSectionKey : headersSectionDictionary,
+                     MTTableSectionRowKey : countRowsForSectionDictionary,
+                     MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
     
     //Configuration with two or more schemas referenced in the database
     
@@ -168,10 +168,10 @@
                              @(44.0000f), @(44.0000f), @([UITableViewCellInstruction defaultHeight])];
     heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
-    tableOutline = @{KEY_TBL_SEC_SECTIONS : sections,
-                     KEY_TBL_SEC_HEADERS : headersSectionDictionary,
-                     KEY_TBL_SEC_ROW_COUNT : countRowsForSectionDictionary,
-                     KEY_TBL_SEC_ROW_HEIGHT: heightRowsForSectionDictionaryDictionary};
+    tableOutline = @{MTTableSectionSectionsKey : sections,
+                     MTTableHeaderSectionKey : headersSectionDictionary,
+                     MTTableSectionRowKey : countRowsForSectionDictionary,
+                     MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
     
     [self setModelWithTwoOrMoreTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
 }
@@ -363,7 +363,7 @@
 
 - (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
     UIViewControllerSchemaTablesSections result = sec;
-    NSArray *sectionTypes = [[[self datamodel] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
+    NSArray *sectionTypes = [[[self datamodel] objectForKey: MTTableSectionSectionsKey] retain];
     if ([sectionTypes count] >= sec) {
         result = [[sectionTypes objectAtIndex:sec] integerValue];
     }
@@ -373,7 +373,7 @@
 
 - (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableViewQueryBuilder] numberOfRowsInSection: 1]] objectForKey: KEY_TBL_SEC_SECTIONS] retain];
+    NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableViewQueryBuilder] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey] retain];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {
@@ -519,7 +519,7 @@
     NSIndexSet *indexSetSections = nil;
     MTReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     NSDictionary *oldLayout = [[self datamodel] retain];
-    NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
+    NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:MTTableSectionSectionsKey] retain];
     [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
 
     //Find the position of the table that was added, so it may be inserted at the right index.
@@ -541,7 +541,7 @@
     [tables release];
     
     NSDictionary *newLayout = [[self datamodel] retain];
-    NSArray *newLayoutSectionTypes = [[newLayout objectForKey:KEY_TBL_SEC_SECTIONS] retain];
+    NSArray *newLayoutSectionTypes = [[newLayout objectForKey:MTTableSectionSectionsKey] retain];
 
     if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
         if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
@@ -608,7 +608,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     id queryBuilderDataModel = [self datamodel];
-    NSInteger numberOfSections = [[queryBuilderDataModel objectForKey: KEY_TBL_SEC_HEADERS] count];
+    NSInteger numberOfSections = [[queryBuilderDataModel objectForKey: MTTableHeaderSectionKey] count];
     return numberOfSections;
 }
 
@@ -616,7 +616,7 @@
     
     UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection: section];
     
-    NSDictionary *rowsDict = [[[self datamodel] objectForKey: KEY_TBL_SEC_ROW_COUNT] retain];
+    NSDictionary *rowsDict = [[[self datamodel] objectForKey: MTTableSectionRowKey] retain];
     NSInteger numberOfRows = 0;
     numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
     if (numberOfRows < 0) {
@@ -706,8 +706,8 @@
                     numberOfTables = numberOfTables - 1;
 
                     NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];
-                    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
-                    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:KEY_TBL_SEC_SECTIONS];
+                    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:MTTableSectionSectionsKey];
+                    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:MTTableSectionSectionsKey];
                     
                     if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
                         NSInteger secctr = 0;
@@ -1121,7 +1121,7 @@
     } else if (section == UIViewControllerSchemaTablesSectionsGroups) {
         result = [UITableViewCellOverride defaultHeight] * 1.6;
     } else {
-        NSDictionary *tableMetaHeight = [[self datamodel] objectForKey:KEY_TBL_SEC_ROW_HEIGHT];
+        NSDictionary *tableMetaHeight = [[self datamodel] objectForKey:MTTableSectionRowHeightKey];
         if (tableMetaHeight) result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
     }
     return result;

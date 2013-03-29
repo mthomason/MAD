@@ -203,19 +203,19 @@ extern NSString * const REPORT_PATH_EXTENSION;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 
-extern NSString * const NSDATABASE_USERNAME;
-extern NSString * const NSDATABASE_PASSWORD;
-extern NSString * const NSDATABASE_DATABASE;
-extern NSString * const NSDATABASE_PORT;
-extern NSString * const NSDATABASE_HOST;
+extern NSString * const MTDatabaseUsernameKey;
+extern NSString * const MTDatabasePasswordKey;
+extern NSString * const MTDatabaseDatabaseKey;
+extern NSString * const MTDatabasePortKey;
+extern NSString * const MTDatabaseHostKey;
 
 extern NSString * const NSDATABASE_SF_OAUTH_KEY;
 extern NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL;
 
-extern NSString * const KEY_TBL_SEC_HEADERS;
-extern NSString * const KEY_TBL_SEC_ROW_COUNT;
-extern NSString * const KEY_TBL_SEC_ROW_HEIGHT;
-extern NSString * const KEY_TBL_SEC_SECTIONS;
+extern NSString * const MTTableHeaderSectionKey;
+extern NSString * const MTTableSectionRowKey;
+extern NSString * const MTTableSectionRowHeightKey;
+extern NSString * const MTTableSectionSectionsKey;
 
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;

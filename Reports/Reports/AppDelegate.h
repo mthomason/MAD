@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ApplicationSettings.h"
 #import "MTManagedDocumentPreferencesUser.h"
 #import "MTReportDocument.h"
 #import "UIDevice+Hack.h"

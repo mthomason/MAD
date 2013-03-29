@@ -215,7 +215,9 @@
     // This is a bit of a performance hack.  Right now, I'm redisplaying the whole label
     //   instead of only the changed parts.  That's cool, but should I reset the image, when
     //   there is currently no UI to change the image?  No!
+    
     // TODO: Update image when changed.
+    
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
     [[self imageView] setImage:[[documentObject isImage] image]];
     

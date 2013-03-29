@@ -55,19 +55,19 @@ NSString * const TEMPLATE_PATH_EXTENSION            = @"trvt";
 
 NSString * const TEMPLATES                          = @"Templates";
 
-NSString * const NSDATABASE_USERNAME                = @"username";
-NSString * const NSDATABASE_PASSWORD                = @"password";
-NSString * const NSDATABASE_DATABASE                = @"database";
-NSString * const NSDATABASE_PORT                    = @"port";
-NSString * const NSDATABASE_HOST                    = @"host";
+NSString * const MTDatabaseUsernameKey                = @"MTDatabaseUsernameKey";
+NSString * const MTDatabasePasswordKey                = @"MTDatabasePasswordKey";
+NSString * const MTDatabaseDatabaseKey                = @"MTDatabaseDatabaseKey";
+NSString * const MTDatabasePortKey                    = @"MTDatabasePortKey";
+NSString * const MTDatabaseHostKey                    = @"MTDatabaseHostKey";
 
 NSString * const NSDATABASE_SF_OAUTH_KEY            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
 NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL  = @"eda://reports.everydayapps.com/";
 
-NSString * const KEY_TBL_SEC_HEADERS                = @"tsh";
-NSString * const KEY_TBL_SEC_ROW_COUNT              = @"tsrc";
-NSString * const KEY_TBL_SEC_ROW_HEIGHT             = @"tsrh";
-NSString * const KEY_TBL_SEC_SECTIONS               = @"tsrs";
+NSString * const MTTableHeaderSectionKey            = @"MTTableHeaderSectionKey";
+NSString * const MTTableSectionRowKey               = @"MTTableSectionRowKey";
+NSString * const MTTableSectionRowHeightKey         = @"MTTableSectionRowHeightKey";
+NSString * const MTTableSectionSectionsKey          = @"MTTableSectionSectionsKey";
 
 CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 
