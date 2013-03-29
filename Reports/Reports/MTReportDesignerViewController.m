@@ -1363,6 +1363,7 @@
                 UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
                 
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+
                 
                 NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [[[documentSection hasRows] objectAtIndex:0] hasObjects]];
                 NSUInteger deleteIndex = 0;
@@ -1370,6 +1371,7 @@
                 BOOL found = NO;
                 for (RptqDocumentObject *object in hasObjects) {
                     if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
+                        
                         found = YES;
                         break;
                     }
@@ -1377,8 +1379,11 @@
                 }
                 if (found) {
                     [svSection performBatchUpdates:^{
+                        RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
+                        [objectToDelete setInSectionRow:nil];
                         [hasObjects removeObjectAtIndex:deleteIndex];
-                        [[[documentSection hasRows] objectAtIndex:0] setHasObjects:hasObjects];
+                        RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex:0];
+                        [row setHasObjects:hasObjects];
                         [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                         NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                         [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
