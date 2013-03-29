@@ -23,7 +23,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
 
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
-@property (nonatomic, retain) UIView *toolboxBackgroundView;
+@property (nonatomic, retain) UIView *toolboxBackgroundView; 
 @property (nonatomic, retain) UIScrollView *toolboxScrollView;
 
 @property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
