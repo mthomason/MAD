@@ -100,6 +100,41 @@
     [document setHasPageHeaderSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
     [document setHasPageFooterSection:            [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
     [document setHasDetailSection:                [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
+
+    RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                       inManagedObjectContext: objectContext];
+    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: headerRow];
+    [[document hasReportHeaderSection] setHasRows:hasRows];
+    [headerRow setInSection:[document hasReportHeaderSection]];
+    [hasRows release]; hasRows = nil;
+
+    RptqDocumentSectionRows *footerRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                       inManagedObjectContext: objectContext];
+    hasRows = [[NSOrderedSet alloc] initWithObject: footerRow];
+    [[document hasReportFooterSection] setHasRows:hasRows];
+    [footerRow setInSection:[document hasReportFooterSection]];
+    [hasRows release]; hasRows = nil;
+
+    RptqDocumentSectionRows *pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                           inManagedObjectContext: objectContext];
+    hasRows = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
+    [[document hasPageHeaderSection] setHasRows:hasRows];
+    [pageHeaderRow setInSection:[document hasPageHeaderSection]];
+    [hasRows release]; hasRows = nil;
+    
+    RptqDocumentSectionRows *pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                           inManagedObjectContext: objectContext];
+    hasRows = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
+    [[document hasPageFooterSection] setHasRows:hasRows];
+    [pageFooterRow setInSection:[document hasPageFooterSection]];
+    [hasRows release]; hasRows = nil;
+    
+    RptqDocumentSectionRows *detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                              inManagedObjectContext: objectContext];
+    hasRows = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
+    [[document hasDetailSection] setHasRows:hasRows];
+    [detailSectionRow setInSection:[document hasDetailSection]];
+    [hasRows release]; hasRows = nil;
     
     [[document hasReportHeaderSection] setType:      @(MNSDocumentSectionTypeReportHeader)];
     [[document hasReportFooterSection] setType:      @(MNSDocumentSectionTypeReportFooter)];

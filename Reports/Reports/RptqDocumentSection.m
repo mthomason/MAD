@@ -2,13 +2,12 @@
 //  RptqDocumentSection.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/19/13.
+//  Created by Michael Thomason on 3/29/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentSection.h"
 #import "RptqDocument.h"
-#import "RptqDocumentObject.h"
 #import "RptqQueryGroup.h"
 
 
@@ -28,8 +27,9 @@
 @dynamic type;
 @dynamic visibility;
 @dynamic wrappingStyle;
-@dynamic hasObjects;
+@dynamic numberOfRows;
 @dynamic inGroup;
 @dynamic inReport;
+@dynamic hasRows;
 
 @end

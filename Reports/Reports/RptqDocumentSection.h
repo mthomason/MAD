@@ -2,14 +2,14 @@
 //  RptqDocumentSection.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/19/13.
+//  Created by Michael Thomason on 3/29/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocument, RptqDocumentObject, RptqQueryGroup;
+@class RptqDocument, RptqQueryGroup;
 
 @interface RptqDocumentSection : NSManagedObject
 
@@ -27,21 +27,22 @@
 @property (nonatomic, retain) NSNumber * type;
 @property (nonatomic, retain) NSNumber * visibility;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSOrderedSet *hasObjects;
+@property (nonatomic, retain) NSNumber * numberOfRows;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nonatomic, retain) RptqDocument *inReport;
+@property (nonatomic, retain) NSOrderedSet *hasRows;
 @end
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(RptqDocumentObject *)value inHasObjectsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromHasObjectsAtIndex:(NSUInteger)idx;
-- (void)insertHasObjects:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeHasObjectsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInHasObjectsAtIndex:(NSUInteger)idx withObject:(RptqDocumentObject *)value;
-- (void)replaceHasObjectsAtIndexes:(NSIndexSet *)indexes withHasObjects:(NSArray *)values;
-- (void)addHasObjectsObject:(RptqDocumentObject *)value;
-- (void)removeHasObjectsObject:(RptqDocumentObject *)value;
-- (void)addHasObjects:(NSOrderedSet *)values;
-- (void)removeHasObjects:(NSOrderedSet *)values;
+- (void)insertObject:(NSManagedObject *)value inHasRowsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromHasRowsAtIndex:(NSUInteger)idx;
+- (void)insertHasRows:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeHasRowsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInHasRowsAtIndex:(NSUInteger)idx withObject:(NSManagedObject *)value;
+- (void)replaceHasRowsAtIndexes:(NSIndexSet *)indexes withHasRows:(NSArray *)values;
+- (void)addHasRowsObject:(NSManagedObject *)value;
+- (void)removeHasRowsObject:(NSManagedObject *)value;
+- (void)addHasRows:(NSOrderedSet *)values;
+- (void)removeHasRows:(NSOrderedSet *)values;
 @end

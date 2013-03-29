@@ -87,9 +87,9 @@
     
     [dataObject setType: @(MTDocumentObjectTypeFormula)];
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[document hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
-    [[document hasDetailSection] setHasObjects:hasObjects];
+    [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
     [hasObjects release];
     [reportObject release];
     

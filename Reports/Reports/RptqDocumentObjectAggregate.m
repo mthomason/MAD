@@ -2,7 +2,7 @@
 //  RptqDocumentObjectAggregate.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/19/13.
+//  Created by Michael Thomason on 3/29/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,9 +15,9 @@
 @implementation RptqDocumentObjectAggregate
 
 @dynamic function;
-@dynamic identifier;
 @dynamic groupNumber;
 @dynamic groupType;
+@dynamic identifier;
 @dynamic aggregateField;
 @dynamic aggregateFunction;
 @dynamic parentObject;

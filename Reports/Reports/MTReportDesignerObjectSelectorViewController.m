@@ -39,7 +39,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
 @property (nonatomic, assign) BOOL showAggregateFunctionsViewController;
 
-@property (nonatomic, retain) MTDocumentObjectNewAggregateViewController *newAggregateViewController;
+@property (nonatomic, retain) MTDocumentObjectNewAggregateViewController *aggregateViewController;
 @property (nonatomic, assign) BOOL showNewAggregateViewController;
 
 @property (nonatomic, retain) MTGroupByViewController *groupByViewController;
@@ -97,7 +97,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [_fieldOrFormulaFormulaPickerViewController release];
     [_aggregateInputFormula release];
     [_aggregateInputField release];
-    [_newAggregateViewController release];
+    [_aggregateViewController release];
     [_aggregateInputField release];
     [_imagePicker release];
     [super dealloc];
@@ -670,7 +670,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 [[self saveButton] setEnabled:NO];
                 MTDocumentObjectNewAggregateViewController *documentObjectNewAggregateViewController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier];
                 [[documentObjectNewAggregateViewController tableView] setDelegate:self];
-                [self setNewAggregateViewController:documentObjectNewAggregateViewController];
+                [self setAggregateViewController:documentObjectNewAggregateViewController];
                 viewControllerToAdd = [documentObjectNewAggregateViewController retain];
                 break;
 
@@ -854,10 +854,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 }
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
-    if ([self newAggregateViewController]) {
+    if ([self aggregateViewController]) {
         NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:functionType];
         NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
-        [[[[self newAggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+        [[[[self aggregateViewController] tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
     }
 }
 
@@ -888,7 +888,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             [objectId release];
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
-            [[[[self newAggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+            [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
             [self setFieldSelectionPopPartOneOfTwo:YES];
             [[self navigationBar] popNavigationItemAnimated:YES];
 
@@ -929,33 +929,33 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 }
 
 - (void)displaySelectedGroupByType {
-    if ([self newAggregateViewController]) {
+    if ([self aggregateViewController]) {
         switch ([self aggregateGroupByType]) {
             case MTGroupByTypeSection: {
 
                 NSUInteger group = [self aggregateGroupBySectionNumber];
                 NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
-                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
                 break;
                 
             }
             case MTGroupByTypeReport: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeReport];
-                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 
             }
             case MTGroupByTypePage: {
 
                 NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypePage];
-                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 
             }
             default:
-                [[[[self newAggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+                [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
                 break;
         }
     }

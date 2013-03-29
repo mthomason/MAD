@@ -32,6 +32,8 @@
     
     // MARK: Initalize section height.
     [self setHeight:@(44.0000f)];
+    [self setNumberOfRows:@(1)];
+    
     
 }
 
@@ -59,23 +61,23 @@
     }
 }
 
-- (void)addHasObjectsObjectFixed:(RptqDocumentObject *)value {
-    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasObjects] addObject:value];
+- (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
+    if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)[self hasRows] addObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasObjects];
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasRows]];
         [tempSet addObject:value];
-        [self setHasObjects: tempSet];
+        [self setHasRows: tempSet];
     }
 }
 
-- (void)removeHasObjectsObjectFixed:(RptqDocumentObject *)value {
-    if ([[self hasObjects] isKindOfClass:[NSMutableOrderedSet class]]) {
-        [(NSMutableOrderedSet *)[self hasObjects] removeObject:value];
+- (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value {
+    if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
+        [(NSMutableOrderedSet *)[self hasRows] removeObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasObjects]];
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasRows]];
         [tempSet removeObject:value];
-        [self setHasObjects: tempSet];
+        [self setHasRows: tempSet];
     }
 }
 

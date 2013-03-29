@@ -57,7 +57,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setPaddingRight:@(0.0000f)];
     [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
     [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
-    
+    [self setSectionRowNumber:@(1)];
 }
 
 - (void)awakeFromFetch {
@@ -296,48 +296,16 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             [documentObject setType: @(MTDocumentObjectTypeImage)];
             
             [reportObject release];
-            
-            
-            
-            
-            /*
-             NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
-             inManagedObjectContext: [document managedObjectContext]];
-             NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
-             inManagedObjectContext: [document managedObjectContext]];
-             
-             RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
-             insertIntoManagedObjectContext: [document managedObjectContext]];
-             
-             //NSString *formulaText = object;
-             
-             RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-             insertIntoManagedObjectContext: [document managedObjectContext]];
-             
-             [dataObject setIsImage: reportObject];
-             
-             UIImage *image = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
-             [[dataObject isImage] setImage:image];
-             
-             [dataObject setType: @(MTDocumentObjectTypeImage)];
-             
-             NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
-             [hasObjects insertObject:dataObject atIndex:0];
-             [[document hasDetailSection] setHasObjects:hasObjects];
-             [hasObjects release];
-             [reportObject release];
-             
-             return [dataObject autorelease];
-             */
+
             break;
         }
         default:
             break;
     }
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[document hasDetailSection] hasObjects]];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[document hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
     [hasObjects insertObject:documentObject atIndex:0];
-    [[document hasDetailSection] setHasObjects:hasObjects];
+    [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
     [hasObjects release];
     
     if ([[[document hasDetailSection] height] floatValue] < [[documentObject sizeheight] floatValue]) {

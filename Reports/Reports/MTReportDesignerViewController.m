@@ -466,7 +466,7 @@
                     [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
-                    UICollectionView *section = [self getCollectionViewForRptqSection: [documentObject inSection]];
+                    UICollectionView *section = [self getCollectionViewForRptqSection: [[documentObject inSectionRow] inSection]];
                     [[section collectionViewLayout] invalidateLayout];
                 }
             }
@@ -879,7 +879,7 @@
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
     
-    NSOrderedSet *objects = [documentSection hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
     
     CGSize result;
     
@@ -905,7 +905,7 @@
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    NSOrderedSet *objects = [documentSection hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
@@ -960,7 +960,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    NSOrderedSet *objects = [documentSection hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
     NSLog(@"Number of items: %d", [objects count]);
     return [objects count];
 }
@@ -1068,7 +1068,7 @@
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    NSOrderedSet *objects = [documentSection hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
 
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
@@ -1359,12 +1359,12 @@
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
                 
-                RptqDocumentSection *section = [documentObject inSection];
+                RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
                 UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
                 
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
                 
-                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [documentSection hasObjects]];
+                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [[[documentSection hasRows] objectAtIndex:0] hasObjects]];
                 NSUInteger deleteIndex = 0;
                 
                 BOOL found = NO;
@@ -1378,7 +1378,7 @@
                 if (found) {
                     [svSection performBatchUpdates:^{
                         [hasObjects removeObjectAtIndex:deleteIndex];
-                        [documentSection setHasObjects:hasObjects];
+                        [[[documentSection hasRows] objectAtIndex:0] setHasObjects:hasObjects];
                         [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                         NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
                         [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
@@ -1476,9 +1476,9 @@
                 
                 // MARK: Add this to the data context and to the container for the sections collection view.
                 [newParent performBatchUpdates:^{
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[documentSection hasObjects]];
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[documentSection hasRows] objectAtIndex:0] hasObjects]];
                     [hasObjects insertObject:documentObject atIndex:[indexPath item]];
-                    [documentSection setHasObjects:hasObjects];
+                    [[[documentSection hasRows] objectAtIndex:0] setHasObjects:hasObjects];
                     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                     [hasObjects release];
                     

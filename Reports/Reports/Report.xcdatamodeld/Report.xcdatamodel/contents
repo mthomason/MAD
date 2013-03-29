@@ -88,6 +88,7 @@
         <attribute name="paddingTop" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="sectionIndexItem" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="sectionIndexRow" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="sectionRowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="sizeheight" attributeType="Float" defaultValueString="44" syncable="YES"/>
         <attribute name="sizewidth" attributeType="Float" defaultValueString="100" syncable="YES"/>
         <attribute name="strike" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -95,7 +96,7 @@
         <attribute name="underline" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="inSection" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasObjects" inverseEntity="RptqDocumentSection" syncable="YES"/>
+        <relationship name="inSectionRow" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
         <relationship name="isAggregate" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="parentObject" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
         <relationship name="isChart" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectChart" inverseName="parentObject" inverseEntity="RptqDocumentObjectChart" syncable="YES"/>
         <relationship name="isFormula" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectFormula" inverseName="parentObjectFormula" inverseEntity="RptqDocumentObjectFormula" syncable="YES"/>
@@ -162,6 +163,7 @@
         <attribute name="marginRight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="marginTop" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberOfRows" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="paddingBottom" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="paddingLeft" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="paddingRight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -169,9 +171,15 @@
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="visibility" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentObject" inverseName="inSection" inverseEntity="RptqDocumentObject" syncable="YES"/>
+        <relationship name="hasRows" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentSectionRows" inverseName="inSection" inverseEntity="RptqDocumentSectionRows" syncable="YES"/>
         <relationship name="inGroup" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="hasSection" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="inReport" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDetailSection" inverseEntity="RptqDocument" syncable="YES"/>
+    </entity>
+    <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="rowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentObject" inverseName="inSectionRow" inverseEntity="RptqDocumentObject" syncable="YES"/>
+        <relationship name="inSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection" syncable="YES"/>
     </entity>
     <entity name="RptqQuery" representedClassName="RptqQuery" syncable="YES">
         <attribute name="cachedText" optional="YES" attributeType="String" syncable="YES"/>
@@ -288,20 +296,20 @@
     </entity>
     <fetchRequest name="getRptqDatabaseSchemaTableByName" entity="RptqDatabaseSchemaTable" predicateString="name == &quot;NAME&quot;"/>
     <elements>
-        <element name="RptqDatabase" positionX="-1386" positionY="-657" width="128" height="165"/>
-        <element name="RptqDatabaseSchemaField" positionX="-936" positionY="-459" width="182" height="300"/>
-        <element name="RptqDatabaseSchemaTable" positionX="-1242" positionY="-423" width="198" height="253"/>
+        <element name="RptqDatabase" positionX="-1503" positionY="-831" width="128" height="165"/>
+        <element name="RptqDatabaseSchemaField" positionX="-1064" positionY="-666" width="182" height="300"/>
+        <element name="RptqDatabaseSchemaTable" positionX="-1305" positionY="-370" width="198" height="253"/>
         <element name="RptqDocument" positionX="-1820" positionY="-270" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="-1224" positionY="-72" width="218" height="645"/>
+        <element name="RptqDocumentObject" positionX="-1296" positionY="-12" width="218" height="658"/>
         <element name="RptqDocumentObjectAggregate" positionX="160" positionY="192" width="128" height="150"/>
         <element name="RptqDocumentObjectChart" positionX="160" positionY="192" width="128" height="75"/>
         <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="120"/>
         <element name="RptqDocumentObjectGroupKey" positionX="160" positionY="192" width="128" height="90"/>
         <element name="RptqDocumentObjectImage" positionX="160" positionY="192" width="128" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="-884" positionY="144" width="218" height="90"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="-855" positionY="297" width="225" height="135"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="-855" positionY="489" width="225" height="105"/>
-        <element name="RptqDocumentSection" positionX="-1620" positionY="204" width="198" height="300"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="-450" positionY="495" width="225" height="135"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="-558" positionY="639" width="225" height="105"/>
+        <element name="RptqDocumentSection" positionX="-1728" positionY="446" width="198" height="313"/>
         <element name="RptqQuery" positionX="-272" positionY="-846" width="128" height="238"/>
         <element name="RptqQueryCache" positionX="43" positionY="-783" width="128" height="148"/>
         <element name="RptqQueryGroup" positionX="-488" positionY="315" width="164" height="163"/>
@@ -311,8 +319,9 @@
         <element name="RptqQueryResultFields" positionX="324" positionY="-765" width="128" height="118"/>
         <element name="RptqQueryResultValues" positionX="495" positionY="-738" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="34" positionY="-261" width="128" height="120"/>
-        <element name="RptqQueryTable" positionX="-504" positionY="-441" width="128" height="88"/>
-        <element name="RptqRelationship" positionX="-1170" positionY="-564" width="128" height="105"/>
-        <element name="RptqUserCredentals" positionX="-1406" positionY="-441" width="128" height="270"/>
+        <element name="RptqQueryTable" positionX="-1053" positionY="-133" width="128" height="88"/>
+        <element name="RptqRelationship" positionX="-1287" positionY="-726" width="128" height="105"/>
+        <element name="RptqUserCredentals" positionX="-1494" positionY="-351" width="128" height="270"/>
+        <element name="RptqDocumentSectionRows" positionX="-1548" positionY="308" width="128" height="103"/>
     </elements>
 </model>

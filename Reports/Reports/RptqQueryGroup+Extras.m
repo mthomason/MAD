@@ -68,7 +68,7 @@
 }
 
 // MARK: Creating group. Updates document sections to reflect new group.
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqDatabaseSchemaField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqQueryGroup *)createQueryGroupFor:(RptqDatabaseSchemaField *)field andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
                                                                    inManagedObjectContext:managedObjectContext];
@@ -88,18 +88,34 @@
     [queryGroup setTable:[[field inTable] name]];
     [queryGroup setSort:@(sortOrder)];
     [queryGroup setWeight:@(groupCount - 1)];
+
+    RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                              inManagedObjectContext: managedObjectContext];
+    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
     
     RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
+    [dsHeader setHasRows:hasRows];
+    [headerSectionRow setInSection:dsHeader];
     [queryGroup addHasSectionObject:dsHeader];
     [dsHeader release];
   
+    [hasRows release]; hasRows = nil;
+
+    RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                              inManagedObjectContext: managedObjectContext];
+
+    hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
+
     RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     [dsFooter setType: [NSNumber numberWithInteger:MNSDocumentSectionTypeGroupFooter]];
+    [dsFooter setHasRows:hasRows];
+    [footerSectionRow setInSection:dsFooter];
     [queryGroup addHasSectionObject:dsFooter];
     [dsFooter release];
-    
-    //NSLog(@"QueryGroup: %@", queryGroup);
+
+    [hasRows release]; hasRows = nil;
+
     return [queryGroup autorelease];
 
 }

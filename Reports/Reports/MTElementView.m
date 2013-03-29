@@ -112,7 +112,6 @@
         [labelBackground release];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[self paddingView] frame]];
-        [imageView setBackgroundColor:[UIColor lightGrayColor]];
         [imageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self paddingView] addSubview:imageView];
         [self setImageView:imageView];

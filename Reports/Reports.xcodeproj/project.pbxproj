@@ -486,8 +486,6 @@
 		4C7C8B0016606F6700F2B88B /* MTDocumentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTDocumentTableViewCell.m */; };
 		4C7C8B0116606F8400F2B88B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
 		4C7C8B0216606F8400F2B88B /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
-		4C8155BA16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */; };
-		4C8155BB16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */; };
 		4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; };
 		4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */; };
 		4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */; };
@@ -719,8 +717,6 @@
 		4C88A9C714EE23D00069A0AF /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */; };
 		4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; };
 		4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; };
-		4C8BF46B16F64541002D9F9B /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46A16F64541002D9F9B /* RptqQuery.m */; };
-		4C8BF46C16F64541002D9F9B /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46A16F64541002D9F9B /* RptqQuery.m */; };
 		4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */; };
 		4C8BF47016F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */; };
 		4C8BF47316F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF47216F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m */; };
@@ -782,32 +778,6 @@
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
 		4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
-		4C9F403A16F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F403916F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m */; };
-		4C9F403B16F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F403916F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m */; };
-		4C9F403E16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F403D16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m */; };
-		4C9F403F16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F403D16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m */; };
-		4C9F404616F821EE004AA4A5 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404516F821EE004AA4A5 /* RptqDocumentSection.m */; };
-		4C9F404716F821EE004AA4A5 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404516F821EE004AA4A5 /* RptqDocumentSection.m */; };
-		4C9F404A16F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404916F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m */; };
-		4C9F404B16F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404916F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m */; };
-		4C9F404E16F821EE004AA4A5 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404D16F821EE004AA4A5 /* RptqDatabase.m */; };
-		4C9F404F16F821EE004AA4A5 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F404D16F821EE004AA4A5 /* RptqDatabase.m */; };
-		4C9F405216F821EF004AA4A5 /* RptqDatabaseSchemaTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405116F821EF004AA4A5 /* RptqDatabaseSchemaTable.m */; };
-		4C9F405316F821EF004AA4A5 /* RptqDatabaseSchemaTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405116F821EF004AA4A5 /* RptqDatabaseSchemaTable.m */; };
-		4C9F405616F821EF004AA4A5 /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405516F821EF004AA4A5 /* RptqDocument.m */; };
-		4C9F405716F821EF004AA4A5 /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405516F821EF004AA4A5 /* RptqDocument.m */; };
-		4C9F405A16F821EF004AA4A5 /* RptqDocumentObjectImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405916F821EF004AA4A5 /* RptqDocumentObjectImage.m */; };
-		4C9F405B16F821EF004AA4A5 /* RptqDocumentObjectImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405916F821EF004AA4A5 /* RptqDocumentObjectImage.m */; };
-		4C9F405E16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405D16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m */; };
-		4C9F405F16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F405D16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m */; };
-		4C9F406216F821EF004AA4A5 /* RptqDatabaseSchemaField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406116F821EF004AA4A5 /* RptqDatabaseSchemaField.m */; };
-		4C9F406316F821EF004AA4A5 /* RptqDatabaseSchemaField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406116F821EF004AA4A5 /* RptqDatabaseSchemaField.m */; };
-		4C9F406616F821EF004AA4A5 /* RptqDocumentObjectChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406516F821EF004AA4A5 /* RptqDocumentObjectChart.m */; };
-		4C9F406716F821EF004AA4A5 /* RptqDocumentObjectChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406516F821EF004AA4A5 /* RptqDocumentObjectChart.m */; };
-		4C9F406A16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406916F821EF004AA4A5 /* RptqDocumentObject.m */; };
-		4C9F406B16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406916F821EF004AA4A5 /* RptqDocumentObject.m */; };
-		4C9F406E16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406D16F821EF004AA4A5 /* RptqDocumentObjectLabel.m */; };
-		4C9F406F16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F406D16F821EF004AA4A5 /* RptqDocumentObjectLabel.m */; };
 		4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C9F94C216423D7300A562B9 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
@@ -1069,10 +1039,6 @@
 		4CB0FF8616F5164200B88626 /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF8416F5164100B88626 /* RptqQueryCache.m */; };
 		4CB0FF8916F5164400B88626 /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF8816F5164300B88626 /* RptqQueryGroup.m */; };
 		4CB0FF8A16F5164400B88626 /* RptqQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF8816F5164300B88626 /* RptqQueryGroup.m */; };
-		4CB0FF8D16F5164400B88626 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF8C16F5164400B88626 /* RptqRelationship.m */; };
-		4CB0FF8E16F5164500B88626 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF8C16F5164400B88626 /* RptqRelationship.m */; };
-		4CB0FF9116F5164500B88626 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF9016F5164500B88626 /* RptqUserCredentals.m */; };
-		4CB0FF9216F5164500B88626 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF9016F5164500B88626 /* RptqUserCredentals.m */; };
 		4CB0FF9D16F5164700B88626 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF9C16F5164700B88626 /* RptqQuerySort.m */; };
 		4CB0FF9E16F5164700B88626 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF9C16F5164700B88626 /* RptqQuerySort.m */; };
 		4CB0FFA116F5164800B88626 /* RptqQueryResultValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FFA016F5164700B88626 /* RptqQueryResultValues.m */; };
@@ -1088,6 +1054,44 @@
 		4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; };
 		4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
+		4CB457161705F6D9005269B7 /* RptqDocumentObjectImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457151705F6D9005269B7 /* RptqDocumentObjectImage.m */; };
+		4CB457171705F6D9005269B7 /* RptqDocumentObjectImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457151705F6D9005269B7 /* RptqDocumentObjectImage.m */; };
+		4CB4571E1705F6D9005269B7 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4571D1705F6D9005269B7 /* RptqDocumentSection.m */; };
+		4CB4571F1705F6D9005269B7 /* RptqDocumentSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4571D1705F6D9005269B7 /* RptqDocumentSection.m */; };
+		4CB457221705F6D9005269B7 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457211705F6D9005269B7 /* RptqQuery.m */; };
+		4CB457231705F6D9005269B7 /* RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457211705F6D9005269B7 /* RptqQuery.m */; };
+		4CB4572A1705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457291705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m */; };
+		4CB4572B1705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457291705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m */; };
+		4CB4572E1705F6DA005269B7 /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4572D1705F6DA005269B7 /* RptqDocument.m */; };
+		4CB4572F1705F6DA005269B7 /* RptqDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4572D1705F6DA005269B7 /* RptqDocument.m */; };
+		4CB457321705F6DA005269B7 /* RptqDocumentObjectAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457311705F6DA005269B7 /* RptqDocumentObjectAggregate.m */; };
+		4CB457331705F6DA005269B7 /* RptqDocumentObjectAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457311705F6DA005269B7 /* RptqDocumentObjectAggregate.m */; };
+		4CB457361705F6DA005269B7 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457351705F6DA005269B7 /* RptqDocumentObjectLabel.m */; };
+		4CB457371705F6DA005269B7 /* RptqDocumentObjectLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457351705F6DA005269B7 /* RptqDocumentObjectLabel.m */; };
+		4CB4573A1705F6DA005269B7 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457391705F6DA005269B7 /* RptqUserCredentals.m */; };
+		4CB4573B1705F6DA005269B7 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457391705F6DA005269B7 /* RptqUserCredentals.m */; };
+		4CB4573E1705F6DA005269B7 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4573D1705F6DA005269B7 /* RptqDatabase.m */; };
+		4CB4573F1705F6DA005269B7 /* RptqDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4573D1705F6DA005269B7 /* RptqDatabase.m */; };
+		4CB457421705F6DA005269B7 /* RptqDatabaseSchemaField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457411705F6DA005269B7 /* RptqDatabaseSchemaField.m */; };
+		4CB457431705F6DA005269B7 /* RptqDatabaseSchemaField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457411705F6DA005269B7 /* RptqDatabaseSchemaField.m */; };
+		4CB457461705F6DB005269B7 /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457451705F6DB005269B7 /* RptqDocumentObjectLabelLink.m */; };
+		4CB457471705F6DB005269B7 /* RptqDocumentObjectLabelLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457451705F6DB005269B7 /* RptqDocumentObjectLabelLink.m */; };
+		4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
+		4CB4574B1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
+		4CB4574E1705F6DB005269B7 /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4574D1705F6DB005269B7 /* RptqDocumentObjectFormula.m */; };
+		4CB4574F1705F6DB005269B7 /* RptqDocumentObjectFormula.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4574D1705F6DB005269B7 /* RptqDocumentObjectFormula.m */; };
+		4CB457521705F6DB005269B7 /* RptqDatabaseSchemaTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457511705F6DB005269B7 /* RptqDatabaseSchemaTable.m */; };
+		4CB457531705F6DB005269B7 /* RptqDatabaseSchemaTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457511705F6DB005269B7 /* RptqDatabaseSchemaTable.m */; };
+		4CB457561705F6DB005269B7 /* RptqDocumentObjectChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457551705F6DB005269B7 /* RptqDocumentObjectChart.m */; };
+		4CB457571705F6DB005269B7 /* RptqDocumentObjectChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457551705F6DB005269B7 /* RptqDocumentObjectChart.m */; };
+		4CB4575A1705F6DB005269B7 /* RptqDocumentObjectGroupKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457591705F6DB005269B7 /* RptqDocumentObjectGroupKey.m */; };
+		4CB4575B1705F6DB005269B7 /* RptqDocumentObjectGroupKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457591705F6DB005269B7 /* RptqDocumentObjectGroupKey.m */; };
+		4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; };
+		4CB4575F1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; };
+		4CB457621705FEBC005269B7 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457611705FEBB005269B7 /* RptqDocumentSectionRows.m */; };
+		4CB457631705FEBC005269B7 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457611705FEBB005269B7 /* RptqDocumentSectionRows.m */; };
+		4CB457661705FEBF005269B7 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457651705FEBE005269B7 /* RptqDocumentObject.m */; };
+		4CB457671705FEBF005269B7 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457651705FEBE005269B7 /* RptqDocumentObject.m */; };
 		4CB652981648D5F70050CD03 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
 		4CB652991648D5F70050CD03 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
 		4CB652D81648D5F70050CD03 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652971648D5F70050CD03 /* libSalesforceOAuth.a */; };
@@ -1880,8 +1884,6 @@
 		4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIManagedDocument+FileOperations.m"; sourceTree = "<group>"; };
 		4C7C8AF516603D3B00F2B88B /* ApplicationSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationSettings.h; path = Reports/ApplicationSettings.h; sourceTree = "<group>"; };
 		4C7C8AF616603D3C00F2B88B /* ApplicationSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationSettings.m; path = Reports/ApplicationSettings.m; sourceTree = "<group>"; };
-		4C8155B816FF980700D5330E /* RptqDocumentObjectFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFormula.h; sourceTree = "<group>"; };
-		4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectFormula.m; sourceTree = "<group>"; };
 		4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewAggregateViewController.h; sourceTree = "<group>"; };
 		4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewAggregateViewController.m; sourceTree = "<group>"; };
 		4C8155C217009E7000D5330E /* MTAggregateFunctionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionsViewController.h; sourceTree = "<group>"; };
@@ -1922,8 +1924,6 @@
 		4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTResizeHandleView.m; sourceTree = "<group>"; };
 		4C8BF42D16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewStaticLabelViewController.h; sourceTree = "<group>"; };
 		4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewStaticLabelViewController.m; sourceTree = "<group>"; };
-		4C8BF46916F64541002D9F9B /* RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuery.h; sourceTree = "<group>"; };
-		4C8BF46A16F64541002D9F9B /* RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuery.m; sourceTree = "<group>"; };
 		4C8BF46D16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectAggregate+Extras.h"; sourceTree = "<group>"; };
 		4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectAggregate+Extras.m"; sourceTree = "<group>"; };
 		4C8BF47116F6459F002D9F9B /* RptqDocumentObjectChart+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectChart+Extras.h"; sourceTree = "<group>"; };
@@ -2075,32 +2075,6 @@
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
 		4C9F400616F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectFormula+Extras.h"; sourceTree = "<group>"; };
 		4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectFormula+Extras.m"; sourceTree = "<group>"; };
-		4C9F403816F821ED004AA4A5 /* RptqDocumentObjectGroupKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectGroupKey.h; sourceTree = "<group>"; };
-		4C9F403916F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectGroupKey.m; sourceTree = "<group>"; };
-		4C9F403C16F821EE004AA4A5 /* RptqDocumentObjectAggregate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectAggregate.h; sourceTree = "<group>"; };
-		4C9F403D16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectAggregate.m; sourceTree = "<group>"; };
-		4C9F404416F821EE004AA4A5 /* RptqDocumentSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSection.h; sourceTree = "<group>"; };
-		4C9F404516F821EE004AA4A5 /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSection.m; sourceTree = "<group>"; };
-		4C9F404816F821EE004AA4A5 /* RptqDocumentObjectLabelLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabelLink.h; sourceTree = "<group>"; };
-		4C9F404916F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelLink.m; sourceTree = "<group>"; };
-		4C9F404C16F821EE004AA4A5 /* RptqDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabase.h; sourceTree = "<group>"; };
-		4C9F404D16F821EE004AA4A5 /* RptqDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabase.m; sourceTree = "<group>"; };
-		4C9F405016F821EF004AA4A5 /* RptqDatabaseSchemaTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabaseSchemaTable.h; sourceTree = "<group>"; };
-		4C9F405116F821EF004AA4A5 /* RptqDatabaseSchemaTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabaseSchemaTable.m; sourceTree = "<group>"; };
-		4C9F405416F821EF004AA4A5 /* RptqDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocument.h; sourceTree = "<group>"; };
-		4C9F405516F821EF004AA4A5 /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocument.m; sourceTree = "<group>"; };
-		4C9F405816F821EF004AA4A5 /* RptqDocumentObjectImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectImage.h; sourceTree = "<group>"; };
-		4C9F405916F821EF004AA4A5 /* RptqDocumentObjectImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectImage.m; sourceTree = "<group>"; };
-		4C9F405C16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabelDataField.h; sourceTree = "<group>"; };
-		4C9F405D16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
-		4C9F406016F821EF004AA4A5 /* RptqDatabaseSchemaField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabaseSchemaField.h; sourceTree = "<group>"; };
-		4C9F406116F821EF004AA4A5 /* RptqDatabaseSchemaField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabaseSchemaField.m; sourceTree = "<group>"; };
-		4C9F406416F821EF004AA4A5 /* RptqDocumentObjectChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectChart.h; sourceTree = "<group>"; };
-		4C9F406516F821EF004AA4A5 /* RptqDocumentObjectChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectChart.m; sourceTree = "<group>"; };
-		4C9F406816F821EF004AA4A5 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
-		4C9F406916F821EF004AA4A5 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
-		4C9F406C16F821EF004AA4A5 /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
-		4C9F406D16F821EF004AA4A5 /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
 		4C9F94BB1642280500A562B9 /* MTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewController.h; sourceTree = "<group>"; };
 		4C9F94BC1642280500A562B9 /* MTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewController.m; sourceTree = "<group>"; };
 		4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDelegate.h; sourceTree = "<group>"; };
@@ -2140,10 +2114,6 @@
 		4CB0FF8416F5164100B88626 /* RptqQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryCache.m; sourceTree = "<group>"; };
 		4CB0FF8716F5164300B88626 /* RptqQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryGroup.h; sourceTree = "<group>"; };
 		4CB0FF8816F5164300B88626 /* RptqQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryGroup.m; sourceTree = "<group>"; };
-		4CB0FF8B16F5164400B88626 /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqRelationship.h; sourceTree = "<group>"; };
-		4CB0FF8C16F5164400B88626 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
-		4CB0FF8F16F5164500B88626 /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
-		4CB0FF9016F5164500B88626 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
 		4CB0FF9B16F5164700B88626 /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuerySort.h; sourceTree = "<group>"; };
 		4CB0FF9C16F5164700B88626 /* RptqQuerySort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuerySort.m; sourceTree = "<group>"; };
 		4CB0FF9F16F5164700B88626 /* RptqQueryResultValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryResultValues.h; sourceTree = "<group>"; };
@@ -2160,6 +2130,44 @@
 		4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
 		4CB42DC6166A339300CE1876 /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
 		4CB42DC7166A339300CE1876 /* NSString+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extras.m"; sourceTree = "<group>"; };
+		4CB457141705F6D9005269B7 /* RptqDocumentObjectImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectImage.h; sourceTree = "<group>"; };
+		4CB457151705F6D9005269B7 /* RptqDocumentObjectImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectImage.m; sourceTree = "<group>"; };
+		4CB4571C1705F6D9005269B7 /* RptqDocumentSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSection.h; sourceTree = "<group>"; };
+		4CB4571D1705F6D9005269B7 /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSection.m; sourceTree = "<group>"; };
+		4CB457201705F6D9005269B7 /* RptqQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuery.h; sourceTree = "<group>"; };
+		4CB457211705F6D9005269B7 /* RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuery.m; sourceTree = "<group>"; };
+		4CB457281705F6D9005269B7 /* RptqDocumentObjectLabelDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabelDataField.h; sourceTree = "<group>"; };
+		4CB457291705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelDataField.m; sourceTree = "<group>"; };
+		4CB4572C1705F6DA005269B7 /* RptqDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocument.h; sourceTree = "<group>"; };
+		4CB4572D1705F6DA005269B7 /* RptqDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocument.m; sourceTree = "<group>"; };
+		4CB457301705F6DA005269B7 /* RptqDocumentObjectAggregate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectAggregate.h; sourceTree = "<group>"; };
+		4CB457311705F6DA005269B7 /* RptqDocumentObjectAggregate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectAggregate.m; sourceTree = "<group>"; };
+		4CB457341705F6DA005269B7 /* RptqDocumentObjectLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabel.h; sourceTree = "<group>"; };
+		4CB457351705F6DA005269B7 /* RptqDocumentObjectLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabel.m; sourceTree = "<group>"; };
+		4CB457381705F6DA005269B7 /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
+		4CB457391705F6DA005269B7 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
+		4CB4573C1705F6DA005269B7 /* RptqDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabase.h; sourceTree = "<group>"; };
+		4CB4573D1705F6DA005269B7 /* RptqDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabase.m; sourceTree = "<group>"; };
+		4CB457401705F6DA005269B7 /* RptqDatabaseSchemaField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabaseSchemaField.h; sourceTree = "<group>"; };
+		4CB457411705F6DA005269B7 /* RptqDatabaseSchemaField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabaseSchemaField.m; sourceTree = "<group>"; };
+		4CB457441705F6DB005269B7 /* RptqDocumentObjectLabelLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectLabelLink.h; sourceTree = "<group>"; };
+		4CB457451705F6DB005269B7 /* RptqDocumentObjectLabelLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectLabelLink.m; sourceTree = "<group>"; };
+		4CB457481705F6DB005269B7 /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqRelationship.h; sourceTree = "<group>"; };
+		4CB457491705F6DB005269B7 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
+		4CB4574C1705F6DB005269B7 /* RptqDocumentObjectFormula.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFormula.h; sourceTree = "<group>"; };
+		4CB4574D1705F6DB005269B7 /* RptqDocumentObjectFormula.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectFormula.m; sourceTree = "<group>"; };
+		4CB457501705F6DB005269B7 /* RptqDatabaseSchemaTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDatabaseSchemaTable.h; sourceTree = "<group>"; };
+		4CB457511705F6DB005269B7 /* RptqDatabaseSchemaTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabaseSchemaTable.m; sourceTree = "<group>"; };
+		4CB457541705F6DB005269B7 /* RptqDocumentObjectChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectChart.h; sourceTree = "<group>"; };
+		4CB457551705F6DB005269B7 /* RptqDocumentObjectChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectChart.m; sourceTree = "<group>"; };
+		4CB457581705F6DB005269B7 /* RptqDocumentObjectGroupKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectGroupKey.h; sourceTree = "<group>"; };
+		4CB457591705F6DB005269B7 /* RptqDocumentObjectGroupKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectGroupKey.m; sourceTree = "<group>"; };
+		4CB4575C1705F735005269B7 /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
+		4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
+		4CB457601705FEB9005269B7 /* RptqDocumentSectionRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSectionRows.h; sourceTree = "<group>"; };
+		4CB457611705FEBB005269B7 /* RptqDocumentSectionRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionRows.m; sourceTree = "<group>"; };
+		4CB457641705FEBD005269B7 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
+		4CB457651705FEBE005269B7 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CB6525E1648D5F70050CD03 /* SFOAuthCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFOAuthCoordinator.h; sourceTree = "<group>"; };
 		4CB6525F1648D5F70050CD03 /* SFOAuthCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFOAuthCredentials.h; sourceTree = "<group>"; };
 		4CB652601648D5F70050CD03 /* SFOAuthInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFOAuthInfo.h; sourceTree = "<group>"; };
@@ -2983,6 +2991,7 @@
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
 				4C752E0B16EA3A0C001FDAA3 /* README-libmysqlclient.txt */,
 				4C5482741672D4A800CA24EB /* TODO.txt */,
+				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
@@ -3141,36 +3150,42 @@
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
 			isa = PBXGroup;
 			children = (
-				4C8155B816FF980700D5330E /* RptqDocumentObjectFormula.h */,
-				4C8155B916FF980700D5330E /* RptqDocumentObjectFormula.m */,
-				4C9F406C16F821EF004AA4A5 /* RptqDocumentObjectLabel.h */,
-				4C9F406D16F821EF004AA4A5 /* RptqDocumentObjectLabel.m */,
-				4C9F406816F821EF004AA4A5 /* RptqDocumentObject.h */,
-				4C9F406916F821EF004AA4A5 /* RptqDocumentObject.m */,
-				4C9F406416F821EF004AA4A5 /* RptqDocumentObjectChart.h */,
-				4C9F406516F821EF004AA4A5 /* RptqDocumentObjectChart.m */,
-				4C9F406016F821EF004AA4A5 /* RptqDatabaseSchemaField.h */,
-				4C9F406116F821EF004AA4A5 /* RptqDatabaseSchemaField.m */,
-				4C9F405C16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.h */,
-				4C9F405D16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m */,
-				4C9F405816F821EF004AA4A5 /* RptqDocumentObjectImage.h */,
-				4C9F405916F821EF004AA4A5 /* RptqDocumentObjectImage.m */,
-				4C9F405416F821EF004AA4A5 /* RptqDocument.h */,
-				4C9F405516F821EF004AA4A5 /* RptqDocument.m */,
-				4C9F405016F821EF004AA4A5 /* RptqDatabaseSchemaTable.h */,
-				4C9F405116F821EF004AA4A5 /* RptqDatabaseSchemaTable.m */,
-				4C9F404C16F821EE004AA4A5 /* RptqDatabase.h */,
-				4C9F404D16F821EE004AA4A5 /* RptqDatabase.m */,
-				4C9F404816F821EE004AA4A5 /* RptqDocumentObjectLabelLink.h */,
-				4C9F404916F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m */,
-				4C9F404416F821EE004AA4A5 /* RptqDocumentSection.h */,
-				4C9F404516F821EE004AA4A5 /* RptqDocumentSection.m */,
-				4C9F403C16F821EE004AA4A5 /* RptqDocumentObjectAggregate.h */,
-				4C9F403D16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m */,
-				4C9F403816F821ED004AA4A5 /* RptqDocumentObjectGroupKey.h */,
-				4C9F403916F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m */,
-				4C8BF46916F64541002D9F9B /* RptqQuery.h */,
-				4C8BF46A16F64541002D9F9B /* RptqQuery.m */,
+				4CB457641705FEBD005269B7 /* RptqDocumentObject.h */,
+				4CB457651705FEBE005269B7 /* RptqDocumentObject.m */,
+				4CB457601705FEB9005269B7 /* RptqDocumentSectionRows.h */,
+				4CB457611705FEBB005269B7 /* RptqDocumentSectionRows.m */,
+				4CB457581705F6DB005269B7 /* RptqDocumentObjectGroupKey.h */,
+				4CB457591705F6DB005269B7 /* RptqDocumentObjectGroupKey.m */,
+				4CB457541705F6DB005269B7 /* RptqDocumentObjectChart.h */,
+				4CB457551705F6DB005269B7 /* RptqDocumentObjectChart.m */,
+				4CB457501705F6DB005269B7 /* RptqDatabaseSchemaTable.h */,
+				4CB457511705F6DB005269B7 /* RptqDatabaseSchemaTable.m */,
+				4CB4574C1705F6DB005269B7 /* RptqDocumentObjectFormula.h */,
+				4CB4574D1705F6DB005269B7 /* RptqDocumentObjectFormula.m */,
+				4CB457481705F6DB005269B7 /* RptqRelationship.h */,
+				4CB457491705F6DB005269B7 /* RptqRelationship.m */,
+				4CB457441705F6DB005269B7 /* RptqDocumentObjectLabelLink.h */,
+				4CB457451705F6DB005269B7 /* RptqDocumentObjectLabelLink.m */,
+				4CB457401705F6DA005269B7 /* RptqDatabaseSchemaField.h */,
+				4CB457411705F6DA005269B7 /* RptqDatabaseSchemaField.m */,
+				4CB4573C1705F6DA005269B7 /* RptqDatabase.h */,
+				4CB4573D1705F6DA005269B7 /* RptqDatabase.m */,
+				4CB457381705F6DA005269B7 /* RptqUserCredentals.h */,
+				4CB457391705F6DA005269B7 /* RptqUserCredentals.m */,
+				4CB457341705F6DA005269B7 /* RptqDocumentObjectLabel.h */,
+				4CB457351705F6DA005269B7 /* RptqDocumentObjectLabel.m */,
+				4CB457301705F6DA005269B7 /* RptqDocumentObjectAggregate.h */,
+				4CB457311705F6DA005269B7 /* RptqDocumentObjectAggregate.m */,
+				4CB4572C1705F6DA005269B7 /* RptqDocument.h */,
+				4CB4572D1705F6DA005269B7 /* RptqDocument.m */,
+				4CB457281705F6D9005269B7 /* RptqDocumentObjectLabelDataField.h */,
+				4CB457291705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m */,
+				4CB457201705F6D9005269B7 /* RptqQuery.h */,
+				4CB457211705F6D9005269B7 /* RptqQuery.m */,
+				4CB4571C1705F6D9005269B7 /* RptqDocumentSection.h */,
+				4CB4571D1705F6D9005269B7 /* RptqDocumentSection.m */,
+				4CB457141705F6D9005269B7 /* RptqDocumentObjectImage.h */,
+				4CB457151705F6D9005269B7 /* RptqDocumentObjectImage.m */,
 				4CB0FFC716F5164A00B88626 /* RptqQueryLinks.h */,
 				4CB0FFC816F5164A00B88626 /* RptqQueryLinks.m */,
 				4CB0FFB716F5164A00B88626 /* RptqQueryResultFields.h */,
@@ -3183,10 +3198,6 @@
 				4CB0FFA016F5164700B88626 /* RptqQueryResultValues.m */,
 				4CB0FF9B16F5164700B88626 /* RptqQuerySort.h */,
 				4CB0FF9C16F5164700B88626 /* RptqQuerySort.m */,
-				4CB0FF8F16F5164500B88626 /* RptqUserCredentals.h */,
-				4CB0FF9016F5164500B88626 /* RptqUserCredentals.m */,
-				4CB0FF8B16F5164400B88626 /* RptqRelationship.h */,
-				4CB0FF8C16F5164400B88626 /* RptqRelationship.m */,
 				4CB0FF8716F5164300B88626 /* RptqQueryGroup.h */,
 				4CB0FF8816F5164300B88626 /* RptqQueryGroup.m */,
 				4CB0FF8316F5164100B88626 /* RptqQueryCache.h */,
@@ -3401,7 +3412,6 @@
 			children = (
 				4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */,
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
-				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,
 				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
 				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
@@ -3434,6 +3444,8 @@
 				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
 				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
 				4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */,
+				4CB4575C1705F735005269B7 /* RptqDocumentSectionRows+Extras.h */,
+				4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */,
 				4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */,
 				4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */,
 				4CA1633E167CAE2D00540A14 /* RptqQueryCache+Extras.h */,
@@ -5243,8 +5255,6 @@
 				4CB0FF8216F5164000B88626 /* RptqQueryPredicate.m in Sources */,
 				4CB0FF8616F5164200B88626 /* RptqQueryCache.m in Sources */,
 				4CB0FF8A16F5164400B88626 /* RptqQueryGroup.m in Sources */,
-				4CB0FF8E16F5164500B88626 /* RptqRelationship.m in Sources */,
-				4CB0FF9216F5164500B88626 /* RptqUserCredentals.m in Sources */,
 				4CB0FF9E16F5164700B88626 /* RptqQuerySort.m in Sources */,
 				4CB0FFA216F5164800B88626 /* RptqQueryResultValues.m in Sources */,
 				4CB0FFAA16F5164900B88626 /* RptqQueryResult.m in Sources */,
@@ -5252,29 +5262,33 @@
 				4CB0FFBA16F5164A00B88626 /* RptqQueryResultFields.m in Sources */,
 				4CB0FFCA16F5164A00B88626 /* RptqQueryLinks.m in Sources */,
 				4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
-				4C8BF46C16F64541002D9F9B /* RptqQuery.m in Sources */,
 				4C8BF47016F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4C8BF47416F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C8BF47C16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
-				4C9F403B16F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m in Sources */,
-				4C9F403F16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m in Sources */,
-				4C9F404716F821EE004AA4A5 /* RptqDocumentSection.m in Sources */,
-				4C9F404B16F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m in Sources */,
-				4C9F404F16F821EE004AA4A5 /* RptqDatabase.m in Sources */,
-				4C9F405316F821EF004AA4A5 /* RptqDatabaseSchemaTable.m in Sources */,
-				4C9F405716F821EF004AA4A5 /* RptqDocument.m in Sources */,
-				4C9F405B16F821EF004AA4A5 /* RptqDocumentObjectImage.m in Sources */,
-				4C9F405F16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m in Sources */,
-				4C9F406316F821EF004AA4A5 /* RptqDatabaseSchemaField.m in Sources */,
-				4C9F406716F821EF004AA4A5 /* RptqDocumentObjectChart.m in Sources */,
-				4C9F406B16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */,
-				4C9F406F16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */,
-				4C8155BB16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */,
 				4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C8155C517009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C91700C90700D5330E /* MTGroupByViewController.m in Sources */,
+				4CB457171705F6D9005269B7 /* RptqDocumentObjectImage.m in Sources */,
+				4CB4571F1705F6D9005269B7 /* RptqDocumentSection.m in Sources */,
+				4CB457231705F6D9005269B7 /* RptqQuery.m in Sources */,
+				4CB4572B1705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4CB4572F1705F6DA005269B7 /* RptqDocument.m in Sources */,
+				4CB457331705F6DA005269B7 /* RptqDocumentObjectAggregate.m in Sources */,
+				4CB457371705F6DA005269B7 /* RptqDocumentObjectLabel.m in Sources */,
+				4CB4573B1705F6DA005269B7 /* RptqUserCredentals.m in Sources */,
+				4CB4573F1705F6DA005269B7 /* RptqDatabase.m in Sources */,
+				4CB457431705F6DA005269B7 /* RptqDatabaseSchemaField.m in Sources */,
+				4CB457471705F6DB005269B7 /* RptqDocumentObjectLabelLink.m in Sources */,
+				4CB4574B1705F6DB005269B7 /* RptqRelationship.m in Sources */,
+				4CB4574F1705F6DB005269B7 /* RptqDocumentObjectFormula.m in Sources */,
+				4CB457531705F6DB005269B7 /* RptqDatabaseSchemaTable.m in Sources */,
+				4CB457571705F6DB005269B7 /* RptqDocumentObjectChart.m in Sources */,
+				4CB4575B1705F6DB005269B7 /* RptqDocumentObjectGroupKey.m in Sources */,
+				4CB4575F1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */,
+				4CB457631705FEBC005269B7 /* RptqDocumentSectionRows.m in Sources */,
+				4CB457671705FEBF005269B7 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5701,8 +5715,6 @@
 				4CB0FF8116F5164000B88626 /* RptqQueryPredicate.m in Sources */,
 				4CB0FF8516F5164200B88626 /* RptqQueryCache.m in Sources */,
 				4CB0FF8916F5164400B88626 /* RptqQueryGroup.m in Sources */,
-				4CB0FF8D16F5164400B88626 /* RptqRelationship.m in Sources */,
-				4CB0FF9116F5164500B88626 /* RptqUserCredentals.m in Sources */,
 				4CB0FF9D16F5164700B88626 /* RptqQuerySort.m in Sources */,
 				4CB0FFA116F5164800B88626 /* RptqQueryResultValues.m in Sources */,
 				4CB0FFA916F5164900B88626 /* RptqQueryResult.m in Sources */,
@@ -5710,29 +5722,33 @@
 				4CB0FFB916F5164A00B88626 /* RptqQueryResultFields.m in Sources */,
 				4CB0FFC916F5164A00B88626 /* RptqQueryLinks.m in Sources */,
 				4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
-				4C8BF46B16F64541002D9F9B /* RptqQuery.m in Sources */,
 				4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4C8BF47316F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C8BF47716F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C8BF47B16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
-				4C9F403A16F821ED004AA4A5 /* RptqDocumentObjectGroupKey.m in Sources */,
-				4C9F403E16F821EE004AA4A5 /* RptqDocumentObjectAggregate.m in Sources */,
-				4C9F404616F821EE004AA4A5 /* RptqDocumentSection.m in Sources */,
-				4C9F404A16F821EE004AA4A5 /* RptqDocumentObjectLabelLink.m in Sources */,
-				4C9F404E16F821EE004AA4A5 /* RptqDatabase.m in Sources */,
-				4C9F405216F821EF004AA4A5 /* RptqDatabaseSchemaTable.m in Sources */,
-				4C9F405616F821EF004AA4A5 /* RptqDocument.m in Sources */,
-				4C9F405A16F821EF004AA4A5 /* RptqDocumentObjectImage.m in Sources */,
-				4C9F405E16F821EF004AA4A5 /* RptqDocumentObjectLabelDataField.m in Sources */,
-				4C9F406216F821EF004AA4A5 /* RptqDatabaseSchemaField.m in Sources */,
-				4C9F406616F821EF004AA4A5 /* RptqDocumentObjectChart.m in Sources */,
-				4C9F406A16F821EF004AA4A5 /* RptqDocumentObject.m in Sources */,
-				4C9F406E16F821EF004AA4A5 /* RptqDocumentObjectLabel.m in Sources */,
-				4C8155BA16FF980700D5330E /* RptqDocumentObjectFormula.m in Sources */,
 				4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
+				4CB457161705F6D9005269B7 /* RptqDocumentObjectImage.m in Sources */,
+				4CB4571E1705F6D9005269B7 /* RptqDocumentSection.m in Sources */,
+				4CB457221705F6D9005269B7 /* RptqQuery.m in Sources */,
+				4CB4572A1705F6D9005269B7 /* RptqDocumentObjectLabelDataField.m in Sources */,
+				4CB4572E1705F6DA005269B7 /* RptqDocument.m in Sources */,
+				4CB457321705F6DA005269B7 /* RptqDocumentObjectAggregate.m in Sources */,
+				4CB457361705F6DA005269B7 /* RptqDocumentObjectLabel.m in Sources */,
+				4CB4573A1705F6DA005269B7 /* RptqUserCredentals.m in Sources */,
+				4CB4573E1705F6DA005269B7 /* RptqDatabase.m in Sources */,
+				4CB457421705F6DA005269B7 /* RptqDatabaseSchemaField.m in Sources */,
+				4CB457461705F6DB005269B7 /* RptqDocumentObjectLabelLink.m in Sources */,
+				4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */,
+				4CB4574E1705F6DB005269B7 /* RptqDocumentObjectFormula.m in Sources */,
+				4CB457521705F6DB005269B7 /* RptqDatabaseSchemaTable.m in Sources */,
+				4CB457561705F6DB005269B7 /* RptqDocumentObjectChart.m in Sources */,
+				4CB4575A1705F6DB005269B7 /* RptqDocumentObjectGroupKey.m in Sources */,
+				4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */,
+				4CB457621705FEBC005269B7 /* RptqDocumentSectionRows.m in Sources */,
+				4CB457661705FEBF005269B7 /* RptqDocumentObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6465,7 +6481,8 @@
 				4CE8A03814BFF744007C8345 /* Report.xcdatamodel */,
 			);
 			currentVersion = 4CE8A03814BFF744007C8345 /* Report.xcdatamodel */;
-			path = Report.xcdatamodeld;
+			name = Report.xcdatamodeld;
+			path = Reports/Report.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

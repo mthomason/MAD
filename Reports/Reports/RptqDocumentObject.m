@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/19/13.
+//  Created by Michael Thomason on 3/29/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,7 +15,7 @@
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectLabelLink.h"
-#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows.h"
 
 
 @implementation RptqDocumentObject
@@ -51,7 +51,7 @@
 @dynamic underline;
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
-@dynamic inSection;
+@dynamic sectionRowNumber;
 @dynamic isAggregate;
 @dynamic isChart;
 @dynamic isFormula;
@@ -60,5 +60,6 @@
 @dynamic isLabel;
 @dynamic isLabelDataField;
 @dynamic isLabelLink;
+@dynamic inSectionRow;
 
 @end
