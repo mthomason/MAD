@@ -16,8 +16,6 @@
 @property (nonatomic, retain) NSMutableArray *layoutArray;
 @property (nonatomic, retain) NSMutableArray *invalidatedLayoutArray;
 
-@property (nonatomic, retain) NSMutableArray *disappearingAttributes;
-
 @end
 
 @implementation MTReportDesignerSectionViewLayout
@@ -25,7 +23,6 @@
 - (void)dealloc {
     [_invalidatedLayoutArray release];
     [_layoutArray release];
-    [_disappearingAttributes release];
     [super dealloc];
 }
 
@@ -36,18 +33,13 @@
         NSMutableArray *rectArray = [[NSMutableArray alloc] init];
         [self setLayoutArray:rectArray];
         [rectArray release];
-
-        NSMutableArray *disappearingAttributes = [[NSMutableArray alloc] init];
-        [self setDisappearingAttributes:disappearingAttributes];
-        [disappearingAttributes release];
-
+        
     }
     return self;
 }
 
 - (void)prepareLayout {
     [super prepareLayout];
-    //NSLog(@"%@Prepare layout", self);
 
     NSUInteger numberOfSections = [[self collectionView] numberOfSections];
     [self setNumberOfSections:numberOfSections];
@@ -58,8 +50,17 @@
     for (NSInteger section = 0; section < self.numberOfSections; section++) {
 
         NSInteger numberOfItems = [[self collectionView] numberOfItemsInSection:section];
-        CGFloat maxWidthForSection = 0.0000f, maxHeightForSection = 0.0000f;
+        
+        //CGSize supplementryViewSize = CGSizeMake(50.0000f, 50.0000f);
+        //CGFloat maxWidthForSection = 50.0000f, maxHeightForSection = 0.0000f;
+        
+        CGFloat maxWidthForSection = CGSizeZero.width, maxHeightForSection = CGSizeZero.height;
         NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
+        
+        //NSIndexPath *firstIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+        //UICollectionViewLayoutAttributes *layoutAttributesForHeader = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+        //                                                                                                                             withIndexPath: firstIndexPath];
+        //[layoutAttributesForHeader setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 50.0000f, 50.0000f)];
         
         for (NSInteger item = 0; item < numberOfItems; item++) {
 
@@ -89,6 +90,8 @@
 
     [self setContentSize:contentSize];
     [self setLayoutArray:layoutAttributesArray];
+    
+    
     [layoutAttributesArray release];
 }
 
@@ -99,7 +102,7 @@
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
-    for (NSInteger section = 0; section < [self.layoutArray count]; section++) {
+    for (NSInteger section = 0; section < [[self layoutArray] count]; section++) {
         NSArray *items = [[self layoutArray] objectAtIndex:section];
         for (NSInteger item = 0; item < items.count; item++) {
             UICollectionViewLayoutAttributes *layoutAttribute = [items objectAtIndex:item];
@@ -111,6 +114,12 @@
     }
     
     return [layoutAttributes autorelease];
+}
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewLayoutAttributes *result;
+    result = [super layoutAttributesForSupplementaryViewOfKind:kind atIndexPath:indexPath];
+    return result;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -144,46 +153,7 @@
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
-    
-    NSMutableArray *disappearingAttributes = [[NSMutableArray alloc] initWithArray:[self invalidatedLayoutArray]];
-    //NSMutableArray *appearingAttributes = [[NSMutableArray alloc] initWithArray:[self layoutArray]];
-    
-    //NSMutableArray *invalidatedLayoutArray = [[NSMutableArray alloc] initWithArray:[self layoutArray]];
-    /*
-    // MARK: Update attribute array for colleciton view.
-    for (UICollectionViewUpdateItem *updateItem in updateItems) {
-        switch ([updateItem updateAction]) {
-            case UICollectionUpdateActionNone:
-                //NSLog(@"%@%@%@", @"UICollectionUpdateActionNone", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                break;
-            case UICollectionUpdateActionInsert:
-                //NSLog(@"%@%@%@", @"UICollectionUpdateActionInsert", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:updateItem.indexPathAfterUpdate];
-                layoutAttributes.size = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:updateItem.indexPathAfterUpdate];
-                layoutAttributes.center = [[self delegate] collectionView:[self collectionView] layout:self initialLayoutCenterPointForIndexPath:updateItem.indexPathAfterUpdate];
-                [[disappearingAttributes objectAtIndex:updateItem.indexPathAfterUpdate.section] insertObject:layoutAttributes atIndex:updateItem.indexPathAfterUpdate.item];
-                break;
-            case UICollectionUpdateActionDelete:
-                //NSLog(@"%@%@%@", @"UICollectionUpdateActionDelete", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:updateItem.indexPathBeforeUpdate.item];
-                [[disappearingAttributes objectAtIndex:updateItem.indexPathBeforeUpdate.section] removeObjectsAtIndexes:indexSet];
-                break;
-            case UICollectionUpdateActionReload:
-                //NSLog(@"%@%@%@", @"UICollectionUpdateActionReload", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                break;
-            case UICollectionUpdateActionMove:
-                //NSLog(@"%@%@%@", @"UICollectionUpdateActionMove", [updateItem indexPathBeforeUpdate], [updateItem indexPathAfterUpdate]);
-                break;
-            default:
-                break;
-        }
-    }
-    */
-    [self setDisappearingAttributes:disappearingAttributes];
-    [disappearingAttributes release];
-    //[appearingAttributes release];
-    
-    
+
     // MARK: Recalculate updated attributes.
     CGSize contentSize = CGSizeZero;
     NSUInteger sectionCounter = 0, itemCounter = 0;

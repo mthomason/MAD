@@ -16,7 +16,6 @@
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "MTReportDesignerObjectSelectorViewController.h"
 #import "MTReportViewerViewController.h"
-#import "MTCollectionViewFlowLayoutDesignerSection.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionView+Extras.h"
 #import "UIView+NSObjectIdTag.h"

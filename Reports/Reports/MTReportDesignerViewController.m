@@ -20,6 +20,8 @@
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
+@property (nonatomic, retain) NSMutableDictionary *sectionControlViews;
+
 @property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
 
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
@@ -75,6 +77,7 @@
     [_toolboxToolbarItemsFontChooser release];
     [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
+    [_sectionControlViews release];
     [_sectionViews release];
     [_settingsPopoverController release];
     [_designScrollView release];
@@ -156,6 +159,10 @@
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
     [self setSectionViews: dictionarySections];
     [dictionarySections release];
+    
+    NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setSectionControlViews:dictionarySectionControls];
+    [dictionarySectionControls release];
 
     // MARK: Setup horizontal constraints.
     [[self view] removeConstraints:[self layoutConstraintsToRemove]];
@@ -216,11 +223,13 @@
         
         MTReportDesignerSectionViewLayout *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayout alloc] init];
         [flowLayoutDesignerSection setDelegate:self];
-        
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
+        NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
+
         MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+        
         [collectionView setObjectIdTag:[reportSection objectID]];
         NSString *reuse = [collectionViewReuseId stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
         NSMutableDictionary *lastTouches = [[NSMutableDictionary alloc] init];
@@ -228,6 +237,15 @@
         [lastTouches release];
         [[self collectionViewReuseIdentifiers] setObject:reuse forKey:[reportSection identifier]];
         [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
+
+        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
+           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+        
+        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
+           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+
         [collectionView setTag:[[reportSection identifier] integerValue]];
         [collectionView setDelegate:self];
         [collectionView setSectionDelegate:self];
@@ -244,23 +262,32 @@
         [[self designScrollView] addSubview:collectionView];
 
         // MARK: Create label to identify document section.
+        UIView *sectionControlView = [[UIView alloc] init];
+        [sectionControlView setBackgroundColor:[UIColor edaYellow]];
+        [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [[sectionControlView layer] setCornerRadius:cornerRadius];
+        [sectionControlView setClipsToBounds:YES];
+        
         UILabel *labelSectionIdentifer = [[UILabel alloc] init];
+        [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
         [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
-        [[labelSectionIdentifer layer] setCornerRadius:cornerRadius];
         [labelSectionIdentifer setFont:[UIFont systemFontOfSize:8.0000f]];
         [labelSectionIdentifer setText:[reportSection localizedDisplayName]];
-        [labelSectionIdentifer setBackgroundColor:[UIColor edaYellow]];
-        [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
 
-        [[self designScrollView] addSubview:labelSectionIdentifer];
+        [sectionControlView addSubview:labelSectionIdentifer];
         
+        [[self designScrollView] addSubview:sectionControlView];
         
         // MARK: Setup vert auto layout
         NSString *collectionViewKey = [reportSection sectionKey];
         NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
-        [self setCollectionView:collectionView forSection:reportSection];
+
         [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
-        [dictionaryViewsVertical setValue:labelSectionIdentifer forKey:labelKey];
+        [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
+        
+        [dictionaryViewsVertical setValue:sectionControlView forKey:labelKey];
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
         
         [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, [[reportSection height] floatValue], - paddingLabel - heightLabel, labelKey, heightLabel];
@@ -271,13 +298,14 @@
         NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 1.0000f constant: -(paddingBorder * 2.0000f)];
         [[self designScrollView] addConstraint:layoutConstraintWidth];
 
-        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f];
         [[self designScrollView] addConstraint:layoutConstraintLabelWidth];
         
-        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: labelSectionIdentifer attribute: NSLayoutAttributeTrailing relatedBy: NSLayoutRelationEqual toItem: collectionView attribute: NSLayoutAttributeTrailing multiplier: 1.0000f constant: -paddingLabel];
+        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeTrailing relatedBy: NSLayoutRelationEqual toItem: collectionView attribute: NSLayoutAttributeTrailing multiplier: 1.0000f constant: -paddingLabel];
         [[self designScrollView] addConstraint:layoutConstraintLabelRight];
 
         [labelSectionIdentifer release];
+        [sectionControlView release];
         lastCollectionView = [collectionView retain];
         [collectionView release];
         [backgroundView release];
@@ -466,7 +494,7 @@
                     [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
-                    UICollectionView *section = [self getCollectionViewForRptqSection: [[documentObject inSectionRow] inSection]];
+                    UICollectionView *section = [self getSectionViewForDocumentSection: [[documentObject inSectionRow] inSection]];
                     [[section collectionViewLayout] invalidateLayout];
                 }
             }
@@ -601,12 +629,12 @@
     return [results autorelease];
 }
 
-- (UICollectionView *)getCollectionViewForRptqSection:(RptqDocumentSection *)documentSection {
+- (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
     return [[self sectionViews] objectForKey:[documentSection sectionKey]];
 }
 
-- (void)setCollectionView:(UICollectionView *)collectionView forSection:(RptqDocumentSection *)documentSection {
-    [[self sectionViews] setValue:collectionView forKey:[documentSection sectionKey]];
+- (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
+    return [[self sectionControlViews] objectForKey:[documentSection sectionKey]];
 }
 
 - (void)cut:(id)sender {
@@ -828,7 +856,6 @@
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    //NSLog(@"Action %@ with %@", NSStringFromSelector(action), sender);
     return action == @selector(cut:) ||
             action == @selector(copy:) ||
             action == @selector(paste:) ||
@@ -849,28 +876,6 @@
     return [result CGPointValue];
 }
 
-#pragma mark - Collection View Flow Layout Delegate
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsZero;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.0000f;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.0000f;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeZero;
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger row = [indexPath row];
@@ -889,16 +894,18 @@
     } else {
         result = CGSizeZero;
     }
-    //NSLog(@"Size for item at %@: %@", indexPath, NSStringFromCGSize(result));
+
     return result;
 }
 
 #pragma mark - Collection View Data Source
 
-// MARK: Load the elements into the sections.
-
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
 
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -969,16 +976,7 @@
 
     MTCollectionReuseableViewDefault *result = nil;
     
-    if ([kind isEqualToString:MTCollectionElementKindSectionLabel]) {
-        result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                    withReuseIdentifier: [MTCollectionReusableViewFloatingLabel reuseIdentifier]
-                                                           forIndexPath: indexPath];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 100.0000f, 22.0000f)];
-        [label setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
-        [label setText:@"Floating Label"];
-        [result addSubview:label];
-        [label release];
-    } else if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
                                                     withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
                                                            forIndexPath: indexPath];
@@ -1112,7 +1110,7 @@
 
     if (document) {
         
-        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -1158,7 +1156,7 @@
     
     if (document) {
         
-        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -1205,7 +1203,7 @@
     
     if (document) {
         
-        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -1244,7 +1242,7 @@
     
     if (document) {
         
-        UICollectionView *detailSection = [self getCollectionViewForRptqSection:[document hasDetailSection]];
+        UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
         [detailSection performBatchUpdates:^{
             
@@ -1360,7 +1358,7 @@
                 RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
                 
                 RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-                UICollectionView *svSection = [self getCollectionViewForRptqSection:section];
+                UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
                 
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
 
