@@ -77,6 +77,15 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
+        [tapGestureRecognizer setNumberOfTapsRequired:1];
+        [tapGestureRecognizer setNumberOfTouchesRequired:1];
+        [tapGestureRecognizer setDelegate: self];
+        [self addGestureRecognizer:tapGestureRecognizer];
+        [tapGestureRecognizer release];
+        
+        
         [self setDisplaySelected:NO];
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
@@ -368,32 +377,16 @@
     return [self displaySelected];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-    [self setDisplayHighlighted:YES];
-    [[self delegate] didHighlightElementView:self];
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesCancelled:touches withEvent:event];
-    [self setDisplayHighlighted:NO];
-    [[self delegate] didUnhighlightElementView:self];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesEnded:touches withEvent:event];
-    [self setDisplayHighlighted:NO];
-    [[self delegate] didUnhighlightElementView:self];
-    if ([self toggleSelected]) {
-        [[self delegate] didSelectElementView:self];
-    } else {
-        [[self delegate] didDeselectElementView:self animated:YES];
+- (void)toggleSelection:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        BOOL displaySelected = [self displaySelected] == NO;
+        [self setDisplaySelected:displaySelected];
+        if (displaySelected) {
+            [[self delegate] didSelectElementView:self];
+        } else {
+            [[self delegate] didDeselectElementView:self animated:YES];
+        }
     }
 }
-
 
 @end

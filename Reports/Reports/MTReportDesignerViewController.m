@@ -292,16 +292,40 @@
         
         [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, [[reportSection height] floatValue], - paddingLabel - heightLabel, labelKey, heightLabel];
 
-        NSLayoutConstraint *layoutConstraintLeft = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeLeft relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeLeft multiplier: 1.0000f constant: paddingBorder];
+        NSLayoutConstraint *layoutConstraintLeft = [NSLayoutConstraint constraintWithItem: collectionView
+                                                                                attribute: NSLayoutAttributeLeft
+                                                                                relatedBy: NSLayoutRelationEqual
+                                                                                   toItem: [self designScrollView]
+                                                                                attribute: NSLayoutAttributeLeft
+                                                                               multiplier: 1.0000f
+                                                                                 constant: paddingBorder];
         [[self designScrollView] addConstraint:layoutConstraintLeft];
 
-        NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 1.0000f constant: -(paddingBorder * 2.0000f)];
+        NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView
+                                                                                 attribute: NSLayoutAttributeWidth
+                                                                                 relatedBy: NSLayoutRelationEqual
+                                                                                    toItem: [self designScrollView]
+                                                                                 attribute: NSLayoutAttributeWidth
+                                                                                multiplier: 1.0000f
+                                                                                  constant: -(paddingBorder * 2.0000f)];
         [[self designScrollView] addConstraint:layoutConstraintWidth];
 
-        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: sectionControlView
+                                                                                      attribute: NSLayoutAttributeWidth
+                                                                                      relatedBy: NSLayoutRelationEqual
+                                                                                         toItem: [self designScrollView]
+                                                                                      attribute: NSLayoutAttributeWidth
+                                                                                     multiplier: 0.20000f
+                                                                                       constant: 0.0000f];
         [[self designScrollView] addConstraint:layoutConstraintLabelWidth];
         
-        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeTrailing relatedBy: NSLayoutRelationEqual toItem: collectionView attribute: NSLayoutAttributeTrailing multiplier: 1.0000f constant: -paddingLabel];
+        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: sectionControlView
+                                                                                      attribute: NSLayoutAttributeTrailing
+                                                                                      relatedBy: NSLayoutRelationEqual
+                                                                                         toItem: collectionView
+                                                                                      attribute: NSLayoutAttributeTrailing
+                                                                                     multiplier: 1.0000f
+                                                                                       constant: -paddingLabel];
         [[self designScrollView] addConstraint:layoutConstraintLabelRight];
 
         [labelSectionIdentifer release];
@@ -312,7 +336,6 @@
         [flowLayoutDesignerSection release];
 
         sectionCounter++;
-
     }
     
     [stringContstraintsVertical appendFormat:@"-(==%f@1000)-|", paddingBorder * 2];
@@ -333,7 +356,6 @@
             [key release];
             [constraint release];
         }
-
     }
     
     [[self designScrollView] addConstraints:labelconstraintsVertical];
@@ -393,21 +415,19 @@
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
-    [defaultCenter removeObserver:self
-                             name:NSManagedObjectContextObjectsDidChangeNotification
-                           object:managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidHideMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidShowMenuNotification
+                           object: nil];
 
-    [defaultCenter removeObserver:self
-                             name:NSManagedObjectContextDidSaveNotification
-                           object:managedObjectContext];
-    [defaultCenter removeObserver:self
-                             name:UIMenuControllerDidHideMenuNotification
-                           object:nil];
-    [defaultCenter removeObserver:self
-                             name:UIMenuControllerDidShowMenuNotification
-                           object:nil];
-
-    
     [super viewDidDisappear:animated];
 }
 

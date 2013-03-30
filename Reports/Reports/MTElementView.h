@@ -23,7 +23,8 @@
 - (void)didUnhighlightElementView:(id)sender;
 @end
 
-@interface MTElementView : UIView;
+@interface MTElementView : UIView
+    <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) id <MTElementViewDelegate> delegate;
 
