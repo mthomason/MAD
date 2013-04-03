@@ -3021,7 +3021,7 @@
                         <sections>
                             <tableViewSection id="QAu-8f-50p">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="sJO-On-gCz">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="sJO-On-gCz">
                                         <rect key="frame" x="0.0" y="30" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -3052,8 +3052,8 @@
                                             <constraint firstItem="S3h-T8-gIH" firstAttribute="centerY" secondItem="gyg-LX-dG6" secondAttribute="centerY" type="default" id="qQ1-2J-yJS"/>
                                         </constraints>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="0x3-aQ-IYw">
-                                        <rect key="frame" x="0.0" y="75" width="540" height="45"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="0x3-aQ-IYw">
+                                        <rect key="frame" x="0.0" y="75" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="31" y="0.0" width="478" height="43"/>
@@ -3083,6 +3083,37 @@
                                             <constraint firstItem="7gA-sg-6JC" firstAttribute="leading" secondItem="0x3-aQ-IYw" secondAttribute="leading" constant="51" id="Rwf-WA-ePj"/>
                                         </constraints>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="MJI-Ad-m6V">
+                                        <rect key="frame" x="0.0" y="119" width="540" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Rows: one" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="5Zx-Wi-Rkb">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="158" id="DjV-RP-Bah"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="256" translatesAutoresizingMaskIntoConstraints="NO" id="dOT-fJ-gmp">
+                                                    <connections>
+                                                        <action selector="numberOfRowsChanged:" destination="jXi-5j-ahn" eventType="valueChanged" id="7n9-YM-G2L"/>
+                                                    </connections>
+                                                </stepper>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="centerY" secondItem="5Zx-Wi-Rkb" secondAttribute="centerY" type="default" id="5QG-Qj-niX"/>
+                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="leading" secondItem="5Zx-Wi-Rkb" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="61A-hl-peJ"/>
+                                            <constraint firstItem="5Zx-Wi-Rkb" firstAttribute="leading" secondItem="MJI-Ad-m6V" secondAttribute="leading" constant="51" id="rcO-d2-FrG"/>
+                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="top" secondItem="MJI-Ad-m6V" secondAttribute="top" constant="8" id="t70-0r-E75"/>
+                                        </constraints>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -3098,12 +3129,14 @@
                     <connections>
                         <outlet property="heightStepper" destination="FfF-QT-ZV6" id="EPY-II-Ao8"/>
                         <outlet property="labelHeight" destination="7gA-sg-6JC" id="U5Z-3j-HcK"/>
+                        <outlet property="labelNumberOfRows" destination="5Zx-Wi-Rkb" id="4fP-co-GSG"/>
+                        <outlet property="rowsStepper" destination="dOT-fJ-gmp" id="u03-qz-KuG"/>
                         <outlet property="visibilitySwitch" destination="S3h-T8-gIH" id="n3W-iq-KtX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ova-jd-OYo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="674" y="1932"/>
+            <point key="canvasLocation" x="667" y="1891"/>
         </scene>
         <!--Query Builder Link Builder View Controller - Link Builder-->
         <scene sceneID="WDC-G1-KxC">
@@ -7017,9 +7050,14 @@
         <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerSectionLayoutSettingsViewController.h"/>
             <relationships>
+                <relationship kind="action" name="heightChanged:"/>
+                <relationship kind="action" name="numberOfRowsChanged:"/>
+                <relationship kind="action" name="visibilityChanged:"/>
                 <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelNumberOfRows" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rowsStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>

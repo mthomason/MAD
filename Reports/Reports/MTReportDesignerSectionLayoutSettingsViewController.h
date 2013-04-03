@@ -10,12 +10,14 @@
 #define Reports_MTReportDesignerSectionLayoutSettingsViewController_h
 
 #import <UIKit/UIKit.h>
+#import "UIViewTableSectionHeaderQueryBuilder.h"
 
 @class MTReportDesignerSectionLayoutSettingsViewController;
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
+- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
 @optional
 - (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller;
 @end
@@ -24,14 +26,10 @@
     <UITableViewDelegate>
 
 @property (assign) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
-@property (retain) IBOutlet UILabel *labelHeight;
-@property (retain) IBOutlet UIStepper *heightStepper;
-@property (retain) IBOutlet UISwitch *visibilitySwitch;
 
-@property (assign) NSInteger initalStepperValue;
-@property (assign) BOOL initalSwitchValue;
-
-- (double)stepperValueNormalized;
+@property (nonatomic, assign) NSInteger initalStepperValue;
+@property (nonatomic, assign) BOOL initalSwitchValue;
+@property (nonatomic, assign) NSUInteger initalNumberOfRows;
 
 @end
 

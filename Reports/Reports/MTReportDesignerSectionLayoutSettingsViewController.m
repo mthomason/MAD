@@ -7,21 +7,27 @@
 //
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
-#import "UIViewTableSectionHeaderQueryBuilder.h"
+
+@interface MTReportDesignerSectionLayoutSettingsViewController ()
+
+
+@property (nonatomic, retain) IBOutlet UILabel *labelHeight;
+@property (nonatomic, retain) IBOutlet UILabel *labelNumberOfRows;
+
+@property (nonatomic, retain) IBOutlet UIStepper *heightStepper;
+@property (nonatomic, retain) IBOutlet UIStepper *rowsStepper;
+
+@property (nonatomic, retain) IBOutlet UISwitch *visibilitySwitch;
+
+@end
 
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
-@synthesize delegate = _delegate;
-@synthesize labelHeight = _labelHeight;
-@synthesize heightStepper = _heightStepper;
-@synthesize visibilitySwitch = _visibilitySwitch;
-
-@synthesize initalStepperValue = _initalStepperValue;
-@synthesize initalSwitchValue = _initalSwitchValue;
-
 - (void)dealloc {
     [_labelHeight release];
+    [_labelNumberOfRows release];
     [_heightStepper release];
+    [_rowsStepper release];
     [_visibilitySwitch release];
     [super dealloc];
 }
@@ -37,18 +43,24 @@
     
     [[self visibilitySwitch] setOn:[self initalSwitchValue]];
     [[self heightStepper] setValue:[self initalStepperValue]];
+    [[self rowsStepper] setValue:[self initalNumberOfRows]];
 
+    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
+    [self setHeighLabel:[self initalStepperValue]];
+    
     UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableView] frame]];
     [[self tableView] setBackgroundView: gradentView];
     [gradentView release];
     
-    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), [self stepperValueNormalized]]];
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), [self stepperValueNormalized]]];
+
+//    [self setHeighLabel:[self stepperValueNormalized]];
+//    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -63,14 +75,33 @@
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+- (void)setHeighLabel:(double)height {
+    NSString *localizedFormatString = NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts");
+    NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, height];
+    [[self labelHeight] setText:localizedHeight];
 }
+
+- (void)setNumberOfRowsLabel:(NSUInteger)numberOfRows {
+    NSString *localizedNumberOfRows = [NSNumberFormatter localizedStringFromNumber: @(numberOfRows)
+                                                                                  numberStyle: NSNumberFormatterSpellOutStyle];
+    NSString *localizedFormatString = NSLocalizedString(@"Rows: %@", @"Something like - Rows: two");
+    NSString *localizedHeight = [NSString stringWithFormat:localizedFormatString, localizedNumberOfRows];
+    [[self labelNumberOfRows] setText:localizedHeight];
+}
+
 - (IBAction)heightChanged:(id)sender {
     double stepperValue = [self stepperValueNormalized];
-    [[self labelHeight] setText:[NSString stringWithFormat:NSLocalizedString(@"Height: %0.1f pts", @"Something like - Height: 44 pts"), stepperValue]];
+    [self setHeighLabel: stepperValue];
     [[self delegate] sectionLayoutDidUpdateHeight: stepperValue];
 }
+
+- (IBAction)numberOfRowsChanged:(id)sender {
+    UIStepper *rowStepper = sender;
+    NSUInteger numberOfRows = [rowStepper value];
+    [self setNumberOfRowsLabel:numberOfRows];
+    [[self delegate] sectionLayoutDidUpdateNumberOfRows:numberOfRows];
+}
+
 - (IBAction)visibilityChanged:(id)sender {
     [[self delegate] sectionLayoutDidUpdateVisibility:[[self visibilitySwitch] isOn]];
 }

@@ -268,6 +268,13 @@
         [[sectionControlView layer] setCornerRadius:cornerRadius];
         [sectionControlView setClipsToBounds:YES];
         
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSectionControlPanel:)];
+        [tapGestureRecognizer setNumberOfTapsRequired:1];
+        [tapGestureRecognizer setNumberOfTouchesRequired:1];
+        [tapGestureRecognizer setDelegate: self];
+        [sectionControlView addGestureRecognizer:tapGestureRecognizer];
+        [tapGestureRecognizer release];
+        
         UILabel *labelSectionIdentifer = [[UILabel alloc] init];
         [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
         [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
@@ -369,6 +376,16 @@
     [sectionEnumerator release];
     [viewRuler release];
 
+}
+
+- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
+    if ([sender state] == UIGestureRecognizerStateEnded) {
+        if ([[[sender view] layer] borderWidth] > 0.5000f) {
+            [self removeBorderFromView:[sender view]];
+        } else {
+            [self applyBorderToView:[sender view]];
+        }
+    }
 }
 
 - (void)updateViewConstraints {
@@ -534,14 +551,14 @@
 
 #pragma mark - Methods
 
-- (void)applyBorderToElementView:(MTElementView *)elementView {
-    [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[elementView layer] setBorderWidth:3.0000f];
+- (void)applyBorderToView:(UIView *)view {
+    [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
+    [[view layer] setBorderWidth:3.0000f];
 }
 
-- (void)removeBorderToElementView:(MTElementView *)elementView {
-    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-    [[elementView layer] setBorderWidth:0.0000f];
+- (void)removeBorderFromView:(UIView *)view {
+    [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+    [[view layer] setBorderWidth:0.0000f];
 }
 
 - (CGRect)rectForSelectedElements {
@@ -1541,8 +1558,7 @@
     if ([sender isKindOfClass:[MTElementView class]]) {
         MTElementView *elementView = sender;
         [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-        [[elementView layer] setBorderColor:[[UIColor redColor] CGColor]];
-        [[elementView layer] setBorderWidth:3.0000f];
+        [self applyBorderToView:elementView];
         [elementView setDisplaySelected:YES];
 
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
@@ -1588,8 +1604,7 @@
     if ([sender isKindOfClass:[MTElementView class]]) {
         MTElementView *elementView = sender;
         [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
-        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[elementView layer] setBorderWidth:0.0000f];
+        [self removeBorderFromView: elementView];
         [elementView setDisplaySelected:NO];
         [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
         if ([UIDevice isPad]) {

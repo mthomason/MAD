@@ -77,14 +77,12 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
         [tapGestureRecognizer setNumberOfTapsRequired:1];
         [tapGestureRecognizer setNumberOfTouchesRequired:1];
         [tapGestureRecognizer setDelegate: self];
         [self addGestureRecognizer:tapGestureRecognizer];
         [tapGestureRecognizer release];
-        
         
         [self setDisplaySelected:NO];
         [self setDisplayHighlighted:NO];
