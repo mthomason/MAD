@@ -85,7 +85,11 @@
 
 - (IBAction)save:(id)sender {
     
+    [sender setEnabled:NO];
+    [[[self navigationItem] backBarButtonItem] setEnabled:NO];
+    
     UIStoryboard *sb = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
     [[vc view] setBounds:[[self view] bounds]];
     [[vc view] setCenter:[[self view] center]];
@@ -108,6 +112,8 @@
 
                 if (success) {
                     [[vc view] removeFromSuperview];
+                    [sender setEnabled:YES];
+                    [[[self navigationItem] backBarButtonItem] setEnabled:YES];
                     [[self delegate] viewControllerDidFinish: self];
                 } else {
                     
@@ -118,6 +124,8 @@
                         [error presentErrorToUserWithCompletion:^(BOOL success) {
                             
                             [[vc view] removeFromSuperview];
+                            [sender setEnabled:YES];
+                            [[[self navigationItem] backBarButtonItem] setEnabled:YES];
                             
                         }];
 
@@ -128,10 +136,14 @@
                                                                   cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
                                                                   
                                                                       [[vc view] removeFromSuperview];
+                                                                      [sender setEnabled:YES];
+                                                                      [[[self navigationItem] backBarButtonItem] setEnabled:YES];
 
                                                                   } onCancel:^{
                                                                   
                                                                       [[vc view] removeFromSuperview];
+                                                                      [sender setEnabled:YES];
+                                                                      [[[self navigationItem] backBarButtonItem] setEnabled:YES];
 
                                                                   }];
                         [alertView show];
@@ -206,4 +218,7 @@
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+}
 @end
