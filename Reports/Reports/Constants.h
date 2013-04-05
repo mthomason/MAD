@@ -78,8 +78,8 @@ MTPaddingMakeQuick(CGFloat p) {
 }
 
 typedef NS_ENUM(NSUInteger, MNSSortOrder) {
-	MNSSortOrderAccending = 2003,
-	MNSSortOrderDecending = 2011
+	MNSSortOrderAccending = 0,
+	MNSSortOrderDecending = 1
 };
 
 typedef NS_ENUM(NSUInteger, MTGroupByType) {
