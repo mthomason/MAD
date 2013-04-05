@@ -50,6 +50,9 @@
 
 //Refresh the data inside the currently opened managed document
 - (void)refresh;
+- (void)refresh:(void (^)(BOOL success))completion;
+
+- (BOOL)hasCachedData;
 
 //Export the data inside the currently opened managed document
 - (void)sendTo;

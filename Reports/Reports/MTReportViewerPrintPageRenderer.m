@@ -289,7 +289,7 @@
 
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
-    if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {
+    if (CGSizeEqualToSize([self printableSize], printableSize) == NO && [self cachedNumberOfPages] >= 1) {
         [self setPrintableSize:printableSize];
 
         RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];

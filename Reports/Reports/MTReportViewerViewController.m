@@ -29,6 +29,8 @@
 
 @property (nonatomic, assign) CGRect lastLayoutBounds;
 
+@property (nonatomic, assign) BOOL startedRefresh;
+
 @end
 
 @implementation MTReportViewerViewController
@@ -57,6 +59,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setStartedRefresh:NO];
     
     [[self view] setBackgroundColor:[UIColor greenColor]];
     
@@ -119,7 +122,23 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     [[self viewContainer] addSubview:[[self pageController] view]];
+
+    if ([self startedRefresh] == NO && [[self documentReport] hasCachedData] == NO) {
+
+        [[self barButtonItemRefresh] setEnabled:NO];
+        [[self documentReport] refresh:^(BOOL success) {
+
+            if (success) {
+                [self reloadReportView];
+                [[self barButtonItemRefresh] setEnabled:YES];
+            }
+
+        }];
+
+    }
+
     //[self reloadReportView];
 }
 
@@ -143,8 +162,15 @@
 #pragma mark - Actions
 
 - (IBAction)refresh:(id)sender {
-    [[self documentReport] refresh];
-    [self reloadReportView];
+    [[self barButtonItemRefresh] setEnabled:NO];
+    [[self documentReport] refresh:^(BOOL success) {
+        
+        if (success) {
+            [self reloadReportView];
+            [[self barButtonItemRefresh] setEnabled:YES];
+        }
+        
+    }];
 }
 
 - (void)reloadReportView {

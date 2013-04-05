@@ -70,7 +70,6 @@
             }];
         }
     }];
-    
 }
 
 - (void)refresh {
@@ -91,6 +90,30 @@
 //    [NSException exceptionWithName: NSInternalInconsistencyException
 //                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
 //                                 userInfo: nil];
+}
+
+- (void)refresh:(void (^)(BOOL success))completion {
+    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+    NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
+    sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
+    [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
+               completion: ^(MTDatabase *database, RptqQueryCache *cache) {
+                   [self save: ^(BOOL success) {
+                       completion(YES);
+                   }];
+               }];
+}
+
+- (BOOL)hasCachedData {
+    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    return [query hasQueryCache] != nil;
 }
 
 - (void)sendTo {
