@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
 @property (nonatomic, retain) NSMutableDictionary *sectionControlViews;
+@property (nonatomic, retain) NSMutableDictionary *sectionControlViewsHeighConstraint;
 
 @property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
 
@@ -72,6 +73,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_sectionControlViewsHeighConstraint release];
     [_navigationControllerSectionLayoutSettings release];
     [_layoutConstraintsReportSectionHeight release];
     [_lastElementViewToShowMenu release];
@@ -173,7 +175,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
     NSMutableString *stringContstraintsVertical = [[NSMutableString alloc] initWithString:@"V:|"];
     NSMutableDictionary *dictionaryViewsVertical = [[NSMutableDictionary alloc] init];
-    CGFloat paddingBorder = 3.0000f, paddingLabel = 2.0000f, heightLabel = 12.0000f,cornerRadius = 5.0000f;
+    CGFloat paddingBorder = 3.0000f, paddingLabel = 2.0000f, heightLabel = 22.0000f, cornerRadius = 5.0000f;
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
     
@@ -193,6 +195,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setSectionControlViews:dictionarySectionControls];
     [dictionarySectionControls release];
 
+    NSMutableDictionary *dictionarySectionControlViewsHeighConstraint = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setSectionControlViewsHeighConstraint:dictionarySectionControlViewsHeighConstraint];
+    [dictionarySectionControlViewsHeighConstraint release];
+
+    
     // MARK: Setup horizontal constraints.
     [[self view] removeConstraints:[self layoutConstraintsToRemove]];
     
@@ -509,7 +516,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [managedObjectContext save:nil];
+//    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
     
 }
 
@@ -533,16 +541,29 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
+
+    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[documentSectionView objectIdTag] fromObjectContext:managedObjectContect];
+    [documentSection setHeight:@([documentSectionView bounds].size.height)];
+    
+
+    [self relayoutSectionView:documentSectionView];
+    
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+}
+
+- (void)relayoutSectionView:(MTDocumentSectionView *)documentSectionView {
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
     NSURL *objectIdUrl = [[objectId URIRepresentation] retain];
+
+    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:objectId fromObjectContext:managedObjectContect];
+
     NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:[objectIdUrl absoluteString]];
-    [layoutConstraint setConstant:[documentSectionView bounds].size.height];
+    [layoutConstraint setConstant:documentSection.height.floatValue];
     [objectIdUrl release];
     
-    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[sender objectIdTag] fromObjectContext:managedObjectContect];
-    [documentSection setHeight:@([sender bounds].size.height)];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+
     [[self view] setNeedsUpdateConstraints];
 }
 
@@ -582,6 +603,22 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     [[section collectionViewLayout] invalidateLayout];
                 }
             }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentSection class]]) {
+            RptqDocumentSection *documentSection = updatedObject;
+            NSDictionary *changes = [documentSection changedValues];
+            for (id change in changes) {
+                if ([change isEqualToString:NSStringFromSelector(@selector(height))]) {
+                    MTDocumentSectionView *section = (MTDocumentSectionView *)[self getSectionViewForDocumentSection: documentSection];
+                    [self relayoutSectionView:section];
+//                    [section invalidateIntrinsicContentSize];
+//                    [[section collectionViewLayout] invalidateLayout];
+//                    CGRect newFrame = ;
+//                    section setBounds:
+                } else if ([change isEqualToString:NSStringFromSelector(@selector(numberOfRows))]) {
+                    
+                }
+            }
+
         }
     }
 }
