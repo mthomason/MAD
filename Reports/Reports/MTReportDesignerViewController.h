@@ -32,6 +32,7 @@
 #import "UIGestureRecognizer+AnchorPoint.h"
 #import "UIDevice+Hack.h"
 #import "MTReportViewerPrintPageRenderer.h"
+#import "MTReportDesignerSectionLayoutSettingsViewController.h"
 
 @interface MTReportDesignerViewController : MTViewController
     <UITableViewDataSource,
@@ -49,7 +50,8 @@
         MTReportDesignerSectionViewLayoutDelegate,
         MTReportDesignerObjectSelectorDelegate,
         MUIViewControllerProtocol,
-        MTDocumentSectionViewDelegate>
+        MTDocumentSectionViewDelegate,
+        MTReportDesignerSectionLayoutSettingsDelegate>
 
 - (IBAction)doneReports:(id)sender;
 - (void)openReport:(NSURL *)url;

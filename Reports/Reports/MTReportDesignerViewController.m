@@ -8,12 +8,23 @@
 
 #import "MTReportDesignerViewController.h"
 
+typedef NS_ENUM(NSUInteger, MTToolboxType) {
+    MTToolboxTypeElement = 2,
+    MTToolboxTypeSection = 3,
+};
+
 @interface MTReportDesignerViewController()
 
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
 
+@property (nonatomic, retain) UINavigationController *navigationControllerSectionLayoutSettings;
+@property (nonatomic, retain) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
+
+@property (nonatomic, assign) NSUInteger lastSelectedSectionControlPanel;
+
 @property (nonatomic, retain) UIPopoverController *popoverControllerInformation;
 @property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
+@property (nonatomic, retain) UIPopoverController *popoverControllerSectionSettings;
 
 @property (nonatomic, assign) BOOL toolboxIsVisible;
 @property (nonatomic, retain) MTElementView *lastElementViewToShowMenu;
@@ -61,10 +72,13 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_navigationControllerSectionLayoutSettings release];
     [_layoutConstraintsReportSectionHeight release];
     [_lastElementViewToShowMenu release];
+    [_popoverControllerSectionSettings release];
     [_popoverControllerObjectSelector release];
     [_popoverControllerInformation release];
+    [_viewControllerSectionLayoutSettings release];
     [_viewControllerToolbox release];
     [_holderForLastTouchesByCollectionView release];
     [_selectedObjectIds release];
@@ -112,6 +126,18 @@
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
 
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [[storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier] retain];
+    [viewControllerSectionLayoutSettings setDelegate:self];
+    [self setViewControllerSectionLayoutSettings: viewControllerSectionLayoutSettings];
+
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hideToolbox:)];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[self viewControllerSectionLayoutSettings]];
+    [self setNavigationControllerSectionLayoutSettings:navigationController];
+    [navigationController release];
+    
+    [[[self viewControllerSectionLayoutSettings] navigationItem] setRightBarButtonItem:doneButton animated:NO];
+    [doneButton release];
+
     if ([UIDevice isPad]) {
         
         UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:viewControllerToolbox];
@@ -120,12 +146,15 @@
         [self setPopoverControllerInformation:popoverControllerInformation];
         [popoverControllerInformation release];
 
-    } else {
-
-        [[viewControllerToolbox view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
-        [[viewControllerToolbox view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[self toolboxView] addSubview:[viewControllerToolbox view]];
+        UIPopoverController *popoverControllerSectionSettings = [[UIPopoverController alloc] initWithContentViewController:[self navigationControllerSectionLayoutSettings]];
+        [popoverControllerSectionSettings setDelegate:self];
+        [popoverControllerSectionSettings setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
+        [self setPopoverControllerSectionSettings:popoverControllerSectionSettings];
+        [popoverControllerSectionSettings release];
+        
     }
+    
+    [viewControllerSectionLayoutSettings release];
     
     [self setViewControllerToolbox:viewControllerToolbox];
     [viewControllerToolbox release];
@@ -166,13 +195,13 @@
 
     // MARK: Setup horizontal constraints.
     [[self view] removeConstraints:[self layoutConstraintsToRemove]];
-
+    
     NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
 
     [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight, layoutConstraintToolbarBottomHeight]];
-
+    
     NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
@@ -267,6 +296,7 @@
         [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[sectionControlView layer] setCornerRadius:cornerRadius];
         [sectionControlView setClipsToBounds:YES];
+        [sectionControlView setTag:sectionCounter];
         
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSectionControlPanel:)];
         [tapGestureRecognizer setNumberOfTapsRequired:1];
@@ -378,16 +408,6 @@
 
 }
 
-- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateEnded) {
-        if ([[[sender view] layer] borderWidth] > 0.5000f) {
-            [self removeBorderFromView:[sender view]];
-        } else {
-            [self applyBorderToView:[sender view]];
-        }
-    }
-}
-
 - (void)updateViewConstraints {
     [super updateViewConstraints];
 }
@@ -482,6 +502,33 @@
     }
 }
 
+
+#pragma mark - Layout Settings Delegate
+
+- (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    
+}
+
+- (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    
+}
+
+- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    
+}
+
 #pragma mark - MTSectionViewDelegate
 
 - (void)didUpdateLayout:(id)sender {
@@ -544,22 +591,12 @@
 #pragma mark - UIMenu Notifications
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    [self removeBorderToElementView:[self lastElementViewToShowMenu]];
+    [self removeBorderFromView:[self lastElementViewToShowMenu]];
 }
 
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 
 #pragma mark - Methods
-
-- (void)applyBorderToView:(UIView *)view {
-    [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[view layer] setBorderWidth:3.0000f];
-}
-
-- (void)removeBorderFromView:(UIView *)view {
-    [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
-    [[view layer] setBorderWidth:0.0000f];
-}
 
 - (CGRect)rectForSelectedElements {
     CGRect popoverRect = CGRectZero;
@@ -589,18 +626,196 @@
     return popoverRect;
 }
 
+#pragma mark - MTElementViewDelegate
+
+- (void)didSelectElementView:(id)sender {
+    
+    NSUInteger deselectedSectionViewCounter = 0;
+    //Remove border from the section views
+    for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
+        deselectedSectionViewCounter += [self  removeBorderFromView:view] == YES ? 1 : 0;
+    }
+    
+    if (deselectedSectionViewCounter == 0) {
+
+        if ([UIDevice isPad] == NO) {
+            if (![self dismissAllPopovers]) {
+                [self showToolbox:MTToolboxTypeElement];
+            }
+        }
+        
+        if ([sender isKindOfClass:[MTElementView class]]) {
+            MTElementView *elementView = sender;
+            [[self selectedObjectIds] addObject:[elementView objectIdTag]];
+            [self applyBorderToView:elementView];
+            [elementView setDisplaySelected:YES];
+            
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            if ([UIDevice isPad]) {
+                
+                NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+                [passThroughViews addObject:elementView];
+                [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+                [passThroughViews release];
+                
+                CGRect popoverRect;
+                if ([[self selectedObjectIds] count] == 1) {
+                    popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                } else if ([[self selectedObjectIds] count] > 1) {
+                    CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+                    NSUInteger counter = 0;
+                    for (MTElementView *elementView in [self selectedElementViews]) {
+                        CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                        if (counter == 0) {
+                            minx = frame.origin.x;
+                            miny = frame.origin.y;
+                            maxx = frame.origin.x + frame.size.width;
+                            maxy = frame.origin.y + frame.size.height;
+                        } else {
+                            minx = minx < frame.origin.x ? minx : frame.origin.x;
+                            miny = miny < frame.origin.y ? miny : frame.origin.y;
+                            maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
+                            maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
+                        }
+                        counter++;
+                    }
+                    popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+                }
+                [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
+                                                                     inView: [self designScrollView]
+                                                   permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                                   animated: YES];
+            }
+        }
+
+    } else {
+        [self hideToolbox];
+    }
+    
+}
+
+- (void)didDeselectElementView:(id)sender animated:(BOOL)animated {
+    if ([sender isKindOfClass:[MTElementView class]]) {
+        MTElementView *elementView = sender;
+        [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
+        [self removeBorderFromView: elementView];
+        [elementView setDisplaySelected:NO];
+        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+        if ([UIDevice isPad]) {
+            
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+            [passThroughViews removeObject:elementView];
+            [passThroughViews release];
+            
+            if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
+                if ([[self selectedObjectIds] count] > 0) {
+                    CGRect popoverRect = [self rectForSelectedElements];
+                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
+                } else {
+                    [[self popoverControllerInformation] dismissPopoverAnimated:animated];
+                }
+            }
+        } else {
+            if ([[self selectedObjectIds] count] == 0) {
+                [self hideToolbox];
+            }
+        }
+    }
+}
+
+- (void)didHighlightElementView:(id)sender { }
+- (void)didUnhighlightElementView:(id)sender { }
+
 #pragma mark - Actions
 
-- (void)deselectAllElements {
-    for (MTElementView *elementView in [self selectedElementViews]) {
-        [self didDeselectElementView:elementView animated:YES];
+- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
+    
+    if ([sender state] == UIGestureRecognizerStateEnded) {
+        
+        if ([[self selectedElementViews] count] >= 1) {
+            [self deselectAllElementsAnimated:YES];
+            [self hideToolbox];
+        } else {
+            
+            
+            if ([self isBorderAppliedToView:[sender view]]) {
+                
+                [self removeBorderFromView:[sender view]];
+                if ([UIDevice isPad]) {
+                    
+                    if ([[self popoverControllerSectionSettings] isPopoverVisible]) {
+                        [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
+                    }
+                } else {
+                    [self hideToolbox:self];
+                }
+                
+            } else {
+                
+                [self deselectAllElementsAnimated:YES];
+                
+                [self applyBorderToView:[sender view]];
+                
+                [self setLastSelectedSectionControlPanel:[[sender view] tag]];
+                
+                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                RptqQuery *query = [[database hasQueries] anyObject];
+                RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                    forQuery: query];
+                [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue] * 2)];
+                [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
+                [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
+                [[self viewControllerSectionLayoutSettings] updateDisplay];
+                if ([UIDevice isPad]) {
+                    
+                    [[self popoverControllerSectionSettings] setPassthroughViews:@[[sender view]]];
+                    [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds] inView:[sender view] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    
+                } else {
+                    [self showToolbox:MTToolboxTypeSection];
+                }
+            }
+            
+        }
+        
     }
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
+
+    //Remove border from element views
     for (MTElementView *elementView in [self selectedElementViews]) {
         [self didDeselectElementView:elementView animated:animated];
     }
+
+    //Remove border from the section views
+    for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
+        [self  removeBorderFromView:view];
+    }
+
+}
+
+- (void)applyBorderToView:(UIView *)view {
+    [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
+    [[view layer] setBorderWidth:3.0000f];
+}
+
+- (BOOL)removeBorderFromView:(UIView *)view {
+    BOOL result;
+    if ([self isBorderAppliedToView:view]) {
+        result = YES;
+        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[view layer] setBorderWidth:0.0000f];
+    } else {
+        result = NO;
+    }
+    return result;
+}
+
+- (BOOL)isBorderAppliedToView:(UIView *)view {
+    return ([[view layer] borderWidth] > 0.5000f);
 }
 
 - (BOOL)dismissAllPopovers {
@@ -770,7 +985,7 @@
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(NO)];
     } else {
-        [self deselectAllElements];
+        [self deselectAllElementsAnimated:YES];
     }
 }
 
@@ -778,7 +993,7 @@
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(YES) animated:NO];
     } else {
-        [self deselectAllElements];
+        [self deselectAllElementsAnimated:YES];
     }
 }
 
@@ -786,7 +1001,7 @@
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showObjects" sender:sender];
     } else {
-        [self deselectAllElements];
+        [self deselectAllElementsAnimated:YES];
     }
 }
 
@@ -794,38 +1009,60 @@
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showSettings" sender:sender];
     } else {
-        [self deselectAllElements];
+        [self deselectAllElementsAnimated:YES];
     }
 }
 
 - (IBAction)info:(id)sender {
     if (![self dismissAllPopovers]) {
-        [self showToolbox:sender];
+        [self showToolbox:MTToolboxTypeElement];
     }
 }
 
-- (IBAction)showToolbox:(id)sender {
+- (IBAction)showToolbox:(MTToolboxType)tooboxType {
+    
+    UIPopoverController *popoverController;
+    UIViewController *viewController;
+
+    switch (tooboxType) {
+
+        case MTToolboxTypeElement:
+            [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+            popoverController = [self popoverControllerInformation];
+            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+            viewController = [[self viewControllerToolbox] retain];
+            break;
+            
+        case MTToolboxTypeSection: {
+            popoverController = [self popoverControllerSectionSettings];
+            viewController = [[self navigationControllerSectionLayoutSettings] retain];
+            [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:NO animated:NO];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
+    [[viewController view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+
+    if ([[viewController view] superview] == nil) {
+        [[self toolboxView] addSubview:[viewController view]];
+    }
     
     if ([UIDevice isPad]) {
-        
-        [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
         [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
                                                     permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                     animated:YES];
-        
-        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-
     } else {
-
+        
         if ([self toolboxIsVisible] == NO) {
             [self setToolboxIsVisible:YES];
             [[self informationButton] setEnabled: NO];
             
             [[self toolbarBottom] setItems:nil animated:YES];
             [[self toolbarTop] setItems:nil animated:YES];
-            
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-
+                        
             [[self view] layoutIfNeeded];
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [self setWantsFullScreenLayout:YES];
@@ -835,14 +1072,20 @@
             } completion:nil];
         }
     }
+    
+    [viewController release];
+    
 }
 
 - (void)hideToolbox {
     if ([UIDevice isPad]) {
         if ([[self popoverControllerInformation] isPopoverVisible]) {
             [[self popoverControllerInformation] dismissPopoverAnimated:YES];
-            [self deselectAllElementsAnimated:YES];
         }
+        if ([[self popoverControllerSectionSettings] isPopoverVisible]) {
+            [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
+        }
+        [self deselectAllElementsAnimated:YES];
     } else {
         [self hideToolbox:self];
     }
@@ -854,15 +1097,24 @@
         [self setToolboxIsVisible:NO];
 
         [[self view] layoutIfNeeded];
+        [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
             [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
             [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
             [[self view] layoutIfNeeded];
+
         } completion:^(BOOL finished) {
+            if ([[[self navigationControllerSectionLayoutSettings] view] superview] != nil) {
+                [[[self navigationControllerSectionLayoutSettings] view] removeFromSuperview];
+            }
+            if ([[[self viewControllerToolbox] view] superview] != nil) {
+                [[[self viewControllerToolbox] view] removeFromSuperview];
+            }
             [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
             [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
             [[self informationButton] setEnabled: YES];
         }];
+        [self deselectAllElementsAnimated:YES];
     }
 }
 
@@ -1116,7 +1368,7 @@
     [self dismissAllPopovers];
     [self deselectAllElementsAnimated:NO];
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-    [self applyBorderToElementView:elementView];
+    [self applyBorderToView:elementView];
     [self setLastElementViewToShowMenu:elementView];
     return YES;
 }
@@ -1551,81 +1803,5 @@
         }
     }
 }
-
-#pragma mark - MTElementViewDelegate
-
-- (void)didSelectElementView:(id)sender {
-    if ([sender isKindOfClass:[MTElementView class]]) {
-        MTElementView *elementView = sender;
-        [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-        [self applyBorderToView:elementView];
-        [elementView setDisplaySelected:YES];
-
-        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-        if ([UIDevice isPad]) {
-            
-            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
-            [passThroughViews addObject:elementView];
-            [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
-            [passThroughViews release];
-            
-            CGRect popoverRect;
-            if ([[self selectedObjectIds] count] == 1) {
-                popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-            } else if ([[self selectedObjectIds] count] > 1) {
-                CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
-                NSUInteger counter = 0;
-                for (MTElementView *elementView in [self selectedElementViews]) {
-                    CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
-                    if (counter == 0) {
-                        minx = frame.origin.x;
-                        miny = frame.origin.y;
-                        maxx = frame.origin.x + frame.size.width;
-                        maxy = frame.origin.y + frame.size.height;
-                    } else {
-                        minx = minx < frame.origin.x ? minx : frame.origin.x;
-                        miny = miny < frame.origin.y ? miny : frame.origin.y;
-                        maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
-                        maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
-                    }
-                    counter++;
-                }
-                popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
-            }
-            [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
-                                                                 inView: [self designScrollView]
-                                               permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                               animated: YES];
-        }
-    }
-}
-
-- (void)didDeselectElementView:(id)sender animated:(BOOL)animated {
-    if ([sender isKindOfClass:[MTElementView class]]) {
-        MTElementView *elementView = sender;
-        [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
-        [self removeBorderFromView: elementView];
-        [elementView setDisplaySelected:NO];
-        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-        if ([UIDevice isPad]) {
-            
-            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
-            [passThroughViews removeObject:elementView];
-            [passThroughViews release];
-            
-            if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
-                if ([[self selectedObjectIds] count] > 0) {
-                    CGRect popoverRect = [self rectForSelectedElements];
-                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
-                } else {
-                    [[self popoverControllerInformation] dismissPopoverAnimated:animated];
-                }
-            }
-        }
-    }
-}
-
-- (void)didHighlightElementView:(id)sender { }
-- (void)didUnhighlightElementView:(id)sender { }
 
 @end

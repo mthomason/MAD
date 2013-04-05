@@ -37,11 +37,15 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(MTManagedDocumentReport *)managedDocument;
 
-- (NSString *)localizedDisplayName;
-- (NSString *)sectionKey;
-
 + (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
+
++ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+- (NSString *)localizedDisplayName;
+- (NSString *)sectionKey;
 
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
 - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;

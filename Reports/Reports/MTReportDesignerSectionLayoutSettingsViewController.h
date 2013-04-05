@@ -12,6 +12,8 @@
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderQueryBuilder.h"
 
+extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier;
+
 @class MTReportDesignerSectionLayoutSettingsViewController;
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate
@@ -30,6 +32,8 @@
 @property (nonatomic, assign) NSInteger initalStepperValue;
 @property (nonatomic, assign) BOOL initalSwitchValue;
 @property (nonatomic, assign) NSUInteger initalNumberOfRows;
+
+- (void)updateDisplay;
 
 @end
 

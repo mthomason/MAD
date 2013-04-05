@@ -206,7 +206,9 @@
         [[segue destinationViewController] setDelegate:self];
 
     } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK: Prepair to show sql.
+
         [[segue destinationViewController] setDelegate: self];
+
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -387,33 +389,20 @@
     return result;
 }
 
-
-#pragma mark - Delegates
-
-#pragma mark Layout Settings Delegate
+#pragma mark - Layout Settings Delegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-    
+
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                         forQuery: query];
-    [section setHeight: [NSNumber numberWithFloat:height]];
+    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                         forQuery: query];
-    [section setVisibility: [NSNumber numberWithBool:isVisible]];
-
+    [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 
 }
@@ -421,15 +410,12 @@
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                        forQuery: query];
-    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
-    
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-
+    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
+    NSError *error = nil;
+    [managedObjectContext save:&error];
+    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    [documentReport save:nil];
+    [documentReport release];
 }
 
 #pragma mark - Delegates

@@ -8,8 +8,9 @@
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 
-@interface MTReportDesignerSectionLayoutSettingsViewController ()
+NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 
+@interface MTReportDesignerSectionLayoutSettingsViewController ()
 
 @property (nonatomic, retain) IBOutlet UILabel *labelHeight;
 @property (nonatomic, retain) IBOutlet UILabel *labelNumberOfRows;
@@ -41,13 +42,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[self visibilitySwitch] setOn:[self initalSwitchValue]];
-    [[self heightStepper] setValue:[self initalStepperValue]];
-    [[self rowsStepper] setValue:[self initalNumberOfRows]];
-
-    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
-    [self setHeighLabel:[self initalStepperValue]];
-    
     UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableView] frame]];
     [[self tableView] setBackgroundView: gradentView];
     [gradentView release];
@@ -58,9 +52,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-//    [self setHeighLabel:[self stepperValueNormalized]];
-//    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
-    
+    [self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -73,6 +65,17 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+}
+
+- (void)updateDisplay {
+
+    [[self visibilitySwitch] setOn:[self initalSwitchValue]];
+    [[self heightStepper] setValue:[self initalStepperValue]];
+    [[self rowsStepper] setValue:[self initalNumberOfRows]];
+    
+    [self setNumberOfRowsLabel:[self initalNumberOfRows]];
+    [self setHeighLabel:[self initalStepperValue]];
+    
 }
 
 - (void)setHeighLabel:(double)height {

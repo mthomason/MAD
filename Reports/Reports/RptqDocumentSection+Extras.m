@@ -249,6 +249,36 @@
     return resultSection;
 }
 
++ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
+    [section setHeight: [NSNumber numberWithFloat:height]];
+    
+}
+
++ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
+    [section setVisibility: [NSNumber numberWithBool:isVisible]];
+    
+}
+
++ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: numberOfRows forQuery: query];
+    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
+    
+}
+
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger documentHeader    = 0;
     NSInteger pageHeader        = 1;

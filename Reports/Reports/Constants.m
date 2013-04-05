@@ -13,7 +13,6 @@
 
 NSString * const MTCollectionElementKindSectionLabel         = @"MTCollectionElementKindSectionLabel";
 
-
 NSString * const MNSStringInterfaceButtonTitleContinue      = @"Continue";
 NSString * const MNSStringInterfaceButtonTitleContinueDesc  = @"Continue Button Title";
 
