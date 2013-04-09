@@ -274,7 +274,7 @@
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: numberOfRows forQuery: query];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
     [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
     
 }

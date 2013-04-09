@@ -5583,7 +5583,853 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4FE-hR-Scw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-599" y="2155"/>
+            <point key="canvasLocation" x="-567" y="1311"/>
+        </scene>
+        <!--Report Designer Document Object Format-->
+        <scene sceneID="kMN-fL-Oq2">
+            <objects>
+                <tableViewController storyboardIdentifier="MTReportDesignerDocumentObjectFormatIdentifier" id="Wuv-x8-ixk" customClass="MTReportDesignerDocumentObjectFormat" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="HXg-R3-k3T">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Numeric" id="hZg-og-38A">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="yyi-jj-pAE">
+                                        <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Decimals" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="inl-dX-P0k">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="158" id="CY8-nh-aib"/>
+                                                        <constraint firstAttribute="height" constant="43" id="QZV-kx-SX3"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="gfI-4O-LkF"/>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="gfI-4O-LkF" firstAttribute="centerY" secondItem="yyi-jj-pAE" secondAttribute="centerY" type="default" id="Yis-fK-qj7"/>
+                                            <constraint firstAttribute="trailing" secondItem="gfI-4O-LkF" secondAttribute="trailing" constant="30" id="awr-qn-JwU"/>
+                                            <constraint firstItem="gfI-4O-LkF" firstAttribute="centerY" secondItem="inl-dX-P0k" secondAttribute="centerY" type="default" id="kX7-AC-Wme"/>
+                                            <constraint firstItem="inl-dX-P0k" firstAttribute="leading" secondItem="yyi-jj-pAE" secondAttribute="leading" constant="20" type="default" id="y79-AB-wz7"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="67m-SG-hiI" style="IBUITableViewCellStyleDefault" id="VQO-qx-ciE">
+                                        <rect key="frame" x="0.0" y="91" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="67m-SG-hiI">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="fLx-Vp-4LB" detailTextLabel="eLo-kE-IRW" style="IBUITableViewCellStyleValue1" id="Cgk-OS-Qnm">
+                                        <rect key="frame" x="0.0" y="135" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Currency Local" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fLx-Vp-4LB">
+                                                    <rect key="frame" x="10" y="11" width="124" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="en" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eLo-kE-IRW">
+                                                    <rect key="frame" x="271" y="11" width="19" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="Wuv-x8-ixk" id="3IW-mG-H7a"/>
+                            <outlet property="delegate" destination="Wuv-x8-ixk" id="uCO-yd-2R0"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="tableViewCellCurrency" destination="VQO-qx-ciE" id="vct-hg-DTi"/>
+                        <outlet property="tableViewCellCurrencyLocation" destination="Cgk-OS-Qnm" id="aGp-b0-R2Q"/>
+                        <outlet property="tableViewCellDecimals" destination="yyi-jj-pAE" id="zqA-17-361"/>
+                        <outletCollection property="viewsToDisableNumeric" destination="inl-dX-P0k" id="Dpu-JW-F2k"/>
+                        <outletCollection property="viewsToDisableNumeric" destination="67m-SG-hiI" id="SPb-LI-N3A"/>
+                        <outletCollection property="viewsToDisableNumeric" destination="eLo-kE-IRW" id="6EU-8E-92a"/>
+                        <outletCollection property="viewsToDisableNumeric" destination="fLx-Vp-4LB" id="LSE-fj-0yN"/>
+                        <outletCollection property="viewsToDisableNumeric" destination="gfI-4O-LkF" id="dLt-oN-jy3"/>
+                        <outletCollection property="controlsToDisableNumeric" destination="gfI-4O-LkF" id="q2X-5Z-X5T"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GoJ-R8-W6V" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-938" y="2496"/>
+        </scene>
+        <!--Document Object New Static Label View Controller-->
+        <scene sceneID="jEa-zS-D43">
+            <objects>
+                <tableViewController storyboardIdentifier="MTDocumentObjectNewStaticLabelViewControllerIdentifier" id="2pr-Qb-pVK" customClass="MTDocumentObjectNewStaticLabelViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" tag="2027" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ckR-ZX-Lrg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="SL0-UN-yLQ">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" id="XFD-wv-8fW">
+                                        <rect key="frame" x="0.0" y="10" width="320" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KLq-Ib-Yse">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label Text" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tcP-AM-LOj">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="eTd-4A-DQw"/>
+                                                        <constraint firstAttribute="width" constant="125" type="user" id="h0N-ol-DkG"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="tcP-AM-LOj" firstAttribute="centerY" secondItem="KLq-Ib-Yse" secondAttribute="centerY" type="default" id="FlW-Id-OIA"/>
+                                            <constraint firstItem="KLq-Ib-Yse" firstAttribute="centerY" secondItem="XFD-wv-8fW" secondAttribute="centerY" type="default" id="M4a-3u-OdW"/>
+                                            <constraint firstAttribute="trailing" secondItem="KLq-Ib-Yse" secondAttribute="trailing" constant="40" type="user" id="Y0J-e7-Lqk"/>
+                                            <constraint firstItem="tcP-AM-LOj" firstAttribute="leading" secondItem="XFD-wv-8fW" secondAttribute="leading" constant="40" type="user" id="bDs-EQ-FcF"/>
+                                            <constraint firstItem="KLq-Ib-Yse" firstAttribute="leading" secondItem="tcP-AM-LOj" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="eHK-cw-4sy"/>
+                                            <constraint firstItem="tcP-AM-LOj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="XFD-wv-8fW" secondAttribute="leading" constant="20" type="user" id="n0c-13-td0"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="2pr-Qb-pVK" id="ghl-TH-gci"/>
+                            <outlet property="delegate" destination="2pr-Qb-pVK" id="V1U-Ul-NAB"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="labelTextLabel" destination="tcP-AM-LOj" id="5gZ-WU-fWx"/>
+                        <outlet property="labelTextTextbox" destination="KLq-Ib-Yse" id="zo0-4k-Vzk"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gLM-OU-FT7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-560" y="2496"/>
+        </scene>
+        <!--Aggregate Functions View Controller-->
+        <scene sceneID="qMF-lU-CNY">
+            <objects>
+                <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="kfc-Go-Hl2" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="YsU-4W-W8h">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="uew-KJ-PBT">
+                                <cells>
+                                    <tableViewCell tag="11" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="WKA-ek-v12" style="IBUITableViewCellStyleDefault" id="1FL-lI-UQW">
+                                        <rect key="frame" x="0.0" y="10" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WKA-ek-v12">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Count">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="5" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="vJW-eE-Qed" style="IBUITableViewCellStyleDefault" id="5h9-5I-q5v">
+                                        <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vJW-eE-Qed">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="First">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="7" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="uXG-Av-Kbp" style="IBUITableViewCellStyleDefault" id="yXL-5k-tBu">
+                                        <rect key="frame" x="0.0" y="99" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uXG-Av-Kbp">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Last">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="17" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="RsJ-v4-aPE" style="IBUITableViewCellStyleDefault" id="xvK-Gd-wyn">
+                                        <rect key="frame" x="0.0" y="143" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RsJ-v4-aPE">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Maximum">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="AVq-i7-G3P" style="IBUITableViewCellStyleDefault" id="Bjo-LF-mwu">
+                                        <rect key="frame" x="0.0" y="187" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AVq-i7-G3P">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Mean">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSOriginalFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="13" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="By3-ac-yW9" style="IBUITableViewCellStyleDefault" id="DNj-VU-FGi">
+                                        <rect key="frame" x="0.0" y="231" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="By3-ac-yW9">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Minimum">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <integer key="NSLigature" value="0"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28.850000381469727"/>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28.850000381469727"/>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28.850000381469727"/>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28.850000381469727"/>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28.850000381469727"/>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell tag="2" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="4q5-ZM-qmb" style="IBUITableViewCellStyleDefault" id="2vj-Js-5jF">
+                                        <rect key="frame" x="0.0" y="275" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4q5-ZM-qmb">
+                                                    <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Sum">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="(">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="[1, x]...[n, x]">
+                                                            <attributes>
+                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="kfc-Go-Hl2" id="FZO-wH-zID"/>
+                            <outlet property="delegate" destination="kfc-Go-Hl2" id="ukR-qS-bph"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="YpA-d3-heA"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outletCollection property="tableViewCells" destination="2vj-Js-5jF" id="RJP-mY-Nrj"/>
+                        <outletCollection property="tableViewCells" destination="DNj-VU-FGi" id="AQe-Ab-c83"/>
+                        <outletCollection property="tableViewCells" destination="xvK-Gd-wyn" id="jkO-An-bnR"/>
+                        <outletCollection property="tableViewCells" destination="yXL-5k-tBu" id="eSv-yz-sWj"/>
+                        <outletCollection property="tableViewCells" destination="Bjo-LF-mwu" id="FVi-85-YbX"/>
+                        <outletCollection property="tableViewCells" destination="1FL-lI-UQW" id="Vij-Rm-8Oh"/>
+                        <outletCollection property="tableViewCells" destination="5h9-5I-q5v" id="dGB-aR-XHf"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="teM-rA-Clp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-103" y="2483"/>
+        </scene>
+        <!--Document Object New Aggregate View Controller-->
+        <scene sceneID="PaV-8X-hq2">
+            <objects>
+                <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="DqB-KB-PyC" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" tag="2017" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="S6h-xk-UdQ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="RZK-wV-bdn">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="Hqs-5G-Czj" detailTextLabel="bMi-5G-fCg" style="IBUITableViewCellStyleValue1" id="29E-ga-Fcs">
+                                        <rect key="frame" x="0.0" y="10" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hqs-5G-Czj">
+                                                    <rect key="frame" x="10" y="10" width="191" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Aggrage Function ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="f(x)">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="CourierNewPS-ItalicMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Sum(x)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bMi-5G-fCg">
+                                                    <rect key="frame" x="215" y="10" width="55" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="wis-r1-BMv" detailTextLabel="Wob-QN-G1h" style="IBUITableViewCellStyleValue1" id="0qI-uE-cmn">
+                                        <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wis-r1-BMv">
+                                                    <rect key="frame" x="10" y="10" width="57" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Input ">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="x">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="CourierNewPS-ItalicMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Not Selected" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Wob-QN-G1h">
+                                                    <rect key="frame" x="172" y="10" width="98" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="br6-el-gnb" detailTextLabel="CDj-F5-Wl2" style="IBUITableViewCellStyleValue1" id="Hy0-qg-iQg">
+                                        <rect key="frame" x="0.0" y="99" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="br6-el-gnb">
+                                                    <rect key="frame" x="10" y="10" width="164" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Group By">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="For Each">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="CourierNewPS-ItalicMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Page" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CDj-F5-Wl2">
+                                                    <rect key="frame" x="230" y="10" width="40" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="DqB-KB-PyC" id="b6A-zd-1tE"/>
+                            <outlet property="delegate" destination="DqB-KB-PyC" id="fO6-Kp-Kco"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="tableViewCellAggrageFunction" destination="29E-ga-Fcs" id="oa7-b7-bLE"/>
+                        <outlet property="tableViewCellAggregateGroupBy" destination="Hy0-qg-iQg" id="gI9-IF-Jlp"/>
+                        <outlet property="tableViewCellAggregateInput" destination="0qI-uE-cmn" id="V92-SU-I8w"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bg4-jD-bYN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-560" y="2796"/>
+        </scene>
+        <!--Group By View Controller-->
+        <scene sceneID="cPV-ne-a30">
+            <objects>
+                <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="ZKJ-dl-Aik" customClass="MTGroupByViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RuD-x0-UW6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTGroupByTableViewCell" textLabel="3sC-Ub-O24" style="IBUITableViewCellStyleDefault" id="quE-88-xBs">
+                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3sC-Ub-O24">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="Page">
+                                                    <attributes>
+                                                        <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                        <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="ZKJ-dl-Aik" id="bZC-hQ-ihD"/>
+                            <outlet property="delegate" destination="ZKJ-dl-Aik" id="hRV-WZ-ev1"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="J2u-vf-cTw"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GtG-aJ-LpJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-103" y="2796"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="MGX-PM-Jmm">
+            <objects>
+                <tableViewController storyboardIdentifier="MTFieldOrFormulaViewControllerIdentifier" id="qR6-ff-0J2" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" tag="2029" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="D3P-XZ-SeL">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="MKH-46-9Ti">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="Bxs-go-kuO" style="IBUITableViewCellStyleDefault" id="Ge4-XQ-zW2">
+                                        <rect key="frame" x="0.0" y="10" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bxs-go-kuO">
+                                                    <rect key="frame" x="10" y="0.0" width="260" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Field">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="dFa-RE-NYp" style="IBUITableViewCellStyleDefault" id="7rx-8A-n8D">
+                                        <rect key="frame" x="0.0" y="55" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dFa-RE-NYp">
+                                                    <rect key="frame" x="10" y="0.0" width="260" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Formula">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="qR6-ff-0J2" id="Hoh-Nd-Z4d"/>
+                            <outlet property="delegate" destination="qR6-ff-0J2" id="AFf-rj-4kT"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="JCC-It-6NK"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vam-2n-2bo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="275" y="2796"/>
         </scene>
     </scenes>
     <resources>
@@ -5612,6 +6458,504 @@
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="MTAggregateFunctionsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAggregateFunctionsViewController.h"/>
+            <relationships>
+                <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTAutoLayoutTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAutoLayoutTableViewCell.h"/>
+        </class>
+        <class className="MTClipboardView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTClipboardView.h"/>
+        </class>
+        <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imagePreview" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorMySqlViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorMySqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hostDidEndOnExit:"/>
+                <relationship kind="action" name="passwordDidEndOnExit:"/>
+                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="usernameDidEndOnExit:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="tableViewCellDatabase" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldDatabase" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldReportName" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorSalesforceViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorSalesforceViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="nicknameDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewAggregateViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewAggregateViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellAggrageFunction" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateGroupBy" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateInput" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewStaticLabelViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewStaticLabelViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelTextLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextTextbox" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTGroupByViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
+        </class>
+        <class className="MTQueryBuilderAddGroupViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddGroupViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellField" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellSort" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkJoinTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkJoinTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddPredicateViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddPredicateViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellLeftSide" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellOperator" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellRightSide" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderChooseFieldViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderChooseFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderNavigationController.h"/>
+        </class>
+        <class className="MTQueryBuilderPredicateFormatViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderPredicateFormatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="addPredicateDelegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderSortTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderSortTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewClipboard" candidateClass="MTClipboardView"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerDocumentObjectFormat" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerDocumentObjectFormat.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellCurrency" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellCurrencyLocation" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellDecimals" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="controlsToDisableNumeric" candidateClass="UIControl"/>
+                <relationship kind="outletCollection" name="viewsToDisableNumeric" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSelectorViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFontAmericanTypewriter" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontArial" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourier" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourierNew" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontGeorgia" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelvetica" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelveticaNeue" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTimesNewRoman" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTrebuchet" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontVerdana" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontZapfino" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="controlValueChanged:"/>
+                <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonUnderline" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fontLabelTableViewCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="labelFontName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelFontSize" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeWidth" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTest" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="segControlFontStyle" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlHorizontalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlVerticalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="stepperFontSize" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeHeight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeWidth" candidateClass="UIStepper"/>
+                <relationship kind="outletCollection" name="groupTableViewCellLayout" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="groupTableViewCellStyle" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="steppers" candidateClass="UIStepper"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerObjectSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerObjectSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="objectSelectorDelegate"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerSectionLayoutSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelNumberOfRows" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rowsStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerToolBoxViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerToolBoxViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="valueChanged:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemFontSelector" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="sceneSelector" candidateClass="UISegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="doneReports:"/>
+                <relationship kind="action" name="info:"/>
+                <relationship kind="action" name="showObjects:"/>
+                <relationship kind="action" name="showSettings:"/>
+                <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolboxView" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="MTReportViewerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTSettingsViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTShowSqlViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTShowSqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="MTStoreTemplatesViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTStoreTemplatesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTTemplateSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTemplateSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="templateSelectorDelegate"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTDocumentTableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTTitleView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerOpenDocument" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
+            <relationships>
+                <relationship kind="action" name="add:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
+                <relationship kind="outlet" name="collectionViewQueries" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTDocumentTableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MUIViewControllerDatabaseSchema" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MUIViewControllerDatabaseSchema.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="scrollViewMain" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewController.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
+        </class>
+        <class className="UITableViewCellInstruction" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelGroupType" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelGroupTypeDetail" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellOverride" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
+        </class>
+        <class className="UITableViewCellQueryGroup" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryGroup.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellQueryInput" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
+        </class>
+        <class className="UITableViewCellQueryLink" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelJoinDesc" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellQueryPredicate" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryPredicate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellStoreItemReportTemplate" superclassName="MTDocumentTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellTableName" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
+        </class>
+        <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
+        </class>
+        <class className="UITableViewControllerEnterString" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerOpperators" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerOpperators.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

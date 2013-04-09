@@ -52,7 +52,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self updateDisplay];
+    //[self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

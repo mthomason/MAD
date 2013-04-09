@@ -409,11 +409,11 @@
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [documentReport managedObjectContext];
     [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
     NSError *error = nil;
     [managedObjectContext save:&error];
-    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [documentReport save:nil];
     [documentReport release];
 }

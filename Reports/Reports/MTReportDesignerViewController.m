@@ -282,7 +282,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                   withReuseIdentifier:supplmentaryViewReuseIdHeader];
 
-        [collectionView setTag:[[reportSection identifier] integerValue]];
+        NSUInteger collectionViewTag = [[reportSection identifier] integerValue];
+        [collectionView setTag: collectionViewTag];
         [collectionView setDelegate:self];
         [collectionView setSectionDelegate:self];
         [collectionView setDataSource:self];
@@ -514,26 +515,31 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
     [managedObjectContext save:nil];
-//    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument save:nil];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [managedObjectContext save:nil];
+    [reportDocument save:nil];
     
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [managedObjectContext save:nil];
+    [reportDocument save:nil];
     
 }
 
@@ -542,14 +548,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
 
-    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[documentSectionView objectIdTag] fromObjectContext:managedObjectContect];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[documentSectionView objectIdTag] fromObjectContext:managedObjectContext];
     [documentSection setHeight:@([documentSectionView bounds].size.height)];
     
 
     [self relayoutSectionView:documentSectionView];
     
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [managedObjectContext save:nil];
 }
 
 - (void)relayoutSectionView:(MTDocumentSectionView *)documentSectionView {
