@@ -2963,6 +2963,7 @@
                         <outlet property="heightStepper" destination="SWE-QX-aMe" id="rro-oe-apC"/>
                         <outlet property="labelHeight" destination="PUH-ve-kDf" id="cHD-aq-xUr"/>
                         <outlet property="labelNumberOfRows" destination="4vj-uT-8Hw" id="RQW-Rf-EIU"/>
+                        <outlet property="rowsStepper" destination="uTq-dX-M5t" id="E0u-pe-WgV"/>
                         <outlet property="visibilitySwitch" destination="ulc-86-ffo" id="H31-FG-gJj"/>
                     </connections>
                 </tableViewController>
@@ -6745,6 +6746,9 @@
         <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerSectionLayoutSettingsViewController.h"/>
             <relationships>
+                <relationship kind="action" name="heightChanged:"/>
+                <relationship kind="action" name="numberOfRowsChanged:"/>
+                <relationship kind="action" name="visibilityChanged:"/>
                 <relationship kind="outlet" name="delegate"/>
                 <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>

@@ -300,7 +300,7 @@
                         RptqQuery *query = [[database hasQueries] anyObject];
                         RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
                                                                                              forQuery: query];
-                        [tvc setInitalStepperValue:([[section height] floatValue] * 2)];
+                        [tvc setInitalStepperValue:([[section height] floatValue])];
                         [tvc setInitalSwitchValue:[[section visibility] boolValue]];
                         [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                     }
@@ -393,29 +393,25 @@
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
+    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
+            inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
+    [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber]
+                inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
-    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [documentReport managedObjectContext];
-    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber] inManagedObjectContext: managedObjectContext];
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    [documentReport save:nil];
-    [documentReport release];
+    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber]
+                  inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 #pragma mark - Delegates

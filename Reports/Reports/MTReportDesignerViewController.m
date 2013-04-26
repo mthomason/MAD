@@ -516,9 +516,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
     MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
-    [managedObjectContext save:nil];
+    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: [reportDocument managedObjectContext]];
+    [[reportDocument managedObjectContext] save:nil];
     [reportDocument save:nil];
     
 }
@@ -588,10 +587,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
     BOOL contextSaved = NO;
+
     for (id updatedObject in updatedObjects) {
+        
         if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
             RptqDocumentObject *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
+
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))] ||
                     [change isEqualToString:NSStringFromSelector(@selector(sizeheight))] ||
@@ -807,7 +809,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqQuery *query = [[database hasQueries] anyObject];
                 RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                     forQuery: query];
-                [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue] * 2)];
+                [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue])];
                 [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
                 [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                 [[self viewControllerSectionLayoutSettings] updateDisplay];
@@ -1211,12 +1213,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
     
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
     
     CGSize result;
     
@@ -1244,7 +1247,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
@@ -1299,7 +1302,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
     NSLog(@"Number of items: %d", [objects count]);
     return [objects count];
 }
@@ -1333,7 +1336,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    return [[documentSection hasRows] count];
 }
 
 #pragma mark - Collection View Delegate
@@ -1398,7 +1403,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:0] hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
 
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
@@ -1695,6 +1700,48 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
 
                 
+                NSUInteger deleteSection = 0;
+                for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
+                    NSUInteger deleteIndex = 0;
+                    
+                    BOOL found = NO;
+                    for (RptqDocumentObject *object in hasObjects) {
+                        
+                        if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
+                            found = YES;
+                            break;
+                        }
+                        deleteIndex++;
+                    }
+                    if (found) {
+                        [svSection performBatchUpdates:^{
+                            RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
+                            [objectToDelete setInSectionRow:nil];
+                            [hasObjects removeObjectAtIndex:deleteIndex];
+                            RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
+                            [row setHasObjects:hasObjects];
+                            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                            NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
+                            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+                        } completion:^(BOOL finished) {
+                            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+                            [[gestureRecognizer view] setCenter: newCenter];
+                            [[self designScrollView] addSubview: [gestureRecognizer view]];
+                            
+                            [svSection setDelegate:self];
+                        }];
+                    }
+                    [hasObjects release];
+                    if (found == YES) {
+                        break;
+                    }
+                    found = NO;     // FIXME: Short circut this?
+                    deleteSection++;
+
+                }
+/*
                 NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [[[documentSection hasRows] objectAtIndex:0] hasObjects]];
                 NSUInteger deleteIndex = 0;
                 
@@ -1726,6 +1773,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     }];
                 }
                 [hasObjects release];
+ */
             }
             break;
         }
@@ -1811,9 +1859,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 // MARK: Add this to the data context and to the container for the sections collection view.
                 [newParent performBatchUpdates:^{
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[documentSection hasRows] objectAtIndex:0] hasObjects]];
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects]];
                     [hasObjects insertObject:documentObject atIndex:[indexPath item]];
-                    [[[documentSection hasRows] objectAtIndex:0] setHasObjects:hasObjects];
+                    [[[documentSection hasRows] objectAtIndex:[indexPath section]] setHasObjects:hasObjects];
                     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                     [hasObjects release];
                     

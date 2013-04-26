@@ -51,12 +51,12 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    //[self updateDisplay];
+    [self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self updateDisplay];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,7 +70,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 - (void)updateDisplay {
 
     [[self visibilitySwitch] setOn:[self initalSwitchValue]];
-    [[self heightStepper] setValue:[self initalStepperValue]];
+    [[self heightStepper] setValue:[self initalStepperValue] * 2];
     [[self rowsStepper] setValue:[self initalNumberOfRows]];
     
     [self setNumberOfRowsLabel:[self initalNumberOfRows]];

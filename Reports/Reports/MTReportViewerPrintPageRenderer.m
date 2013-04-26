@@ -245,6 +245,7 @@
 - (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
     if ([results isKindOfClass:[NSDictionary class]]) {
         CGFloat originX = CGPointZero.x;
+        // FIXME: Print more than  the first row.
         for (RptqDocumentObject *documentObject in [[[section hasRows] objectAtIndex:0] hasObjects]) {
             NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
             CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
@@ -256,6 +257,7 @@
         }
     } else if ([results isKindOfClass:[NSArray class]]) {
         CGFloat originX = CGPointZero.x;
+        // FIXME: Print more than  the first row.
         for (RptqDocumentObject *documentObject in [[[section hasRows] objectAtIndex:0] hasObjects]) {
             //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
             CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
@@ -442,6 +444,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                         
                         NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
                         NSUInteger documentObjectCounter = 0;
+                        // FIXME: Print more than  the first row.
+
                         for (RptqDocumentObject *documentObject in [[[documentSection hasRows] objectAtIndex:0] hasObjects]) {
                             if (documentObjectCounter > 0) {
                                 [mutableStringToPrint appendString:@", "];
@@ -539,6 +543,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         *printableSpaceUsedPageHeight += [[detailSection height] floatValue];
         NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
         NSUInteger documentObjectCounter = 0;
+        // FIXME: Print more than  the first row.
+
         for (RptqDocumentObject *documentObject in [[[detailSection hasRows] objectAtIndex:0] hasObjects]) {
             if (documentObjectCounter > 0) {
                 [mutableStringToPrint appendString:@", "];
