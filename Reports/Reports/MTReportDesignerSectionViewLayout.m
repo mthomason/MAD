@@ -38,18 +38,27 @@
     return self;
 }
 
+- (CGFloat)sectionHeight {
+    CGFloat collectionViewHeight = [[self delegate] heightOfCollectionView:[self collectionView]];
+    return collectionViewHeight / [self numberOfSections];
+}
+
 - (void)prepareLayout {
     [super prepareLayout];
-
-    NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+    NSUInteger numberOfSections = [[self delegate] numberOfSectionsInCollectionView:[self collectionView]];
     [self setNumberOfSections:numberOfSections];
     NSMutableArray *layoutAttributesArray = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
 
     CGSize contentSize = CGSizeZero;
-
+    
+    CGFloat sectionHeight = [self sectionHeight];
+    
     for (NSInteger section = 0; section < self.numberOfSections; section++) {
 
         NSInteger numberOfItems = [[self collectionView] numberOfItemsInSection:section];
+        
+        NSLog(@"Number of items in section %d: %d", section, numberOfItems);
+
         
         //CGSize supplementryViewSize = CGSizeMake(50.0000f, 50.0000f);
         //CGFloat maxWidthForSection = 50.0000f, maxHeightForSection = 0.0000f;
@@ -62,14 +71,20 @@
         //                                                                                                                             withIndexPath: firstIndexPath];
         //[layoutAttributesForHeader setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 50.0000f, 50.0000f)];
         
+        CGFloat sectionY = CGPointZero.y + sectionHeight * section;
+        
         for (NSInteger item = 0; item < numberOfItems; item++) {
-
+            
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
             CGSize itemSize = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:indexPath];
             UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+            
+//            layoutAttributes.frame = CGRectMake(maxWidthForSection, CGPointZero.y, itemSize.width, itemSize.height);
+            
+            layoutAttributes.frame = CGRectMake(maxWidthForSection, sectionY, itemSize.width, itemSize.height);
 
-            layoutAttributes.frame = CGRectMake(maxWidthForSection, CGPointZero.y, itemSize.width, itemSize.height);
-
+            NSLog(@"Layout frame: %@", NSStringFromCGRect(layoutAttributes.frame));
+            
             [layoutAttributesForSection addObject: layoutAttributes];
             if (itemSize.height > maxHeightForSection) {
                 maxHeightForSection = itemSize.height;
@@ -100,6 +115,7 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+    
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
     for (NSInteger section = 0; section < [[self layoutArray] count]; section++) {
@@ -157,19 +173,29 @@
     // MARK: Recalculate updated attributes.
     CGSize contentSize = CGSizeZero;
     NSUInteger sectionCounter = 0, itemCounter = 0;
+    CGFloat sectionHeight = [self sectionHeight];
+
     for (NSArray *sectionAttributes in [self invalidatedLayoutArray]) {
 
         CGFloat maxWidthForSection = 0.0000f, maxHeightForSection = 0.0000f;
 
         for (UICollectionViewLayoutAttributes *layoutAttributes in sectionAttributes) {
+
             layoutAttributes.indexPath = [NSIndexPath indexPathForItem:itemCounter inSection:sectionCounter];
+
             if (CGSizeEqualToSize(layoutAttributes.size, CGSizeZero)) {
                 layoutAttributes.size = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:layoutAttributes.indexPath];
             }
-            layoutAttributes.frame = CGRectMake(maxWidthForSection, CGPointZero.y, layoutAttributes.size.width, layoutAttributes.size.height);
+            CGFloat sectionY = CGPointZero.y + sectionHeight * layoutAttributes.indexPath.section;
+            //CGFloat sectionY = CGPointZero.y;
+            layoutAttributes.frame = CGRectMake(maxWidthForSection, sectionY, layoutAttributes.size.width, layoutAttributes.size.height);
+
+            NSLog(@"Update frame: %@", NSStringFromCGRect(layoutAttributes.frame));
+
             if (layoutAttributes.size.height > maxHeightForSection) {
                 maxHeightForSection = layoutAttributes.size.height;
             }
+
             maxWidthForSection += layoutAttributes.size.width;
 
             itemCounter++;

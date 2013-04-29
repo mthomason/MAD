@@ -11,5 +11,6 @@
 @interface UIGestureRecognizer (AnchorPoint)
 
 + (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
++ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer inView:(UIView *)containerView;
 
 @end

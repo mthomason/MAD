@@ -16,11 +16,12 @@
 @protocol MTReportDesignerSectionViewLayoutDelegate
 - (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
 @end
 
 @interface MTReportDesignerSectionViewLayout : UICollectionViewLayout
 
-@property (assign, nonatomic) id <MTReportDesignerSectionViewLayoutDelegate> delegate;
+@property (assign, nonatomic) id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
 
 @end
 

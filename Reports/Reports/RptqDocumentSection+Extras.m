@@ -275,6 +275,30 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
+    
+    if ([[section numberOfRows] integerValue] == numberOfRows) {
+        
+        //No change
+
+    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
+
+        //Add row
+        RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                                inManagedObjectContext: managedObjectContext];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [hasRows addObject:newRowToAppend];
+        [section setHasRows:hasRows];
+        [hasRows release]; hasRows = nil;
+        
+    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
+
+        //Remove row
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [hasRows removeObjectAtIndex:[hasRows count] - 1];
+        [section setHasRows:hasRows];
+        [hasRows release]; hasRows = nil;
+
+    }
     [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
     
 }

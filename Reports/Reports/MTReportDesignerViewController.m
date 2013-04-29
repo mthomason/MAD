@@ -536,7 +536,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: managedObjectContext];
+    [RptqDocumentSection setNumberOfRows: numberOfRows
+                         forSectionAtRow: [self lastSelectedSectionControlPanel]
+                  inManagedObjectContext: managedObjectContext];
     [managedObjectContext save:nil];
     [reportDocument save:nil];
     
@@ -1203,7 +1205,28 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [super canPerformAction:action withSender:sender];
 }
 
-#pragma mark - MTCollectionViewLineLayoutDelegate
+#pragma mark --
+#pragma Collection View Line Layout Delegate
+/*
+- (NSUInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    
+    return [[documentSection hasRows] count];
+}
+*/
+
+
+- (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    return [[documentSection height] floatValue];
+}
 
 - (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
     NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
@@ -1235,16 +1258,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 #pragma mark - Collection View Data Source
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-
+    NSLog(@"Display number cell at index path %@", indexPath);
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
@@ -1285,7 +1300,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 [cell setTag:[[documentObject identifier] integerValue] + 3838];
                 [cell setObjectIdTag:[documentObject objectID]];
-                [cell setFrame: cellFrame];
+                //[cell setFrame: cellFrame];
                 [cell setUserInteractionEnabled:YES];
                 [[cell contentView] addSubview:elementView];
                 
@@ -1299,11 +1314,22 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:managedObjectContext];
+    
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    NSLog(@"Number of items: %d", [objects count]);
+    NSLog(@"Number of items: %d in section: %d", [objects count], section);
     return [objects count];
 }
 
@@ -1338,6 +1364,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    NSLog(@"Number of sections: %d", [[documentSection hasRows] count]);
     return [[documentSection hasRows] count];
 }
 
@@ -1676,7 +1703,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-    
     switch ([gestureRecognizer state]) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
@@ -1701,22 +1727,28 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
                 
                 NSUInteger deleteSection = 0;
+
                 for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
 
                     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
                     NSUInteger deleteIndex = 0;
                     
                     BOOL found = NO;
+
                     for (RptqDocumentObject *object in hasObjects) {
                         
                         if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
                             found = YES;
                             break;
                         }
+                    
                         deleteIndex++;
                     }
+
                     if (found) {
+
                         [svSection performBatchUpdates:^{
+                            
                             RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
                             [objectToDelete setInSectionRow:nil];
                             [hasObjects removeObjectAtIndex:deleteIndex];
@@ -1724,7 +1756,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                             [row setHasObjects:hasObjects];
                             [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                             NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
+
                             [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+
                         } completion:^(BOOL finished) {
                             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
                             [[gestureRecognizer view] setCenter: newCenter];
@@ -1845,9 +1879,16 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
                                                                                         fromObjectContext: managedObjectContext];
                 
-                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
+//                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
+                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
+//                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
+                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:pointInView];
+                
+                NSUInteger sectionToAddTo = 0;
+                
                 if (indexPath == nil) {
-                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: 0] inSection:0];
+                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: sectionToAddTo]
+                                                    inSection:sectionToAddTo];
                 }
                 
                 NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
@@ -1859,12 +1900,16 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 // MARK: Add this to the data context and to the container for the sections collection view.
                 [newParent performBatchUpdates:^{
+                    
                     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects]];
+                    
                     [hasObjects insertObject:documentObject atIndex:[indexPath item]];
                     [[[documentSection hasRows] objectAtIndex:[indexPath section]] setHasObjects:hasObjects];
-                    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+
                     [hasObjects release];
                     
+                    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                    NSLog(@"Insert item into index path: %@", indexPaths);
                     [newParent insertItemsAtIndexPaths:indexPaths];
                     
                 } completion:^(BOOL finished) {
