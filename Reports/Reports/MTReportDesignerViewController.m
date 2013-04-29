@@ -535,12 +535,105 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
     MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                        forQuery: query];
+    
+    BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.integerValue;
+    BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.integerValue;
+    
+    __block UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
+
+    //[documentSectionView performBatchUpdates:^{
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
     [RptqDocumentSection setNumberOfRows: numberOfRows
                          forSectionAtRow: [self lastSelectedSectionControlPanel]
-                  inManagedObjectContext: managedObjectContext];
-    [managedObjectContext save:nil];
-    [reportDocument save:nil];
+                  inManagedObjectContext: [reportDocument managedObjectContext]];
+    
+    
+    
+    
+    
+    */
+    
+    
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel] forQuery: query];
+    
+    if ([[section numberOfRows] integerValue] == numberOfRows) {
+        
+        //No change
+        
+    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
+        
+        //Add row
+        RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                                inManagedObjectContext: [reportDocument managedObjectContext]];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [newRowToAppend setInSection:section];
+        [hasRows addObject:newRowToAppend];
+        [section setHasRows:hasRows];
+        [hasRows release]; hasRows = nil;
+        
+    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
+        
+        //Remove row
+        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [[hasRows lastObject] setInSection:nil];
+        [hasRows removeObjectAtIndex:[hasRows count] - 1];
+        [section setHasRows:hasRows];
+//        [section setNumberOfRows:[[section numberOfRows] integerValue] -1];
+        [hasRows release]; hasRows = nil;
+        [rowToDelete setInSection:nil];
+        
+    }
+    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
+    
+    
+    
+    
+    
+    NSError *error = nil;
+    [[reportDocument managedObjectContext] save:&error];
+    
+    NSLog(@"error %@", error);
+    
+    [reportDocument save:^(BOOL success) {
+        
+        if (insertNewSection) {
+            NSInteger index = numberOfRows - 1;
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
+            [documentSectionView insertSections:indexSet];
+        } else if (deleteLastSection) {
+            NSInteger index = numberOfRows;
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
+            [documentSectionView deleteSections:indexSet];
+        }
+        
+    }];
+
+
+    //[[documentSectionView collectionViewLayout] invalidateLayout];
+    //} completion:nil];
+    
+    [documentSectionView release];
     
 }
 
@@ -574,7 +667,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self view] setNeedsUpdateConstraints];
 }
 
-#pragma mark - UIViewControllerToolboxDelegate
+#pragma mark - Toolbox Delegate
 
 - (void)heightChanged:(CGFloat)newHeight {
     //NSLog(@"Height changed to %f", newHeight);
@@ -635,7 +728,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification { }
 
-#pragma mark - UIMenu Notifications
+#pragma mark - Menu Notifications
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
     [self removeBorderFromView:[self lastElementViewToShowMenu]];
@@ -673,7 +766,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return popoverRect;
 }
 
-#pragma mark - MTElementViewDelegate
+#pragma mark - Element View Delegate
 
 - (void)didSelectElementView:(id)sender {
     
@@ -884,6 +977,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (NSSet *)elementViews {
+    
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
@@ -904,10 +998,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         }
     }
     [enumerator release];
+
     return [results autorelease];
+
 }
 
 - (NSSet *)selectedElementViews {
+
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
@@ -925,7 +1022,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         }
     }
     [enumerator release];
+    
     return [results autorelease];
+
 }
 
 - (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
@@ -1205,8 +1304,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [super canPerformAction:action withSender:sender];
 }
 
-#pragma mark --
-#pragma Collection View Line Layout Delegate
+#pragma mark -
+#pragma mark Collection View Line Layout Delegate
 /*
 - (NSUInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 
@@ -1256,7 +1355,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return result;
 }
 
-#pragma mark - Collection View Data Source
+#pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Display number cell at index path %@", indexPath);
@@ -1334,6 +1433,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"viewForSupplementaryElementOfKind: %@ atIndexPath %@", kind, indexPath);
 
     MTCollectionReuseableViewDefault *result = nil;
     
@@ -1364,38 +1464,57 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    NSLog(@"Number of sections: %d", [[documentSection hasRows] count]);
+    NSLog(@"numberOfSectionsInCollectionView: %d", [[documentSection hasRows] count]);
     return [[documentSection hasRows] count];
 }
 
-#pragma mark - Collection View Delegate
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
+    NSLog(@"numberOfItemsInSection");
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    return [objects count];
+}
 
-- (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath inCollectionView:(UICollectionView *)collectionView {
+#pragma mark Collection View Delegate
+
+- (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
+                         inCollectionView:(UICollectionView *)collectionView {
+
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     MTElementView *result = nil;
+    
     for (id elementView in [[cell contentView] subviews]) {
-        //NSLog(@"%@", [[cell contentView] subviews]);
         if ([elementView isKindOfClass:[MTElementView class]]) {
             result = [elementView retain];
             break;
         }
     }
+
     return [result autorelease];
+
 }
 
 - (NSSet *)selectedObjectIdsInCollectionView:(UICollectionView *)collectionView {
+
     NSMutableSet *result = [[NSMutableSet alloc] init];
+    
     for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
+    
         for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
+        
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            
             if ([cell isSelected]) {
                 MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
                 [result addObject:[elementView objectIdTag]];
             }
         }
     }
+
     return [result autorelease];
+
 }
 
 - (NSSet *)selectedObjectIdsCalculated {
@@ -1413,14 +1532,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return [results autorelease];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
-
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     return [self respondsToSelector:action];
 }
@@ -1431,7 +1542,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
-
+    
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
         [self performSelector:action withObject:documentObject];
@@ -1447,6 +1558,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setLastElementViewToShowMenu:elementView];
     return YES;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark - Delegates
 #pragma mark MUIViewControllerDelegate
@@ -1913,6 +2032,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     [newParent insertItemsAtIndexPaths:indexPaths];
                     
                 } completion:^(BOOL finished) {
+                    
                 }];
                 
             }

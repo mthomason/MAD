@@ -286,6 +286,7 @@
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [newRowToAppend setInSection:section];
         [hasRows addObject:newRowToAppend];
         [section setHasRows:hasRows];
         [hasRows release]; hasRows = nil;
@@ -293,10 +294,13 @@
     } else if (numberOfRows < [[section numberOfRows] integerValue]) {
 
         //Remove row
+        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:[hasRows count] - 1];
         [section setHasRows:hasRows];
         [hasRows release]; hasRows = nil;
+        [rowToDelete setInSection:nil];
 
     }
     [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];

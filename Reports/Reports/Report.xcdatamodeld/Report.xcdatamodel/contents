@@ -179,7 +179,7 @@
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="rowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentObject" inverseName="inSectionRow" inverseEntity="RptqDocumentObject" syncable="YES"/>
-        <relationship name="inSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection" syncable="YES"/>
+        <relationship name="inSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection" syncable="YES"/>
     </entity>
     <entity name="RptqQuery" representedClassName="RptqQuery" syncable="YES">
         <attribute name="cachedText" optional="YES" attributeType="String" syncable="YES"/>
@@ -309,7 +309,8 @@
         <element name="RptqDocumentObjectLabel" positionX="-884" positionY="144" width="218" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="-450" positionY="495" width="225" height="135"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-558" positionY="639" width="225" height="105"/>
-        <element name="RptqDocumentSection" positionX="-1728" positionY="446" width="198" height="313"/>
+        <element name="RptqDocumentSection" positionX="-1800" positionY="443" width="198" height="313"/>
+        <element name="RptqDocumentSectionRows" positionX="-1575" positionY="338" width="245" height="103"/>
         <element name="RptqQuery" positionX="-272" positionY="-846" width="128" height="238"/>
         <element name="RptqQueryCache" positionX="43" positionY="-783" width="128" height="148"/>
         <element name="RptqQueryGroup" positionX="-488" positionY="315" width="164" height="163"/>
@@ -322,6 +323,5 @@
         <element name="RptqQueryTable" positionX="-1053" positionY="-133" width="128" height="88"/>
         <element name="RptqRelationship" positionX="-1287" positionY="-726" width="128" height="105"/>
         <element name="RptqUserCredentals" positionX="-1494" positionY="-351" width="128" height="270"/>
-        <element name="RptqDocumentSectionRows" positionX="-1548" positionY="308" width="128" height="103"/>
     </elements>
 </model>
