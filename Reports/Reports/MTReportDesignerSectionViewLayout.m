@@ -106,6 +106,8 @@
         contentSize.height += maxHeightForSection;
 
     }
+    
+    contentSize.height = [[self delegate] heightOfCollectionView:[self collectionView]];
 
     [self setContentSize:contentSize];
     [self setLayoutArray:layoutAttributesArray];
