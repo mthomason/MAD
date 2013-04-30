@@ -50,6 +50,8 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
 - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
 
+- (MNSDocumentSectionType)getDocumentSectionType;
+
 @end
 
 #endif

@@ -59,8 +59,10 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
-    return [RptqDocumentSection getDocumentSectionForRow: self.current++
+    id result = [RptqDocumentSection getDocumentSectionForRow: self.current
                                                 forQuery: query];
+    self.current++;
+    return result;
 }
 
 @end

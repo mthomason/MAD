@@ -416,6 +416,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
 - (void)updateViewConstraints {
     [super updateViewConstraints];
 }
@@ -547,33 +550,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     __block UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
 
-    //[documentSectionView performBatchUpdates:^{
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-    [RptqDocumentSection setNumberOfRows: numberOfRows
-                         forSectionAtRow: [self lastSelectedSectionControlPanel]
-                  inManagedObjectContext: [reportDocument managedObjectContext]];
-    
-    
-    
-    
-    
-    */
-    
-    
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel] forQuery: query];
     
     if ([[section numberOfRows] integerValue] == numberOfRows) {
@@ -629,15 +605,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
     }];
 
-
-    //[[documentSectionView collectionViewLayout] invalidateLayout];
-    //} completion:nil];
-    
     [documentSectionView release];
     
 }
 
-#pragma mark - MTSectionViewDelegate
+#pragma mark - Section View Delegate
 
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
@@ -908,10 +880,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
                 [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                 [[self viewControllerSectionLayoutSettings] updateDisplay];
+                
                 if ([UIDevice isPad]) {
                     
                     [[self popoverControllerSectionSettings] setPassthroughViews:@[[sender view]]];
-                    [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds] inView:[sender view] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds]
+                                                                             inView:[sender view]
+                                                           permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                                           animated:YES];
                     
                 } else {
                     [self showToolbox:MTToolboxTypeSection];
@@ -919,6 +895,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             }
             
         }
+        
+    } else {
         
     }
 }
@@ -979,28 +957,41 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSSet *)elementViews {
     
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:
+                                     [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
-        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
-        if ([subview isKindOfClass:[UICollectionView class]]) {
-            UICollectionView *collectionView = (UICollectionView *)subview;
-            for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
-                for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
-                    MTElementView *elementView = [[self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView] retain];
-                    if (elementView != nil) {
-                        [results addObject:elementView];
-                    } else {
-                        //NSLog(@"Nil element view!  WTF");
-                    }
-                    [elementView release];
+        MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+        
+        NSInteger numberOfSectionsInCollectionView = [documentSectionView numberOfSections];
+        
+        for (NSUInteger section = 0; section < numberOfSectionsInCollectionView; section++) {
+            NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
+            
+            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+                MTElementView *elementView = [[self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
+                                                          inCollectionView: documentSectionView] retain];
+                
+                if (elementView != nil) {
+                    [results addObject:elementView];
                 }
+                [elementView release];
             }
         }
+        [documentSectionView release];
     }
     [enumerator release];
-
     return [results autorelease];
+}
 
+- (MTDocumentSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
+    MTDocumentSectionView *documentSectionView = nil;
+    for (id subview in [[self designScrollView] subviews]) {
+        if ([subview tag] == identifer && [subview isKindOfClass:[MTDocumentSectionView class]]) {
+            documentSectionView = [subview retain];
+            break;
+        }
+    }
+    return [documentSectionView autorelease];
 }
 
 - (NSSet *)selectedElementViews {
@@ -1008,18 +999,17 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
-        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
-        if ([subview isKindOfClass:[UICollectionView class]]) {
-            UICollectionView *collectionView = (UICollectionView *)subview;
-            for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
-                for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
-                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:collectionView];
-                    if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
-                        [results addObject:elementView];
-                    }
+        MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+        
+        for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+            for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
+                if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                    [results addObject:elementView];
                 }
             }
         }
+        [documentSectionView release];
     }
     [enumerator release];
     
@@ -1210,12 +1200,45 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [[self toolbarTop] setItems:nil animated:YES];
                         
             [[self view] layoutIfNeeded];
+            
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [self setWantsFullScreenLayout:YES];
                 [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
                 [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[self view] layoutIfNeeded];
-            } completion:nil];
+            } completion:^(BOOL finished) {
+                
+                if (finished) {
+                    
+                    CGRect rectToShow = CGRectZero;
+                    
+                    if (tooboxType == MTToolboxTypeSection) {
+                        
+                        MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        
+                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+                        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                        RptqQuery *query = [[database hasQueries] anyObject];
+                        RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                                    forQuery: query];
+                        
+                        UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
+                        
+                        rectToShow = selectedSectionView.frame;
+                        
+                    } else if (tooboxType == MTToolboxTypeElement) {
+                        rectToShow = [self rectForSelectedElements];
+                    }
+
+                    if (CGRectIntersectsRect(rectToShow, self.designScrollView.frame) == NO) {
+                        
+                        CGFloat offsetPointY = rectToShow.origin.y + rectToShow.size.height + 5.0000f - [[self designScrollView] frame].size.height;
+                        CGPoint offsetPoint = CGPointMake(CGPointZero.x, offsetPointY);
+                        [[self designScrollView] setContentOffset:offsetPoint animated:YES];
+                        
+                    }
+                }            
+            }];
         }
     }
     
@@ -1250,6 +1273,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [[self view] layoutIfNeeded];
 
         } completion:^(BOOL finished) {
+            //[[self designScrollView] setContentSize:[[self designScrollView] frame].size];
             if ([[[self navigationControllerSectionLayoutSettings] view] superview] != nil) {
                 [[[self navigationControllerSectionLayoutSettings] view] removeFromSuperview];
             }
@@ -1521,12 +1545,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
-        UIView *subview = [[self designScrollView] viewWithTag:[[documentSection identifier] integerValue]];
-        if ([subview isKindOfClass:[UICollectionView class]]) {
-            UICollectionView *collectionView = (UICollectionView *)subview;
-            NSArray *selectedObjects = [[self selectedObjectIdsInCollectionView:collectionView] allObjects];
-            [results addObjectsFromArray: selectedObjects];
-        }
+        MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+        
+        NSArray *selectedObjects = [[self selectedObjectIdsInCollectionView:documentSectionView] allObjects];
+        [results addObjectsFromArray: selectedObjects];
+        [documentSectionView release];
     }
     [enumerator release];
     return [results autorelease];

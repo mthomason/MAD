@@ -361,6 +361,9 @@
     return result;
 }
 
+- (MNSDocumentSectionType)getDocumentSectionType {
+    return [[self type] integerValue];
+}
 - (NSString *)localizedDisplayName {
     NSString *result = nil;
     switch ([[self type] integerValue]) {
