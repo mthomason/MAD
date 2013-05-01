@@ -59,8 +59,6 @@
 @property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
 @property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
 
-@property (nonatomic, retain) IBOutlet UILabel *labelTest;
-
 @property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
 @property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
 
@@ -115,7 +113,6 @@
     [_labelSizeHeight release];
     [_groupTableViewCellStyle release];
     [_groupTableViewCellLayout release];
-    [_labelTest release];
     [super dealloc];
 }
 
