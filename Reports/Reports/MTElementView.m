@@ -97,14 +97,17 @@
         
         UIView *marginView = [self retain];
         //[marginView setFrame: frame];
-        [marginView setBackgroundColor:[UIColor edaBlackFiftyPercent]];
+        [marginView setBackgroundColor:[UIColor clearColor]];
+//        [marginView setBackgroundColor:[UIColor edaBlackFiftyPercent]];
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
         
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
-        [visibleView setBackgroundColor:[UIColor yellowColor]];
+        [[visibleView layer] setBorderWidth:1.0000f];
+        [visibleView setBackgroundColor:[UIColor whiteColor]];
+//        [visibleView setBackgroundColor:[UIColor yellowColor]];
         [visibleView setAutoresizingMask:UIViewAutoresizingNone];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
@@ -112,7 +115,9 @@
         
         UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
-        [labelBackground setBackgroundColor:[UIColor whiteColor]];
+        [[labelBackground layer] setBorderWidth:1.0000f];
+        [labelBackground setBackgroundColor:[UIColor clearColor]];
+//        [labelBackground setBackgroundColor:[UIColor whiteColor]];
         [labelBackground setAutoresizingMask:UIViewAutoresizingNone];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
@@ -126,7 +131,8 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         //[label setUserInteractionEnabled:NO];
-        [label setBackgroundColor:[UIColor whiteColor]];
+        [label setBackgroundColor:[UIColor clearColor]];
+//        [label setBackgroundColor:[UIColor whiteColor]];
         [label setAutoresizingMask:UIViewAutoresizingNone];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];
