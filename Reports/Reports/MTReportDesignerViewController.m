@@ -1414,7 +1414,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = [documentObject viewSize];
+        result = [documentObject elementViewSize];
     } else {
         result = CGSizeZero;
     }
@@ -1436,7 +1436,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
     
-        CGSize documentObjectSize = [documentObject viewSize];
+        CGSize documentObjectSize = [documentObject elementViewSize];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
@@ -2056,8 +2056,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 [documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
                 [documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
-                [documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
-                [documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
+                //[documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
+                //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
                 
                 CGPoint newCenter = [[gestureRecognizer view] center];
                 [[gestureRecognizer view] removeFromSuperview];

@@ -39,6 +39,7 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
 - (MTDocumentObjectType)getType;
+- (CGSize)elementViewSize;
 - (CGSize)viewSize;
 - (NSString *)designerRepresentationText;
 
