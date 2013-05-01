@@ -241,8 +241,17 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [collectionViewReuseIdentifiers release];
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    [[viewRuler layer] setCornerRadius: 6.0f];
+    CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
+    CGFloat shadowOpacity = 0.90000f;
+    CGSize shadowOffset = CGSizeMake(-2.0000f, -2.0000f);
+    [[viewRuler layer] setShadowColor: shadowColor];
+    [[viewRuler layer] setShadowOpacity: shadowOpacity];
+    [[viewRuler layer] setShadowOffset: shadowOffset];
+    [[viewRuler layer] setCornerRadius: 6.0000f];
     [[viewRuler layer] setMasksToBounds: YES];
+    [[viewRuler layer] setBorderColor: shadowColor];
+    [[viewRuler layer] setBorderWidth: 3.0000f];
+
     NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
     NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: -(paddingBorder * 2.0000f)];
     NSLayoutConstraint *rulerConstraintLeading = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeLeading multiplier:1.0000f constant: paddingBorder];
@@ -340,10 +349,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[sectionControlView layer] setBorderColor: [[UIColor darkGrayColor] CGColor]];
         [[sectionControlView layer] setBorderWidth: 2.0000f];
 
-        [[collectionView layer] setBorderColor: [[UIColor darkGrayColor] CGColor]];
+        [[collectionView layer] setBorderColor: shadowColor];
         [[collectionView layer] setBorderWidth: 3.0000f];
-        [[collectionView layer] setShadowOffset:CGSizeMake(-2.0000f, -2.0000f)];
-        [[collectionView layer] setShadowColor: [[UIColor darkGrayColor] CGColor]];
+        [[collectionView layer] setShadowOffset: shadowOffset];
+        [[collectionView layer] setShadowColor: shadowColor];
+        [[collectionView layer] setShadowOpacity: shadowOpacity];
+
         
         [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
         [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
