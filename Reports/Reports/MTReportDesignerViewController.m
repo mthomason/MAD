@@ -1965,8 +1965,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
         case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-            
-            
+                        
             // MARK: Remove the element from one section and place it into the next new section
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
@@ -1997,8 +1996,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 }
             }
             
-            
-            
             if (addedToNewParent) {
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
@@ -2021,9 +2018,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
                                                                                         fromObjectContext: managedObjectContext];
                 
-//                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
                 CGPoint pointInView = [gestureRecognizer locationInView:newParent];
-//                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:adjustedCenter];
                 NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:pointInView];
                 
                 NSUInteger sectionToAddTo = 0;
@@ -2042,20 +2037,32 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 // MARK: Add this to the data context and to the container for the sections collection view.
                 [newParent performBatchUpdates:^{
-                    
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects]];
-                    
-                    [hasObjects insertObject:documentObject atIndex:[indexPath item]];
-                    [[[documentSection hasRows] objectAtIndex:[indexPath section]] setHasObjects:hasObjects];
-
+                    NSOrderedSet *hasRows = [documentSection hasRows];
+                    NSMutableOrderedSet *hasObjects = nil;
+                    NSUInteger indexSectionUsed = 0, indexItemUsed = 0;
+                    RptqDocumentSectionRows *row = nil;
+                    if ([hasRows count] > [indexPath section]) {
+                        indexSectionUsed = [indexPath section];
+                        row = [hasRows objectAtIndex:indexSectionUsed];
+                        hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[row hasObjects]];
+                    } else if ([hasRows count] > 0) {
+                        indexSectionUsed = [hasRows count] - 1;
+                        row = [hasRows objectAtIndex:indexSectionUsed];
+                        hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[row hasObjects]];
+                    }
+                    if (hasObjects) {
+                        indexItemUsed = [indexPath item];
+                        [hasObjects insertObject:documentObject atIndex:indexItemUsed];
+                        [row setHasObjects:hasObjects];
+                    }
                     [hasObjects release];
                     
                     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                    NSLog(@"Insert item into index path: %@", indexPaths);
-                    [newParent insertItemsAtIndexPaths:indexPaths];
+                    
+                    [newParent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:indexItemUsed inSection:indexSectionUsed]]];
                     
                 } completion:^(BOOL finished) {
-                    
+
                 }];
                 
             }
