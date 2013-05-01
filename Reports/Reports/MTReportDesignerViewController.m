@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
 @property (nonatomic, retain) NSMutableDictionary *sectionControlViews;
+@property (nonatomic, retain) NSMutableDictionary *sectionBackgroundViews;
 @property (nonatomic, retain) NSMutableDictionary *sectionControlViewsHeighConstraint;
 
 @property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
@@ -94,6 +95,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
     [_sectionControlViews release];
+    [_sectionBackgroundViews release];
     [_sectionViews release];
     [_settingsPopoverController release];
     [_designScrollView release];
@@ -187,6 +189,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setLayoutConstraintsReportSectionHeight:layoutConstraintsReportSectionHeight];
     [layoutConstraintsReportSectionHeight release];
     
+    NSMutableDictionary *dictionarySectionBackgroundViews = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    [self setSectionBackgroundViews:dictionarySectionBackgroundViews];
+    [dictionarySectionBackgroundViews release];
+    
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
     [self setSectionViews: dictionarySections];
     [dictionarySections release];
@@ -259,7 +265,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         MTReportDesignerSectionViewLayout *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayout alloc] init];
         [flowLayoutDesignerSection setDelegate:self];
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+//        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+        [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
         [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
@@ -329,8 +337,17 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         NSString *collectionViewKey = [reportSection sectionKey];
         NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
 
+        [[sectionControlView layer] setBorderColor: [[UIColor darkGrayColor] CGColor]];
+        [[sectionControlView layer] setBorderWidth: 2.0000f];
+
+        [[collectionView layer] setBorderColor: [[UIColor darkGrayColor] CGColor]];
+        [[collectionView layer] setBorderWidth: 3.0000f];
+        [[collectionView layer] setShadowOffset:CGSizeMake(-2.0000f, -2.0000f)];
+        [[collectionView layer] setShadowColor: [[UIColor darkGrayColor] CGColor]];
+        
         [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
         [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
+        [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
         
         [dictionaryViewsVertical setValue:sectionControlView forKey:labelKey];
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
@@ -519,9 +536,24 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
     MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                forQuery: query];
+
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: [reportDocument managedObjectContext]];
     [[reportDocument managedObjectContext] save:nil];
     [reportDocument save:nil];
+    
+    MTReportDesignerSectionBackgroundView *backgroundView = [[[self sectionBackgroundViews] objectForKey:[documentSection sectionKey]] retain];
+    [backgroundView setNeedsDisplay];
+    [backgroundView release];
+    
+    UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
+    [[documentSectionView collectionViewLayout] invalidateLayout];
+    [documentSection release];
+//    UICollectionView *collectionView =
     
 }
 
@@ -550,42 +582,42 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     __block UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
 
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel] forQuery: query];
+    //RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel] forQuery: query];
     
-    if ([[section numberOfRows] integerValue] == numberOfRows) {
+    if ([[documentSection numberOfRows] integerValue] == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
+    } else if (numberOfRows > [[documentSection numberOfRows] integerValue]) {
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: [reportDocument managedObjectContext]];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
-        [newRowToAppend setInSection:section];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[documentSection hasRows] array]];
+        [newRowToAppend setInSection:documentSection];
         [hasRows addObject:newRowToAppend];
-        [section setHasRows:hasRows];
+        [documentSection setHasRows:hasRows];
         [hasRows release]; hasRows = nil;
         
-    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
+    } else if (numberOfRows < [[documentSection numberOfRows] integerValue]) {
         
         //Remove row
-        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        RptqDocumentSectionRows *rowToDelete = [[documentSection hasRows] lastObject];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[documentSection hasRows] array]];
         [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:[hasRows count] - 1];
-        [section setHasRows:hasRows];
+        [documentSection setHasRows:hasRows];
 //        [section setNumberOfRows:[[section numberOfRows] integerValue] -1];
         [hasRows release]; hasRows = nil;
         [rowToDelete setInSection:nil];
         
     }
-    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
+    [documentSection setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
     
-    
-    
-    
-    
+    MTReportDesignerSectionBackgroundView *backgroundView = [[[self sectionBackgroundViews] objectForKey:[documentSection sectionKey]] retain];
+    [backgroundView setNumberOfRowsInBackground:numberOfRows];
+    [backgroundView release];
+
     NSError *error = nil;
     [[reportDocument managedObjectContext] save:&error];
     
@@ -924,8 +956,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         result = YES;
-        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[view layer] setBorderWidth:0.0000f];
+        [[view layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
+        [[view layer] setBorderWidth:2.0000f];
     } else {
         result = NO;
     }
@@ -933,7 +965,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
-    return ([[view layer] borderWidth] > 0.5000f);
+    return ([[view layer] borderWidth] >2.5000f);
 }
 
 - (BOOL)dismissAllPopovers {
@@ -1409,11 +1441,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
                                                                      inObjectContext:managedObjectContext];
+                [[elementView layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
+                [[elementView layer] setBorderWidth:2.0000f];
                 
                 [elementView setDelegate:self];
                 [cell setBackgroundColor:[UIColor clearColor]];
                 [elementView setFrame:cellFrame];
-                [[elementView layer] setCornerRadius: 3.0000f];
+                [[elementView layer] setCornerRadius: 5.0000f];
                 
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
                 [panGesture setMaximumNumberOfTouches:1];
@@ -1851,6 +1885,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [[gestureRecognizer view] setCenter: newCenter];
+            [[gestureRecognizer view] setAlpha:0.8000f];
             
             [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
             newCenter = [gestureRecognizer locationInView:[self designScrollView]];
@@ -1965,7 +2000,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
         case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-                        
+
+            [[gestureRecognizer view] setAlpha:1.0000f];
+            
             // MARK: Remove the element from one section and place it into the next new section
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];

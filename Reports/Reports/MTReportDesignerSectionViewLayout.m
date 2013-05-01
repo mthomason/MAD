@@ -13,7 +13,8 @@
 @property (assign) CGSize contentSize;
 @property (assign) NSInteger numberOfSections;
 
-@property (nonatomic, retain) NSMutableArray *layoutArray;
+@property (nonatomic, retain) NSMutableArray *itemAttributesBySection;
+@property (nonatomic, retain) NSMutableArray *decorationAttributesBySection;
 @property (nonatomic, retain) NSMutableArray *invalidatedLayoutArray;
 
 @end
@@ -21,8 +22,9 @@
 @implementation MTReportDesignerSectionViewLayout
 
 - (void)dealloc {
+    [_itemAttributesBySection release];
+    [_decorationAttributesBySection release];
     [_invalidatedLayoutArray release];
-    [_layoutArray release];
     [super dealloc];
 }
 
@@ -31,14 +33,18 @@
     if (self) {
         
         NSMutableArray *rectArray = [[NSMutableArray alloc] init];
-        [self setLayoutArray:rectArray];
+        [self setItemAttributesBySection:rectArray];
         [rectArray release];
-        
+
+        [self registerClass: [MTReportDesignerSectionDecorationView class]
+    forDecorationViewOfKind: NSStringFromClass([MTReportDesignerSectionDecorationView class])];
+
     }
     return self;
 }
 
 - (CGFloat)sectionHeight {
+    NSLog(@"sectionHeight");
     CGFloat collectionViewHeight = [[self delegate] heightOfCollectionView:[self collectionView]];
     return collectionViewHeight / [self numberOfSections];
 }
@@ -49,7 +55,9 @@
 
     NSUInteger numberOfSections = [[self delegate] numberOfSectionsInCollectionView:[self collectionView]];
     [self setNumberOfSections:numberOfSections];
-    NSMutableArray *layoutAttributesArray = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
+
+    NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
+    NSMutableArray *decorationAttributesBySection = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
 
     CGSize contentSize = CGSizeZero;
     
@@ -58,22 +66,8 @@
     for (NSInteger section = 0; section < self.numberOfSections; section++) {
         
         NSInteger numberOfItems = [[self delegate] numberOfItemsInSection:section ofCollectionView:[self collectionView]];
-
-//        NSInteger numberOfItems = [[self collectionView] numberOfItemsInSection:section];
-        
-        NSLog(@"Number of items in section %d: %d", section, numberOfItems);
-
-        
-        //CGSize supplementryViewSize = CGSizeMake(50.0000f, 50.0000f);
-        //CGFloat maxWidthForSection = 50.0000f, maxHeightForSection = 0.0000f;
-        
         CGFloat maxWidthForSection = CGSizeZero.width, maxHeightForSection = CGSizeZero.height;
         NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
-        
-        //NSIndexPath *firstIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-        //UICollectionViewLayoutAttributes *layoutAttributesForHeader = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-        //                                                                                                                             withIndexPath: firstIndexPath];
-        //[layoutAttributesForHeader setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 50.0000f, 50.0000f)];
         
         CGFloat sectionY = CGPointZero.y + sectionHeight * section;
         
@@ -81,42 +75,55 @@
             
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
             CGSize itemSize = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:indexPath];
-            UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-            
-//            layoutAttributes.frame = CGRectMake(maxWidthForSection, CGPointZero.y, itemSize.width, itemSize.height);
-            
-            layoutAttributes.frame = CGRectMake(maxWidthForSection, sectionY, itemSize.width, itemSize.height);
 
-            NSLog(@"Layout frame: %@", NSStringFromCGRect(layoutAttributes.frame));
+            UICollectionViewLayoutAttributes *itemAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+            [itemAttributes retain];
             
-            [layoutAttributesForSection addObject: layoutAttributes];
+            itemAttributes.frame = CGRectMake(maxWidthForSection, sectionY, itemSize.width, itemSize.height);
+            [layoutAttributesForSection addObject: itemAttributes];
             if (itemSize.height > maxHeightForSection) {
                 maxHeightForSection = itemSize.height;
             }
+            [itemAttributes setZIndex:section];
             maxWidthForSection += itemSize.width;
+            [itemAttributes release];
         }
-        
-        [layoutAttributesArray addObject:layoutAttributesForSection];
+                
+        [itemAttributesBySection addObject:layoutAttributesForSection];
         [layoutAttributesForSection release];
-        
+
         if (maxWidthForSection > contentSize.width) {
             contentSize.width = maxWidthForSection;
         }
     
         contentSize.height += maxHeightForSection;
 
+        /*
+        UICollectionViewLayoutAttributes *sectionAttributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:NSStringFromClass([MTReportDesignerSectionDecorationView class])
+                                                                                                                          withIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]];
+        [sectionAttributes retain];
+        CGFloat backgroundWidth = self.collectionView.frame.size.width > contentSize.width ? self.collectionView.frame.size.width : contentSize.width;
+        [sectionAttributes setFrame: CGRectMake(CGPointZero.x, sectionY, backgroundWidth, sectionHeight)];
+//        [sectionAttributes setFrame: CGRectMake(CGPointZero.x, sectionY, backgroundWidth, 1.0000f)];
+        [sectionAttributes setZIndex: -1000];
+        [decorationAttributesBySection addObject:sectionAttributes];
+        [sectionAttributes release];
+         */
     }
     
     contentSize.height = [[self delegate] heightOfCollectionView:[self collectionView]];
 
     [self setContentSize:contentSize];
-    [self setLayoutArray:layoutAttributesArray];
+    [self setItemAttributesBySection:itemAttributesBySection];
+    [self setDecorationAttributesBySection:decorationAttributesBySection];
     
     
-    [layoutAttributesArray release];
+    [itemAttributesBySection release];
+    [decorationAttributesBySection release];
 }
 
 - (CGSize)collectionViewContentSize {
+    NSLog(@"collectionViewContentSize");
     return [self contentSize];
 }
 
@@ -125,24 +132,56 @@
     NSLog(@"layoutAttributesForElementsInRect %@", NSStringFromCGRect(rect));
     
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
-    
-    for (NSInteger section = 0; section < [[self layoutArray] count]; section++) {
-        NSArray *items = [[self layoutArray] objectAtIndex:section];
-        for (NSInteger item = 0; item < items.count; item++) {
-            UICollectionViewLayoutAttributes *layoutAttribute = [items objectAtIndex:item];
-            if (CGRectIntersectsRect(rect, layoutAttribute.frame)) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-                [layoutAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+    NSUInteger section = 0;
+    for (NSArray *items in [self itemAttributesBySection]) {
+        
+        for (UICollectionViewLayoutAttributes *itemAttribute in items) {
+            if (CGRectIntersectsRect(rect, itemAttribute.frame)) {
+                [itemAttribute retain];
+                [layoutAttributes addObject:itemAttribute];
+                [itemAttribute release];
             }
         }
+        
+        /*
+        UICollectionViewLayoutAttributes *decorationAttributes = [[[self decorationAttributesBySection] objectAtIndex:section] retain];
+        if (CGRectIntersectsRect(rect, decorationAttributes.frame)) {
+            [layoutAttributes addObject:decorationAttributes];
+        }
+        [decorationAttributes release];
+*/
+         
+        section++;
     }
+    /*
+    for (NSInteger section = 0; section < [[self itemAttributesBySection] count]; section++) {
+        
+        NSArray *items = [[self itemAttributesBySection] objectAtIndex:section];
+        for (NSInteger item = 0; item < items.count; item++) {
+
+            UICollectionViewLayoutAttributes *itemAttribute = [items objectAtIndex:item];
+
+            if (CGRectIntersectsRect(rect, itemAttribute.frame)) {
+                //NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
+//                [layoutAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+                [layoutAttributes addObject:itemAttribute];
+
+            }
+        }
+
+        UICollectionViewLayoutAttributes *decorationAttributes = [[[self decorationAttributesBySection] objectAtIndex:section] retain];
+        if (CGRectIntersectsRect(rect, decorationAttributes.frame)) {
+            [layoutAttributes addObject:decorationAttributes];
+        }
+        [decorationAttributes release];
+    }*/
     
     return [layoutAttributes autorelease];
-
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
+    NSLog(@"layoutAttributesForSupplementaryViewOfKind %@", indexPath);
+
     UICollectionViewLayoutAttributes *result;
     result = [super layoutAttributesForSupplementaryViewOfKind:kind atIndexPath:indexPath];
 
@@ -151,51 +190,53 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSUInteger sectionIndex = [indexPath section];
-    NSUInteger itemIndex = [indexPath item];
-    NSArray *rectsForSection = [[self layoutArray] objectAtIndex:sectionIndex];
-    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:itemIndex];
+    NSLog(@"layoutAttributesForItemAtIndexPath %@", indexPath);
+
+    NSArray *rectsForSection = [[self itemAttributesBySection] objectAtIndex:[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:[indexPath item]];
 
     return layoutAttributes;
 
 }
 
+- (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"layoutAttributesForDecorationViewOfKind %@", indexPath);
+
+    UICollectionViewLayoutAttributes *layoutAttributes = [[self decorationAttributesBySection] objectAtIndex:[indexPath section]];
+    [layoutAttributes setFrame:CGRectMake(layoutAttributes.frame.origin.x, layoutAttributes.frame.origin.y, self.collectionView.contentSize.width, layoutAttributes.frame.size.height)];
+    return  layoutAttributes;
+
+}
+
 - (UICollectionViewLayoutAttributes *)invalidatedLayoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"invalidatedLayoutAttributesForItemAtIndexPath %@", indexPath);
 
-    NSLog(@"initialLayoutAttributesForAppearingItemAtIndexPath %@", indexPath);
-
-    NSUInteger sectionIndex = [indexPath section];
-    NSUInteger itemIndex = [indexPath item];
-    NSArray *rectsForSection = [[self invalidatedLayoutArray] objectAtIndex:sectionIndex];
-    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:itemIndex];
+    NSArray *rectsForSection = [[self invalidatedLayoutArray] objectAtIndex:[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:[indexPath item]];
 
     return layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     NSLog(@"initialLayoutAttributesForAppearingItemAtIndexPath %@", indexPath);
     
-    UICollectionViewLayoutAttributes *layoutAttributes = [[[[self layoutArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.item] copy];
-    
+    UICollectionViewLayoutAttributes *layoutAttributes = [[[[self itemAttributesBySection] objectAtIndex:indexPath.section] objectAtIndex:indexPath.item] copy];
     return [layoutAttributes autorelease];
+
 }
 
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     NSLog(@"finalLayoutAttributesForDisappearingItemAtIndexPath %@", indexPath);
 
-    //NSLog(@"Disappearing %@", itemIndexPath);
     [super layoutAttributesForItemAtIndexPath:indexPath];
     UICollectionViewLayoutAttributes *layoutAttributes = [[[self invalidatedLayoutArray] objectAtIndex:indexPath.section] objectAtIndex: indexPath.item];
     return layoutAttributes;
+
 }
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
-    
-    NSLog(@"prepareForCollectionViewUpdates");
+    NSLog(@"prepareForCollectionViewUpdates %@", updateItems);
 
     [super prepareForCollectionViewUpdates:updateItems];
 
@@ -215,11 +256,9 @@
             if (CGSizeEqualToSize(layoutAttributes.size, CGSizeZero)) {
                 layoutAttributes.size = [[self delegate] collectionView:[self collectionView] layout:self sizeForItemAtIndexPath:layoutAttributes.indexPath];
             }
+            
             CGFloat sectionY = CGPointZero.y + sectionHeight * layoutAttributes.indexPath.section;
-            //CGFloat sectionY = CGPointZero.y;
             layoutAttributes.frame = CGRectMake(maxWidthForSection, sectionY, layoutAttributes.size.width, layoutAttributes.size.height);
-
-            NSLog(@"Update frame: %@", NSStringFromCGRect(layoutAttributes.frame));
 
             if (layoutAttributes.size.height > maxHeightForSection) {
                 maxHeightForSection = layoutAttributes.size.height;
@@ -240,20 +279,23 @@
 }
 
 - (void)finalizeCollectionViewUpdates {
-    
-    NSLog(@"finalizeCollectionViewUpdates");
 
+    NSLog(@"finalizeCollectionViewUpdates");
+    
     [super finalizeCollectionViewUpdates];
+
 }
 
 - (void)invalidateLayout {
     
     NSLog(@"invalidateLayout");
-
-    NSMutableArray *invalidatedLayoutArray = [[self layoutArray] copy];
+    
+    NSMutableArray *invalidatedLayoutArray = [[self itemAttributesBySection] copy];
     [self setInvalidatedLayoutArray:invalidatedLayoutArray];
     [invalidatedLayoutArray release];
+
     [super invalidateLayout];
+
 }
 
 @end

@@ -33,6 +33,7 @@
 #import "UIDevice+Hack.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "MTReportDesignerSectionBackgroundView.h"
 
 @interface MTReportDesignerViewController : MTViewController
     <UITableViewDataSource,
