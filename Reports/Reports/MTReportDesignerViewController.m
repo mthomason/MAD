@@ -1414,7 +1414,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = [documentObject elementViewSize];
+        result = [documentObject viewSize];
     } else {
         result = CGSizeZero;
     }
@@ -1436,7 +1436,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
     
-        CGSize documentObjectSize = [documentObject elementViewSize];
+        CGSize documentObjectSize = [documentObject viewSize];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
