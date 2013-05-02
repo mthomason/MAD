@@ -239,7 +239,6 @@
         [pageSectionsToPrint release];
         [data release];
     }
-
 }
 
 - (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
