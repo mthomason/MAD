@@ -52,13 +52,15 @@
         UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath: indexPath];
         
         if ([indexPath section] == section) {
+
+            if (alienCenter.x < [layoutAttributes center].x && valueSet == NO) {
+                item = [indexPath item];
+                //section = [indexPath section];
+                valueSet = YES;
+                //break;
+            }
             numberOfItemsInSameSection++;
-        }
-        if (alienCenter.x < [layoutAttributes center].x && valueSet == NO) {
-            item = [indexPath item];
-            section = [indexPath section];
-            valueSet = YES;
-//            break;
+
         }
         counter++;
     }

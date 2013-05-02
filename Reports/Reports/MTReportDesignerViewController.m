@@ -706,21 +706,32 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(sizewidth))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(sizeheight))] ||
                     [change isEqualToString:NSStringFromSelector(@selector(marginLeft))] ||
                     [change isEqualToString:NSStringFromSelector(@selector(marginRight))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(marginTop))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(marginBottom))] ||
                     [change isEqualToString:NSStringFromSelector(@selector(paddingLeft))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(paddingRight))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(paddingTop))] ||
-                    [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
+                    [change isEqualToString:NSStringFromSelector(@selector(paddingRight))]) {
                     
-                    if (contextSaved == NO) [[documentObject managedObjectContext] save:nil];
+                    
                     UICollectionView *section = [self getSectionViewForDocumentSection: [[documentObject inSectionRow] inSection]];
                     [[section collectionViewLayout] invalidateLayout];
+                    
+                } else if ([change isEqualToString:NSStringFromSelector(@selector(sizeheight))] ||
+                           [change isEqualToString:NSStringFromSelector(@selector(marginTop))] ||
+                           [change isEqualToString:NSStringFromSelector(@selector(marginBottom))] ||
+                           [change isEqualToString:NSStringFromSelector(@selector(paddingTop))] ||
+                           [change isEqualToString:NSStringFromSelector(@selector(paddingBottom))]) {
+                    
+                    UICollectionView *section = [self getSectionViewForDocumentSection: [[documentObject inSectionRow] inSection]];
+                    [[section collectionViewLayout] invalidateLayout];
+                    RptqDocumentSection *documentSection = [[documentObject inSectionRow] inSection];
+                    [self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height];
                 }
+                
             }
+
+            [[documentObject managedObjectContext] save:nil];
+            
+
         } else if ([updatedObject isKindOfClass:[RptqDocumentSection class]]) {
             RptqDocumentSection *documentSection = updatedObject;
             NSDictionary *changes = [documentSection changedValues];
@@ -2059,6 +2070,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 //[documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
                 //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
                 
+                
                 CGPoint newCenter = [[gestureRecognizer view] center];
                 [[gestureRecognizer view] removeFromSuperview];
                 
@@ -2066,14 +2078,15 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
                                                                                         fromObjectContext: managedObjectContext];
                 
+
+                
                 CGPoint pointInView = [gestureRecognizer locationInView:newParent];
                 NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:pointInView];
                 
-                NSUInteger sectionToAddTo = 0;
-                
                 if (indexPath == nil) {
-                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: sectionToAddTo]
-                                                    inSection:sectionToAddTo];
+                    NSUInteger sectionZero = 0;
+                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: sectionZero]
+                                                    inSection:sectionZero];
                 }
                 
                 NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
@@ -2105,22 +2118,44 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     }
                     [hasObjects release];
                     
+                    
+                    
                     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                     
                     [newParent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:indexItemUsed inSection:indexSectionUsed]]];
                     
                 } completion:^(BOOL finished) {
 
+                    //if ([self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height]) {
+                    //    [[newParent collectionViewLayout] invalidateLayout];
+                    //}
+
                 }];
                 
             }
             [self setScrollersEnabled:YES];
             [[gestureRecognizer view] setNeedsDisplay];
+            
+            
+            
             break;
         }
         default:
             break;
     }
+}
+
+- (BOOL)checkAndUpdateHeightForSection:(RptqDocumentSection *)documentSection forHeight:(CGFloat)height {
+    BOOL heightUpdated;
+    CGFloat sectionHeight = [[documentSection height] floatValue] / [[documentSection numberOfRows] integerValue];
+    if (height > sectionHeight) {
+        [documentSection setHeight:@(height * [[documentSection numberOfRows] integerValue])];
+        [[documentSection managedObjectContext] save:nil];
+        heightUpdated = YES;
+    } else {
+        heightUpdated = NO;
+    }
+    return heightUpdated;
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
