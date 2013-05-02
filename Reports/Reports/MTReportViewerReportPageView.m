@@ -36,7 +36,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
+    //[super drawRect:rect];
     [[self delegate] drawView:self inRect:rect];
 }
 

@@ -97,141 +97,114 @@
             
             NSString *pageSectionId = [[NSString alloc] initWithString:[pageSection objectForKey: MTReportSectionType]];
             id reportSectionValues = nil;
+
             //NSLog(@"%@ (%@): %@", pageSectionId, data, NSStringFromCGRect(sectionRect));
+            
+            NSNumber *groupLevel = nil;
+            RptqQuery *query = nil;
+            RptqDocumentSection *documentSection = nil;
+            CGFloat sizeHeight = CGSizeZero.height;
             
             if ([MTPageDetail isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *detailSection = [[self document] hasDetailSection];
-                CGFloat sizeHeight = [[detailSection height] floatValue];
+                documentSection = [[self document] hasDetailSection];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor whiteColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                }
-                [self printDocumentElementsForSection:detailSection atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             } else if ([MTPageHeader isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *pageHeaderSection = [[self document] hasPageHeaderSection];
-                CGFloat sizeHeight = [[pageHeaderSection height] floatValue];
+                documentSection = [[self document] hasPageHeaderSection];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor yellowColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                }
-                [self printDocumentElementsForSection:pageHeaderSection atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             } else if ([MTPageFooter isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
-                CGFloat sizeHeight = [[pageFooterSection height] floatValue];
+                documentSection = [[self document] hasPageFooterSection];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor yellowColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                }
-                [self printDocumentElementsForSection:pageFooterSection atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             } else if ([MTReportHeader isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *reportHeaderSection = [[self document] hasReportHeaderSection];
-                CGFloat sizeHeight = [[reportHeaderSection height] floatValue];
+                documentSection = [[self document] hasReportHeaderSection];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor greenColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                }
-                [self printDocumentElementsForSection:reportHeaderSection atHeight:originY withResults:reportSectionValues];
-                originY += [[reportHeaderSection height] floatValue];
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
-                CGFloat sizeHeight = [[reportFooterSection height] floatValue];
+                documentSection = [[self document] hasReportFooterSection];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor greenColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                }
-                [self printDocumentElementsForSection:reportFooterSection atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
                 
-                NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                RptqDocumentSection *groupHeader = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
+                groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+                documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
                 
-                CGFloat sizeHeight = [[groupHeader height] floatValue];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor lightTextColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                if ([reportSectionValues isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:[pageSection objectForKey:MTReportSectionValues]];
-                } else if ([reportSectionValues isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
-                }
-                [self printDocumentElementsForSection:groupHeader atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
                 
-                NSNumber *groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                RptqDocumentSection *groupFooter = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-                CGFloat sizeHeight = [[groupFooter height] floatValue];
+                groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+                documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
+                sizeHeight = [[documentSection height] floatValue];
                 sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor lightTextColor] set];
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                if ([reportSectionValues isKindOfClass:[NSArray class]]) {
-                    reportSectionValues = [[NSArray alloc] initWithArray:[pageSection objectForKey:MTReportSectionValues]];
-                } else if ([reportSectionValues isKindOfClass:[NSDictionary class]]) {
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:[pageSection objectForKey:MTReportSectionValues]];
-                }
-                
-                [self printDocumentElementsForSection:groupFooter atHeight:originY withResults:reportSectionValues];
-                originY += sizeHeight;
                 
             }
             
-            //NSLog(@"Object to print: %@", pageSectionId);
+            CGFloat sectionHeight = CGSizeZero.height;
+            
+            for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+
+                CGFloat rowHeight = CGSizeZero.height;
+                CGFloat objectHeight;
+                
+                for (RptqDocumentObject *object in [row hasObjects]) {
+                    objectHeight = [object viewSize].height;
+                    if (objectHeight > rowHeight) {
+                        rowHeight = objectHeight;
+                    }
+                }
+                
+                if (rowHeight > sectionHeight) {
+                    sectionHeight = rowHeight;
+                }
+                
+            }
+            
+            [[UIBezierPath bezierPathWithRect:sectionRect] fill];
+            
+            id obj = [pageSection objectForKey:MTReportSectionValues];
+
+            if ([obj isKindOfClass:[NSDictionary class]]) {
+            
+                reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+            
+            } else if ([obj isKindOfClass:[NSArray class]]) {
+            
+                reportSectionValues = [[NSArray alloc] initWithArray:obj];
+            
+            }
+
+            [self printDocumentElementsForSection:documentSection atHeight:originY withResults:reportSectionValues];
+            
+            originY += sizeHeight;
             
             [pageSectionId release];
             [reportSectionValues release];
@@ -242,10 +215,37 @@
 }
 
 - (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
+
     if ([results isKindOfClass:[NSDictionary class]]) {
-        CGFloat originX = CGPointZero.x;
+        
         // FIXME: Print more than  the first row.
+        CGFloat rowMaxItemHeight = CGSizeZero.height;
+        
+        for (RptqDocumentSectionRows *row in [section hasRows]) {
+            
+            CGFloat originX = CGPointZero.x;
+            CGFloat itemMaxHeigh = CGSizeZero.height;
+            
+            for (RptqDocumentObject *item in [row hasObjects]) {
+
+                NSAttributedString *attributedString = [self attributedStringFor:item
+                                                            withResultDictionary:results];
+                CGFloat sizeWidth = [[item sizewidth] floatValue];
+                CGFloat sizeHeight = [[item sizeheight] floatValue];
+                CGRect elementCanvasRect = CGRectMake(originX, originY + rowMaxItemHeight, sizeWidth, sizeHeight);
+                [attributedString drawInRect:elementCanvasRect];
+                //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+                originX += sizeWidth;
+
+                if (sizeHeight > itemMaxHeigh) {
+                    itemMaxHeigh = sizeHeight;
+                }
+            }
+            rowMaxItemHeight += itemMaxHeigh;
+        }
+        /*
         for (RptqDocumentObject *documentObject in [[[section hasRows] objectAtIndex:0] hasObjects]) {
+
             NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
             CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
             CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
@@ -253,18 +253,27 @@
             [attributedString drawInRect:elementCanvasRect];
             //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
             originX += sizeWidth;
+            
         }
+         */
+    
     } else if ([results isKindOfClass:[NSArray class]]) {
-        CGFloat originX = CGPointZero.x;
+    
         // FIXME: Print more than  the first row.
-        for (RptqDocumentObject *documentObject in [[[section hasRows] objectAtIndex:0] hasObjects]) {
-            //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
-            CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
-            //CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-            //CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-            //[attributedString drawInRect:elementCanvasRect];
-            //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
-            originX += sizeWidth;
+        
+        for (RptqDocumentSectionRows *row in [section hasRows]) {
+
+            CGFloat originX = CGPointZero.x;
+
+            for (RptqDocumentObject *item in [row hasObjects]) {
+                //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
+                CGFloat sizeWidth = [[item sizewidth] floatValue];
+                //CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
+                //CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                //[attributedString drawInRect:elementCanvasRect];
+                //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
+                originX += sizeWidth;
+            }
         }
     }
 }
@@ -290,7 +299,7 @@
 
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
-    if (CGSizeEqualToSize([self printableSize], printableSize) == NO && [self cachedNumberOfPages] >= 1) {
+    if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {
         [self setPrintableSize:printableSize];
 
         RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
@@ -445,16 +454,30 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                         NSUInteger documentObjectCounter = 0;
                         // FIXME: Print more than  the first row.
 
+                        for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+                            for (RptqDocumentObject *item in [row hasObjects]) {
+                                if (documentObjectCounter > 0) {
+                                    [mutableStringToPrint appendString:@", "];
+                                }
+                                NSString *stringToPrint = [self printDocumentObject:item
+                                                               withResultDictionary:nil/*resultDictionary*/];
+                                //                            NSString *stringToPrint = [self printDocumentObject:documentObject
+                                //                                                           withResultDictionary: groupedRows];
+                                [mutableStringToPrint appendString:stringToPrint];
+                            }
+                        }
+                        
+/*
                         for (RptqDocumentObject *documentObject in [[[documentSection hasRows] objectAtIndex:0] hasObjects]) {
                             if (documentObjectCounter > 0) {
                                 [mutableStringToPrint appendString:@", "];
                             }
                             NSString *stringToPrint = [self printDocumentObject:documentObject
-                                                           withResultDictionary:nil/*resultDictionary*/];
-//                            NSString *stringToPrint = [self printDocumentObject:documentObject
-//                                                           withResultDictionary: groupedRows];
+                                                           withResultDictionary:nil];
                             [mutableStringToPrint appendString:stringToPrint];
                         }
+                        */
+                        
                         [mutableStringToPrint release];
                         *printableSpaceUsedPageHeight += [[documentSection height] floatValue];
                         NSUInteger groupNumber = [[queryGroup weight] integerValue];
@@ -544,6 +567,21 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         NSUInteger documentObjectCounter = 0;
         // FIXME: Print more than  the first row.
 
+        for (RptqDocumentSectionRows *row in [detailSection hasRows]) {
+            for (RptqDocumentObject *item in [row hasObjects]) {
+                if (documentObjectCounter > 0) {
+                    [mutableStringToPrint appendString:@", "];
+                }
+                NSString *stringToPrint = [self printDocumentObject: item
+                                               withResultDictionary: resultDictionary];
+                if (stringToPrint != nil) {
+                    [mutableStringToPrint appendString:@"<Null>"];
+                } else {
+                    [mutableStringToPrint appendString:stringToPrint];
+                }
+            }
+        }
+        /*
         for (RptqDocumentObject *documentObject in [[[detailSection hasRows] objectAtIndex:0] hasObjects]) {
             if (documentObjectCounter > 0) {
                 [mutableStringToPrint appendString:@", "];
@@ -556,6 +594,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 [mutableStringToPrint appendString:stringToPrint];
             }
         }
+         */
         //NSLog(@"Detail: (%@)", mutableStringToPrint);
         [mutableStringToPrint release];
         documentObjectCounter++;
@@ -614,6 +653,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
 }
 
 - (NSString *)printDocumentObject:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
+
     NSString *result = nil;
     id value = nil;
     
@@ -627,6 +667,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             switch ([[[[documentObject inSectionRow] inSection] type] integerValue]) {
 
                 case MNSDocumentSectionTypeBody: {
+
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
                     RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
                     value = [resultDictionary objectForKey: [field display]];
@@ -639,6 +680,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                     break;
 
                 } default: {
+
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
                     RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
                     value = [resultDictionary objectForKey: [field display]];
@@ -657,16 +699,23 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         }
     }
     if ([value isKindOfClass:[NSString class]]) {
+        
         result = [[NSString alloc] initWithString:value];
+
     } else if ([value isKindOfClass:[NSNumber class]]) {
+    
         result = [[NSString alloc] initWithFormat:@"%f", [value floatValue]];
+
     } else {
-        //NSLog(@"Value: %@", value);
+
         result = [[NSString alloc] initWithString: @"<Unknown type>"];
+
     }
     
     if (value == nil) {
+        
         result = [[NSString alloc] initWithString:@"<null>"];
+
     }
     return [result autorelease];
 }

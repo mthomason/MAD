@@ -94,12 +94,15 @@
     
     [pageController setDataSource:self];
     [pageController setDelegate:self];
-    
+
+    [[self viewContainer] addSubview:[pageController view]];
+
     [self setPageController:pageController];
     [pageController release];
     
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
@@ -123,7 +126,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [[self viewContainer] addSubview:[[self pageController] view]];
 
     if ([self startedRefresh] == NO && [[self documentReport] hasCachedData] == NO) {
 
