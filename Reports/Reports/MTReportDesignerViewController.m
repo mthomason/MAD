@@ -1612,7 +1612,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    return [self respondsToSelector:action];
+    BOOL result = NO;
+    if (action == @selector(delete:)) {
+        result = YES;
+    }
+    return result || [self respondsToSelector:action];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
@@ -1907,7 +1911,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
             [[gestureRecognizer view] setCenter: newCenter];
-            [[gestureRecognizer view] setAlpha:0.8000f];
+            [[gestureRecognizer view] setAlpha:0.6000f];
             
             [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
             newCenter = [gestureRecognizer locationInView:[self designScrollView]];

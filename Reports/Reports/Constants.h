@@ -79,7 +79,7 @@ MTPaddingMakeQuick(CGFloat p) {
 
 typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderAccending = 0,
-	MNSSortOrderDecending = 1
+	MNSSortOrderDecending
 };
 
 typedef NS_ENUM(NSUInteger, MTGroupByType) {
@@ -105,54 +105,54 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
 };
 
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
-    MTAggregateFunctionInputTypeField = 2,
-    MTAggregateFunctionInputTypeFormula = 3,
+    MTAggregateFunctionInputTypeField = 0,
+    MTAggregateFunctionInputTypeFormula
 };
 
 typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelDynamic = 2003,
-	MTDocumentObjectTypeLabelStatic = 2011,
-	MTDocumentObjectTypeImage = 2017,
-    MTDocumentObjectTypeChart = 2027,
-    MTDocumentObjectTypeFormula = 2029,
-    MTDocumentObjectTypeAggregate = 2039,
-    MTDocumentObjectTypeGroupKey = 2053,
-    MTDocumentObjectTypeAggregateFunctionList = 2063
+	MTDocumentObjectTypeLabelDynamic = 0,
+	MTDocumentObjectTypeLabelStatic = 1,
+	MTDocumentObjectTypeImage = 2,
+    MTDocumentObjectTypeChart = 3,
+    MTDocumentObjectTypeFormula = 4,
+    MTDocumentObjectTypeAggregate = 5,
+    MTDocumentObjectTypeGroupKey = 6,
+    MTDocumentObjectTypeAggregateFunctionList = 7
 };
 
 typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
-    MTDocumentObjectBuilderType = 2003,
-    MTDocumentObjectBuilderValue = 2011
+    MTDocumentObjectBuilderType,
+    MTDocumentObjectBuilderValue
 };
 
 typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
-	UIViewControllerSchemaTablesSectionsInstructions = 2003,
-    UIViewControllerSchemaTablesSectionsDatasource = 2011,
-	UIViewControllerSchemaTablesSectionsTables = 2017,
-	UIViewControllerSchemaTablesSectionsLinks = 2027,
-	UIViewControllerSchemaTablesSectionsGroups = 2029,
-	UIViewControllerSchemaTablesSectionsPredicate = 2053,
-    UIViewControllerSchemaTablesSectionsSql = 2063
+	UIViewControllerSchemaTablesSectionsInstructions = 0,
+    UIViewControllerSchemaTablesSectionsDatasource = 1,
+	UIViewControllerSchemaTablesSectionsTables = 2,
+	UIViewControllerSchemaTablesSectionsLinks = 3,
+	UIViewControllerSchemaTablesSectionsGroups = 4,
+	UIViewControllerSchemaTablesSectionsPredicate = 5,
+    UIViewControllerSchemaTablesSectionsSql = 6
 };
 
 typedef NS_ENUM(NSUInteger, MTControlState) {
-	MTControlStateOff = 2003,
-	MTControlStateOn = 2011,
-    MTControlStateAmbiguous = 2017
+	MTControlStateOff = 0,
+	MTControlStateOn,
+    MTControlStateAmbiguous
 };
 
 typedef NS_ENUM(NSUInteger, MTVerticalAlignment) {
-	MTVerticalAlignmentTop = 2003,
-	MTVerticalAlignmentCenter = 2011,
-	MTVerticalAlignmentBottom = 2017
+	MTVerticalAlignmentTop = 0,
+	MTVerticalAlignmentCenter = 1,
+	MTVerticalAlignmentBottom = 2
 };
 
 typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
-	MTHorizontalAlignmentLeft = 3001,
-	MTHorizontalAlignmentCenter = 3011,
-	MTHorizontalAlignmentRight = 3019,
-	MTHorizontalAlignmentJustified = 3023,
-	MTHorizontalAlignmentNatrual = 3037
+	MTHorizontalAlignmentLeft = 0,
+	MTHorizontalAlignmentCenter = 1,
+	MTHorizontalAlignmentRight = 2,
+	MTHorizontalAlignmentJustified = 3,
+	MTHorizontalAlignmentNatrual = 4
 };
 
 extern NSString * const MTCollectionElementKindSectionLabel;

@@ -70,6 +70,15 @@
                                  userInfo: nil];
 }
 
+- (void)setAlpha:(CGFloat)alpha {
+    [super setAlpha:alpha];
+    UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
+    [[self marginView] setBackgroundColor:labelBackgroundColor];
+    [labelBackgroundColor release];
+    [[self visibleView] setAlpha:alpha];
+    [[self paddingView] setAlpha:alpha];
+}
+
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
     CGSize viewSize = [documentObject viewSize];
@@ -97,7 +106,7 @@
         
         UIView *marginView = [self retain];
         //[marginView setFrame: frame];
-        [marginView setBackgroundColor:[UIColor clearColor]];
+        [marginView setBackgroundColor:[UIColor whiteColor]];
 //        [marginView setBackgroundColor:[UIColor edaBlackFiftyPercent]];
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
@@ -116,7 +125,7 @@
         UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
         [[labelBackground layer] setBorderWidth:1.0000f];
-        [labelBackground setBackgroundColor:[UIColor clearColor]];
+        [labelBackground setBackgroundColor:[UIColor whiteColor]];
 //        [labelBackground setBackgroundColor:[UIColor whiteColor]];
         [labelBackground setAutoresizingMask:UIViewAutoresizingNone];
         [[self visibleView] addSubview:labelBackground];
@@ -131,7 +140,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         //[label setUserInteractionEnabled:NO];
-        [label setBackgroundColor:[UIColor clearColor]];
+        [label setBackgroundColor:[UIColor whiteColor]];
 //        [label setBackgroundColor:[UIColor whiteColor]];
         [label setAutoresizingMask:UIViewAutoresizingNone];
         [[self paddingView] addSubview:label];
@@ -294,7 +303,7 @@
             textAlignment = NSTextAlignmentJustified;
             break;
         default:
-            textAlignment = NSTextAlignmentNatural;
+            textAlignment = NSTextAlignmentLeft;
             break;
     }
     [[self displayLabel] setTextAlignment:textAlignment];
