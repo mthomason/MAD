@@ -197,7 +197,7 @@
         if ([deletedObject isKindOfClass:[RptqDatabaseSchemaTable class]]) {
             RptqDatabaseSchemaTable *deletedTable = deletedObject;
             if ([deletedTable inQuery] != nil &&
-                [[self tableIds] containsObject: [deletedTable objectID]] == YES) {
+                [[self tableIds] containsObject: [deletedTable objectID]]) {
                 [self removeSchemaViewControllerForTable:deletedTable];
             }
         } else if ([deletedObject isKindOfClass:[RptqQueryLinks class]]) {
@@ -336,7 +336,7 @@
     [[self tableIds] addObject:objectId];
     [[self controllersForObjectIds] setObject:viewController forKey:objectId];
     [objectId release];
-    if ([[table designerInitalLayout] boolValue] == YES) {
+    if ([[table designerInitalLayout] boolValue]) {
         CGFloat originX = 50.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
         CGFloat originY = originX;
         subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);

@@ -272,7 +272,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         // MARK: Create collection view for report document section.
         
-        MTReportDesignerSectionViewLayout *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayout alloc] init];
+        MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
         [flowLayoutDesignerSection setDelegate:self];
 //        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
@@ -799,7 +799,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSUInteger deselectedSectionViewCounter = 0;
     //Remove border from the section views
     for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
-        deselectedSectionViewCounter += [self  removeBorderFromView:view] == YES ? 1 : 0;
+        deselectedSectionViewCounter += [self  removeBorderFromView:view] ? 1 : 0;
     }
     
     if (deselectedSectionViewCounter == 0) {
@@ -1433,6 +1433,54 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return result;
 }
 
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropPointForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    
+    CGPoint result;
+    
+    if ([objects count] > row) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        result = CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue]);
+    } else {
+        result = CGPointZero;
+    }
+    
+    return result;
+}
+
+
+- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    
+    CGPoint result;
+    
+    if ([objects count] > row) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        [documentObject setDropPointX:@(dropPoint.x)];
+        [documentObject setDropPointY:@(dropPoint.y)];
+        NSError *error = nil;
+        [[documentObject managedObjectContext] save:&error];
+    } else {
+        result = CGPointZero;
+    }    
+}
+
 #pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1678,7 +1726,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
-        [detailSection performBatchUpdates:^{
+        //[detailSection performBatchUpdates:^{
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
@@ -1705,9 +1753,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             
             [detailSection insertItemsAtIndexPaths:indexPaths];
          
-        } completion:^(BOOL finished) {
+        //} completion:^(BOOL finished) {
 
-        }];
+        //}];
     }
 }
 
@@ -1971,7 +2019,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                         }];
                     }
                     [hasObjects release];
-                    if (found == YES) {
+                    if (found) {
                         break;
                     }
                     found = NO;     // FIXME: Short circut this?
@@ -2062,7 +2110,15 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             if (addedToNewParent) {
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
-                                
+                
+                
+                
+                
+                [newParent performBatchUpdates:^{
+
+                
+                
+                
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 
                 NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
@@ -2082,16 +2138,24 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
                                                                                         fromObjectContext: managedObjectContext];
                 
+                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
+                //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
+
+                [documentObject setDropPointX:@(pointInView.x)];
+                [documentObject setDropPointY:@(pointInView.y)];
+                
+                //NSIndexPath *indexPath = [(MTReportDesignerSectionViewLayoutLiquid *)[newParent collectionViewLayout] indexOfAlienViewWithCenterPoint:pointInView];
+                
+                NSUInteger sectionZero = 0;
+                RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[[sectionRow hasObjects] count]
+                                                             inSection:sectionZero];
+                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[sectionRow hasObjects]];
 
                 
-                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
-                NSIndexPath *indexPath = [newParent indexOfAlienViewWithCenterPoint:pointInView];
-                
-                if (indexPath == nil) {
-                    NSUInteger sectionZero = 0;
-                    indexPath = [NSIndexPath indexPathForItem:[newParent numberOfItemsInSection: sectionZero]
-                                                    inSection:sectionZero];
-                }
+                [hasObjects insertObject:documentObject atIndex:[indexPath item]];
+
+            
                 
                 NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
                 
@@ -2100,34 +2164,22 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     [holderForLastTouches setObject:[NSValue valueWithCGPoint:newCenter] forKey:indexPath];
                 }
                 
+                
                 // MARK: Add this to the data context and to the container for the sections collection view.
-                [newParent performBatchUpdates:^{
+                    
                     NSOrderedSet *hasRows = [documentSection hasRows];
-                    NSMutableOrderedSet *hasObjects = nil;
-                    NSUInteger indexSectionUsed = 0, indexItemUsed = 0;
-                    RptqDocumentSectionRows *row = nil;
-                    if ([hasRows count] > [indexPath section]) {
-                        indexSectionUsed = [indexPath section];
-                        row = [hasRows objectAtIndex:indexSectionUsed];
-                        hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[row hasObjects]];
-                    } else if ([hasRows count] > 0) {
-                        indexSectionUsed = [hasRows count] - 1;
-                        row = [hasRows objectAtIndex:indexSectionUsed];
-                        hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[row hasObjects]];
-                    }
-                    if (hasObjects) {
-                        indexItemUsed = [indexPath item];
-                        [hasObjects insertObject:documentObject atIndex:indexItemUsed];
-                        [row setHasObjects:hasObjects];
-                    }
-                    [hasObjects release];
+
+                        [sectionRow setHasObjects:hasObjects];
+
                     
                     
                     
                     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
                     
-                    [newParent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:indexItemUsed inSection:indexSectionUsed]]];
-                    
+                    [newParent insertItemsAtIndexPaths:indexPaths];
+                   
+                    [hasObjects release];
+
                 } completion:^(BOOL finished) {
 
                     //if ([self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height]) {
@@ -2135,6 +2187,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     //}
 
                 }];
+                
+                
+                
                 
             }
             [self setScrollersEnabled:YES];

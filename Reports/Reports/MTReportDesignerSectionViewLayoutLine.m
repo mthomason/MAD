@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerSectionViewLayout.h"
+#import "MTReportDesignerSectionViewLayoutLine.h"
 
-@interface MTReportDesignerSectionViewLayout ()
+@interface MTReportDesignerSectionViewLayoutLine ()
 
 @property (assign) CGSize contentSize;
 @property (assign) NSInteger numberOfSections;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation MTReportDesignerSectionViewLayout
+@implementation MTReportDesignerSectionViewLayoutLine
 
 - (void)dealloc {
     [_itemAttributesBySection release];
@@ -297,5 +297,43 @@
     [super invalidateLayout];
 
 }
+
+- (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter {
+    NSUInteger item = 0;
+    NSInteger counter = 0;
+    BOOL valueSet = NO;
+    NSArray *indexPathsForItems = [[self collectionView] indexPathsForVisibleItems];
+    CGFloat sectionHeight = ([[self collectionView] frame].size.height / [[self collectionView] numberOfSections]);
+    NSUInteger section = alienCenter.y / sectionHeight;
+    NSUInteger numberOfItemsInSameSection = 0;
+    
+    for (NSIndexPath *indexPath in indexPathsForItems) {
+        
+        UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath: indexPath];
+        
+        if ([indexPath section] == section) {
+            
+            if (alienCenter.x < [layoutAttributes center].x && valueSet == NO) {
+                item = [indexPath item];
+                //section = [indexPath section];
+                valueSet = YES;
+                //break;
+            }
+            numberOfItemsInSameSection++;
+            
+        }
+        counter++;
+    }
+    
+    if (counter == 0) {
+        item = 0;
+        valueSet = YES;
+    }
+    if (!valueSet) {
+        item = numberOfItemsInSameSection;
+    }
+    return  [NSIndexPath indexPathForItem:item inSection:section];
+}
+
 
 @end

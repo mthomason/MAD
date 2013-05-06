@@ -47,17 +47,20 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setItalic:@NO];
     [self setUnderline:@NO];
     [self setStrike:@NO];
-    [self setMarginBottom:@(0.0000f)];
-    [self setMarginTop:@(0.0000f)];
-    [self setMarginLeft:@(0.0000f)];
-    [self setMarginRight:@(0.0000f)];
-    [self setPaddingBottom:@(0.0000f)];
-    [self setPaddingTop:@(0.0000f)];
-    [self setPaddingLeft:@(0.0000f)];
-    [self setPaddingRight:@(0.0000f)];
+    [self setMarginBottom:@(CGSizeZero.height)];
+    [self setMarginTop:@(CGSizeZero.height)];
+    [self setMarginLeft:@(CGSizeZero.width)];
+    [self setMarginRight:@(CGSizeZero.width)];
+    [self setPaddingBottom:@(CGSizeZero.height)];
+    [self setPaddingTop:@(CGSizeZero.height)];
+    [self setPaddingLeft:@(CGSizeZero.width)];
+    [self setPaddingRight:@(CGSizeZero.width)];
     [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
     [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
     [self setSectionRowNumber:@(1)];
+    [self setDropPointX:@(CGPointZero.x)];
+    [self setDropPointY:@(CGPointZero.y)];
+
 }
 
 - (void)awakeFromFetch {

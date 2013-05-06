@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/3/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -44,6 +44,7 @@
 @dynamic paddingTop;
 @dynamic sectionIndexItem;
 @dynamic sectionIndexRow;
+@dynamic sectionRowNumber;
 @dynamic sizeheight;
 @dynamic sizewidth;
 @dynamic strike;
@@ -51,7 +52,9 @@
 @dynamic underline;
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
-@dynamic sectionRowNumber;
+@dynamic dropPointX;
+@dynamic dropPointY;
+@dynamic inSectionRow;
 @dynamic isAggregate;
 @dynamic isChart;
 @dynamic isFormula;
@@ -60,6 +63,5 @@
 @dynamic isLabel;
 @dynamic isLabelDataField;
 @dynamic isLabelLink;
-@dynamic inSectionRow;
 
 @end

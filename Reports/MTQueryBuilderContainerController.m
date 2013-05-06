@@ -139,7 +139,7 @@
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
     [self dismissViewControllerAnimated:animated completion:^{
         if ([sender isKindOfClass:[NSNumber class]]) {
-            if ([sender boolValue] == YES) {
+            if ([sender boolValue]) {
                 [[self delegate] viewControllerDidFinish:self animated:YES];
             }
         }

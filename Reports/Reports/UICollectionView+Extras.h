@@ -11,6 +11,4 @@
 
 @interface UICollectionView (Extras)
 
-- (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter;
-
 @end

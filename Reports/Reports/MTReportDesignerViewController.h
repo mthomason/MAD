@@ -25,7 +25,7 @@
 #import "MTCollectionReusableViewFloatingLabel.h"
 #import "MTElementView.h"
 #import "MTFont.h"
-#import "MTReportDesignerSectionViewLayout.h"
+#import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerToolBoxViewController.h"
 #import "MTRulerView.h"
 #import "MTDocumentSectionView.h"
@@ -48,7 +48,7 @@
         UIScrollViewDelegate,
         MTReportDesignerToolBoxDelegate,
         MTElementViewDelegate,
-        MTReportDesignerSectionViewLayoutDelegate,
+        MTReportDesignerSectionViewLayoutLiquidDelegate,
         MTReportDesignerObjectSelectorDelegate,
         MUIViewControllerProtocol,
         MTDocumentSectionViewDelegate,

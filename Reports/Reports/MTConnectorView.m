@@ -139,7 +139,7 @@
         origin = CGPointMake(rect.origin.x, rect.origin.y);
         destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
         
-        if ([self leftViewIsInital] == YES) {   //origin is the back point of the arrow
+        if ([self leftViewIsInital]) {   //origin is the back point of the arrow
             connectorNobRectOrigin = CGRectMake(origin.x - smallCircleRadius, origin.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
             connectorNobRectDestination = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
         } else {
@@ -155,7 +155,7 @@
         origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
         destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
 
-        if ([self leftViewIsInital] == YES) {   //Origin is the front part of the arrow
+        if ([self leftViewIsInital]) {   //Origin is the front part of the arrow
             connectorNobRectDestination = CGRectMake(origin.x - largeCircleRadius, origin.y - largeCircleRadius, smallCircleSize.width, smallCircleSize.height);
             connectorNobRectOrigin = CGRectMake(destination.x - smallCircleRadius, destination.y - smallCircleRadius, smallCircleSize.width, smallCircleSize.height);
         } else {
@@ -181,7 +181,7 @@
     CGPoint pathOrigin = connectorNobRectDestination.origin;
     pathOrigin.y += 3.0000f;
     if ([[self topLeftToBottomRight] boolValue]) {
-        if ([self leftViewIsInital] == YES) {
+        if ([self leftViewIsInital]) {
             //NSLog(@"A");
             pathOrigin.x -= 5.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
@@ -195,7 +195,7 @@
             [path addLineToPoint:CGPointMake(pathOrigin.x + arrowRadius, pathOrigin.y + arrowRadius)];
         }
     } else {
-        if ([self leftViewIsInital] == YES) {
+        if ([self leftViewIsInital]) {
             //NSLog(@"C");
             pathOrigin.x -= 5.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];

@@ -8,7 +8,45 @@
 
 /* Make a point from `(x, y)'. */
 
-#define square(x) ( (x) * (x) )
+#define            SQUARE(x)             ( (x) * (x) )
+
+#define            MIN(x, y)             (((x) < (y)) ? (x) : (y))
+#define            MAX(x, y)             (((x) > (y)) ? (x) : (y))
+
+#define            DEGTORAD(deg)         (((deg) * 2.0 * PI) / 360.0)
+#define            RADTODEG(rad)         (((rad) * 360.0) / (2.0 * PI))
+
+/* Lines. */
+
+struct CGLine {
+    CGFloat m;
+    CGFloat b;
+};
+typedef struct CGLine CGLine;
+
+struct CGLineSegment {
+    CGPoint start;
+    CGPoint end;
+};
+typedef struct CGLineSegment CGLineSegment;
+
+CG_INLINE CGLine CGLineMake(CGFloat m, CGFloat b);
+CG_INLINE CGLine
+CGLineMake(CGFloat m, CGFloat b) {
+    CGLine line;
+    line.m = m;
+    line.b = b;
+    return line;
+}
+
+CG_INLINE CGLineSegment CGLineSegmentMake(CGPoint p1, CGPoint p2);
+CG_INLINE CGLineSegment
+CGLineSegmentMake(CGPoint p1, CGPoint p2) {
+    CGLineSegment lineSegment;
+    lineSegment.start = p1;
+    lineSegment.end = p2;
+    return lineSegment;
+}
 
 CG_INLINE CGPoint CGCenterOfRect(CGRect rect);
 
@@ -166,7 +204,14 @@ CGDistance(CGPoint p1, CGPoint p2) {
 CG_INLINE CGFloat CGSlope(CGPoint p1, CGPoint p2);
 CG_INLINE CGFloat
 CGSlope(CGPoint p1, CGPoint p2) {
-	return ((p2.y - p1.y) / (p2.x - p1.x));
+    CGFloat d = (p2.x - p1.x);
+	return d > FLT_EPSILON ? ((p2.y - p1.y) / d) : 0.0000f;
+}
+
+CG_INLINE CGFloat CGLineSegmentSlope(CGLineSegment lineSegment);
+CG_INLINE CGFloat
+CGLineSegmentSlope(CGLineSegment lineSegment) {
+	return CGSlope(lineSegment.start, lineSegment.end);
 }
 
 CG_INLINE CGFloat CGInterceptBySlope(CGPoint p2, CGFloat m);
@@ -231,4 +276,148 @@ CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
 		c.y = (-1) * (c.y);
 	}
 	return c;
+}
+
+CG_INLINE CGPoint CGLineIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
+CG_INLINE CGPoint
+CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+    
+	return CGPointMake(
+					    ( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.x - p2b.x) - ((  p1a.x  -    p1b.x) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ),
+					   -( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.y - p2b.y) - (((-p1a.y) - (-p1b.y)) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ) );
+    
+}
+
+CG_INLINE BOOL CGFloatCompare(CGFloat x, CGFloat y);
+CG_INLINE BOOL
+CGFloatCompare(CGFloat x, CGFloat y) {
+    return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN);
+}
+
+CG_INLINE BOOL CGFloatMax(CGFloat n1, CGFloat n2);
+CG_INLINE BOOL
+CGFloatMax(CGFloat n1, CGFloat n2) {
+    return n1 > n2 ? n1 : n2;
+}
+
+CG_INLINE BOOL CGFloatMin(CGFloat n1, CGFloat n2);
+CG_INLINE BOOL
+CGFloatMin(CGFloat n1, CGFloat n2) {
+    return n1 < n2 ? n1 : n2;
+}
+
+CG_INLINE BOOL CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
+CG_INLINE BOOL
+CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+    
+    BOOL result = NO;
+
+    //If bounding rects intercept
+    if (MAX(p1a.x, p1b.x) >= MIN(p2a.x, p2b.x) &&
+        MAX(p2a.x, p2b.x) >= MIN(p1a.x, p1b.x) &&
+        MAX(p1a.y, p1b.y) >= MIN(p2a.y, p2b.y) &&
+        MAX(p2a.y, p2b.y) >= MIN(p1a.y, p1b.y)) {
+        
+        //Straddle test
+        
+        double z1, z2, z3, z4;
+        int s1, s2, s3, s4;
+        
+        if ((z1 = ((p2a.x - p1a.x)*(p1b.y - p1a.y)) - ((p2a.y - p1a.y)*(p1b.x - p1a.x))) < 0)
+            s1 = -1;
+        else if (z1 > 0)
+            s1 = 1;
+        else
+            s1 = 0;
+        
+        if ((z2 = ((p2b.x - p1a.x)*(p1b.y - p1a.y)) - ((p2b.y - p1a.y)*(p1b.x - p1a.x))) < 0)
+            s2 = -1;
+        else if (z2 > 0)
+            s2 = 1;
+        else
+            s2 = 0;
+        
+        if ((z3 = ((p1a.x - p2a.x)*(p2b.y - p2a.y)) - ((p1a.y - p2a.y)*(p2b.x - p2a.x))) < 0)
+            s3 = -1;
+        else if (z3 > 0)
+            s3 = 1;
+        else
+            s3 = 0;
+        
+        if ((z4 = ((p1b.x - p2a.x)*(p2b.y - p2a.y)) - ((p1b.y - p2a.y)*(p2b.x - p2a.x))) < 0)
+            s4 = -1;
+        else if (z4 > 0)
+            s4 = 1;
+        else
+            s4 = 0;
+        
+        if ((s1 * s2 <= 0) && (s3 * s4 <= 0))
+            result = YES;
+
+    }
+    
+    return result;
+    
+}
+
+CG_INLINE BOOL CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2);
+CG_INLINE BOOL
+CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
+    
+    BOOL result = NO;
+    
+    //If bounding rects intercept
+    if (MAX(lineSegment1.start.x, lineSegment1.end.x) >= MIN(lineSegment2.start.x, lineSegment2.end.x) &&
+        MAX(lineSegment2.start.x, lineSegment2.end.x) >= MIN(lineSegment1.start.x, lineSegment1.end.x) &&
+        MAX(lineSegment1.start.y, lineSegment1.end.y) >= MIN(lineSegment2.start.y, lineSegment2.end.y) &&
+        MAX(lineSegment2.start.y, lineSegment2.end.y) >= MIN(lineSegment1.start.y, lineSegment1.end.y)) {
+        
+        //Straddle test
+        
+        double z1, z2, z3, z4;
+        int straddleTest1, straddleTest2; int straddleTest3; int straddleTest4;
+        
+        if ((z1 = ((lineSegment2.start.x - lineSegment1.start.x) *
+                   (lineSegment1.end.y - lineSegment1.start.y)) - ((lineSegment2.start.y - lineSegment1.start.y) *
+                                                                   (lineSegment1.end.x - lineSegment1.start.x))) < 0)
+            straddleTest1 = -1;
+        else if (z1 > 0)
+            straddleTest1 = 1;
+        else
+            straddleTest1 = 0;
+        
+        if ((z2 = ((lineSegment2.end.x - lineSegment1.start.x) *
+                   (lineSegment1.end.y - lineSegment1.start.y)) - ((lineSegment2.end.y - lineSegment1.start.y) *
+                                                      (lineSegment1.end.x - lineSegment1.start.x))) < 0)
+            straddleTest2 = -1;
+        else if (z2 > 0)
+            straddleTest2 = 1;
+        else
+            straddleTest2 = 0;
+        
+        if ((z3 = ((lineSegment1.start.x - lineSegment2.start.x) *
+                   (lineSegment2.end.y - lineSegment2.start.y)) - ((lineSegment1.start.y - lineSegment2.start.y) *
+                                                                   (lineSegment2.end.x - lineSegment2.start.x))) < 0)
+            straddleTest3 = -1;
+        else if (z3 > 0)
+            straddleTest3 = 1;
+        else
+            straddleTest3 = 0;
+        
+        if ((z4 = ((lineSegment1.end.x - lineSegment2.start.x) *
+                   (lineSegment2.end.y - lineSegment2.start.y)) - ((lineSegment1.end.y - lineSegment2.start.y) *
+                                                                   (lineSegment2.end.x - lineSegment2.start.x))) < 0)
+            straddleTest4 = -1;
+        else if (z4 > 0)
+            straddleTest4 = 1;
+        else
+            straddleTest4 = 0;
+        
+        if ((straddleTest1 * straddleTest2 <= 0) && (straddleTest3 * straddleTest4 <= 0))
+            result = YES;
+        
+    }
+    
+    return result;
+    
 }

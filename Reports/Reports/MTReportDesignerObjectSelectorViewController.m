@@ -474,7 +474,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
     
-    if ([self fieldSelectionPopPartOneOfTwo] == YES) {
+    if ([self fieldSelectionPopPartOneOfTwo]) {
 
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         dispatch_async(queuePriorityBackground, ^{
@@ -554,7 +554,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
             [self setShowFieldOrFormulaViewController:NO];
             
-        } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+        } else if ([self showFieldOrFormulaFieldPickerViewController] &&
                    [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
 
             CGRect offScreen = CGRectMake([[[self fieldOrFormulaFieldPickerViewController] view] frame].origin.x + [[[self fieldOrFormulaFieldPickerViewController] view] frame].size.width,
@@ -571,7 +571,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
             [self setShowFieldOrFormulaFieldPickerViewController:NO];
 
-        } else if ([self showFieldOrFormulaFormulaPickerViewerController] == YES &&
+        } else if ([self showFieldOrFormulaFormulaPickerViewerController] &&
                    [self showFieldOrFormulaFieldPickerViewController] == NO) {
             
             CGRect offScreen = CGRectMake([[[self fieldOrFormulaFormulaPickerViewController] view] frame].origin.x + [[[self fieldOrFormulaFormulaPickerViewController] view] frame].size.width,
@@ -588,8 +588,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
             [self setShowFieldOrFormulaFormulaPickerViewerController:NO];
 
-        } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
-                   [self showFieldOrFormulaFormulaPickerViewerController] == YES) {
+        } else if ([self showFieldOrFormulaFieldPickerViewController] &&
+                   [self showFieldOrFormulaFormulaPickerViewerController]) {
             
             @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                            reason: [NSString stringWithFormat:@"Both view controllers can't be open at the same time: %@.", NSStringFromSelector(_cmd)]
@@ -759,7 +759,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 [self setFieldOrFormulaViewController:fieldOrFormulaViewController];
                 [fieldOrFormulaViewController release];
 
-            } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
+            } else if ([self showFieldOrFormulaFieldPickerViewController] &&
                        [self showFieldOrFormulaFormulaPickerViewerController] == NO) {
             
                 UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
@@ -772,7 +772,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 [queryBuilderChooseFieldViewController release];
                 
 
-            } else if ([self showFieldOrFormulaFormulaPickerViewerController] == YES &&
+            } else if ([self showFieldOrFormulaFormulaPickerViewerController] &&
                        [self showFieldOrFormulaFieldPickerViewController] == NO) {
 
 #warning Implement me when you implement fomulas.
@@ -781,8 +781,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                                              userInfo: nil];
 
                 
-            } else if ([self showFieldOrFormulaFieldPickerViewController] == YES &&
-                       [self showFieldOrFormulaFormulaPickerViewerController] == YES) {
+            } else if ([self showFieldOrFormulaFieldPickerViewController] &&
+                       [self showFieldOrFormulaFormulaPickerViewerController]) {
                 
                 @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                                reason: [NSString stringWithFormat:@"Both view controllers can't be open at the same time: %@.", NSStringFromSelector(_cmd)]

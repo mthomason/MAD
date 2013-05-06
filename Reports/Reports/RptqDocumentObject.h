@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/3/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -37,6 +37,7 @@
 @property (nonatomic, retain) NSNumber * paddingTop;
 @property (nonatomic, retain) NSNumber * sectionIndexItem;
 @property (nonatomic, retain) NSNumber * sectionIndexRow;
+@property (nonatomic, retain) NSNumber * sectionRowNumber;
 @property (nonatomic, retain) NSNumber * sizeheight;
 @property (nonatomic, retain) NSNumber * sizewidth;
 @property (nonatomic, retain) NSNumber * strike;
@@ -44,7 +45,9 @@
 @property (nonatomic, retain) NSNumber * underline;
 @property (nonatomic, retain) NSNumber * verticalAlignment;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSNumber * sectionRowNumber;
+@property (nonatomic, retain) NSNumber * dropPointX;
+@property (nonatomic, retain) NSNumber * dropPointY;
+@property (nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 @property (nonatomic, retain) RptqDocumentObjectAggregate *isAggregate;
 @property (nonatomic, retain) RptqDocumentObjectChart *isChart;
 @property (nonatomic, retain) RptqDocumentObjectFormula *isFormula;
@@ -53,6 +56,5 @@
 @property (nonatomic, retain) RptqDocumentObjectLabel *isLabel;
 @property (nonatomic, retain) RptqDocumentObjectLabelDataField *isLabelDataField;
 @property (nonatomic, retain) RptqDocumentObjectLabelLink *isLabelLink;
-@property (nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 
 @end

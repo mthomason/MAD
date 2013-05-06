@@ -11,19 +11,29 @@
 
 #import <UIKit/UIKit.h>
 #import "MTReportDesignerSectionDecorationView.h"
+#import "CGGeometry+Extras.h"
 
-@class MTReportDesignerSectionViewLayout;
+@class MTReportDesignerSectionViewLayoutLiquid;
 
-@protocol MTReportDesignerSectionViewLayoutDelegate
+@protocol MTReportDesignerSectionViewLayoutLiquidDelegate
+
 - (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropPointForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath;
+
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
+
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
+
 @end
 
-@interface MTReportDesignerSectionViewLayout : UICollectionViewLayout
+@interface MTReportDesignerSectionViewLayoutLiquid : UICollectionViewLayout
 
-@property (assign, nonatomic) id <MTReportDesignerSectionViewLayoutDelegate, UICollectionViewDataSource> delegate;
+@property (assign, nonatomic) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
 @end
 
