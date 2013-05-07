@@ -153,9 +153,12 @@
         NSInteger numberOfItems = [[self delegate] numberOfItemsInSection:sectionIndex ofCollectionView:[self collectionView]];
         NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
 
+        NSMutableArray *itemLayouts = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
+        
         for (NSInteger itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
             
             NSIndexPath *indexPath = [[NSIndexPath indexPathForItem:itemIndex inSection:sectionIndex] retain];
+            UICollectionViewLayoutAttributes *itemAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
 
             CGSize itemSize = [[self delegate] collectionView: [self collectionView]
                                                        layout: self
@@ -164,16 +167,38 @@
             CGPoint dropPoint = [[self delegate] collectionView: [self collectionView]
                                                          layout: self
                                     dropPointForItemAtIndexPath: indexPath];
+            [itemAttributes setFrame:CGRectMake(dropPoint.x, dropPoint.y, itemSize.width, itemSize.height)];
+           
+            [itemLayouts addObject:itemAttributes];
+            [itemAttributes release];
+            [indexPath release];
+        }
+        
+        [itemLayouts sortUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *layout1, UICollectionViewLayoutAttributes *layout2) {
+            CGFloat distanceOne = CGDistance([layout1 frame].origin, CGPointZero);
+            CGFloat distanceTwo = CGDistance([layout2 frame].origin, CGPointZero);
+            
+            NSComparisonResult result;
+            if (distanceOne > distanceTwo) {
+                result = NSOrderedDescending;
+            } else {
+                result = NSOrderedAscending;
+            }
+            return result;
 
-            UICollectionViewLayoutAttributes *itemAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+        }];
+        
+        for (UICollectionViewLayoutAttributes *itemAttributes in itemLayouts) {
+
+//            UICollectionViewLayoutAttributes *itemAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
             [itemAttributes retain];
 
-            if (indexPath.item == 3) {
+            if (itemAttributes.indexPath.item == 3) {
                 BOOL breakp = YES;
             }
             
             
-            itemAttributes.frame = CGRectMake(dropPoint.x, dropPoint.y, itemSize.width, itemSize.height);
+            //itemAttributes.frame = CGRectMake(dropPoint.x, dropPoint.y, itemSize.width, itemSize.height);
             
             CGRect nearestRect;
 
@@ -304,10 +329,10 @@
             [layoutAttributesForSection addObject:itemAttributes];
             
             [itemAttributes release];
-            [indexPath release];
+            //[indexPath release];
             
         }
-
+/*
         [layoutAttributesForSection sortUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *layout1, UICollectionViewLayoutAttributes *layout2) {
             CGFloat distanceOne = CGDistance([layout1 frame].origin, CGPointZero);
             CGFloat distanceTwo = CGDistance([layout2 frame].origin, CGPointZero);
@@ -320,16 +345,16 @@
             }
             return result;
         }];
- 
+*/ 
         NSUInteger collectionViewIndexAfterSort = 0;
         
         for (UICollectionViewLayoutAttributes *layout in layoutAttributesForSection) {
 
-            NSIndexPath *indexPath = [[NSIndexPath indexPathForItem:collectionViewIndexAfterSort inSection:sectionIndex] retain];
+            //NSIndexPath *indexPath = [[NSIndexPath indexPathForItem:collectionViewIndexAfterSort inSection:sectionIndex] retain];
             //[layout setIndexPath: indexPath];
-            [[self delegate] collectionView:[self collectionView] layout:self
-                               setDropPoint:layout.frame.origin forItemAtIndexPath:layout.indexPath];
-            [indexPath release];
+            //[[self delegate] collectionView:[self collectionView] layout:self
+            //                   setDropPoint:layout.frame.origin forItemAtIndexPath:layout.indexPath];
+            //[indexPath release];
             
             collectionViewIndexAfterSort++;
         }
