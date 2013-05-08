@@ -227,14 +227,16 @@
                 
                 if ([updatedLayout dropIndex] == indexOfPotentiallyDroppedItem) {
 
+                    [self repositionLayouts:layoutAttributesForSection forLayout:updatedLayout];
+                    
+                    /*
                     BOOL overlapWithAnother = NO;
                     NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] init];
                     
                     for (MTCollectionViewLayoutLiquidAttributes *layoutForSection in layoutAttributesForSection) {
                         [layoutForSection retain];
                         
-                        //CGRect frameForTest = CGRectMake(updatedLayout.dropPoint.x, updatedLayout.dropPoint.y, updatedLayout.frame.size.width, updatedLayout.frame.size.height);
-                        if (CGRectIntersectsRect([layoutForSection frame], [updatedLayout frame]) && // CGRectContainsPoint([layoutForSection frame], updatedLayout.lastTouchPoint) &&
+                        if (CGRectIntersectsRect([layoutForSection frame], [updatedLayout frame]) &&
                             [updatedLayout dropIndex] != [layoutForSection dropIndex]) {
                             
                             [layoutsToReposition addObject:layoutForSection];
@@ -275,10 +277,12 @@
                             //recursive call.
                             
                         }
+                     
+                     
                     }
 
                     [layoutsToReposition release];
-
+*/
                 }
                  
                 
@@ -388,6 +392,57 @@
 
 - (void)repositionLayouts:(NSArray *)layouts forLayout:(MTCollectionViewLayoutLiquidAttributes *)layoutToReposition {
     
+    BOOL overlapWithAnother = NO;
+    NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] init];
+    
+    for (MTCollectionViewLayoutLiquidAttributes *layoutForSection in layouts) {
+        [layoutForSection retain];
+        
+        if (CGRectIntersectsRect([layoutForSection frame], [layoutToReposition frame]) &&
+            [layoutToReposition dropIndex] != [layoutForSection dropIndex]) {
+            
+            [layoutsToReposition addObject:layoutForSection];
+            overlapWithAnother = YES;
+        }
+        
+        [layoutForSection release];
+    }
+    
+    if (overlapWithAnother) {
+        for (MTCollectionViewLayoutLiquidAttributes *layoutToChange in layoutsToReposition) {
+            
+            NSSet *availablePositions = [[self availablePositionsOfRect:[layoutToChange frame]
+                                                             aroundRect:[layoutToReposition frame]] retain];
+            NSArray *availablePositionsOrdered = [[availablePositions allObjects] retain];
+            NSUInteger indexOfNearestPosition = -1;
+            CGFloat distanceToNearest = 0.0000f;
+            NSUInteger positionCounter = 0;
+            for (NSValue *availablePositionsValue in availablePositionsOrdered) {
+                CGRect availablePosition = [availablePositionsValue CGRectValue];
+                CGFloat d = CGDistance(availablePosition.origin, layoutToReposition.frame.origin);
+                if (indexOfNearestPosition == -1 || d < distanceToNearest) {
+                    distanceToNearest = d;
+                    indexOfNearestPosition = positionCounter;
+                }
+                positionCounter++;
+            }
+            
+            [layoutToChange setFrame: [[availablePositionsOrdered objectAtIndex:indexOfNearestPosition] CGRectValue]];
+            [layoutToChange setDropIndex: [[self delegate] collectionView:[self collectionView] layout:self updateDropIndexForItemAtIndexPath:[layoutToChange indexPath]]];
+            [layoutToChange setDropPoint: [layoutToChange frame].origin];
+            [[self delegate] collectionView:[self collectionView] layout:self setDropPoint:[layoutToChange frame].origin forItemAtIndexPath:[layoutToChange indexPath]];
+            [layoutToChange setLastTouchPointValid: NO];
+            
+            [availablePositionsOrdered release];
+            [availablePositions release];
+            
+            
+            //recursive call.
+            [self repositionLayouts:layouts forLayout:layoutToChange];
+        }    
+    }
+    
+    [layoutsToReposition release];
 }
 
 /*
@@ -395,22 +450,22 @@
 - (UICollectionViewLayoutAttributes *)layoutOfItemDroppedAtRect:(CGRect)rect {
  
     //CGRect rect = CGRectMake(dropPoint.x, dropPoint.y, itemSize.width, itemSize.height);
-    
+ 
     CGRect nearestRect;
 //    NSUInteger placementIndex = item;
-    
+ 
     //NSMutableArray *placedItemFrame = [[NSMutableArray alloc] initWithArray:[self placedItemFrame]];
-    
-    
-    
+ 
+ 
+ 
     if ([layoutAttributesForSection count] == 0 || CGPointEqualToPoint(dropPoint, CGPointZero)) {
-        
+ 
         nearestRect = CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, rect.size.height);
-        
+ 
     } else {
-        
+ 
         for (UICollectionViewLayoutAttributes *placedLayout in layoutAttributesForSection) {
-            
+ 
             //CGRect placedRect = layout.frame;
             
             //There exist three potental placement spots for each alredy placed rect
