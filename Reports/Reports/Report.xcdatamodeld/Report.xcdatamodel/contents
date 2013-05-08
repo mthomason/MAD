@@ -67,6 +67,7 @@
         <attribute name="binary" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="bold" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="dropPointX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="dropPointY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="fontname" optional="YES" attributeType="String" syncable="YES"/>
@@ -94,6 +95,8 @@
         <attribute name="sizeheight" attributeType="Float" defaultValueString="44" syncable="YES"/>
         <attribute name="sizewidth" attributeType="Float" defaultValueString="100" syncable="YES"/>
         <attribute name="strike" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="touchPointX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="touchPointY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="underline" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="verticalAlignment" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -302,7 +305,7 @@
         <element name="RptqDatabaseSchemaField" positionX="-1064" positionY="-666" width="182" height="300"/>
         <element name="RptqDatabaseSchemaTable" positionX="-1305" positionY="-370" width="198" height="253"/>
         <element name="RptqDocument" positionX="-1820" positionY="-270" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="-1296" positionY="-12" width="218" height="688"/>
+        <element name="RptqDocumentObject" positionX="-1296" positionY="-12" width="218" height="733"/>
         <element name="RptqDocumentObjectAggregate" positionX="160" positionY="192" width="128" height="150"/>
         <element name="RptqDocumentObjectChart" positionX="160" positionY="192" width="128" height="75"/>
         <element name="RptqDocumentObjectFormula" positionX="-900" positionY="-18" width="234" height="120"/>
@@ -312,7 +315,7 @@
         <element name="RptqDocumentObjectLabelDataField" positionX="-450" positionY="495" width="225" height="135"/>
         <element name="RptqDocumentObjectLabelLink" positionX="-558" positionY="639" width="225" height="105"/>
         <element name="RptqDocumentSection" positionX="-1800" positionY="443" width="198" height="313"/>
-        <element name="RptqDocumentSectionRows" positionX="-1575" positionY="338" width="245" height="103"/>
+        <element name="RptqDocumentSectionRows" positionX="-1568" positionY="347" width="209" height="103"/>
         <element name="RptqQuery" positionX="-272" positionY="-846" width="128" height="238"/>
         <element name="RptqQueryCache" positionX="43" positionY="-783" width="128" height="148"/>
         <element name="RptqQueryGroup" positionX="-488" positionY="315" width="164" height="163"/>

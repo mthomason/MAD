@@ -15,6 +15,7 @@
 #import "MTProtocolCompare.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows+Extras.h"
+#import "RptqDocumentObject.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
@@ -51,6 +52,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
 
 - (MNSDocumentSectionType)getDocumentSectionType;
+- (NSUInteger)nextDropIndexForSection;
 
 @end
 

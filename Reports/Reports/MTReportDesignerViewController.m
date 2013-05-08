@@ -1456,6 +1456,71 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return result;
 }
 
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout lastTouchPointForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    
+    CGPoint result;
+    
+    if ([objects count] > row) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        result = CGPointMake([[documentObject touchPointX] floatValue], [[documentObject touchPointY] floatValue]);
+    } else {
+        result = CGPointZero;
+    }
+    
+    return result;
+
+}
+
+- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
+                                                                            fromObjectContext: managedObjectContext];
+    
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    
+    NSUInteger result;
+    
+    if ([objects count] > row) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        result = [[documentObject dropIndex] integerValue];
+    } else {
+        result = 0;
+    }
+    
+    return result;
+    
+}
+
+- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:managedObjectContext];
+
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
+    
+    NSUInteger dropIndex = 0;
+    if ([objects count] > [indexPath row]) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
+        NSUInteger dropIndex = [documentSection nextDropIndexForSection];
+        [documentObject setDropIndex:@(dropIndex)];
+        NSError *error = nil;
+        [[documentObject managedObjectContext] save:&error];
+    }
+    return dropIndex;
+}
 
 - (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -1481,12 +1546,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }    
 }
 
+
 #pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Display number cell at index path %@", indexPath);
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
+                                                                            fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
@@ -1726,7 +1793,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
         
-        //[detailSection performBatchUpdates:^{
+        [detailSection performBatchUpdates:^{
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             
@@ -1747,15 +1814,16 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     }
                 }
             }
-            
+            [documentObject setDropIndex:@([documentObject.inSectionRow.inSection nextDropIndexForSection])];
+
             NSArray *indexPaths = [NSArray arrayWithObject: [NSIndexPath indexPathForItem:0 inSection:0]];
             [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
             
             [detailSection insertItemsAtIndexPaths:indexPaths];
          
-        //} completion:^(BOOL finished) {
+        } completion:^(BOOL finished) {
 
-        //}];
+        }];
     }
 }
 
@@ -2119,58 +2187,74 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 
                 
-                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-                
-                NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
-                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
-                                                                             fromObjectContext: managedObjectContext];
-                
-                [documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
-                [documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
-                //[documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
-                //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
-                
-                
-                CGPoint newCenter = [[gestureRecognizer view] center];
-                [[gestureRecognizer view] removeFromSuperview];
-                
-                objectId = [newParent objectIdTag];
-                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
-                                                                                        fromObjectContext: managedObjectContext];
-                
-                CGPoint pointInView = [gestureRecognizer locationInView:newParent];
-                //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
+                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                    
+                    NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
+                    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
+                                                                                 fromObjectContext: managedObjectContext];
+                    
+                    [documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
+                    [documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
+                    //[documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
+                    //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
+                    
+                    
+                    CGPoint newCenter = [[gestureRecognizer view] center];
+                    [[gestureRecognizer view] removeFromSuperview];
+                    
+                    objectId = [newParent objectIdTag];
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
+                                                                                            fromObjectContext: managedObjectContext];
+                    
+                    NSUInteger sectionZero = 0;
+                    RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
+                    
+                //    CGPoint pointInView = [[gestureRecognizer view] frame].origin;
+               
+                    //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
 
-                [documentObject setDropPointX:@(pointInView.x)];
-                [documentObject setDropPointY:@(pointInView.y)];
-                
-                //NSIndexPath *indexPath = [(MTReportDesignerSectionViewLayoutLiquid *)[newParent collectionViewLayout] indexOfAlienViewWithCenterPoint:pointInView];
-                
-                NSUInteger sectionZero = 0;
-                RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[[sectionRow hasObjects] count]
-                                                             inSection:sectionZero];
-                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[sectionRow hasObjects]];
+                    CGPoint pointInView = [[gestureRecognizer view] frame].origin;
+                    CGPoint touchPointInView = [gestureRecognizer locationInView:newParent];
+                    //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
+                    
+                    [documentObject setDropPointX:@(pointInView.x)];
+                    [documentObject setDropPointY:@(pointInView.y)];
+                    
+                    [documentObject setTouchPointX:@(touchPointInView.x)];
+                    [documentObject setTouchPointY:@(touchPointInView.y)];
+                    
+                    
+                    NSUInteger dropIndex = [documentSection nextDropIndexForSection];
+                    [documentObject setDropIndex:@(dropIndex)];
+                    //                    [documentObject setDropIndex]
+                    
+                    //NSIndexPath *indexPath = [(MTReportDesignerSectionViewLayoutLiquid *)[newParent collectionViewLayout] indexOfAlienViewWithCenterPoint:pointInView];
+                    
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[[sectionRow hasObjects] count]
+                                                                 inSection:sectionZero];
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[sectionRow hasObjects]];
+                    
+                    
+                    [hasObjects insertObject:documentObject atIndex:[indexPath item]];
+                    
+                    
+                    
+                    NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+                    
+                    for (NSIndexPath *indexPath in indexPaths) {
+                        NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])];
 
-                
-                [hasObjects insertObject:documentObject atIndex:[indexPath item]];
+                        [holderForLastTouches setObject:[NSValue valueWithCGPoint:pointInView] forKey:indexPath];
 
-            
-                
-                NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
-                
-                for (NSIndexPath *indexPath in indexPaths) {
-                    NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])];
-                    [holderForLastTouches setObject:[NSValue valueWithCGPoint:newCenter] forKey:indexPath];
-                }
-                
-                
-                // MARK: Add this to the data context and to the container for the sections collection view.
+                    }
+                    
+                    
+                    // MARK: Add this to the data context and to the container for the sections collection view.
                     
                     NSOrderedSet *hasRows = [documentSection hasRows];
-
-                        [sectionRow setHasObjects:hasObjects];
-
+                    
+                    [sectionRow setHasObjects:hasObjects];
+                    
                     
                     
                     

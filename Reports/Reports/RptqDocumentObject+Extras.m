@@ -60,7 +60,8 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setSectionRowNumber:@(1)];
     [self setDropPointX:@(CGPointZero.x)];
     [self setDropPointY:@(CGPointZero.y)];
-
+    [self setDropIndex:@(0)];
+    
 }
 
 - (void)awakeFromFetch {

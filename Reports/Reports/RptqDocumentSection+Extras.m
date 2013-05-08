@@ -90,6 +90,22 @@
     return key;
 }
 
+- (NSUInteger)nextDropIndexForSection {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex))
+                                                                     ascending: NO];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSUInteger dropIndex = 0;
+    if (error == nil) {
+        RptqDocumentObject *lastObject = [fetchResults lastObject];
+        dropIndex = [[lastObject dropIndex] integerValue] + 1;
+    }
+    return dropIndex;
+}
+
 #pragma mark - Static
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {

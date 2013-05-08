@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/3/13.
+//  Created by Michael Thomason on 5/7/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -23,6 +23,8 @@
 @dynamic binary;
 @dynamic bold;
 @dynamic color;
+@dynamic dropPointX;
+@dynamic dropPointY;
 @dynamic fontname;
 @dynamic fontsize;
 @dynamic formatNumericCurrency;
@@ -52,8 +54,9 @@
 @dynamic underline;
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
-@dynamic dropPointX;
-@dynamic dropPointY;
+@dynamic dropIndex;
+@dynamic touchPointX;
+@dynamic touchPointY;
 @dynamic inSectionRow;
 @dynamic isAggregate;
 @dynamic isChart;
