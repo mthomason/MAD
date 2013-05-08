@@ -234,7 +234,7 @@
                         [layoutForSection retain];
                         
                         //CGRect frameForTest = CGRectMake(updatedLayout.dropPoint.x, updatedLayout.dropPoint.y, updatedLayout.frame.size.width, updatedLayout.frame.size.height);
-                        if (CGRectContainsPoint([layoutForSection frame], updatedLayout.lastTouchPoint) &&
+                        if (CGRectIntersectsRect([layoutForSection frame], [updatedLayout frame]) && // CGRectContainsPoint([layoutForSection frame], updatedLayout.lastTouchPoint) &&
                             [updatedLayout dropIndex] != [layoutForSection dropIndex]) {
                             
                             [layoutsToReposition addObject:layoutForSection];
