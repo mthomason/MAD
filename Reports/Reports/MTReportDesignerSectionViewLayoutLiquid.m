@@ -11,8 +11,8 @@
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
-@property (assign) CGSize contentSize;
-@property (assign) NSInteger numberOfSections;
+@property (nonatomic, assign) CGSize contentSize;
+@property (nonatomic, assign) NSInteger numberOfSections;
 
 @property (nonatomic, retain) NSMutableArray *itemAttributesBySection;
 @property (nonatomic, retain) NSMutableArray *decorationAttributesBySection;
@@ -320,7 +320,6 @@
             [availablePositionsOrdered release];
             [availablePositions release];
             
-            
             //recursive call.
             [self repositionLayouts:layouts forLayout:layoutToChange];
         }    
@@ -622,12 +621,10 @@
     NSLog(@"%d\tlayoutAttributesForElementsInRect %@", self.collectionView.tag, NSStringFromCGRect(rect));
     
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
-    NSUInteger section = 0;
     
     for (NSArray *items in [self itemAttributesBySection]) {
         
         for (MTCollectionViewLayoutLiquidAttributes *itemAttribute in items) {
-
             if (CGRectIntersectsRect(rect, itemAttribute.frame)) {
                 [itemAttribute retain];
                 [layoutAttributes addObject:itemAttribute];
@@ -635,7 +632,6 @@
             }
 
         }
-        section++;
     }
     
     return [layoutAttributes autorelease];
@@ -645,11 +641,17 @@
     NSLog(@"%d\tlayoutAttributesForItemAtIndexPath %@", self.collectionView.tag, indexPath);
 
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
+    BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
         for (MTCollectionViewLayoutLiquidAttributes *layoutAttributes in section) {
             if (layoutAttributes.indexPath.item == indexPath.item && layoutAttributes.indexPath.section == indexPath.section) {
                 resultLayout = layoutAttributes;
+                found = YES;
+                break;
             }
+        }
+        if (found) {
+            break;
         }
     }
 
@@ -660,11 +662,17 @@
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
     
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
+    BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
         for (MTCollectionViewLayoutLiquidAttributes *layoutAttributes in section) {
             if (layoutAttributes.indexPath.item == indexPath.item && layoutAttributes.indexPath.section == indexPath.section) {
                 resultLayout = layoutAttributes;
+                found = YES;
+                break;
             }
+        }
+        if (found) {
+            break;
         }
     }
     NSLog(@"%d\tinitialLayoutAttributesForAppearingItemAtIndexPath %@:\t\t%@", self.collectionView.tag, indexPath, NSStringFromCGRect(resultLayout.frame));
@@ -675,11 +683,17 @@
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)indexPath {
     
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
+    BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
         for (MTCollectionViewLayoutLiquidAttributes *layoutAttributes in section) {
             if (layoutAttributes.indexPath.item == indexPath.item && layoutAttributes.indexPath.section == indexPath.section) {
                 resultLayout = layoutAttributes;
+                found = YES;
+                break;
             }
+        }
+        if (found) {
+            break;
         }
     }
     NSLog(@"%d\tfinalLayoutAttributesForDisappearingItemAtIndexPath %@:\t\t%@", self.collectionView.tag, indexPath, NSStringFromCGRect(resultLayout.frame));
@@ -691,7 +705,7 @@
 
     NSLog(@"%d\tprepareForCollectionViewUpdates %@", self.collectionView.tag, updateItems);
     [super prepareForCollectionViewUpdates:updateItems];
-    
+    /*
     for (UICollectionViewUpdateItem *updatedItem in updateItems) {
 
         switch ([updatedItem updateAction]) {
@@ -708,8 +722,8 @@
             default:
                 break;
         }
-
     }
+     */
 }
 
 - (void)finalizeCollectionViewUpdates {
