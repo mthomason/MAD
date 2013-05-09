@@ -824,7 +824,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
                 [passThroughViews release];
                 
-                CGRect popoverRect;
+                CGRect popoverRect = CGRectZero;
                 if ([[self selectedObjectIds] count] == 1) {
                     popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
                 } else if ([[self selectedObjectIds] count] > 1) {

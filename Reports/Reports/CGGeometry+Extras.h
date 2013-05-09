@@ -10,8 +10,8 @@
 
 #define            SQUARE(x)             ( (x) * (x) )
 
-#define            MIN(x, y)             (((x) < (y)) ? (x) : (y))
-#define            MAX(x, y)             (((x) > (y)) ? (x) : (y))
+//#define            MIN(x, y)             (((x) < (y)) ? (x) : (y))
+//#define            MAX(x, y)             (((x) > (y)) ? (x) : (y))
 
 #define            DEGTORAD(deg)         (((deg) * 2.0 * PI) / 360.0)
 #define            RADTODEG(rad)         (((rad) * 360.0) / (2.0 * PI))
