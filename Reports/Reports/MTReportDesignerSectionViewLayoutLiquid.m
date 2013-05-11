@@ -122,6 +122,7 @@
     
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithArray:[self updatedItemAttributesBySection]];
 
+    
     for (NSArray *sectionItemLayouts in itemAttributesBySection) {
         NSUInteger itemCounter = 0;
         NSUInteger indexOfPotentiallyDroppedItem = [[sectionItemLayouts lastObject] dropIndex];
@@ -141,11 +142,6 @@
                 
                 //If placing the dropped item, check to see if it overlaps anything.
                 
-                if ([updatedLayout dropIndex] == indexOfPotentiallyDroppedItem) {
-                    [self repositionLayouts:layoutAttributesForSection forLayout:updatedLayout];
-                }
-                
-                
                 [layoutAttributesForSection addObject:updatedLayout];
                 
                 [updatedLayout release];
@@ -154,6 +150,9 @@
 
         }
     }
+ 
+    [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:[[itemAttributesBySection objectAtIndex:0] lastObject]];
+
     [self setItemAttributesBySection: itemAttributesBySection];
 
     [itemAttributesBySection release];
@@ -262,23 +261,25 @@
         BOOL yes = YES;
     }
 
-    NSArray *layoutsToReposition = [[self layout:layoutToReposition overlapWithLayout:layouts] retain];
+    NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] initWithArray:[self layout:layoutToReposition overlapWithLayout:layouts]];
     
     if ([layoutsToReposition count]) {
         
+        //Sort layouts by distance from layoutToReposition
+        [layoutsToReposition sortUsingComparator:^NSComparisonResult(MTCollectionViewLayoutLiquidAttributes *layout1, MTCollectionViewLayoutLiquidAttributes *layout2) {
+            return (CGDistance(layoutToReposition.frame.origin, layout1.frame.origin) > CGDistance(layoutToReposition.frame.origin, layout2.frame.origin)) ? NSOrderedDescending : NSOrderedAscending;
+        }];
+
+        
+        
+        // FIXME: Order by distance from layoutToReposition
+        NSUInteger ctr = 0;
         for (MTCollectionViewLayoutLiquidAttributes *layoutToChange in layoutsToReposition) {
 
             [layoutToChange retain];
             
-            if ((layoutToReposition.indexPath.row == layoutToChange.indexPath.row && layoutToReposition.indexPath.section == layoutToChange.indexPath.section) == NO) {
+            if (ctr == 0) {
 
-            
-                // FIXME: This needs to return more ubiquitious points that don't cause intersectins.
-                //  Use something like the function below.
-                //NSSet *availablePositions = [[self availablePositionsOfRect:layoutToChange
-                //                                                 aroundLayouts:layoutToReposition] retain];
-                
-                
                 NSSet *availablePositions = [[self availablePositionsOfRect:[layoutToChange frame]
                                                                  aroundRect:[layoutToReposition frame]] retain];
                 NSArray *availablePositionsOrdered = [[availablePositions allObjects] retain];
@@ -303,27 +304,42 @@
                 
                 [availablePositionsOrdered release];
                 [availablePositions release];
+
+            
+            } else {
+                NSArray *lb = [[layoutsToReposition subarrayWithRange:NSMakeRange(ctr, [layoutsToReposition count]-1)] retain];
+                [self repositionLayouts:lb forLayout:[layoutsToReposition objectAtIndex:ctr-1]];
+                [lb release];
+            }
+            if ((layoutToReposition.indexPath.row == layoutToChange.indexPath.row && layoutToReposition.indexPath.section == layoutToChange.indexPath.section) == NO) {
+
+            
+                // FIXME: This needs to return more ubiquitious points that don't cause intersectins.
+                //  Use something like the function below.
+                //NSSet *availablePositions = [[self availablePositionsOfRect:layoutToChange
+                //                                                 aroundLayouts:layoutToReposition] retain];
+                
+                
                 
                 //recursive call.
-                /*
 //                if (layouts != nil) {
-                    NSArray *newSectionLayouts = [[self updatedItemAttributesBySection] retain];
-                    for (NSArray *newLayouts in newSectionLayouts) {
-                        [self repositionLayouts:newLayouts forLayout:layoutToChange];
+                    //NSArray *newSectionLayouts = [[self updatedItemAttributesBySection] retain];
+                    //for (NSArray *newLayouts in newSectionLayouts) {
+                        //[self repositionLayouts:newLayouts forLayout:layoutToChange];
                         //for (id newLayout in newLayouts) {
                         //    if (layoutToChange != newLayout) {
                         //    }
                         //}
-                    }
-                    [newSectionLayouts release];
+                    //}
+                    //[newSectionLayouts release];
 //                }
-                */
+                
                 //for (MTCollectionViewLayoutLiquidAttributes *ltc in layouts) {
                 //}
-                [layoutToChange release];
                 
             }
-
+            [layoutToChange release];
+            ctr++;
         }
     }
     
