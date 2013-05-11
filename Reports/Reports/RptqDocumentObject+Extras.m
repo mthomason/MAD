@@ -347,16 +347,15 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 #pragma mark - MTProtocolLog
 
 - (NSString *)toString {
-    NSString *result = nil;
-    return result;
+    return [self toStringDebug];
 }
 
 - (NSString *)toStringDebug {
-    return nil;
+    return [[[NSString stringWithFormat: @"%@-%@", self, [self designerRepresentationText]] retain] autorelease];
 }
 
 - (NSString *)toStringHumanReadable {
-    return nil;
+    return [[[NSString stringWithFormat: @"%@", [self designerRepresentationText]] retain] autorelease];
 }
 
 - (NSAttributedString *)toAttributedString {

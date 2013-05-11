@@ -18,16 +18,17 @@
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
+- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+                               initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (MTCollectionViewLayoutLiquidAttributes *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+                        layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath;
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropPointForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropIndexForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout lastTouchPointForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+          setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath;
 
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath;
-- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+                                     updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
 

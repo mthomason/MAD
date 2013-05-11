@@ -241,9 +241,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [collectionViewReuseIdentifiers release];
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-    CGFloat shadowOpacity = 0.90000f;
-    CGSize shadowOffset = CGSizeMake(-2.0000f, -2.0000f);
+    CGColorRef shadowColor = [[UIColor blackColor] CGColor];
+    CGFloat shadowOpacity = 1.00000f;
+    CGSize shadowOffset = CGSizeMake(-1.0000f, -1.0000f);
     [[viewRuler layer] setShadowColor: shadowColor];
     [[viewRuler layer] setShadowOpacity: shadowOpacity];
     [[viewRuler layer] setShadowOffset: shadowOffset];
@@ -346,7 +346,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         NSString *collectionViewKey = [reportSection sectionKey];
         NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
 
-        [[sectionControlView layer] setBorderColor: [[UIColor darkGrayColor] CGColor]];
+        [[sectionControlView layer] setBorderColor: [[UIColor blackColor] CGColor]];
         [[sectionControlView layer] setBorderWidth: 2.0000f];
 
         [[collectionView layer] setBorderColor: shadowColor];
@@ -978,7 +978,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         result = YES;
-        [[view layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
+        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
         [[view layer] setBorderWidth:2.0000f];
     } else {
         result = NO;
@@ -1433,75 +1433,33 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return result;
 }
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropPointForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (MTCollectionViewLayoutLiquidAttributes *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
     
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     
-    CGPoint result;
+    MTCollectionViewLayoutLiquidAttributes *result = [[MTCollectionViewLayoutLiquidAttributes layoutAttributesForCellWithIndexPath:indexPath] retain];
     
-    if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue]);
+    if ([objects count] > [indexPath item]) {
+        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath item]];
+        [result setDropPoint: CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue])];
+        [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObject.viewSize.width, documentObject.viewSize.height)];
+        [result setLastTouchPoint: CGPointMake([[documentObject touchPointX] floatValue], [[documentObject touchPointY] floatValue])];
+        [result setDropIndex: [[documentObject dropIndex] integerValue]];
+        [result setDescription:[documentObject toStringHumanReadable]];
     } else {
-        result = CGPointZero;
+        [result setDropPoint: CGPointZero];
+        [result setLastTouchPoint:CGPointZero];
+        [result setDropIndex:0];
+        [result setFrame:CGRectZero];
     }
+    [result setLastTouchPointValid: NO];
     
-    return result;
-}
-
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout lastTouchPointForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
-                                                                            fromObjectContext: managedObjectContext];
-    
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    
-    CGPoint result;
-    
-    if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = CGPointMake([[documentObject touchPointX] floatValue], [[documentObject touchPointY] floatValue]);
-    } else {
-        result = CGPointZero;
-    }
-    
-    return result;
-
-}
-
-- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout dropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
-                                                                            fromObjectContext: managedObjectContext];
-    
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    
-    NSUInteger result;
-    
-    if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = [[documentObject dropIndex] integerValue];
-    } else {
-        result = 0;
-    }
-    
-    return result;
-    
+    return [result autorelease];
 }
 
 - (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1522,7 +1480,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return dropIndex;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout setDropPoint:(CGPoint)dropPoint forItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+                layout:(UICollectionViewLayout *)collectionViewLayout
+          setDropPoint:(CGPoint)dropPoint
+    forItemAtIndexPath:(NSIndexPath *)indexPath {
 
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
