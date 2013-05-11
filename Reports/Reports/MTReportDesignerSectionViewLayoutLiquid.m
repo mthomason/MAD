@@ -150,8 +150,11 @@
 
         }
     }
- 
+
     [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:[[itemAttributesBySection objectAtIndex:0] lastObject]];
+    for (id ly in [itemAttributesBySection objectAtIndex:0]) {
+        [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:ly];
+    }
 
     [self setItemAttributesBySection: itemAttributesBySection];
 
