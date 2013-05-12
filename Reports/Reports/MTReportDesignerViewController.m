@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [collectionViewReuseIdentifiers release];
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    CGColorRef shadowColor = [[UIColor blackColor] CGColor];
+    CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
     CGFloat shadowOpacity = 1.00000f;
     CGSize shadowOffset = CGSizeMake(-1.0000f, -1.0000f);
     [[viewRuler layer] setShadowColor: shadowColor];
@@ -978,7 +978,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         result = YES;
-        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[view layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
         [[view layer] setBorderWidth:2.0000f];
     } else {
         result = NO;
