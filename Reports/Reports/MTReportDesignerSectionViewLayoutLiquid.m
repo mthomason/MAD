@@ -82,7 +82,7 @@
         
         NSArray *potentialPlacements = @[[NSValue valueWithCGRect: placement0],
                                          [NSValue valueWithCGRect: placement1],
-                                         [NSValue valueWithCGRect: placement2],
+                                         //[NSValue valueWithCGRect: placement2],
                                          [NSValue valueWithCGRect: placement3]];
         
         for (NSValue *placementValue in potentialPlacements) {
@@ -139,8 +139,6 @@
                 //  checking for overlap with every already placed item.  The shortest
                 //  path to the drop path wins.
                 MTCollectionViewLayoutLiquidAttributes *updatedLayout = [[self placeLayouts:layoutAttributesForSection forLayout:itemAttributes] retain];
-                
-                //If placing the dropped item, check to see if it overlaps anything.
                 
                 [layoutAttributesForSection addObject:updatedLayout];
                 
