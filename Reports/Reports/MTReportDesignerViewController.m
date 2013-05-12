@@ -757,7 +757,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - Menu Notifications
 
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    [self removeBorderFromView:[self lastElementViewToShowMenu]];
+    //[self removeBorderFromView:[self lastElementViewToShowMenu]];
 }
 
 - (void)didShowMenuNotification:(NSNotification *)notification { }
@@ -978,8 +978,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         result = YES;
-        [[view layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
-        [[view layer] setBorderWidth:2.0000f];
+        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[view layer] setBorderWidth:1.0000f];
     } else {
         result = NO;
     }
@@ -987,7 +987,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
-    return ([[view layer] borderWidth] >2.5000f);
+    return ([[view layer] borderWidth] > 1.5000f);
 }
 
 - (BOOL)dismissAllPopovers {
@@ -1539,8 +1539,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
                                                                      inObjectContext:managedObjectContext];
-                [[elementView layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
-                [[elementView layer] setBorderWidth:2.0000f];
+                [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+                [[elementView layer] setBorderWidth:1.0000f];
                 
                 [elementView setDelegate:self];
                 [cell setBackgroundColor:[UIColor clearColor]];
@@ -1714,6 +1714,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self deselectAllElementsAnimated:NO];
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [self applyBorderToView:elementView];
+    //[self removeBorderFromView:elementView];
     [self setLastElementViewToShowMenu:elementView];
     return YES;
 }
