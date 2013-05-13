@@ -122,21 +122,30 @@
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     for (MTVertex *vertexTable in tables) {
         if (vertexTable) {
-            if ([vertexTable sortVertexColor] == MTColorWhite) {
-                [vertexTable setSortVertexColor: MTColorBlack];
+            
+            NSManagedObjectID *objectID = [vertexTable object];
+            RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:managedObjectContext];
+
+            if ([vertexTable sortVertexColor] == MTColorWhite || [vertexTable sortVertexColor] == MTColorGray) {
+
                 NSArray *incidentEdges = [vertexTable incidentEdges];
+
                 if (tableCounter > 0) [result appendString:@",\n"];
-                NSManagedObjectID *objectID = [vertexTable object];
-                RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:managedObjectContext];
+                
                 NSString *tname = [table name];
-                [result appendString:tname];
+
+                if ([vertexTable sortVertexColor] == MTColorWhite) {
+                    [result appendString:tname];
+                }
+
+                [vertexTable setSortVertexColor: MTColorBlack];
 
                 for (MTEdge *edge in incidentEdges) {
                     MTVertex *vertexTableDestination = [edge destination];
                     if (vertexTableDestination) {
                         if ([vertexTableDestination sortVertexColor] == MTColorWhite) {
                             
-                            [vertexTableDestination setSortVertexColor:MTColorBlack];
+                            [vertexTableDestination setSortVertexColor:MTColorGray];
                             
                             NSManagedObjectID *queryLinkID = [edge object];
                             RptqQueryLinks *queryLink = [RptqQueryLinks getQueryLinkWithID:queryLinkID fromObjectContext:managedObjectContext];
@@ -197,6 +206,8 @@
                 }
                 NSString *newDip = [self getSqlFromClauseWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
                 if ([newDip length] > 0) {
+                    [result insertString:@"(" atIndex:0];
+                    [result appendString:@")\n\t"];
                     [result appendString:newDip];
                 }
                 [destinationVertices release];
