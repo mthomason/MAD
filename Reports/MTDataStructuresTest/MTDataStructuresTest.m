@@ -80,12 +80,12 @@
     [graph addEdgeWithOrigin:vertexShirt destination:vertexTie object:@"Shirt->Tie" andWeight:@(1)];
     [graph addEdgeWithOrigin:vertexSocks destination:vertexShoes object:@"Socks->Shoes" andWeight:@(1)];
 
-    //NSLog(@"%@", [graph toStringHumanReadable]);
+    NSLog(@"%@", [graph toStringHumanReadable]);
     
     NSError *error = nil;
-    MTLinkedList *topologicalSort = [[graph topologicalSort:vertexShoes error:&error] retain];
+    MTLinkedList *topologicalSort = [[graph topologicalSortWithError:&error] retain];
     
-    //NSLog(@"%@", [topologicalSort toStringHumanReadable]);
+    NSLog(@"%@", [topologicalSort toStringHumanReadable]);
     
     [topologicalSort release];
     [graph release];

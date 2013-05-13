@@ -36,8 +36,7 @@
     // MARK: Use a graph to represent the query: verticies are tables and edges are links.
     MTGraph *graph = [[MTGraph alloc] init];
     NSSet *hasTables = [query hasTables];
-    NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasTables count]];
-    
+
     // MARK: Create vertex in the graph for each query table.
     for (RptqDatabaseSchemaTable *table in hasTables) {
         [graph addVertexWithObject:[table objectID]];
@@ -64,7 +63,7 @@
     NSError *error = nil;
 
     // MARK: Sort the vectors topologically.
-    MTLinkedList *topologicalSort = [graph topologicalSort:[vertices anyObject] error:&error];
+    MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
     
     // MARK: Error on circuts or other bad query.
     if (error) {
@@ -111,9 +110,16 @@
         [linkDepth release];
     }
     
-    [vertices release];
     [graph release];
     return [result autorelease];
+}
+
+- (NSString *)selectExpression {
+    return @"";
+}
+
+- (NSString *)tableReferences {
+    
 }
 
 - (NSString *)getSqlFromClauseWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

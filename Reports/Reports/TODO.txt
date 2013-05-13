@@ -1,24 +1,26 @@
 Report Designer
     Implement "border" in the same way that margin and padding are implemented.
     On iPad version, make sure tool box close button works.  Right now, only touch away works.
-    Expand the abstract report elements to include images, labels, and formula types.  It already includes a data-field type that links to a spot in the query.
     Formula type will use a sub set of JavaScript, since JavaScript is widely known, and there is a processor for it  built into Safari which is always running on iOS.
+    COMPLETE - Expand the abstract report elements to include images, labels, and formula types.  It already includes a data-field type that links to a spot in the query.
 
 Report Viewer
+    Cache data in the background, use NSLocalNotification to notify when data is cached.
     Provide print button.
     Save image of rendered report for thumbnail.
     Render font style changes in rendering of report (size and margin are already implemented).
 
 Data Model
-    Abstract table schema so that the same table may be included multiple times.  Do before first release to make updates easier.
+    Allow multiple caches.    Do before first release to make updates easier.
+    COMPLETE - Abstract table schema so that the same table may be included multiple times.
 
 Database Access
-    MySQL is working.
     SalesForce needs the sql generator to create SFQL as it is now creating SQL.  Only difference is join syntax, but the join grouping is the same.  SFQL was only starting to support joins when I started on this project.
     Implement the reporting protocol for the already compiled TDS driver.  This will provide support for MS SQL Server and Sybase.
     Prioritize and then implement the same protocol for every other datasource known, becasue each one would be useful to someone.
 
 Query Builder
+    Add support for ORDER BY.
     Make sure the links are added correctly to the table view, because in some cases they can't be deleted.
     Make sure the predicates are added correctly to the table view, because in some cases they can't be deleted.
 
