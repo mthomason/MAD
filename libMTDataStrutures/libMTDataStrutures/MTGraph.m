@@ -199,7 +199,7 @@
     return [resultEdges autorelease];
 }
 
-- (MTLinkedList *)topologicalSort:(MTVertex *)root error:(NSError **)anError {
+- (MTLinkedList *)topologicalSortWithError:(NSError **)anError {
     
     NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
     
@@ -210,23 +210,33 @@
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
     MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
-    [self depthFirstSearchVisitWithCurrentVertex:root counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+    [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
+
     for (MTVertex *vertex in [self vertices]) {
         if ([vertex dfsVertexColor] == MTColorWhite) {
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }
     }
+    
     BOOL isDirectedAcyclicGraph = YES;
     for (MTPair *pair in resultEdges) {
         MTEdgeType edgeType = [[pair latter] integerValue];
         if (edgeType == MTEdgeTypeBackEdge) {
             isDirectedAcyclicGraph = NO;
-            if (anError != NULL) *anError = [NSError errorWithDomain:@"MTDataStructures" code:1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
+
+            if (anError != NULL) {
+                *anError = [NSError errorWithDomain: @"MTDataStructures"
+                                               code: 1
+                                           userInfo: @{ NSLocalizedDescriptionKey : NSLocalizedString(@"Cycle encountered.", @"Cycle encountered.")}];
+            }
             break;
         }
     }
+
     [resultEdges autorelease];
+
     [resultVertices reverse];
+    
     [resultVertices autorelease];
     return isDirectedAcyclicGraph ? resultVertices : nil;
 

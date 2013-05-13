@@ -41,6 +41,6 @@
 
 - (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
 
-- (MTLinkedList *)topologicalSort:(MTVertex *)root error:(NSError **)anError;
+- (MTLinkedList *)topologicalSortWithError:(NSError **)anError;
 
 @end
