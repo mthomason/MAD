@@ -33,16 +33,16 @@
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@"SELECT\n"];
     
-    // MARK: Use a graph to represent the query: verticies are tables and edges are links.
+    //Use a graph to represent the query: verticies are tables and edges are links.
     MTGraph *graph = [[MTGraph alloc] init];
     NSSet *hasTables = [query hasTables];
 
-    // MARK: Create vertex in the graph for each query table.
+    //Add a vertex to the graph for each edge.
     for (RptqDatabaseSchemaTable *table in hasTables) {
         [graph addVertexWithObject:[table objectID]];
     }
     
-    // MARK: Create an edge in the graph for each query link.
+    //Create an edge in the graph for each query link.
     NSSet *hasQueryLinks = [query hasQueryLinks];
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
         
@@ -53,31 +53,42 @@
         id objectDestination =          [tableDestination objectID];
         id objectQueryLink =            [queryLink objectID];
         
-        MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
-        MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
+        MTVertex *vertexOrigin =        [[graph vertexForObject:objectOrigin] retain];
+        MTVertex *vertexDestination =   [[graph vertexForObject:objectDestination] retain];
         
         [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
         
+        [vertexOrigin release];
+        [vertexDestination release];
     }
     
-    NSError *error = nil;
 
     // MARK: Sort the vectors topologically.
+    NSError *error = nil;
     MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
     
     // MARK: Error on circuts or other bad query.
     if (error) {
-        [result setString:[error localizedDescription]];
+        
+        [error presentErrorToUserWithCompletion:^(BOOL success) {
+
+        }];
+
+        [result setString:@""];
+
     } else {
+
         NSInteger tableCounter = 0;
         
         // MAKR: List each field in the query.
         for (MTPair *pair in topologicalSort) {
+
             MTVertex *queryTable = [pair former];
             //NSUInteger timeFound = [[pair latter] integerValue];
             if (queryTable) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 NSManagedObjectID *objectID = [queryTable object];
+
                 RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
                 NSString *tableAlias = [[table name] stringByAppendingString:@"."];
                 
@@ -90,6 +101,7 @@
                 }
                 tableCounter++;
             }
+
         };
         
         // MARK: Get from part of the query.
@@ -98,6 +110,7 @@
         NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
         NSArray *topologicalSortArray = [topologicalSort toArray];
         NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
+
         for (MTPair *pair in topologicalSortArray) {
             MTVertex *vertexTable = [pair former];
             if (vertexTable) {
