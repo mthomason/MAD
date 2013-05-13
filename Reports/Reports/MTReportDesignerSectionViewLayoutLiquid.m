@@ -287,10 +287,14 @@
                 NSUInteger indexOfNearestPosition = -1;
                 CGFloat distanceToNearest = 0.0000f;
                 NSUInteger positionCounter = 0;
+
                 for (NSValue *availablePositionsValue in availablePositionsOrdered) {
                     CGRect availableRect = [availablePositionsValue CGRectValue];
+
+                    //CGFloat d = CGDistance(availableRect.origin, layoutToChange.frame.origin);
+                    
                     CGFloat d = CGDistance(availableRect.origin, layoutToReposition.frame.origin);
-                    if (indexOfNearestPosition == -1 || d < distanceToNearest) {
+                    if (indexOfNearestPosition == -1 || d > distanceToNearest) {
                         distanceToNearest = d;
                         indexOfNearestPosition = positionCounter;
                     }
@@ -308,9 +312,15 @@
 
             
             } else {
-                NSArray *lb = [[layoutsToReposition subarrayWithRange:NSMakeRange(ctr, [layoutsToReposition count]-1)] retain];
-                [self repositionLayouts:lb forLayout:[layoutsToReposition objectAtIndex:ctr-1]];
-                [lb release];
+            
+                NSArray *layoutToRepositionLocked = [[NSArray alloc] initWithArray:layoutsToReposition];
+                if (ctr < [layoutToRepositionLocked count] - 1) {
+                    NSRange range = NSMakeRange(ctr, [layoutToRepositionLocked count] - 1);
+                    NSArray *lb = [[NSArray alloc] initWithArray:[layoutToRepositionLocked subarrayWithRange:range]];
+                    [self repositionLayouts:lb forLayout:[layoutToRepositionLocked objectAtIndex:ctr - 1]];
+                    [lb release];
+                }
+                [layoutToRepositionLocked release];
             }
             if ((layoutToReposition.indexPath.row == layoutToChange.indexPath.row && layoutToReposition.indexPath.section == layoutToChange.indexPath.section) == NO) {
 
