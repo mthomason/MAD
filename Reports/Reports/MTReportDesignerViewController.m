@@ -1746,7 +1746,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }
 }
 
-- (void)insertDocumentObjectDataField:(RptqDatabaseSchemaField *)field {
+- (void)insertDocumentObjectDataField:(RptqQueryField *)field {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];

@@ -69,7 +69,7 @@
     RptqQuery *query = [RptqDocument queryForActiveDocument];
     NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    request.predicate = [NSPredicate predicateWithFormat: @"ANY inQuery == %@", [query objectID]];
+    request.predicate = [NSPredicate predicateWithFormat: @"inQuery == %@", [query objectID]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
     [request setSortDescriptors: @[sortDescriptor]];
     NSError *error = nil;
@@ -114,8 +114,8 @@
     [doc release];
 }
 
-+ (id)createQueryLinkWithLeftField:(RptqDatabaseSchemaField *)fieldLeft
-                         rightField:(RptqDatabaseSchemaField *)fieldRight
++ (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
+                         rightField:(RptqQueryField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     
@@ -125,10 +125,10 @@
     [queryLinks setHasLeftField:    fieldLeft];
     [queryLinks setHasRightField:   fieldRight];
     
-    [queryLinks setTableleft:       [[fieldLeft inTable] name]];
-    [queryLinks setFieldleft:       [fieldLeft name]];
-    [queryLinks setTableright:      [[fieldRight inTable] name]];
-    [queryLinks setFieldright:      [fieldRight name]];
+    [queryLinks setTableleft:       [[fieldLeft inQueryTable] alias]];
+    [queryLinks setFieldleft:       [[fieldLeft databaseSchemaField] name]];
+    [queryLinks setTableright:      [[fieldRight inQueryTable] alias]];
+    [queryLinks setFieldright:      [[fieldRight databaseSchemaField] name]];
     [queryLinks setJointype:        [MNSLinkTypeReuseIds objectAtIndex: joinType]];
     [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
 
@@ -149,9 +149,9 @@
 // MARK: MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    NSMutableString *result = [[NSMutableString alloc] initWithString:[[self hasLeftField] name]];
+    NSMutableString *result = [[NSMutableString alloc] initWithString:[[[self hasLeftField] databaseSchemaField] name]];
     [result appendFormat:@" %@ ", [self linkDescription]];
-    [result appendString:[[self hasRightField] name]];
+    [result appendString:[[[self hasRightField] databaseSchemaField] name]];
     return [result autorelease];
 }
 
@@ -167,7 +167,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqQueryLinks *s = sender;

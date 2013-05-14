@@ -58,9 +58,9 @@
 
 #pragma mark - Static
 
-+ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
++ (id)createPredicateWithLeftField:(RptqQueryField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqDatabaseSchemaField *)rightField
+                     andRightField:(RptqQueryField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
@@ -72,7 +72,7 @@
     return [queryPredicate autorelease];
 }
 
-+ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
++ (id)createPredicateWithLeftField:(RptqQueryField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
                      andRightValue:(NSString *)rightUserValue
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -102,7 +102,7 @@
 
 + (id)createPredicateWithLeftValue:(NSString *)leftUserValue
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqDatabaseSchemaField *)rightField
+                     andRightField:(RptqQueryField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
@@ -126,7 +126,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqQueryPredicate *s = sender;

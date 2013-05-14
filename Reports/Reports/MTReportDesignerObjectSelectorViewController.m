@@ -869,7 +869,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark
 #pragma mark - UITableViewControllerChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
     
     switch ([[controller view] tag]) {
             

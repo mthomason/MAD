@@ -68,7 +68,7 @@
 }
 
 // MARK: Creating group. Updates document sections to reflect new group.
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqDatabaseSchemaField *)field andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSEntityDescription *entityDescriptionQueryGroup = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryGroup class])
                                                                    inManagedObjectContext:managedObjectContext];
@@ -83,9 +83,9 @@
     NSInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
     groupCount = (error) ? 0 : groupCount;
     
-    [queryGroup setHasField:field];
-    [queryGroup setField:[field name]];
-    [queryGroup setTable:[[field inTable] name]];
+    [queryGroup setHasField:queryField];
+    //[queryGroup setField:[field name]];
+    //[queryGroup setTable:[[field inTable] name]];
     [queryGroup setSort:@(sortOrder)];
     [queryGroup setWeight:@(groupCount - 1)];
 
@@ -153,7 +153,7 @@
 }
 
 - (NSString *)fieldNameNice {
-    NSString *fieldNameNice = [[[NSString stringWithFormat:@"%@.%@", [self table], [self field]] lowercaseString] retain];
+    NSString *fieldNameNice = [[[NSString stringWithFormat:@"%@.%@", [[[self hasField] inQueryTable] alias], [[self hasField] databaseSchemaField]] lowercaseString] retain];
     return [fieldNameNice autorelease];
 }
 
@@ -178,7 +178,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqQueryGroup *s = sender;

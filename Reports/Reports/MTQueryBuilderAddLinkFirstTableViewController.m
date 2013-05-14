@@ -46,8 +46,8 @@
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
     }
     
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[cell textLabel] setText: [tablea name]];
+    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[cell textLabel] setText: [tablea alias]];
     [[cell detailTextLabel] setText: @""];
     [tablea release];
 /*
@@ -88,7 +88,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerDidFinishWithTable:tablea];
     [tablea release];
 }

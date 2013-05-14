@@ -15,6 +15,7 @@
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryLinks+Extras.h"
+#import "RptqQueryField+Extras.h"
 
 @class MTQueryBuilderLinkBuilderViewController;
 
@@ -51,10 +52,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFieldTwo;
 
 @property (assign) MNSLinkPart currentlyEditingPart;
-
-@property (copy) NSString *firstTableFieldName;
 @property (assign) MNSLinkType linkType;
-@property (copy) NSString *secondTableFieldName;
 
 - (IBAction)done:(id)sender;
 - (IBAction)save:(id)sender;

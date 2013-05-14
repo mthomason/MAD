@@ -73,7 +73,7 @@
     for (NSManagedObjectID *objectId in objectIds) {
 
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-        if (MTDataTypeNumber == [[[[documentObject isLabelDataField] referencesField] dataType] integerValue]) {
+        if (MTDataTypeNumber == [[[[[documentObject isLabelDataField] referencesQueryField] databaseSchemaField] dataType] integerValue]) {
             numericTypeInSet = YES;
             break;
         }

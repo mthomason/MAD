@@ -37,8 +37,8 @@
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
     }
     
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-    [[cell textLabel] setText: [tablea name]];
+    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    [[cell textLabel] setText: [tablea alias]];
     [tablea release];
     
     return cell;
@@ -49,7 +49,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
     [[self delegate] viewControllerDidFinishWithSecondTable: tablea];
     [tablea release];
 }

@@ -12,10 +12,10 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase+Extras.h"
+#import "RptqQueryTable+Extras.h"
 #import "MTDatabaseTable.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
-
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
@@ -30,10 +30,13 @@
 + (RptqDatabaseSchemaTable *)getTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                       database:(RptqDatabase *)database
                                   andTableName:(NSString *)name;
-+ (void)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
++ (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+
 + (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (id)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
+
++ (RptqDatabaseSchemaTable *)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
 + (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

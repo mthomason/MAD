@@ -461,22 +461,9 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                                 }
                                 NSString *stringToPrint = [self printDocumentObject:item
                                                                withResultDictionary:nil/*resultDictionary*/];
-                                //                            NSString *stringToPrint = [self printDocumentObject:documentObject
-                                //                                                           withResultDictionary: groupedRows];
                                 [mutableStringToPrint appendString:stringToPrint];
                             }
                         }
-                        
-/*
-                        for (RptqDocumentObject *documentObject in [[[documentSection hasRows] objectAtIndex:0] hasObjects]) {
-                            if (documentObjectCounter > 0) {
-                                [mutableStringToPrint appendString:@", "];
-                            }
-                            NSString *stringToPrint = [self printDocumentObject:documentObject
-                                                           withResultDictionary:nil];
-                            [mutableStringToPrint appendString:stringToPrint];
-                        }
-                        */
                         
                         [mutableStringToPrint release];
                         *printableSpaceUsedPageHeight += [[documentSection height] floatValue];
@@ -581,20 +568,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 }
             }
         }
-        /*
-        for (RptqDocumentObject *documentObject in [[[detailSection hasRows] objectAtIndex:0] hasObjects]) {
-            if (documentObjectCounter > 0) {
-                [mutableStringToPrint appendString:@", "];
-            }
-            NSString *stringToPrint = [self printDocumentObject:documentObject
-                                           withResultDictionary:resultDictionary];
-            if (stringToPrint != nil) {
-                [mutableStringToPrint appendString:@"<Null>"];
-            } else {
-                [mutableStringToPrint appendString:stringToPrint];
-            }
-        }
-         */
+
         //NSLog(@"Detail: (%@)", mutableStringToPrint);
         [mutableStringToPrint release];
         documentObjectCounter++;
@@ -669,8 +643,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 case MNSDocumentSectionTypeBody: {
 
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
-                    value = [resultDictionary objectForKey: [field display]];
+                    RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
+                    value = [resultDictionary objectForKey: [queryField tableFieldKey]];
                     break;
 
                 } case MNSDocumentSectionTypeGroupHeader: {
@@ -682,8 +656,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                 } default: {
 
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqDatabaseSchemaField *field = [documentObjectDataField referencesField];
-                    value = [resultDictionary objectForKey: [field display]];
+                    RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
+                    value = [resultDictionary objectForKey: [queryField tableFieldKey]];
                     break;
                     
                 }

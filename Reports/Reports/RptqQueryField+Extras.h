@@ -7,7 +7,15 @@
 //
 
 #import "RptqQueryField.h"
+#import "RptqQueryTable.h"
+#import "MTProtocolLog.h"
+#import "MTProtocolCompare.h"
 
-@interface RptqQueryField (Extras)
+@interface RptqQueryField (Extras) <MTProtocolLog, MTProtocolCompare>
+
+- (NSString *)display;
+- (NSString *)tableFieldKey;
++ (id)getQueryFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (RptqQueryField *)createNewQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

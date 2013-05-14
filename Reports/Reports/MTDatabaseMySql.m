@@ -35,7 +35,7 @@
     
     //Use a graph to represent the query: verticies are tables and edges are links.
     MTGraph *graph = [[MTGraph alloc] init];
-    NSSet *hasTables = [query hasTables];
+    NSSet *hasTables = [query hasQueryTables];
 
     //Add a vertex to the graph for each edge.
     for (RptqDatabaseSchemaTable *table in hasTables) {
@@ -46,8 +46,8 @@
     NSSet *hasQueryLinks = [query hasQueryLinks];
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
         
-        RptqDatabaseSchemaTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
-        RptqDatabaseSchemaTable *tableDestination =   [[queryLink hasRightField] inTable];
+        RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
+        RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
         
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
@@ -89,11 +89,12 @@
                 if (tableCounter != 0) [result appendString:@",\n"];
                 NSManagedObjectID *objectID = [queryTable object];
 
-                RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
-                NSString *tableAlias = [[table name] stringByAppendingString:@"."];
+                RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
+                NSString *tableAlias = [[table alias] stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
-                for (RptqDatabaseSchemaField *field in [table hasFields]) {
+                for (RptqQueryField *queryField in [table hasQueryFields]) {
+                    RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
                     if (fieldCounter != 0)  [result appendString:@",\n"];
                     NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
                     [result appendFormat: @"\t%@", fieldAlias];
@@ -132,7 +133,7 @@
 }
 
 - (NSString *)tableReferences {
-    
+    return @"";
 }
 
 - (NSString *)getSqlFromClauseWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -143,7 +144,7 @@
         if (vertexTable) {
             
             NSManagedObjectID *objectID = [vertexTable object];
-            RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectID fromObjectContext:managedObjectContext];
+            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
 
             if ([vertexTable sortVertexColor] == MTColorWhite || [vertexTable sortVertexColor] == MTColorGray) {
 
@@ -151,10 +152,12 @@
 
                 if (tableCounter > 0) [result appendString:@",\n"];
                 
-                NSString *tname = [table name];
+                NSString *tname = [[table databaseSchemaTable] name];
 
                 if ([vertexTable sortVertexColor] == MTColorWhite) {
                     [result appendString:tname];
+                    [result appendString:@" AS "];
+                    [result appendString:[table alias]];
                 }
 
                 [vertexTable setSortVertexColor: MTColorBlack];
@@ -198,13 +201,13 @@
                                         break;
                                 }
                                 
-                                RptqDatabaseSchemaField *rightField = [queryLink hasRightField];
-                                RptqDatabaseSchemaTable *rightTable = [rightField inTable];
+                                RptqQueryField *rightField = [queryLink hasRightField];
+                                RptqQueryTable *rightTable = [rightField inQueryTable];
                                 
-                                [result appendString:[rightTable name]];
+                                [result appendString:[rightTable alias]];
                                 [result appendString:@" ON "];
                                 
-                                RptqDatabaseSchemaField *leftField = [queryLink hasLeftField];
+                                RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
                                     [result appendString: [leftField toStringHumanReadable]];
                                 }

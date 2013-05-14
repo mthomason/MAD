@@ -64,13 +64,13 @@
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query {
 
-    NSSet *hasTables = [query hasTables];
-    NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasTables count]];
+    NSSet *hasQueryTables = [query hasQueryTables];
+    NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasQueryTables count]];
 
     MTGraph *graph = [[MTGraph alloc] init];
 
     // MARK: Create vertex in the graph for each query table.
-    for (RptqDatabaseSchemaTable *table in hasTables) {
+    for (RptqQueryTable *table in hasQueryTables) {
         [graph addVertexWithObject:[table objectID]];
     }
     
@@ -78,8 +78,8 @@
     NSSet *hasQueryLinks = [query hasQueryLinks];
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
  
-        RptqDatabaseSchemaTable *tableOrigin =        [[queryLink  hasLeftField] inTable];
-        RptqDatabaseSchemaTable *tableDestination =   [[queryLink hasRightField] inTable];
+        RptqQueryTable *tableOrigin =        [[queryLink hasLeftField] inQueryTable];
+        RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
 
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];
@@ -115,7 +115,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqQuery *s = sender;

@@ -15,7 +15,7 @@
 @class MTQueryBuilderAddLinkFirstFieldViewController;
 
 @protocol MTQueryBuilderAddLinkFirstFieldDelegate
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqDatabaseSchemaField *)result;
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqQueryField *)result;
 @end
 
 @interface MTQueryBuilderAddLinkFirstFieldViewController : UITableViewControllerCoreDataResults

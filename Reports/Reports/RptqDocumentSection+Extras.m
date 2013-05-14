@@ -414,7 +414,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqDocumentSection *s = sender;

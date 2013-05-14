@@ -17,7 +17,7 @@
 
 @protocol MTQueryBuilderAddGroupDelegate
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller;
-- (void)addGroupDidAddGroupWithField:(RptqDatabaseSchemaField *)fieldName andSort:(MNSSortOrder)sortOrder;
+- (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder;
 @end
 
 @interface MTQueryBuilderAddGroupViewController : UITableViewController

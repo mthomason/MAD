@@ -16,7 +16,7 @@
     [super dealloc];
 }
 
-- (id)initWithTable:(RptqDatabaseSchemaTable *)sectionTable {
+- (id)initWithTable:(RptqQueryTable *)sectionTable {
 	self = [super init];
 	if (self) {
 
@@ -25,8 +25,12 @@
         [rh release];
         
         [self setTable: sectionTable];
-        
-        NSArray *sectionFields = [[NSArray alloc] initWithArray: [[[self table] hasFields] allObjects]];
+
+        NSSet *fieldsSet = [[self table] hasQueryFields];
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
+        NSArray *fieldsArray = [fieldsSet sortedArrayUsingDescriptors:@[namesAccending]];
+
+        NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
         [self setFields: sectionFields];
         [sectionFields release];
 	}
@@ -65,8 +69,5 @@
 - (void)replaceRowHeightsAtIndexes:(NSIndexSet *)indexes withRowHeights:(NSArray *)rowHeightArray {
 	[rowHeights replaceObjectsAtIndexes:indexes withObjects:rowHeightArray];
 }
-
-
-
 
 @end

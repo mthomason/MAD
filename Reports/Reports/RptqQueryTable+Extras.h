@@ -7,7 +7,14 @@
 //
 
 #import "RptqQueryTable.h"
+#import "RptqDocument+ActiveDocument.h"
+#import "RptqDocument+Extras.h"
 
-@interface RptqQueryTable (Extras)
+@interface RptqQueryTable (Extras) <MTProtocolCompare>
+
++ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable;
++ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

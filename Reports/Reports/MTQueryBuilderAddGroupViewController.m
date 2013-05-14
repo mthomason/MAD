@@ -11,7 +11,7 @@
 
 @interface MTQueryBuilderAddGroupViewController ()
 
-@property (nonatomic, retain) RptqDatabaseSchemaField *field;
+@property (nonatomic, retain) RptqQueryField *field;
 
 @end
 
@@ -87,12 +87,12 @@
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
     [[self navigationController] popToViewController:self animated:YES];
-    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]] retain];
-    [self setField:field];
+    NSString *fieldName = [[queryField tableFieldKey] retain];
+    [self setField:queryField];
     [self setFieldName:fieldName];
-    [[[self tableViewCellField] detailTextLabel] setText: [fieldName lowercaseString]];
+    [[[self tableViewCellField] detailTextLabel] setText: [[queryField display] lowercaseString]];
     //NSLog(@"%@", NSStringFromCGRect([[self tableViewCellField] detailTextLabel].frame));
     [fieldName release];
 }
@@ -124,7 +124,7 @@
 }
 
 - (IBAction)save:(id)sender {
-    [[self delegate] addGroupDidAddGroupWithField:[self field] andSort:[self sortOrder]];
+    [[self delegate] addGroupDidAddGroupWithQueryField:[self field] andSort:[self sortOrder]];
 }
 
 #pragma mark - Table View Sort Type Delegate

@@ -43,9 +43,11 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
         [self setHasFieldsObjectIds:hasFieldsObjectIds];
         [hasFieldsObjectIds release];
+
     }
     return self;
 }
@@ -114,8 +116,8 @@
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];    
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
-    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
-    [[result detailLabel] setText:[field name]];
+    RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
+    [[result detailLabel] setText:[[field databaseSchemaField] name]];
     return result;
 }
 
@@ -126,11 +128,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
-    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     [[self hasFieldsObjectIds] removeAllObjects];
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-    NSArray *fields = [[NSArray alloc] initWithArray: [[table hasFields] sortedArrayUsingDescriptors:@[namesAccending]]];
-    for (RptqDatabaseSchemaField *field in fields) {
+    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
+    NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields] sortedArrayUsingDescriptors:@[namesAccending]]];
+    for (RptqQueryField *field in fields) {
+        
         [[self hasFieldsObjectIds] addObject:[field objectID]];
     }
     [fields release];

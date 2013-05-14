@@ -133,16 +133,16 @@
     [[self navigationController] popToViewController:self animated:YES];
 }
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
     [[self navigationController] popToViewController:self animated:YES];
     if ([self currentlyEditingPart] == MNSPredicateLeft) {
         [self setLeftValue: nil];
-        [self setFieldLeft: field];
-        [[[self tableViewCellLeftSide] detailTextLabel] setText: [field display]];
+        [self setFieldLeft: queryField];
+        [[[self tableViewCellLeftSide] detailTextLabel] setText: [queryField display]];
     } else if ([self currentlyEditingPart] == MNSPredicateRight) {
         [self setRightValue: nil];
-        [self setFieldRight: field];
-        [[[self tableViewCellRightSide] detailTextLabel] setText: [field display]];
+        [self setFieldRight: queryField];
+        [[[self tableViewCellRightSide] detailTextLabel] setText: [queryField display]];
     }
 }
 

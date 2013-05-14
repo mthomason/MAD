@@ -15,13 +15,14 @@
 #import "Constants.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocument+Extras.h"
+#import "RptqQueryField.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolEnumerator.h"
 
 @interface RptqQueryGroup (Extras) <MTProtocolCompare, MTProtocolEnumerator>
 
 + (NSInteger)numberOfGroupsForQuery:(RptqQuery *)query;
-+ (RptqQueryGroup *)createQueryGroupFor:(RptqDatabaseSchemaField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)fieldNameNice;
 - (NSString *)sortDisplayNice;

@@ -29,6 +29,7 @@
 #import "RptqQueryResultFields+Extras.h"
 #import "RptqQueryResultValues+Extras.h"
 #import "RptqQueryResult+Extras.h"
+#import "RptqQueryField+Extras.h"
 
 @interface MTDatabaseMySql : MTDatabase
 

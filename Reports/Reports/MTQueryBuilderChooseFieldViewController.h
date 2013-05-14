@@ -18,7 +18,7 @@
 @class MTQueryBuilderChooseFieldViewController;
 
 @protocol MTQueryBuilderChooseFieldDelegate
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqDatabaseSchemaField *)field;
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field;
 @end
 
 @interface MTQueryBuilderChooseFieldViewController : UITableViewController

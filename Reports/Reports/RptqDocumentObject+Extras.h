@@ -17,6 +17,7 @@
 #import "MTFont.h"
 #import "Constants.h"
 #import "RptqDatabaseSchemaField.h"
+#import "RptqQueryField+Extras.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "RptqDocumentObjectLabel+Extras.h"
 #import "RptqDocumentObjectLabelLink+Extras.h"

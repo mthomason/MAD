@@ -16,12 +16,12 @@
 
 @interface RptqQueryPredicate (Extras) <MTProtocolCompare>
 
-+ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
++ (id)createPredicateWithLeftField:(RptqQueryField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqDatabaseSchemaField *)rightField
+                     andRightField:(RptqQueryField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-+ (id)createPredicateWithLeftField:(RptqDatabaseSchemaField *)leftField
++ (id)createPredicateWithLeftField:(RptqQueryField *)leftField
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
                      andRightValue:(NSString *)rightUserValue
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
@@ -33,7 +33,7 @@
 
 + (id)createPredicateWithLeftValue:(NSString *)leftUserValue
                  comparsonOperator:(MNSPredicateOperator)comparsonOperator
-                     andRightField:(RptqDatabaseSchemaField *)rightField
+                     andRightField:(RptqQueryField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 + (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;

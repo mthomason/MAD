@@ -247,7 +247,11 @@
                             
                             RptqDatabaseSchemaField *rptqField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
                                                                                                                        andField: objField];
-                            [rptqTableOrigional addHasFieldsObject: rptqField];
+                            NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
+                            [fieldSet addObject:rptqField];
+                            [rptqTableOrigional setHasFields:fieldSet];
+                            [fieldSet release];
+//                            [rptqTableOrigional addHasFieldsObject: rptqField];
                             NSError *saveError = nil;
                             [[rptqField managedObjectContext] save:&saveError];
                             if (saveError) {
@@ -279,7 +283,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqDocument *s = sender;

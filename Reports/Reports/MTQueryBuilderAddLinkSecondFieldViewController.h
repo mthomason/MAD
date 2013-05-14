@@ -15,7 +15,7 @@
 @class MTQueryBuilderAddLinkSecondFieldViewController;
 
 @protocol MTQueryBuilderAddLinkSecondFieldDelegate
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqDatabaseSchemaField *)result;
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result;
 @end
 
 @interface MTQueryBuilderAddLinkSecondFieldViewController : UITableViewControllerCoreDataResults

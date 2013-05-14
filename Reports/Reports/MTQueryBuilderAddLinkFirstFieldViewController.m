@@ -54,7 +54,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    RptqDatabaseSchemaField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
+    RptqQueryField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[self delegate] viewControllerSchemaAddLinkFirstFieldDidFinishWith:field];
 }
 

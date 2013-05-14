@@ -11,17 +11,19 @@
 
 #import <Foundation/Foundation.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryField.h"
 #import "RptqDatabaseSchemaTable.h"
 
 @interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 
 @property (assign) BOOL open;
-@property (retain) RptqDatabaseSchemaTable *table;
+@property (retain) RptqQueryTable *table;
 @property (retain) NSArray *fields;
-@property (retain) UIViewTableSectionHeaderDatabaseTable* headerView;
+@property (retain) UIViewTableSectionHeaderDatabaseTable *headerView;
 @property (nonatomic, retain) NSMutableArray *rowHeights;
 
-- (id)initWithTable:(RptqDatabaseSchemaTable *)sectionTable;
+- (id)initWithTable:(RptqQueryTable *)sectionTable;
 
 - (NSUInteger)countOfRowHeights;
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx;

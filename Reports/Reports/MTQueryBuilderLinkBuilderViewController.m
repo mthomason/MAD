@@ -13,10 +13,10 @@
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 
-@property (nonatomic, retain) RptqDatabaseSchemaTable *firstTableName;
-@property (nonatomic, retain) RptqDatabaseSchemaTable *secondTableName;
-@property (nonatomic, retain) RptqDatabaseSchemaField *firstFieldName;
-@property (nonatomic, retain) RptqDatabaseSchemaField *secondFieldName;
+@property (nonatomic, retain) RptqQueryTable *firstTableName;
+@property (nonatomic, retain) RptqQueryTable *secondTableName;
+@property (nonatomic, retain) RptqQueryField *firstFieldName;
+@property (nonatomic, retain) RptqQueryField *secondFieldName;
 
 @end
 
@@ -31,12 +31,9 @@
 @synthesize tableViewCellTableFieldOne = _tableViewCellTableFieldOne;
 @synthesize tableViewCellTableFieldTwo = _tableViewCellTableFieldTwo;
 @synthesize linkType = _linkType;
-@synthesize firstTableFieldName = _firstTableFieldName, secondTableFieldName = _secondTableFieldName;
 @synthesize currentlyEditingPart = _currentlyEditingPart;
 
 - (void)dealloc {
-    [_firstTableFieldName release];
-    [_secondTableFieldName release];
     [_firstTableName release];
     [_firstFieldName release];
     [_secondTableName release];
@@ -83,8 +80,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showSelectJoinType"]) {
-        //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
-        
+
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
             MTQueryBuilderAddLinkJoinTypeViewController *vcFf = [segue destinationViewController];
             if (vcFf) {
@@ -95,7 +91,7 @@
     } else {
         
         if ([[segue identifier] isEqualToString:@"showSelectTableOne"]) {
-            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkFirstTableViewController class]]) {
                 MTQueryBuilderAddLinkFirstTableViewController *tvc = [segue destinationViewController];
                 if (tvc) {
@@ -106,11 +102,11 @@
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+                    request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-                    //NSLog(@"[[tvc managedDocumentQuery] managedObjectContext]: %@", [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]);
+
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
@@ -119,15 +115,17 @@
                     [frc release];
                 }
             }
+
         } else if ([[segue identifier] isEqualToString:@"showSelectFieldOne"]) {
-            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkFirstFieldViewController class]]) {
                 MTQueryBuilderAddLinkFirstFieldViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {
-                    [vcFf setDelegate:self];                    
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self firstTableName] name]];
+                    [vcFf setDelegate:self];
+                    
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryField class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"databaseSchemaField.name" ascending:YES];
+                    request.predicate = [NSPredicate predicateWithFormat:@"inQueryTable == %@", [[self firstTableName] objectID]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
@@ -137,8 +135,10 @@
                     [frc release];
                 }
             }
+
         } else if ([[segue identifier] isEqualToString:@"showSelectTableTwo"]) {
-            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+
+            
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkSecondTableViewController class]]) {
                 MTQueryBuilderAddLinkSecondTableViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {                
@@ -149,11 +149,11 @@
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
 
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-                    request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", query];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+                    request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
                     [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [[self firstTableName] name]];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [[self firstTableName] alias]];
                     [request setPredicate: predicate];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
@@ -164,15 +164,15 @@
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectFieldTwo"]) {
-            //NSLog(@"Class: %@", NSStringFromClass([[segue destinationViewController] class]));
+
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkSecondFieldViewController class]]) {
                 MTQueryBuilderAddLinkSecondFieldViewController *vcFf = [segue destinationViewController];
                 if (vcFf) {                
                     [vcFf setDelegate:self];
                     
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable.name == %@", [[self secondTableName] name]];
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryField class])];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"databaseSchemaField.name" ascending:YES];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQueryTable == %@", [[self secondTableName] objectID]];
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -189,7 +189,7 @@
             
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self secondTableName] name] ? [NSArray arrayWithObject:[[self secondTableName] name]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self secondTableName] alias] ? [NSArray arrayWithObject:[[self secondTableName] alias]] : [NSArray array])];
                 [dvc setDelegate: self];
             }
 
@@ -199,7 +199,7 @@
             
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self firstTableName] name] ? [NSArray arrayWithObject:[[self firstTableName] name]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self firstTableName] alias] ? [NSArray arrayWithObject:[[self firstTableName] alias]] : [NSArray array])];
                 [dvc setDelegate: self];
             }
 
@@ -226,19 +226,20 @@
 #pragma mark - Delegate callbacks
 
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
-                                      withField: (RptqDatabaseSchemaField *)field {
+                                      withField: (RptqQueryField *)queryField {
     [[self navigationController] popToViewController: self animated: YES];
     
-    RptqDatabaseSchemaTable *tableName = [field inTable];
+    RptqQueryTable *queryTable = [queryField inQueryTable];
+    //RptqDatabaseSchemaTable *tableName = [queryTable databaseSchemaTable];
     //NSString *fieldName = [field name];
     //NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
-    NSString *tableFieldName = [[field toString] retain];
+    NSString *tableFieldName = [[queryField toString] retain];
     switch ([self currentlyEditingPart]) {
         case MNSLinkLeft:
             [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
-            [self setFirstTableName:tableName];
-            [self setFirstFieldName:field];
-            [self setFirstTableFieldName:tableFieldName];
+            [self setFirstTableName:queryTable];
+            [self setFirstFieldName:queryField];
+//            [self setFirstTableFieldName:tableFieldName];
 
             [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
             [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:YES];
@@ -251,9 +252,9 @@
             break;
         case MNSLinkRight:
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
-            [self setSecondTableName:tableName];
-            [self setSecondFieldName:field];
-            [self setSecondTableFieldName:tableFieldName];
+            [self setSecondTableName:queryTable];
+            [self setSecondFieldName:queryField];
+//            [self setSecondTableFieldName:tableFieldName];
             break;
         default:
             break;
@@ -263,27 +264,27 @@
     [tableFieldName release];
 }
 
-- (void)viewControllerDidFinishWithTable:(RptqDatabaseSchemaTable *)result {
+- (void)viewControllerDidFinishWithTable:(RptqQueryTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellTableOne] detailTextLabel] setText: [[result name] lowercaseString]];
+    [[[self tableViewCellTableOne] detailTextLabel] setText: [[result alias] lowercaseString]];
     [self setFirstTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqDatabaseSchemaField *)result {
+- (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqQueryField *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellFieldOne] detailTextLabel] setText: [[result name] lowercaseString]];
+    [[[self tableViewCellFieldOne] detailTextLabel] setText: [[[result databaseSchemaField] name] lowercaseString]];
     [self setFirstFieldName: result];
 }
 
-- (void)viewControllerDidFinishWithSecondTable:(RptqDatabaseSchemaTable *)result {
+- (void)viewControllerDidFinishWithSecondTable:(RptqQueryTable *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellTableTwo] detailTextLabel] setText: [[result name] lowercaseString]];
+    [[[self tableViewCellTableTwo] detailTextLabel] setText: [[result alias] lowercaseString]];
     [self setSecondTableName: result];
 }
 
-- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqDatabaseSchemaField *)result {
+- (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result {
     [[self navigationController] popToViewController: self animated: YES];
-    [[[self tableViewCellFieldTwo] detailTextLabel] setText: [[result name] lowercaseString]];
+    [[[self tableViewCellFieldTwo] detailTextLabel] setText: [[[result databaseSchemaField] name] lowercaseString]];
     [self setSecondFieldName: result];
 }
 

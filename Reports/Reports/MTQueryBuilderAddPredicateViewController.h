@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "RptqQueryPredicate+Extras.h"
+#import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "MTManagedDocumentReport.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -45,8 +46,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @property (assign) MNSPredicateOperator predicateOperator;
 @property (copy) NSString *leftValue;
 @property (copy) NSString *rightValue;
-@property (nonatomic, retain) RptqDatabaseSchemaField *fieldLeft;
-@property (nonatomic, retain) RptqDatabaseSchemaField *fieldRight;
+@property (nonatomic, retain) RptqQueryField *fieldLeft;
+@property (nonatomic, retain) RptqQueryField *fieldRight;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

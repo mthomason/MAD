@@ -225,21 +225,22 @@
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
-                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]]];
+//                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]]];
 
                     //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]]];
-                    if ([tableNames count]) {
-                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
-                        [request setPredicate: predicate];
-                    }
-                    [tableNames release];
+//                    if ([tableNames count]) {
+//                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
+//                        [request setPredicate: predicate];
+//                    }
+
+//                    [tableNames release];
                     
-                        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                              managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
-                                                                                                sectionNameKeyPath: nil
-                                                                                                         cacheName: nil];
-                        [tvc setFetchedResultsController: frc];
-                        [frc release];
+                    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                            sectionNameKeyPath: nil
+                                                                                                     cacheName: nil];
+                    [tvc setFetchedResultsController: frc];
+                    [frc release];
                 }
             }
             [navControl release];
@@ -470,7 +471,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)addGroupDidAddGroupWithField:(RptqDatabaseSchemaField *)field andSort:(MNSSortOrder)sortOrder {
+- (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
 
     [self dismissViewControllerAnimated:YES completion:nil];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -479,7 +480,7 @@
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
 
-    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:field andSort:sortOrder inManagedObjectContext:managedObjectContext];
+    RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -520,27 +521,34 @@
 
     NSIndexSet *indexSetSections = nil;
     MTReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [reportDocument managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+
     NSDictionary *oldLayout = [[self datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:MTTableSectionSectionsKey] retain];
-    [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
+    
+    RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
 
     //Find the position of the table that was added, so it may be inserted at the right index.
-    RptqQuery *query = [[table inQuery] anyObject];
-    NSSet *tables = [[query hasTables] retain];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-    NSArray *tablesSorted = [[tables sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
+    //RptqQuery *query = [[table inQuery] anyObject];
+    
+    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
+    NSArray *queryTablesArray = [[[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]] retain];
+
     NSUInteger indexCounter = 0;
-    for (RptqDatabaseSchemaTable *foundTable in tablesSorted) {
-        if ([foundTable objectID] == [table objectID]) {
-            break;
+    for (RptqQueryTable *queryTable in queryTablesArray) {
+        if ([[queryTable alias] compare:[newQueryTable alias]] == NSOrderedAscending) {
+            indexCounter++;
         }
-        indexCounter++;
     }
+    
+    [queryTablesArray release];
+    
+    //NSUInteger indexCounter = [[query hasQueryTables] count] - 1;
+    
     NSUInteger sectionPosition = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsTables];
     NSIndexPath *insertedRowIndexPath = [[NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition] retain];
-    
-    [tablesSorted release];
-    [tables release];
     
     NSDictionary *newLayout = [[self datamodel] retain];
     NSArray *newLayoutSectionTypes = [[newLayout objectForKey:MTTableSectionSectionsKey] retain];
@@ -582,15 +590,18 @@
         [[self tableViewQueryBuilder] beginUpdates];
         [[self tableViewQueryBuilder] insertSections: indexSetSections
                                     withRowAnimation: UITableViewRowAnimationAutomatic];
+        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+                                            withRowAnimation: UITableViewRowAnimationAutomatic];
+        [[self tableViewQueryBuilder] endUpdates];
+    } else {
+        [[self tableViewQueryBuilder] beginUpdates];
+        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+                                            withRowAnimation: UITableViewRowAnimationAutomatic];
         [[self tableViewQueryBuilder] endUpdates];
     }
     
     [reportDocument saveContext];
     
-    [[self tableViewQueryBuilder] beginUpdates];
-    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
-                                        withRowAnimation: UITableViewRowAnimationAutomatic];
-    [[self tableViewQueryBuilder] endUpdates];
 
     
     
@@ -695,14 +706,14 @@
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
                     
-                    NSInteger numberOfTables = [RptqDatabaseSchemaTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
+                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];                    
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
 
-                    RptqDatabaseSchemaTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+                    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
-                    [query removeHasTablesObject:table];
+                    [query removeHasQueryTablesObject:table];
 
                     deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
                     numberOfTables = numberOfTables - 1;
@@ -919,8 +930,8 @@
         case UIViewControllerSchemaTablesSectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
-            RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
-            [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea name]]];
+            RptqQueryTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea alias]]];
             [[resultR textLabel] setFont: [self boldSystemFont]];
             
             [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
@@ -1177,10 +1188,10 @@
     {
         RptqQuery *query = [RptqDocument queryForActiveDocument];
         
-        NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
+        NSString *entityName = NSStringFromClass([RptqQueryTable class]);
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-        request.predicate = [NSPredicate predicateWithFormat:@"ANY inQuery == %@", [query objectID]];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
+        request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
         [request setSortDescriptors: @[sortDescriptor]];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
@@ -1247,7 +1258,7 @@
 
 - (NSMutableDictionary *)datamodel {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    NSInteger numberOfTablesInQuery = [RptqDatabaseSchemaTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
+    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
     return [self datamodelForNumberOfTables:numberOfTablesInQuery];
 }
 

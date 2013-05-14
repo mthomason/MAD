@@ -64,10 +64,10 @@
 #pragma mark - Static
 
 + (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    RptqQuery *query = [RptqDocument queryForActiveDocument];    
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    request.predicate = [NSPredicate predicateWithFormat: @"ANY inQuery == %@", [query objectID]];
+    request.predicate = [NSPredicate predicateWithFormat: @"inQuery == %@", [query objectID]];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
     [request setSortDescriptors: @[sortDescriptor]];
     NSError *error = nil;
@@ -119,7 +119,7 @@
     return result;
 }
 
-+ (id)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
++ (RptqDatabaseSchemaTable *)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
     request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
     NSError *error = nil;
@@ -129,7 +129,36 @@
     return result;
 }
 
-+ (void)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
+    
+    RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table] retain];
+    
+    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
+    for (RptqDatabaseSchemaField *field in [table hasFields]) {
+        RptqQueryField *newQueryField = [[RptqQueryField createNewQueryFieldForManagedObjectContext:managedObjectContext] retain];
+        [newQueryField setInQueryTable:newQueryTable];
+        [newQueryField setDatabaseSchemaField:field];
+        [newQueryTable setInQuery:query];
+        [newQueryFields addObject:newQueryField];
+        [newQueryField release];
+    }
+    [newQueryTable setHasQueryFields:newQueryFields];
+    [tablesInQuery addObject:newQueryTable];
+    
+    [query setHasQueryTables:tablesInQuery];
+    
+    NSError *error = nil;
+    [managedObjectContext save:&error];
+
+    [newQueryFields release];
+    return [newQueryTable autorelease];
+    
+/*
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -145,25 +174,15 @@
     if (!isTableAlreadyInQuery) {
         [query addHasTablesObject:table];
     }
-}
-
-+ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSUInteger result = 0;
-    if (managedObjectContext) {
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
-        result = [[query hasTables] count];
-    }
-    return result;
+*/
 }
 
 + (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[[query hasTables] count]];
-    for (RptqDatabaseSchemaTable *table in [query hasTables]) {
+    //return [[[[database hasTables] allObjects] retain] autorelease];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[[database hasTables] count]];
+    for (RptqDatabaseSchemaTable *table in [database hasTables]) {
         [results addObject:[table name]];
     }
     return [results autorelease];
@@ -173,7 +192,7 @@
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if (self == sender) {
+    if ([self isEqual: sender]) {
         result = YES;
     } else {
         RptqDatabaseSchemaTable *s = sender;

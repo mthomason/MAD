@@ -201,7 +201,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
                                                                  inManagedObjectContext: mangedObjectContext];
 
             NSManagedObjectID *fieldObjectId = [documentObjectDefination objectForKey: MTDocumentObjectDefinationObject];
-            RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: fieldObjectId
+            RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID: fieldObjectId
                                                                         fromObjectContext: mangedObjectContext];
             
             
@@ -210,10 +210,10 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             
             [documentObject setIsLabelDataField: reportObject];
             
-            [[documentObject isLabelDataField] setText: [NSString stringWithFormat:@"%@.%@", [[field inTable] name], [field name]]];
-            [[documentObject isLabelDataField] setReferencesField: field];
+            [[documentObject isLabelDataField] setText: @"Dynamically generate this text then remove this string 3737373"];
+            [[documentObject isLabelDataField] setReferencesQueryField: field];
             
-            [reportObject setReferencesField: field];
+            [reportObject setReferencesQueryField: field];
 
             [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
             
@@ -264,7 +264,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 
             switch (functionType) {
                 case MTAggregateFunctionInputTypeField: {
-                    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
+                    RptqQueryField *field = [RptqDatabaseSchemaField getFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
                     [[documentObject isAggregate] setAggregateField:field];
                     [[documentObject isAggregate] setAggregateFunction:nil];
                     break;
@@ -335,7 +335,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
-    if ([self isEqualTo:sender]) {
+    if ([self isEqual:sender]) {
         result = YES;
     } else {
         RptqDocumentObject *s = sender;

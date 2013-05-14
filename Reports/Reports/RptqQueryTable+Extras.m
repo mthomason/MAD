@@ -17,17 +17,93 @@
     [super awakeFromInsert];
     
     // MARK: Auto increment row counter
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
+                                                                     ascending: NO];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
     
     if (error == nil) {
-        RptqDatabaseSchemaTable *lastObject = [fetchResults lastObject];
+        RptqQueryTable *lastObject = [fetchResults lastObject];
         identifier = [[lastObject identifier] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
+    
+}
+
++ (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
+    NSError *error = nil;
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+    RptqQueryTable *result = nil;
+    if (results) result = [results lastObject];
+    return result;
+}
+
++ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable {
+
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"databaseSchemaTable == %@", [databaseSchemaTable objectID]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSUInteger numberOfReferencesToTableInQuery = [[databaseSchemaTable managedObjectContext] countForFetchRequest:request error:&error];
+    
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
+                                                   inManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+    RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity
+                                         insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
+
+    
+    [queryTable setDropIndex:@(numberOfReferencesToTableInQuery)];
+    [queryTable setDatabaseSchemaTable:databaseSchemaTable];
+    
+    NSString *tableAlias = [numberOfReferencesToTableInQuery == 0 ? [databaseSchemaTable name] : [NSString stringWithFormat:@"%@_%d", [databaseSchemaTable name], numberOfReferencesToTableInQuery] retain];
+    [queryTable setAlias:tableAlias];
+    [tableAlias release];
+
+    [queryTable setInQuery:query];
+    return [queryTable autorelease];
+}
+
++ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSUInteger result = 0;
+    if (managedObjectContext) {
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        RptqQuery *query = [[database hasQueries] anyObject];
+        result = [[query hasQueryTables] count];
+    }
+    return result;
+}
+
++ (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    NSSet *queryTablesSet = [query hasQueryTables];
+    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
+    NSArray *queryTablesArray = [queryTablesSet sortedArrayUsingDescriptors:@[namesAccending]];
+
+    return [[queryTablesArray retain] autorelease];
+}
+
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqual:sender]) {
+        result = YES;
+    } else {
+        RptqQueryTable *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
 }
 
 @end
