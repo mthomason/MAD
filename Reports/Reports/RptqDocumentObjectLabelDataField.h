@@ -2,14 +2,14 @@
 //  RptqDocumentObjectLabelDataField.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabaseSchemaField, RptqDocumentObject;
+@class RptqDocumentObject, RptqQueryField;
 
 @interface RptqDocumentObjectLabelDataField : NSManagedObject
 
@@ -18,6 +18,6 @@
 @property (nonatomic, retain) NSString * table;
 @property (nonatomic, retain) NSString * text;
 @property (nonatomic, retain) RptqDocumentObject *parentObjectLabelDataField;
-@property (nonatomic, retain) RptqDatabaseSchemaField *referencesField;
+@property (nonatomic, retain) RptqQueryField *referencesQueryField;
 
 @end

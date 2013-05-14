@@ -2,14 +2,13 @@
 //  RptqDatabaseSchemaTable.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
-#import "RptqQuery.h"
 #import "RptqQueryTable.h"
 
 
@@ -27,7 +26,6 @@
 @dynamic queryable;
 @dynamic hasFields;
 @dynamic inDatabase;
-@dynamic inQuery;
 @dynamic inQueryTable;
 
 @end

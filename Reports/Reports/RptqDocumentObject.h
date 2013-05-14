@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/7/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSData * binary;
 @property (nonatomic, retain) NSNumber * bold;
 @property (nonatomic, retain) id color;
+@property (nonatomic, retain) NSNumber * dropIndex;
 @property (nonatomic, retain) NSNumber * dropPointX;
 @property (nonatomic, retain) NSNumber * dropPointY;
 @property (nonatomic, retain) NSString * fontname;
@@ -43,13 +44,12 @@
 @property (nonatomic, retain) NSNumber * sizeheight;
 @property (nonatomic, retain) NSNumber * sizewidth;
 @property (nonatomic, retain) NSNumber * strike;
+@property (nonatomic, retain) NSNumber * touchPointX;
+@property (nonatomic, retain) NSNumber * touchPointY;
 @property (nonatomic, retain) NSNumber * type;
 @property (nonatomic, retain) NSNumber * underline;
 @property (nonatomic, retain) NSNumber * verticalAlignment;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSNumber * dropIndex;
-@property (nonatomic, retain) NSNumber * touchPointX;
-@property (nonatomic, retain) NSNumber * touchPointY;
 @property (nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 @property (nonatomic, retain) RptqDocumentObjectAggregate *isAggregate;
 @property (nonatomic, retain) RptqDocumentObjectChart *isChart;

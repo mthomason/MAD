@@ -2,19 +2,23 @@
 //  RptqQueryTable.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqQueryTable.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqQuery.h"
+#import "RptqQueryField.h"
 
 
 @implementation RptqQueryTable
 
+@dynamic alias;
+@dynamic dropIndex;
 @dynamic identifier;
-@dynamic fromDatabaseSchemaTable;
+@dynamic databaseSchemaTable;
 @dynamic inQuery;
+@dynamic hasQueryFields;
 
 @end

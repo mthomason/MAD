@@ -2,14 +2,14 @@
 //  RptqDocumentObjectAggregate.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentObjectAggregate.h"
-#import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectFormula.h"
+#import "RptqQueryField.h"
 
 
 @implementation RptqDocumentObjectAggregate

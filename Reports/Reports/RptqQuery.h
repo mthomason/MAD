@@ -2,14 +2,14 @@
 //  RptqQuery.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqDatabaseSchemaTable, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryCache, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
 @interface RptqQuery : NSManagedObject
 
@@ -23,8 +23,7 @@
 @property (nonatomic, retain) NSSet *hasQueryLinks;
 @property (nonatomic, retain) NSSet *hasQueryPredicate;
 @property (nonatomic, retain) RptqQuerySort *hasQuerySort;
-@property (nonatomic, retain) NSOrderedSet *hasQueryTables;
-@property (nonatomic, retain) NSSet *hasTables;
+@property (nonatomic, retain) NSSet *hasQueryTables;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
 @end
 
@@ -50,19 +49,9 @@
 - (void)addHasQueryPredicate:(NSSet *)values;
 - (void)removeHasQueryPredicate:(NSSet *)values;
 
-- (void)insertObject:(RptqQueryTable *)value inHasQueryTablesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromHasQueryTablesAtIndex:(NSUInteger)idx;
-- (void)insertHasQueryTables:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeHasQueryTablesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInHasQueryTablesAtIndex:(NSUInteger)idx withObject:(RptqQueryTable *)value;
-- (void)replaceHasQueryTablesAtIndexes:(NSIndexSet *)indexes withHasQueryTables:(NSArray *)values;
 - (void)addHasQueryTablesObject:(RptqQueryTable *)value;
 - (void)removeHasQueryTablesObject:(RptqQueryTable *)value;
-- (void)addHasQueryTables:(NSOrderedSet *)values;
-- (void)removeHasQueryTables:(NSOrderedSet *)values;
-- (void)addHasTablesObject:(RptqDatabaseSchemaTable *)value;
-- (void)removeHasTablesObject:(RptqDatabaseSchemaTable *)value;
-- (void)addHasTables:(NSSet *)values;
-- (void)removeHasTables:(NSSet *)values;
+- (void)addHasQueryTables:(NSSet *)values;
+- (void)removeHasQueryTables:(NSSet *)values;
 
 @end

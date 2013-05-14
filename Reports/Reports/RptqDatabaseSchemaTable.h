@@ -2,14 +2,14 @@
 //  RptqDatabaseSchemaTable.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqQuery, RptqQueryTable;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryTable;
 
 @interface RptqDatabaseSchemaTable : NSManagedObject
 
@@ -23,24 +23,23 @@
 @property (nonatomic, retain) NSString * label_plural;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * queryable;
-@property (nonatomic, retain) NSSet *hasFields;
+@property (nonatomic, retain) NSOrderedSet *hasFields;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
-@property (nonatomic, retain) NSSet *inQuery;
 @property (nonatomic, retain) NSOrderedSet *inQueryTable;
 @end
 
 @interface RptqDatabaseSchemaTable (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(RptqDatabaseSchemaField *)value inHasFieldsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromHasFieldsAtIndex:(NSUInteger)idx;
+- (void)insertHasFields:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeHasFieldsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInHasFieldsAtIndex:(NSUInteger)idx withObject:(RptqDatabaseSchemaField *)value;
+- (void)replaceHasFieldsAtIndexes:(NSIndexSet *)indexes withHasFields:(NSArray *)values;
 - (void)addHasFieldsObject:(RptqDatabaseSchemaField *)value;
 - (void)removeHasFieldsObject:(RptqDatabaseSchemaField *)value;
-- (void)addHasFields:(NSSet *)values;
-- (void)removeHasFields:(NSSet *)values;
-
-- (void)addInQueryObject:(RptqQuery *)value;
-- (void)removeInQueryObject:(RptqQuery *)value;
-- (void)addInQuery:(NSSet *)values;
-- (void)removeInQuery:(NSSet *)values;
-
+- (void)addHasFields:(NSOrderedSet *)values;
+- (void)removeHasFields:(NSOrderedSet *)values;
 - (void)insertObject:(RptqQueryTable *)value inInQueryTableAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromInQueryTableAtIndex:(NSUInteger)idx;
 - (void)insertInQueryTable:(NSArray *)value atIndexes:(NSIndexSet *)indexes;

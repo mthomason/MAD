@@ -2,13 +2,13 @@
 //  RptqDocumentObjectLabelDataField.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentObjectLabelDataField.h"
-#import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentObject.h"
+#import "RptqQueryField.h"
 
 
 @implementation RptqDocumentObjectLabelDataField
@@ -18,6 +18,6 @@
 @dynamic table;
 @dynamic text;
 @dynamic parentObjectLabelDataField;
-@dynamic referencesField;
+@dynamic referencesQueryField;
 
 @end

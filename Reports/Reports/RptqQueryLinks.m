@@ -2,13 +2,13 @@
 //  RptqQueryLinks.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 5/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqQueryLinks.h"
-#import "RptqDatabaseSchemaField.h"
 #import "RptqQuery.h"
+#import "RptqQueryField.h"
 
 
 @implementation RptqQueryLinks
