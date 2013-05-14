@@ -2,7 +2,7 @@
 //  RptqQueryTable.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/13/13.
+//  Created by Michael Thomason on 5/14/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,6 +16,11 @@
 @property (nonatomic, retain) NSString * alias;
 @property (nonatomic, retain) NSNumber * dropIndex;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSNumber * designerInitalLayout;
+@property (nonatomic, retain) NSNumber * designerOriginX;
+@property (nonatomic, retain) NSNumber * designerOriginY;
+@property (nonatomic, retain) NSNumber * designerSizeHeight;
+@property (nonatomic, retain) NSNumber * designerSizeWidth;
 @property (nonatomic, retain) RptqDatabaseSchemaTable *databaseSchemaTable;
 @property (nonatomic, retain) RptqQuery *inQuery;
 @property (nonatomic, retain) NSSet *hasQueryFields;

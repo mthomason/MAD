@@ -154,10 +154,19 @@
     NSArray *insertedObjects = [[notification userInfo] objectForKey: NSInsertedObjectsKey];
     
     for (id insertedObject in insertedObjects) {
+
         if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
+        
             RptqQueryLinks *insertedQueryLinks = [insertedObject retain];
             [self addLinkViewControllerForQueryLink: insertedQueryLinks];
             [insertedQueryLinks release];
+
+        } else if ([insertedObject isKindOfClass:[RptqQueryTable class]]) {
+
+            RptqQueryTable *insertedQueryTable = [insertedObject retain];
+            [self addSchemaViewControllerForTable: insertedQueryTable];
+            [insertedQueryTable release];
+
         }
     }
     
@@ -194,8 +203,8 @@
     for (id deletedObject in deletedObjects) {
         //NSLog(@"Deleted %@", deletedObject);
         
-        if ([deletedObject isKindOfClass:[RptqDatabaseSchemaTable class]]) {
-            RptqDatabaseSchemaTable *deletedTable = deletedObject;
+        if ([deletedObject isKindOfClass:[RptqQueryTable class]]) {
+            RptqQueryTable *deletedTable = deletedObject;
             if ([deletedTable inQuery] != nil &&
                 [[self tableIds] containsObject: [deletedTable objectID]]) {
                 [self removeSchemaViewControllerForTable:deletedTable];
@@ -323,7 +332,7 @@
 
 - (CGRect)desiredFrameForTableId:(NSManagedObjectID *)objectId {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
+    RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectId fromObjectContext:managedObjectContext];
     return CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
 }
 
@@ -332,7 +341,7 @@
     CGRect subviewRect = CGRectZero;
     NSManagedObjectID *objectId = [[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] retain];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:objectId fromObjectContext:managedObjectContext];
+    RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectId fromObjectContext:managedObjectContext];
     [[self tableIds] addObject:objectId];
     [[self controllersForObjectIds] setObject:viewController forKey:objectId];
     [objectId release];
@@ -363,7 +372,7 @@
     [viewController release];
 }
 
-- (void)removeSchemaViewControllerForTable:(RptqDatabaseSchemaTable *)table {
+- (void)removeSchemaViewControllerForTable:(RptqQueryTable *)table {
     UIViewController *viewController = [[[self controllersForObjectIds] objectForKey:[table objectID]] retain];
     [self removeViewController:viewController];
     [viewController release];
@@ -630,11 +639,11 @@
             
             NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
             RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
-            RptqDatabaseSchemaTable *table = [queryTable databaseSchemaTable];
-            [table setDesignerSizeHeight:@([[gestureRecognizer view] frame].size.height)];
-            [table setDesignerSizeWidth:@([[gestureRecognizer view] frame].size.width)];
-            [table setDesignerOriginY:@([[gestureRecognizer view] frame].origin.y)];
-            [table setDesignerOriginX:@([[gestureRecognizer view] frame].origin.x)];
+            //RptqDatabaseSchemaTable *table = [queryTable databaseSchemaTable];
+            [queryTable setDesignerSizeHeight:@([[gestureRecognizer view] frame].size.height)];
+            [queryTable setDesignerSizeWidth:@([[gestureRecognizer view] frame].size.width)];
+            [queryTable setDesignerOriginY:@([[gestureRecognizer view] frame].origin.y)];
+            [queryTable setDesignerOriginX:@([[gestureRecognizer view] frame].origin.x)];
             NSError *error;
             [managedObjectContext save:&error];
             break;

@@ -32,6 +32,12 @@
     }
     [self setIdentifier:@(identifier)];
     
+    [self setDesignerOriginX:@(CGPointZero.x)];
+    [self setDesignerOriginY:@(CGPointZero.y)];
+    [self setDesignerSizeWidth:@(CGSizeZero.width)];
+    [self setDesignerSizeHeight:@(CGSizeZero.height)];
+    [self setDesignerInitalLayout:@(YES)];
+    
 }
 
 + (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

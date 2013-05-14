@@ -36,6 +36,10 @@
         NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
         [self setHasFieldsObjectIds:hasFieldsObjectIds];
         [hasFieldsObjectIds release];
+        
+        //NSManagedObjectID *emptyId = [[NSManagedObjectID alloc] init];
+        //[self setCachedTableObjectId:emptyId];
+        //[emptyId release];
     }
     return self;
 }
@@ -47,6 +51,10 @@
         NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
         [self setHasFieldsObjectIds:hasFieldsObjectIds];
         [hasFieldsObjectIds release];
+
+        //NSManagedObjectID *emptyId = [[NSManagedObjectID alloc] init];
+        //[self setCachedTableObjectId:emptyId];
+        //[emptyId release];
 
     }
     return self;
@@ -93,8 +101,10 @@
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
-    [[[self titleView] label] setText:[table name]];
+    RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    [[[self titleView] label] setText:[table alias]];
+
+    [[self schemaTableViewController] reloadData];
 }
 
 #pragma mark - Table view delegate
@@ -126,20 +136,26 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+    NSUInteger result = 0;
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    
     RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
-    [[self hasFieldsObjectIds] removeAllObjects];
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-    NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields] sortedArrayUsingDescriptors:@[namesAccending]]];
-    for (RptqQueryField *field in fields) {
+    
+    if (queryTable != nil) {
+        [[self hasFieldsObjectIds] removeAllObjects];
         
-        [[self hasFieldsObjectIds] addObject:[field objectID]];
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
+        NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields] sortedArrayUsingDescriptors:@[namesAccending]]];
+        for (RptqQueryField *field in fields) {
+            [[self hasFieldsObjectIds] addObject:[field objectID]];
+        }
+        [fields release];
+        [namesAccending release];
+        
+        result = [[self hasFieldsObjectIds] count];
     }
-    [fields release];
-    [namesAccending release];
-    //[self setHasFields:[[table hasFields] allObjects]];
-    return [[self hasFieldsObjectIds] count];
+    
+    return result;
 }
 
 #pragma mark - Methods

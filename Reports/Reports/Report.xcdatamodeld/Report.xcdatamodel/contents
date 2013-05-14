@@ -21,11 +21,6 @@
         <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="hasFields" inverseEntity="RptqDatabaseSchemaTable" syncable="YES"/>
     </entity>
     <entity name="RptqDatabaseSchemaTable" representedClassName="RptqDatabaseSchemaTable" syncable="YES">
-        <attribute name="designerInitalLayout" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="designerOriginX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="designerOriginY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="designerSizeHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="designerSizeWidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label_plural" optional="YES" attributeType="String" syncable="YES"/>
@@ -273,6 +268,11 @@
     </entity>
     <entity name="RptqQueryTable" representedClassName="RptqQueryTable" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="designerInitalLayout" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="designerOriginX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerOriginY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="designerSizeWidth" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="databaseSchemaTable" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inQueryTable" inverseEntity="RptqDatabaseSchemaTable" syncable="YES"/>
@@ -299,7 +299,7 @@
     <elements>
         <element name="RptqDatabase" positionX="-1125" positionY="-1305" width="128" height="148"/>
         <element name="RptqDatabaseSchemaField" positionX="-1260" positionY="-1708" width="182" height="178"/>
-        <element name="RptqDatabaseSchemaTable" positionX="-1539" positionY="-1692" width="198" height="238"/>
+        <element name="RptqDatabaseSchemaTable" positionX="-1539" positionY="-1692" width="198" height="163"/>
         <element name="RptqDocument" positionX="-2061" positionY="-405" width="128" height="285"/>
         <element name="RptqDocumentObject" positionX="-308" positionY="68" width="218" height="733"/>
         <element name="RptqDocumentObjectAggregate" positionX="232" positionY="360" width="209" height="148"/>
@@ -321,7 +321,7 @@
         <element name="RptqQueryResultFields" positionX="376" positionY="-1819" width="128" height="118"/>
         <element name="RptqQueryResultValues" positionX="621" positionY="-1809" width="128" height="88"/>
         <element name="RptqQuerySort" positionX="106" positionY="-954" width="128" height="118"/>
-        <element name="RptqQueryTable" positionX="-641" positionY="-1573" width="173" height="133"/>
+        <element name="RptqQueryTable" positionX="-641" positionY="-1573" width="173" height="208"/>
         <element name="RptqUserCredentals" positionX="-1802" positionY="-567" width="128" height="270"/>
         <element name="RptqQueryField" positionX="-378" positionY="-1692" width="128" height="208"/>
     </elements>
