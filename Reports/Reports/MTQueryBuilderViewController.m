@@ -587,23 +587,23 @@
     }
 
     if (indexSetSections != nil) {
+    
         [[self tableViewQueryBuilder] beginUpdates];
         [[self tableViewQueryBuilder] insertSections: indexSetSections
                                     withRowAnimation: UITableViewRowAnimationAutomatic];
         [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
                                             withRowAnimation: UITableViewRowAnimationAutomatic];
+        [reportDocument saveContext];
         [[self tableViewQueryBuilder] endUpdates];
+
     } else {
+
         [[self tableViewQueryBuilder] beginUpdates];
         [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
                                             withRowAnimation: UITableViewRowAnimationAutomatic];
+        [reportDocument saveContext];
         [[self tableViewQueryBuilder] endUpdates];
     }
-    
-    [reportDocument saveContext];
-    
-
-    
     
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 

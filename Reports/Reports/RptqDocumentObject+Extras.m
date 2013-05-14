@@ -158,7 +158,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             break;
         
         case MTDocumentObjectTypeLabelDynamic:
-            result = [[self isLabelDataField] text];
+            result = [[[self isLabelDataField] referencesQueryField] toStringHumanReadable];
             break;
         
         case MTDocumentObjectTypeLabelStatic:
@@ -209,8 +209,6 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
                                                                                        insertIntoManagedObjectContext: mangedObjectContext];
             
             [documentObject setIsLabelDataField: reportObject];
-            
-            [[documentObject isLabelDataField] setText: @"Dynamically generate this text then remove this string 3737373"];
             [[documentObject isLabelDataField] setReferencesQueryField: field];
             
             [reportObject setReferencesQueryField: field];
