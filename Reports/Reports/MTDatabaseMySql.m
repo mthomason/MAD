@@ -238,6 +238,7 @@
                 *linkDepth = @([*linkDepth integerValue] + 1);
                 NSString *tableFactor = [self sqlTableReferenceWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
                 if ([tableFactor length] > 0) {
+                    [result setString: [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
                     [result insertString:@"\t(" atIndex:0];
                     [result appendString:@")\n\t"];
                     for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
