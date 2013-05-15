@@ -1982,7 +1982,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
-    CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+    //CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     switch ([gestureRecognizer state]) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
@@ -2161,7 +2161,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
                     
                     
-                    CGPoint newCenter = [[gestureRecognizer view] center];
+                    //CGPoint newCenter = [[gestureRecognizer view] center];
                     [[gestureRecognizer view] removeFromSuperview];
                     
                     objectId = [newParent objectIdTag];
@@ -2213,7 +2213,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     // MARK: Add this to the data context and to the container for the sections collection view.
                     
-                    NSOrderedSet *hasRows = [documentSection hasRows];
+                    //NSOrderedSet *hasRows = [documentSection hasRows];
                     
                     [sectionRow setHasObjects:hasObjects];
                     

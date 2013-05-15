@@ -26,9 +26,11 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [super awakeFromInsert];
     
     // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
+
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
+                                                                     ascending: NO];
+    
     [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;

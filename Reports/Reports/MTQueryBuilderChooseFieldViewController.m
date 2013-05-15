@@ -73,32 +73,7 @@
     [self setDataTables:queryTablesArray];
     [queryTablesArray release];
     [queryTables release];
-    
-/*
-    //NSArray *rptqQueryTables = [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext:managedObjectContext];
-    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: rptqQueryTables];
 
-    // FIXME: Excluded tables are broken.
-    //    [tableNames removeObjectsInArray:[self excludeTables]];
-
-    if ([tableNames count] > 0) {
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-        request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name IN %@", tableNames];
-        [request setPredicate: predicate];
-        
-        NSError *error = nil;
-        NSArray *tablesResults = [[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext] executeFetchRequest:request error:&error];
-        [self setDataTables: (!error ? tablesResults : [NSArray array]) ]; 
-
-    } else {
-        [self setDataTables:[NSArray array]];
-    }
- 
-    [tableNames release];
-*/
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -145,7 +120,7 @@
 }
 
 
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
+- (UITableViewCell *)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     
     static NSString *CellIdentifier = @"UITableViewCellFieldWithType";
     
@@ -175,7 +150,7 @@
 }
 
 
-- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:section];
     if (![sectionInfo headerView]) {
 		NSString *name = [[sectionInfo table] alias];

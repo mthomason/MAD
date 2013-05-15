@@ -26,8 +26,6 @@
 @property (retain, nonatomic) UIFont *boldSystemFont;
 @property (retain, nonatomic) NSArray *tableSectionTitles;
 
-@property (nonatomic, retain) IBOutlet MTClipboardView *viewClipboard;
-
 @property (nonatomic, assign) BOOL beganUpdates;
 
 @property (nonatomic, retain) NSMutableDictionary *modelWithZeroTables;
@@ -57,7 +55,6 @@
     [_tableSectionTitles release];
     [_tableViewQueryBuilder release];
     [_toolbar release];
-    [_viewClipboard release];
     [_toolbarTop release];
     [super dealloc];
 }
