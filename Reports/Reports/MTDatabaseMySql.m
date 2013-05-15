@@ -119,7 +119,8 @@
                 [vertexArray addObject:vertexTable];
             }
         }
-        [result appendString:[self getSqlFromClauseWithTables:vertexArray linkDepth:&linkDepth forManagedObjectContext:[query managedObjectContext]]];
+        [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
+                                       forManagedObjectContext:[query managedObjectContext]]];
         [vertexArray release];
         [linkDepth release];
     }
@@ -128,15 +129,7 @@
     return [result autorelease];
 }
 
-- (NSString *)selectExpression {
-    return @"";
-}
-
-- (NSString *)tableReferences {
-    return @"";
-}
-
-- (NSString *)getSqlFromClauseWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (NSString *)sqlTableReferenceWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSInteger tableCounter = 0;
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
@@ -150,12 +143,18 @@
 
                 NSArray *incidentEdges = [vertexTable incidentEdges];
 
-                if (tableCounter > 0) [result appendString:@",\n"];
-                
-                NSString *tname = [[table databaseSchemaTable] name];
+                if (tableCounter > 0) {
+                    if ([*linkDepth integerValue] == 0){
+                        [result appendString:@","];
+                    }
+                    [result appendString:@"\n\t"];
+                }
 
                 if ([vertexTable sortVertexColor] == MTColorWhite) {
-                    [result appendString:tname];
+                    if ([result length] <= 0) {
+                        [result appendString:@"\t"];
+                    }
+                    [result appendString:[[table databaseSchemaTable] name]];
                     [result appendString:@" AS "];
                     [result appendString:[table alias]];
                 }
@@ -173,7 +172,11 @@
                             RptqQueryLinks *queryLink = [RptqQueryLinks getQueryLinkWithID:queryLinkID fromObjectContext:managedObjectContext];
                             
                             
-                            if (queryLink) {                                
+                            if (queryLink) {
+                                [result appendString:@"\n\t"];
+                                for (NSUInteger i = 0; i <= [*linkDepth integerValue]; i++) {
+                                    [result appendString:@"\t"];
+                                }
                                 switch ([[queryLink jointypeenum] integerValue]) {
                                     case MNSLinkTypeInnerJoin:
                                         [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeInnerJoin]];
@@ -203,9 +206,15 @@
                                 
                                 RptqQueryField *rightField = [queryLink hasRightField];
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
-                                
+                                [result appendString:[[rightTable databaseSchemaTable] name]];
+                                [result appendString:@" AS "];
                                 [result appendString:[rightTable alias]];
-                                [result appendString:@" ON "];
+                                [result appendString:@"\n\t"];
+                                for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
+                                    [result appendString:@"\t"];
+                                }
+
+                                [result appendString:@"ON "];
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
@@ -226,12 +235,18 @@
                     MTVertex *vertexTableDestination = [edge destination];
                     [destinationVertices addObject:vertexTableDestination];
                 }
-                NSString *newDip = [self getSqlFromClauseWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
-                if ([newDip length] > 0) {
-                    [result insertString:@"(" atIndex:0];
+                *linkDepth = @([*linkDepth integerValue] + 1);
+                NSString *tableFactor = [self sqlTableReferenceWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
+                if ([tableFactor length] > 0) {
+                    [result insertString:@"\t(" atIndex:0];
                     [result appendString:@")\n\t"];
-                    [result appendString:newDip];
+                    for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
+                        [result appendFormat:@"\t"];
+                    }
+                    [result appendString:tableFactor];
                 }
+
+                *linkDepth = @([*linkDepth integerValue] - 1);
                 [destinationVertices release];
 
                 tableCounter++;
@@ -241,7 +256,7 @@
     return [result autorelease];
 }
 
-- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
