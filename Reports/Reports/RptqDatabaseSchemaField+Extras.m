@@ -124,21 +124,22 @@
 
     NSString *result = nil;
     switch ([[self dataType] integerValue]) {
+        case MDDataTypeDate:
+            result = NSLocalizedString(@"Date", @"Date data type.");
         case MTDataTypeImage:
-            result = [[NSString alloc] initWithString:@"Image"];
+            result = NSLocalizedString(@"Image", @"Image data type.");
             break;
         case MTDataTypeNumber:
-            result = [[NSString alloc] initWithString:@"Number"];
+            result = NSLocalizedString(@"Number", @"Number data type.");
             break;
         case MTDataTypeString:
-            result = [[NSString alloc] initWithString:@"String"];
+            result = NSLocalizedString(@"String", @"String data type.");
             break;
         default:
-            result = [[NSString alloc] initWithString:@""];
+            result = @"";
             break;
     }
-    
-    return [result autorelease];
+    return result;
 }
 
 @end

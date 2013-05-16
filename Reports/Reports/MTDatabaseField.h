@@ -13,6 +13,7 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 	MTDataTypeString = 0,
 	MTDataTypeNumber = 1,
 	MTDataTypeImage = 2,
+    MDDataTypeDate = 3
 };
 
 #import <Foundation/Foundation.h>

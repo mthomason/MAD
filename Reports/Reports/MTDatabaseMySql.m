@@ -69,47 +69,19 @@
     
     // MARK: Error on circuts or other bad query.
     if (error) {
-        
-        [error presentErrorToUserWithCompletion:^(BOOL success) {
-
-        }];
-
+        [error presentErrorToUserWithCompletion:^(BOOL success) {}];
         [result setString:@""];
-
     } else {
 
-        NSInteger tableCounter = 0;
-        
+        NSArray *topologicalSortArray = [topologicalSort toArray];
+
         // MAKR: List each field in the query.
-        for (MTPair *pair in topologicalSort) {
+        [result appendString:[self sqlSelectExpressionWithTables:[topologicalSort toArray]
+                                         forManagedObjectContext:[query managedObjectContext]]];
 
-            MTVertex *queryTable = [pair former];
-            //NSUInteger timeFound = [[pair latter] integerValue];
-            if (queryTable) {
-                if (tableCounter != 0) [result appendString:@",\n"];
-                NSManagedObjectID *objectID = [queryTable object];
-
-                RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:[query managedObjectContext]];
-                NSString *tableAlias = [[table alias] stringByAppendingString:@"."];
-                
-                NSUInteger fieldCounter = 0;
-                for (RptqQueryField *queryField in [table hasQueryFields]) {
-                    RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
-                    if (fieldCounter != 0)  [result appendString:@",\n"];
-                    NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
-                    [result appendFormat: @"\t%@", fieldAlias];
-                    fieldCounter++;
-                }
-                tableCounter++;
-            }
-
-        };
-        
-        // MARK: Get from part of the query.
         [result appendString:@"\nFROM\n"];
         
         NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
-        NSArray *topologicalSortArray = [topologicalSort toArray];
         NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
 
         for (MTPair *pair in topologicalSortArray) {
@@ -126,7 +98,90 @@
     }
     
     [graph release];
+    
+    [result appendString:[self sqlWhereClauseWithQuery:query]];
+    
     return [result autorelease];
+}
+
+- (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
+
+    NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
+    NSUInteger loopCounter = 0;
+    for (RptqQueryPredicate *queryPredicate in [query hasQueryPredicate]) {
+        
+        if (loopCounter == 0) {
+            [result appendString:@"\nWHERE\n"];
+        } else {
+            [result appendString:@" AND \n"];
+        }
+        
+        NSString *leftValue = nil;
+        NSString *rightValue = nil;
+        
+        if ([queryPredicate hasLeftField] != nil) {
+
+            leftValue = [[[queryPredicate hasLeftField] display] retain];
+            
+        } else if ([queryPredicate fieldleftpred] != nil) {
+
+            leftValue = [[queryPredicate fieldleftpred] retain];
+
+        }
+
+        if ([queryPredicate hasRightField] != nil) {
+            
+            rightValue = [[[queryPredicate hasRightField] display] retain];
+            
+        } else if ([queryPredicate fieldrightpred] != nil) {
+            
+            rightValue = [[queryPredicate fieldrightpred] retain];
+            
+        }
+
+        
+        [leftValue release];
+        [rightValue release];
+        
+        [result appendFormat:@"\t(%@ %@ %@)", leftValue, [queryPredicate symbolForComparson], rightValue];
+        
+        loopCounter++;
+    }
+    
+    return [result autorelease];
+}
+
+- (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {
+    //Group is done on the reporting client side, so we do not add group by information here.
+    return @"";
+}
+
+- (NSString *)sqlSelectExpressionWithTables:(NSArray *)tables forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSMutableString *result = [[NSMutableString alloc] init];
+    NSUInteger tableCounter = 0;
+    for (MTPair *pair in tables) {
+        
+        MTVertex *queryTable = [pair former];
+        
+        if (tableCounter != 0) [result appendString:@",\n"];
+        NSManagedObjectID *objectID = [queryTable object];
+        
+        RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
+        NSString *tableAlias = [[table alias] stringByAppendingString:@"."];
+        
+        NSUInteger fieldCounter = 0;
+        for (RptqQueryField *queryField in [table hasQueryFields]) {
+            RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
+            if (fieldCounter != 0)  [result appendString:@",\n"];
+            NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+            [result appendFormat: @"\t%@", fieldAlias];
+            fieldCounter++;
+        }
+        tableCounter++;
+
+        
+    };
+    return result;
 }
 
 - (NSString *)sqlTableReferenceWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -370,7 +425,7 @@
                                     [databaseField setFieldType: MTDataTypeString];
                                     break;
                                 case MYSQL_TYPE_DATETIME:
-                                    [databaseField setFieldType: MTDataTypeString];
+                                    [databaseField setFieldType: MDDataTypeDate];
                                     break;
                                 case MYSQL_TYPE_DECIMAL:
                                     [databaseField setFieldType: MTDataTypeNumber];
@@ -421,10 +476,10 @@
                                     [databaseField setFieldType: MTDataTypeString];
                                     break;
                                 case MYSQL_TYPE_TIME:
-                                    [databaseField setFieldType: MTDataTypeString];
+                                    [databaseField setFieldType: MDDataTypeDate];
                                     break;
                                 case MYSQL_TYPE_TIMESTAMP:
-                                    [databaseField setFieldType: MTDataTypeString];
+                                    [databaseField setFieldType: MDDataTypeDate];
                                     break;
                                 case MYSQL_TYPE_TINY:
                                     [databaseField setFieldType: MTDataTypeString];

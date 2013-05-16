@@ -122,6 +122,10 @@
 
 }
 
+- (NSString *)symbolForComparson {
+    return [MNSPredicateOperatorSymbols objectAtIndex:[[self comparson] integerValue]];
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

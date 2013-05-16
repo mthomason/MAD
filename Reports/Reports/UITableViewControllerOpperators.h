@@ -8,18 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
-	MNSPredicateOperatorEqual = 0,
-	MNSPredicateOperatorNotEqual,
-	MNSPredicateOperatorGreaterThan,
-	MNSPredicateOperatorGreaterThanOrEqualTo,
-	MNSPredicateOperatorLessThan,
-	MNSPredicateOperatorLessThanOrEqualTo
-};
-
-#define MNSPredicateOperatorReuseIds [NSArray arrayWithObjects: @"UITableViewCellPredicateOperatorEqual", @"UITableViewCellPredicateOperatorNotEqual", @"UITableViewCellPredicateOperatorGreaterThan", @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo", @"UITableViewCellPredicateOperatorLessThan", @"UITableViewCellPredicateOperatorLessThanOrEqualTo", nil]
-
-#define MNSPredicateOperatorNames [NSArray arrayWithObjects: NSLocalizedString(@"Equal", @"Equal"), NSLocalizedString(@"Not Equal", @"Not Equal"), NSLocalizedString(@"Greater Than", @"Greater Than"), NSLocalizedString(@"Greater Than or Equal To", @"Greater Than or Equal To"), NSLocalizedString(@"Less Than", @"Less Than"), NSLocalizedString(@"Less Than or Equal To", @"Less Than or Equal To"), nil]
+#import "RptqQueryPredicate+Extras.h"
 
 @class UITableViewControllerOpperators;
 
