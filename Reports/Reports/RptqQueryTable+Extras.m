@@ -71,13 +71,19 @@
     
     [queryTable setDropIndex:@(numberOfReferencesToTableInQuery)];
     [queryTable setDatabaseSchemaTable:databaseSchemaTable];
-    
-    NSString *tableAlias = [numberOfReferencesToTableInQuery == 0 ? [databaseSchemaTable name] : [NSString stringWithFormat:@"%@_%d", [databaseSchemaTable name], numberOfReferencesToTableInQuery] retain];
-    [queryTable setAlias:tableAlias];
-    [tableAlias release];
+    [queryTable setAlias:[queryTable tableAlias]];
 
     [queryTable setInQuery:query];
     return [queryTable autorelease];
+}
+
+- (NSString *)tableAlias {
+    NSUInteger dropIndex = [[self dropIndex] integerValue];
+    return dropIndex == 0 ? [[self databaseSchemaTable] name] : [self queryAlias];
+}
+
+- (NSString *)queryAlias {
+    return [NSString stringWithFormat:@"%@_%d", [[self databaseSchemaTable] name], [[self dropIndex] integerValue]];
 }
 
 + (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

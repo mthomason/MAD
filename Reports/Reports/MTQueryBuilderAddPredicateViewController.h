@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
@@ -14,6 +15,7 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
 #import "MTActiveDocument.h"
+#import "MTViewControllerValueBasedOnField.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -33,7 +35,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
     <UITableViewDelegate,
         UITableViewControllerOpperatorsDelegate,
         MTQueryBuilderChooseFieldDelegate,
-        UITableViewControllerEnterStringDelegate>
+        MTViewControllerValueBasedOnFieldDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate> delegate;
 

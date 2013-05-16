@@ -6426,6 +6426,50 @@
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="MTQueryBuilderAddLinkFirstFieldViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstFieldViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondFieldViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondFieldViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderLinkBuilderViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerObjectSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerObjectSelectorViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

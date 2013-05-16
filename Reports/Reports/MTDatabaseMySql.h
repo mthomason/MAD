@@ -41,8 +41,11 @@
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
-- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
+
+- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
+                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

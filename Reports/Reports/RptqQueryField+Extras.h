@@ -7,7 +7,7 @@
 //
 
 #import "RptqQueryField.h"
-#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 

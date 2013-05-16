@@ -87,7 +87,8 @@
 }
 
 - (NSString *)toString {
-    return [self toStringHumanReadable];
+    return [NSString stringWithFormat:@"%@.%@", [[self inQueryTable] queryAlias], [[self databaseSchemaField] name]];
+//    return [self toStringHumanReadable];
 }
 
 - (NSString *)toStringDebug {

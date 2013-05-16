@@ -17,4 +17,7 @@
 + (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+- (NSString *)queryAlias;
+- (NSString *)tableAlias;
+
 @end

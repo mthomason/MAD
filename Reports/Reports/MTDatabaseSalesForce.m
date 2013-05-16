@@ -42,6 +42,13 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
     return @"";
 }
 
+- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
+                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     [self setCurrentQueryType: MTDatabaseQueryTypeGetTables];
     
@@ -63,14 +70,17 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 
 }
 
-- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
     [self setCurrentQueryType: MTDatabaseQueryTypeGetResults];
     
     self.resultBlockResults = completion;
-    
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForQuery: query];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *rquery = [[database hasQueries] anyObject];
+
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForQuery: rquery];
     [[SFRestAPI sharedInstance] send:request delegate:self];
     
     

@@ -153,8 +153,7 @@
 }
 
 - (NSString *)fieldNameNice {
-    NSString *fieldNameNice = [[[NSString stringWithFormat:@"%@.%@", [[[self hasField] inQueryTable] alias], [[self hasField] databaseSchemaField]] lowercaseString] retain];
-    return [fieldNameNice autorelease];
+    return [[[[self hasField] toStringHumanReadable] retain] autorelease];
 }
 
 - (NSString *)sortDisplayNice {

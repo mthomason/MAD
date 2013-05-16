@@ -985,6 +985,11 @@
 		4C8BA9881742C44F00B646E2 /* RptqQueryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9851742C44E00B646E2 /* RptqQueryTable.m */; };
 		4C8BA9891742C44F00B646E2 /* RptqQueryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9851742C44E00B646E2 /* RptqQueryTable.m */; };
 		4C8BA98A1742C44F00B646E2 /* RptqQueryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9851742C44E00B646E2 /* RptqQueryTable.m */; };
+		4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
+		4C8BA98E174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
+		4C8BA98F174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
+		4C8BA990174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
+		4C8BA991174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
 		4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; };
 		4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; };
 		4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */; };
@@ -2171,6 +2176,8 @@
 		4C8BA97E1742C44B00B646E2 /* RptqDatabaseSchemaTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDatabaseSchemaTable.m; sourceTree = "<group>"; };
 		4C8BA9841742C44D00B646E2 /* RptqQueryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryTable.h; sourceTree = "<group>"; };
 		4C8BA9851742C44E00B646E2 /* RptqQueryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryTable.m; sourceTree = "<group>"; };
+		4C8BA98B174533CF00B646E2 /* MTViewControllerValueBasedOnField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerValueBasedOnField.h; sourceTree = "<group>"; };
+		4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerValueBasedOnField.m; sourceTree = "<group>"; };
 		4C8BF42D16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewStaticLabelViewController.h; sourceTree = "<group>"; };
 		4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewStaticLabelViewController.m; sourceTree = "<group>"; };
 		4C8BF46D16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectAggregate+Extras.h"; sourceTree = "<group>"; };
@@ -2905,8 +2912,6 @@
 				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
 				4C88A9C514EE23CF0069A0AF /* MTResizeHandleView.h */,
 				4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */,
-				4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */,
-				4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */,
 				4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */,
 				4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */,
 				4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */,
@@ -4081,6 +4086,10 @@
 		4CDB624614E38B9600A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */,
+				4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */,
+				4C8BA98B174533CF00B646E2 /* MTViewControllerValueBasedOnField.h */,
+				4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
 				4C9F94BB1642280500A562B9 /* MTViewController.h */,
 				4C9F94BC1642280500A562B9 /* MTViewController.m */,
@@ -5505,6 +5514,7 @@
 				4C8BA9791741DA7C00B646E2 /* RptqQuery.m in Sources */,
 				4C8BA9801742C44C00B646E2 /* RptqDatabaseSchemaTable.m in Sources */,
 				4C8BA9871742C44F00B646E2 /* RptqQueryTable.m in Sources */,
+				4C8BA98E174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5703,6 +5713,7 @@
 				4C8BA97B1741DA7C00B646E2 /* RptqQuery.m in Sources */,
 				4C8BA9821742C44C00B646E2 /* RptqDatabaseSchemaTable.m in Sources */,
 				4C8BA9891742C44F00B646E2 /* RptqQueryTable.m in Sources */,
+				4C8BA990174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5901,6 +5912,7 @@
 				4C8BA97A1741DA7C00B646E2 /* RptqQuery.m in Sources */,
 				4C8BA9811742C44C00B646E2 /* RptqDatabaseSchemaTable.m in Sources */,
 				4C8BA9881742C44F00B646E2 /* RptqQueryTable.m in Sources */,
+				4C8BA98F174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6102,6 +6114,7 @@
 				4C8BA9781741DA7C00B646E2 /* RptqQuery.m in Sources */,
 				4C8BA97F1742C44C00B646E2 /* RptqDatabaseSchemaTable.m in Sources */,
 				4C8BA9861742C44F00B646E2 /* RptqQueryTable.m in Sources */,
+				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6300,6 +6313,7 @@
 				4C8BA97C1741DA7C00B646E2 /* RptqQuery.m in Sources */,
 				4C8BA9831742C44C00B646E2 /* RptqDatabaseSchemaTable.m in Sources */,
 				4C8BA98A1742C44F00B646E2 /* RptqQueryTable.m in Sources */,
+				4C8BA991174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

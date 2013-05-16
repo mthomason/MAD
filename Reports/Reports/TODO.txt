@@ -19,10 +19,13 @@ Database Access
     Implement the reporting protocol for the already compiled TDS driver.  This will provide support for MS SQL Server and Sybase.
     Prioritize and then implement the same protocol for every other datasource known, becasue each one would be useful to someone.
 
+Show SQL
+    This should display static text on scroll view, to allow for horizontal scrolling.
+
 Query Builder
-    Add support for ORDER BY.
     Make sure the links are added correctly to the table view, because in some cases they can't be deleted.
     Make sure the predicates are added correctly to the table view, because in some cases they can't be deleted.
+    Add support for ORDER BY, but suppress it in reporting app.
 
 File Type
     Implement the UIManagedDocument iCloud features.

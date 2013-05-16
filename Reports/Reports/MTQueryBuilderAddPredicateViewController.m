@@ -50,6 +50,16 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil) == NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil) == NO];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
@@ -83,9 +93,10 @@
                 [dvc setExcludeTables:[NSArray array]];
                 [dvc setDelegate: self];
             }
-        } else if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerEnterString class]]) {
-            UITableViewControllerEnterString *tvcEnterString = [segue destinationViewController];
+        } else if ([[segue destinationViewController] isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
+            MTViewControllerValueBasedOnField *tvcEnterString = [segue destinationViewController];
             [tvcEnterString setEnterStringDelegate: self];
+            [tvcEnterString setSchemaFieldObjectId:[[[self fieldLeft] databaseSchemaField] objectID]];
         }
     }
 }
@@ -144,6 +155,7 @@
         [self setFieldRight: queryField];
         [[[self tableViewCellRightSide] detailTextLabel] setText: [queryField display]];
     }
+    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil)];
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MNSPredicateOperator)operatorType {

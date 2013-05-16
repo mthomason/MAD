@@ -162,22 +162,23 @@
     for (MTPair *pair in tables) {
         
         MTVertex *queryTable = [pair former];
-        
-        if (tableCounter != 0) [result appendString:@",\n"];
         NSManagedObjectID *objectID = [queryTable object];
-        
         RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
-        NSString *tableAlias = [[table alias] stringByAppendingString:@"."];
-        
-        NSUInteger fieldCounter = 0;
-        for (RptqQueryField *queryField in [table hasQueryFields]) {
-            RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
-            if (fieldCounter != 0)  [result appendString:@",\n"];
-            NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
-            [result appendFormat: @"\t%@", fieldAlias];
-            fieldCounter++;
+        if (table != nil) {
+            if (tableCounter != 0) [result appendString:@",\n"];
+            
+            NSString *tableAlias = [[table queryAlias] stringByAppendingString:@"."];
+            
+            NSUInteger fieldCounter = 0;
+            for (RptqQueryField *queryField in [table hasQueryFields]) {
+                RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
+                if (fieldCounter != 0)  [result appendString:@",\n"];
+                NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+                [result appendFormat: @"\t%@", fieldAlias];
+                fieldCounter++;
+            }
+            tableCounter++;
         }
-        tableCounter++;
 
         
     };
@@ -211,7 +212,7 @@
                     }
                     [result appendString:[[table databaseSchemaTable] name]];
                     [result appendString:@" AS "];
-                    [result appendString:[table alias]];
+                    [result appendString:[table queryAlias]];
                 }
 
                 [vertexTable setSortVertexColor: MTColorBlack];
@@ -263,7 +264,7 @@
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
                                 [result appendString:[[rightTable databaseSchemaTable] name]];
                                 [result appendString:@" AS "];
-                                [result appendString:[rightTable alias]];
+                                [result appendString:[rightTable queryAlias]];
                                 [result appendString:@"\n\t"];
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
                                     [result appendString:@"\t"];
@@ -273,11 +274,11 @@
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
-                                    [result appendString: [leftField toStringHumanReadable]];
+                                    [result appendString: [leftField toString]];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    [result appendString: [rightField toStringHumanReadable]];
+                                    [result appendString: [rightField toString]];
                                 }
                             }
                         }
@@ -411,95 +412,7 @@
                             
                             MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
                             [databaseField setFieldTypeNative:[field fieldType]];
-                            switch ([field fieldType]) {
-                                case MAX_NO_FIELD_TYPES:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_BIT:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_BLOB:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_DATE:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_DATETIME:
-                                    [databaseField setFieldType: MDDataTypeDate];
-                                    break;
-                                case MYSQL_TYPE_DECIMAL:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_DOUBLE:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_ENUM:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_FLOAT:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_GEOMETRY:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_INT24:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_LONG:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_LONG_BLOB:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_LONGLONG:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_MEDIUM_BLOB:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_NEWDATE:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_NEWDECIMAL:
-                                    [databaseField setFieldType: MTDataTypeNumber];
-                                    break;
-                                case MYSQL_TYPE_NULL:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_SET:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_SHORT:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_STRING:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_TIME:
-                                    [databaseField setFieldType: MDDataTypeDate];
-                                    break;
-                                case MYSQL_TYPE_TIMESTAMP:
-                                    [databaseField setFieldType: MDDataTypeDate];
-                                    break;
-                                case MYSQL_TYPE_TINY:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_TINY_BLOB:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_VAR_STRING:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_VARCHAR:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                case MYSQL_TYPE_YEAR:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                                default:
-                                    [databaseField setFieldType: MTDataTypeString];
-                                    break;
-                            }
+                            [databaseField setDatatype:[self dataTypeForMySqlType:[field fieldType]]];
                             [databaseField release];
                         }
                     }
@@ -518,9 +431,109 @@
     
 }
 
-- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-      completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
-    
+- (MTDataType)dataTypeForMySqlType:(NSInteger)mySqlFieldTypes {
+    MTDataType result;
+    switch (mySqlFieldTypes) {
+        case MAX_NO_FIELD_TYPES:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_BIT:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_BLOB:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_DATE:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_DATETIME:
+            result = MDDataTypeDate;
+            break;
+        case MYSQL_TYPE_DECIMAL:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_DOUBLE:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_ENUM:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_FLOAT:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_GEOMETRY:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_INT24:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_LONG:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_LONG_BLOB:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_LONGLONG:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_MEDIUM_BLOB:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_NEWDATE:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_NEWDECIMAL:
+            result = MTDataTypeNumber;
+            break;
+        case MYSQL_TYPE_NULL:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_SET:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_SHORT:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_STRING:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_TIME:
+            result = MDDataTypeDate;
+            break;
+        case MYSQL_TYPE_TIMESTAMP:
+            result = MDDataTypeDate;
+            break;
+        case MYSQL_TYPE_TINY:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_TINY_BLOB:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_VAR_STRING:
+            result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_VARCHAR:
+             result = MTDataTypeString;
+            break;
+        case MYSQL_TYPE_YEAR:
+            result = MTDataTypeString;
+            break;
+        default:
+            result = MTDataTypeString;
+            break;
+    }
+    return result;
+}
+
+- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                     completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *rquery = [[database hasQueries] anyObject];
+    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+    NSString *query = [mnsDatabase getSqlForQuery:rquery];
+    query = [NSString stringWithFormat:@"%@ LIMIT 220", query];
+
     RptqQueryCache *queryCache = nil;
     MysqlServer *serv = [[MysqlServer alloc] init];
     
@@ -594,6 +607,38 @@
         [error presentErrorToUser];
     }
     completion(self, queryCache);
+}
+
+- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
+                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *error = nil;
+            MysqlFetch *fetch = nil;
+            MysqlServer *serv = [[MysqlServer alloc] init];
+            
+            [serv setHost:      [[self databaseConnection] server]];
+            [serv setUser:      [[self databaseConnection] username]];
+            [serv setPassword:  [[self databaseConnection] password]];
+            [serv setSchema:    [[self databaseConnection] database]];
+            
+            MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
+            BOOL success = conn != nil;
+            if (success) {
+                NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
+                                 @"FROM %@ "
+                                 @"LIMIT 100;",
+                                 schemaField.name, schemaField.inTable.name];
+                fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
+            }
+            
+            completion(success, error, [[[fetch results] retain] autorelease]);
+        });
+    });
+
 }
 
 - (NSString *)identifier {

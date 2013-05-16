@@ -80,7 +80,7 @@
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
-    [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
+    [mnsDatabase cacheReportQueryForManagedObjectContext: managedObjectContext
                completion: ^(MTDatabase *database, RptqQueryCache *cache) {
                    [self save: ^(BOOL success) {
                        
@@ -100,7 +100,7 @@
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
-    [mnsDatabase runQuery: sqlSelect forManagedObjectContext: managedObjectContext
+    [mnsDatabase cacheReportQueryForManagedObjectContext: managedObjectContext
                completion: ^(MTDatabase *database, RptqQueryCache *cache) {
                    [self save: ^(BOOL success) {
                        completion(YES);

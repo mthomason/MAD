@@ -68,8 +68,15 @@
                                  userInfo: nil];
 }
 
-- (void)runQuery: (NSString *)query forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
+- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
+                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
