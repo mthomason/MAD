@@ -347,7 +347,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         NSString *labelKey = [NSString stringWithFormat:@"label%@", collectionViewKey];
 
         [[sectionControlView layer] setBorderColor: [[UIColor blackColor] CGColor]];
-        [[sectionControlView layer] setBorderWidth: 2.0000f];
+        [[sectionControlView layer] setBorderWidth: 1.0000f];
 
         [[collectionView layer] setBorderColor: shadowColor];
         [[collectionView layer] setBorderWidth: 3.0000f];

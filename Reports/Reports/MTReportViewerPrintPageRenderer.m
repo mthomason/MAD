@@ -126,7 +126,8 @@
                 
                 documentSection = [[self document] hasPageFooterSection];
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+//                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                sectionRect = CGRectMake(originX, pageRect.origin.y + pageRect.size.height - sizeHeight, sizeWidth, sizeHeight);
                 
                 [[UIColor yellowColor] set];
                 
@@ -140,9 +141,11 @@
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
-                documentSection = [[self document] hasReportFooterSection];
-                sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
+                CGFloat sizeHeightReportFooter = [[reportFooterSection height] floatValue];
+                RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
+                CGFloat sizeHeightPageFooter = [[pageFooterSection height] floatValue];
+                sectionRect = CGRectMake(originX, pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter, sizeWidth, sizeHeightReportFooter);
                 
                 [[UIColor greenColor] set];
                 
@@ -387,14 +390,32 @@
             numberOfPagesUsed:&numberOfPagesUsed
                   groupedRows:groupedRows
 printPageRenderReportPageData:&printPageRenderReportPageData];
+
         
-        printableSpaceUsedPageHeight += [[[[self document] hasReportFooterSection] height] floatValue];
-        //NSLog(@"Report Footer Last");
+        
+        CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] height] floatValue];
+
+        [self printPageBreakWithNextItemHeight: reportFooterHeight
+                  printableSpaceUsedPageHeight: &printableSpaceUsedPageHeight
+                             numberOfPagesUsed: &numberOfPagesUsed
+                                   groupedRows: groupedRows
+                 printPageRenderReportPageData: &printPageRenderReportPageData];
+        
+        printableSpaceUsedPageHeight += reportFooterHeight;
         [printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
         
-        printableSpaceUsedPageHeight += [[[[self document] hasPageFooterSection] height] floatValue];
-        //NSLog(@"Page Footer Last");
+        CGFloat pageFooterHeight = [[[[self document] hasPageFooterSection] height] floatValue];
+        
+        [self printPageBreakWithNextItemHeight: pageFooterHeight
+                  printableSpaceUsedPageHeight: &printableSpaceUsedPageHeight
+                             numberOfPagesUsed: &numberOfPagesUsed
+                                   groupedRows: groupedRows
+                 printPageRenderReportPageData: &printPageRenderReportPageData];
+
+        printableSpaceUsedPageHeight += pageFooterHeight;
         [printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
+        
+
         
         [groupedRows release];
         [sortedResultsByRow release];
@@ -436,9 +457,12 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         //NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
         
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
+            
+            SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSortingDataType];
+            
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
             NSSortDescriptor *desc = [[[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-            NSArray *allKeysSorted = [[allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] retain];
+            NSArray *allKeysSorted = [[allKeys sortedArrayUsingSelector:sortSelector] retain];
             NSEnumerator *loopEnumerator;
             if ([desc ascending] == NO) {
                 loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
@@ -705,7 +729,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
     return [result autorelease];
 }
 
-- (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject withResultDictionary:(NSDictionary *)resultDictionary {
+- (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject
+                       withResultDictionary:(NSDictionary *)resultDictionary {
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
     
     NSString *displayText = [[self printDocumentObject:documentObject withResultDictionary:resultDictionary] retain];
@@ -724,14 +749,20 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                        numberOfPagesUsed:(NSUInteger *)numberOfPagesUsed
                              groupedRows:(NSDictionary *)groupedRows
 printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
+
     CGRect pageRect;
     CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] height] floatValue];
+    //CGFloat reportFooterSectionHeight = CGSizeZero.height;
+    
     if (CGRectIsEmpty([self printableRect])) {
         pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
     } else {
         pageRect = [self paperRect];
     }
     
+    //if ([self numberOfPages] == *numberOfPagesUsed) {
+    //    reportFooterSectionHeight = [[[[self document] hasReportFooterSection] height] floatValue];
+    //}
     if (*printableSpaceUsedPageHeight + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
         //NSLog(@"Page Footer");
         *printableSpaceUsedPageHeight += pageFooterSectionHeight;

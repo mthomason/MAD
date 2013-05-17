@@ -25,6 +25,8 @@
 - (NSString *)display;
 - (NSString *)fieldTypeDisplay;
 
+- (SEL)selectorForSortingDataType;
+
 @end
 
 #endif

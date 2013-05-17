@@ -101,6 +101,28 @@
 }
 */
 
+- (SEL)selectorForSortingDataType {
+    SEL result;
+    switch ([[self dataType] integerValue]) {
+        case MTDataTypeImage:
+            @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                           reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                         userInfo: nil];
+
+            break;
+        case MTDataTypeNumber:
+            result = @selector(compare:);
+            break;
+        case MTDataTypeString:
+            result = @selector(caseInsensitiveCompare:);
+            break;
+        default:
+            result = @selector(compare:);
+            break;
+    }
+    return result;
+}
+
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
