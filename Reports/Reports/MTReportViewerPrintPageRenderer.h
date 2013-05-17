@@ -18,6 +18,7 @@
 #import "CGGeometry+Extras.h"
 #import "MTReportViewerPrintPageRenderPageData.h"
 #import "RptqDocumentSectionRows+Extras.h"
+#import "RptqDocumentSection+Extras.h"
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
 

@@ -13,7 +13,7 @@
 - (void)dealloc {
     [_label release];
     [_name release];
-    [_datatype release];
+    //[_datatype release];
     [super dealloc];
 }
 
@@ -22,7 +22,6 @@
     if (self) {
         [self setLabel: name];
         [self setName: name];
-        [self setDatatype: name];
     }
     return self;
 }

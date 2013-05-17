@@ -104,7 +104,6 @@
         
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        //        RptqQuery *query = [[database hasQueries] anyObject];
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         [mnsDatabase sampleDataForSchemaField:field completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
             
@@ -130,7 +129,9 @@
     [[self pickerView] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, backgroundSize.width, backgroundSize.height)];
     [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 
-    [[self textField] setText:[self pickerView:[self pickerView] titleForRow:0 forComponent:0]];
+    [[self textField] setText:[self pickerView: [self pickerView]
+                                   titleForRow: 0
+                                  forComponent: 0]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

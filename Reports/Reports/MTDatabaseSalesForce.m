@@ -153,7 +153,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
                         MTDatabaseField *databaseField = [[MTDatabaseField alloc] init];
                         [databaseField setName:     [object objectForKey:@"name"]];
                         [databaseField setLabel:    [object objectForKey:@"label"]];
-                        [databaseField setDatatype: [object objectForKey:@"type"]];
+                        //[databaseField setDatatype: [object objectForKey:@"type"]];
                         [resultFields addObject:databaseField];
                         [databaseField release];
                     }

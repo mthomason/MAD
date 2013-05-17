@@ -394,7 +394,7 @@
                             NSString *fieldName = [field objectForKey:[fieldMetaData name]];
                             
                             MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
-                            [databaseField setDatatype:[field objectForKey:@"Type"]];
+                            //[databaseField setDatatype:[field objectForKey:@"Type"]];
                             [results addObject: databaseField];
                             [resultsDictionary setObject:databaseField forKey:fieldName];
                             [databaseField release];
@@ -412,7 +412,10 @@
                             
                             MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
                             [databaseField setFieldTypeNative:[field fieldType]];
-                            [databaseField setDatatype:[self dataTypeForMySqlType:[field fieldType]]];
+                            [databaseField setFieldType:[self dataTypeForMySqlType:[field fieldType]]];
+                            [databaseField setWidth:[field width]];
+                            [databaseField setDecimals:[field decimals]];
+                            [databaseField setPrimaryKey:[field primaryKey]];
                             [databaseField release];
                         }
                     }
@@ -547,9 +550,9 @@
     if (conn) {
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn extendedNames:YES];
         
-        NSArray *results = [[NSArray alloc] initWithArray:[fetch results]];
+        //NSArray *results = [[NSArray alloc] initWithArray:[fetch results]];
         
-        if (results != nil) {
+        //if (results != nil) {
             
             RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -559,23 +562,8 @@
             
             //[queryCache removeHasValues:[queryCache hasQueryResults]];
             NSUInteger resultCounter = 0;
-            for (NSDictionary *result in results) {
+            for (NSDictionary *result in [fetch results]) {
                 //NSLog(@"%@", result);
-                
-                for (NSString *key in [result keyEnumerator]) {
-                    //NSLog(@"Field %@", key);
-                    id object = [result objectForKey:key];
-
-                    RptqQueryResult *queryResult = [RptqQueryResult initObjectForManagedObjectContext:managedObjectContext];
-                    [queryResult setFieldname:key];
-                    [queryResult setValue:object];
-                    [queryResult setRowid:@(resultCounter)];
-                    [queryCache addHasQueryResultsObject:queryResult];
-                    //[queryResult setResultOrder:@(fieldCounter)];
-                    //[queryCache addHasQueryResultFieldsObject:queryResultField];
-                    //fieldCounter++;
-                }
-                
                 
                 if (resultCounter == 0) {
                     NSUInteger fieldCounter = 0;
@@ -593,14 +581,15 @@
                     id object = [result objectForKey:[queryResultField fieldname]];
                     RptqQueryResultValues *queryResultValue = [RptqQueryResultValues initObjectForManagedObjectContext:managedObjectContext];
                     [queryResultValue setRowId:@(resultCounter)];
-                    [queryResultValue setValue: object];
+                    [queryResultValue setCachedValue: object];
                     [queryResultField addHasValuesObject:queryResultValue];
+                    
                 }
                 
                 resultCounter++;
             }
-        }
-        [results release];
+        //}
+        //[results release];
         NSError *error = nil;
         [managedObjectContext save:&error];
     } else {
@@ -629,8 +618,8 @@
             BOOL success = conn != nil;
             if (success) {
                 NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
-                                 @"FROM %@ "
-                                 @"LIMIT 100;",
+                                                                @"FROM %@ "
+                                                                @"LIMIT 100;",
                                  schemaField.name, schemaField.inTable.name];
                 fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
             }

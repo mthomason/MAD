@@ -215,48 +215,55 @@
 }
 
 - (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
+    
+    switch ([[section type] integerValue]) {
+        case MNSDocumentSectionTypeBody: {
 
-    if ([results isKindOfClass:[NSDictionary class]]) {
-        
-        // FIXME: Print more than  the first row.
-        CGFloat rowMaxItemHeight = CGSizeZero.height;
-        
-        for (RptqDocumentSectionRows *row in [section hasRows]) {
-            
-            CGFloat originX = CGPointZero.x;
-            CGFloat itemMaxHeigh = CGSizeZero.height;
-            
-            for (RptqDocumentObject *item in [row hasObjects]) {
-
-                NSAttributedString *attributedString = [self attributedStringFor:item
-                                                            withResultDictionary:results];
-                CGFloat sizeWidth = [[item sizewidth] floatValue];
-                CGFloat sizeHeight = [[item sizeheight] floatValue];
-                CGRect elementCanvasRect = CGRectMake(originX, originY + rowMaxItemHeight, sizeWidth, sizeHeight);
-                [attributedString drawInRect:elementCanvasRect];
-                //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
-                originX += sizeWidth;
-
-                if (sizeHeight > itemMaxHeigh) {
-                    itemMaxHeigh = sizeHeight;
+            for (RptqDocumentSectionRows *row in [section hasRows]) {
+                for (RptqDocumentObject *item in [row hasObjects]) {
+                    
+                    NSAttributedString *attributedString = [self attributedStringFor:item
+                                                                withResultDictionary:results];
+                    CGFloat originPointX        = [[item originx] floatValue];
+                    CGFloat originPointY        = [[item originy] floatValue] + originY;
+                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
+                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
+                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                    
+                    [attributedString drawInRect:elementCanvasRect];
+                    
                 }
             }
-            rowMaxItemHeight += itemMaxHeigh;
+            break;
         }
-        /*
-        for (RptqDocumentObject *documentObject in [[[section hasRows] objectAtIndex:0] hasObjects]) {
 
-            NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
-            CGFloat sizeWidth = [[documentObject sizewidth] floatValue];
-            CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-            CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-            [attributedString drawInRect:elementCanvasRect];
-            //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
-            originX += sizeWidth;
-            
+        case MNSDocumentSectionTypeReportHeader: {
+            break;
         }
-         */
-    
+        case MNSDocumentSectionTypeReportFooter: {
+            break;
+        }
+        case MNSDocumentSectionTypePageHeader: {
+            break;
+        }
+        case MNSDocumentSectionTypePageFooter: {
+            break;
+        }
+        case MNSDocumentSectionTypeGroupHeader: {
+            break;
+        }
+        
+        case MNSDocumentSectionTypeGroupFooter: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    /*
+    if ([results isKindOfClass:[NSDictionary class]]) {
+        
+
     } else if ([results isKindOfClass:[NSArray class]]) {
     
         // FIXME: Print more than  the first row.
@@ -266,16 +273,11 @@
             CGFloat originX = CGPointZero.x;
 
             for (RptqDocumentObject *item in [row hasObjects]) {
-                //NSAttributedString *attributedString = [self attributedStringFor:documentObject withResultDictionary:results];
                 CGFloat sizeWidth = [[item sizewidth] floatValue];
-                //CGFloat sizeHeight = [[documentObject sizeheight] floatValue];
-                //CGRect elementCanvasRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                //[attributedString drawInRect:elementCanvasRect];
-                //NSLog(@"Element at rect: %@", NSStringFromCGRect(elementCanvasRect));
                 originX += sizeWidth;
             }
         }
-    }
+    }*/
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
@@ -307,37 +309,45 @@
         RptqQueryCache *queryCache = [query hasQueryCache];
         
         [[self cachedResults] removeAllObjects];
+        [[self resultsByRow] removeAllObjects];
         
-        NSSet *hasQueryResults = [queryCache hasQueryResults];
-        for (RptqQueryResult *queryResult in hasQueryResults) {
-            
-            NSMutableDictionary *resultDictionary = [[[self resultsByRow] objectForKey:[queryResult rowid]] retain];
-            
-            id results = [[self resultsByRow] objectForKey:[queryResult rowid]];
-            if (results == nil) {
-                [resultDictionary release];
-                resultDictionary = nil;
-                resultDictionary = [[NSMutableDictionary alloc] init];
-            } else {
-                [resultDictionary retain];
-            }
-            
-            id queryResultValue = [[queryResult value] retain];
+        for (RptqQueryResultFields *queryResultField in [queryCache hasQueryResultFields]) {
 
-            NSString *fieldName = [[NSString alloc] initWithString:[queryResult fieldname]];
-            
-            [resultDictionary setObject:queryResultValue forKey:fieldName];
-            
-            [fieldName release];
-            [queryResultValue release];
-            
-            NSNumber *rowId = [[queryResult rowid] retain];
-            NSMutableDictionary *d = [resultDictionary retain];
-            [[self resultsByRow] setObject:d forKey:rowId];
-            [d release];
-            [rowId release];
-            
-            [resultDictionary release];
+
+            for (RptqQueryResultValues *queryResultValue in [queryResultField hasValues]) {
+        
+                id results = [[self resultsByRow] objectForKey:[queryResultValue rowId]];
+                
+                NSMutableDictionary *resultDictionary = nil;
+                if (results == nil || resultDictionary == nil) {
+                    if (results != nil) {
+                        [resultDictionary release];
+                        resultDictionary = nil;
+                        resultDictionary = [[NSMutableDictionary alloc] initWithDictionary:results];
+                    } else {
+                        [resultDictionary release];
+                        resultDictionary = nil;
+                        resultDictionary = [[NSMutableDictionary alloc] init];
+                    }
+                } else {
+                    [resultDictionary retain];
+                }
+                
+                id queryResultCValue = [[queryResultValue cachedValue] retain];
+                
+                NSString *fieldName = [[NSString alloc] initWithString:[queryResultField fieldname]];
+                
+                [resultDictionary setObject:queryResultCValue forKey:fieldName];
+                
+                [[self resultsByRow] setObject: resultDictionary
+                                        forKey: [queryResultValue rowId]];
+
+                [fieldName release];
+                [queryResultCValue release];
+                
+                [resultDictionary release];
+                
+            }
         }
         
         NSSet *resultsByRowSet = [[NSSet setWithArray:[[self resultsByRow] allValues]] retain];
@@ -641,10 +651,11 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             switch ([[[[documentObject inSectionRow] inSection] type] integerValue]) {
 
                 case MNSDocumentSectionTypeBody: {
-
+// FIXME: Do logic here to convert value to readable formats...
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
                     RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-                    value = [resultDictionary objectForKey: [queryField tableFieldKey]];
+                    NSString * tableFieldKey = [queryField tableFieldKey];
+                    value = [resultDictionary objectForKey: tableFieldKey];
                     break;
 
                 } case MNSDocumentSectionTypeGroupHeader: {
@@ -657,12 +668,13 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
 
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
                     RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-                    value = [resultDictionary objectForKey: [queryField tableFieldKey]];
+                    NSString *tableFieldKey = [queryField tableFieldKey];
+                    value = [resultDictionary objectForKey: tableFieldKey];
                     break;
                     
                 }
             }
-            
+    
             
         }
         case MTDocumentObjectTypeFormula: {

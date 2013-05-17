@@ -60,13 +60,21 @@
 
 + (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field {
-    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class]) inManagedObjectContext: objectContext];
+    
+    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class])
+                                                   inManagedObjectContext: objectContext];
+
     RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity
-                              insertIntoManagedObjectContext: objectContext];
-    [rptqField setLabel:    [field label]];
-    [rptqField setName:     [field name]];
-    [rptqField setDataType: @([field fieldType])];
+                                                          insertIntoManagedObjectContext: objectContext];
+    [rptqField setLabel:            [field label]];
+    [rptqField setName:             [field name]];
+    [rptqField setDataType:         @([field fieldType])];
+    [rptqField setDataTypeNative:   @([field fieldTypeNative])];
+    [rptqField setDecimals:         @([field decimals])];
+    [rptqField setWidth:            @([field width])];
+    [rptqField setPrimaryKey:       @([field primaryKey])];
     return [rptqField autorelease];
+
 }
 
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

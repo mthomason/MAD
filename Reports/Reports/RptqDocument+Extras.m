@@ -245,18 +245,17 @@
                                                                                               database: currentDatabase
                                                                                           andTableName: [databaseTable name]];
                             
-                            RptqDatabaseSchemaField *rptqField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
                                                                                                                        andField: objField];
+                            
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
-                            [fieldSet addObject:rptqField];
+                            [fieldSet addObject:schemaField];
                             [rptqTableOrigional setHasFields:fieldSet];
                             [fieldSet release];
-//                            [rptqTableOrigional addHasFieldsObject: rptqField];
+
                             NSError *saveError = nil;
-                            [[rptqField managedObjectContext] save:&saveError];
-                            if (saveError) {
-                                //NSLog(@"%@", [saveError localizedDescription]);
-                            }
+                            [[schemaField managedObjectContext] save:&saveError];
+
                         }
                         if (tableCounter == numberOfTables - 1) {
                             completion(YES, nil);

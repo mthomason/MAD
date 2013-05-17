@@ -24,7 +24,6 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 
 @property (nonatomic, retain) NSString *label;
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *datatype;
 
 @property (nonatomic, assign) MTDataType fieldType;
 @property (nonatomic, assign) NSInteger fieldTypeNative;

@@ -8,7 +8,6 @@
 
 #import "RptqQueryCache.h"
 #import "RptqQuery.h"
-#import "RptqQueryResult.h"
 #import "RptqQueryResultFields.h"
 
 
