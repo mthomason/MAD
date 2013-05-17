@@ -125,7 +125,7 @@
     
     for (NSArray *sectionItemLayouts in itemAttributesBySection) {
         NSUInteger itemCounter = 0;
-        NSUInteger indexOfPotentiallyDroppedItem = [[sectionItemLayouts lastObject] dropIndex];
+        //NSUInteger indexOfPotentiallyDroppedItem = [[sectionItemLayouts lastObject] dropIndex];
 
         NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:[sectionItemLayouts count]];
 
@@ -641,9 +641,18 @@
 */
 
 - (CGSize)collectionViewContentSize {
-    // FIXME: Calculate this.
-    //NSLog(@"%d\tcollectionViewContentSize", self.collectionView.tag);
-    return [self contentSize];
+    CGFloat width = CGSizeZero.width, height = CGSizeZero.height;
+    for (NSArray *items in [self itemAttributesBySection]) {
+        
+        for (MTCollectionViewLayoutLiquidAttributes *itemAttribute in items) {
+            CGFloat w = itemAttribute.frame.origin.x + itemAttribute.frame.size.width;
+            width = width > w ? width : w;
+            CGFloat h = itemAttribute.frame.origin.y + itemAttribute.frame.size.height;
+            height = height > h ? height : h;
+        }
+    }
+
+    return CGSizeMake(width, height);
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {

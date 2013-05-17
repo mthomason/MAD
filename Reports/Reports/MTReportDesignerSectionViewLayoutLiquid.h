@@ -18,9 +18,6 @@
 
 @protocol MTReportDesignerSectionViewLayoutLiquidDelegate
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-                               initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
-
 - (MTCollectionViewLayoutLiquidAttributes *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -29,8 +26,6 @@
 
 - (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
                                      updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath;
-
-- (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
 

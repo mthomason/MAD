@@ -15,7 +15,6 @@
 @class MTReportDesignerSectionViewLayoutLine;
 
 @protocol MTReportDesignerSectionViewLayoutDelegate
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
