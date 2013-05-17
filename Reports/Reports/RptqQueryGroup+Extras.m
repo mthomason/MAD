@@ -156,6 +156,10 @@
     return [[[[self hasField] toStringHumanReadable] retain] autorelease];
 }
 
+- (NSString *)fieldNameQuery {
+    return [[[[self hasField] toString] retain] autorelease];
+}
+
 - (NSString *)sortDisplayNice {
     NSString *sort;
     MNSSortOrder sortOrder = [[self sort] integerValue];

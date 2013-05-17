@@ -134,8 +134,14 @@
 
         for (MTCollectionViewLayoutLiquidAttributes *itemAttributes in sectionItemLayouts) {
             if (itemCounter == 0) {
-                itemAttributes.frame = CGRectMake(CGPointZero.x, CGPointZero.y, itemAttributes.frame.size.width, itemAttributes.frame.size.height);
+                CGRect zeroPointRect = CGRectMake(CGPointZero.x, CGPointZero.y, itemAttributes.frame.size.width, itemAttributes.frame.size.height);
+                [itemAttributes setFrame: zeroPointRect];
+                [[self delegate] collectionView:[self collectionView] layout:self
+                                   setDropPoint:[itemAttributes frame].origin
+                             forItemAtIndexPath:[itemAttributes indexPath]];
+                
                 [layoutAttributesForSection addObject:itemAttributes];
+
             } else {
                 
                 //Try every placement option to the bottom-right of existing items, while
@@ -309,9 +315,13 @@
                 }
                 
                 [layoutToChange setFrame: [[availablePositionsOrdered objectAtIndex:indexOfNearestPosition] CGRectValue]];
-                [layoutToChange setDropIndex: [[self delegate] collectionView:[self collectionView] layout:self updateDropIndexForItemAtIndexPath:[layoutToChange indexPath]]];
+                [layoutToChange setDropIndex: [[self delegate] collectionView: [self collectionView]
+                                                                       layout: self
+                                            updateDropIndexForItemAtIndexPath: [layoutToChange indexPath]]];
                 [layoutToChange setDropPoint: [layoutToChange frame].origin];
-                [[self delegate] collectionView:[self collectionView] layout:self setDropPoint:[layoutToChange frame].origin forItemAtIndexPath:[layoutToChange indexPath]];
+                [[self delegate] collectionView:[self collectionView] layout:self
+                                   setDropPoint:[layoutToChange frame].origin
+                             forItemAtIndexPath:[layoutToChange indexPath]];
                 [layoutToChange setLastTouchPointValid: NO];
                 
                 [availablePositionsOrdered release];

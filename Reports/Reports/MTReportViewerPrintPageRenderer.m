@@ -357,7 +357,7 @@
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-            NSString *fieldNameNice = [[NSString alloc] initWithString:[queryGroup fieldNameNice]];
+            NSString *fieldNameNice = [[NSString alloc] initWithString:[queryGroup fieldNameQuery]];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: fieldNameNice
                                                                            ascending: sortAscending];
             [[self sortedSortDescriptorsGroup] addObject:sortDescriptor];

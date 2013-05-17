@@ -25,6 +25,7 @@
 + (RptqQueryGroup *)createQueryGroupFor:(RptqQueryField *)field  andSort:(MNSSortOrder)sortOrder inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)fieldNameNice;
+- (NSString *)fieldNameQuery;
 - (NSString *)sortDisplayNice;
 
 @end
