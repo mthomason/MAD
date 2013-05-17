@@ -61,7 +61,6 @@
     self = [super init];
     if (self) {
 
-        
         [self setPrintableSize:printableAreaSize];
         [self setDocument:document];
         
@@ -80,6 +79,8 @@
     }
     return self;
 }
+
+#pragma mark - UIPrintPageRenderer Overrides
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
     
@@ -214,70 +215,8 @@
     }
 }
 
-- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
-    
-    switch ([[section type] integerValue]) {
-        case MNSDocumentSectionTypeBody: {
-
-            for (RptqDocumentSectionRows *row in [section hasRows]) {
-                for (RptqDocumentObject *item in [row hasObjects]) {
-                    
-                    NSAttributedString *attributedString = [self attributedStringFor:item
-                                                                withResultDictionary:results];
-                    CGFloat originPointX        = [[item originx] floatValue];
-                    CGFloat originPointY        = [[item originy] floatValue] + originY;
-                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
-                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
-                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
-                    
-                    [attributedString drawInRect:elementCanvasRect];
-                    
-                }
-            }
-            break;
-        }
-
-        case MNSDocumentSectionTypeReportHeader: {
-            break;
-        }
-        case MNSDocumentSectionTypeReportFooter: {
-            break;
-        }
-        case MNSDocumentSectionTypePageHeader: {
-            break;
-        }
-        case MNSDocumentSectionTypePageFooter: {
-            break;
-        }
-        case MNSDocumentSectionTypeGroupHeader: {
-            break;
-        }
-        
-        case MNSDocumentSectionTypeGroupFooter: {
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    /*
-    if ([results isKindOfClass:[NSDictionary class]]) {
-        
-
-    } else if ([results isKindOfClass:[NSArray class]]) {
-    
-        // FIXME: Print more than  the first row.
-        
-        for (RptqDocumentSectionRows *row in [section hasRows]) {
-
-            CGFloat originX = CGPointZero.x;
-
-            for (RptqDocumentObject *item in [row hasObjects]) {
-                CGFloat sizeWidth = [[item sizewidth] floatValue];
-                originX += sizeWidth;
-            }
-        }
-    }*/
+- (NSInteger)numberOfPages {
+    return [self cachedNumberOfPages];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
@@ -293,12 +232,72 @@
 }
 
 
-- (NSInteger)numberOfPages {
-    return [self cachedNumberOfPages];
-}
-
 #pragma mark - Object methods
 
+- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
+    
+    switch ([[section type] integerValue]) {
+        case MNSDocumentSectionTypeBody: {
+            
+            for (RptqDocumentSectionRows *row in [section hasRows]) {
+                for (RptqDocumentObject *item in [row hasObjects]) {
+                    
+                    NSAttributedString *attributedString = [self attributedStringFor:item
+                                                                withResultDictionary:results];
+                    CGFloat originPointX        = [[item dropPointX] floatValue];
+                    CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
+                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
+                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
+                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                    
+                    [attributedString drawInRect:elementCanvasRect];
+                    
+                }
+            }
+            break;
+        }
+            
+        case MNSDocumentSectionTypeReportHeader: {
+            break;
+        }
+        case MNSDocumentSectionTypeReportFooter: {
+            break;
+        }
+        case MNSDocumentSectionTypePageHeader: {
+            break;
+        }
+        case MNSDocumentSectionTypePageFooter: {
+            break;
+        }
+        case MNSDocumentSectionTypeGroupHeader: {
+            break;
+        }
+        case MNSDocumentSectionTypeGroupFooter: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    /*
+     if ([results isKindOfClass:[NSDictionary class]]) {
+     
+     
+     } else if ([results isKindOfClass:[NSArray class]]) {
+     
+     // FIXME: Print more than  the first row.
+     
+     for (RptqDocumentSectionRows *row in [section hasRows]) {
+     
+     CGFloat originX = CGPointZero.x;
+     
+     for (RptqDocumentObject *item in [row hasObjects]) {
+     CGFloat sizeWidth = [[item sizewidth] floatValue];
+     originX += sizeWidth;
+     }
+     }
+     }*/
+}
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
     if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {

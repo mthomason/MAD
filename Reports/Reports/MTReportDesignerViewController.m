@@ -1405,11 +1405,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return [[documentSection height] floatValue];
 }
 
-- (CGPoint)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout initialLayoutCenterPointForIndexPath:(NSIndexPath *)indexPath {
-    NSValue *result = [[[self holderForLastTouchesByCollectionView] objectForKey:@([collectionView tag])] objectForKey:indexPath];
-    return [result CGPointValue];
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger row = [indexPath row];
@@ -1433,7 +1428,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return result;
 }
 
-- (MTCollectionViewLayoutLiquidAttributes *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (MTCollectionViewLayoutLiquidAttributes *)collectionView: (UICollectionView *)collectionView
+                                                    layout: (UICollectionViewLayout *)collectionViewLayout
+                        layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
@@ -1462,7 +1459,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return [result autorelease];
 }
 
-- (NSUInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (NSUInteger)collectionView:(UICollectionView *)collectionView
+                      layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
@@ -1504,7 +1502,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[documentObject managedObjectContext] save:&error];
     } else {
         result = CGPointZero;
-    }    
+    }
 }
 
 
