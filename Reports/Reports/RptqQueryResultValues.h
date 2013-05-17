@@ -2,7 +2,7 @@
 //  RptqQueryResultValues.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/16/13.
+//  Created by Michael Thomason on 5/17/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 @interface RptqQueryResultValues : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * rowId;
-@property (nonatomic, retain) id value;
+@property (nonatomic, retain) id cachedValue;
 @property (nonatomic, retain) RptqQueryResultFields *valuesForField;
 
 @end
