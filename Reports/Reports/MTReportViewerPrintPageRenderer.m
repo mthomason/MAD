@@ -452,8 +452,8 @@ printableSpaceUsedPageHeight:(CGFloat *)printableSpaceUsedPageHeight
        groupedRowsLevel:(NSUInteger)groupedRowsLevel
           detailPrinted:(BOOL *)detailPrinted
 printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
-    @try {
 
+    
         //NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
         
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
@@ -539,10 +539,10 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                                  printPageRenderReportPageData: printPageRenderReportPageData];
                         
                         *printableSpaceUsedPageHeight += [[documentSection height] floatValue];
-                        NSUInteger groupNumber = [[queryGroup weight] integerValue];
-                        NSSortDescriptor *sortDescriptor = [[self sortedSortDescriptorsGroup] objectAtIndex:groupNumber];
-                        NSString *sortOrderDescription = [sortDescriptor ascending] ?
-                        NSLocalizedString(@"Ascending", @"Ascending") : NSLocalizedString(@"Decending", @"Decending");
+                        //NSUInteger groupNumber = [[queryGroup weight] integerValue];
+                        //NSSortDescriptor *sortDescriptor = [[self sortedSortDescriptorsGroup] objectAtIndex:groupNumber];
+                        //NSString *sortOrderDescription = [sortDescriptor ascending] ?
+                        //NSLocalizedString(@"Ascending", @"Ascending") : NSLocalizedString(@"Decending", @"Decending");
                         //NSLog(@"Group Footer %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
                         break;
                     }
@@ -553,17 +553,16 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             [loopEnumerator release];
             [allKeysSorted release];
             [allKeys release];
+
         } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
-            [self printDetailLevelWithDetails:(NSArray *)groupedRows printableSpaceUsedPageHeight:printableSpaceUsedPageHeight numberOfPagesUsed:numberOfPagesUsed groupedRows:groupedRows printPageRenderReportPageData:printPageRenderReportPageData];
+
+            [self printDetailLevelWithDetails:(NSArray *)groupedRows
+                 printableSpaceUsedPageHeight:printableSpaceUsedPageHeight
+                            numberOfPagesUsed:numberOfPagesUsed
+                                  groupedRows:groupedRows
+                printPageRenderReportPageData:printPageRenderReportPageData];
+
         }
-    }
-    @catch (NSException *exception) {
-        //NSLog(@"Exception %@", exception);
-    }
-    @finally {
-
-    }
-
 }
 
 - (void)printDetailLevelWithDetails:(NSArray *)containerDetails
