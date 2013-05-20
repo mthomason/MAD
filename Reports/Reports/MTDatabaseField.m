@@ -26,4 +26,130 @@
     return self;
 }
 
+- (BOOL)isNumeric {
+    return [MTDatabaseField isNumeric:[self fieldType]];
+}
+
++ (BOOL)isNumeric:(MTDataType)dataType {
+    BOOL result;
+    switch (dataType) {
+        case MTDataTypeBit:
+        case MTDataTypeFloat:
+        case MTDataTypeInteger:
+        case MTDataTypeNumber:
+            result = YES;
+            break;
+        case MTDataTypeBlob:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        case MTDataTypeImage:
+        case MTDataTypeSet:
+        case MTDataTypeString:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeUnknown:
+        default:
+            result = NO;
+            break;
+    }
+    return result;
+}
+
+- (SEL)selectorForSorting {
+    return [MTDatabaseField selectorForSorting:[self fieldType]];
+}
+
++ (SEL)selectorForSorting:(MTDataType)dataType {
+    SEL result;
+    switch (dataType) {
+        case MTDataTypeBlob:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        case MTDataTypeImage:
+        case MTDataTypeSet:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeUnknown:
+            @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                           reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                         userInfo: nil];
+            
+            break;
+        case MTDataTypeBit:
+        case MTDataTypeFloat:
+        case MTDataTypeInteger:
+        case MTDataTypeNumber:
+            result = @selector(compare:);
+            break;
+        case MTDataTypeString:
+            result = @selector(caseInsensitiveCompare:);
+            break;
+        default:
+            result = @selector(compare:);
+            break;
+    }
+    return result;
+}
+
+- (NSString *)formattedStringForValue:(id)value {
+    return [MTDatabaseField formattedString:[self fieldType] forValue:value];
+}
+
++ (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+    NSString *result;
+    switch (dataType) {
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        case MTDataTypeImage:
+        case MTDataTypeSet:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeUnknown:
+            result = NSLocalizedString(@"Not implemented.", @"Not implemented.");
+//            result = [NSString stringWithFormat:@"%@", value];
+/*            @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                           reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                         userInfo: nil];*/
+            
+            break;
+        case MTDataTypeBlob:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeBit:
+        case MTDataTypeFloat:
+        case MTDataTypeInteger:
+        case MTDataTypeNumber:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeString:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        default:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+    }
+    if (result == nil) {
+        result = @"";
+    }
+    return result;
+}
+
+- (NSString *)sqlPredicateStringForValue:(id)value {
+    return [MTDatabaseField sqlPredicateString:[self fieldType] forValue:value];
+}
+
++ (NSString *)sqlPredicateString:(MTDataType)dataType forValue:(id)value {
+    NSString *result = [MTDatabaseField formattedString:dataType forValue:value];
+    if ([MTDatabaseField isNumeric:dataType]) {
+        result = [NSString stringWithFormat:@"\"%@\"", result];
+    }
+    return result;
+}
+
 @end

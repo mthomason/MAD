@@ -77,6 +77,18 @@
 
 }
 
++ (MTDatabaseField *)databaseFieldForSchemaField:(RptqDatabaseSchemaField *)schemaField {
+
+    MTDatabaseField *result = [[MTDatabaseField alloc] init];
+    [result setLabel:[schemaField label]];
+    [result setName:[schemaField name]];
+    [result setFieldType:[schemaField dataType]];
+    [result setFieldTypeNative:[schemaField dataTypeNative]];
+    [result setDecimals:[schemaField decimals]];
+    [result setPrimaryKey:[schemaField primaryKey]];
+    return [result autorelease];
+}
+
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
     request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
@@ -91,36 +103,8 @@
     return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]] lowercaseString];
 }
 
-/*
-+ (void)addFieldToQueryForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    
-}
-
-+ (void)removeFieldFromQueryInManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    
-}
-*/
-
-- (SEL)selectorForSortingDataType {
-    SEL result;
-    switch ([[self dataType] integerValue]) {
-        case MTDataTypeImage:
-            @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                           reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
-                                         userInfo: nil];
-
-            break;
-        case MTDataTypeNumber:
-            result = @selector(compare:);
-            break;
-        case MTDataTypeString:
-            result = @selector(caseInsensitiveCompare:);
-            break;
-        default:
-            result = @selector(compare:);
-            break;
-    }
-    return result;
+- (SEL)selectorForSorting {
+    return [MTDatabaseField selectorForSorting:[[self dataType] integerValue]];
 }
 
 #pragma mark - MTProtocolLog
@@ -154,7 +138,7 @@
 
     NSString *result = nil;
     switch ([[self dataType] integerValue]) {
-        case MDDataTypeDate:
+        case MTDataTypeDate:
             result = NSLocalizedString(@"Date", @"Date data type.");
         case MTDataTypeImage:
             result = NSLocalizedString(@"Image", @"Image data type.");

@@ -119,9 +119,15 @@
         NSString *leftValue = nil;
         NSString *rightValue = nil;
         
+        MTDataType leftFieldDataType = MTDataTypeUnknown;
+        BOOL leftFieldIsNumeric = NO;
+        
         if ([queryPredicate hasLeftField] != nil) {
 
-            leftValue = [[[queryPredicate hasLeftField] toString] retain];
+            RptqQueryField *leftField = [queryPredicate hasLeftField];
+            leftValue = [[leftField toString] retain];
+            MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:[leftField databaseSchemaField]];
+            leftFieldDataType = [dbField fieldType];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
 
@@ -412,7 +418,7 @@
                             
                             MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
                             [databaseField setFieldTypeNative:[field fieldType]];
-                            [databaseField setFieldType:[self dataTypeForMySqlType:[field fieldType]]];
+                            [databaseField setFieldType:[self dataTypeForNativeType:[field fieldType]]];
                             [databaseField setWidth:[field width]];
                             [databaseField setDecimals:[field decimals]];
                             [databaseField setPrimaryKey:[field primaryKey]];
@@ -434,50 +440,50 @@
     
 }
 
-- (MTDataType)dataTypeForMySqlType:(NSInteger)mySqlFieldTypes {
+- (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
     MTDataType result;
-    switch (mySqlFieldTypes) {
+    switch (nativeType) {
         case MAX_NO_FIELD_TYPES:
             result = MTDataTypeString;
             break;
         case MYSQL_TYPE_BIT:
-            result = MTDataTypeString;
+            result = MTDataTypeBit;
             break;
         case MYSQL_TYPE_BLOB:
-            result = MTDataTypeString;
+            result = MTDataTypeBlob;
             break;
         case MYSQL_TYPE_DATE:
-            result = MTDataTypeString;
+            result = MTDataTypeDate;
             break;
         case MYSQL_TYPE_DATETIME:
-            result = MDDataTypeDate;
+            result = MTDataTypeDateTime;
             break;
         case MYSQL_TYPE_DECIMAL:
-            result = MTDataTypeNumber;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_DOUBLE:
-            result = MTDataTypeNumber;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_ENUM:
-            result = MTDataTypeNumber;
+            result = MTDataTypeInteger;
             break;
         case MYSQL_TYPE_FLOAT:
-            result = MTDataTypeNumber;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_GEOMETRY:
-            result = MTDataTypeString;
+            result = MTDataTypeGeometry;
             break;
         case MYSQL_TYPE_INT24:
-            result = MTDataTypeNumber;
+            result = MTDataTypeInteger;
             break;
         case MYSQL_TYPE_LONG:
-            result = MTDataTypeNumber;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_LONG_BLOB:
             result = MTDataTypeString;
             break;
         case MYSQL_TYPE_LONGLONG:
-            result = MTDataTypeString;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_MEDIUM_BLOB:
             result = MTDataTypeString;
@@ -486,7 +492,7 @@
             result = MTDataTypeString;
             break;
         case MYSQL_TYPE_NEWDECIMAL:
-            result = MTDataTypeNumber;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_NULL:
             result = MTDataTypeString;
@@ -495,22 +501,22 @@
             result = MTDataTypeString;
             break;
         case MYSQL_TYPE_SHORT:
-            result = MTDataTypeString;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_STRING:
             result = MTDataTypeString;
             break;
         case MYSQL_TYPE_TIME:
-            result = MDDataTypeDate;
+            result = MTDataTypeDateTime;
             break;
         case MYSQL_TYPE_TIMESTAMP:
-            result = MDDataTypeDate;
+            result = MTDataTypeTimeStamp;
             break;
         case MYSQL_TYPE_TINY:
-            result = MTDataTypeString;
+            result = MTDataTypeFloat;
             break;
         case MYSQL_TYPE_TINY_BLOB:
-            result = MTDataTypeString;
+            result = MTDataTypeBlob;
             break;
         case MYSQL_TYPE_VAR_STRING:
             result = MTDataTypeString;
@@ -519,7 +525,7 @@
              result = MTDataTypeString;
             break;
         case MYSQL_TYPE_YEAR:
-            result = MTDataTypeString;
+            result = MTDataTypeDate;
             break;
         default:
             result = MTDataTypeString;

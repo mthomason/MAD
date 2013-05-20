@@ -457,7 +457,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
             
-            SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSortingDataType];
+            SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
             
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
             NSSortDescriptor *desc = [[[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
@@ -653,6 +653,11 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
     switch ([documentObject getType]) {
         
         case MTDocumentObjectTypeLabelStatic: {
+            
+            RptqDocumentObjectLabel *documentObjectLabel = [documentObject isLabel];
+            value = [documentObjectLabel text];
+            result = [documentObjectLabel text];
+            
             break;
         }
 
@@ -660,14 +665,13 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             switch ([[[[documentObject inSectionRow] inSection] type] integerValue]) {
 
                 case MNSDocumentSectionTypeBody: {
-// FIXME: Do logic here to convert value to readable formats...
                     RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
                     RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
                     NSString * tableFieldKey = [queryField tableFieldKey];
                     value = [resultDictionary objectForKey: tableFieldKey];
-                    if ([value integerValue] == 45) {
-                        BOOL breakp = YES;
-                    }
+                    MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+                    result = [MTDatabaseField formattedString:dataType
+                                                     forValue:value];
                     break;
 
                 } case MNSDocumentSectionTypeGroupHeader: {
@@ -696,6 +700,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             break;
         }
     }
+    /*
     if ([value isKindOfClass:[NSString class]]) {
         
         result = [[NSString alloc] initWithString:value];
@@ -714,8 +719,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         
         result = [[NSString alloc] initWithString:@"<null>"];
 
-    }
-    return [result autorelease];
+    }*/
+    return result;
 }
 
 - (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject
@@ -739,7 +744,6 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
 
     CGRect pageRect;
     CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] height] floatValue];
-    //CGFloat reportFooterSectionHeight = CGSizeZero.height;
     
     if (CGRectIsEmpty([self printableRect])) {
         pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);

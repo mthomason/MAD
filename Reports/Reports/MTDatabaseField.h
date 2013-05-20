@@ -10,10 +10,21 @@
 #define Reports_MTDatabaseField_h
 
 typedef NS_ENUM(NSUInteger, MTDataType) {
-	MTDataTypeString = 0,
-	MTDataTypeNumber = 1,
-	MTDataTypeImage = 2,
-    MDDataTypeDate = 3
+    MTDataTypeBit       = 0,
+    MTDataTypeBlob      = 1,
+    MTDataTypeDate      = 2,
+    MTDataTypeDateTime  = 3,
+    MTDataTypeFloat     = 5,
+    MTDataTypeGeometry  = 6,
+	MTDataTypeImage     = 7,
+    MTDataTypeInteger   = 8,
+	MTDataTypeNumber    = 9,
+    MTDataTypeSet       = 10,
+	MTDataTypeString    = 11,
+    MTDataTypeTime      = 12,
+    MTDataTypeTimeStamp = 13,
+    MTDataTypeYear      = 14,
+    MTDataTypeUnknown   = 15
 };
 
 #import <Foundation/Foundation.h>
@@ -30,6 +41,18 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger decimals;
 @property (nonatomic, assign) BOOL primaryKey;
+
+- (BOOL)isNumeric;
++ (BOOL)isNumeric:(MTDataType)dataType;
+
+- (SEL)selectorForSorting;
++ (SEL)selectorForSorting:(MTDataType)dataType;
+
+- (NSString *)formattedStringForValue:(id)value;
++ (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+
+- (NSString *)sqlPredicateStringForValue:(id)value;
++ (NSString *)sqlPredicateString:(MTDataType)dataType forValue:(id)value;
 
 @end
 

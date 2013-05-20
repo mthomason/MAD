@@ -18,14 +18,14 @@
 
 + (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field;
-
++ (MTDatabaseField *)databaseFieldForSchemaField:(RptqDatabaseSchemaField *)schemaField;
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID
         fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)display;
 - (NSString *)fieldTypeDisplay;
 
-- (SEL)selectorForSortingDataType;
+- (SEL)selectorForSorting;
 
 @end
 
