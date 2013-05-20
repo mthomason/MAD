@@ -24,7 +24,7 @@
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber {
-    self = [super init];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [self setPageNumber:pageNumber];
     }

@@ -31,6 +31,8 @@
 
 @property (nonatomic, assign) BOOL startedRefresh;
 
+@property (nonatomic, assign) BOOL pageIsAnimating;
+
 @end
 
 @implementation MTReportViewerViewController
@@ -59,6 +61,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setPageIsAnimating:NO];
+    
     [self setStartedRefresh:NO];
     
     [[self view] setBackgroundColor:[UIColor greenColor]];
@@ -184,24 +189,34 @@
 
 #pragma mark - UIPageViewControllerDataSrouce
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
+       viewControllerAfterViewController:(UIViewController *)viewController {
+
     MTReportViewerReportPageViewController *result = nil;
-    if (visablePageNumber + 1 <= [self numberOfPages]) {
-        result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1];
-        [result setDelegate: self];
-        [[result view] setFrame:[[self viewContainer] bounds]];
+    if ([self pageIsAnimating] == NO) {
+        NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+        if (visablePageNumber + 1 <= [self numberOfPages]) {
+            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1];
+            [result setDelegate: self];
+            [[result view] setFrame:[[self viewContainer] bounds]];
+            [result autorelease];
+        }
     }
     return result;
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
+      viewControllerBeforeViewController:(UIViewController *)viewController {
+   
     MTReportViewerReportPageViewController *result = nil;
-    if (visablePageNumber - 1 > 0) {
-        result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1];
-        [result setDelegate: self];
-        [[result view] setFrame:[[self viewContainer] bounds]];
+    if ([self pageIsAnimating] == NO) {
+        NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+        if (visablePageNumber - 1 > 0) {
+            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1];
+            [result setDelegate: self];
+            [[result view] setFrame:[[self viewContainer] bounds]];
+            [result autorelease];
+        }
     }
     return result;
 }
@@ -216,15 +231,23 @@
 
 #pragma mark - UIPageViewControllerDelegate
 
-- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
-    
+- (void)pageViewController:(UIPageViewController *)pageViewController
+        didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers
+       transitionCompleted:(BOOL)completed {
+    if (completed || finished) {
+        [self setPageIsAnimating:NO];
+    }
 }
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    [self setPageIsAnimating:NO];
     return UIPageViewControllerSpineLocationMin;
 }
 
 - (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+    
+    [self setPageIsAnimating:YES];
     
 }
 
