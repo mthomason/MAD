@@ -122,6 +122,16 @@
 
 }
 
++ (void)deletePredicateWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
+    NSError *error = nil;
+    NSArray *results = [moc executeFetchRequest:request error:&error];
+    for (NSManagedObject *result in results) {
+        [moc deleteObject: result];
+    }
+}
+
 - (NSString *)symbolForComparson {
     return [MNSPredicateOperatorSymbols objectAtIndex:[[self comparson] integerValue]];
 }
