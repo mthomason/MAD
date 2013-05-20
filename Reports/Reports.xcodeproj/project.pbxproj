@@ -394,6 +394,8 @@
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
 		4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
+		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
+		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
 		4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
 		4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
@@ -2001,6 +2003,8 @@
 		4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryPredicate+Extras.m"; sourceTree = "<group>"; };
 		4C45742614E795CE00FF326C /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocument+Extras.h"; sourceTree = "<group>"; };
 		4C45742714E795CE00FF326C /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+Extras.m"; sourceTree = "<group>"; };
+		4C472A6E174A150900A7A5E6 /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Extras.h"; sourceTree = "<group>"; };
+		4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Extras.m"; sourceTree = "<group>"; };
 		4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = ../libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
@@ -4111,6 +4115,8 @@
 				4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */,
 				4C8EC0AB167A953C00F37DA7 /* NSManagedObjectID+Extras.h */,
 				4C8EC0AC167A953C00F37DA7 /* NSManagedObjectID+Extras.m */,
+				4C472A6E174A150900A7A5E6 /* NSManagedObject+Extras.h */,
+				4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */,
 				4CB42DC6166A339300CE1876 /* NSString+Extras.h */,
 				4CB42DC7166A339300CE1876 /* NSString+Extras.m */,
 				4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */,
@@ -5495,6 +5501,7 @@
 				4C8BA98E174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C934D6B1745E13500F1A3C1 /* RptqDatabaseSchemaField.m in Sources */,
 				4C934D7B1745EF2D00F1A3C1 /* RptqQueryResultValues.m in Sources */,
+				4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6089,6 +6096,7 @@
 				4C8BA98D174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C934D6A1745E13500F1A3C1 /* RptqDatabaseSchemaField.m in Sources */,
 				4C934D7A1745EF2D00F1A3C1 /* RptqQueryResultValues.m in Sources */,
+				4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

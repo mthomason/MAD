@@ -1364,6 +1364,19 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }
 }
 
+- (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
+    CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
+    [section setHeight:@(contentSize.height + 44.0000f)];
+    NSError *error = nil;
+    [managedObjectContext save:&error];
+    if (error != nil) {
+        [error presentErrorToUser];
+    }
+    
+}
+
 #pragma mark - UIPopoverControllerDelegate
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -1728,7 +1741,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self deselectAllElementsAnimated:NO];
     MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [self applyBorderToView:elementView];
-    //[self removeBorderFromView:elementView];
     [self setLastElementViewToShowMenu:elementView];
     return YES;
 }
@@ -1767,74 +1779,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
-
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDocumentSection *section = [document hasDetailSection];
-    NSManagedObjectID *sectionID = [section objectID];
-    
-    __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
-    
-    //[detailSection performBatchUpdates:^{
-        
-        MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        NSManagedObjectContext *managedObjectContextBlock = [reportDocument managedObjectContext];
-        //RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContextBlock];
-        
-        NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-                                                   MTDocumentObjectDefinationObject : [field objectID]};
-        
-        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
-        [documentObject identifier];
-        // MARK: Get a permanent id on insert.  Let's make sure it's correct.
-        
-        if ([[documentObject objectID] isTemporaryID]) {
-            NSError *error = nil;
-            [managedObjectContextBlock obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-            if (error != nil) {
-                error = nil;
-                [managedObjectContextBlock obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-                if (error != nil) {
-                    [error presentErrorToUser];
-                } else {
-                    //[managedObjectContext save:&error];
-                }
-            } else {
-                //[managedObjectContext save:&error];
-            }
-        }
-         
-        //[documentObject setDropIndex:@([documentObject.inSectionRow.inSection nextDropIndexForSection])];
-        
-
-        NSError *error = nil;
-        //[[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-        
-//        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-        //if ([managedObjectContextBlock hasChanges]) {
-            [managedObjectContextBlock save:&error];
-        //}
-        //if (error != nil) {
-        //    [error presentErrorToUser];
-        //}
-        [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-        
-     
-    //} completion:^(BOOL finished) {
-        
-        //if (finished) {
-        //    [self resizeCollectionView:detailSection forSectionWithId:sectionID];
-        //}
-        
-        //MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        //[reportDocument save:^(BOOL success) {
-            
-        //    if (success) {
-        //    }
-            
-        //}];
-
-    //}];
+    [self insertDocumentObjectWithDefination:
+     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+           MTDocumentObjectDefinationObject : [field objectID]}];
 }
 
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
@@ -1842,163 +1789,54 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                                              inputObject:(NSManagedObjectID *)inputObject
                                                groupType:(MTGroupByType)groupType
                                              groupNumber:(NSNumber *)groupNumber {
-    
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
 
-    RptqDocumentSection *section = [document hasDetailSection];
-    NSManagedObjectID *sectionID = [section objectID];
-    
-    __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
-    
-    [detailSection performBatchUpdates:^{
-        
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-        
-        NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
-                                                   MTDocumentObjectDefinationObject :  @{MTDocumentObjectDefinationAggregateType : @(functionType),
-                                                                                         MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
-                                                                                         MTDocumentObjectDefinationAggregatePivotType : @(groupType),
-                                                                                         MTDocumentObjectDefinationAggregateObjectId : inputObject,
-                                                                                         MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)}};
-        
-        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
-        
-        // MARK: Get a permanent id on insert.  Let's make sure it's correct.
-        if ([[documentObject objectID] isTemporaryID]) {
-            NSError *error = nil;
-            [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-            if (error != nil) {
-                error = nil;
-                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-                if (error != nil) {
-                    [error presentErrorToUser];
-                }
-            }
-        }
-        
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        if (error != nil) {
-            [error presentErrorToUser];
-        }
-        
-        [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-        
-    } completion:^(BOOL finished) {
-        
-        if (finished) {
-            [self resizeCollectionView:detailSection forSectionWithId:sectionID];
-        }
-        
-    }];
+    NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
+                                               MTDocumentObjectDefinationObject :  @{MTDocumentObjectDefinationAggregateType : @(functionType),
+                                                                                     MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
+                                                                                     MTDocumentObjectDefinationAggregatePivotType : @(groupType),
+                                                                                     MTDocumentObjectDefinationAggregateObjectId : inputObject,
+                                                                                     MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)}};
+
+    [self insertDocumentObjectWithDefination: documentObjectDefination];
 }
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
+    [self insertDocumentObjectWithDefination:
+        @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelStatic),
+           MTDocumentObjectDefinationObject : labelText}];
+
+}
+
+- (void)insertDocumentObjectNewImage:(UIImage *)image {
+    [self insertDocumentObjectWithDefination:
+        @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
+           MTDocumentObjectDefinationObject : image}];
+}
+
+- (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    
     RptqDocumentSection *section = [document hasDetailSection];
     NSManagedObjectID *sectionID = [section objectID];
+    
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
     
     [detailSection performBatchUpdates:^{
         
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-
-        NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelStatic),
-                                                   MTDocumentObjectDefinationObject : labelText};
+        MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContextBlock = [reportDocument managedObjectContext];
         
-        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
         
-        if ([[documentObject objectID] isTemporaryID]) {
-            NSError *error = nil;
-            [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-            if (error != nil) {
-                error = nil;
-                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-                if (error != nil) {
-                    [error presentErrorToUser];
-                }
-            }
-        }
-
+        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination
+                                                                        toDocument:document];
+        [documentObject obtainPermanentID];
+        
         NSError *error = nil;
-        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-        
-//        [managedObjectContext save:&error];
-//        if (error != nil) {
-//            [error presentErrorToUser];
-//        }
-        
+        [managedObjectContextBlock save:&error];
         [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-
-    
-    } completion:^(BOOL finished) {
-
-        if (finished) {
-            [self resizeCollectionView:detailSection forSectionWithId:sectionID];
-        }
- 
-    }];
-}
-
-- (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
-/*    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
-    CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
-    [section setHeight:@(contentSize.height)];
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    if (error != nil) {
-        [error presentErrorToUser];
-    }
- */
-}
-
-- (void)insertDocumentObjectNewImage:(UIImage *)image {
-    
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDocumentSection *section = [document hasDetailSection];
-    NSManagedObjectID *sectionID = [section objectID];
-    
-    
-    __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:[document hasDetailSection]];
-    
-    [detailSection performBatchUpdates:^{
         
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         
-        NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
-                                                   MTDocumentObjectDefinationObject : image};
-        
-        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination toDocument:document];
-        
-        if ([[documentObject objectID] isTemporaryID]) {
-            NSError *error = nil;
-            [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-            if (error != nil) {
-                error = nil;
-                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject: documentObject] error:&error];
-                if (error != nil) {
-                    [error presentErrorToUser];
-                }
-            }
-        }
-
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        if (error != nil) {
-            [error presentErrorToUser];
-        }
-        
-        [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-
     } completion:^(BOOL finished) {
         
         if (finished) {
@@ -2006,6 +1844,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         }
         
     }];
+    
 }
 
 - (void)insertDocumentObjectNewFormula {
@@ -2145,39 +1984,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     deleteSection++;
 
                 }
-/*
-                NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [[[documentSection hasRows] objectAtIndex:0] hasObjects]];
-                NSUInteger deleteIndex = 0;
-                
-                BOOL found = NO;
-                for (RptqDocumentObject *object in hasObjects) {
-                    if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
-                        
-                        found = YES;
-                        break;
-                    }
-                    deleteIndex++;
-                }
-                if (found) {
-                    [svSection performBatchUpdates:^{
-                        RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
-                        [objectToDelete setInSectionRow:nil];
-                        [hasObjects removeObjectAtIndex:deleteIndex];
-                        RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex:0];
-                        [row setHasObjects:hasObjects];
-                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                        NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
-                        [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-                    } completion:^(BOOL finished) {
-                        CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
-                        [[gestureRecognizer view] setCenter: newCenter];
-                        [[self designScrollView] addSubview: [gestureRecognizer view]];
-                        
-                        [svSection setDelegate:self];
-                    }];
-                }
-                [hasObjects release];
- */
             }
             break;
         }
@@ -2196,19 +2002,19 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
             [[gestureRecognizer view] setAlpha:1.0000f];
             
-            // MARK: Remove the element from one section and place it into the next new section
+            // Remove the element from one section and place it into the next new section
             
             CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
-            UICollectionView *newParent = nil;
+            UICollectionView *reportSectionCollectionView = nil;
             
-            // MARK: Try to find the section to place the element view into.
+            // Try to find the section to place the element view into.
             BOOL addedToNewParent = NO;
             for (UICollectionView *view in [[self designScrollView] subviews]) {
                 if (CGRectContainsPoint([view frame], [[gestureRecognizer view] center]) && ![view isEqual:self]) {
                     if ([view isKindOfClass:[UICollectionView class]]) {
-                        newParent = [[view retain] autorelease];
+                        reportSectionCollectionView = [[view retain] autorelease];
                         addedToNewParent = YES;
-                        newCenter = [gestureRecognizer locationInView:newParent];
+                        newCenter = [gestureRecognizer locationInView:reportSectionCollectionView];
                         [[gestureRecognizer view] setCenter: newCenter];
                         break;
                     }
@@ -2217,7 +2023,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             if (!addedToNewParent) {
                 for (UICollectionView *view in [[self designScrollView] subviews]) {
                     if ([view isKindOfClass: [UICollectionView class]]) {
-                        newParent = [[view retain] autorelease];
+                        reportSectionCollectionView = [[view retain] autorelease];
                         addedToNewParent = YES;
                         newCenter = CGPointMake([gestureRecognizer view].frame.size.width / 2.0000f, [gestureRecognizer view].frame.size.height / 2.0000f);
                         [[gestureRecognizer view] setCenter: newCenter];
@@ -2230,14 +2036,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 newCenter = CGPointRoundPointToGrid(newCenter);
                 [[gestureRecognizer view] setCenter: newCenter];
                 
-                
-                
-                
-                [newParent performBatchUpdates:^{
+                [reportSectionCollectionView performBatchUpdates:^{
 
-                
-                
-                
                     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                     
                     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
@@ -2246,27 +2046,17 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     [documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
                     [documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
-                    //[documentObject setSizewidth: @([gestureRecognizer view].frame.size.width)];
-                    //[documentObject setSizeheight: @([gestureRecognizer view].frame.size.height)];
                     
-                    
-                    //CGPoint newCenter = [[gestureRecognizer view] center];
                     [[gestureRecognizer view] removeFromSuperview];
                     
-                    objectId = [newParent objectIdTag];
-                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: objectId
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [reportSectionCollectionView objectIdTag]
                                                                                             fromObjectContext: managedObjectContext];
                     
                     NSUInteger sectionZero = 0;
                     RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
-                    
-                //    CGPoint pointInView = [[gestureRecognizer view] frame].origin;
-               
-                    //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
 
                     CGPoint pointInView = [[gestureRecognizer view] frame].origin;
-                    CGPoint touchPointInView = [gestureRecognizer locationInView:newParent];
-                    //CGPoint originInView = [[gestureRecognizer view] convertPoint:[[gestureRecognizer view] frame].origin fromView:newParent];
+                    CGPoint touchPointInView = [gestureRecognizer locationInView:reportSectionCollectionView];
                     
                     [documentObject setDropPointX:@(pointInView.x)];
                     [documentObject setDropPointY:@(pointInView.y)];
@@ -2277,9 +2067,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     NSUInteger dropIndex = [documentSection nextDropIndexForSection];
                     [documentObject setDropIndex:@(dropIndex)];
-                    //                    [documentObject setDropIndex]
-                    
-                    //NSIndexPath *indexPath = [(MTReportDesignerSectionViewLayoutLiquid *)[newParent collectionViewLayout] indexOfAlienViewWithCenterPoint:pointInView];
                     
                     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[[sectionRow hasObjects] count]
                                                                  inSection:sectionZero];
@@ -2293,45 +2080,30 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
                     
                     for (NSIndexPath *indexPath in indexPaths) {
-                        NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([newParent tag])];
+                        NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([reportSectionCollectionView tag])];
 
                         [holderForLastTouches setObject:[NSValue valueWithCGPoint:pointInView] forKey:indexPath];
 
                     }
                     
-                    
-                    // MARK: Add this to the data context and to the container for the sections collection view.
-                    
-                    //NSOrderedSet *hasRows = [documentSection hasRows];
-                    
                     [sectionRow setHasObjects:hasObjects];
                     
+                    [managedObjectContext save:nil];
                     
-                    
-                    
-                    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                    
-                    [newParent insertItemsAtIndexPaths:indexPaths];
+                    [reportSectionCollectionView insertItemsAtIndexPaths:indexPaths];
                    
                     [hasObjects release];
 
                 } completion:^(BOOL finished) {
-
-                    //if ([self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height]) {
-                    //    [[newParent collectionViewLayout] invalidateLayout];
-                    //}
-
+                    if (finished) {
+                        [self resizeCollectionView:reportSectionCollectionView forSectionWithId:[reportSectionCollectionView objectIdTag]];
+                    }
                 }];
-                
-                
-                
                 
             }
             [self setScrollersEnabled:YES];
             [[gestureRecognizer view] setNeedsDisplay];
-            
-            
-            
+
             break;
         }
         default:

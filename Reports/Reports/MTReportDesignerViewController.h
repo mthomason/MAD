@@ -34,6 +34,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
+#import "NSManagedObject+Extras.h"
 
 @interface MTReportDesignerViewController : MTViewController
     <UITableViewDataSource,
