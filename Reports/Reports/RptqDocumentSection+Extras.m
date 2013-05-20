@@ -101,7 +101,10 @@
     NSUInteger dropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = [fetchResults lastObject];
-        dropIndex = [[lastObject dropIndex] integerValue] + 1;
+        BOOL tempObjectId = [[lastObject objectID] isTemporaryID];
+        if (tempObjectId == NO) {
+            dropIndex = [[lastObject dropIndex] integerValue] + 1;
+        }
     }
     return dropIndex;
 }

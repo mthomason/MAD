@@ -11,7 +11,7 @@
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
-@property (nonatomic, assign) CGSize contentSize;
+//@property (nonatomic, assign) CGSize contentSize;
 @property (nonatomic, assign) NSInteger numberOfSections;
 
 @property (nonatomic, retain) NSMutableArray *itemAttributesBySection;
@@ -171,7 +171,6 @@
 
     [itemAttributesBySection release];
 
-    [self setContentSize:CGSizeMake(1000.0000f, 1000.0000f)];
 }
 
 - (NSArray *)updatedItemAttributesBySection {
@@ -668,8 +667,8 @@
             height = height > h ? height : h;
         }
     }
-
-    return CGSizeMake(width, height);
+    [self setContentSize:CGSizeMake(width, height)];
+    return [self contentSize];
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {

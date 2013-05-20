@@ -250,101 +250,112 @@
     
     // TODO: Only update specific properties when they change.
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    
+    if (documentObject != nil) {
 
-    [[self marginView] setFrame:[self marginViewFrame]];
-    [[self visibleView] setFrame:[self paddingViewFrame]];
-    [[self paddingView] setFrame:[self elementViewFrame]];
-    
-    NSString *fontName = [documentObject fontname];
-    CGFloat pointSize = [[documentObject fontsize] floatValue];
-    
-    UIFont *displayFont;
-    if ([fontName length] == 0) {
-        displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    } else {
-        MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-        if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-            displayFont = [stylizedDisplayFont boldItalicFont];
-        } else if ([[documentObject bold] boolValue]) {
-            displayFont = [stylizedDisplayFont boldFont];
-        } else if ([[documentObject italic] boolValue]) {
-            displayFont = [stylizedDisplayFont italicFont];
+        [[self marginView] setFrame:[self marginViewFrame]];
+        [[self visibleView] setFrame:[self paddingViewFrame]];
+        [[self paddingView] setFrame:[self elementViewFrame]];
+        
+        NSString *fontName = [documentObject fontname];
+        CGFloat pointSize = [[documentObject fontsize] floatValue];
+        
+        UIFont *displayFont;
+        if ([fontName length] == 0) {
+            displayFont = [[UIFont systemFontOfSize:[UIFont systemFontSize]] retain];
         } else {
-            displayFont = [stylizedDisplayFont font];
+            MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+            if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+                displayFont = [stylizedDisplayFont boldItalicFont];
+            } else if ([[documentObject bold] boolValue]) {
+                displayFont = [stylizedDisplayFont boldFont];
+            } else if ([[documentObject italic] boolValue]) {
+                displayFont = [stylizedDisplayFont italicFont];
+            } else {
+                displayFont = [stylizedDisplayFont font];
+            }
+            [displayFont retain];
         }
+        
+        NSString *string = [documentObject designerRepresentationText];
+        
+        NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+        NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+        
+        NSDictionary *attributes = @{NSFontAttributeName : displayFont,
+                                     NSStrikethroughStyleAttributeName : strikeThroughStyle,
+                                     NSUnderlineStyleAttributeName : underlineStyle};
+        if ([string length] <= 0) {
+            BOOL breakp = YES;
+            breakp = NO ? YES : NO;
+        }
+        
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+        
+        [[self displayLabel] setAttributedText:attributtedString];
+        
+        MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
+        NSTextAlignment textAlignment;
+        switch (horizontalAlignment) {
+            case MTHorizontalAlignmentCenter:
+                textAlignment = NSTextAlignmentCenter;
+                break;
+            case MTHorizontalAlignmentLeft:
+                textAlignment = NSTextAlignmentLeft;
+                break;
+            case MTHorizontalAlignmentRight:
+                textAlignment = NSTextAlignmentRight;
+                break;
+            case MTHorizontalAlignmentJustified:
+                textAlignment = NSTextAlignmentJustified;
+                break;
+            default:
+                textAlignment = NSTextAlignmentLeft;
+                break;
+        }
+        [[self displayLabel] setTextAlignment:textAlignment];
+        
+        MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
+        UIBaselineAdjustment baselineAdjustment;
+        switch (verticalAlignment) {
+            case MTVerticalAlignmentTop: {
+                
+                [[self displayLabel] sizeToFit];
+                CGFloat originX = [[self paddingView] bounds].origin.x;
+                CGFloat originY = [[self paddingView] bounds].origin.y;
+                CGFloat sizeWidth = [[self paddingView] bounds].size.width;
+                CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
+                
+                [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
+                baselineAdjustment = UIBaselineAdjustmentNone;
+                break;
+            }
+            case MTVerticalAlignmentCenter: {
+                [[self displayLabel] setFrame:[[self paddingView] bounds]];
+                baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+                break;
+            }
+            case MTVerticalAlignmentBottom: {
+                [[self displayLabel] sizeToFit];
+                
+                CGFloat originX = [[self paddingView] bounds].origin.x;
+                CGFloat originY = [[self paddingView] bounds].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
+                CGFloat sizeWidth = [[self paddingView] bounds].size.width;
+                CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
+                [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
+                baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+                break;
+            }
+            default:
+                baselineAdjustment = UIBaselineAdjustmentNone;
+                break;
+        }
+        [[self displayLabel] setNeedsDisplay];
+        [displayFont release];
+        [attributtedString release];
+    
     }
-    
-    NSString *string = [documentObject designerRepresentationText];
-    
-    NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    
-    NSDictionary *attributes = @{NSFontAttributeName : displayFont,
-                                    NSStrikethroughStyleAttributeName : strikeThroughStyle,
-                                    NSUnderlineStyleAttributeName : underlineStyle};
 
-    NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
-    
-    [[self displayLabel] setAttributedText:attributtedString];
-    
-    MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
-    NSTextAlignment textAlignment;
-    switch (horizontalAlignment) {
-        case MTHorizontalAlignmentCenter:
-            textAlignment = NSTextAlignmentCenter;
-            break;
-        case MTHorizontalAlignmentLeft:
-            textAlignment = NSTextAlignmentLeft;
-            break;
-        case MTHorizontalAlignmentRight:
-            textAlignment = NSTextAlignmentRight;
-            break;
-        case MTHorizontalAlignmentJustified:
-            textAlignment = NSTextAlignmentJustified;
-            break;
-        default:
-            textAlignment = NSTextAlignmentLeft;
-            break;
-    }
-    [[self displayLabel] setTextAlignment:textAlignment];
-    
-    MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-    UIBaselineAdjustment baselineAdjustment;
-    switch (verticalAlignment) {
-        case MTVerticalAlignmentTop: {
-            
-            [[self displayLabel] sizeToFit];
-            CGFloat originX = [[self paddingView] bounds].origin.x;
-            CGFloat originY = [[self paddingView] bounds].origin.y;
-            CGFloat sizeWidth = [[self paddingView] bounds].size.width;
-            CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
-
-            [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            baselineAdjustment = UIBaselineAdjustmentNone;
-            break;
-        }
-        case MTVerticalAlignmentCenter: {
-            [[self displayLabel] setFrame:[[self paddingView] bounds]];
-            baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-            break;
-        }
-        case MTVerticalAlignmentBottom: {
-            [[self displayLabel] sizeToFit];
-            
-            CGFloat originX = [[self paddingView] bounds].origin.x;
-            CGFloat originY = [[self paddingView] bounds].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
-            CGFloat sizeWidth = [[self paddingView] bounds].size.width;
-            CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
-            [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-            baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-            break;
-        }
-        default:
-            baselineAdjustment = UIBaselineAdjustmentNone;
-            break;
-    }
-    [[self displayLabel] setNeedsDisplay];
-    [attributtedString release];
 }
 
 #pragma mark - Members

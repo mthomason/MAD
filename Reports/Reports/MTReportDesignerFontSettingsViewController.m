@@ -312,68 +312,72 @@
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
 
+            if (documentObject != nil) {
+
+                if (![[documentObject fontname] isEqualToString:fontDisplayName]) {
+                    fontDisplayName = [documentObject fontname];
+                    fontSizeHolder = [[documentObject fontsize] floatValue];
+                    numberFonts++;
+                }
+                
+                if (![[documentObject marginTop] isEqualToNumber:marginTopHolder] ) {
+                    marginTopHolder = [documentObject marginTop];
+                    numberOfMarginTop++;
+                }
+                if (![[documentObject marginBottom] isEqualToNumber:marginBottomHolder] ) {
+                    marginBottomHolder = [documentObject marginBottom];
+                    numberOfMarginBottom++;
+                }
+                if (![[documentObject marginLeft] isEqualToNumber:marginLeftHolder] ) {
+                    marginLeftHolder = [documentObject marginLeft];
+                    numberOfMarginLeft++;
+                }
+                if (![[documentObject marginRight] isEqualToNumber:marginRightHolder] ) {
+                    marginRightHolder = [documentObject marginRight];
+                    numberOfMarginRight++;
+                }
+                if (![[documentObject paddingTop] isEqualToNumber:paddingTopHolder] ) {
+                    paddingTopHolder = [documentObject paddingTop];
+                    numberOfPaddingTop++;
+                }
+                if (![[documentObject paddingBottom] isEqualToNumber:paddingBottomHolder] ) {
+                    paddingBottomHolder = [documentObject paddingBottom];
+                    numberOfPaddingBottom++;
+                }
+                if (![[documentObject paddingLeft] isEqualToNumber:paddingLeftHolder] ) {
+                    paddingLeftHolder = [documentObject paddingLeft];
+                    numberOfPaddingLeft++;
+                }
+                if (![[documentObject paddingRight] isEqualToNumber:paddingRightHolder] ) {
+                    paddingRightHolder = [documentObject paddingRight];
+                    numberOfPaddingRight++;
+                }
+                
+                if (![[documentObject sizewidth] isEqualToNumber:sizeWidthHolder] ) {
+                    sizeWidthHolder = [documentObject sizewidth];
+                    numberOfSizeWidths++;
+                }
+                if (![[documentObject sizeheight] isEqualToNumber:sizeHeightHolder] ) {
+                    sizeHeightHolder = [documentObject sizeheight];
+                    numberOfSizeHeights++;
+                }
+                
+                if (![[documentObject verticalAlignment] isEqualToNumber:verticalAlignmentHolder] ) {
+                    verticalAlignmentHolder = [documentObject verticalAlignment];
+                    numberOfVerticalAlignments++;
+                }
+                if (![[documentObject horizontalAlignment] isEqualToNumber:horizontalAlignmentHolder] ) {
+                    horizontalAlignmentHolder = [documentObject horizontalAlignment];
+                    numberOfHorazontalAlignments++;
+                }
+                
+                [[documentObject bold] boolValue] ? numberBold++ : numberNotBold++;
+                [[documentObject underline] boolValue] ? numberUnderline++ : numberNotUnderline++;
+                [[documentObject strike] boolValue] ? numberStrike++ : numberNotStrike++;
+                [[documentObject italic] boolValue] ? numberItalic++ : numberNotItalic++;
             
-            if (![[documentObject fontname] isEqualToString:fontDisplayName]) {
-                fontDisplayName = [documentObject fontname];
-                fontSizeHolder = [[documentObject fontsize] floatValue];
-                numberFonts++;
-            }
-
-            if (![[documentObject marginTop] isEqualToNumber:marginTopHolder] ) {
-                marginTopHolder = [documentObject marginTop];
-                numberOfMarginTop++;
-            }
-            if (![[documentObject marginBottom] isEqualToNumber:marginBottomHolder] ) {
-                marginBottomHolder = [documentObject marginBottom];
-                numberOfMarginBottom++;
-            }
-            if (![[documentObject marginLeft] isEqualToNumber:marginLeftHolder] ) {
-                marginLeftHolder = [documentObject marginLeft];
-                numberOfMarginLeft++;
-            }
-            if (![[documentObject marginRight] isEqualToNumber:marginRightHolder] ) {
-                marginRightHolder = [documentObject marginRight];
-                numberOfMarginRight++;
-            }
-            if (![[documentObject paddingTop] isEqualToNumber:paddingTopHolder] ) {
-                paddingTopHolder = [documentObject paddingTop];
-                numberOfPaddingTop++;
-            }
-            if (![[documentObject paddingBottom] isEqualToNumber:paddingBottomHolder] ) {
-                paddingBottomHolder = [documentObject paddingBottom];
-                numberOfPaddingBottom++;
-            }
-            if (![[documentObject paddingLeft] isEqualToNumber:paddingLeftHolder] ) {
-                paddingLeftHolder = [documentObject paddingLeft];
-                numberOfPaddingLeft++;
-            }
-            if (![[documentObject paddingRight] isEqualToNumber:paddingRightHolder] ) {
-                paddingRightHolder = [documentObject paddingRight];
-                numberOfPaddingRight++;
-            }
-
-            if (![[documentObject sizewidth] isEqualToNumber:sizeWidthHolder] ) {
-                sizeWidthHolder = [documentObject sizewidth];
-                numberOfSizeWidths++;
-            }
-            if (![[documentObject sizeheight] isEqualToNumber:sizeHeightHolder] ) {
-                sizeHeightHolder = [documentObject sizeheight];
-                numberOfSizeHeights++;
-            }
-
-            if (![[documentObject verticalAlignment] isEqualToNumber:verticalAlignmentHolder] ) {
-                verticalAlignmentHolder = [documentObject verticalAlignment];
-                numberOfVerticalAlignments++;
-            }
-            if (![[documentObject horizontalAlignment] isEqualToNumber:horizontalAlignmentHolder] ) {
-                horizontalAlignmentHolder = [documentObject horizontalAlignment];
-                numberOfHorazontalAlignments++;
             }
             
-            [[documentObject bold] boolValue] ? numberBold++ : numberNotBold++;
-            [[documentObject underline] boolValue] ? numberUnderline++ : numberNotUnderline++;
-            [[documentObject strike] boolValue] ? numberStrike++ : numberNotStrike++;
-            [[documentObject italic] boolValue] ? numberItalic++ : numberNotItalic++;
         }
         
         [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:[horizontalAlignmentHolder integerValue]];
@@ -580,6 +584,9 @@
 - (NSAttributedString *)boldSystemString:(NSString *)string ofSize:(CGFloat)fontSize {
     UIFont *boldFont = [UIFont boldSystemFontOfSize:fontSize];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
+    if (string == nil) {
+        string = @"";
+    }
     NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:string
                                                                                                    attributes:boldAttributes];
     return [localizedAttributedMessage autorelease];
@@ -588,6 +595,9 @@
 - (NSAttributedString *)systemString:(NSString *)string ofSize:(CGFloat)fontSize {
     UIFont *font = [UIFont systemFontOfSize:fontSize];
     NSDictionary *boldAttributes = @{NSFontAttributeName : font};
+    if (string == nil) {
+        string = @"";
+    }
     NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:string
                                                                                                    attributes:boldAttributes];
     return [localizedAttributedMessage autorelease];

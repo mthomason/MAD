@@ -36,9 +36,11 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
     NSUInteger identifier = 0;
+    NSUInteger lastDropIndex = 0;
     if (error == nil) {
         RptqDocumentObject *lastObject = [fetchResults lastObject];
         identifier = [[lastObject identifier] integerValue] + 1;
+        lastDropIndex = [[lastObject dropIndex] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
     
@@ -62,7 +64,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setSectionRowNumber:@(1)];
     [self setDropPointX:@(CGPointZero.x)];
     [self setDropPointY:@(CGPointZero.y)];
-    [self setDropIndex:@(0)];
+    [self setDropIndex:@(lastDropIndex)];
     
 }
 
@@ -312,9 +314,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
     [hasObjects release];
     
-    if ([[[document hasDetailSection] height] floatValue] < [[documentObject sizeheight] floatValue]) {
-        [[document hasDetailSection] setHeight:@([[documentObject sizeheight] floatValue] + 10.0000f)];
-    }
+    //[[document managedObjectContext] save:nil];
 
     return [documentObject autorelease];
 }
@@ -325,9 +325,9 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
     
     NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDocumentObject *result = nil;
-    if (results) result = [results lastObject];
+    NSArray *results = [[managedObjectContext executeFetchRequest:request error:&error] retain];
+    RptqDocumentObject *result = [results lastObject];
+    [results autorelease];
     return result;
 }
 

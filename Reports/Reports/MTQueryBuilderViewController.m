@@ -418,7 +418,9 @@
 
 - (void)viewControllerDidFinish:(id)sender {
     //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
     //} else {
     //    [self dismissViewControllerAnimated:YES completion:nil];
     //}
@@ -426,14 +428,18 @@
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
     //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
     //} else {
     //    [self dismissViewControllerAnimated:YES completion:nil];
     //}
 }
 
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 
     [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
 
@@ -442,35 +448,49 @@
 }
 
 - (void)addPredicateDidCancel:(MTQueryBuilderPredicateFormatViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
     
     [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];    
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddLinkDidFinish:(MTQueryBuilderAddLinkFirstTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)viewControllerSchemaAddTableDidFinish:(MTQueryBuilderAddTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
 //    [[self tableViewQueryBuilder] beginUpdates];
@@ -512,7 +532,9 @@
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 

@@ -270,7 +270,7 @@
             [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
                 //[[viewController view] setTransform:desiredTransform];
-            } completion:nil];
+            } completion:^(BOOL finished) {}];
 
             break;
         case 2:
@@ -278,7 +278,7 @@
             [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
                 [[viewController view] setTransform:desiredTransform];
-            } completion:nil];
+            } completion:^(BOOL finished) {}];
             
             break;
             

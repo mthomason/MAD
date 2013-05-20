@@ -176,7 +176,6 @@
 }
 
 - (void)reloadReportView {
-    //NSLog(@"Bounds %@", NSStringFromCGRect([[self viewContainer] bounds]));
     [[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self viewContainer] bounds].size];
     NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
     [self setNumberOfPages:numberOfPages];
