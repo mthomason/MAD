@@ -488,12 +488,9 @@
 
 - (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
 
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 
-//    [[self tableViewQueryBuilder] beginUpdates];
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
 
@@ -515,7 +512,7 @@
     NSUInteger rowThirdTransaction = groupCount + 3;
     
     [managedObjectContext save: &error];
-    //if (!error) {
+
     NSArray *indexPaths = [NSArray arrayWithObjects:
                            [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
                            [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
@@ -525,16 +522,12 @@
     [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
     
-    //[[self tableViewQueryBuilder] endUpdates];
-
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
@@ -872,6 +865,17 @@
                     break;
                 }
                 
+                case UIViewControllerSchemaTablesSectionsPredicate: {
+                    UITableViewCellQueryPredicate *tvcPred = (UITableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+                    if (tvcPred) {
+                        NSManagedObjectID *objid = [tvcPred tableID];
+                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                    }
+                    [tvcPred release];
+
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -1010,6 +1014,7 @@
             
             [[(UITableViewCellQueryPredicate *)result labelMain] setText: leftFieldDisplay];
             [[(UITableViewCellQueryPredicate *)result labelDetail] setText: rightFieldDisplay];
+            [(UITableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
             
             [leftFieldDisplay release];
             [rightFieldDisplay release];
