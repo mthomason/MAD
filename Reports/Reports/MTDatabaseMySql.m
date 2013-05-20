@@ -121,7 +121,7 @@
         
         if ([queryPredicate hasLeftField] != nil) {
 
-            leftValue = [[[queryPredicate hasLeftField] display] retain];
+            leftValue = [[[queryPredicate hasLeftField] toString] retain];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
 
@@ -131,7 +131,7 @@
 
         if ([queryPredicate hasRightField] != nil) {
             
-            rightValue = [[[queryPredicate hasRightField] display] retain];
+            rightValue = [[[queryPredicate hasRightField] toString] retain];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             
