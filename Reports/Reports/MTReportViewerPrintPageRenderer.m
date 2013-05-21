@@ -12,12 +12,22 @@
 
 @property (nonatomic, assign) CGSize printableSize;
 
+@property (nonatomic, assign) RptqDocument *document;
+
+@property (nonatomic, retain) NSMutableArray *cachedSortedSortDescriptorsGroup;
+@property (nonatomic, retain) NSMutableDictionary *cachedResultsForReport;
 @property (nonatomic, assign) NSUInteger cachedNumberOfPages;
 
-@property (nonatomic, assign) RptqDocument *document;
-@property (nonatomic, retain) NSMutableArray *cachedResults;
-@property (nonatomic, retain) NSMutableArray *sortedSortDescriptorsGroup;
-@property (nonatomic, retain) NSMutableDictionary *resultsByRow;
+@property (nonatomic, copy) NSArray *cachedLayout;
+@property (nonatomic, copy) NSDictionary *cachedDataByPage;
+@property (nonatomic, copy) NSDictionary *cachedDataByGroup;
+@property (nonatomic, copy) NSDictionary *cachedDataByReport;
+
+@property (nonatomic, retain) NSMutableArray *temporaryLayout;
+@property (nonatomic, retain) NSMutableArray *temporaryPageData;
+@property (nonatomic, retain) NSMutableDictionary *temporaryDataByPage;
+@property (nonatomic, retain) NSMutableDictionary *temporaryDataByGroup;
+@property (nonatomic, retain) NSMutableDictionary *temporaryDataByReport;
 
 
 @property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
@@ -27,17 +37,38 @@
 @implementation MTReportViewerPrintPageRenderer
 
 - (oneway void)release {
-    [_resultsByRow release];
-    [_sortedSortDescriptorsGroup release];
-    [_cachedResults release];
+    
+    [_cachedLayout release];
+    [_cachedDataByPage release];
+    [_cachedDataByGroup release];
+    [_cachedDataByReport release];
+
+    [_temporaryLayout release];
+    [_temporaryPageData release];
+    [_temporaryDataByPage release];
+    [_temporaryDataByGroup release];
+    [_temporaryDataByReport release];
+
+    [_cachedResultsForReport release];
+    [_cachedSortedSortDescriptorsGroup release];
 }
 
 - (id)retain {
     self = [super retain];
     if (self) {
-        [_resultsByRow retain];
-        [_sortedSortDescriptorsGroup retain];
-        [_cachedResults retain];
+        [_cachedLayout retain];
+        [_cachedDataByPage retain];
+        [_cachedDataByGroup retain];
+        [_cachedDataByReport retain];
+        
+        [_temporaryLayout retain];
+        [_temporaryPageData retain];
+        [_temporaryDataByPage retain];
+        [_temporaryDataByGroup retain];
+        [_temporaryDataByReport retain];
+
+        [_cachedResultsForReport retain];
+        [_cachedSortedSortDescriptorsGroup retain];
     }
     return self;
 }
@@ -45,12 +76,11 @@
 - (id)copyWithZone:(NSZone *)zone {
     MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:[self document]];
     if (copy) {
-        NSMutableArray *cachedResults = [[NSMutableArray alloc] initWithArray: [self cachedResults] copyItems:YES];
-        [copy setCachedResults: cachedResults];
-        [cachedResults release];
+        
         
         [copy setDocument:[self document]];
         [copy setCachedNumberOfPages:[self cachedNumberOfPages]];
+
     }
     return copy;
 }
@@ -67,17 +97,31 @@
         [self setPrintableSize:printableAreaSize];
         [self setDocument:document];
         
-        NSMutableArray *cachedResults = [[NSMutableArray alloc] init];
-        [self setCachedResults:cachedResults];
-        [cachedResults release];
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-        [self setSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
+        [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
         [sortedSortDescriptorsGroup release];
         
         NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] init];
-        [self setResultsByRow:resultsForRow];
+        [self setCachedResultsForReport:resultsForRow];
         [resultsForRow release];
+
+        NSMutableArray *a1 = [[NSMutableArray alloc] init];
+        [self setTemporaryLayout:a1];
+        [a1 release];
+        NSMutableArray *a2 = [[NSMutableArray alloc] init];
+        [self setTemporaryPageData:a2];
+        [a2 release];
+        NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
+        [self setTemporaryDataByReport:d2];
+        [d2 release];
+        NSMutableDictionary *d3 = [[NSMutableDictionary alloc] init];
+        [self setTemporaryDataByPage:d3];
+        [d3 release];
+        NSMutableDictionary *d4 = [[NSMutableDictionary alloc] init];
+        [self setTemporaryDataByGroup:d4];
+        [d4 release];
+
         
     }
     return self;
@@ -91,9 +135,11 @@
     CGFloat originX = pageRect.origin.x;
     CGFloat sizeWidth = pageRect.size.width;
 
-    if (index < [[self cachedResults] count]) {
-        MTReportViewerPrintPageRenderPageData *data = [[[self cachedResults] objectAtIndex:index] retain];
-        NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:[data enumeratePageSections]];
+    if (index < [[self cachedLayout] count]) {
+
+        NSArray *pageArray = [[[self cachedLayout] objectAtIndex:index] retain];
+        NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:pageArray];
+        [pageArray release];
         
         CGRect sectionRect = CGRectZero;
         
@@ -141,7 +187,6 @@
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasReportFooterSection];
-//                RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
                 CGFloat sizeHeightReportFooter = [[documentSection height] floatValue];
                 RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
                 CGFloat sizeHeightPageFooter = [[pageFooterSection height] floatValue];
@@ -206,15 +251,99 @@
             
             }
 
-            [self printDocumentElementsForSection:documentSection atHeight:originY withResults:reportSectionValues];
+            // Print document elements for section
+            
+            switch ([[documentSection type] integerValue]) {
+                    
+                case MNSDocumentSectionTypeBody: {
+                    
+                    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+                        for (RptqDocumentObject *item in [row hasObjects]) {
+                            
+                            NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
+                                                                    initWithString:[self printDocumentObject: item
+                                                                                        withResultDictionary: reportSectionValues]
+                                                                    attributes:[self attributesForDocumentObject:item]];
+                            
+                            CGFloat originPointX        = [[item dropPointX] floatValue];
+                            CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
+                            CGFloat sizeWidth           = [[item sizewidth] floatValue];
+                            CGFloat sizeHeight          = [[item sizeheight] floatValue];
+                            CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                            
+                            [attributedString drawInRect:elementCanvasRect];
+                            
+                            [attributedString release];
+                        }
+                    }
+                    
+                    break;
+                }
+                case MNSDocumentSectionTypePageHeader:
+                case MNSDocumentSectionTypePageFooter:
+                case MNSDocumentSectionTypeGroupHeader:
+                case MNSDocumentSectionTypeGroupFooter:
+                case MNSDocumentSectionTypeReportFooter:
+                case MNSDocumentSectionTypeReportHeader: {
+                    
+                    // FIXME: This is the next area to program the fuck out of... Almost working, except the data is not in correct format for page grouping yet.
+                    
+                    /*
+                     for (RptqDocumentSectionRows *row in [section hasRows]) {
+                     for (RptqDocumentObject *item in [row hasObjects]) {
+                     
+                     NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
+                     initWithString:[self printDocumentObject: item
+                     withResultArray: results]
+                     attributes:[self attributesForDocumentObject: item]];
+                     
+                     CGFloat originPointX        = [[item dropPointX] floatValue];
+                     CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
+                     CGFloat sizeWidth           = [[item sizewidth] floatValue];
+                     CGFloat sizeHeight          = [[item sizeheight] floatValue];
+                     CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                     
+                     [attributedString drawInRect:elementCanvasRect];
+                     
+                     }
+                     }
+                     */
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+            /*
+             if ([results isKindOfClass:[NSDictionary class]]) {
+             
+             
+             } else if ([results isKindOfClass:[NSArray class]]) {
+             
+             // FIXME: Print more than  the first row.
+             
+             for (RptqDocumentSectionRows *row in [section hasRows]) {
+             
+             CGFloat originX = CGPointZero.x;
+             
+             for (RptqDocumentObject *item in [row hasObjects]) {
+             CGFloat sizeWidth = [[item sizewidth] floatValue];
+             originX += sizeWidth;
+             }
+             }
+             }*/
+            
+
+            // Increment the y-origin.
             
             originY += sizeHeight;
             
             [pageSectionId release];
             [reportSectionValues release];
+
         }
         [pageSectionsToPrint release];
-        [data release];
+        //[data release];
     }
 }
 
@@ -237,90 +366,9 @@
 
 #pragma mark - Object methods
 
-- (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
-    
-    switch ([[section type] integerValue]) {
-
-        case MNSDocumentSectionTypeBody: {
-            
-            for (RptqDocumentSectionRows *row in [section hasRows]) {
-                for (RptqDocumentObject *item in [row hasObjects]) {
-                                        
-                    NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
-                                                            initWithString:[self printDocumentObject: item
-                                                                                withResultDictionary: results]
-                                                            attributes:[self attributesForDocumentObject:item]];
-                    
-                    CGFloat originPointX        = [[item dropPointX] floatValue];
-                    CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
-                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
-                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
-                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
-                    
-                    [attributedString drawInRect:elementCanvasRect];
-                    
-                    [attributedString release];
-                }
-            }
-
-            break;
-        }
-        case MNSDocumentSectionTypePageHeader:
-        case MNSDocumentSectionTypePageFooter:
-        case MNSDocumentSectionTypeGroupHeader:
-        case MNSDocumentSectionTypeGroupFooter:
-        case MNSDocumentSectionTypeReportFooter:
-        case MNSDocumentSectionTypeReportHeader: {
-            
-            // FIXME: This is the next area to program the fuck out of... Almost working, except the data is not in correct format for page grouping yet.
-            
-            /*
-            for (RptqDocumentSectionRows *row in [section hasRows]) {
-                for (RptqDocumentObject *item in [row hasObjects]) {
-                    
-                    NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
-                                                            initWithString:[self printDocumentObject: item
-                                                                                     withResultArray: results]
-                                                            attributes:[self attributesForDocumentObject: item]];
-                    
-                    CGFloat originPointX        = [[item dropPointX] floatValue];
-                    CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
-                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
-                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
-                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
-                    
-                    [attributedString drawInRect:elementCanvasRect];
-                    
-                }
-            }
-             */
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    /*
-     if ([results isKindOfClass:[NSDictionary class]]) {
-     
-     
-     } else if ([results isKindOfClass:[NSArray class]]) {
-     
-     // FIXME: Print more than  the first row.
-     
-     for (RptqDocumentSectionRows *row in [section hasRows]) {
-     
-     CGFloat originX = CGPointZero.x;
-     
-     for (RptqDocumentObject *item in [row hasObjects]) {
-     CGFloat sizeWidth = [[item sizewidth] floatValue];
-     originX += sizeWidth;
-     }
-     }
-     }*/
-}
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
+
     if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {
         [self setPrintableSize:printableSize];
 
@@ -328,10 +376,10 @@
         RptqQuery *query = [[database hasQueries] anyObject];
         RptqQueryCache *queryCache = [query hasQueryCache];
         
-        [[self cachedResults] removeAllObjects];
-        [[self resultsByRow] removeAllObjects];
-        [[self sortedSortDescriptorsGroup] removeAllObjects];
-        [self setCachedNumberOfPages:0];
+        [[self temporaryLayout] removeAllObjects];
+        [[self cachedResultsForReport] removeAllObjects];
+        [[self cachedSortedSortDescriptorsGroup] removeAllObjects];
+        [self setCachedNumberOfPages: 0];
         [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
         
         for (RptqQueryResultFields *queryResultField in [queryCache hasQueryResultFields]) {
@@ -339,7 +387,7 @@
 
             for (RptqQueryResultValues *queryResultValue in [queryResultField hasValues]) {
         
-                id results = [[self resultsByRow] objectForKey:[queryResultValue rowId]];
+                id results = [[self cachedResultsForReport] objectForKey:[queryResultValue rowId]];
                 
                 NSMutableDictionary *resultDictionary = nil;
                 if (results == nil || resultDictionary == nil) {
@@ -362,8 +410,8 @@
                 
                 [resultDictionary setObject:queryResultCValue forKey:fieldName];
                 
-                [[self resultsByRow] setObject: resultDictionary
-                                        forKey: [queryResultValue rowId]];
+                [[self cachedResultsForReport] setObject: resultDictionary
+                                                  forKey: [queryResultValue rowId]];
 
                 [fieldName release];
                 [queryResultCValue release];
@@ -373,100 +421,87 @@
             }
         }
         
-        NSSet *resultsByRowSet = [[NSSet setWithArray:[[self resultsByRow] allValues]] retain];
+        NSSet *resultsByRowSet = [[NSSet setWithArray:[[self cachedResultsForReport] allValues]] retain];
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
-        NSSortDescriptor *sortd = [[NSSortDescriptor alloc] initWithKey:@"weight" ascending:YES];
-        NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortd]];
+        
+        NSString *sortKey = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey
+                                                              ascending: YES];
+        NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
+        
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
             NSString *fieldNameNice = [[NSString alloc] initWithString:[queryGroup fieldNameQuery]];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: fieldNameNice
                                                                            ascending: sortAscending];
-            [[self sortedSortDescriptorsGroup] addObject:sortDescriptor];
+            [[self cachedSortedSortDescriptorsGroup] addObject:sortDescriptor];
             [fieldNameNice release];
             [sortDescriptor release];
         }
-        NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self sortedSortDescriptorsGroup]];
+        NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         sortedResultsByRow = [sortedResultsByRow retain];
         
-        id groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:[self sortedSortDescriptorsGroup]] retain];
+        id groupedRows = [[self groupedResults:sortedResultsByRow level:0 sortDescriptors:[self cachedSortedSortDescriptorsGroup]] retain];
         
         self.printableSpaceUsedPageHeight = 0.0000f;
         [self setCachedNumberOfPages: 0];
         
-        MTReportViewerPrintPageRenderPageData *printPageRenderReportPageData  = [[MTReportViewerPrintPageRenderPageData alloc] init];
+        //MTReportViewerPrintPageRenderPageData *printPageRenderReportPageData  = [[MTReportViewerPrintPageRenderPageData alloc] init];
         
         self.printableSpaceUsedPageHeight += [[[[self document] hasPageHeaderSection] height] floatValue];
-        //NSLog(@"Page Header One");
-        [printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
+
+        //[printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
+        [self addPageHeaderWithValueDictionary:groupedRows];
         
         self.printableSpaceUsedPageHeight += [[[[self document] hasReportHeaderSection] height] floatValue];
-        //NSLog(@"Report Header");
-        [printPageRenderReportPageData addReportHeaderWithValueDictionary:groupedRows];
+
+        [self addReportHeaderWithValueDictionary:groupedRows];
+        //[printPageRenderReportPageData addReportHeaderWithValueDictionary:groupedRows];
         
+        BOOL detailPrinted = NO;
         [self printGroupLevel:[query firstQueryGroup]
                   groupedRows:groupedRows
-printPageRenderReportPageData:&printPageRenderReportPageData];
-
+             groupedRowsLevel:0
+                detailPrinted:&detailPrinted];
         
         
         CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] height] floatValue];
 
         [self printPageBreakWithNextItemHeight: reportFooterHeight
-                                   groupedRows: groupedRows
-                 printPageRenderReportPageData: &printPageRenderReportPageData];
+                                   groupedRows: groupedRows];
         
         self.printableSpaceUsedPageHeight += reportFooterHeight;
-        [printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
+
+        [self addReportFooterWithValueDictionary:groupedRows];
         
         CGFloat pageFooterHeight = [[[[self document] hasPageFooterSection] height] floatValue];
         
         [self printPageBreakWithNextItemHeight: pageFooterHeight
-                                   groupedRows: groupedRows
-                 printPageRenderReportPageData: &printPageRenderReportPageData];
+                                   groupedRows: groupedRows];
 
         self.printableSpaceUsedPageHeight += pageFooterHeight;
-        [printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
-        MTReportViewerPrintPageRenderPageData *pageData = [printPageRenderReportPageData copy];
-        [[self cachedResults] addObject:pageData];
-        [pageData release];
-
+        [self addPageFooterWithValueDictionary:groupedRows];
+        
+        [[self temporaryLayout] addObject:[[self temporaryPageData] copy]];
+        
         [self setCachedNumberOfPages:([self cachedNumberOfPages] + 1)];
-        
-        //[printPageRenderReportPageData addReportFooterWithValueDictionary:groupedRows];
         
         [groupedRows release];
         [sortedResultsByRow release];
         [resultsByRowSet release];
-        [sortd release];
-        
+        [sortDescriptor release];
+      
+        [self setCachedLayout:[[self temporaryLayout] copy]];
     }
 }
 
 - (void)printGroupLevel:(RptqQueryGroup *)queryGroup
             groupedRows:(NSDictionary *)groupedRows
-printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
-    
-    BOOL detailPrinted = NO;
-    NSUInteger groupedRowsLevel = 0;
-    
-    [self printGroupLevel: queryGroup
-              groupedRows: groupedRows
-         groupedRowsLevel: groupedRowsLevel
-            detailPrinted: &detailPrinted
-printPageRenderReportPageData:printPageRenderReportPageData];
-    
-}
-
-- (void)printGroupLevel:(RptqQueryGroup *)queryGroup
-            groupedRows:(NSDictionary *)groupedRows
        groupedRowsLevel:(NSUInteger)groupedRowsLevel
-          detailPrinted:(BOOL *)detailPrinted
-printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
-
+          detailPrinted:(BOOL *)detailPrinted {
     
         //NSLog(@"Group level %d %@.", groupedRowsLevel, [[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel]);
         
@@ -475,7 +510,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
             
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
-            NSSortDescriptor *desc = [[[self sortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
+            NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
             NSArray *allKeysSorted = [[allKeys sortedArrayUsingSelector:sortSelector] retain];
             NSEnumerator *loopEnumerator;
             if ([desc ascending] == NO) {
@@ -492,8 +527,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
                         
                         [self printPageBreakWithNextItemHeight: [[documentSection height] floatValue]
-                                                   groupedRows: groupedRows
-                                 printPageRenderReportPageData: printPageRenderReportPageData];
+                                                   groupedRows: groupedRows];
                         
                         NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
                         NSUInteger documentObjectCounter = 0;
@@ -513,14 +547,15 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                         [mutableStringToPrint release];
                         self.printableSpaceUsedPageHeight += [[documentSection height] floatValue];
                         NSUInteger groupNumber = [[queryGroup weight] integerValue];
-                        NSSortDescriptor *sortDescriptor = [[self sortedSortDescriptorsGroup] objectAtIndex:groupNumber];
+                        NSSortDescriptor *sortDescriptor = [[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupNumber];
                         NSString *sortOrderDescription = [sortDescriptor ascending] ?
                         NSLocalizedString(@"Ascending", @"Ascending") : NSLocalizedString(@"Decending", @"Decending");
                         NSLog(@"Group Header %d (%@, %@)", groupNumber, [sortDescriptor key], sortOrderDescription);
                         break;
                     }
                 }
-                [*printPageRenderReportPageData addGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
+
+                [self addGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
                 
                 RptqQueryGroup *nextGroup = [queryGroup next];
                 
@@ -529,11 +564,10 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                     [self printGroupLevel: nextGroup
                               groupedRows: obj
                          groupedRowsLevel: groupedRowsLevel
-                            detailPrinted: detailPrinted printPageRenderReportPageData:printPageRenderReportPageData];
+                            detailPrinted: detailPrinted];
                 } else {
                     [self printDetailLevelWithDetails:obj
-                                          groupedRows:groupedRows
-                        printPageRenderReportPageData:printPageRenderReportPageData];
+                                          groupedRows:groupedRows];
                 }
                 
                 //Group footer section
@@ -541,8 +575,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
                         
                         [self printPageBreakWithNextItemHeight: [[documentSection height] floatValue]
-                                                   groupedRows: groupedRows
-                                 printPageRenderReportPageData: printPageRenderReportPageData];
+                                                   groupedRows: groupedRows];
                         
                         self.printableSpaceUsedPageHeight += [[documentSection height] floatValue];
                         //NSUInteger groupNumber = [[queryGroup weight] integerValue];
@@ -553,8 +586,8 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
                         break;
                     }
                 }
-                [*printPageRenderReportPageData addGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
-                
+
+                [self addGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
                 
                 [obj release];
             }
@@ -565,23 +598,19 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
         } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
 
             [self printDetailLevelWithDetails:(NSArray *)groupedRows
-                                  groupedRows:groupedRows
-                printPageRenderReportPageData:printPageRenderReportPageData];
-
+                                  groupedRows:groupedRows];
         }
 }
 
 - (void)printDetailLevelWithDetails:(NSArray *)containerDetails
-                        groupedRows:(NSDictionary *)groupedRows
-      printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
+                        groupedRows:(NSDictionary *)groupedRows {
     RptqDocumentSection *detailSection = [[self document] hasDetailSection];
     for (NSDictionary *resultDictionary in containerDetails) {
         
         [self printPageBreakWithNextItemHeight: [[detailSection height] floatValue]
-                                   groupedRows: groupedRows
-                 printPageRenderReportPageData: printPageRenderReportPageData];
+                                   groupedRows: groupedRows];
         
-        [*printPageRenderReportPageData addDetailWithValueDictionary:resultDictionary];
+        [self addDetailWithValueDictionary:resultDictionary];
         
         self.printableSpaceUsedPageHeight += [[detailSection height] floatValue];
         NSMutableString *mutableStringToPrint = [[NSMutableString alloc] init];
@@ -876,8 +905,7 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
 }*/
 
 - (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight
-                             groupedRows:(NSDictionary *)groupedRows
-printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPageRenderReportPageData {
+                             groupedRows:(NSDictionary *)groupedRows {
 
     CGRect pageRect;
     CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] height] floatValue];
@@ -890,21 +918,105 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
     
     if (self.printableSpaceUsedPageHeight + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
         self.printableSpaceUsedPageHeight += pageFooterSectionHeight;
-        [*printPageRenderReportPageData addPageFooterWithValueDictionary:groupedRows];
         
-        MTReportViewerPrintPageRenderPageData *pageData = [*printPageRenderReportPageData copy];
-        [[self cachedResults] addObject:pageData];
-        [pageData release];
+        [self addPageFooterWithValueDictionary:groupedRows];
         
-        [*printPageRenderReportPageData release];
-        *printPageRenderReportPageData = nil;
-        *printPageRenderReportPageData  = [[MTReportViewerPrintPageRenderPageData alloc] init];
+        [[self temporaryLayout] addObject:[[self temporaryPageData] copy]];
         
         [self setCachedNumberOfPages:[self cachedNumberOfPages] + 1];
         [self setPrintableSpaceUsedPageHeight: (CGPointZero.y + [[[[self document] hasPageHeaderSection] height] floatValue])];
-        [*printPageRenderReportPageData addPageHeaderWithValueDictionary:groupedRows];
+
+        [self addPageHeaderWithValueDictionary:groupedRows];
+        
     }
     
+}
+
+
+
+- (void)addPageHeaderWithValueDictionary:(NSDictionary *)values {
+    [[self temporaryPageData] removeAllObjects];
+    
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTPageHeader forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addPageFooterWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTPageFooter forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addReportHeaderWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTReportHeader forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addReportFooterWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTReportFooter forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTReportGroupHeader forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    NSNumber *groupLevelObject = [[NSNumber alloc] initWithInteger:groupLevel];
+    [sectionData setObject:groupLevelObject forKey:MTReportGroupLevel];
+    [groupLevelObject release];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTReportGroupFooter forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    NSNumber *groupLevelObject = [[NSNumber alloc] initWithInteger:groupLevel];
+    [sectionData setObject:groupLevelObject forKey:MTReportGroupLevel];
+    [groupLevelObject release];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
+}
+
+- (void)addDetailWithValueDictionary:(NSDictionary *)values {
+    id newValue = [values copy];
+    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
+    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [sectionData setObject:MTPageDetail forKey:MTReportSectionType];
+    [sectionData setObject:newValue forKey:MTReportSectionValues];
+    [[self temporaryPageData] addObject: sectionData];
+    [sectionData release];
+    [newValue release];
 }
 
 @end
