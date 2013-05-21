@@ -271,6 +271,10 @@
         case MNSDocumentSectionTypeGroupFooter:
         case MNSDocumentSectionTypeReportFooter:
         case MNSDocumentSectionTypeReportHeader: {
+            
+            // FIXME: This is the next area to program the fuck out of... Almost working, except the data is not in correct format for page grouping yet.
+            
+            /*
             for (RptqDocumentSectionRows *row in [section hasRows]) {
                 for (RptqDocumentObject *item in [row hasObjects]) {
                     
@@ -289,6 +293,7 @@
                     
                 }
             }
+             */
             break;
         }
         default: {
@@ -683,21 +688,38 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             
         }
         case MTDocumentObjectTypeFormula: {
+            result = @"";
             break;
         }
         case MTDocumentObjectTypeAggregate: {
+            /*
+            RptqDocumentObjectAggregate *aggregateField = [documentObject isAggregate];
+            RptqQueryField *queryField = [aggregateField aggregateField];
+            NSString * tableFieldKey = [queryField tableFieldKey];
+            [aggregateField aggregateFunction] set
+            value = [resultDictionary objectForKey: tableFieldKey];
+            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+            result = [MTDatabaseField formattedString:dataType
+                                             forValue:value];
+             */
+
+            result = @"";
             break;
         }
         case MTDocumentObjectTypeAggregateFunctionList: {
+            result = @"";
             break;
         }
         case MTDocumentObjectTypeChart: {
+            result = @"";
             break;
         }
         case MTDocumentObjectTypeGroupKey: {
+            result = @"";
             break;
         }
         case MTDocumentObjectTypeImage: {
+            result = @"";
             break;
         }
         default: {
@@ -740,6 +762,74 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             break;
         }
         case MTDocumentObjectTypeAggregate: {
+            RptqDocumentObjectAggregate *aggregateField = [documentObject isAggregate];
+            RptqQueryField *queryField = [aggregateField aggregateField];
+            NSString * tableFieldKey = [queryField tableFieldKey];
+            value = nil;
+            
+            switch ([[aggregateField function] integerValue]) {
+                case MTAggregateFunctionTypeCount:
+                    value = @([resultArray count]);
+                    break;
+                case MTAggregateFunctionTypeFirst:
+                    value = [[resultArray objectAtIndex:0] objectForKey: tableFieldKey];
+                    break;
+                case MTAggregateFunctionTypeLast:
+                    value = [[resultArray lastObject] objectForKey: tableFieldKey];
+                    break;
+                case MTAggregateFunctionTypeMax: {
+
+                    long long max = 0;
+                    for (NSDictionary *resultDictionary in resultArray) {
+                        long long sumValue = [[resultDictionary objectForKey: tableFieldKey] longLongValue];
+                        max = max > sumValue ? max : sumValue;
+                    }
+                    value = @(max);
+                    
+                    break;
+                }
+                case MTAggregateFunctionTypeMean: {
+                    
+                    long long sum = 0;
+                    for (NSDictionary *resultDictionary in resultArray) {
+                        long long sumValue = [[resultDictionary objectForKey: tableFieldKey] longLongValue];
+                        sum = sum + sumValue;
+                    }
+                    value = @(sum / [resultArray count]);
+                    
+                    break;
+                }
+                case MTAggregateFunctionTypeMin: {
+                    
+                    long long min = 0;
+                    for (NSDictionary *resultDictionary in resultArray) {
+                        long long sumValue = [[resultDictionary objectForKey: tableFieldKey] longLongValue];
+                        min = min < sumValue ?
+                                min : sumValue;
+                    }
+                    value = @(min);
+                    
+                    break;
+                }
+                case MTAggregateFunctionTypeSum: {
+
+                    long long sum = 0;
+                    for (NSDictionary *resultDictionary in resultArray) {
+                        long long sumValue = [[resultDictionary objectForKey: tableFieldKey] longLongValue];
+                        sum = sum + sumValue;
+                    }
+                    value = @(sum);
+                    
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+            result = [MTDatabaseField formattedString:dataType
+                                             forValue:value];
+
             break;
         }
         case MTDocumentObjectTypeAggregateFunctionList: {

@@ -60,6 +60,12 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     }
 }
 
+- (NSString *)displayStringForValues:(NSArray *)inputValues {
+    
+    
+    
+}
+
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectAggregate class])];
     [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objectId]];

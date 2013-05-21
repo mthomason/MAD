@@ -64,7 +64,6 @@
 + (SEL)selectorForSorting:(MTDataType)dataType {
     SEL result;
     switch (dataType) {
-        case MTDataTypeBlob:
         case MTDataTypeDate:
         case MTDataTypeDateTime:
         case MTDataTypeGeometry:
@@ -79,6 +78,7 @@
                                          userInfo: nil];
             
             break;
+        case MTDataTypeBlob:
         case MTDataTypeBit:
         case MTDataTypeFloat:
         case MTDataTypeInteger:

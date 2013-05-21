@@ -266,7 +266,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 
             switch (functionType) {
                 case MTAggregateFunctionInputTypeField: {
-                    RptqQueryField *field = [RptqDatabaseSchemaField getFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
+                    RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
                     [[documentObject isAggregate] setAggregateField:field];
                     [[documentObject isAggregate] setAggregateFunction:nil];
                     break;
