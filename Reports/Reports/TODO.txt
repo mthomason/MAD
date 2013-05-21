@@ -9,6 +9,7 @@ Report Viewer
     Provide print button.
     Save image of rendered report for thumbnail.
     Render font style changes in rendering of report (size and margin are already implemented).
+    Show page numbers.
 
 Data Model
     Allow multiple caches.    Do before first release to make updates easier.

@@ -113,7 +113,6 @@
                 
                 documentSection = [[self document] hasDetailSection];
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor whiteColor] set];
                 
@@ -121,7 +120,6 @@
                 
                 documentSection = [[self document] hasPageHeaderSection];
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor yellowColor] set];
                 
@@ -129,27 +127,26 @@
                 
                 documentSection = [[self document] hasPageFooterSection];
                 sizeHeight = [[documentSection height] floatValue];
-//                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                sectionRect = CGRectMake(originX, pageRect.origin.y + pageRect.size.height - sizeHeight, sizeWidth, sizeHeight);
-                
+                originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
+
                 [[UIColor yellowColor] set];
                 
             } else if ([MTReportHeader isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasReportHeaderSection];
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                
+
                 [[UIColor greenColor] set];
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
-                RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
-                CGFloat sizeHeightReportFooter = [[reportFooterSection height] floatValue];
+                documentSection = [[self document] hasReportFooterSection];
+//                RptqDocumentSection *reportFooterSection = [[self document] hasReportFooterSection];
+                CGFloat sizeHeightReportFooter = [[documentSection height] floatValue];
                 RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
                 CGFloat sizeHeightPageFooter = [[pageFooterSection height] floatValue];
-                sectionRect = CGRectMake(originX, pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter, sizeWidth, sizeHeightReportFooter);
-                
+                originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
+                sizeHeight = sizeHeightReportFooter;
                 [[UIColor greenColor] set];
                 
             } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
@@ -159,7 +156,6 @@
                 documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
                 
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor lightGrayColor] set];
                 
@@ -169,11 +165,12 @@
                 query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                 documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
                 sizeHeight = [[documentSection height] floatValue];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [[UIColor lightTextColor] set];
                 
             }
+
+            sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             
             CGFloat sectionHeight = CGSizeZero.height;
             
@@ -243,13 +240,45 @@
 - (void)printDocumentElementsForSection:(RptqDocumentSection *)section atHeight:(CGFloat)originY withResults:(id)results {
     
     switch ([[section type] integerValue]) {
+
         case MNSDocumentSectionTypeBody: {
             
             for (RptqDocumentSectionRows *row in [section hasRows]) {
                 for (RptqDocumentObject *item in [row hasObjects]) {
+                                        
+                    NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
+                                                            initWithString:[self printDocumentObject: item
+                                                                                withResultDictionary: results]
+                                                            attributes:[self attributesForDocumentObject:item]];
                     
-                    NSAttributedString *attributedString = [self attributedStringFor:item
-                                                                withResultDictionary:results];
+                    CGFloat originPointX        = [[item dropPointX] floatValue];
+                    CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
+                    CGFloat sizeWidth           = [[item sizewidth] floatValue];
+                    CGFloat sizeHeight          = [[item sizeheight] floatValue];
+                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                    
+                    [attributedString drawInRect:elementCanvasRect];
+                    
+                    [attributedString release];
+                }
+            }
+
+            break;
+        }
+        case MNSDocumentSectionTypePageHeader:
+        case MNSDocumentSectionTypePageFooter:
+        case MNSDocumentSectionTypeGroupHeader:
+        case MNSDocumentSectionTypeGroupFooter:
+        case MNSDocumentSectionTypeReportFooter:
+        case MNSDocumentSectionTypeReportHeader: {
+            for (RptqDocumentSectionRows *row in [section hasRows]) {
+                for (RptqDocumentObject *item in [row hasObjects]) {
+                    
+                    NSAttributedString *attributedString = [[NSMutableAttributedString alloc]
+                                                            initWithString:[self printDocumentObject: item
+                                                                                     withResultArray: results]
+                                                            attributes:[self attributesForDocumentObject: item]];
+                    
                     CGFloat originPointX        = [[item dropPointX] floatValue];
                     CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                     CGFloat sizeWidth           = [[item sizewidth] floatValue];
@@ -260,25 +289,6 @@
                     
                 }
             }
-            break;
-        }
-            
-        case MNSDocumentSectionTypeReportHeader: {
-            break;
-        }
-        case MNSDocumentSectionTypeReportFooter: {
-            break;
-        }
-        case MNSDocumentSectionTypePageHeader: {
-            break;
-        }
-        case MNSDocumentSectionTypePageFooter: {
-            break;
-        }
-        case MNSDocumentSectionTypeGroupHeader: {
-            break;
-        }
-        case MNSDocumentSectionTypeGroupFooter: {
             break;
         }
         default: {
@@ -657,74 +667,111 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
             RptqDocumentObjectLabel *documentObjectLabel = [documentObject isLabel];
             value = [documentObjectLabel text];
             result = [documentObjectLabel text];
-            
             break;
         }
 
         case MTDocumentObjectTypeLabelDynamic: {
-            switch ([[[[documentObject inSectionRow] inSection] type] integerValue]) {
 
-                case MNSDocumentSectionTypeBody: {
-                    RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-                    NSString * tableFieldKey = [queryField tableFieldKey];
-                    value = [resultDictionary objectForKey: tableFieldKey];
-                    MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-                    result = [MTDatabaseField formattedString:dataType
-                                                     forValue:value];
-                    break;
-
-                } case MNSDocumentSectionTypeGroupHeader: {
-                    break;
-
-                } case MNSDocumentSectionTypeGroupFooter: {
-                    break;
-
-                } default: {
-
-                    RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
-                    RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-                    NSString *tableFieldKey = [queryField tableFieldKey];
-                    value = [resultDictionary objectForKey: tableFieldKey];
-                    break;
-                    
-                }
-            }
-    
+            RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
+            RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
+            NSString * tableFieldKey = [queryField tableFieldKey];
+            value = [resultDictionary objectForKey: tableFieldKey];
+            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+            result = [MTDatabaseField formattedString:dataType
+                                             forValue:value];
+            break;
             
         }
         case MTDocumentObjectTypeFormula: {
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            break;
+        }
+        case MTDocumentObjectTypeAggregateFunctionList: {
+            break;
+        }
+        case MTDocumentObjectTypeChart: {
+            break;
+        }
+        case MTDocumentObjectTypeGroupKey: {
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
             break;
         }
         default: {
             break;
         }
     }
-    /*
-    if ([value isKindOfClass:[NSString class]]) {
-        
-        result = [[NSString alloc] initWithString:value];
 
-    } else if ([value isKindOfClass:[NSNumber class]]) {
-    
-        result = [[NSString alloc] initWithFormat:@"%f", [value floatValue]];
-
-    } else {
-
-        result = [[NSString alloc] initWithString: @"<Unknown type>"];
-
-    }
-    
-    if (value == nil) {
-        
-        result = [[NSString alloc] initWithString:@"<null>"];
-
-    }*/
     return result;
 }
 
+- (NSString *)printDocumentObject:(RptqDocumentObject *)documentObject withResultArray:(NSArray *)resultArray {
+    
+    NSString *result = nil;
+    id value = nil;
+    
+    switch ([documentObject getType]) {
+            
+        case MTDocumentObjectTypeLabelStatic: {
+            
+            RptqDocumentObjectLabel *documentObjectLabel = [documentObject isLabel];
+            value = [documentObjectLabel text];
+            result = [documentObjectLabel text];
+            break;
+        }
+            
+        case MTDocumentObjectTypeLabelDynamic: {
+            
+            RptqDocumentObjectLabelDataField *documentObjectDataField = [documentObject isLabelDataField];
+            RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
+            NSString * tableFieldKey = [queryField tableFieldKey];
+            NSDictionary *resultDictionary = [resultArray objectAtIndex:0];
+            value = [resultDictionary objectForKey: tableFieldKey];
+            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+            result = [MTDatabaseField formattedString:dataType
+                                             forValue:value];
+            break;
+            
+        }
+        case MTDocumentObjectTypeFormula: {
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            break;
+        }
+        case MTDocumentObjectTypeAggregateFunctionList: {
+            break;
+        }
+        case MTDocumentObjectTypeChart: {
+            break;
+        }
+        case MTDocumentObjectTypeGroupKey: {
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    
+    return result;
+}
+
+- (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
+
+    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
+    return @{NSFontAttributeName : customFont};
+}
+
+/*
 - (NSAttributedString *)attributedStringFor:(RptqDocumentObject *)documentObject
                        withResultDictionary:(NSDictionary *)resultDictionary {
+    
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
     
     NSString *displayText = [[self printDocumentObject:documentObject withResultDictionary:resultDictionary] retain];
@@ -732,11 +779,11 @@ printPageRenderReportPageData:(MTReportViewerPrintPageRenderPageData **)printPag
     [displayText release];
     
     NSRange wholeString = NSMakeRange(0, [[result mutableString] length]);
-    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
-    NSDictionary *customAttributes = @{NSFontAttributeName : customFont};
-    [result setAttributes:customAttributes range:wholeString];
+
+    [result setAttributes: [self attributesForDocumentObject:documentObject]
+                    range: wholeString];
     return [result autorelease];
-}
+}*/
 
 - (void)printPageBreakWithNextItemHeight:(CGFloat)nextItemHeight
                              groupedRows:(NSDictionary *)groupedRows
