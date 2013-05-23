@@ -5,11 +5,11 @@ Report Designer
     COMPLETE - Expand the abstract report elements to include images, labels, and formula types.  It already includes a data-field type that links to a spot in the query.
 
 Report Viewer
-    Cache data in the background, use NSLocalNotification to notify when data is cached.
     Provide print button.
     Save image of rendered report for thumbnail.
     Render font style changes in rendering of report (size and margin are already implemented).
     Show page numbers.
+    Cache data in the background, use NSLocalNotification to notify when data is cached.
 
 Data Model
     Allow multiple caches.    Do before first release to make updates easier.
