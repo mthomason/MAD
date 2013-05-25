@@ -348,10 +348,6 @@
                                     displayString = [MTDatabaseField formattedString:dataType
                                                                             forValue:value];
 
-
-                                    //displayString = @"Group By Section";
-                                    
-                                    
                                     break;
                                 }
                                     
@@ -363,13 +359,10 @@
                                 default:
                                     break;
                             }
-
-//                            NSString *tableFieldKey = [queryField tableFieldKey];
                             
                             switch ([[aggregateField function] integerValue]) {
                                 case MTAggregateFunctionTypeCount:
                                     
-                                   
                                     break;
                                 case MTAggregateFunctionTypeFirst:
                                     
