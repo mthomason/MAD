@@ -29,7 +29,7 @@
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject
-                                               groupType:(MTGroupByType)groupType
+                                               groupType:(MTAggregateGroupByType)groupType
                                              groupNumber:(NSNumber *)groupNumber;
 - (void)viewControllerDidFinish:(id)sender;
 @end

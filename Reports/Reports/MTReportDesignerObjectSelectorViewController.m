@@ -66,7 +66,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @property (nonatomic, retain) NSManagedObjectID *aggregateInputFormula;
 @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
 @property (nonatomic, assign) MTAggregateFunctionInputType  aggregateFunctionInputType;
-@property (nonatomic, assign) MTGroupByType aggregateGroupByType;
+@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 
 @property (nonatomic, retain) UIImagePickerController *imagePicker;
@@ -908,21 +908,21 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark - Group By Functions View Controller Delegate Protocol
 
 - (void)didSelectGroupByPage {
-    [self setAggregateGroupByType: MTGroupByTypePage];
+    [self setAggregateGroupByType: MTAggregateGroupByTypePage];
     [self setAggregateGroupBySectionNumber: 0];
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupByReport {
-    [self setAggregateGroupByType: MTGroupByTypeReport];
+    [self setAggregateGroupByType: MTAggregateGroupByTypeReport];
     [self setAggregateGroupBySectionNumber: 0];
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
-    [self setAggregateGroupByType: MTGroupByTypeSection];
+    [self setAggregateGroupByType: MTAggregateGroupByTypeSection];
     [self setAggregateGroupBySectionNumber: groupNumber];
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
@@ -931,25 +931,25 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)displaySelectedGroupByType {
     if ([self aggregateViewController]) {
         switch ([self aggregateGroupByType]) {
-            case MTGroupByTypeSection: {
+            case MTAggregateGroupByTypeSection: {
 
                 NSUInteger group = [self aggregateGroupBySectionNumber];
-                NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeSection];
+                NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
                 break;
                 
             }
-            case MTGroupByTypeReport: {
+            case MTAggregateGroupByTypeReport: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeReport];
+                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 
             }
-            case MTGroupByTypePage: {
+            case MTAggregateGroupByTypePage: {
 
-                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypePage];
+                NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
                 break;
                 

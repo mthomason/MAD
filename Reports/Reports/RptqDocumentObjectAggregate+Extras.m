@@ -119,18 +119,18 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     
 }
 
-+ (NSString *)displayStringForGroupByType:(MTGroupByType)groupByType {
++ (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType {
 
     NSString *result = nil;
     
     switch (groupByType) {
-        case MTGroupByTypeSection:
+        case MTAggregateGroupByTypeSection:
             result = NSLocalizedString(@"Section: %d", @"Section: %d");
             break;
-        case MTGroupByTypePage:
+        case MTAggregateGroupByTypePage:
             result = NSLocalizedString(@"Page", @"Page");
             break;
-        case MTGroupByTypeReport:
+        case MTAggregateGroupByTypeReport:
             result = NSLocalizedString(@"Report", @"Report");
             break;
         default:

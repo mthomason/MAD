@@ -82,10 +82,10 @@ typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderDecending
 };
 
-typedef NS_ENUM(NSUInteger, MTGroupByType) {
-    MTGroupByTypePage = 2,
-    MTGroupByTypeReport = 3,
-    MTGroupByTypeSection = 5,
+typedef NS_ENUM(NSUInteger, MTAggregateGroupByType) {
+    MTAggregateGroupByTypePage = 2,
+    MTAggregateGroupByTypeReport = 3,
+    MTAggregateGroupByTypeSection = 5,
 };
 
 /*

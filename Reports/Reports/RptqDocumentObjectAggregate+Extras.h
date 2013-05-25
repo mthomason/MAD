@@ -17,6 +17,6 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
 @interface RptqDocumentObjectAggregate (Extras)
 
 + (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType;
-+ (NSString *)displayStringForGroupByType:(MTGroupByType)groupByType;
++ (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType;
 
 @end

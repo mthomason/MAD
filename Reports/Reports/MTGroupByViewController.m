@@ -14,7 +14,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
 
-@property (nonatomic, assign, readonly) MTGroupByType aggregateGroupType;
+@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
 @property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
 
 @end
@@ -61,14 +61,14 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     return [NSIndexPath indexPathForRow:[indexPath row] - 2 inSection:[indexPath section]];
 }
 
-- (void)setGroupType:(MTGroupByType)groupType {
+- (void)setGroupType:(MTAggregateGroupByType)groupType {
     _aggregateGroupNumber = 0;
     _aggregateGroupType = groupType;
 }
 
 - (void)setGroupTypeSectionWithNumber:(NSUInteger)sectionNumber {
     _aggregateGroupNumber = sectionNumber;
-    _aggregateGroupType = MTGroupByTypeSection;
+    _aggregateGroupType = MTAggregateGroupByTypeSection;
 }
 
 #pragma mark - View lifecycle
@@ -113,12 +113,12 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     switch ([indexPath row]) {
         
         case 0:
-            [self setGroupType:MTGroupByTypePage];
+            [self setGroupType:MTAggregateGroupByTypePage];
             [[self delegate] didSelectGroupByPage];
             break;
         
         case 1:
-            [self setGroupType:MTGroupByTypeReport];
+            [self setGroupType:MTAggregateGroupByTypeReport];
             [[self delegate] didSelectGroupByReport];
             break;
         
@@ -151,16 +151,16 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     switch ([indexPath row]) {
 
         case 0:
-            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypePage]];
+            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage]];
             break;
         
         case 1:
-            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeReport]];
+            [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport]];
             break;
         
         default: {
             RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:[self updatedIndexPath:indexPath]];
-            NSString *sectionNumber = [RptqDocumentObjectAggregate displayStringForGroupByType: MTGroupByTypeSection];
+            NSString *sectionNumber = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
             NSString *textLabel = [NSString stringWithFormat:sectionNumber, [[queryGroup weight] integerValue]];
             [[cell textLabel] setText:textLabel];
             break;

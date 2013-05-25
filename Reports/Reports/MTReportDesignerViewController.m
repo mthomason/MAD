@@ -1787,7 +1787,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject
-                                               groupType:(MTGroupByType)groupType
+                                               groupType:(MTAggregateGroupByType)groupType
                                              groupNumber:(NSNumber *)groupNumber {
 
     NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
