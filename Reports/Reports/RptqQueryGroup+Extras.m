@@ -133,9 +133,16 @@
 }
 
 - (id)next {
+    //RptqQuery *query = [self inQuery];
+    //NSArray *hasQueryGroups = [query hasQueryGroups];
+    //NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight)) ascending:YES];
+//    [request setSortDescriptors:@[sortDescriptor]];
+    //NSArray *hasQueryGroupsSorted = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
+    //return [hasQueryGroupsSorted lastObject];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self objectID], ([[self weight] integerValue] + 1)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self inQuery], ([[self weight] integerValue] + 1)];
     [request setPredicate:predicate];
+    [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
     RptqQueryGroup *nextGroup = error == nil ? [resultArray lastObject] : nil;
@@ -144,8 +151,9 @@
 
 - (id)previous {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self objectID], ([[self weight] integerValue] - 1)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self inQuery], ([[self weight] integerValue] - 1)];
     [request setPredicate:predicate];
+    [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
     RptqQueryGroup *previousGroup = error == nil ? [resultArray lastObject] : nil;
