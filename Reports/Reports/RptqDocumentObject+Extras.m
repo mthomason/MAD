@@ -130,7 +130,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             //                                                             numberStyle: NSNumberFormatterSpellOutStyle];
             
             RptqDocumentObjectAggregate *aggregateObject = [self isAggregate];
-            //MTGroupByType groupType = [[aggregateObject groupType] integerValue];
+            //MTAggregateGroupByType groupType = [[aggregateObject groupType] integerValue];
             if ([aggregateObject aggregateField] != nil) {
                 result = [NSString stringWithFormat:@"Aggregate: %@", [[aggregateObject aggregateField] toStringHumanReadable]];
             } else if ([aggregateObject aggregateFunction] != nil) {
