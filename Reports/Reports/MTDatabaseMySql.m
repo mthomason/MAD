@@ -623,7 +623,7 @@
             MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
             BOOL success = conn != nil;
             if (success) {
-                NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
+                NSString *sql = [NSString stringWithFormat:@"SELECT %@ "
                                                                 @"FROM %@ "
                                                                 @"LIMIT 100;",
                                  schemaField.name, schemaField.inTable.name];
