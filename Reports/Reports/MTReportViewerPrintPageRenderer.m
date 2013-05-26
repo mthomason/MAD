@@ -8,6 +8,18 @@
 
 #import "MTReportViewerPrintPageRenderer.h"
 
+const NSString *MTReportSectionType = @"MTReportSectionType";
+const NSString *MTReportSectionValues = @"MTReportSectionValues";
+const NSString *MTReportGroupLevel = @"MTReportGroupLevel";
+
+const NSString *MTPageDetail = @"MTPageDetail";
+const NSString *MTPageHeader = @"MTPageHeader";
+const NSString *MTPageFooter = @"MTPageFooter";
+const NSString *MTReportHeader = @"MTReportHeader";
+const NSString *MTReportFooter = @"MTReportFooter";
+const NSString *MTReportGroupHeader = @"MTReportGroupHeader";
+const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
+
 @interface MTReportViewerPrintPageRenderer ()
 
 @property (nonatomic, assign) CGSize printableSize;
@@ -151,7 +163,7 @@
     RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
 
     NSUInteger numberOfGroups = [[query hasQueryGroups] count];
-    NSUInteger groupLevelCounter[numberOfGroups];
+    //NSUInteger groupLevelCounter[numberOfGroups];
     NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
   
     /*
