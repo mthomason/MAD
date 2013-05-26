@@ -150,7 +150,7 @@
             result = NSLocalizedString(@"String", @"String data type.");
             break;
         default:
-            result = @"";
+            result = [NSString stringWithFormat:@"Type %d", [[self dataType] integerValue]];
             break;
     }
     return result;

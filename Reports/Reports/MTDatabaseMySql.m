@@ -459,13 +459,13 @@
             result = MTDataTypeDateTime;
             break;
         case MYSQL_TYPE_DECIMAL:
-            result = MTDataTypeFloat;
+            result = MTDataTypeDecimal;
             break;
         case MYSQL_TYPE_DOUBLE:
-            result = MTDataTypeFloat;
+            result = MTDataTypeDouble;
             break;
         case MYSQL_TYPE_ENUM:
-            result = MTDataTypeInteger;
+            result = MTDataTypeEnum;
             break;
         case MYSQL_TYPE_FLOAT:
             result = MTDataTypeFloat;
@@ -477,31 +477,31 @@
             result = MTDataTypeInteger;
             break;
         case MYSQL_TYPE_LONG:
-            result = MTDataTypeFloat;
+            result = MTDataTypeLong;
             break;
         case MYSQL_TYPE_LONG_BLOB:
-            result = MTDataTypeString;
+            result = MTDataTypeBlob;
             break;
         case MYSQL_TYPE_LONGLONG:
-            result = MTDataTypeFloat;
+            result = MTDataTypeLongLong;
             break;
         case MYSQL_TYPE_MEDIUM_BLOB:
-            result = MTDataTypeString;
+            result = MTDataTypeBlob;
             break;
         case MYSQL_TYPE_NEWDATE:
-            result = MTDataTypeString;
+            result = MTDataTypeDate;
             break;
         case MYSQL_TYPE_NEWDECIMAL:
-            result = MTDataTypeFloat;
+            result = MTDataTypeDecimal;
             break;
         case MYSQL_TYPE_NULL:
-            result = MTDataTypeString;
+            result = MTDataTypeNumber;
             break;
         case MYSQL_TYPE_SET:
-            result = MTDataTypeString;
+            result = MTDataTypeSet;
             break;
         case MYSQL_TYPE_SHORT:
-            result = MTDataTypeFloat;
+            result = MTDataTypeShort;
             break;
         case MYSQL_TYPE_STRING:
             result = MTDataTypeString;
@@ -513,19 +513,19 @@
             result = MTDataTypeTimeStamp;
             break;
         case MYSQL_TYPE_TINY:
-            result = MTDataTypeFloat;
+            result = MTDataTypeShort;
             break;
         case MYSQL_TYPE_TINY_BLOB:
             result = MTDataTypeBlob;
             break;
         case MYSQL_TYPE_VAR_STRING:
-            result = MTDataTypeString;
+            result = MTDataTypeVarChar;
             break;
         case MYSQL_TYPE_VARCHAR:
-             result = MTDataTypeString;
+             result = MTDataTypeVarChar;
             break;
         case MYSQL_TYPE_YEAR:
-            result = MTDataTypeDate;
+            result = MTDataTypeYear;
             break;
         default:
             result = MTDataTypeString;

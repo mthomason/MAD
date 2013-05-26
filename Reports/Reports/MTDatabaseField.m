@@ -37,6 +37,13 @@
         case MTDataTypeFloat:
         case MTDataTypeInteger:
         case MTDataTypeNumber:
+        case MTDataTypeDecimal:
+        case MTDataTypeDouble:
+        case MTDataTypeEnum:
+        case MTDataTypeInt24:
+        case MTDataTypeLong:
+        case MTDataTypeLongLong:
+        case MTDataTypeShort:
             result = YES;
             break;
         case MTDataTypeBlob:
@@ -50,6 +57,7 @@
         case MTDataTypeTimeStamp:
         case MTDataTypeYear:
         case MTDataTypeUnknown:
+        case MTDataTypeVarChar:
         default:
             result = NO;
             break;

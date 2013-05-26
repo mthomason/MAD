@@ -98,7 +98,7 @@
                     
                     distanceFromDropPoint = potentialPlacementDistanceFromDropPoint;
                     nearestRect = potentialPlacement;
-                    
+                    /*
                     NSLog(@"NEAREST RECT UPDATED");
                     NSLog(@"Index path:                                     %@", placedLayout.indexPath);
                     NSLog(@"Drop point:                                     %@", NSStringFromCGPoint(layout.frame.origin));
@@ -107,7 +107,7 @@
                     NSLog(@"Drop point is origin:                           %@", dropPointIsOrigin ? @"YES" : @"NO");
                     NSLog(@"Distance from drop point:                       %f", distanceFromDropPoint);
                     NSLog(@"Potential placement distance from drop point:   %f", potentialPlacementDistanceFromDropPoint);
-                    NSLog(@" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                    NSLog(@" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");*/
                 }
             
         }
@@ -120,7 +120,7 @@
 }
 
 - (void)prepareLayout {
-    NSLog(@"%d\tprepareLaout", self.collectionView.tag);
+    //NSLog(@"%d\tprepareLaout", self.collectionView.tag);
     [super prepareLayout];
     
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithArray:[self updatedItemAttributesBySection]];
@@ -268,7 +268,7 @@
 
 
 - (void)repositionLayouts:(NSArray *)layouts forLayout:(MTCollectionViewLayoutLiquidAttributes *)layoutToReposition {
-    NSLog(@"%d\trepositionLayouts\nLayouts\t\t%@\nlayoutToReposition\t\t%@-%@", self.collectionView.tag, layouts, layoutToReposition.description, NSStringFromCGRect([layoutToReposition frame]));
+    //NSLog(@"%d\trepositionLayouts\nLayouts\t\t%@\nlayoutToReposition\t\t%@-%@", self.collectionView.tag, layouts, layoutToReposition.description, NSStringFromCGRect([layoutToReposition frame]));
 
     if ([[layoutToReposition description] isEqualToString: @"quotes.author"]) {
         BOOL yes = YES;

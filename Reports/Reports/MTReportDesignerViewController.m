@@ -1534,7 +1534,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Display number cell at index path %@", indexPath);
+    //NSLog(@"Display number cell at index path %@", indexPath);
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
@@ -1611,12 +1611,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                                                                             fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    NSLog(@"Number of items: %d in section: %d", [objects count], section);
+    //NSLog(@"Number of items: %d in section: %d", [objects count], section);
     return [objects count];
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"viewForSupplementaryElementOfKind: %@ atIndexPath %@", kind, indexPath);
+    //NSLog(@"viewForSupplementaryElementOfKind: %@ atIndexPath %@", kind, indexPath);
 
     MTCollectionReuseableViewDefault *result = nil;
     
@@ -1647,12 +1647,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    NSLog(@"numberOfSectionsInCollectionView: %d", [[documentSection hasRows] count]);
+    //NSLog(@"numberOfSectionsInCollectionView: %d", [[documentSection hasRows] count]);
     return [[documentSection hasRows] count];
 }
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
-    NSLog(@"numberOfItemsInSection");
+    //NSLog(@"numberOfItemsInSection");
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
