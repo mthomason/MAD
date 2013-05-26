@@ -1,3 +1,14 @@
+Before Release
+    Complete Report Rendering
+    White Space Document Element
+    Print Preview of Report
+    Print Report
+    Send to Email
+    Export PDF
+    General Bug Sweep
+    Make Sure iPhone and iPad Versions Match
+    Report Viewer Stand Alone Version
+
 Report Designer
     Implement "border" in the same way that margin and padding are implemented.
     On iPad version, make sure tool box close button works.  Right now, only touch away works.
