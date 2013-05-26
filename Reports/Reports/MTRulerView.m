@@ -13,7 +13,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        [self setBackgroundColor:[UIColor yellowColor]];
+        [self setBackgroundColor:[UIColor edaYellow]];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundColor:[UIColor yellowColor]];
+        [self setBackgroundColor:[UIColor edaYellow]];
     }
     return self;
 }

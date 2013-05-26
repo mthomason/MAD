@@ -242,11 +242,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
     CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-    CGFloat shadowOpacity = 1.00000f;
-    CGSize shadowOffset = CGSizeMake(-1.0000f, -1.0000f);
-    [[viewRuler layer] setShadowColor: shadowColor];
-    [[viewRuler layer] setShadowOpacity: shadowOpacity];
-    [[viewRuler layer] setShadowOffset: shadowOffset];
     [[viewRuler layer] setCornerRadius: 6.0000f];
     [[viewRuler layer] setMasksToBounds: YES];
     [[viewRuler layer] setBorderColor: shadowColor];
@@ -274,10 +269,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
         [flowLayoutDesignerSection setDelegate:self];
-//        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
-        [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+//        [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+        [backgroundView setBackgroundColor:[UIColor edaGreenLight]];
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
 
@@ -351,11 +347,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
         [[collectionView layer] setBorderColor: shadowColor];
         [[collectionView layer] setBorderWidth: 3.0000f];
-        [[collectionView layer] setShadowOffset: shadowOffset];
-        [[collectionView layer] setShadowColor: shadowColor];
-        [[collectionView layer] setShadowOpacity: shadowOpacity];
 
-        
         [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
         [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
@@ -433,7 +425,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     [[self designScrollView] addConstraints:labelconstraintsVertical];
     [[self designScrollView] setScrollEnabled:YES];
-    [[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+    //[[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+    [[self designScrollView] setBackgroundColor: [UIColor whiteColor]];
     [[self designScrollView] setUserInteractionEnabled:YES];
     [[self designScrollView] flashScrollIndicators];
 
