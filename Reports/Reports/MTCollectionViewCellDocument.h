@@ -13,10 +13,18 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+EverydayApps.h"
 
+@class MTCollectionViewCellDocument;
+
+@protocol MTCollectionViewCellDocumentDelegate
+- (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell;
+@end
+
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 
 @property (retain, nonatomic) IBOutlet UILabel *labelTitle;
 @property (retain, nonatomic) IBOutlet UIImageView *imagePreview;
+
+@property (nonatomic, assign) id <MTCollectionViewCellDocumentDelegate> delegate;
 
 @end
 

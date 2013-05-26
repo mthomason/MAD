@@ -10,6 +10,12 @@
 
 @implementation MTCollectionViewCellDocument
 
+- (void)dealloc {
+    [_labelTitle release];
+    [_imagePreview release];
+    [super dealloc];
+}
+
 - (void)awakeFromNib {
     
     UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
@@ -23,10 +29,20 @@
     [super awakeFromNib];
 }
 
-- (void)dealloc {
-    [_labelTitle release];
-    [_imagePreview release];
-    [super dealloc];
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    BOOL result = NO;
+    if (action == @selector(delete:)) {
+        result = YES;
+    }
+    return result;
+}
+
+- (void)delete:(id)sender {
+    [[self delegate] deleteDocumentRepresentedByCell:self];
 }
 
 @end

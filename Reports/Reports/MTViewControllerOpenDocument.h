@@ -32,7 +32,7 @@ extern NSString * const MTSegueShowOpenDocument;
         MTQueryBuilderContainerDelegate,
         MTTemplateSelectorDelegate,
         MUIViewControllerProtocol,
-        MUIViewControllerProtocol>
+        MTCollectionViewCellDocumentDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;

@@ -132,11 +132,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
-    return YES;
+    return NO;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return [self respondsToSelector:action] || [super canPerformAction:action withSender:sender];
+    return NO;
 }
 
 #pragma mark - UIViewController Overrides
@@ -281,6 +281,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 #pragma mark - Delegates
 
+- (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
+    NSIndexPath *cellPath = [[self collectionViewQueries] indexPathForCell:cell];
+    [self deleteDocumentAtIndexPath:cellPath];
+}
+
 - (void)viewControllerDidFinish:(id)sender {
     [self viewControllerDidFinish:sender animated:YES];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
@@ -420,30 +425,32 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self collectionViewQueries] != nil) {
         for (NSUInteger section = 0; section < [[self collectionViewQueries] numberOfSections]; section++) {
             for (NSUInteger item = 0; item < [[self collectionViewQueries] numberOfItemsInSection:section]; item++) {
-                NSIndexPath *selectedCellLocation = [[NSIndexPath indexPathForItem:item inSection:section] retain];
+                NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
                 MTCollectionViewCellDocument *documentCell = [(MTCollectionViewCellDocument *)[[self collectionViewQueries] cellForItemAtIndexPath:selectedCellLocation] retain];
                 if (documentCell != nil) {
                     if ([documentCell isSelected]) {
-                        
-                        NSError *error = nil;
-                        [[NSFileManager defaultManager] removeItemAtURL:[[self availableFilesCache] objectAtIndex:item] error:&error];
-                        if (!error) {
-                            if (item < [[self availableFilesCache] count]) {
-                                [[self availableFilesCache] removeObjectAtIndex:item];
-                                [[self collectionViewQueries] deleteItemsAtIndexPaths:@[selectedCellLocation]];
-                            }
-                        } else {
-                            [error presentErrorToUser];
-                        }
-                        
-                        
+                        [self deleteDocumentAtIndexPath:selectedCellLocation];
                     }
                 }
-                [selectedCellLocation release];
                 [documentCell release];
             }
         }
     }
+}
+
+- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:[[self availableFilesCache]
+                                                     objectAtIndex:index.item] error:&error];
+    if (!error) {
+        if (index.item < [[self availableFilesCache] count]) {
+            [[self availableFilesCache] removeObjectAtIndex:index.item];
+            [[self collectionViewQueries] deleteItemsAtIndexPaths:@[index]];
+        }
+    } else {
+        [error presentErrorToUser];
+    }
+    
 }
 
 
@@ -608,6 +615,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     MTCollectionViewCellDocument *result = [[collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                       forIndexPath:indexPath] retain];
+    [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *url = [[self availableFilesCache] objectAtIndex:[indexPath row]];
         [[result imagePreview] setImage:[MTDocumentTableViewCell defaultThumbnail]];
