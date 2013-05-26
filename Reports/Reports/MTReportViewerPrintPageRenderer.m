@@ -26,7 +26,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) RptqDocument *document;
 
-
+@property (nonatomic, retain) NSMutableArray *cachedHeightsForSectionByRow;
 @property (nonatomic, copy) NSArray *cachedLayoutByPage;
 @property (nonatomic, copy) NSArray *cachedSortedSortDescriptorsGroup;
 @property (nonatomic, copy) NSArray *cachedDataByPage;
@@ -52,6 +52,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (oneway void)release {
     
+    //[_cachedHeightsForSectionByRow release];
     [_cachedLayoutByPage release];
     [_cachedDataByPage release];
     [_cachedDataByGroup release];
@@ -127,6 +128,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSMutableArray *a2 = [[NSMutableArray alloc] init];
         [self setTemporaryLayoutForPage:a2];
         [a2 release];
+
+        NSMutableArray *a3 = [[NSMutableArray alloc] init];
+        [self setCachedHeightsForSectionByRow:a3];
+        [a3 release];
         
         NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
         [self setTemporaryDataByReport:d2];
@@ -706,6 +711,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         RptqQuery *query = [[database hasQueries] anyObject];
         RptqQueryCache *queryCache = [query hasQueryCache];
         
+        SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[query managedObjectContext]];
+        for (RptqDocumentSection *sec in enumerator) {
+            CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
+            [sec setLayoutHeight:@(layoutHight)];
+        }
+        [[query managedObjectContext] save:nil];
+        
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
         
         [[self temporaryLayoutByPage] removeAllObjects];
@@ -778,8 +790,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
              groupedRowsLevel:0
                 detailPrinted:&detailPrinted];
         
-        
-        //CGFloat reportFooterHeight = [RptqDocumentSection layoutHeightForSection:[[self document] hasReportFooterSection]];
         CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] layoutHeight] floatValue];
         
         [self cachePageBreakWithNextItemHeight: reportFooterHeight
@@ -789,10 +799,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cacheReportFooterWithValueDictionary:groupedRows];
         
-        //CGFloat pageFooterHeight = [RptqDocumentSection layoutHeightForSection:[[self document] hasPageFooterSection]];
         CGFloat pageFooterHeight = [[[[self document] hasPageFooterSection] layoutHeight] floatValue];
-        //[self cachePageBreakWithNextItemHeight: pageFooterHeight
-        //                           groupedRows: groupedRows];
         
         printableSpaceUsed = [self printableSpaceUsedPageHeight] + pageFooterHeight;
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
@@ -804,6 +811,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setCachedDataByGroup:[groupedRows copy]];
         [self setCachedLayoutByPage:[[self temporaryLayoutByPage] copy]];
         [self setCachedDataByPage:[[self temporaryDataByPage] copy]];
+        
+        
+        
         
         [cachedResultsForReport release];
         [groupedRows release];

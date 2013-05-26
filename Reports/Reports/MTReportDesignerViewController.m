@@ -720,10 +720,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     UICollectionView *section = [self getSectionViewForDocumentSection: [[documentObject inSectionRow] inSection]];
                     [[section collectionViewLayout] invalidateLayout];
-                    [RptqDocumentSection layoutHeightForSection:[[documentObject inSectionRow] inSection]];
-                    
-                    //RptqDocumentSection *documentSection = [[documentObject inSectionRow] inSection];
-                    //[self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height];
                 }
                 
             }
@@ -754,10 +750,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }
 }
 
-- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView {
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    [RptqDocumentSection layoutHeightForSection:section];
-}
+- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification { }
 
@@ -1426,7 +1419,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [result setFrame:CGRectZero];
     }
     [result setLastTouchPointValid: NO];
-    
+
     return [result autorelease];
 }
 
@@ -1473,8 +1466,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [documentObject setDropPointX:@(dropPoint.x)];
         [documentObject setDropPointY:@(dropPoint.y)];
         [[documentObject managedObjectContext] save:&error];
-        [RptqDocumentSection layoutHeightForSection:documentSection];
-        [[documentSection managedObjectContext] save:&error];
     } else {
         result = CGPointZero;
     }
@@ -2059,6 +2050,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 } completion:^(BOOL finished) {
                     if (finished) {
                         [self resizeCollectionView:reportSectionCollectionView forSectionWithId:[reportSectionCollectionView objectIdTag]];
+                        
+                        
                     }
                 }];
                 

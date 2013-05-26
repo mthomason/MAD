@@ -65,7 +65,6 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setDropPointX:@(CGPointZero.x)];
     [self setDropPointY:@(CGPointZero.y)];
     [self setDropIndex:@(lastDropIndex)];
-    
 }
 
 - (void)awakeFromFetch {
