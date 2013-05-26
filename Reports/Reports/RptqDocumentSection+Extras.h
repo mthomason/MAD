@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section;
 
 - (NSString *)localizedDisplayName;
 - (NSString *)sectionKey;

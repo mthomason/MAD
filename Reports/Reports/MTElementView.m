@@ -371,14 +371,14 @@
         
         [self setTransform: leftWobble];
         
-        [[self layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
+        [[self layer] setAnchorPoint:CGPointMake(0.5000f, 0.5000f)];
         
         [UIView animateWithDuration:0.3500
                               delay:0
                             options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
                          animations:^{
                              [UIView setAnimationRepeatCount:NSNotFound];
-                             self.transform = rightWobble;
+                             [self setTransform: rightWobble];
                          }
                          completion:nil];
         

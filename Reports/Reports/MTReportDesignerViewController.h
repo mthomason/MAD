@@ -49,6 +49,7 @@
         UIScrollViewDelegate,
         MTReportDesignerToolBoxDelegate,
         MTElementViewDelegate,
+        MTCollectionViewCellElementDelegate,
         MTReportDesignerSectionViewLayoutLiquidDelegate,
         MTReportDesignerObjectSelectorDelegate,
         MUIViewControllerProtocol,

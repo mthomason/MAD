@@ -547,6 +547,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                                                                                 forQuery: query];
 
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: [reportDocument managedObjectContext]];
+    UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
+
+    [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
     [[reportDocument managedObjectContext] save:nil];
     [reportDocument save:nil];
     
@@ -554,8 +557,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [backgroundView setNeedsDisplay];
     [backgroundView release];
     
-    UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
     [[documentSectionView collectionViewLayout] invalidateLayout];
+    [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
     [documentSectionView release];
     
 }
@@ -717,6 +720,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     UICollectionView *section = [self getSectionViewForDocumentSection: [[documentObject inSectionRow] inSection]];
                     [[section collectionViewLayout] invalidateLayout];
+                    [RptqDocumentSection layoutHeightForSection:[[documentObject inSectionRow] inSection]];
+                    
                     //RptqDocumentSection *documentSection = [[documentObject inSectionRow] inSection];
                     //[self checkAndUpdateHeightForSection:documentSection forHeight:[documentObject viewSize].height];
                 }
@@ -747,6 +752,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
         }
     }
+}
+
+- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView {
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    [RptqDocumentSection layoutHeightForSection:section];
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification { }
@@ -1081,57 +1091,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     return [[self sectionControlViews] objectForKey:[documentSection sectionKey]];
 }
 
-- (void)cut:(id)sender {
-    //NSLog(@"Fake a cut.");
-}
-
-- (void)copy:(id)sender {
-    //NSLog(@"Fake a copy.");
-}
-
-- (void)select:(id)sender {
-    //NSLog(@"Fake a select.");
-}
-
-- (void)selectAll:(id)sender {
-    //NSLog(@"Fake a select all.");
-}
-
-- (void)paste:(id)sender {
-    //NSLog(@"Fake a paste.");
-}
-
-- (void)delete:(id)sender {
-    //NSLog(@"Fake a delete.");
-}
-
-- (void)toggleUnderline:(id)sender {
-    //NSLog(@"Fake a delete.");
-    
-}
-
-- (void)toggleItalics:(id)sender {
-    //NSLog(@"Fake a delete.");
-    
-}
-
-- (void)toggleBoldface:(id)sender {
-    //NSLog(@"Fake a delete.");
-    
-}
-
-- (void)showFontChooser:(id)sender {
-    
-}
-
-- (void)hideFontChooser:(id)sender {
-    
-}
-
-- (void)customAction:(id)sender {
-    //NSLog(@"custom action! %@", sender);
-}
-
 - (void)openReport:(NSURL *)url {
     MTManagedDocumentPreferencesUser *trvFile = [[MTManagedDocumentPreferencesUser alloc] initWithFileURL:url];
     
@@ -1361,6 +1320,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
+    [section setLayoutHeight:@(contentSize.height)];
     [section setHeight:@(contentSize.height + 44.0000f)];
     NSError *error = nil;
     [managedObjectContext save:&error];
@@ -1383,37 +1343,30 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
-    return YES;
+    return NO;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return action == @selector(cut:) ||
-            action == @selector(copy:) ||
-            action == @selector(paste:) ||
-            action == @selector(delete:) ||
-            action == @selector(select:) ||
-            action == @selector(selectAll:) ||
-            action == @selector(toggleBoldface:) ||
-            action == @selector(toggleItalics:) ||
-            action == @selector(toggleUnderline:) ||
-            action == @selector(customAction:) ||
-            [super canPerformAction:action withSender:sender];
+    BOOL result = NO;
+    return result;
 }
 
 #pragma mark -
-#pragma mark Collection View Line Layout Delegate
-/*
-- (NSUInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+#pragma mark MTCollectionViewCellElement Delegate
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
-                                                                            fromObjectContext: managedObjectContext];
-    
-    return [[documentSection hasRows] count];
+- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
+    NSManagedObjectID *objectId = [cell objectIdTag];
+    [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
+        if (finished) {
+            NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [RptqDocumentObject removeDocumentObject:documentObject];
+        }
+    }];
 }
-*/
 
+#pragma mark -
+#pragma mark Collection View Layout Delegate
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
@@ -1507,17 +1460,21 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
+
     
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
     
     CGPoint result;
     
     if ([objects count] > row) {
+        NSError *error;
+
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
         [documentObject setDropPointX:@(dropPoint.x)];
         [documentObject setDropPointY:@(dropPoint.y)];
-        NSError *error = nil;
-        [managedObjectContext save:&error];
+        [[documentObject managedObjectContext] save:&error];
+        [RptqDocumentSection layoutHeightForSection:documentSection];
+        [[documentSection managedObjectContext] save:&error];
     } else {
         result = CGPointZero;
     }
@@ -1535,6 +1492,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
+    [cell setDelegate:self];
     if ([objects count] > [indexPath row]) {
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
@@ -1712,7 +1670,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     if (action == @selector(delete:)) {
         result = YES;
     }
-    return result || [self respondsToSelector:action];
+    return result;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
@@ -1901,6 +1859,67 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }
 }
 
+- (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
+                                    completion:(void (^)(BOOL finished))completion {
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
+    
+    RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
+    UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+    
+    
+    BOOL found = NO;
+    NSUInteger deleteSection = 0;
+    
+    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+        
+        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
+        NSUInteger deleteIndex = 0;
+        
+        
+        for (RptqDocumentObject *object in hasObjects) {
+            
+            if ([[object objectID] isEqual: elementViewId]) {
+                found = YES;
+                break;
+            }
+            
+            deleteIndex++;
+        }
+        
+        if (found) {
+            
+            [svSection performBatchUpdates:^{
+                
+                RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
+                [objectToDelete setInSectionRow:nil];
+                [hasObjects removeObjectAtIndex:deleteIndex];
+                RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
+                [row setHasObjects:hasObjects];
+                [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
+                
+                [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+                
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    completion(YES);
+                }
+            }];
+        }
+        
+        [hasObjects release];
+        if (found) {
+            break;
+        }
+        found = NO;     // FIXME: Short circut this?
+        deleteSection++;
+    }
+}
+
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     //CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
@@ -1919,64 +1938,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [[gestureRecognizer view] setCenter: newCenter];
 
             {
-                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
-                
-                RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-                UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
-                
-                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
-
-                
-                NSUInteger deleteSection = 0;
-
-                for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
-
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
-                    NSUInteger deleteIndex = 0;
-                    
-                    BOOL found = NO;
-
-                    for (RptqDocumentObject *object in hasObjects) {
-                        
-                        if ([[object objectID] isEqual: [[gestureRecognizer view] objectIdTag]]) {
-                            found = YES;
-                            break;
-                        }
-                    
-                        deleteIndex++;
+                [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:^(BOOL finished) {
+                    if (finished) {
+                        CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        [[self designScrollView] addSubview: [gestureRecognizer view]];
                     }
 
-                    if (found) {
-
-                        [svSection performBatchUpdates:^{
-                            
-                            RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
-                            [objectToDelete setInSectionRow:nil];
-                            [hasObjects removeObjectAtIndex:deleteIndex];
-                            RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
-                            [row setHasObjects:hasObjects];
-                            [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
-                            NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
-
-                            [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-
-                        } completion:^(BOOL finished) {
-                            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
-                            [[gestureRecognizer view] setCenter: newCenter];
-                            [[self designScrollView] addSubview: [gestureRecognizer view]];
-                            
-                            [svSection setDelegate:self];
-                        }];
-                    }
-                    [hasObjects release];
-                    if (found) {
-                        break;
-                    }
-                    found = NO;     // FIXME: Short circut this?
-                    deleteSection++;
-
-                }
+                }];
             }
             break;
         }

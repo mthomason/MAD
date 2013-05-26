@@ -151,6 +151,7 @@
     <entity name="RptqDocumentSection" representedClassName="RptqDocumentSection" syncable="YES">
         <attribute name="height" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="marginBottom" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="marginLeft" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="marginRight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -170,6 +171,7 @@
     </entity>
     <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES">
         <attribute name="identifier" attributeType="Integer 64" minValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="layoutHeight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="rowNumber" attributeType="Integer 64" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentObject" inverseName="inSectionRow" inverseEntity="RptqDocumentObject" syncable="YES"/>
         <relationship name="inSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection" syncable="YES"/>
@@ -306,8 +308,8 @@
         <element name="RptqDocumentObjectLabel" positionX="252" positionY="819" width="218" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="234" positionY="666" width="234" height="133"/>
         <element name="RptqDocumentObjectLabelLink" positionX="234" positionY="540" width="225" height="105"/>
-        <element name="RptqDocumentSection" positionX="-1854" positionY="-144" width="198" height="313"/>
-        <element name="RptqDocumentSectionRows" positionX="-1541" positionY="36" width="209" height="103"/>
+        <element name="RptqDocumentSection" positionX="-1854" positionY="-144" width="198" height="330"/>
+        <element name="RptqDocumentSectionRows" positionX="-1541" positionY="36" width="209" height="120"/>
         <element name="RptqQuery" positionX="-864" positionY="-1521" width="128" height="223"/>
         <element name="RptqQueryCache" positionX="205" positionY="-1579" width="128" height="133"/>
         <element name="RptqQueryField" positionX="-378" positionY="-1692" width="128" height="210"/>

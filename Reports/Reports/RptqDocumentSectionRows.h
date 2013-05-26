@@ -2,7 +2,7 @@
 //  RptqDocumentSectionRows.h
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,8 +13,9 @@
 
 @interface RptqDocumentSectionRows : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * rowNumber;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSNumber * rowNumber;
+@property (nonatomic, retain) NSNumber * layoutHeight;
 @property (nonatomic, retain) NSOrderedSet *hasObjects;
 @property (nonatomic, retain) RptqDocumentSection *inSection;
 @end

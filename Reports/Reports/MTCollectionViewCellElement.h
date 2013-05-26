@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class MTCollectionViewCellElement;
+
+@protocol MTCollectionViewCellElementDelegate
+- (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+@end
+
 @interface MTCollectionViewCellElement : UICollectionViewCell
+
+@property (nonatomic, assign) IBOutlet id <MTCollectionViewCellElementDelegate> delegate;
 
 @end

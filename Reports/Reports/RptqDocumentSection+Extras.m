@@ -31,8 +31,9 @@
     [self setIdentifier:@(identifier)];
     
     // MARK: Initalize section height.
-    [self setHeight:@(44.0000f)];
-    [self setNumberOfRows:@(1)];
+    [self setHeight:@44.0000f];
+    [self setLayoutHeight:@0.0000f];
+    [self setNumberOfRows:@1];
     
     
 }
@@ -200,24 +201,31 @@
     NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForQuery:query];
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
+        
         RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-        //NSLog(@"Row: %d, Number of Groups: %d", row, numberOfGroups);
+
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
+
             case MNSDocumentSectionTypeReportHeader:
                 resultSection = [[[document hasReportHeaderSection] retain] autorelease];
                 break;
+            
             case MNSDocumentSectionTypePageHeader:
                 resultSection = [[[document hasPageHeaderSection] retain] autorelease];
                 break;
+            
             case MNSDocumentSectionTypeBody:
                 resultSection = [[[document hasDetailSection] retain] autorelease];
                 break;
+            
             case MNSDocumentSectionTypePageFooter:
                 resultSection = [[[document hasPageFooterSection] retain] autorelease];
                 break;
+            
             case MNSDocumentSectionTypeReportFooter:
                 resultSection = [[[document hasReportFooterSection] retain] autorelease];
                 break;
+            
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
                 NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
@@ -237,6 +245,7 @@
                 [groupsUnsorted release];
                 break;
             }
+            
             case MNSDocumentSectionTypeGroupFooter: {
                 //NSLog(@"Get GF, %d", row);
                 NSInteger body              = 2 + numberOfGroups;
@@ -259,6 +268,7 @@
                 }
                 break;
             }
+            
             default:
                 break;
         }
@@ -268,13 +278,47 @@
     return resultSection;
 }
 
+
+// This is the layout height for page rendering... the designer section height is stored in the db
++ (CGFloat)layoutHeightForSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    return [RptqDocumentSection layoutHeightForSection: [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query]];
+}
+
+// This is the layout height for page rendering... the designer section height is stored in the db
++ (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section {
+    CGFloat h = CGSizeZero.height;
+    for (RptqDocumentSectionRows *row in [section hasRows]) {
+        for (RptqDocumentObject *element in [row hasObjects]) {
+            CGFloat eh = element.originy.floatValue + element.sizeheight.floatValue;
+            if (eh > h) {
+                h = eh;
+                [section setLayoutHeight:@(h)];
+            }
+        }
+    }
+    return h;
+}
+
 + (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
-    [section setHeight: [NSNumber numberWithFloat:height]];
+    [section setHeight: @(height)];
+    
+}
+
++ (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
+    [section setLayoutHeight: @(height)];
     
 }
 
@@ -383,6 +427,7 @@
 - (MNSDocumentSectionType)getDocumentSectionType {
     return [[self type] integerValue];
 }
+
 - (NSString *)localizedDisplayName {
     NSString *result = nil;
     switch ([[self type] integerValue]) {

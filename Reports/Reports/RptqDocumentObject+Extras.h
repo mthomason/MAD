@@ -43,6 +43,7 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 - (CGSize)elementViewSize;
 - (CGSize)viewSize;
 - (NSString *)designerRepresentationText;
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
 
 @end
 

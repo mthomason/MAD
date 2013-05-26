@@ -29,6 +29,8 @@
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
 
+- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView;
+
 @end
 
 @interface MTReportDesignerSectionViewLayoutLiquid : UICollectionViewLayout

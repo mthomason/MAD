@@ -25,4 +25,20 @@
     }
 }
 
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    BOOL result = NO;
+    if (action == @selector(delete:)) {
+        result = YES;
+    }
+    return result;
+}
+
+- (void)delete:(id)sender {
+    [[self delegate] deleteDocumentObjectRepresentedByCell:self];
+}
+
 @end

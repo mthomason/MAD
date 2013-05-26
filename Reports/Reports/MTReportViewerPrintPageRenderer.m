@@ -206,7 +206,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             if ([MTPageDetail isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasDetailSection];
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 [[UIColor whiteColor] set];
                 
@@ -215,14 +215,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } else if ([MTPageHeader isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasPageHeaderSection];
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 [[UIColor yellowColor] set];
                 
             } else if ([MTPageFooter isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasPageFooterSection];
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
 
                 [[UIColor yellowColor] set];
@@ -232,16 +232,16 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } else if ([MTReportHeader isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasReportHeaderSection];
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
 
                 [[UIColor greenColor] set];
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasReportFooterSection];
-                CGFloat sizeHeightReportFooter = [[documentSection height] floatValue];
+                CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
                 RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
-                CGFloat sizeHeightPageFooter = [[pageFooterSection height] floatValue];
+                CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
                 sizeHeight = sizeHeightReportFooter;
                 [[UIColor greenColor] set];
@@ -251,7 +251,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                 documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
                 
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 [[UIColor lightGrayColor] set];
                 
@@ -262,14 +262,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 //[groupLevelKeys setObject:@"" atIndexedSubscript:groupLevel];
                 query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                 documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-                sizeHeight = [[documentSection height] floatValue];
+                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 [[UIColor lightTextColor] set];
                 
             }
-            
-            
-            
 
             sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             
@@ -341,21 +338,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         dataForGroup = [[[self cachedDataByPage] objectAtIndex:pageNumber] retain];
                                         break;
                                         
-                                    case MTAggregateGroupByTypeSection: {
-                                        /*
-                                        id groupedData = [self data:[self cachedDataByGroup] forKeys:groupLevelKeys];
-                                        
-                                        groupedData = [[self cachedDataByGroup] retain];
-                                        NSLog(@"A-Group Data (%@):\n", NSStringFromClass([groupedData class]));
-                                        for (id key in groupLevelKeys) {
-                                            groupedData = [groupedData objectForKey:key];
-                                        }
-                                        NSLog(@"B-Group Data (%@):\n\t%@", NSStringFromClass([groupedData class]), groupedData);
-                                        */
+                                    case MTAggregateGroupByTypeSection:
                                         dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys] retain];
-                                        //[groupedData release];
                                         break;
-                                    }
                                         
                                     case MTAggregateGroupByTypeReport:
                                         dataForGroup = [[[self cachedDataByReport] objectAtIndex:pageNumber] retain];
@@ -779,11 +764,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
         
-        CGFloat printableSpaceUsed = [self printableSpaceUsedPageHeight] + [[[[self document] hasPageHeaderSection] height] floatValue];
+        CGFloat printableSpaceUsed = [self printableSpaceUsedPageHeight] + [[[[self document] hasPageHeaderSection] layoutHeight] floatValue];
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cachePageHeaderWithValueDictionary:groupedRows];
 
-        printableSpaceUsed = [self printableSpaceUsedPageHeight] + [[[[self document] hasReportHeaderSection] height] floatValue];
+        printableSpaceUsed = [self printableSpaceUsedPageHeight] + [[[[self document] hasReportHeaderSection] layoutHeight] floatValue];
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cacheReportHeaderWithValueDictionary:groupedRows];
         
@@ -794,7 +779,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 detailPrinted:&detailPrinted];
         
         
-        CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] height] floatValue];
+        //CGFloat reportFooterHeight = [RptqDocumentSection layoutHeightForSection:[[self document] hasReportFooterSection]];
+        CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] layoutHeight] floatValue];
         
         [self cachePageBreakWithNextItemHeight: reportFooterHeight
                                    groupedRows: groupedRows];
@@ -803,7 +789,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cacheReportFooterWithValueDictionary:groupedRows];
         
-        CGFloat pageFooterHeight = [[[[self document] hasPageFooterSection] height] floatValue];
+        //CGFloat pageFooterHeight = [RptqDocumentSection layoutHeightForSection:[[self document] hasPageFooterSection]];
+        CGFloat pageFooterHeight = [[[[self document] hasPageFooterSection] layoutHeight] floatValue];
         //[self cachePageBreakWithNextItemHeight: pageFooterHeight
         //                           groupedRows: groupedRows];
         
@@ -853,9 +840,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 //Group header section
                 for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                        [self cachePageBreakWithNextItemHeight: [[documentSection height] floatValue]
+                        [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
                                                    groupedRows: groupedRows];
-                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection height] floatValue];
+                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection layoutHeight] floatValue];
                         [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
                         break;
                     }
@@ -879,9 +866,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 //Group footer section
                 for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                        [self cachePageBreakWithNextItemHeight: [[documentSection height] floatValue]
+                        [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
                                                    groupedRows: groupedRows];
-                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection height] floatValue];
+                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection layoutHeight] floatValue];
                         [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
                         break;
                     }
@@ -908,10 +895,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     RptqDocumentSection *detailSection = [[self document] hasDetailSection];
     for (NSDictionary *resultDictionary in containerDetails) {
         
-        [self cachePageBreakWithNextItemHeight: [[detailSection height] floatValue]
+        [self cachePageBreakWithNextItemHeight: [[detailSection layoutHeight] floatValue]
                                    groupedRows: groupedRows];
         [self cacheDetailWithValueDictionary:resultDictionary];
-        CGFloat printableHeightUsed = ([self printableSpaceUsedPageHeight] + [[detailSection height] floatValue]);
+        CGFloat printableHeightUsed = ([self printableSpaceUsedPageHeight] + [[detailSection layoutHeight] floatValue]);
         [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
     }
 
@@ -979,7 +966,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     BOOL newPageCreated = NO;
     CGRect pageRect;
-    CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] height] floatValue];
+    CGFloat pageFooterSectionHeight = [[[[self document] hasPageFooterSection] layoutHeight] floatValue];
     
     if (CGRectIsEmpty([self printableRect])) {
         pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
@@ -996,7 +983,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [[self temporaryLayoutByPage] addObject:[[self temporaryLayoutForPage] copy]];
         [[self temporaryDataByPage] addObject:[[self temporaryDataForPage] copy]];
         
-        [self setPrintableSpaceUsedPageHeight: (CGPointZero.y + [[[[self document] hasPageHeaderSection] height] floatValue])];
+        [self setPrintableSpaceUsedPageHeight: (CGPointZero.y + [[[[self document] hasPageHeaderSection] layoutHeight] floatValue])];
 
         [self cachePageHeaderWithValueDictionary:groupedRows];
         

@@ -319,6 +319,39 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     return [documentObject autorelease];
 }
 
++ (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
+    
+    MTDocumentObjectType objectType = [[documentObject type] integerValue];
+    NSManagedObjectContext *managedObjectContext = [[documentObject managedObjectContext] retain];
+    
+    switch (objectType) {
+        case MTDocumentObjectTypeLabelDynamic: {
+            [managedObjectContext deleteObject:[documentObject isLabelDataField]];
+            break;
+        }
+        case MTDocumentObjectTypeLabelStatic: {
+            [managedObjectContext deleteObject:[documentObject isLabel]];
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            [managedObjectContext deleteObject:[documentObject isAggregate]];
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
+            [managedObjectContext deleteObject:[documentObject isImage]];
+            break;
+        }
+        default:
+            break;
+    }
+    [managedObjectContext deleteObject: documentObject];
+    NSError *error = nil;
+    [managedObjectContext save:&error];
+    if (error) {
+        [error presentErrorToUser];
+    }
+}
+
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];

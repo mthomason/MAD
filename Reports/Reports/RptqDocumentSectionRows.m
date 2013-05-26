@@ -2,7 +2,7 @@
 //  RptqDocumentSectionRows.m
 //  Reports
 //
-//  Created by Michael Thomason on 3/29/13.
+//  Created by Michael Thomason on 5/26/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,8 +13,9 @@
 
 @implementation RptqDocumentSectionRows
 
-@dynamic rowNumber;
 @dynamic identifier;
+@dynamic rowNumber;
+@dynamic layoutHeight;
 @dynamic hasObjects;
 @dynamic inSection;
 

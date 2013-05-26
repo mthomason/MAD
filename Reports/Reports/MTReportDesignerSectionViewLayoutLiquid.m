@@ -751,47 +751,20 @@
             break;
         }
     }
-    //NSLog(@"%d\tfinalLayoutAttributesForDisappearingItemAtIndexPath %@:\t\t%@", self.collectionView.tag, indexPath, NSStringFromCGRect(resultLayout.frame));
     return resultLayout;
 
 }
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
-
-    //NSLog(@"%d\tprepareForCollectionViewUpdates %@", self.collectionView.tag, updateItems);
     [super prepareForCollectionViewUpdates:updateItems];
-    /*
-    for (UICollectionViewUpdateItem *updatedItem in updateItems) {
-
-        switch ([updatedItem updateAction]) {
-            case UICollectionUpdateActionInsert:
-                break;
-            case UICollectionUpdateActionDelete:
-                break;
-            case UICollectionUpdateActionMove:
-                break;
-            case UICollectionUpdateActionReload:
-                break;
-            case UICollectionUpdateActionNone:
-                break;
-            default:
-                break;
-        }
-    }
-     */
 }
 
 - (void)finalizeCollectionViewUpdates {
-
-    //NSLog(@"%d\tfinalizeCollectionViewUpdates", self.collectionView.tag);
+    [[self delegate] collectionViewDidFinishUpdates:[self collectionView]];
     [super finalizeCollectionViewUpdates];
-
 }
 
 - (void)invalidateLayout {
-    
-    //NSLog(@"%d\tinvalidateLayout", self.collectionView.tag);
-    
     NSMutableArray *invalidatedLayoutArray = [[self itemAttributesBySection] copy];
     [self setInvalidatedLayoutArray:invalidatedLayoutArray];
     [invalidatedLayoutArray release];
