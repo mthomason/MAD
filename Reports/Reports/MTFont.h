@@ -30,8 +30,10 @@ extern NSString * const MTFontFamilyZapfino;
 + (id)fontWithFamilyName:(NSString *)familyName;
 - (id)initWithFamilyName:(NSString *)familyName;
 - (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize;
+- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic;
 
 - (UIFont *)font;
+- (UIFont *)standardFont;
 - (UIFont *)italicFont;
 - (UIFont *)boldFont;
 - (UIFont *)boldItalicFont;

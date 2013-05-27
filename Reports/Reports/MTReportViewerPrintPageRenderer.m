@@ -26,7 +26,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) RptqDocument *document;
 
-@property (nonatomic, retain) NSMutableArray *cachedHeightsForSectionByRow;
 @property (nonatomic, copy) NSArray *cachedLayoutByPage;
 @property (nonatomic, copy) NSArray *cachedSortedSortDescriptorsGroup;
 @property (nonatomic, copy) NSArray *cachedDataByPage;
@@ -52,7 +51,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (oneway void)release {
     
-    //[_cachedHeightsForSectionByRow release];
     [_cachedLayoutByPage release];
     [_cachedDataByPage release];
     [_cachedDataByGroup release];
@@ -128,10 +126,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSMutableArray *a2 = [[NSMutableArray alloc] init];
         [self setTemporaryLayoutForPage:a2];
         [a2 release];
-
-        NSMutableArray *a3 = [[NSMutableArray alloc] init];
-        [self setCachedHeightsForSectionByRow:a3];
-        [a3 release];
         
         NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
         [self setTemporaryDataByReport:d2];
@@ -168,23 +162,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     RptqQuery *query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
 
     NSUInteger numberOfGroups = [[query hasQueryGroups] count];
-    //NSUInteger groupLevelCounter[numberOfGroups];
     NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-  
-    /*
-    if (numberOfGroups > 1) {
-        
-        NSArray *groupKeys = [[self cachedDataByGroup] allKeys];
-        for (id key in groupKeys) {
-            
-        }
-        for (NSUInteger i = 0; i < numberOfGroups; i++) {
-            [groupLevelKeys addObject: [self cachedDataByGroup]];
-            groupLevelCounter[i] = 0;
-            [[self cachedDataByGroup] obj]
-        }
-    }
-*/
     
     if (index < [[self cachedLayoutByPage] count]) {
 
@@ -198,10 +176,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             NSString *pageSectionId = [[NSString alloc] initWithString:[pageSection objectForKey: MTReportSectionType]];
             id reportSectionValues = nil;
-            
-
-
-            //NSLog(@"%@ (%@): %@", pageSectionId, data, NSStringFromCGRect(sectionRect));
             
             NSNumber *groupLevel = nil;
             
@@ -272,7 +246,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [[UIColor lightTextColor] set];
                 
             }
-
+            
             sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             
             CGFloat sectionHeight = CGSizeZero.height;
@@ -310,7 +284,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             }
             
             NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-            NSUInteger groupCounter = 0;
             NSDictionary *rowData = [self rowDataForRow: detailRowToPrint
                                                  onPage: index];
             if (rowData != nil) {
@@ -494,6 +467,22 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [groupLevelKeys release];
 }
 
+- (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
+    NSString *fontname = [documentObject fontname];
+    NSLog(@"%@", fontname);
+    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
+    UIFont *customFont = [font font];
+    //    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
+    NSNumber *underline = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *strikethough = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+//    NSNumber *strokeWidth = [[documentObject bold] boolValue] ? @(3.0000f) : @(0.0000f);
+    
+    return @{NSFontAttributeName : customFont,
+             NSUnderlineStyleAttributeName : underline,
+             NSStrikethroughStyleAttributeName : strikethough};
+
+}
+
 - (id)sumObject:(id)obj1 andObject:(id)obj2 forType:(MTDataType)dataType {
     id result;
     switch (dataType) {
@@ -674,7 +663,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys {
-    NSLog(@"Keys (%@)\n\tDataType (%@)\n\t DataCount(%d)", keys, NSStringFromClass([data class]), [data count]);
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
         resultData = [data retain];
@@ -695,10 +683,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return [resultData autorelease];
 }
 
-- (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
-    return @{NSFontAttributeName : customFont};
-}
+#pragma mark - Routines to cache the data
+
+//  Data is cached by group, page, and report.
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
 
@@ -771,7 +758,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         [self setCachedDataByReport:[sortedResultsByRow copy]];
         
-        id groupedRows = [[self groupedResults:sortedResultsByRow
+        id groupedRows = [[self cachedGroupedResults:sortedResultsByRow
                                          level:0] retain];
         
         [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
@@ -811,9 +798,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setCachedDataByGroup:[groupedRows copy]];
         [self setCachedLayoutByPage:[[self temporaryLayoutByPage] copy]];
         [self setCachedDataByPage:[[self temporaryDataByPage] copy]];
-        
-        
-        
         
         [cachedResultsForReport release];
         [groupedRows release];
@@ -916,7 +900,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 //Roll through the groups
 //Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).
-- (id)groupedResults:(NSArray *)sortedResults level:(NSUInteger)level {
+- (id)cachedGroupedResults:(NSArray *)sortedResults level:(NSUInteger)level {
     
     BOOL detailLevel = level == [[self cachedSortedSortDescriptorsGroup] count];
     id resultsDictionary = nil;
@@ -940,7 +924,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
 
-                id resultOfNextGroup = [self groupedResults: resultsForGroup
+                id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                       level: (level + 1)];
                 
                 [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
@@ -957,7 +941,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
         NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
         if (valueForField != nil) {
-            id resultOfNextGroup = [self groupedResults: resultsForGroup
+            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                   level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             [resultsDictionary setObject:resultOfNextGroup forKey:key];

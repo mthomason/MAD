@@ -45,6 +45,8 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 @interface MTFont()
 
 @property (nonatomic, retain) NSString *familyName;
+@property (nonatomic, assign) BOOL bold;
+@property (nonatomic, assign) BOOL italic;
 
 @end
 
@@ -242,7 +244,32 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return self;
 }
 
+- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic {
+    self = [super init];
+    if (self) {
+        [self setBold:bold];
+        [self setItalic:italic];
+        [self setFamilyName:familyName];
+        [self setPointSize:pointSize];
+    }
+    return self;
+}
+
 - (UIFont *)font {
+    UIFont *result = nil;
+    if ([self bold] && [self italic]) {
+        result = [self boldItalicFont];
+    } else if ([self bold]) {
+        result = [self boldFont];
+    } else if ([self italic]) {
+        result = [self italicFont];
+    } else {
+        result = [self standardFont];
+    }
+    return result;
+}
+
+- (UIFont *)standardFont {
     NSDictionary *fontNames = [MTFont fontNamesForFamilyName:[self familyName]];
     NSString *fontName = [fontNames objectForKey: MTFontNormal];
     UIFont *result = nil;
