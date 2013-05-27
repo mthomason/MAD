@@ -5400,14 +5400,47 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectLabelCollectionViewCell" id="gfZ-mx-eyU">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="8" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectWhitespaceCollectionViewCell" id="ZOv-eD-d7E">
                                 <rect key="frame" x="195" y="0.0" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Js3-q4-gRT">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Whitespace" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRX-GP-zFt">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="An empty element to help with formatting." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="110" translatesAutoresizingMaskIntoConstraints="NO" id="J7N-bV-GIb">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="37" id="o7F-t5-DwC"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="yRX-GP-zFt" secondAttribute="trailing" constant="20" type="default" id="0Vh-jF-mQv"/>
+                                    <constraint firstItem="yRX-GP-zFt" firstAttribute="leading" secondItem="ZOv-eD-d7E" secondAttribute="leading" constant="20" type="default" id="ZFc-L2-MOb"/>
+                                    <constraint firstItem="J7N-bV-GIb" firstAttribute="top" secondItem="ZOv-eD-d7E" secondAttribute="top" constant="30" id="g6t-NW-bly"/>
+                                    <constraint firstItem="J7N-bV-GIb" firstAttribute="leading" secondItem="ZOv-eD-d7E" secondAttribute="leading" constant="20" type="default" id="uX8-tK-6JS"/>
+                                    <constraint firstAttribute="trailing" secondItem="J7N-bV-GIb" secondAttribute="trailing" constant="20" type="default" id="ugr-0Y-Clf"/>
+                                    <constraint firstItem="yRX-GP-zFt" firstAttribute="top" secondItem="ZOv-eD-d7E" secondAttribute="top" constant="13" id="x5j-6U-f88"/>
+                                </constraints>
+                                <size key="customSize" width="150" height="80"/>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectLabelCollectionViewCell" id="gfZ-mx-eyU">
+                                <rect key="frame" x="390" y="0.0" width="150" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Static Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Js3-q4-gRT">
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -5434,7 +5467,7 @@
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="f4g-SP-ifp">
-                                <rect key="frame" x="390" y="0.0" width="150" height="80"/>
+                                <rect key="frame" x="0.0" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
@@ -5467,7 +5500,7 @@
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectChartCollectionViewCell" id="Ond-Wb-EQM">
-                                <rect key="frame" x="0.0" y="90" width="150" height="80"/>
+                                <rect key="frame" x="195" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
@@ -5500,7 +5533,7 @@
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="5" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectAggregateCollectionViewCell" id="afx-kG-EgU">
-                                <rect key="frame" x="195" y="90" width="150" height="80"/>
+                                <rect key="frame" x="390" y="90" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
@@ -5533,7 +5566,7 @@
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="jCb-LZ-0jl">
-                                <rect key="frame" x="390" y="90" width="150" height="80"/>
+                                <rect key="frame" x="0.0" y="180" width="150" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
@@ -5562,6 +5595,39 @@
                                     <constraint firstAttribute="trailing" secondItem="Dzh-XJ-t42" secondAttribute="trailing" constant="20" type="default" id="Vcg-8l-n2g"/>
                                     <constraint firstAttribute="trailing" secondItem="M3l-6C-Ic0" secondAttribute="trailing" constant="20" type="default" id="uCC-Fc-BVC"/>
                                     <constraint firstItem="M3l-6C-Ic0" firstAttribute="leading" secondItem="jCb-LZ-0jl" secondAttribute="leading" constant="20" type="default" id="whn-qa-ngv"/>
+                                </constraints>
+                                <size key="customSize" width="150" height="80"/>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="6" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectGroupKeyCollectionViewCell" id="jMP-Hu-6N0">
+                                <rect key="frame" x="195" y="180" width="150" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Group Key" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uMH-sl-fgn">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="The values used to group data." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="110" translatesAutoresizingMaskIntoConstraints="NO" id="hYM-3X-trM">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="37" id="axK-9E-uTv"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="uMH-sl-fgn" firstAttribute="leading" secondItem="jMP-Hu-6N0" secondAttribute="leading" constant="20" type="default" id="BEE-im-EoK"/>
+                                    <constraint firstAttribute="trailing" secondItem="uMH-sl-fgn" secondAttribute="trailing" constant="20" type="default" id="HNW-Ao-nDf"/>
+                                    <constraint firstAttribute="trailing" secondItem="hYM-3X-trM" secondAttribute="trailing" constant="20" type="default" id="TZt-kY-Olg"/>
+                                    <constraint firstItem="uMH-sl-fgn" firstAttribute="top" secondItem="jMP-Hu-6N0" secondAttribute="top" constant="13" id="iDz-dJ-prp"/>
+                                    <constraint firstItem="hYM-3X-trM" firstAttribute="leading" secondItem="jMP-Hu-6N0" secondAttribute="leading" constant="20" type="default" id="t1t-cl-nmA"/>
+                                    <constraint firstItem="hYM-3X-trM" firstAttribute="top" secondItem="jMP-Hu-6N0" secondAttribute="top" constant="30" id="uft-nP-lXE"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                             </collectionViewCell>

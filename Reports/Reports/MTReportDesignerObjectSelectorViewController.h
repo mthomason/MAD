@@ -26,6 +26,7 @@
 - (void)insertDocumentObjectNewFormula;
 - (void)insertDocumentObjectNewChart;
 - (void)insertDocumentObjectNewHyperlink;
+- (void)insertDocumentObjectWhitespace;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject

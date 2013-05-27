@@ -167,8 +167,12 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
         case MTDocumentObjectTypeLabelStatic:
             result = [[self isLabel] text];
             break;
+        case MTDocumentObjectTypeWhtiespace:
+            result = @"Whitespace";
+            break;
         
         default:
+            result = @"";
             break;
     
     }
@@ -301,6 +305,12 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             [documentObject setType: @(MTDocumentObjectTypeImage)];
             
             [reportObject release];
+
+            break;
+        }
+        case MTDocumentObjectTypeWhtiespace: {
+
+            [documentObject setType: @(MTDocumentObjectTypeWhtiespace)];
 
             break;
         }

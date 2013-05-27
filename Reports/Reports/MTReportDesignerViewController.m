@@ -1775,6 +1775,38 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
            MTDocumentObjectDefinationObject : image}];
 }
 
+- (void)insertDocumentObjectWhitespace {
+    [self insertDocumentObjectWithDefination:
+     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
+    [self dismissObjectSelectorViewController];
+}
+
+- (void)insertDocumentObjectNewFormula {
+    [self dismissObjectSelectorViewController];
+    
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+
+}
+
+- (void)insertDocumentObjectNewChart {
+    [self dismissObjectSelectorViewController];
+
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+
+}
+- (void)insertDocumentObjectNewHyperlink {
+    [self dismissObjectSelectorViewController];
+
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+
+}
+
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
@@ -1807,17 +1839,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
     }];
     
-}
-
-- (void)insertDocumentObjectNewFormula {
-    [self dismissObjectSelectorViewController];
-}
-
-- (void)insertDocumentObjectNewChart {
-    [self dismissObjectSelectorViewController];
-}
-- (void)insertDocumentObjectNewHyperlink {
-    [self dismissObjectSelectorViewController];
 }
 
 #pragma mark - Gesture Recognizer Delegate

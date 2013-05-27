@@ -15,6 +15,7 @@ NSString * const MTIdentiferDocumentObjectAggregateCollectionViewCell = @"MTIden
 NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentiferDocumentObjectDataCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
+NSString * const MTIdentiferDocumentObjectWhitespaceCollectionViewCell = @"MTIdentiferDocumentObjectWhitespaceCollectionViewCell";
 
 NSString * const MTFieldOrFormulaViewControllerIdentifier = @"MTFieldOrFormulaViewControllerIdentifier";
 
@@ -241,9 +242,13 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     tag = MTDocumentObjectTypeLabelDynamic;
                     break;
                 }
-                case 4: {
+                case 9: {
                     cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
                     tag = MTDocumentObjectTypeGroupKey;
+                }
+                case 4: {
+                    cellIdentifier = MTIdentiferDocumentObjectWhitespaceCollectionViewCell;
+                    tag = MTDocumentObjectTypeWhtiespace;
                 }
                 default: {
                     break;
@@ -271,7 +276,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSInteger result = 0;
     switch (section) {
         case 0:
-            result = 4;
+            result = 5;
             break;
         default:
             break;
@@ -322,6 +327,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         
             switch (objectType) {
 
+                case MTDocumentObjectTypeWhtiespace:
+                    [[self objectSelectorDelegate] insertDocumentObjectWhitespace];
+                    break;
+                    
                 case MTDocumentObjectTypeLabelStatic:
                     navigationItemTitle = NSLocalizedString(@"Label", @"Label");
                     rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
@@ -361,7 +370,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     navigationItemTitle = NSLocalizedString(@"Group Key", @"Group Key");
                     rightBarButtonItem = nil;
                     break;
-                    
+
                 default:
                     break;
             }
