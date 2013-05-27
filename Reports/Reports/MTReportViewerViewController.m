@@ -251,8 +251,4 @@
     
 }
 
-- (void)viewDidUnload {
-    [self setBarButtonItemRefresh:nil];
-    [super viewDidUnload];
-}
 @end

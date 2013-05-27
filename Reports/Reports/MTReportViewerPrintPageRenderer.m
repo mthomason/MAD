@@ -702,8 +702,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         for (RptqDocumentSection *sec in enumerator) {
             CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
             [sec setLayoutHeight:@(layoutHight)];
+            [[sec managedObjectContext] save:nil];
         }
-        [[query managedObjectContext] save:nil];
         
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
         

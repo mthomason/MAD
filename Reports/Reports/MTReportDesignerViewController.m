@@ -505,6 +505,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([[segue identifier] isEqualToString:@"showSettings"]) {
         UINavigationController *navController = [[segue destinationViewController] retain];
         if (navController) {
@@ -515,8 +516,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             }
         }
         [navController release];
+    
     } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
-        //NSLog(@"Sender :%@", sender);
+        
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [[popoverSegue popoverController] retain];
@@ -525,11 +527,14 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         }
         MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
+        
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
 
         MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
         [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
+        
+        [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
         
     }
 }
@@ -1303,8 +1308,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
         }
     } else {
+        [[self designScrollView] setContentOffset:CGPointZero animated:NO];
         [self dismissViewControllerAnimated:YES completion:^{
-            
+        
         }];
     }
 }
@@ -1700,21 +1706,23 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
+        [[self designScrollView] setContentOffset:CGPointZero animated:NO];
         [self dismissViewControllerAnimated:YES completion:^{
-            
+
         }];
     } else {
         if ([UIDevice isPad]) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
             } else {
+                [[self designScrollView] setContentOffset:CGPointZero animated:NO];
                 [self dismissViewControllerAnimated:YES completion:^{
-                    
+
                 }];
             }
         } else {
+            [[self designScrollView] setContentOffset:CGPointZero animated:NO];
             [self dismissViewControllerAnimated:YES completion:^{
-                
             }];
         }
     }
