@@ -376,7 +376,13 @@
                                 </items>
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="z6W-8h-kya">
-                                <items/>
+                                <items>
+                                    <barButtonItem title="Print" id="DID-rD-aUM">
+                                        <connections>
+                                            <action selector="print:" destination="yU8-vi-ajy" id="u4R-WG-2HC"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Osy-v2-DAi">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -397,6 +403,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="printButton" destination="DID-rD-aUM" id="jCQ-9L-Kag"/>
                         <outlet property="viewBackground" destination="qss-v8-rBe" id="opr-tF-kEL"/>
                         <outlet property="viewContainer" destination="Osy-v2-DAi" id="cZ5-pF-wHh"/>
                     </connections>
@@ -6821,7 +6828,11 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="print:"/>
+                <relationship kind="action" name="refresh:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>

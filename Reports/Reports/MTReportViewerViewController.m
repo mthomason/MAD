@@ -48,6 +48,7 @@
     [_toolbarBottom release];
     [_toolbars release];
     [_barButtonItemRefresh release];
+    [_printButton release];
     [super dealloc];
 }
 
@@ -186,6 +187,36 @@
     [self setNumberOfPages:numberOfPages];
 }
 
+- (IBAction)print:(id)sender {
+
+    UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];
+    if(controller){
+        
+        UIPrintInteractionCompletionHandler completionHandler =
+        ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+            if(!completed && error){
+                NSLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
+            }
+        };
+        
+        // Obtain a printInfo so that we can set our printing defaults.
+        UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+        printInfo.outputType = UIPrintInfoOutputGeneral;
+        printInfo.jobName = [[RptqDocument activeDocument] name];
+        printInfo.duplex = UIPrintInfoDuplexLongEdge;
+        controller.printInfo = printInfo;
+        
+        controller.showsPageRange = YES;
+        controller.printPageRenderer = [self printPageRendererReport];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [controller presentFromBarButtonItem:[self printButton] animated:YES completionHandler:completionHandler];  // iPad
+        } else {
+            [controller presentAnimated:YES completionHandler:completionHandler];  // iPhone
+        }
+    }
+
+}
 
 #pragma mark - UIPageViewControllerDataSrouce
 
@@ -251,4 +282,8 @@
     
 }
 
+- (void)viewDidUnload {
+    [self setPrintButton:nil];
+    [super viewDidUnload];
+}
 @end
