@@ -45,6 +45,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
 
+@property (nonatomic, assign) BOOL debugMode;
+
 @end
 
 @implementation MTReportViewerPrintPageRenderer
@@ -143,6 +145,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setTemporaryDataForPage:d5];
         [d5 release];
 
+        [self setDebugMode:NO];
         
     }
     return self;
@@ -196,15 +199,23 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 documentSection = [[self document] hasPageHeaderSection];
                 sizeHeight = [[documentSection layoutHeight] floatValue];
                 
-                [[UIColor yellowColor] set];
-                
+                if ([self debugMode]) {
+                    [[UIColor yellowColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+            
             } else if ([MTPageFooter isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasPageFooterSection];
                 sizeHeight = [[documentSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
 
-                [[UIColor yellowColor] set];
+                if ([self debugMode]) {
+                    [[UIColor yellowColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
                 
                 pageNumber++;
                 
@@ -213,7 +224,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 documentSection = [[self document] hasReportHeaderSection];
                 sizeHeight = [[documentSection layoutHeight] floatValue];
 
-                [[UIColor greenColor] set];
+                if ([self debugMode]) {
+                    [[UIColor greenColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
@@ -223,16 +238,25 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
                 sizeHeight = sizeHeightReportFooter;
-                [[UIColor greenColor] set];
-                
+
+                if ([self debugMode]) {
+                    [[UIColor greenColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+
             } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
                 
                 groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                 documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
                 
                 sizeHeight = [[documentSection layoutHeight] floatValue];
-                
-                [[UIColor lightGrayColor] set];
+
+                if ([self debugMode]) {
+                    [[UIColor lightGrayColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
                 
             } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
                 
@@ -243,10 +267,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
                 sizeHeight = [[documentSection layoutHeight] floatValue];
                 
-                [[UIColor lightTextColor] set];
-                
+                if ([self debugMode]) {
+                    [[UIColor lightTextColor] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+
             }
-            
+        
             sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             
             CGFloat sectionHeight = CGSizeZero.height;
@@ -417,7 +445,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 break;
                             }
                             case MTDocumentObjectTypeImage: {
-                                drawingObject = [[item isImage] image];
+                                drawingObject = [[[item isImage] image] retain];
                                 displayString = @"";
                                 break;
                             }
