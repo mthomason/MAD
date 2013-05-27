@@ -38,7 +38,7 @@
     [[self view] setClipsToBounds:YES];
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:[[self view] bounds]];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [renderedReportView setBackgroundColor:[UIColor brownColor]];
+    [renderedReportView setBackgroundColor:[UIColor whiteColor]];
     [renderedReportView setDelegate:self];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
