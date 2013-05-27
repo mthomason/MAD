@@ -65,6 +65,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 @property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
+@property (nonatomic, retain) MTRulerView *viewRuler;
+
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @end
@@ -74,6 +76,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_viewRuler release];
     [_sectionControlViewsHeighConstraint release];
     [_navigationControllerSectionLayoutSettings release];
     [_layoutConstraintsReportSectionHeight release];
@@ -126,7 +129,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [super viewDidLoad];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-
+    
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
 
@@ -141,6 +144,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     [[[self viewControllerSectionLayoutSettings] navigationItem] setRightBarButtonItem:doneButton animated:NO];
     [doneButton release];
+    
+    //[[self designScrollView] setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
 
     if ([UIDevice isPad]) {
         
@@ -173,15 +178,24 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     [self setToolbarTopItems:[[self toolbarTop] items]];
     [self setToolbarBottomItems:[[self toolbarBottom] items]];
-    
+    [self setToolboxIsVisible:NO];
+
+    MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+    CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
+    [[viewRuler layer] setCornerRadius: 6.0000f];
+    [[viewRuler layer] setMasksToBounds: YES];
+    [[viewRuler layer] setBorderColor: shadowColor];
+    [[viewRuler layer] setBorderWidth: 3.0000f];
+    [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+
     NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
     NSMutableString *stringContstraintsVertical = [[NSMutableString alloc] initWithString:@"V:|"];
     NSMutableDictionary *dictionaryViewsVertical = [[NSMutableDictionary alloc] init];
     CGFloat paddingBorder = 3.0000f, paddingLabel = 2.0000f, heightLabel = 22.0000f, cornerRadius = 5.0000f;
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
-    
-    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:managedObjectContect];
 
@@ -218,6 +232,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+
     [[self view] addConstraint:layoutConstraintToolboxHeightHidden];
 
     [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
@@ -233,19 +248,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
      NSLayoutConstraint *layoutConstraintToolboxVisible = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f];
     [[self view] addConstraint:layoutConstraintToolboxVisible];
-    
-    [self setToolboxIsVisible:NO];
-    
+        
     NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
     [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
     [collectionViewReuseIdentifiers release];
     
-    MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-    [[viewRuler layer] setCornerRadius: 6.0000f];
-    [[viewRuler layer] setMasksToBounds: YES];
-    [[viewRuler layer] setBorderColor: shadowColor];
-    [[viewRuler layer] setBorderWidth: 3.0000f];
 
     NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
     NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: -(paddingBorder * 2.0000f)];
@@ -253,8 +260,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self designScrollView] addConstraint:rulerConstraintHeight];
     [[self designScrollView] addConstraint:rulerConstraintWidth];
     [[self designScrollView] addConstraint:rulerConstraintLeading];
-    
-    [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [[self designScrollView] addSubview:viewRuler];
     [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 2.0, @"viewRuler"];
@@ -264,7 +269,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         CGFloat paddingTop = sectionCounter == 0 ? paddingBorder : (2 * paddingBorder);
         [lastCollectionView  release];  //Should be nil on first pass.
 
-        
         // MARK: Create collection view for report document section.
         
         MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
@@ -272,7 +276,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
-//        [backgroundView setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
         [backgroundView setBackgroundColor:[UIColor edaGreenLight]];
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
@@ -392,7 +395,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                                                                                      multiplier: 1.0000f
                                                                                        constant: -paddingLabel];
         [[self designScrollView] addConstraint:layoutConstraintLabelRight];
-
+        
         [labelSectionIdentifer release];
         [sectionControlView release];
         lastCollectionView = [collectionView retain];
@@ -429,6 +432,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self designScrollView] setBackgroundColor: [UIColor whiteColor]];
     [[self designScrollView] setUserInteractionEnabled:YES];
     [[self designScrollView] flashScrollIndicators];
+    
+    [self setViewRuler:viewRuler];
 
     [stringContstraintsVertical release];
     [dictionaryViewsVertical release];
@@ -502,6 +507,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [[self viewRuler] setNeedsDisplay];
+    // FIXME: size to fit toolbars... requires moving constraint layout to updateViewConstraints
+    //[[self toolbarBottom] sizeToFit];
+    //[[self toolbarTop] sizeToFit];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
