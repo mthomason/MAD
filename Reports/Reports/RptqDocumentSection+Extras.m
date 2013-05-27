@@ -292,7 +292,7 @@
     CGFloat h = CGSizeZero.height;
     for (RptqDocumentSectionRows *row in [section hasRows]) {
         for (RptqDocumentObject *element in [row hasObjects]) {
-            CGFloat eh = element.originy.floatValue + element.sizeheight.floatValue;
+            CGFloat eh = element.dropPointY.floatValue + element.sizeheight.floatValue;
             if (eh > h) {
                 h = eh;
                 [section setLayoutHeight:@(h)];
