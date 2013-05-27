@@ -1,5 +1,5 @@
 Before Release
-    Complete Report Rendering
+    Complete Report Rendering   - Image elements
     White Space Document Element
     Print Preview of Report
     Print Report

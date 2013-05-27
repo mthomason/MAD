@@ -299,7 +299,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     for (RptqDocumentObject *item in [row hasObjects]) {
                         
                         NSString *displayString = nil;
+                        id drawingObject = nil;
+
                         switch ([item getType]) {
+                                
                             case MTDocumentObjectTypeAggregate: {
                                 
                                 RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
@@ -414,7 +417,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 break;
                             }
                             case MTDocumentObjectTypeImage: {
-                                displayString = @"Image";
+                                drawingObject = [[item isImage] image];
+                                displayString = @"";
                                 break;
                             }
                             case MTDocumentObjectTypeLabelDynamic: {
@@ -437,10 +441,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 break;
                             }
                         }
-                        
-                        
-                        NSAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: displayString
-                                                                                                      attributes: [self attributesForDocumentObject:item]];
+
+                        if (drawingObject == nil) {
+                            drawingObject = [[NSMutableAttributedString alloc] initWithString: displayString
+                                                                                   attributes: [self attributesForDocumentObject:item]];
+                        }
                         
                         CGFloat originPointX        = [[item dropPointX] floatValue];
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
@@ -448,9 +453,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         CGFloat sizeHeight          = [[item sizeheight] floatValue];
                         CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
                         
-                        [attributedString drawInRect:elementCanvasRect];
+                        [drawingObject drawInRect:elementCanvasRect];
                         
-                        [attributedString release];
+                        [drawingObject release];
+                        drawingObject = nil;
+                        
                     }
                 }
             
