@@ -47,6 +47,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) BOOL debugMode;
 
+@property (nonatomic, assign) CGSize cachedPageSize;
+
 @end
 
 @implementation MTReportViewerPrintPageRenderer
@@ -109,6 +111,46 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return copy;
 }
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self setDocument:[RptqDocument activeDocument]];
+        [self initCommon];
+    }
+    return self;
+}
+
+- (void)initCommon {
+
+    NSMutableArray *a1 = [[NSMutableArray alloc] init];
+    [self setTemporaryLayoutByPage:a1];
+    [a1 release];
+    
+    NSMutableArray *a2 = [[NSMutableArray alloc] init];
+    [self setTemporaryLayoutForPage:a2];
+    [a2 release];
+    
+    NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
+    [self setTemporaryDataByReport:d2];
+    [d2 release];
+    
+    NSMutableArray *d3 = [[NSMutableArray alloc] init];
+    [self setTemporaryDataByPage:d3];
+    [d3 release];
+    
+    NSMutableDictionary *d4 = [[NSMutableDictionary alloc] init];
+    [self setTemporaryDataByGroup:d4];
+    [d4 release];
+    
+    NSMutableArray *d5 = [[NSMutableArray alloc] init];
+    [self setTemporaryDataForPage:d5];
+    [d5 release];
+    
+    [self setDebugMode:NO];
+
+    [self setCachedPageSize:CGSizeZero];
+}
+
 - (id)initWithDocument:(RptqDocument *)document {
     CGSize printableSize = CGSizeMake(CGFloatPointsForInches(8.5000f), CGFloatPointsForInches(11.0000f));
     return [self initWithDocument:document andPrintableAreaSize:printableSize];
@@ -117,35 +159,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
     self = [super init];
     if (self) {
-
+        
+        [self initCommon];
         [self setPrintableSize:printableAreaSize];
         [self setDocument:document];
-        
-        NSMutableArray *a1 = [[NSMutableArray alloc] init];
-        [self setTemporaryLayoutByPage:a1];
-        [a1 release];
-        
-        NSMutableArray *a2 = [[NSMutableArray alloc] init];
-        [self setTemporaryLayoutForPage:a2];
-        [a2 release];
-        
-        NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
-        [self setTemporaryDataByReport:d2];
-        [d2 release];
-        
-        NSMutableArray *d3 = [[NSMutableArray alloc] init];
-        [self setTemporaryDataByPage:d3];
-        [d3 release];
-        
-        NSMutableDictionary *d4 = [[NSMutableDictionary alloc] init];
-        [self setTemporaryDataByGroup:d4];
-        [d4 release];
-
-        NSMutableArray *d5 = [[NSMutableArray alloc] init];
-        [self setTemporaryDataForPage:d5];
-        [d5 release];
-
-        [self setDebugMode:NO];
         
     }
     return self;
@@ -470,18 +487,20 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             }
                         }
 
-                        if (drawingObject == nil) {
-                            drawingObject = [[NSMutableAttributedString alloc] initWithString: displayString
-                                                                                   attributes: [self attributesForDocumentObject:item]];
-                        }
-                        
                         CGFloat originPointX        = [[item dropPointX] floatValue];
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                         CGFloat sizeWidth           = [[item sizewidth] floatValue];
                         CGFloat sizeHeight          = [[item sizeheight] floatValue];
                         CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
-                        
-                        [drawingObject drawInRect:elementCanvasRect];
+
+                        if (drawingObject == nil) {
+                            NSMutableAttributedString *dObject = [[NSMutableAttributedString alloc] initWithString: displayString
+                                                                                   attributes: [self attributesForDocumentObject:item]];
+                            [dObject drawWithRect:elementCanvasRect options:NSStringDrawingTruncatesLastVisibleLine context:nil];
+                            [dObject release];
+                        } else {
+                            [drawingObject drawInRect:elementCanvasRect];
+                        }
                         
                         [drawingObject release];
                         drawingObject = nil;
@@ -638,6 +657,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSInteger)numberOfPages {
+    if ([self cachedLayoutByPage] == nil) {
+        [self cachePrintPageRenderDataForSize:[self printableRect].size];
+    }
     return [[self cachedLayoutByPage] count];
 }
 
@@ -718,13 +740,19 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return [resultData autorelease];
 }
 
+- (void)prepareForDrawingPages:(NSRange)range {
+    [self cachePrintPageRenderDataForSize:[self printableRect].size];
+}
+
 #pragma mark - Routines to cache the data
 
 //  Data is cached by group, page, and report.
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
 
-    if (CGSizeEqualToSize([self printableSize], printableSize) == NO) {
+    if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO) {
+        [self setCachedPageSize:printableSize];
+        
         [self setPrintableSize:printableSize];
         
         [self setTemporaryCachedDetailCounter:0];

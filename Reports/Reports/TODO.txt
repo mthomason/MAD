@@ -1,7 +1,5 @@
 Before Release
-    White Space Document Element
     Print Preview of Report
-    Print Report
     Send to Email
     Export PDF
     General Bug Sweep

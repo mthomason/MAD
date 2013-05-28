@@ -33,11 +33,14 @@
 
 @property (nonatomic, assign) BOOL pageIsAnimating;
 
+@property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRenderForPrinting;
+
 @end
 
 @implementation MTReportViewerViewController
 
 - (void)dealloc {
+    [_printPageRenderForPrinting release];
     [_initalViewControllers release];
     [_printPageRendererReport release];
     [_documentReport release];
@@ -207,7 +210,10 @@
         controller.printInfo = printInfo;
         
         controller.showsPageRange = YES;
-        controller.printPageRenderer = [self printPageRendererReport];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
+        [self setPrintPageRenderForPrinting:printPageRender];
+        controller.printPageRenderer = [self printPageRenderForPrinting];
+        [printPageRender release];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [controller presentFromBarButtonItem:[self printButton] animated:YES completionHandler:completionHandler];  // iPad
