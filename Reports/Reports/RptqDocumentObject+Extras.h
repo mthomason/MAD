@@ -44,6 +44,12 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 - (CGSize)viewSize;
 - (NSString *)designerRepresentationText;
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
+- (CGRect)paddingViewFrame;
+- (CGRect)marginViewFrame;
+- (CGRect)elementViewFrame;
+
+- (CGRect)frameInSectionForSpacingWithOriginPoint:(CGPoint)origin;
+- (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin;
 
 @end
 

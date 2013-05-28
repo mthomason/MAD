@@ -1,5 +1,4 @@
 Before Release
-    Rendering - Make sure margin and padding are used
     Document Interaction
     Print Preview of Report
     Send to Email

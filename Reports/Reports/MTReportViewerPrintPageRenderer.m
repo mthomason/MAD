@@ -495,17 +495,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             }
                         }
 
+                        //CGRect elementViewFrame = [item elementViewFrame]
+                        
                         CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
-                        CGFloat sizeWidth           = [[item sizewidth] floatValue];
-                        CGFloat sizeHeight          = [[item sizeheight] floatValue];
-                        CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
+                        CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
+
 
                         if (drawingObject == nil) {
                             
                             NSMutableAttributedString *dObject = [[NSMutableAttributedString alloc] initWithString: displayString
                                                                                    attributes: [self attributesForDocumentObject:item]];
-//                            [dObject drawWithRect:elementCanvasRect options:NSStringDrawingUsesDeviceMetrics|NSStringDrawingTruncatesLastVisibleLine context:nil];
                             [dObject drawInRect:elementCanvasRect];
                             [dObject release];
 

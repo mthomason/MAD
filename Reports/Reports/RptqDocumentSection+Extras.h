@@ -15,7 +15,7 @@
 #import "MTProtocolCompare.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {

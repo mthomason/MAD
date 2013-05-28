@@ -111,6 +111,75 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     return [self marginViewSize];
 }
 
+- (CGRect)marginViewBounds {
+    CGFloat marginBoundsSizeWidth = [[self marginLeft] floatValue] +
+    [[self marginRight] floatValue] +
+    [[self paddingLeft] floatValue] +
+    [[self paddingRight] floatValue] +
+    [[self sizewidth] floatValue];
+    CGFloat marginBoundsSizeHeight = [[self marginTop] floatValue] +
+    [[self marginBottom] floatValue] +
+    [[self paddingTop] floatValue] +
+    [[self paddingBottom] floatValue] +
+    [[self sizeheight] floatValue];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, marginBoundsSizeWidth, marginBoundsSizeHeight);
+}
+
+- (CGRect)marginViewFrame {
+    return [self marginViewBounds];
+}
+
+- (CGRect)paddingViewBounds {
+    CGFloat paddingBoundsSizeWidth = [[self paddingLeft] floatValue] +
+    [[self paddingRight] floatValue] +
+    [[self sizewidth] floatValue];
+    CGFloat paddingBoundsSizeHeight = [[self paddingTop] floatValue] +
+    [[self paddingBottom] floatValue] +
+    [[self sizeheight] floatValue];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
+}
+
+- (CGRect)paddingViewFrame {
+    CGRect paddingViewBounds = [self paddingViewBounds];
+    CGFloat originX = CGPointZero.x + [[self marginLeft] floatValue];
+    CGFloat originY = CGPointZero.y + [[self marginTop] floatValue];
+    CGFloat sizeWidth = paddingViewBounds.size.width;
+    CGFloat sizeHeight = paddingViewBounds.size.height;
+    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+}
+
+- (CGRect)elementViewBounds {
+    return CGRectMake(CGPointZero.x, CGPointZero.y,
+                      [[self sizewidth] floatValue],
+                      [[self sizeheight] floatValue]);
+}
+
+- (CGRect)elementViewFrame {
+    CGRect elementViewBounds = [self elementViewBounds];
+    CGFloat originX = CGPointZero.x + [[self paddingLeft] floatValue];
+    CGFloat originY = CGPointZero.y + [[self paddingTop] floatValue];
+    CGFloat sizeWidth = elementViewBounds.size.width;
+    CGFloat sizeHeight = elementViewBounds.size.height;
+    return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+}
+
+- (CGRect)frameInSectionForSpacingWithOriginPoint:(CGPoint)origin {
+    CGSize marginSize           = [self marginViewSize];
+    CGRect result               = CGRectMake(origin.x + [[self dropPointX] floatValue], origin.y + [[self dropPointY] floatValue], marginSize.width, marginSize.height);
+    return result;
+}
+
+- (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin {
+
+    CGRect result               = [self paddingViewFrame];
+    CGFloat x                   = [[self paddingLeft] floatValue] + result.origin.x + [[self dropPointX] floatValue] + origin.x;
+    CGFloat y                   = [[self paddingTop] floatValue] + result.origin.y + [[self dropPointY] floatValue] + origin.y;
+    CGFloat width               = result.size.width;
+    CGFloat height              = result.size.height;
+    return                      CGRectMake(x, y, width, height);
+    
+}
+
 #pragma mark - Member
 
 - (MTDocumentObjectType)getType {

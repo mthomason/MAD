@@ -289,17 +289,21 @@
 
 // This is the layout height for page rendering... the designer section height is stored in the db
 + (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section {
-    CGFloat h = CGSizeZero.height;
+    CGFloat resultHeight = CGSizeZero.height;
     for (RptqDocumentSectionRows *row in [section hasRows]) {
         for (RptqDocumentObject *element in [row hasObjects]) {
-            CGFloat eh = element.dropPointY.floatValue + element.sizeheight.floatValue;
-            if (eh > h) {
-                h = eh;
-                [section setLayoutHeight:@(h)];
+            
+            CGFloat originPointX        = [[element dropPointX] floatValue];
+            CGFloat originPointY        = [[element dropPointY] floatValue];
+            CGRect elementCanvasRect    = [element frameInSectionForSpacingWithOriginPoint:CGPointMake(originPointX, originPointY)];
+
+            if (elementCanvasRect.size.height > resultHeight) {
+                resultHeight = elementCanvasRect.size.height;
+                [section setLayoutHeight:@(resultHeight)];
             }
         }
     }
-    return h;
+    return resultHeight;
 }
 
 + (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

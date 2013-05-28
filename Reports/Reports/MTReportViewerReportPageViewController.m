@@ -85,7 +85,9 @@
     [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]+1.0000f]];
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];
-    [numberView setBackgroundColor:[UIColor blackColor]];
+    [numberView setBackgroundColor:[UIColor darkGrayColor]];
+    [numberView setUserInteractionEnabled:NO];
+    [labelView setUserInteractionEnabled:NO];
     [labelView setBackgroundColor:[UIColor clearColor]];
     [[numberView layer] setCornerRadius: 6.0000f];
     [numberView addSubview:labelView];
@@ -99,7 +101,8 @@
         [numberView setAlpha:1.0000f];
     } completion:^(BOOL finished) {
         if (finished) {
-            [UIView animateWithDuration:0.70000f delay:1.7000f options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [UIView animateWithDuration:0.70000f delay:1.7000f
+                                options:UIViewAnimationOptionCurveEaseIn animations:^{
                 [numberView setAlpha:0.0000f];
             } completion:nil ];
         }
