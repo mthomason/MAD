@@ -164,6 +164,14 @@ CGFloatPointsForInches(CGFloat inches) {
     return inches * 72.0000f;
 }
 
+CG_INLINE CGFloat CGFloatPointsForMillimeters(CGFloat millimeters);
+
+CG_INLINE CGFloat
+CGFloatPointsForMillimeters(CGFloat millimeters) {
+    CGFloat inches = millimeters * 0.0393701f;
+    return inches * 72.0000f;
+}
+
 CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);
 
 CG_INLINE CGFloat

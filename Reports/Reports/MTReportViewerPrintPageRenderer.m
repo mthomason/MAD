@@ -154,8 +154,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (id)initWithDocument:(RptqDocument *)document {
-    CGSize printableSize = CGSizeMake(CGFloatPointsForInches(8.5000f), CGFloatPointsForInches(11.0000f));
-    return [self initWithDocument:document andPrintableAreaSize:printableSize];
+    return [self initWithDocument:document andPrintableAreaSize:[MTPaper sizeLetter]];
 }
 
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
@@ -168,6 +167,22 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
     }
     return self;
+}
+
+- (void)writeToPdf:(NSString *)filepath {
+    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Everyday Apps Report Designer"};
+    CGRect letterRect = [MTPaper rectLetter];
+    [self cachePrintPageRenderDataForSize:letterRect.size];
+    NSUInteger numberOfPages = [self numberOfPages];
+    UIGraphicsBeginPDFContextToFile(filepath, letterRect, options);
+    
+    for (NSUInteger i=0; i<numberOfPages; i++) {
+        UIGraphicsBeginPDFPageWithInfo(letterRect, nil);
+        [self drawPageAtIndex:i inRect:letterRect];
+    }
+    
+    // Close the PDF context and write the contents out.
+    UIGraphicsEndPDFContext();
 }
 
 #pragma mark - UIPrintPageRenderer Overrides
@@ -371,7 +386,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         break;
                                         
                                     case MTAggregateGroupByTypeReport:
-                                        dataForGroup = [[[self cachedDataByReport] objectAtIndex:pageNumber] retain];
+                                        dataForGroup = [[self cachedDataByReport] retain];
                                         break;
                                         
                                     default:
@@ -692,7 +707,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     id value;
     if (groupType == MTAggregateGroupByTypePage) {
         NSUInteger row = [object integerValue];
-        NSDictionary *rd = [self rowDataForRow:row onPage:index];
+        NSDictionary *rd = [[self cachedDataByReport] objectAtIndex:row];//[self rowDataForRow:row onPage:page];
         value = [rd objectForKey: fieldKey];
         
     } else if (groupType == MTAggregateGroupByTypeReport) {
@@ -719,7 +734,20 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     }
     return rowData;
 }
-
+/*
+- (NSDictionary *)rowDataForRow:(NSUInteger)row {
+    return [[self cachedDataByReport] objectAtIndex:row];
+    id rowData = nil;
+    if (page < [[self cachedDataByPage] count]) {
+        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:page];
+        if (row < [pageData count]) {
+            NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
+            rowData = [[self cachedDataByReport] objectAtIndex:cachedDataIndex];
+        }
+    }
+    return rowData;
+}
+*/
 - (NSString *)printDynamicDocumentLabel:(RptqDocumentObjectLabelDataField *)documentObjectDataField forRow:(NSUInteger)row onPage:(NSUInteger)page {
     NSString *result = @"";
     RptqQueryField *queryField = [documentObjectDataField referencesQueryField];

@@ -19,7 +19,9 @@
 @property (nonatomic, retain) MTReportDocument *documentReport;
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
-- (IBAction)print:(id)sender;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *printButton;
+
+- (IBAction)print:(id)sender;
+- (IBAction)sendToPdf:(id)sender;
 
 @end

@@ -124,6 +124,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         
         default: {
             NSUInteger groupNumber = [indexPath row] -2;
+            [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
             [[self delegate] didSelectGroupBySectionNumber: groupNumber];
             break;

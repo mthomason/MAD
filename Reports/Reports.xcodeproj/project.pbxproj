@@ -1809,6 +1809,11 @@
 		4CF2F26E17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */; };
 		4CF2F26F17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */; };
 		4CF2F27017525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */; };
+		4CF2F2731754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
+		4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
+		4CF2F2751754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
+		4CF2F2761754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
+		4CF2F2771754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
 		4CF339441693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339451693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339461693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
@@ -2690,6 +2695,8 @@
 		4CF2F26417525A1700DC34E3 /* RptqDocumentSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSection.m; sourceTree = "<group>"; };
 		4CF2F26A17525A1800DC34E3 /* RptqDocumentSectionRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentSectionRows.h; sourceTree = "<group>"; };
 		4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionRows.m; sourceTree = "<group>"; };
+		4CF2F2711754F8F200DC34E3 /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaper.h; sourceTree = "<group>"; };
+		4CF2F2721754F8F200DC34E3 /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaper.m; sourceTree = "<group>"; };
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
@@ -3026,6 +3033,8 @@
 				4C0AFC3916B1C2750007964D /* MTSqlite3.m */,
 				4CE9BC2316EF59CB00B0808C /* MTActiveDocument.h */,
 				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
+				4CF2F2711754F8F200DC34E3 /* MTPaper.h */,
+				4CF2F2721754F8F200DC34E3 /* MTPaper.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -5492,6 +5501,7 @@
 				4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4CF2F26617525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26D17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
+				4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5688,6 +5698,7 @@
 				4C934D7D1745EF2D00F1A3C1 /* RptqQueryResultValues.m in Sources */,
 				4CF2F26817525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26F17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
+				4CF2F2761754F8F300DC34E3 /* MTPaper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5884,6 +5895,7 @@
 				4C934D7C1745EF2D00F1A3C1 /* RptqQueryResultValues.m in Sources */,
 				4CF2F26717525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26E17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
+				4CF2F2751754F8F300DC34E3 /* MTPaper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6084,6 +6096,7 @@
 				4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4CF2F26517525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26C17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
+				4CF2F2731754F8F300DC34E3 /* MTPaper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6280,6 +6293,7 @@
 				4C934D7E1745EF2D00F1A3C1 /* RptqQueryResultValues.m in Sources */,
 				4CF2F26917525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F27017525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
+				4CF2F2771754F8F300DC34E3 /* MTPaper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

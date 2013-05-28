@@ -10,6 +10,7 @@
 #define Reports_MTPrintPageRendererReport_h
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectLabelDataField+Extras.h"
@@ -18,12 +19,14 @@
 #import "CGGeometry+Extras.h"
 #import "RptqDocumentSectionRows+Extras.h"
 #import "RptqDocumentSection+Extras.h"
+#import "MTPaper.h"
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
 
 - (id)initWithDocument:(RptqDocument *)document;
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
+- (void)writeToPdf:(NSString *)filepath;
 
 @end
 

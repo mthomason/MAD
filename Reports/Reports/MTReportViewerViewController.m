@@ -189,6 +189,14 @@
     NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
     [self setNumberOfPages:numberOfPages];
 }
+- (IBAction)sendTo:(id)sender {
+}
+
+- (IBAction)sendToPdf:(id)sender {
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
+    [printPageRender writeToPdf:@"/Users/mthomason/Desktop/edareports.pdf"];
+    [printPageRender release];
+}
 
 - (IBAction)print:(id)sender {
 
