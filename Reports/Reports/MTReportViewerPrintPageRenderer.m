@@ -48,6 +48,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @property (nonatomic, assign) BOOL debugMode;
 
 @property (nonatomic, assign) CGSize cachedPageSize;
+@property (nonatomic, assign) CGRect cachedPageRect;
 
 @end
 
@@ -149,6 +150,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [self setDebugMode:NO];
 
     [self setCachedPageSize:CGSizeZero];
+    [self setCachedPageRect:CGRectZero];
 }
 
 - (id)initWithDocument:(RptqDocument *)document {
@@ -406,6 +408,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         break;
                                     }
+                                    
                                     case MTAggregateFunctionTypeMean: {
                                         
                                         
@@ -425,6 +428,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         break;
                                     }
+                                    
                                     case MTAggregateFunctionTypeMin: {
                                         
                                         id result = nil;
@@ -461,11 +465,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                                         forValue:aggregateResult];
                                 break;
                             }
+                            
                             case MTDocumentObjectTypeImage: {
                                 drawingObject = [[[item isImage] image] retain];
                                 displayString = @"";
                                 break;
                             }
+                            
                             case MTDocumentObjectTypeLabelDynamic: {
                                 
                                 RptqQueryField *queryField = [[item isLabelDataField] referencesQueryField];
@@ -477,29 +483,36 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                                         forValue:value];
                                 break;
                             }
+                            
                             case MTDocumentObjectTypeLabelStatic: {
                                 displayString = [[item isLabel] text];
                                 break;
                             }
+                            
                             default: {
                                 displayString = @"";
                                 break;
                             }
                         }
 
-                        CGFloat originPointX        = [[item dropPointX] floatValue];
+                        CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                         CGFloat sizeWidth           = [[item sizewidth] floatValue];
                         CGFloat sizeHeight          = [[item sizeheight] floatValue];
                         CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, sizeWidth, sizeHeight);
 
                         if (drawingObject == nil) {
+                            
                             NSMutableAttributedString *dObject = [[NSMutableAttributedString alloc] initWithString: displayString
                                                                                    attributes: [self attributesForDocumentObject:item]];
-                            [dObject drawWithRect:elementCanvasRect options:NSStringDrawingTruncatesLastVisibleLine context:nil];
+//                            [dObject drawWithRect:elementCanvasRect options:NSStringDrawingUsesDeviceMetrics|NSStringDrawingTruncatesLastVisibleLine context:nil];
+                            [dObject drawInRect:elementCanvasRect];
                             [dObject release];
+
                         } else {
+                        
                             [drawingObject drawInRect:elementCanvasRect];
+                        
                         }
                         
                         [drawingObject release];
@@ -752,7 +765,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO) {
         [self setCachedPageSize:printableSize];
-        
+        [self setCachedPageRect:[self printableRect]];
         [self setPrintableSize:printableSize];
         
         [self setTemporaryCachedDetailCounter:0];

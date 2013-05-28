@@ -13,6 +13,8 @@
 @property (nonatomic, assign, readwrite) NSUInteger pageNumber;
 @property (atomic, retain) MTReportViewerReportPageView *renderedReportView;
 
+@property (nonatomic, retain) UIView *pageNumberDisplay;
+
 @end
 
 @implementation MTReportViewerReportPageViewController
@@ -20,6 +22,7 @@
 - (void)dealloc {
     [_document release];
     [_renderedReportView release];
+    [_pageNumberDisplay release];
     [super dealloc];
 }
 
@@ -40,8 +43,10 @@
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [renderedReportView setBackgroundColor:[UIColor whiteColor]];
     [renderedReportView setDelegate:self];
+    //[[self renderedReportView] addSubview:[self pageNumberViewForPageNumber:[self pageNumber]]];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -55,6 +60,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self pageNumberViewForPageNumber:[self pageNumber]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -66,6 +72,39 @@
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
     [[self delegate] drawPageAtIndex:[self pageNumber] - 1 inRect:rect];
+}
+
+- (UIView *)pageNumberViewForPageNumber:(NSUInteger)pageNumber {
+    CGFloat w = 33.0000f;
+    CGFloat h = 33.0000f;
+    CGFloat y = CGPointZero.y + 10.0000f;
+    CGFloat x = CGPointZero.x + self.view.bounds.size.width - w - y;
+    __block UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, w, h)];
+    [labelView setText:[NSString stringWithFormat:@"%d", pageNumber]];
+    [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]+1.0000f]];
+    [labelView setTextColor:[UIColor whiteColor]];
+    [labelView setTextAlignment:NSTextAlignmentCenter];
+    [numberView setBackgroundColor:[UIColor blackColor]];
+    [labelView setBackgroundColor:[UIColor clearColor]];
+    [[numberView layer] setCornerRadius: 6.0000f];
+    [numberView addSubview:labelView];
+    [labelView autorelease];
+    [numberView setAlpha:0.0000f];
+    [[self renderedReportView] addSubview:numberView];
+    //[self setPageNumberDisplay:numberView];
+    //[numberView release];
+    
+    [UIView animateWithDuration:0.7000f animations:^{
+        [numberView setAlpha:1.0000f];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [UIView animateWithDuration:0.70000f delay:1.7000f options:UIViewAnimationOptionCurveEaseIn animations:^{
+                [numberView setAlpha:0.0000f];
+            } completion:nil ];
+        }
+    }];
+    return [numberView autorelease];
 }
 
 @end

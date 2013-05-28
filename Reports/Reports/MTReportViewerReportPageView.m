@@ -32,7 +32,7 @@
     //[[[self delegate] delegate] reloadReportView];
     //[[[[self delegate] delegate] printPageRendererReport] setPrintableSize:[self bounds].size];
     //[[[[self delegate] delegate] printPageRendererReport] cachePrintPageRenderData];
-    [self setNeedsDisplay];
+    //[self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {

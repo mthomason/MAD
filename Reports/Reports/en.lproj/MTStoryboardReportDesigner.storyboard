@@ -6828,9 +6828,7 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
-                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="print:"/>
-                <relationship kind="action" name="refresh:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>

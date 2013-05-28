@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
 #import "MTPrintingProtocol.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTReportViewerReportPageViewController : UIViewController
     <MTPrintingProtocol>
