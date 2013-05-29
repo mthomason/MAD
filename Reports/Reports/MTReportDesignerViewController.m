@@ -1114,7 +1114,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSURL *urlLibraryTemplate = [[NSFileManager applicationLibraryTemplatesDirectoryUrl] retain];
     NSURL *urlFilenameWithoutExtention = [[[urlLibraryTemplate URLByAppendingPathComponent:origionalFileName] URLByDeletingPathExtension] retain];
     
-    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentData] retain];
     NSString *templateDestinationName = [[templateDestination lastPathComponent] retain];
     
     BOOL fileWritten = NO;
@@ -1126,7 +1126,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         if (!fileWritten) {
             [templateDestination release];
             NSString *p = [[[urlFilenameWithoutExtention path] stringByAppendingFormat:@" %d", (ctr + 1)] retain];
-            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:TRVDATA_PATH_EXTENSION] retain];
+            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentData] retain];
             [p release];
         }
     }

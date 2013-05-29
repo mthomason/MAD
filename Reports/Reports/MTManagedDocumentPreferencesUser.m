@@ -11,7 +11,7 @@
 @implementation MTManagedDocumentPreferencesUser
 
 + (NSString *)persistentStoreName {
-    return TRVDATA_FILENAME;
+    return MTPersistentStoreAliasUserPreferences;
 }
 
 @end

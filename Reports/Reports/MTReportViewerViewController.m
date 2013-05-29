@@ -76,15 +76,20 @@
                                                                                        navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                                                                                      options:@{}];
     [[pageController view] setBackgroundColor:[UIColor blueColor]];
+    [pageController setDataSource:self];
+    [pageController setDelegate:self];
 
     NSUInteger initalNumberOfPagesRequired = 1;
     NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
 
+    [self setCurrentPageIndex:0];
+    
     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1];
     [[pageOne view] setBounds:[[self viewContainer] bounds]];
     [[pageOne view] setCenter:[[self viewContainer] center]];
     [pageOne setDelegate:self];
     [initalPages addObject:pageOne];
+
     [pageOne release];
     if (initalNumberOfPagesRequired == 2) {
         MTReportViewerReportPageViewController *pageTwo = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:2];
@@ -101,9 +106,6 @@
 
     [initalPages release];
     
-    [pageController setDataSource:self];
-    [pageController setDelegate:self];
-
     [[self viewContainer] addSubview:[pageController view]];
 
     [self setPageController:pageController];
@@ -159,7 +161,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[[self pageController] view] removeFromSuperview];
+    //[[[self pageController] view] removeFromSuperview];
 }
 
 - (IBAction)done:(id)sender {
@@ -168,6 +170,37 @@
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
     [[self printPageRendererReport] drawPageAtIndex:pageIndex inRect:printableRect];
+}
+
+#pragma mark - Document Interaction Controller Delegate
+
+- (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controller {
+    return self;
+}
+
+- (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
+  //  [self reloadReportView];
+//    [self pageController]
+//    [[self view] setNeedsDisplay];
+    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+    NSLog(@"%@", self.pageController.presentedViewController);
+    
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1];
+    [[pageOne view] setFrame:[[self viewContainer] bounds]];
+    //[[pageOne view] setCenter:[[self viewContainer] center]];
+    [pageOne setDelegate:self];
+    [[self pageController] setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+        
+    }];
+    [pageOne release];
+
+        //[self.pageController.presentedViewController updateCurrentPageDisplay];
 }
 
 #pragma mark - Actions
@@ -193,9 +226,14 @@
 }
 
 - (IBAction)sendToPdf:(id)sender {
+    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
-    [printPageRender writeToPdf:@"/Users/mthomason/Desktop/edareports.pdf"];
+    [printPageRender writeToPdf:temporaryFile];
     [printPageRender release];
+    UIDocumentInteractionController *c = [UIDocumentInteractionController interactionControllerWithURL:temporaryFile];
+    [c setDelegate:self];
+    [c presentPreviewAnimated:YES];
 }
 
 - (IBAction)print:(id)sender {

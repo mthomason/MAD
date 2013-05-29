@@ -44,13 +44,14 @@ NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed t
 NSString * const UIIMAGEDOCUMENTBLANK               = @"UIImageDocumentBlank";
 NSString * const APPLICATIONDATA_FILENAME           = @"appdata";
 NSString * const MYSQLDATABASEDATA_FILENAME         = @"mydata";
-NSString * const QUERYDATA_FILENAME                 = @"query";
-NSString * const TRVDATA_FILENAME                   = @"settings";
+NSString * const MTPersistentStoreAliasMad                 = @"analyitics";
+NSString * const MTPersistentStoreAliasUserPreferences                   = @"preferences";
 
-NSString * const SCHEMA_PATH_EXTENSION              = @"report";
-NSString * const TRVDATA_PATH_EXTENSION             = @"trvp";
-NSString * const REPORT_PATH_EXTENSION              = @"trv";
-NSString * const TEMPLATE_PATH_EXTENSION            = @"trvt";
+NSString * const PDF_PATH_EXTENSION                                 = @"pdf";
+NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
+NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
+NSString * const MTDocumentExtentionMobleApplicationDocumentReport  = @"madr";
+NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
 NSString * const TEMPLATES                          = @"Templates";
 

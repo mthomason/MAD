@@ -13,11 +13,15 @@
 @implementation NSFileManager (Reports)
 
 + (NSArray *)schemaFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: SCHEMA_PATH_EXTENSION];
+    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
 }
 
 + (NSArray *)reportFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:REPORT_PATH_EXTENSION];
+    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:MTDocumentExtentionMobleApplicationDocumentReport];
+}
+
++ (NSArray *)pdfFiles {
+    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:PDF_PATH_EXTENSION];
 }
 
 @end

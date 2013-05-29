@@ -32,7 +32,7 @@
 }
 
 + (NSString *)persistentStoreName {
-    return QUERYDATA_FILENAME;
+    return MTPersistentStoreAliasMad;
 }
 
 @end

@@ -195,12 +195,12 @@ extern NSString * const MNSInterfaceMessageErrorFailedToCreateReport;
 extern NSString * const UIIMAGEDOCUMENTBLANK;
 extern NSString * const APPLICATIONDATA_FILENAME;
 extern NSString * const MYSQLDATABASEDATA_FILENAME;
-extern NSString * const QUERYDATA_FILENAME;
-extern NSString * const TRVDATA_FILENAME;
+extern NSString * const MTPersistentStoreAliasMad;
+extern NSString * const MTPersistentStoreAliasUserPreferences;
 
-extern NSString * const SCHEMA_PATH_EXTENSION;
-extern NSString * const TRVDATA_PATH_EXTENSION;
-extern NSString * const REPORT_PATH_EXTENSION;
+extern NSString * const MTDocumentExtentionMobleApplicationDocument;
+extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
+extern NSString * const MTDocumentExtentionMobleApplicationDocumentReport;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 

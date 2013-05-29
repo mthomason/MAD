@@ -14,7 +14,8 @@
 #import "MTPrintingProtocol.h"
 
 @interface MTReportViewerViewController : MTViewController
-    <UIPageViewControllerDelegate, UIPageViewControllerDataSource, MTPrintingProtocol>
+    <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
+        UIDocumentInteractionControllerDelegate, MTPrintingProtocol>
 
 @property (nonatomic, retain) MTReportDocument *documentReport;
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;

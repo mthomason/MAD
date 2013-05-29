@@ -169,12 +169,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return self;
 }
 
-- (void)writeToPdf:(NSString *)filepath {
-    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Everyday Apps Report Designer"};
+- (void)writeToPdf:(NSURL *)filepath {
+    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];
     [self cachePrintPageRenderDataForSize:letterRect.size];
     NSUInteger numberOfPages = [self numberOfPages];
-    UIGraphicsBeginPDFContextToFile(filepath, letterRect, options);
+    //NSLog(@"%@", [filepath absoluteString]);
+    UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
     for (NSUInteger i=0; i<numberOfPages; i++) {
         UIGraphicsBeginPDFPageWithInfo(letterRect, nil);
