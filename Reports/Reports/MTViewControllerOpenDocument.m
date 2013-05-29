@@ -286,6 +286,73 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self deleteDocumentAtIndexPath:cellPath];
 }
 
+- (void)emailDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
+    if ([MFMailComposeViewController canSendMail]) {
+        NSIndexPath *cellPath = [[self collectionViewQueries] indexPathForCell:cell];
+        NSURL *fileToAttach = [[self availableFilesCache] objectAtIndex:cellPath.item];
+        
+        UIManagedDocument *documentReport = [[UIManagedDocument alloc] initWithFileURL:fileToAttach];
+        
+        if ([documentReport documentState] != UIDocumentStateClosed) {
+
+            [documentReport closeWithCompletionHandler:^(BOOL success) {
+                if (success) {
+
+                    [self emailDocumentRepresentedByCell:[[cell retain] autorelease]];
+                }
+
+            }];
+        }
+                
+        if (documentReport) {
+            
+                NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
+                                                                                                         @"The attached document can be opened with the Mad Viewer available on iOS.")];
+                [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
+                
+                MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
+                [mailComposer setMailComposeDelegate: self];
+                [mailComposer setMessageBody:messageBody isHTML:NO];
+                [mailComposer setSubject:NSLocalizedString(@"Emailed from Shopped?", @"This is the subject of an email export.")];
+                NSError *error = nil;
+                //NSData *data = [NSData dataWithContentsOfURL:[fileToAttach filePathURL]];
+                NSData *data = [NSData dataWithContentsOfURL:[documentReport fileURL] options:0 error:&error];
+                //NSData *data = [NSData dataWithContentsOfURL:[documentReport fileURL] options:0 error:&error];
+                if (error != nil) {
+                    [error presentErrorToUserWithTryAgain:^(BOOL success) {
+                        if (success) {
+                            [self emailDocumentRepresentedByCell:[[cell retain] autorelease]];
+                        }
+                    }];
+                } else {
+
+                    [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:@"image.jpg"];
+                    [self presentViewController:mailComposer animated:YES completion:^{ }];
+                }
+                [mailComposer release];
+                [messageBody release];
+            } else {
+                //Display an alert...
+                UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Warning", @"Heading of a warning alert message.")
+                                                                      message: NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.")
+                                                                     delegate: nil
+                                                            cancelButtonTitle: NSLocalizedString(@"OK", @"OK button on an alert message.")
+                                                            otherButtonTitles: nil];
+                [uIAlertView show];
+                [uIAlertView release];
+            }
+
+                
+                
+                
+                
+                
+        [documentReport release];
+
+    }
+
+}
+
 - (void)viewControllerDidFinish:(id)sender {
     [self viewControllerDidFinish:sender animated:YES];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
@@ -297,6 +364,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [documentReport saveContext];
         [documentReport save:^(BOOL success) {
             if (success) {
+                [[documentReport document] closeWithCompletionHandler:^(BOOL success) {
+
+                }];
                 [[MTActiveDocument sharedDocument] setActiveDocument: nil];
                 [[self tableViewQueries] reloadData];
                 [[self collectionViewQueries] reloadData];
@@ -391,8 +461,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (IBAction)about:(id)sender {
-    NSString *title = NSLocalizedString(@"About Reports", @"About Reports");
-    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.", @"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.");
+    NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"About %@", @"About Mad Designer"),  applicationName];
+    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.",
+                                          @"© Everyday Apps LLC 2013.  Software created by Michael Thomason for Everyday Apps LLC.");
     NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
 
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: title
@@ -401,12 +473,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                                otherButtonTitle: nil onDismiss:nil onCancel:nil];
     [alertView show];
     [alertView autorelease];
-/*
-    [UIAlertView showAlertViewWithTitle: title
-                                message: message
-                      cancelButtonTitle: buttonTitle
-                       otherButtonTitle: nil onDismiss: nil onCancel: nil];
- */
 }
 
 - (void)cut:(id)sender {
@@ -483,6 +549,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[result labelH1] setText: @""];    
         [[result labelH2] setText: @""];
     }
+    [result setDelegate:self];
     return result;
 }
 
@@ -605,6 +672,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+-(void)tableView:(UITableView*)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender {
+    NSLog(@"Get busy!!!");
+}
+-(BOOL)tableView:(UITableView*)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender {
+    return YES;
+}
+-(BOOL)tableView:(UITableView*)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath*)indexPath {
     return YES;
 }
 

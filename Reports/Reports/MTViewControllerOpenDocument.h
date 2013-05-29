@@ -10,6 +10,7 @@
 #define Reports_MTViewControllerOpenDocument_h
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "MTQueryBuilderViewController.h"
 #import "MTTemplateSelectorViewController.h"
 #import "NSFileManager+Reports.h"
@@ -17,6 +18,7 @@
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
 #import "MTQueryBuilderAdvancedViewController.h"
+#import "MTDocumentCellProtocol.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
@@ -29,10 +31,11 @@ extern NSString * const MTSegueShowOpenDocument;
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
+        MFMailComposeViewControllerDelegate,
         MTQueryBuilderContainerDelegate,
         MTTemplateSelectorDelegate,
         MUIViewControllerProtocol,
-        MTCollectionViewCellDocumentDelegate>
+        MTDocumentCellProtocol>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;

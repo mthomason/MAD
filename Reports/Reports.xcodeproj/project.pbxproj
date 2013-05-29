@@ -1814,6 +1814,8 @@
 		4CF2F2751754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
 		4CF2F2761754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
 		4CF2F2771754F8F300DC34E3 /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
+		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
+		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF339441693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339451693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339461693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
@@ -1984,7 +1986,7 @@
 		4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewFlowLayoutDesignerSection.m; sourceTree = "<group>"; };
 		4C3727DA168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReusableViewFloatingLabel.h; sourceTree = "<group>"; };
 		4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReusableViewFloatingLabel.m; sourceTree = "<group>"; };
-		4C384E2414B29789007B4F48 /* ReportDesigner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportDesigner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C384E2414B29789007B4F48 /* Mad Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mad Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2032,6 +2034,7 @@
 		4C50DF9116B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C5482741672D4A800CA24EB /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = Reports/TODO.txt; sourceTree = "<group>"; };
+		4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentCellProtocol.h; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentPreferencesApplication.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTManagedDocumentPreferencesApplication.m; sourceTree = "<group>"; };
 		4C5F02D614B9755400C49BE9 /* MTManagedDocumentPreferencesUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentPreferencesUser.h; sourceTree = "<group>"; };
@@ -2697,6 +2700,7 @@
 		4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionRows.m; sourceTree = "<group>"; };
 		4CF2F2711754F8F200DC34E3 /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaper.h; sourceTree = "<group>"; };
 		4CF2F2721754F8F200DC34E3 /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaper.m; sourceTree = "<group>"; };
+		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
@@ -2732,6 +2736,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F2A167643C9004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */,
@@ -2815,6 +2820,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4C8EEC8C1644E8D100FAB2F3 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */,
@@ -3190,6 +3196,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4CF2F27817564C8000DC34E3 /* MessageUI.framework */,
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
 				4C752E0B16EA3A0C001FDAA3 /* README-libmysqlclient.txt */,
 				4C5482741672D4A800CA24EB /* TODO.txt */,
@@ -3212,7 +3219,7 @@
 		4C384E2514B29789007B4F48 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E2414B29789007B4F48 /* ReportDesigner.app */,
+				4C384E2414B29789007B4F48 /* Mad Designer.app */,
 				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
 				4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */,
 				4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */,
@@ -3313,6 +3320,7 @@
 			children = (
 				4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */,
 				4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */,
+				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
 			);
 			name = "Open Document";
 			path = Reports;
@@ -4295,9 +4303,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4C0E771F163B5AEC003B951E /* ReportViewer */ = {
+		4C0E771F163B5AEC003B951E /* Mad Viewer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "ReportViewer" */;
+			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "Mad Viewer" */;
 			buildPhases = (
 				4C0E7720163B5AEC003B951E /* Sources */,
 				4C0E779E163B5AEC003B951E /* Frameworks */,
@@ -4307,7 +4315,7 @@
 			);
 			dependencies = (
 			);
-			name = ReportViewer;
+			name = "Mad Viewer";
 			productName = TheReportViewer;
 			productReference = 4C0E785B163B5AEC003B951E /* ReportViewer.app */;
 			productType = "com.apple.product-type.application";
@@ -4348,9 +4356,9 @@
 			productReference = 4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
-		4C384E2314B29789007B4F48 /* ReportDesigner */ = {
+		4C384E2314B29789007B4F48 /* Mad Designer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "ReportDesigner" */;
+			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Mad Designer" */;
 			buildPhases = (
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
@@ -4360,9 +4368,9 @@
 			);
 			dependencies = (
 			);
-			name = ReportDesigner;
+			name = "Mad Designer";
 			productName = TheReportViewer;
-			productReference = 4C384E2414B29789007B4F48 /* ReportDesigner.app */;
+			productReference = 4C384E2414B29789007B4F48 /* Mad Designer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4C860ABF167EDE7000AC1904 /* MTDataStructuresTest */ = {
@@ -4414,8 +4422,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				4C384E2314B29789007B4F48 /* ReportDesigner */,
-				4C0E771F163B5AEC003B951E /* ReportViewer */,
+				4C384E2314B29789007B4F48 /* Mad Designer */,
+				4C0E771F163B5AEC003B951E /* Mad Viewer */,
 				4C20212E163DD4090058F869 /* ReportsGeneralTest */,
 				4C1B7A53163E0D9400E331AA /* MySqlClientTest */,
 				4C860ABF167EDE7000AC1904 /* MTDataStructuresTest */,
@@ -6812,7 +6820,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "ReportViewer" */ = {
+		4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "Mad Viewer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C0E7859163B5AEC003B951E /* Debug */,
@@ -6848,7 +6856,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "ReportDesigner" */ = {
+		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Mad Designer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C384E4914B29789007B4F48 /* Debug */,

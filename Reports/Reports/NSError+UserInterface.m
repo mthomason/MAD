@@ -28,7 +28,7 @@
 
 }
 
-- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain {
+- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL tryagain))tryAgain {
     NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
     NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc),
     NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc)];
@@ -37,13 +37,24 @@
                                                         message: [self localizedFailureReason]
                                               cancelButtonTitle: continueButtonTitle
                                                otherButtonTitle: otherButtonTitles onDismiss:^(NSInteger buttonIndex) {
-                                                   tryAgain(YES);
-                                               } onCancel:nil];
+                                                   switch (buttonIndex) {
+                                                       case 0:
+                                                           tryAgain(YES);
+                                                           break;
+                                                       case 1:             //Abort applicaiton
+                                                           exit(0);
+                                                           break;
+                                                       default:
+                                                           break;
+                                                   }
+                                               } onCancel:^{
+                                                   tryAgain(NO);
+                                               }];
     [alertView show];
     [alertView autorelease];
 }
 
-- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain andCompletion:(void (^)(BOOL success))completion {
+- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL tryagain))tryAgain andCompletion:(void (^)(BOOL success))completion {
     
     NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
     NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc),

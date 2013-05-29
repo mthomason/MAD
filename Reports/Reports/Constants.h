@@ -217,6 +217,7 @@ extern NSString * const MTTableHeaderSectionKey;
 extern NSString * const MTTableSectionRowKey;
 extern NSString * const MTTableSectionRowHeightKey;
 extern NSString * const MTTableSectionSectionsKey;
+extern NSString * const PDF_PATH_EXTENSION;
 
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;

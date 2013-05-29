@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTDocumentCellProtocol.h"
 
 @interface MTDocumentTableViewCell : UITableViewCell
 
@@ -16,5 +17,7 @@
 
 + (CGFloat)defaultHeight;
 + (UIImage *)defaultThumbnail;
+
+@property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
 
 @end

@@ -26,6 +26,19 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+        UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
+                                                          action: @selector(email:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:@[menuItem]];
+        [menuItem release];
+        dispatch_async(dispatch_get_main_queue(), ^{
+        });
+    });
+
     return YES;
 }
 			
