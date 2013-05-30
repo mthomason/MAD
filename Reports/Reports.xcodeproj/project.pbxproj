@@ -4303,9 +4303,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4C0E771F163B5AEC003B951E /* Mad Viewer */ = {
+		4C0E771F163B5AEC003B951E /* MAD Viewer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "Mad Viewer" */;
+			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "MAD Viewer" */;
 			buildPhases = (
 				4C0E7720163B5AEC003B951E /* Sources */,
 				4C0E779E163B5AEC003B951E /* Frameworks */,
@@ -4315,7 +4315,7 @@
 			);
 			dependencies = (
 			);
-			name = "Mad Viewer";
+			name = "MAD Viewer";
 			productName = TheReportViewer;
 			productReference = 4C0E785B163B5AEC003B951E /* ReportViewer.app */;
 			productType = "com.apple.product-type.application";
@@ -4356,9 +4356,9 @@
 			productReference = 4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
-		4C384E2314B29789007B4F48 /* Mad Designer */ = {
+		4C384E2314B29789007B4F48 /* MAD Designer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Mad Designer" */;
+			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "MAD Designer" */;
 			buildPhases = (
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
@@ -4368,7 +4368,7 @@
 			);
 			dependencies = (
 			);
-			name = "Mad Designer";
+			name = "MAD Designer";
 			productName = TheReportViewer;
 			productReference = 4C384E2414B29789007B4F48 /* Mad Designer.app */;
 			productType = "com.apple.product-type.application";
@@ -4422,8 +4422,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				4C384E2314B29789007B4F48 /* Mad Designer */,
-				4C0E771F163B5AEC003B951E /* Mad Viewer */,
+				4C384E2314B29789007B4F48 /* MAD Designer */,
+				4C0E771F163B5AEC003B951E /* MAD Viewer */,
 				4C20212E163DD4090058F869 /* ReportsGeneralTest */,
 				4C1B7A53163E0D9400E331AA /* MySqlClientTest */,
 				4C860ABF167EDE7000AC1904 /* MTDataStructuresTest */,
@@ -6820,7 +6820,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "Mad Viewer" */ = {
+		4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "MAD Viewer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C0E7859163B5AEC003B951E /* Debug */,
@@ -6856,7 +6856,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "Mad Designer" */ = {
+		4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "MAD Designer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C384E4914B29789007B4F48 /* Debug */,
