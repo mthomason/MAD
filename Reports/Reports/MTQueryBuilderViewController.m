@@ -1176,38 +1176,18 @@
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }
 
-/*
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- 
- }
- */
-
-
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
-
-/*
-- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-*/
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 }
 
- 
-/*
- - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
- }
- */
-
 #pragma mark - NSFetchedResultsSetup
 
 - (void)reloadDocument:(MTReportDocument *)documentReport {
-    NSManagedObjectContext *managedObjectContext = [[documentReport managedDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [documentReport managedObjectContext];
     
     {
         RptqQuery *query = [RptqDocument queryForActiveDocument];

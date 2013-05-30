@@ -18,54 +18,27 @@
     [super dealloc];
 }
 
-//Create a new file
-- (id)initNewFileWithName:(NSString *)name completion:(void (^)(BOOL success))completion {
-    self = [super initNewFileWithName:name extension:MTDocumentExtentionMobleApplicationDocument managedObjectType:[MTManagedDocumentReport class] completion:^(BOOL success) {
-        if (self) {
-            RptqDocument *doc = [RptqDocument createMainDocumentForManagedObjectContext: [[self managedDocument] managedObjectContext]];
-            [doc setName: name];
-            
-            [self saveContext];
-            [self save:^(BOOL success) {
-                completion(success);
-            }];
-        }
-    }];
++ (NSString *)persistentStoreName {
+    return MTPersistentStoreAliasMad;
+}
+
+
+- (id)initWithFileURL:(NSURL *)url {
+    self = [super initWithFileURL:url];
+    if (self) {
+        
+    }
     return self;
-}
-
-//Open an existing file
-- (id)initExistingExistingFileWithUrl:(NSURL *)url completion:(void (^)(BOOL success, id document))completion {
-    self = [super initExistingFileWithUrl:url managedObjectType:[MTManagedDocumentReport class] completion:^(BOOL success, id document) {
-        if (self) {
-            completion(success, self);
-        }
-    }];
-    return self;
-}
-
-- (void)save:(void (^)(BOOL success))completion {
-    [super save: ^(BOOL success) {
-        if (completion) {
-            completion(success);
-        }
-    }];
-}
-
-- (void)saveToUrl:(NSURL *)url completion:(void (^)(BOOL success))completion {
-    [super saveToUrl:url completion:^(BOOL success){
-        completion(success);
-    }];
 }
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion {
     
-    [RptqDocument addDatabase:database toManagedObjectContext:[[self managedDocument] managedObjectContext] completion:^(BOOL success, NSError *error) {
+    [RptqDocument addDatabase:database toManagedObjectContext:[self managedObjectContext] completion:^(BOOL success, NSError *error) {
         completion(success, error);
         if (success) {
-            [self save:^(BOOL success) {
+            [self saveToUrl:[self fileURL] completion:^(BOOL success) {
 
             }];
         }
@@ -73,7 +46,7 @@
 }
 
 - (void)refresh {
-    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -93,7 +66,7 @@
 }
 
 - (void)refresh:(void (^)(BOOL success))completion {
-    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -109,7 +82,7 @@
 }
 
 - (BOOL)hasCachedData {
-    NSManagedObjectContext *managedObjectContext = [[self managedDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];

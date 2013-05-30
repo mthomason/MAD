@@ -710,7 +710,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
     NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
-    BOOL contextSaved = NO;
+    //BOOL contextSaved = NO;
 
     for (id updatedObject in updatedObjects) {
         

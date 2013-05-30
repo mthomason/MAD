@@ -409,11 +409,11 @@
     return (row <= body) ? row : body - (row - body);
 }
 
-+ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(MTManagedDocumentReport *)managedDocument {
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section {
     
     NSInteger result = 0;
     BOOL breakNow = NO;
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[managedDocument managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[section managedObjectContext]];
     NSURL *urlNeedle = [[[section objectID] URIRepresentation] retain];
 
     for (RptqDocumentSection *sec in enumerator) {

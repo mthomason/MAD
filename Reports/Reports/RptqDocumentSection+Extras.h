@@ -13,6 +13,7 @@
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
 #import "MTProtocolCompare.h"
+#import "MTReportDocument.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows+Extras.h"
 #import "RptqDocumentObject+Extras.h"
@@ -31,12 +32,11 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 @interface RptqDocumentSection (Extras) <MTProtocolCompare>
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row forQuery:(RptqQuery *)query;
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
 + (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (NSInteger)getRowForSection:(RptqDocumentSection *)section inManagedObjectContext:(MTManagedDocumentReport *)managedDocument;
++ (NSInteger)getRowForSection:(RptqDocumentSection *)section;
 
 + (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;

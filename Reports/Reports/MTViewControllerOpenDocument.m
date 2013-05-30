@@ -364,7 +364,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [documentReport saveContext];
         [documentReport save:^(BOOL success) {
             if (success) {
-                [[documentReport document] closeWithCompletionHandler:^(BOOL success) {
+                [documentReport closeWithCompletionHandler:^(BOOL success) {
 
                 }];
                 [[MTActiveDocument sharedDocument] setActiveDocument: nil];
@@ -415,29 +415,36 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self bothContentControllersDisplayed] && [self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
 
         [[self standardQueryBuilder] setDelegate: self];
-        MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:[self urlBeingOpended] completion:^(BOOL success, id document) {
+        
+        
+        [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+                                        withWrapper:[MTReportDocument class]
+                               andCompletionHandler:^(id managedDocument, BOOL success) {
+            
             if (success) {
-                [[MTActiveDocument sharedDocument] setActiveDocument: document];
-                [[self standardQueryBuilder] reloadDocument:document];
-                [[self advancedQueryBuilder] reloadDocument:document];
+                [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                [[self standardQueryBuilder] reloadDocument:managedDocument];
+                [[self advancedQueryBuilder] reloadDocument:managedDocument];
             }
+            
         }];
-        [documentReport release];
+        
     }
     [childController release];
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
     [tvc setDelegate: self];
-    MTReportDocument *documentReport = [[MTReportDocument alloc] initExistingExistingFileWithUrl:url completion:^(BOOL success, id document) {
-        if (success) {
-            
-            [[MTActiveDocument sharedDocument] setActiveDocument: document];
-            [tvc reloadDocument:document];
-
-        }
-    }];
-    [documentReport release];
+    [UIManagedDocument openManagedDocumentAtUrl:url
+                                    withWrapper:[MTReportDocument class]
+                           andCompletionHandler:^(id managedDocument, BOOL success) {
+                               
+                               if (success) {
+                                   [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                                   [tvc reloadDocument:managedDocument];
+                               }
+                               
+                           }];
 }
 
 #pragma mark - Actions

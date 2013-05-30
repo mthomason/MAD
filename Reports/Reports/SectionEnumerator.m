@@ -25,7 +25,7 @@
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     self = [super init];
     if (self) {
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         [self setManagedObjectContext:managedObjectContext];

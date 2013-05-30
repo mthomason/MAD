@@ -8,7 +8,6 @@
 
 #import "MTTableViewController.h"
 #import "MTQueryBuilderAddPredicateViewController.h"
-#import "MTManagedDocumentReport.h"
 #import "RptqQueryPredicate.h"
 
 @class MTQueryBuilderPredicateFormatViewController;

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTManagedDocumentReport.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 #import "RptqQueryTable.h"

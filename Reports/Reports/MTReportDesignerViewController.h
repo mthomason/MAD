@@ -64,13 +64,6 @@
 - (IBAction)showObjects:(id)sender;
 - (IBAction)showSettings:(id)sender;
 
-- (void)cut:(id)sender;
-- (void)copy:(id)sender;
-- (void)select:(id)sender;
-- (void)selectAll:(id)sender;
-- (void)paste:(id)sender;
-- (void)delete:(id)sender;
-
 @end
 
 #endif

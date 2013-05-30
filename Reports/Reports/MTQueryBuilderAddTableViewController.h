@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "MTManagedDocumentReport.h"
 #import "RptqDatabaseSchemaTable.h"
 
 @class MTQueryBuilderAddTableViewController;

@@ -182,9 +182,9 @@
     }
 
     //Create the document if it does not exist.
-    //if (!doc) {
-    //    doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
-    //}
+    if (!doc) {
+        doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
+    }
 
     return doc;
 }

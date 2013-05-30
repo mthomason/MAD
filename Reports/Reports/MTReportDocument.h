@@ -11,9 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MTDocument.h"
-#import "MTManagedDocumentReport.h"
-
 #import "MTDatabase.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
@@ -26,35 +23,16 @@
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryResultFields+Extras.h"
+#import "MTDocument.h"
 
 @interface MTReportDocument : MTDocument
-
-//Create a new file
-- (id)initNewFileWithName: (NSString *)name
-            completion: (void (^)(BOOL success))completion;
-
-//Open an existing file
-- (id)initExistingExistingFileWithUrl: (NSURL *)url
-           completion: (void (^)(BOOL success, id document))completion;
-
-//Save the currently opend UIManagedDocument
-- (void)save:(void (^)(BOOL success))completion;
-
-//Save the currently opend UIManagedDocument to a specific location
-- (void)saveToUrl: (NSURL *)url
-       completion: (void (^)(BOOL success))completion;
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion;
-
-//Refresh the data inside the currently opened managed document
 - (void)refresh;
 - (void)refresh:(void (^)(BOOL success))completion;
-
 - (BOOL)hasCachedData;
-
-//Export the data inside the currently opened managed document
 - (void)sendTo;
 
 @end

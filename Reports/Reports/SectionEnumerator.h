@@ -10,10 +10,8 @@
 #define Reports_SectionEnumerator_h
 
 #import <Foundation/Foundation.h>
-#import "MTManagedDocumentReport.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup.h"
-#import "MTManagedDocumentReport.h"
 
 @interface SectionEnumerator : NSEnumerator
 

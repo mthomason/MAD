@@ -11,7 +11,6 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
-#import "MTManagedDocumentReport.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "UITableViewControllerEnterString.h"
 #import "MTActiveDocument.h"

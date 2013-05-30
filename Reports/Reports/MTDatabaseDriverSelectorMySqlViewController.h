@@ -16,9 +16,9 @@
 #import "MTReportDocument.h"
 #import "MTDatabaseMySql.h"
 #import "AppDelegate.h"
-
+#import "NSURL+Document.h"
 #import "MTAlertView.h"
-
+#import "UIManagedDocument+FileOperations.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
     <UITableViewDelegate,

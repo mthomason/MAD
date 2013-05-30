@@ -288,7 +288,7 @@
     [self setSecondFieldName: result];
 }
 
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MTManagedDocumentReport *)document {
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MTReportDocument *)document {
     switch (result) {
         case MNSLinkTypeEquiJoin:
             [[[self tableViewCellJoinType] detailTextLabel] setText:[[MNSLinkTypeNames objectAtIndex:MNSLinkTypeEquiJoin] lowercaseString]];

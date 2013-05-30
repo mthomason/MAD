@@ -95,6 +95,95 @@
     [[vc view] setCenter:[[self view] center]];
     [[self view] addSubview: [vc view]];
 
+    
+    
+    
+    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
+                                                                   withExtension:MTDocumentExtentionMobleApplicationDocument];
+    
+    [UIManagedDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention
+                                    withWrapper:[MTReportDocument class]
+                           andCompletionHandler:^(id managedDocument, BOOL success) {
+        if (success) {
+            __block MTReportDocument *documentReport = managedDocument;
+            
+            MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
+            [databaseConnection setUsername:    [[self textFieldUsername] text]];
+            [databaseConnection setPassword:    [[self textFieldPassword] text]];
+            [databaseConnection setServer:      [[self textFieldHost] text]];
+            [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
+            [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
+            
+            MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+            
+            [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success, NSError *error) {
+                
+                if (success) {
+                    [[vc view] removeFromSuperview];
+                    [sender setEnabled:YES];
+                    [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                    [[self delegate] viewControllerDidFinish: self];
+                } else {
+                    
+                    [documentReport deleteFromDiskCompletion:nil];
+                    
+                    if (error) {
+                        
+                        [error presentErrorToUserWithCompletion:^(BOOL success) {
+                            
+                            [[vc view] removeFromSuperview];
+                            [sender setEnabled:YES];
+                            [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                            
+                        }];
+                        
+                    } else {
+                        
+                        MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Connection Problem", @"Connection Problem")
+                                                                            message: NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.")
+                                                                  cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
+                                                                      
+                                                                      [[vc view] removeFromSuperview];
+                                                                      [sender setEnabled:YES];
+                                                                      [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                                                                      
+                                                                  } onCancel:^{
+                                                                      
+                                                                      [[vc view] removeFromSuperview];
+                                                                      [sender setEnabled:YES];
+                                                                      [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                                                                      
+                                                                  }];
+                        [alertView show];
+                        [alertView autorelease];
+                        
+                    }
+                }
+                
+            }];
+            
+            [databaseMySql release];
+            [databaseConnection release];
+
+        } else {
+            MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
+                                                                message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
+                                                      cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
+                                                       otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
+                                                           
+                                                       } onCancel:^{
+                                                           
+                                                       }];
+            [alertView show];
+            [alertView autorelease];
+        }
+    }];
+
+    
+    
+    
+    /*
+    
     __block MTReportDocument *documentReport = [[MTReportDocument alloc] initNewFileWithName: [[self textFieldReportName] text] completion: ^(BOOL success) {
         
         if (success) {
@@ -174,7 +263,7 @@
         }
         
     }];
-    
+    */
 }
 
 - (IBAction)done:(id)sender {

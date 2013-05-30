@@ -77,7 +77,6 @@
 		4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
 		4C0E7742163B5AEC003B951E /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
-		4C0E7752163B5AEC003B951E /* MTManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C0E7754163B5AEC003B951E /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
@@ -710,7 +709,6 @@
 		4C860AF2167EDE7000AC1904 /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E371658F0A00002F8EA /* MTDatabaseTable.m */; };
 		4C860AF3167EDE7000AC1904 /* ApplicationPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098561666855300C2D3B1 /* ApplicationPreferences.m */; };
 		4C860AF4167EDE7000AC1904 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098521666850300C2D3B1 /* User.m */; };
-		4C860AF5167EDE7000AC1904 /* MTManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */; };
 		4C860AF6167EDE7000AC1904 /* MTManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */; };
 		4C860AF7167EDE7000AC1904 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
@@ -875,7 +873,6 @@
 		4C87407A15052D3D007FC473 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4C87407E15053927007FC473 /* UIImageClip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407C15053927007FC473 /* UIImageClip@2x.png */; };
 		4C87407F15053927007FC473 /* UIImageClip.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C87407D15053927007FC473 /* UIImageClip.png */; };
-		4C8779DE14CA9D90005CBE6F /* MTManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */; };
 		4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
 		4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
 		4C88A9B014ECDE560069A0AF /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
@@ -1098,10 +1095,8 @@
 		4CA163A1167EB8A100540A14 /* ApplicationPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098561666855300C2D3B1 /* ApplicationPreferences.m */; };
 		4CA163A2167EB8A500540A14 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098521666850300C2D3B1 /* User.m */; };
 		4CA163A3167EB8A700540A14 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1098521666850300C2D3B1 /* User.m */; };
-		4CA163A4167EB8AD00540A14 /* MTManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */; };
 		4CA163A5167EB8AD00540A14 /* MTManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */; };
 		4CA163A6167EB8AD00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
-		4CA163A7167EB8AE00540A14 /* MTManagedDocumentReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */; };
 		4CA163A8167EB8AE00540A14 /* MTManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */; };
 		4CA163A9167EB8AE00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
@@ -2125,8 +2120,6 @@
 		4C87407D15053927007FC473 /* UIImageClip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageClip.png; sourceTree = "<group>"; };
 		4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
 		4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryGroup+Extras.m"; sourceTree = "<group>"; };
-		4C8779DC14CA9D90005CBE6F /* MTManagedDocumentReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentReport.h; sourceTree = "<group>"; };
-		4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTManagedDocumentReport.m; sourceTree = "<group>"; };
 		4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSection+Extras.h"; sourceTree = "<group>"; };
 		4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4C88A99714EA22F80069A0AF /* SectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEnumerator.h; sourceTree = "<group>"; };
@@ -3015,8 +3008,6 @@
 				4CFF3F24164DFF1F0070E880 /* MTDocument.m */,
 				4CFF3E7B164CD75D0070E880 /* MTReportDocument.h */,
 				4CFF3E7C164CD75D0070E880 /* MTReportDocument.m */,
-				4C8779DC14CA9D90005CBE6F /* MTManagedDocumentReport.h */,
-				4C8779DD14CA9D90005CBE6F /* MTManagedDocumentReport.m */,
 				4C5F02D214B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.h */,
 				4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */,
 				4C5F02D614B9755400C49BE9 /* MTManagedDocumentPreferencesUser.h */,
@@ -5338,7 +5329,6 @@
 				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4C0E7742163B5AEC003B951E /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
-				4C0E7752163B5AEC003B951E /* MTManagedDocumentReport.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MTQueryBuilderViewController.m in Sources */,
 				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
@@ -5550,7 +5540,6 @@
 				4CA16399167EB89B00540A14 /* MTDatabaseTable.m in Sources */,
 				4CA163A0167EB8A100540A14 /* ApplicationPreferences.m in Sources */,
 				4CA163A2167EB8A500540A14 /* User.m in Sources */,
-				4CA163A4167EB8AD00540A14 /* MTManagedDocumentReport.m in Sources */,
 				4CA163A5167EB8AD00540A14 /* MTManagedDocumentPreferencesApplication.m in Sources */,
 				4CA163A6167EB8AD00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
@@ -5730,7 +5719,6 @@
 				4CA1639F167EB89C00540A14 /* MTDatabaseTable.m in Sources */,
 				4CA163A1167EB8A100540A14 /* ApplicationPreferences.m in Sources */,
 				4CA163A3167EB8A700540A14 /* User.m in Sources */,
-				4CA163A7167EB8AE00540A14 /* MTManagedDocumentReport.m in Sources */,
 				4CA163A8167EB8AE00540A14 /* MTManagedDocumentPreferencesApplication.m in Sources */,
 				4CA163A9167EB8AE00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4CA163AE167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
@@ -5933,7 +5921,6 @@
 				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4CE7B77514C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
-				4C8779DE14CA9D90005CBE6F /* MTManagedDocumentReport.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MTQueryBuilderViewController.m in Sources */,
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
@@ -6143,7 +6130,6 @@
 				4C860AF2167EDE7000AC1904 /* MTDatabaseTable.m in Sources */,
 				4C860AF3167EDE7000AC1904 /* ApplicationPreferences.m in Sources */,
 				4C860AF4167EDE7000AC1904 /* User.m in Sources */,
-				4C860AF5167EDE7000AC1904 /* MTManagedDocumentReport.m in Sources */,
 				4C860AF6167EDE7000AC1904 /* MTManagedDocumentPreferencesApplication.m in Sources */,
 				4C860AF7167EDE7000AC1904 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */,

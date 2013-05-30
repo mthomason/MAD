@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MTManagedDocumentReport.h"
 
 @interface UIManagedDocument (FileOperations)
 

@@ -11,7 +11,6 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryGroup.h"
 #import "RptqDatabaseSchemaField.h"
-#import "MTManagedDocumentReport.h"
 
 @class MTQueryBuilderAddGroupViewController;
 

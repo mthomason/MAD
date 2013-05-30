@@ -122,13 +122,13 @@
 
 }
 
-+ (void)deletePredicateWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
++ (void)deletePredicateWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
     [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
     NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
+    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
     for (NSManagedObject *result in results) {
-        [moc deleteObject: result];
+        [managedObjectContext deleteObject: result];
     }
 }
 

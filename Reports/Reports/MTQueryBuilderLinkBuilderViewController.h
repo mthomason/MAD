@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTManagedDocumentReport.h"
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"

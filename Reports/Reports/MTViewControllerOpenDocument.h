@@ -19,6 +19,7 @@
 #import "UIView+Animations.h"
 #import "MTQueryBuilderAdvancedViewController.h"
 #import "MTDocumentCellProtocol.h"
+#import "UIManagedDocument+FileOperations.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
