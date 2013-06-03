@@ -10,6 +10,7 @@
 #import "MTManagedDocumentPreferencesUser.h"
 #import "MTReportDocument.h"
 #import "UIDevice+Hack.h"
+#import "CloudManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
