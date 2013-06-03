@@ -1,7 +1,5 @@
 Before Release
     Document Interaction
-    Send to Email
-    Export PDF
     General Bug Sweep
     Make Sure iPhone and iPad Versions Match
     Report Viewer Stand Alone Version
