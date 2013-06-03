@@ -78,7 +78,8 @@
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+    NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
     
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:request error:&error];
@@ -91,9 +92,8 @@
             }];
         }
     }
-    
-    NSEntityDescription *ed                     = [NSEntityDescription entityForName:NSStringFromClass([RptqDocument class]) inManagedObjectContext: objectContext];
-    RptqDocument *document                      = [[RptqDocument alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *entityDescription                     = [NSEntityDescription entityForName:rptqDocumentName inManagedObjectContext: objectContext];
+    RptqDocument *document                      = [[RptqDocument alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:objectContext];
 
     [document setHasReportHeaderSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
     [document setHasReportFooterSection:          [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSection class]) inManagedObjectContext: objectContext]];
@@ -183,7 +183,8 @@
 
     //Create the document if it does not exist.
     if (!doc) {
-        doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
+        NSLog(@"Failed to create");
+//        doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
     }
 
     return doc;
@@ -194,6 +195,9 @@
     
     RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
     
+    if (rptqDocument == nil) {
+        rptqDocument = [RptqDocument createMainDocumentForManagedObjectContext:objectContext];
+    }
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
     

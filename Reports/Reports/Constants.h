@@ -156,6 +156,9 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 	MTHorizontalAlignmentNatrual = 4
 };
 
+extern NSString * const MTDocumentTypeUtiMad;
+extern NSString * const MTDocumentTypeExtentionMad;
+
 extern NSString * const MTCollectionElementKindSectionLabel;
 
 extern NSString * const MNSStringInterfaceButtonTitleContinue;

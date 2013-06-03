@@ -26,6 +26,8 @@
     [self setSelectedBackgroundView:selectedBackground];
     [selectedBackground release];
     
+    [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+    
     [super awakeFromNib];
 }
 

@@ -857,8 +857,7 @@
                     }
 
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                    [activateDocument save:^(BOOL success) {
-
+                    [activateDocument saveToURL:[activateDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
                     }];
                     
                     

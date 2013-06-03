@@ -21,6 +21,12 @@
     return MNSDocumentHeight;
 }
 
+- (void)awakeFromNib {
+    [[self imageThumbnail] setContentMode:UIViewContentModeScaleAspectFit];
+
+    [super awakeFromNib];
+}
+
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
     if (action == @selector(delete:) || action == @selector(email:)) {

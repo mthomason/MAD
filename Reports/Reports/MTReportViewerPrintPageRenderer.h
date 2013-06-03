@@ -27,6 +27,7 @@
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
 - (void)writeToPdf:(NSURL *)filepath;
+- (UIImage *)thumbnail;
 
 @end
 

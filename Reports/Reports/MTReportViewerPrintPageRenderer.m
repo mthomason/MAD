@@ -7,6 +7,7 @@
 //
 
 #import "MTReportViewerPrintPageRenderer.h"
+#import "UIImage+Resize.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -115,7 +116,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)init {
     self = [super init];
     if (self) {
-        [self setDocument:[RptqDocument activeDocument]];
+        RptqDocument *activeDocument = [RptqDocument activeDocument];
+        [self setDocument:activeDocument];
         [self initCommon];
     }
     return self;
@@ -174,7 +176,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGRect letterRect = [MTPaper rectLetter];
     [self cachePrintPageRenderDataForSize:letterRect.size];
     NSUInteger numberOfPages = [self numberOfPages];
-    //NSLog(@"%@", [filepath absoluteString]);
     UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
     for (NSUInteger i=0; i<numberOfPages; i++) {
@@ -184,6 +185,27 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     
     // Close the PDF context and write the contents out.
     UIGraphicsEndPDFContext();
+}
+
+- (UIImage *)thumbnail {
+    CGRect letterRect = [MTPaper rectLetter];
+    [self cachePrintPageRenderDataForSize:letterRect.size];
+    CGFloat scale = 128.0000 / (letterRect.size.height > letterRect.size.width > 0.0f ? letterRect.size.height : (letterRect.size.width == 0.0000f? letterRect.size.width : 1.0000f));
+    UIGraphicsBeginImageContextWithOptions(letterRect.size, YES, 0.0000f);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, letterRect);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextAddPath(context, path);
+    [[UIColor whiteColor] set];
+    CGContextDrawPath(context, kCGPathFill);
+    
+    [self drawPageAtIndex:0 inRect:letterRect];
+
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *result = [image thumbnailImage:64.0000f interpolationQuality:kCGInterpolationLow];
+    UIGraphicsEndImageContext();
+    return [[result retain] autorelease];
 }
 
 #pragma mark - UIPrintPageRenderer Overrides
@@ -202,6 +224,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     NSUInteger numberOfGroups = [[query hasQueryGroups] count];
     NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
     
+    [[UIColor whiteColor] set];
+
     if (index < [[self cachedLayoutByPage] count]) {
 
         NSArray *pageArray = [[[self cachedLayoutByPage] objectAtIndex:index] retain];

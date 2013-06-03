@@ -22,7 +22,7 @@
     return MTPersistentStoreAliasMad;
 }
 
-
+/*
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
@@ -30,7 +30,48 @@
     }
     return self;
 }
+*/
+/*- (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
+    NSLog(@"Auto-Saving Document");
+    id result = [super contentsForType:typeName error:outError];
+    return result;
+}
 
+- (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
+    BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
+    return result;
+}*/
+/*
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error
+{
+    NSURL *myURL = [absoluteURL URLByAppendingPathComponent:@"AdditionalInformation.plist"];
+    self.extraInfo = [NSDictionary dictionaryWithContentsOfURL:myURL];
+    return YES;
+}
+
+- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error
+{
+    if (!self.extraInfo) {
+        return [NSDictionary dictionaryWithObjectsAndKeys: @"Picard", @"Captain", [[NSDate date] description], @"RightNow", nil];
+    } else {
+        NSMutableDictionary *updatedFriendInfo = [self.extraInfo mutableCopy];
+        [updatedFriendInfo setObject:[[NSDate date] description] forKey:@"RightNow"];
+        [updatedFriendInfo setObject:@"YES" forKey:@"Updated"];
+        
+        return updatedFriendInfo;
+    }
+}
+
+- (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error
+{
+    if (content) {
+        NSURL *myURL = [absoluteURL URLByAppendingPathComponent:@"AdditionalInformation.plist"];
+        [(NSDictionary *)content writeToURL:myURL atomically:NO];
+    }
+    
+    return YES;
+}
+*/
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion {
@@ -38,7 +79,7 @@
     [RptqDocument addDatabase:database toManagedObjectContext:[self managedObjectContext] completion:^(BOOL success, NSError *error) {
         completion(success, error);
         if (success) {
-            [self saveToUrl:[self fileURL] completion:^(BOOL success) {
+            [self saveToURL:[self fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
 
             }];
         }

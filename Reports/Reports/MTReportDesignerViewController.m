@@ -647,9 +647,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[reportDocument managedObjectContext] save:&error];
     
     NSLog(@"error %@", error);
-    
-    [reportDocument save:^(BOOL success) {
-        
+    [reportDocument saveToURL:[reportDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
         if (insertNewSection) {
             NSInteger index = numberOfRows - 1;
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
@@ -659,7 +657,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:index];
             [documentSectionView deleteSections:indexSet];
         }
-        
     }];
 
     [documentSectionView release];

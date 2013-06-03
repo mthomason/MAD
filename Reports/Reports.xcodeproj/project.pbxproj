@@ -609,6 +609,31 @@
 		4C515ED7174134960004A664 /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */; };
 		4C515ED8174134960004A664 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C515ED9174134960004A664 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
+		4C5625E01758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C5625E11758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
+		4C5625E21758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
+		4C5625E31758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
+		4C5625E41758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
+		4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
+		4C5625EC1759730200433E88 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
+		4C5625ED1759730200433E88 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
+		4C5625EE1759730200433E88 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
+		4C5625EF1759730200433E88 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E51759730100433E88 /* UIImage+Resize.m */; };
+		4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
+		4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
+		4C5625F21759730200433E88 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
+		4C5625F31759730200433E88 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
+		4C5625F41759730200433E88 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
+		4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
+		4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
+		4C5625F71759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
+		4C5625F81759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
+		4C5625F91759730200433E88 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
+		4C5626031759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5626041759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5626051759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5626061759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5626071759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5F02D414B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */; };
 		4C5F02D814B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4C5F02DB14B9A47300C49BE9 /* Invoice.trvt in Resources */ = {isa = PBXBuildFile; fileRef = 4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */; };
@@ -1981,7 +2006,7 @@
 		4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewFlowLayoutDesignerSection.m; sourceTree = "<group>"; };
 		4C3727DA168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReusableViewFloatingLabel.h; sourceTree = "<group>"; };
 		4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReusableViewFloatingLabel.m; sourceTree = "<group>"; };
-		4C384E2414B29789007B4F48 /* Mad Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mad Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C384E2414B29789007B4F48 /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2030,6 +2055,16 @@
 		4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C5482741672D4A800CA24EB /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = Reports/TODO.txt; sourceTree = "<group>"; };
 		4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentCellProtocol.h; sourceTree = "<group>"; };
+		4C5625DE1758A17D00433E88 /* CloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudManager.h; sourceTree = "<group>"; };
+		4C5625DF1758A17E00433E88 /* CloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudManager.m; sourceTree = "<group>"; };
+		4C5625E51759730100433E88 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		4C5625E61759730100433E88 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
+		4C5625E81759730200433E88 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		4C5625E91759730200433E88 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		4C5625EA1759730200433E88 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
+		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
 		4C5F02D214B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentPreferencesApplication.h; sourceTree = "<group>"; };
 		4C5F02D314B9753700C49BE9 /* MTManagedDocumentPreferencesApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTManagedDocumentPreferencesApplication.m; sourceTree = "<group>"; };
 		4C5F02D614B9755400C49BE9 /* MTManagedDocumentPreferencesUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTManagedDocumentPreferencesUser.h; sourceTree = "<group>"; };
@@ -3196,6 +3231,8 @@
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
+				4C5625DE1758A17D00433E88 /* CloudManager.h */,
+				4C5625DF1758A17E00433E88 /* CloudManager.m */,
 				4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */,
 				4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
@@ -3210,7 +3247,7 @@
 		4C384E2514B29789007B4F48 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E2414B29789007B4F48 /* Mad Designer.app */,
+				4C384E2414B29789007B4F48 /* MAD Designer.app */,
 				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
 				4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */,
 				4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */,
@@ -4102,6 +4139,12 @@
 		4CDB624B14E38C8400A5389E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				4C5625E91759730200433E88 /* UIImage+Resize.h */,
+				4C5625E51759730100433E88 /* UIImage+Resize.m */,
+				4C5625EA1759730200433E88 /* UIImage+Alpha.h */,
+				4C5625E61759730100433E88 /* UIImage+Alpha.m */,
+				4C5625E81759730200433E88 /* UIImage+RoundedCorner.h */,
+				4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */,
 				4CD88D091689175200683C01 /* UIView+NSObjectIdTag.h */,
 				4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */,
 				4CD88D021689164100683C01 /* UIView+StringTag.h */,
@@ -4146,6 +4189,8 @@
 				4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */,
 				4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */,
 				4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */,
+				4C5626011759865900433E88 /* NSData+AES256.h */,
+				4C5626021759865A00433E88 /* NSData+AES256.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -4361,7 +4406,7 @@
 			);
 			name = "MAD Designer";
 			productName = TheReportViewer;
-			productReference = 4C384E2414B29789007B4F48 /* Mad Designer.app */;
+			productReference = 4C384E2414B29789007B4F48 /* MAD Designer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4C860ABF167EDE7000AC1904 /* MTDataStructuresTest */ = {
@@ -5500,6 +5545,11 @@
 				4CF2F26617525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26D17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
 				4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C5625E11758A17F00433E88 /* CloudManager.m in Sources */,
+				4C5625EC1759730200433E88 /* UIImage+Resize.m in Sources */,
+				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
+				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5696,6 +5746,11 @@
 				4CF2F26817525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26F17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
 				4CF2F2761754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C5625E31758A17F00433E88 /* CloudManager.m in Sources */,
+				4C5625EE1759730200433E88 /* UIImage+Resize.m in Sources */,
+				4C5625F31759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C5625F81759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
+				4C5626061759865A00433E88 /* NSData+AES256.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5892,6 +5947,11 @@
 				4CF2F26717525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26E17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
 				4CF2F2751754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C5625E21758A17F00433E88 /* CloudManager.m in Sources */,
+				4C5625ED1759730200433E88 /* UIImage+Resize.m in Sources */,
+				4C5625F21759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C5625F71759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
+				4C5626051759865A00433E88 /* NSData+AES256.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6092,6 +6152,11 @@
 				4CF2F26517525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F26C17525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
 				4CF2F2731754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C5625E01758A17F00433E88 /* CloudManager.m in Sources */,
+				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
+				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
+				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6288,6 +6353,11 @@
 				4CF2F26917525A1700DC34E3 /* RptqDocumentSection.m in Sources */,
 				4CF2F27017525A1800DC34E3 /* RptqDocumentSectionRows.m in Sources */,
 				4CF2F2771754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C5625E41758A17F00433E88 /* CloudManager.m in Sources */,
+				4C5625EF1759730200433E88 /* UIImage+Resize.m in Sources */,
+				4C5625F41759730200433E88 /* UIImage+Alpha.m in Sources */,
+				4C5625F91759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
+				4C5626071759865A00433E88 /* NSData+AES256.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,19 +11,28 @@
 #pragma mark - Customizable Constants
 #pragma mark Common UI Strings
 
-NSString * const MTCollectionElementKindSectionLabel         = @"MTCollectionElementKindSectionLabel";
+NSString * const MTDocumentTypeUtiMad                               = @"com.everydayapps.productivity.mad";
+NSString * const MTDocumentTypeExtentionMad                         = @"mad";
 
-NSString * const MNSStringInterfaceButtonTitleContinue      = @"Continue";
-NSString * const MNSStringInterfaceButtonTitleContinueDesc  = @"Continue Button Title";
+NSString * const PDF_PATH_EXTENSION                                 = @"pdf";
+NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
+NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
+NSString * const MTDocumentExtentionMobleApplicationDocumentReport  = @"madr";
+NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
-NSString * const MNSStringInterfaceButtonTitleTryAgain      = @"Try Again";
-NSString * const MNSStringInterfaceButtonTitleTryAgainDesc  = @"Try Again Button Title";
+NSString * const MTCollectionElementKindSectionLabel                = @"MTCollectionElementKindSectionLabel";
 
-NSString * const MNSStringInterfaceButtonTitleAbort         = @"Abort Application";
-NSString * const MNSStringInterfaceButtonTitleAbortDesc     = @"Abort Button Title";
+NSString * const MNSStringInterfaceButtonTitleContinue              = @"Continue";
+NSString * const MNSStringInterfaceButtonTitleContinueDesc          = @"Continue Button Title";
 
-NSString * const MTStoryboardReportDesigner = @"MTStoryboardReportDesigner";
-NSString * const MTStoryboardReportDesignerPad = @"MTStoryboardReportDesignerPad";
+NSString * const MNSStringInterfaceButtonTitleTryAgain              = @"Try Again";
+NSString * const MNSStringInterfaceButtonTitleTryAgainDesc          = @"Try Again Button Title";
+
+NSString * const MNSStringInterfaceButtonTitleAbort                 = @"Abort Application";
+NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Button Title";
+
+NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
+NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
 
 CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
 CGFloat const MNSAnimationDurationShowFromBottomHalf = 0.3500f;
@@ -41,33 +50,28 @@ NSString * const MNSInterfaceTitleError                             = @"error";
 NSString * const MNSInterfaceMessageErrorDataSourceCreation         = @"Datasource creation failed.";
 NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
 
-NSString * const UIIMAGEDOCUMENTBLANK               = @"UIImageDocumentBlank";
-NSString * const APPLICATIONDATA_FILENAME           = @"appdata";
-NSString * const MYSQLDATABASEDATA_FILENAME         = @"mydata";
-NSString * const MTPersistentStoreAliasMad                 = @"analyitics";
-NSString * const MTPersistentStoreAliasUserPreferences                   = @"preferences";
+NSString * const UIIMAGEDOCUMENTBLANK                               = @"UIImageDocumentBlank";
+NSString * const APPLICATIONDATA_FILENAME                           = @"appdata";
+NSString * const MYSQLDATABASEDATA_FILENAME                         = @"mydata";
+NSString * const MTPersistentStoreAliasMad                          = @"analyitics";
+NSString * const MTPersistentStoreAliasUserPreferences              = @"preferences";
 
-NSString * const PDF_PATH_EXTENSION                                 = @"pdf";
-NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
-NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
-NSString * const MTDocumentExtentionMobleApplicationDocumentReport  = @"madr";
-NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
-NSString * const TEMPLATES                          = @"Templates";
+NSString * const TEMPLATES                                          = @"Templates";
 
-NSString * const MTDatabaseUsernameKey                = @"MTDatabaseUsernameKey";
-NSString * const MTDatabasePasswordKey                = @"MTDatabasePasswordKey";
-NSString * const MTDatabaseDatabaseKey                = @"MTDatabaseDatabaseKey";
-NSString * const MTDatabasePortKey                    = @"MTDatabasePortKey";
-NSString * const MTDatabaseHostKey                    = @"MTDatabaseHostKey";
+NSString * const MTDatabaseUsernameKey                              = @"MTDatabaseUsernameKey";
+NSString * const MTDatabasePasswordKey                              = @"MTDatabasePasswordKey";
+NSString * const MTDatabaseDatabaseKey                              = @"MTDatabaseDatabaseKey";
+NSString * const MTDatabasePortKey                                  = @"MTDatabasePortKey";
+NSString * const MTDatabaseHostKey                                  = @"MTDatabaseHostKey";
 
-NSString * const NSDATABASE_SF_OAUTH_KEY            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
-NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL  = @"eda://reports.everydayapps.com/";
+NSString * const NSDATABASE_SF_OAUTH_KEY                            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
+NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL                  = @"eda://reports.everydayapps.com/";
 
-NSString * const MTTableHeaderSectionKey            = @"MTTableHeaderSectionKey";
-NSString * const MTTableSectionRowKey               = @"MTTableSectionRowKey";
-NSString * const MTTableSectionRowHeightKey         = @"MTTableSectionRowHeightKey";
-NSString * const MTTableSectionSectionsKey          = @"MTTableSectionSectionsKey";
+NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
+NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
+NSString * const MTTableSectionRowHeightKey                         = @"MTTableSectionRowHeightKey";
+NSString * const MTTableSectionSectionsKey                          = @"MTTableSectionSectionsKey";
 
 CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 

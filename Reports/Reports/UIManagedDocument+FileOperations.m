@@ -42,6 +42,7 @@
     [managedDocumentAtUrl setPersistentStoreOptions: options];
     
     BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+
     if (fileExist) {
         [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
             completionHandler(managedDocumentAtUrl, success);
