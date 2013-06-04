@@ -12,10 +12,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8ak-PQ-eRf">
-                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8ak-PQ-eRf">
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="NjH-tx-gYJ" customClass="MTDocumentTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="NjH-tx-gYJ" customClass="MTDocumentTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -25,36 +25,25 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="eH3-b2-hY5"/>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blank Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mx0-j0-DZa">
                                                     <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="4hI-0n-A2B"/>
                                                         <constraint firstAttribute="width" constant="188" id="Rfo-DI-0Ps"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A blank report template." lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="8HF-1e-bIc">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="12" id="K2C-Ig-B32"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="8HF-1e-bIc" secondAttribute="bottom" constant="21" id="1FO-4Q-p12"/>
-                                            <constraint firstItem="Mx0-j0-DZa" firstAttribute="top" secondItem="NjH-tx-gYJ" secondAttribute="top" constant="20" type="default" id="E80-jc-0yV"/>
+                                            <constraint firstItem="Mx0-j0-DZa" firstAttribute="top" secondItem="NjH-tx-gYJ" secondAttribute="top" constant="25" id="QKR-Ln-SMz"/>
                                             <constraint firstItem="eH3-b2-hY5" firstAttribute="leading" secondItem="NjH-tx-gYJ" secondAttribute="leading" constant="20" type="default" id="QkB-Cg-e3t"/>
-                                            <constraint firstItem="Mx0-j0-DZa" firstAttribute="trailing" secondItem="8HF-1e-bIc" secondAttribute="trailing" type="default" id="dPP-fn-M5H"/>
                                             <constraint firstItem="eH3-b2-hY5" firstAttribute="centerY" secondItem="NjH-tx-gYJ" secondAttribute="centerY" type="default" id="f0S-Jx-a64"/>
                                             <constraint firstItem="Mx0-j0-DZa" firstAttribute="leading" secondItem="eH3-b2-hY5" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="fYS-63-x10"/>
-                                            <constraint firstItem="8HF-1e-bIc" firstAttribute="leading" secondItem="eH3-b2-hY5" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="iHH-5B-xvc"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageThumbnail" destination="eH3-b2-hY5" id="3NA-oR-q5Q"/>
                                             <outlet property="labelH1" destination="Mx0-j0-DZa" id="DND-cI-Ux8"/>
-                                            <outlet property="labelH2" destination="8HF-1e-bIc" id="wgK-lQ-XNw"/>
                                             <segue destination="ZV6-4A-f9x" kind="push" identifier="showChooseDatasource" id="Gaa-0Y-kkk"/>
                                         </connections>
                                     </tableViewCell>
@@ -458,7 +447,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="Em9-tf-74d"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 </label>
                                             </subviews>
