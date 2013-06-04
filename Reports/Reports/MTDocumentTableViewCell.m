@@ -29,7 +29,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
-    if (action == @selector(delete:) || action == @selector(email:)) {
+    if (action == @selector(email:)) {
         result = YES;
     }
     return result;
