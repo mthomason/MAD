@@ -1,6 +1,6 @@
 Before Release
     Document Interaction
-    UI
+    UI Display
     Report Viewer Stand Alone Version
 
 Report Designer
