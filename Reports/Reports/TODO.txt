@@ -1,6 +1,8 @@
 Before Release
     Document Interaction
-    UI Display
+    Display YouTube Demo Video
+    In App Purchase
+    UI Display Save State
     Report Viewer Stand Alone Version
 
 Report Designer

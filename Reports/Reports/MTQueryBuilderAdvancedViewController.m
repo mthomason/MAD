@@ -31,6 +31,9 @@
 
 @property (nonatomic, retain) MTReportDocument *reportDocument;
 
+@property (nonatomic, retain) UIPopoverController *showSqlPopoverController;
+@property (nonatomic, assign) BOOL *showSqlIsVisable;
+
 @end
 
 @implementation MTQueryBuilderAdvancedViewController
@@ -91,7 +94,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    [self setShowSqlIsVisable:NO];
     UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
     [containerView setBackgroundColor:[UIColor paperGraphPaper]];
     [self setContentView:containerView];
@@ -145,6 +148,27 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    [self setShowSqlIsVisable:NO];
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    BOOL shouldPerformSegueWithIdentifier = YES;
+    if ([identifier isEqualToString:MNSSegueShowSql]) {
+        if ([UIDevice isPad] == YES && [self showSqlIsVisable]) {
+            shouldPerformSegueWithIdentifier = NO;
+            [[self showSqlPopoverController] dismissPopoverAnimated:YES];
+            [self setShowSqlIsVisable:NO];
+        }
+    }
+    return shouldPerformSegueWithIdentifier;
+ 
 }
 
 #pragma mark - NSManagedObjectContext observer
@@ -329,6 +353,32 @@
 }
 
 #pragma mark View Controller Container Custom Handlers
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([[segue identifier] isEqualToString:MNSSegueShowSql]) {
+        if ([UIDevice isPad]) {
+            [self setShowSqlIsVisable:YES];
+            UIPopoverController *popoverController = [[(UIStoryboardPopoverSegue *)segue popoverController] retain];
+            [popoverController setDelegate:self];
+            [self setShowSqlPopoverController:popoverController];
+            [popoverController release];
+            [[segue destinationViewController] setDelegate: self];
+        } else {
+            [[segue destinationViewController] setDelegate: self];
+        }
+    }
+
+}
+- (void)viewControllerDidFinish:(id)sender {
+    if ([UIDevice isPad] && [self showSqlIsVisable]) {
+        [[self showSqlPopoverController] dismissPopoverAnimated:YES];
+        [self setShowSqlIsVisable:NO];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    }
+}
+
 
 - (CGRect)desiredFrameForTableId:(NSManagedObjectID *)objectId {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];

@@ -1330,6 +1330,11 @@
 		4CC182D516C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182D116C6CCC1006FAD93 /* MTReportViewerReportViewController.m */; };
 		4CC182D616C6CCC2006FAD93 /* MTReportViewerReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182D116C6CCC1006FAD93 /* MTReportViewerReportViewController.m */; };
 		4CC24AA51503E3AB00C4EE98 /* MTGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */; };
+		4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
+		4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
+		4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
+		4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
+		4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
 		4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
 		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
@@ -2457,6 +2462,8 @@
 		4CC182D116C6CCC1006FAD93 /* MTReportViewerReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportViewController.m; sourceTree = "<group>"; };
 		4CC24AA31503E3AB00C4EE98 /* MTGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGradientView.h; sourceTree = "<group>"; };
 		4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGradientView.m; sourceTree = "<group>"; };
+		4CC39D61175E4A4800865CCA /* DocumentStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentStatusView.h; sourceTree = "<group>"; };
+		4CC39D62175E4A4800865CCA /* DocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentStatusView.m; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
@@ -2906,6 +2913,8 @@
 		4C00815914B6BDB6003DF437 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4CC39D61175E4A4800865CCA /* DocumentStatusView.h */,
+				4CC39D62175E4A4800865CCA /* DocumentStatusView.m */,
 				4CDC60AE16E48F9C00924676 /* Table View Cells */,
 				4CE3143516952E3B00114431 /* MTTextView.h */,
 				4CE3143616952E3B00114431 /* MTTextView.m */,
@@ -5550,6 +5559,7 @@
 				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
+				4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5751,6 +5761,7 @@
 				4C5625F31759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F81759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626061759865A00433E88 /* NSData+AES256.m in Sources */,
+				4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5952,6 +5963,7 @@
 				4C5625F21759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F71759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626051759865A00433E88 /* NSData+AES256.m in Sources */,
+				4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6157,6 +6169,7 @@
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
+				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6358,6 +6371,7 @@
 				4C5625F41759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F91759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626071759865A00433E88 /* NSData+AES256.m in Sources */,
+				4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

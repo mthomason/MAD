@@ -32,7 +32,11 @@
 @property (nonatomic, retain) NSMutableDictionary *modelWithOneTable;
 @property (nonatomic, retain) NSMutableDictionary *modelWithTwoOrMoreTables;
 
+@property (nonatomic, retain) MTReportDocument *activeDocument;
+
 @property (assign) NSInteger lastSelectedRowNumber;
+
+@property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
 - (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
@@ -56,6 +60,7 @@
     [_tableViewQueryBuilder release];
     [_toolbar release];
     [_toolbarTop release];
+    [_documentStatusView release];
     [super dealloc];
 }
 
@@ -80,11 +85,43 @@
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
+
+- (void)documentStateChanged {
+    UIDocumentState state = [[self activeDocument] documentState];
+    switch ([[self activeDocument] documentState]) {
+        case UIDocumentStateClosed:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateInConflict:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateSavingError:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateEditingDisabled:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateNormal:
+        default:
+            [self enableUserInteraction];
+            break;
+    }
+    [[self documentStatusView] setDocumentState: state];
+}
+
+- (void)enableUserInteraction {
+    [[self view] setUserInteractionEnabled:YES];
+}
+
+- (void)disableUserInteraction {
+    [[self view] setUserInteractionEnabled:NO];
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
     [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
@@ -180,7 +217,16 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(documentStateChanged)
+                                                 name:UIDocumentStateChangedNotification
+                                               object:[self activeDocument]];
     [[self tableViewQueryBuilder] reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
@@ -222,9 +268,9 @@
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
-//                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]]];
+//                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext: [[self activeDocument] managedObjectContext]]];
 
-                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]]];
+                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self activeDocument] managedObjectContext]]];
 //                    if ([tableNames count]) {
 //                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
 //                        [request setPredicate: predicate];
@@ -233,7 +279,7 @@
 //                    [tableNames release];
                     
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [[self activeDocument] managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -292,7 +338,7 @@
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)[segue destinationViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
-                        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                        NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
                         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
@@ -392,24 +438,24 @@
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
 
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
-            inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+            inManagedObjectContext: [[self activeDocument] managedObjectContext]];
+    [[self activeDocument] saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
     [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber]
-                inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                inManagedObjectContext: [[self activeDocument] managedObjectContext]];
+    [[self activeDocument] saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
     [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber]
-                  inManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                  inManagedObjectContext: [[self activeDocument] managedObjectContext]];
+    [[self activeDocument] saveContext];
 }
 
 #pragma mark - Delegates
@@ -417,73 +463,47 @@
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
-    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-    //} else {
-    //    [self dismissViewControllerAnimated:YES completion:nil];
-    //}
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)modalTableViewControllerDidFinish:(id)controller {
-    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-    //} else {
-    //    [self dismissViewControllerAnimated:YES completion:nil];
-    //}
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 
-    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[self activeDocument] managedObjectContext]];
 
     [[self tableViewQueryBuilder] reloadData];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [[self activeDocument] saveContext];
 }
 
 - (void)addPredicateDidCancel:(MTQueryBuilderPredicateFormatViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
     
-    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];    
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[self activeDocument] managedObjectContext]];    
+    [[self activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddLinkDidFinish:(MTQueryBuilderAddLinkFirstTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)viewControllerSchemaAddTableDidFinish:(MTQueryBuilderAddTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
@@ -492,7 +512,7 @@
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
 
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
@@ -523,7 +543,7 @@
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
     
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [[self activeDocument] saveContext];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
@@ -532,7 +552,7 @@
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSIndexSet *indexSetSections = nil;
-    MTReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MTReportDocument *reportDocument = [[self activeDocument] retain];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -713,7 +733,7 @@
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     
-                    MTReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+                    MTReportDocument *reportDocument = [[self activeDocument] retain];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
@@ -789,8 +809,8 @@
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
                         NSManagedObjectID *objid = [tvcLink tableID];
-                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
+                        [[self activeDocument] saveContext];
                     }
                     [tvcLink release];
                     break;
@@ -799,7 +819,7 @@
                 // MARK: Delete UIViewControllerSchemaTablesSectionsGroups
                 case UIViewControllerSchemaTablesSectionsGroups: {
                     
-                    MTReportDocument *activateDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    MTReportDocument *activateDocument = [self activeDocument];
                     NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
@@ -868,8 +888,8 @@
                     UITableViewCellQueryPredicate *tvcPred = (UITableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
-                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
-                        [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
+                        [[self activeDocument] saveContext];
                     }
                     [tvcPred release];
 
@@ -931,7 +951,7 @@
         case UIViewControllerSchemaTablesSectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
-            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[self activeDocument] managedObjectContext]];
             if (connections) {
                 [connections retain];
                 if ([connections count] >= 1) {
@@ -1186,7 +1206,11 @@
 #pragma mark - NSFetchedResultsSetup
 
 - (void)reloadDocument:(MTReportDocument *)documentReport {
-    NSManagedObjectContext *managedObjectContext = [documentReport managedObjectContext];
+    MTReportDocument *doc = [documentReport retain];
+    [self setActiveDocument:doc];
+    [doc release];
+    
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     
     {
         RptqQuery *query = [RptqDocument queryForActiveDocument];
@@ -1260,7 +1284,7 @@
 }
 
 - (NSMutableDictionary *)datamodel {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
     return [self datamodelForNumberOfTables:numberOfTablesInQuery];
 }
@@ -1472,4 +1496,8 @@
     [[self tableViewQueryBuilder] reloadData];
 }
 
+- (void)viewDidUnload {
+    [self setDocumentStatusView:nil];
+    [super viewDidUnload];
+}
 @end

@@ -303,10 +303,11 @@
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="K4W-Fo-5ZQ">
                                 <items>
-                                    <barButtonItem title="Reports" width="66" id="Ph0-RK-UQf">
-                                        <connections>
-                                            <action selector="doneReports:" destination="oy5-et-qFd" id="tfP-pm-vdf"/>
-                                        </connections>
+                                    <barButtonItem width="32" style="plain" id="mhH-x7-UAm">
+                                        <view key="customView" opaque="NO" contentMode="scaleToFill" id="DEV-Xq-atR" customClass="DocumentStatusView">
+                                            <rect key="frame" x="12" y="6" width="32" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="uyH-cG-XCg"/>
                                     <barButtonItem systemItem="add" id="Jgg-su-8FN">
@@ -359,6 +360,7 @@
                     <connections>
                         <outlet property="barButtonItemObjects" destination="Jgg-su-8FN" id="bBA-KX-tW6"/>
                         <outlet property="designScrollView" destination="wQV-wk-ktS" id="hqu-OY-PZY"/>
+                        <outlet property="documentStatusView" destination="DEV-Xq-atR" id="eQq-CU-vnp"/>
                         <outlet property="toolbarBottom" destination="K4W-Fo-5ZQ" id="eq1-zm-gfY"/>
                         <outlet property="toolbarTop" destination="lq1-v2-HyI" id="axn-Qx-9Th"/>
                         <outlet property="toolboxView" destination="dLN-M6-x2r" id="uzB-vX-5is"/>
@@ -589,12 +591,12 @@
                                     <constraint firstAttribute="width" constant="320" type="user" id="lXY-Sg-8yq"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="SQL" id="D6Z-M9-31R">
-                                        <connections>
-                                            <segue destination="CS8-UT-bFG" kind="modal" identifier="MNSSegueShowSql" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="T6Q-GV-VzM"/>
-                                        </connections>
+                                    <barButtonItem style="plain" id="OF4-rW-Ney">
+                                        <view key="customView" opaque="NO" contentMode="scaleToFill" id="N1a-eh-qH8" customClass="DocumentStatusView">
+                                            <rect key="frame" x="12" y="6" width="32" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </view>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Ese-hK-49U"/>
                                 </items>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="OzG-h0-uFA">
@@ -871,6 +873,7 @@
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
+                        <outlet property="documentStatusView" destination="N1a-eh-qH8" id="Byh-bY-BCQ"/>
                         <outlet property="navigationItem" destination="AZb-3b-nJJ" id="MyD-Ay-Shw"/>
                         <outlet property="tableViewQueryBuilder" destination="OzG-h0-uFA" id="S41-a0-BD9"/>
                         <outlet property="toolbar" destination="IL6-pP-bPX" id="yfV-RJ-HXE"/>
@@ -5918,7 +5921,17 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rvx-IX-0B2">
-                                <items/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="7K6-1a-DJs"/>
+                                    <barButtonItem title="SQL" id="Mqp-Hm-l11">
+                                        <connections>
+                                            <action selector="buttonShowSqlDidTouchUpInside:" destination="hfc-QN-gR2" id="HWM-rI-fUK"/>
+                                            <segue destination="CS8-UT-bFG" kind="popover" identifier="MNSSegueShowSql" popoverAnchorBarButtonItem="Mqp-Hm-l11" id="LzJ-Eg-1pi">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
                             </toolbar>
                         </subviews>
                         <constraints>
@@ -6616,6 +6629,9 @@
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="DocumentStatusView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
+        </class>
         <class className="MTAggregateFunctionsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAggregateFunctionsViewController.h"/>
             <relationships>
@@ -6695,7 +6711,6 @@
             <relationships>
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="MTGroupByViewController" superclassName="UITableViewController">
@@ -6832,6 +6847,7 @@
                 <relationship kind="action" name="addTable:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
                 <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
                 <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
                 <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
@@ -6957,6 +6973,7 @@
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
                 <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
@@ -6967,10 +6984,7 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
-                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="print:"/>
-                <relationship kind="action" name="refresh:"/>
-                <relationship kind="action" name="sendTo:"/>
                 <relationship kind="action" name="sendToPdf:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>

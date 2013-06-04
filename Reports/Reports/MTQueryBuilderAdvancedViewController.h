@@ -16,9 +16,11 @@
 #import "CGGeometry+Extras.h"
 #import "UIColor+PaperPatterns.h"
 #import "MTScrollViewCenter.h"
+#import "MUIViewControllerDelegate.h"
+#import "MTViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
-    <UIGestureRecognizerDelegate, UIScrollViewDelegate, MTQueryBuilderAdvancedSchemaDelegate>
+    <UIGestureRecognizerDelegate, UIScrollViewDelegate, UIPopoverControllerDelegate, MTQueryBuilderAdvancedSchemaDelegate, MUIViewControllerProtocol>
 
 - (void)reloadDocument:(MTReportDocument *)documentReport;
 

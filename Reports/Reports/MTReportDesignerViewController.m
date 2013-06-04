@@ -69,6 +69,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
+@property (nonatomic, retain) MTReportDocument *activeDocument;
+
+@property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -76,6 +80,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_activeDocument release];
     [_viewRuler release];
     [_sectionControlViewsHeighConstraint release];
     [_navigationControllerSectionLayoutSettings release];
@@ -110,6 +116,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [_toolbarTop release];
     [_toolboxView release];
     [_layoutConstraintsToRemove release];
+    [_documentStatusView release];
     [super dealloc];
 }
 
@@ -127,6 +134,15 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MTReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    [self setActiveDocument:activeDocument];
+    [activeDocument release];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(documentStateChanged)
+                                                 name:UIDocumentStateChangedNotification
+                                               object:[self activeDocument]];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     
@@ -188,7 +204,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[viewRuler layer] setBorderWidth: 3.0000f];
     [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContect = [[self activeDocument] managedObjectContext];
 
     NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
     NSMutableString *stringContstraintsVertical = [[NSMutableString alloc] initWithString:@"V:|"];
@@ -456,7 +472,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
     [defaultCenter addObserver: self
@@ -486,7 +502,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
     [defaultCenter removeObserver: self
@@ -544,19 +560,51 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
         MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
         [viewControllerReportViewer setDelegate:self];
-        [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
+        [viewControllerReportViewer setDocumentReport:[self activeDocument]];
         
         [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
         
     }
 }
 
+#pragma mark - Document State
+
+- (void)documentStateChanged {
+    UIDocumentState state = [[self activeDocument] documentState];
+    switch ([[self activeDocument] documentState]) {
+        case UIDocumentStateClosed:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateInConflict:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateSavingError:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateEditingDisabled:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateNormal:
+        default:
+            [self enableUserInteraction];
+            break;
+    }
+    [[self documentStatusView] setDocumentState: state];
+}
+
+- (void)enableUserInteraction {
+    [[self view] setUserInteractionEnabled:YES];
+}
+
+- (void)disableUserInteraction {
+    [[self view] setUserInteractionEnabled:NO];
+}
 
 #pragma mark - Layout Settings Delegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MTReportDocument *reportDocument = [self activeDocument];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -582,7 +630,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MTReportDocument *reportDocument = [self activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setVisibility: isVisible
                        forSectionAtRow: [self lastSelectedSectionControlPanel]
@@ -594,7 +642,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MTReportDocument *reportDocument = [self activeDocument];
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -668,7 +716,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[documentSectionView objectIdTag] fromObjectContext:managedObjectContext];
     [documentSection setHeight:@([documentSectionView bounds].size.height)];
     
@@ -682,7 +730,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
     NSURL *objectIdUrl = [[objectId URIRepresentation] retain];
 
-    NSManagedObjectContext *managedObjectContect = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContect = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:objectId fromObjectContext:managedObjectContect];
 
     NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:[objectIdUrl absoluteString]];
@@ -943,7 +991,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 [self setLastSelectedSectionControlPanel:[[sender view] tag]];
                 
-                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
                 RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
                 RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                 RptqQuery *query = [[database hasQueries] anyObject];
@@ -1031,7 +1079,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:
-                                     [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                                     [[self activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -1070,7 +1118,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSSet *)selectedElementViews {
 
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -1236,7 +1284,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     
                     if (tooboxType == MTToolboxTypeSection) {
                         
-                        MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        MTReportDocument *reportDocument = [self activeDocument];
                         
                         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1325,7 +1373,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
     [section setLayoutHeight:@(contentSize.height)];
@@ -1366,7 +1414,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     NSManagedObjectID *objectId = [cell objectIdTag];
     [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
         if (finished) {
-            NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+            NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
             [RptqDocumentObject removeDocumentObject:documentObject];
         }
@@ -1377,7 +1425,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark Collection View Layout Delegate
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1388,7 +1436,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1411,7 +1459,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                                                     layout: (UICollectionViewLayout *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1440,7 +1488,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (NSUInteger)collectionView:(UICollectionView *)collectionView
                       layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
 
@@ -1464,7 +1512,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1491,7 +1539,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     //NSLog(@"Display number cell at index path %@", indexPath);
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
@@ -1563,7 +1611,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
     
@@ -1603,7 +1651,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:[[self activeDocument] managedObjectContext]];
     //NSLog(@"numberOfSectionsInCollectionView: %d", [[documentSection hasRows] count]);
     return [[documentSection hasRows] count];
 }
@@ -1611,7 +1659,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
     //NSLog(@"numberOfItemsInSection");
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:[[self activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
     return [objects count];
 }
@@ -1659,7 +1707,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (NSSet *)selectedObjectIdsCalculated {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -1682,7 +1730,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     //NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
     NSInteger row = [indexPath row];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     
@@ -1806,7 +1854,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
 
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDocumentSection *section = [document hasDetailSection];
     NSManagedObjectID *sectionID = [section objectID];
@@ -1815,7 +1863,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     [detailSection performBatchUpdates:^{
         
-        MTReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        MTReportDocument *reportDocument = [self activeDocument];
         NSManagedObjectContext *managedObjectContextBlock = [reportDocument managedObjectContext];
         
         
@@ -1891,7 +1939,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
@@ -1928,7 +1976,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 [hasObjects removeObjectAtIndex:deleteIndex];
                 RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
                 [row setHasObjects:hasObjects];
-                [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+                [[self activeDocument] saveContext];
                 NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
                 
                 [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
@@ -2029,7 +2077,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 [reportSectionCollectionView performBatchUpdates:^{
 
-                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
                     
                     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
                     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
@@ -2132,4 +2180,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     }
 }
 
+- (void)viewDidUnload {
+    [self setDocumentStatusView:nil];
+    [super viewDidUnload];
+}
 @end
