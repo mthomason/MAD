@@ -60,7 +60,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @interface MTViewControllerOpenDocument()
 
 @property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
-
+@property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) NSMutableArray *availableFilesCacheMetaData;
@@ -80,6 +80,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
 
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *buttonAddNewDocument;
 @end
 
 @implementation MTViewControllerOpenDocument
@@ -99,11 +100,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_collectionViewQueries release];
     [_titleView release];
     [_openDocumentPopoverController release];
+    [_buttonAddNewDocument release];
     [super dealloc];
 }
 
 - (void)awakeFromNib {
     [self setContentSizeForViewInPopover: CGSizeMake(320.0, 480.0)];
+    [self setShouldShowAddDocumentPopover:YES];
+    [[self buttonAddNewDocument] setEnabled:YES];
     [super awakeFromNib];
 }
 
@@ -251,19 +255,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-
+    [self setShouldShowAddDocumentPopover:YES];
+    [[self buttonAddNewDocument] setEnabled:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
 
     if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
+        
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTTemplateSelectorViewController class]]) {
                     if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                         [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
+                        [[self openDocumentPopoverController] setDelegate:self];
                     }
                     MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[[navControl topViewController] retain];
                     if (tvc) {
@@ -316,6 +323,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
             }
             [navControl release];
+            
         } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
             
             MTQueryBuilderContainerController *splitViewController = (MTQueryBuilderContainerController* )[[segue destinationViewController] retain];
@@ -334,8 +342,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     BOOL shouldPerformSegueWithIdentifier = YES;
-    if ([identifier isEqualToString:@""]) {
-
+    if ([identifier isEqualToString:MTSegueShowAddDocument]) {
+        if ([UIDevice isPad] == YES) {
+            shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
+            [self setShouldShowAddDocumentPopover:NO];
+            [[self buttonAddNewDocument] setEnabled:NO];
+        }
     }
     return shouldPerformSegueWithIdentifier;
 }
@@ -486,6 +498,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)viewControllerDidFinish:(id)sender {
     [self viewControllerDidFinish:sender animated:YES];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    [self setShouldShowAddDocumentPopover:YES];
+    [[self buttonAddNewDocument] setEnabled:YES];
+
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
@@ -517,6 +532,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    [self setShouldShowAddDocumentPopover:YES];
+    [[self buttonAddNewDocument] setEnabled:YES];
 }
 
 - (void)displayContentController:(UIViewController *)contentController {
@@ -919,4 +936,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return CGSizeMake(150.0000f, 100.0000f);
 }
 
+- (void)viewDidUnload {
+    [self setButtonAddNewDocument:nil];
+    [super viewDidUnload];
+}
 @end
