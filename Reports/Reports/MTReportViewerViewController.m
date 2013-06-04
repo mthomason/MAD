@@ -10,30 +10,31 @@
 
 @interface MTReportViewerViewController ()
 
-@property (retain, nonatomic) IBOutlet UIView *viewBackground;
-@property (retain, nonatomic) IBOutlet UIView *viewContainer;
+@property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRenderForPrinting;
+
+@property (nonatomic, retain) IBOutlet UIView *viewBackground;
+@property (nonatomic, retain) IBOutlet UIView *viewContainer;
 
 @property (nonatomic, retain) MTReportViewerReportViewController *pageController;
 
-@property (assign) NSUInteger numberOfPages;
-@property (assign) NSUInteger currentPageIndex;
-
 @property (nonatomic, retain) NSArray *initalViewControllers;
 
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
 
-@property (retain, nonatomic) IBOutletCollection(UIToolbar) NSArray *toolbars;
+@property (nonatomic, retain) IBOutletCollection(UIToolbar) NSArray *toolbars;
 
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
+
+@property (nonatomic, assign) NSUInteger numberOfPages;
+@property (nonatomic, assign) NSUInteger currentPageIndex;
 
 @property (nonatomic, assign) CGRect lastLayoutBounds;
 
 @property (nonatomic, assign) BOOL startedRefresh;
 
 @property (nonatomic, assign) BOOL pageIsAnimating;
-
-@property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRenderForPrinting;
 
 @end
 
@@ -52,6 +53,7 @@
     [_toolbars release];
     [_barButtonItemRefresh release];
     [_printButton release];
+    [_barButtonItemSendToPdf release];
     [super dealloc];
 }
 
@@ -84,7 +86,7 @@
 
     [self setCurrentPageIndex:0];
     
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1];
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1 ofPages:initalNumberOfPagesRequired];
     [[pageOne view] setBounds:[[self viewContainer] bounds]];
     [[pageOne view] setCenter:[[self viewContainer] center]];
     [pageOne setDelegate:self];
@@ -92,7 +94,7 @@
 
     [pageOne release];
     if (initalNumberOfPagesRequired == 2) {
-        MTReportViewerReportPageViewController *pageTwo = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:2];
+        MTReportViewerReportPageViewController *pageTwo = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:2 ofPages:initalNumberOfPagesRequired];
         [[pageTwo view] setBounds:[[self viewContainer] bounds]];
         [[pageTwo view] setCenter:[[self viewContainer] center]];
         [pageTwo setDelegate:self];
@@ -145,14 +147,12 @@
 
             if (success) {
                 [self reloadReportView];
-                [[self barButtonItemRefresh] setEnabled:YES];
             }
+            [[self barButtonItemRefresh] setEnabled:YES];
 
         }];
 
     }
-
-    //[self reloadReportView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -161,7 +161,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //[[[self pageController] view] removeFromSuperview];
 }
 
 - (IBAction)done:(id)sender {
@@ -179,28 +178,19 @@
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
-  //  [self reloadReportView];
-//    [self pageController]
-//    [[self view] setNeedsDisplay];
+
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
-    if (error) {
-        NSLog(@"Error: %@", error);
-    }
-    NSLog(@"%@", self.pageController.presentedViewController);
     
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1];
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
     [[pageOne view] setFrame:[[self viewContainer] bounds]];
-    //[[pageOne view] setCenter:[[self viewContainer] center]];
     [pageOne setDelegate:self];
     [[self pageController] setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
         
     }];
     [pageOne release];
-
-        //[self.pageController.presentedViewController updateCurrentPageDisplay];
 }
 
 #pragma mark - Actions
@@ -211,8 +201,8 @@
         
         if (success) {
             [self reloadReportView];
-            [[self barButtonItemRefresh] setEnabled:YES];
         }
+        [[self barButtonItemRefresh] setEnabled:YES];
         
     }];
 }
@@ -221,8 +211,6 @@
     [[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self viewContainer] bounds].size];
     NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
     [self setNumberOfPages:numberOfPages];
-}
-- (IBAction)sendTo:(id)sender {
 }
 
 - (IBAction)sendToPdf:(id)sender {
@@ -239,10 +227,17 @@
 - (IBAction)print:(id)sender {
 
     UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];
-    if(controller){
+    if (controller) {
+        
+        [[self printButton] setEnabled:NO];
+        [[self barButtonItemRefresh] setEnabled:NO];
+        [[self barButtonItemSendToPdf] setEnabled:NO];
         
         UIPrintInteractionCompletionHandler completionHandler =
         ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+            [[self printButton] setEnabled:YES];
+            [[self barButtonItemRefresh] setEnabled:YES];
+            [[self barButtonItemSendToPdf] setEnabled:YES];
             if(!completed && error){
                 NSLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
             }
@@ -262,7 +257,9 @@
         [printPageRender release];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [controller presentFromBarButtonItem:[self printButton] animated:YES completionHandler:completionHandler];  // iPad
+            [controller presentFromBarButtonItem:[self printButton]
+                                        animated:YES
+                               completionHandler:completionHandler];  // iPad
         } else {
             [controller presentAnimated:YES completionHandler:completionHandler];  // iPhone
         }
@@ -279,13 +276,14 @@
     if ([self pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
         if (visablePageNumber + 1 <= [self numberOfPages]) {
-            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1];
+            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1  ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self viewContainer] bounds]];
             [result autorelease];
         }
     }
     return result;
+    
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
@@ -295,7 +293,7 @@
     if ([self pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
         if (visablePageNumber - 1 > 0) {
-            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1];
+            result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1 ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self viewContainer] bounds]];
             [result autorelease];
@@ -314,13 +312,13 @@
 
 #pragma mark - UIPageViewControllerDelegate
 
-- (void)pageViewController:(UIPageViewController *)pageViewController
-        didFinishAnimating:(BOOL)finished
-   previousViewControllers:(NSArray *)previousViewControllers
-       transitionCompleted:(BOOL)completed {
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+
     if (completed || finished) {
         [self setPageIsAnimating:NO];
     }
+
 }
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
@@ -334,8 +332,4 @@
     
 }
 
-- (void)viewDidUnload {
-    [self setPrintButton:nil];
-    [super viewDidUnload];
-}
 @end

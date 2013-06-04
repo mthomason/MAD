@@ -11,7 +11,7 @@
 
 @implementation MTDocumentTableViewCell
 
-@synthesize labelH1, labelH2, imageThumbnail;
+@synthesize labelH1, imageThumbnail;
 
 + (UIImage *)defaultThumbnail {
     return [UIImage imageNamed:UIIMAGEDOCUMENTBLANK];

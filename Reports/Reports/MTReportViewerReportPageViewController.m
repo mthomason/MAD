@@ -10,7 +10,9 @@
 
 @interface MTReportViewerReportPageViewController ()
 
-@property (nonatomic, assign, readwrite) NSUInteger pageNumber;
+@property (nonatomic, assign) NSUInteger pageNumber;
+@property (nonatomic, assign) NSUInteger numberOfPages;
+
 @property (atomic, retain) MTReportViewerReportPageView *renderedReportView;
 
 @property (nonatomic, retain) UIView *pageNumberDisplay;
@@ -26,10 +28,11 @@
     [super dealloc];
 }
 
-- (id)initWithPageNumber:(NSUInteger)pageNumber {
+- (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [self setPageNumber:pageNumber];
+        [self setNumberOfPages:numberOfPages];
     }
     return self;
 }
@@ -43,7 +46,6 @@
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [renderedReportView setBackgroundColor:[UIColor whiteColor]];
     [renderedReportView setDelegate:self];
-    //[[self renderedReportView] addSubview:[self pageNumberViewForPageNumber:[self pageNumber]]];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];
     
@@ -60,7 +62,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self pageNumberViewForPageNumber:[self pageNumber]];
+    [self pageNumberViewForPageNumber:[self pageNumber] of:[self numberOfPages]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -74,14 +76,14 @@
     [[self delegate] drawPageAtIndex:[self pageNumber] - 1 inRect:rect];
 }
 
-- (UIView *)pageNumberViewForPageNumber:(NSUInteger)pageNumber {
-    CGFloat w = 33.0000f;
+- (UIView *)pageNumberViewForPageNumber:(NSUInteger)pageNumber of:(NSUInteger)numberOfPages {
+    CGFloat w = 66.0000f;
     CGFloat h = 33.0000f;
     CGFloat y = CGPointZero.y + 10.0000f;
     CGFloat x = CGPointZero.x + self.view.bounds.size.width - w - y;
     __block UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
     UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, w, h)];
-    [labelView setText:[NSString stringWithFormat:@"%d", pageNumber]];
+    [labelView setText:[NSString stringWithFormat:@"%d of %d", pageNumber, numberOfPages]];
     [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]+1.0000f]];
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];
@@ -94,8 +96,6 @@
     [labelView autorelease];
     [numberView setAlpha:0.0000f];
     [[self renderedReportView] addSubview:numberView];
-    //[self setPageNumberDisplay:numberView];
-    //[numberView release];
     
     [UIView animateWithDuration:0.7000f animations:^{
         [numberView setAlpha:1.0000f];

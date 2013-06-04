@@ -30,7 +30,7 @@
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion;
-- (void)refresh;
+//- (void)refresh;
 - (void)refresh:(void (^)(BOOL success))completion;
 - (BOOL)hasCachedData;
 - (void)sendTo;

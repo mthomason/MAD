@@ -12,7 +12,6 @@
 @interface MTDocumentTableViewCell : UITableViewCell
 
 @property (nonatomic, assign) IBOutlet UILabel *labelH1;
-@property (nonatomic, assign) IBOutlet UILabel *labelH2;
 @property (nonatomic, assign) IBOutlet UIImageView *imageThumbnail;
 
 + (CGFloat)defaultHeight;

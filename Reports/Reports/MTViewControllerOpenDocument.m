@@ -42,6 +42,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSURL *u = [url retain];
         [self setUrl:u];
         [u release];
+                
     }
     
     return self;
@@ -216,21 +217,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[[self titleView] label] setText:NSLocalizedString(@"Reports", @"Reports")];
     [self updateFileList];
 
-    NSMutableArray *fileUrlCache = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
+    NSMutableArray *fileUrlCache = [[NSMutableArray alloc] init];
     [self setAvailableFilesCache: fileUrlCache];
-    
-    NSMutableArray *fileMetaCache = [[NSMutableArray alloc] initWithCapacity: [fileUrlCache count]];
-    [self setAvailableFilesCacheMetaData: fileMetaCache];
-    
-    [fileMetaCache release];
     [fileUrlCache release];
     
+    NSMutableArray *fileMetaCache = [[NSMutableArray alloc] init];
+    [self setAvailableFilesCacheMetaData: fileMetaCache];
+    [fileMetaCache release];
+    
+    [self updateFileList];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self updateFileList];
     [[self tableViewQueries] reloadData];
 }
 
@@ -360,6 +360,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
 //    [_fileList removeAllObjects];
 //    [_query stopQuery];
+    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
+    [self setAvailableFilesCache: a];
+    [a release];
+    [[self availableFilesCacheMetaData] removeAllObjects];
     
     if ([[CloudManager sharedManager] isCloudEnabled]) {
         /*
@@ -518,9 +522,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [self dismissViewControllerAnimated:animated completion:nil];
         }];
     } else {
-        NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
-        [self setAvailableFilesCache: a];
-        [a release];
+        [self updateFileList];
         [[self tableViewQueries] reloadData];
         [[self collectionViewQueries] reloadData];
         [self dismissViewControllerAnimated:animated completion:nil];
@@ -697,12 +699,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         FileRepresentation *fr = [[self availableFilesCacheMetaData] objectAtIndex:[indexPath row]];
         [[result imageThumbnail] setImage:nil];
         [[result labelH1] setText: [fr fileName]];
-        [[result labelH2] setText:NSLocalizedString(@"Fixme Default Text.", @"A subheading.")];
         [self loadTableViewPreviewImageForIndexPath:indexPath];
     } else {
         [[result imageThumbnail] setImage:[MTDocumentTableViewCell defaultThumbnail]];
         [[result labelH1] setText: @""];    
-        [[result labelH2] setText: @""];
     }
     [result setDelegate:self];
     return result;
@@ -861,9 +861,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:[NSFileManager schemaFiles]];
-    [self setAvailableFilesCache: a];
-    [a release];
+    [self updateFileList];
     return [[self availableFilesCache] count];
 }
 

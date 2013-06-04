@@ -121,7 +121,6 @@ NSString * const MTSegueShowChooseDatasourceIdentifier = @"showChooseDatasource"
     }
     
     [[result labelH1] setText:NSLocalizedString(@"Blank", @"The name of a blank template document.")];    
-    [[result labelH2] setText:NSLocalizedString(@"A blank report template.", @"A subheading.")];
 
     return result;
 }

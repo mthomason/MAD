@@ -75,7 +75,7 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <navigationItem key="navigationItem" title="Templates" id="Tmo-dQ-hCR">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="2cW-dM-sfB">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="2cW-dM-sfB">
                             <connections>
                                 <action selector="cancel:" destination="5LH-bH-jcr" id="6OS-hP-HWa"/>
                             </connections>
@@ -240,7 +240,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9PG-EI-mAl">
                                 <items>
                                     <navigationItem title="Generated Query" id="pbn-Y7-7Y8">
-                                        <barButtonItem key="leftBarButtonItem" style="done" systemItem="done" id="9Er-8q-bn2">
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="9Er-8q-bn2">
                                             <connections>
                                                 <action selector="done:" destination="CS8-UT-bFG" id="1BP-5T-e66"/>
                                             </connections>
@@ -288,19 +288,13 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS" customClass="UIScrollViewSection"/>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-v2-HyI">
                                 <items>
-                                    <barButtonItem title="Reports" width="66" id="Ph0-RK-UQf">
-                                        <connections>
-                                            <action selector="doneReports:" destination="oy5-et-qFd" id="tfP-pm-vdf"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem title="Query" width="66" id="FWg-Ni-c6x">
+                                    <barButtonItem title="Query Designer" width="109" id="FWg-Ni-c6x">
                                         <connections>
                                             <action selector="done:" destination="oy5-et-qFd" id="Avw-j3-2ef"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="334-Me-wnr"/>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="fCh-S9-SRF"/>
-                                    <barButtonItem style="plain" systemItem="refresh" id="MOO-Fx-x3Q">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="gek-bz-TZX"/>
+                                    <barButtonItem systemItem="play" id="MOO-Fx-x3Q">
                                         <connections>
                                             <segue destination="SeT-Hl-V2y" kind="modal" identifier="showReportViewerFromDesign" id="YlD-km-rEj"/>
                                         </connections>
@@ -309,12 +303,17 @@
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="K4W-Fo-5ZQ">
                                 <items>
-                                    <barButtonItem style="plain" systemItem="add" id="Jgg-su-8FN">
+                                    <barButtonItem title="Reports" width="66" id="Ph0-RK-UQf">
+                                        <connections>
+                                            <action selector="doneReports:" destination="oy5-et-qFd" id="tfP-pm-vdf"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="uyH-cG-XCg"/>
+                                    <barButtonItem systemItem="add" id="Jgg-su-8FN">
                                         <connections>
                                             <action selector="showObjects:" destination="oy5-et-qFd" id="elh-ym-kmi"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="uyH-cG-XCg"/>
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dLN-M6-x2r">
@@ -385,21 +384,22 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="40Q-Vk-tKl">
                                 <items>
+                                    <barButtonItem image="UIImageArrowDown.png" id="2yZ-fa-sLz">
+                                        <connections>
+                                            <action selector="done:" destination="SeT-Hl-V2y" id="c28-Iz-HAC"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="NOD-G5-d0a"/>
                                     <barButtonItem systemItem="refresh" id="cbU-Yf-zEg">
                                         <connections>
                                             <action selector="refresh:" destination="SeT-Hl-V2y" id="5fw-Tq-mLQ"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem image="UIImageArrowDown.png" id="2yZ-fa-sLz">
-                                        <connections>
-                                            <action selector="done:" destination="SeT-Hl-V2y" id="c28-Iz-HAC"/>
-                                        </connections>
-                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="AGP-MF-pDa">
                                 <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="OWL-ua-FQ2"/>
                                     <barButtonItem title="Print" id="sVX-X1-Pl8">
                                         <connections>
                                             <action selector="print:" destination="SeT-Hl-V2y" id="0ZI-4v-Tdd"/>
@@ -441,6 +441,7 @@
                     <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemRefresh" destination="cbU-Yf-zEg" id="Tqx-1E-fYe"/>
+                        <outlet property="barButtonItemSendToPdf" destination="tzF-47-UAX" id="Au8-WQ-gL7"/>
                         <outlet property="printButton" destination="sVX-X1-Pl8" id="QEY-hT-s4C"/>
                         <outlet property="toolbarBottom" destination="AGP-MF-pDa" id="ZVl-zq-D64"/>
                         <outlet property="toolbarTop" destination="40Q-Vk-tKl" id="7Zx-cb-bP1"/>
@@ -6966,9 +6967,13 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
+                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="print:"/>
+                <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="sendTo:"/>
                 <relationship kind="action" name="sendToPdf:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
@@ -7042,9 +7047,7 @@
         <class className="MTViewControllerOpenDocument" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
             <relationships>
-                <relationship kind="action" name="about:"/>
                 <relationship kind="action" name="add:"/>
-                <relationship kind="action" name="delete:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
                 <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>

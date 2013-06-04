@@ -20,6 +20,6 @@
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
 @property (assign, nonatomic) id <MTPrintingProtocol> delegate;
 
-- (id)initWithPageNumber:(NSUInteger)pageNumber;
+- (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
 
 @end

@@ -63,6 +63,15 @@
     }
     [self setTitle: NSLocalizedString(@"Inital Settings", @"Inital Settings")];
     [self setClearsSelectionOnViewWillAppear: YES];
+    
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    [[self navigationItem] setLeftBarButtonItem:cancel];
+    [[self navigationItem] setHidesBackButton:NO];
+    [[self navigationItem] setBackBarButtonItem:cancel];
+    [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+    
+    [cancel release];
+
  }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -82,6 +91,12 @@
 }
 
 #pragma mark - Actions
+
+- (void)cancel:(id)sender {
+    //if ([UIDevice isPad]) {
+        [[self delegate] viewControllerDidCancel:self];
+    //}
+}
 
 - (IBAction)save:(id)sender {
     

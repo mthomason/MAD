@@ -281,11 +281,6 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="9VI-qP-p12">
                                 <items>
-                                    <barButtonItem title="Reports" width="66" id="uEV-qL-uAc">
-                                        <connections>
-                                            <action selector="done:" destination="d6e-CT-kmt" id="5U9-gZ-AXF"/>
-                                        </connections>
-                                    </barButtonItem>
                                     <barButtonItem title="Query" width="66" id="UFx-y1-7e8">
                                         <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
                                         <connections>
@@ -293,9 +288,9 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="vRz-Yl-3Fc"/>
-                                    <barButtonItem style="plain" systemItem="refresh" id="vKG-yA-osd">
+                                    <barButtonItem systemItem="add" id="U4m-Tl-FVb">
                                         <connections>
-                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromDesign" id="amO-vq-5zB"/>
+                                            <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -303,13 +298,13 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM" customClass="UIScrollViewSection"/>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-my-rda">
                                 <items>
-                                    <barButtonItem style="plain" systemItem="add" id="U4m-Tl-FVb">
-                                        <connections>
-                                            <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
-                                        </connections>
-                                    </barButtonItem>
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="5eh-EQ-ze3"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
+                                    <barButtonItem style="plain" systemItem="play" id="vKG-yA-osd">
+                                        <connections>
+                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromDesign" id="amO-vq-5zB"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNt-T0-zvD">
@@ -362,12 +357,13 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="I43-IO-Vjh">
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Wfx-yZ-FZK"/>
                                     <barButtonItem image="UIImageArrowDown.png" id="R0b-dh-gck">
                                         <connections>
                                             <action selector="done:" destination="yU8-vi-ajy" id="ZYC-cT-GOw"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Wfx-yZ-FZK"/>
+                                    <barButtonItem systemItem="refresh" id="dHk-yi-Ofz"/>
                                 </items>
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="z6W-8h-kya">
@@ -429,21 +425,21 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="UAX-SM-hCd"/>
-                                    <barButtonItem title="Reports" style="plain" id="YUl-IR-3EZ">
+                                    <barButtonItem title="MAD Designer" style="plain" id="YUl-IR-3EZ">
                                         <connections>
                                             <action selector="about:" destination="6" id="02z-kG-ltV"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zVi-KO-A4a"/>
-                                    <barButtonItem systemItem="edit" id="sDx-xO-Iad">
+                                    <barButtonItem style="plain" systemItem="edit" id="sDx-xO-Iad">
                                         <connections>
                                             <action selector="edit:" destination="6" id="N0k-2K-ITF"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gW9-un-K2H">
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gW9-un-K2H">
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="gPc-AS-IYI" customClass="MTDocumentTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="73"/>
@@ -458,16 +454,11 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Example Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="GFe-iG-Egi">
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A blank report template." lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Nlg-i1-4BM">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="12" id="joT-T1-Xt0"/>
+                                                        <constraint firstAttribute="height" constant="21" id="Em9-tf-74d"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 </label>
                                             </subviews>
@@ -475,18 +466,14 @@
                                         </view>
                                         <constraints>
                                             <constraint firstItem="cRV-Qj-A3K" firstAttribute="centerY" secondItem="gPc-AS-IYI" secondAttribute="centerY" type="default" id="1pI-yH-AAr"/>
-                                            <constraint firstItem="Nlg-i1-4BM" firstAttribute="leading" secondItem="cRV-Qj-A3K" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="2ev-16-VLC"/>
-                                            <constraint firstAttribute="trailing" secondItem="Nlg-i1-4BM" secondAttribute="trailing" constant="20" type="default" id="8pm-R3-u5C"/>
                                             <constraint firstItem="cRV-Qj-A3K" firstAttribute="leading" secondItem="gPc-AS-IYI" secondAttribute="leading" constant="20" type="default" id="Hmr-92-KSq"/>
-                                            <constraint firstItem="GFe-iG-Egi" firstAttribute="top" secondItem="gPc-AS-IYI" secondAttribute="top" constant="20" type="default" id="KZb-JG-uo4"/>
-                                            <constraint firstAttribute="bottom" secondItem="Nlg-i1-4BM" secondAttribute="bottom" constant="21" id="Nqn-c5-ggM"/>
+                                            <constraint firstItem="GFe-iG-Egi" firstAttribute="top" secondItem="gPc-AS-IYI" secondAttribute="top" constant="25" id="YIm-aK-Sww"/>
                                             <constraint firstItem="GFe-iG-Egi" firstAttribute="leading" secondItem="cRV-Qj-A3K" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="ZuF-pw-638"/>
                                             <constraint firstAttribute="trailing" secondItem="GFe-iG-Egi" secondAttribute="trailing" constant="20" type="default" id="jXC-nA-Ljh"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageThumbnail" destination="cRV-Qj-A3K" id="fGn-9R-J4V"/>
                                             <outlet property="labelH1" destination="GFe-iG-Egi" id="NXW-ij-hoS"/>
-                                            <outlet property="labelH2" destination="Nlg-i1-4BM" id="yRC-Zu-Qug"/>
                                             <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="UoD-L2-g2K"/>
                                         </connections>
                                     </tableViewCell>
@@ -548,45 +535,19 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="KBE-nZ-iUw">
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="y1z-I5-jq9"/>
-                                    <barButtonItem style="plain" id="h7K-BX-Chp">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="aXL-Ux-ed8">
-                                            <rect key="frame" x="60" y="8" width="200" height="31"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <segments>
-                                                <segment title="Direct"/>
-                                                <segment title="Advanced"/>
-                                                <segment title="Override"/>
-                                            </segments>
-                                        </segmentedControl>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ohU-eS-CaB"/>
-                                </items>
-                            </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="xVO-9D-O7m">
                                 <items>
-                                    <barButtonItem image="UIImageDocument20.png" style="plain" id="76r-VE-2fP">
-                                        <color key="tintColor" red="0.72549021244049072" green="0.87843137979507446" blue="0.9686274528503418" alpha="1" colorSpace="calibratedRGB"/>
+                                    <barButtonItem title="Designer" id="76r-VE-2fP">
                                         <connections>
                                             <segue destination="d6e-CT-kmt" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="jCL-NW-r6y"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="MQd-64-cNd"/>
-                                    <barButtonItem image="UIImageBolt20.png" style="plain" id="y0T-IG-QST">
-                                        <color key="tintColor" red="0.72549021244049072" green="0.87843137979507446" blue="0.9686274528503418" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromQuery" id="dOe-6a-PiX"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EnV-ib-ZhA"/>
-                                    <barButtonItem title="SQL" id="8Sz-vr-PDm">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
+                                    <barButtonItem title="Show SQL" id="8Sz-vr-PDm">
                                         <connections>
                                             <segue destination="rH1-dA-DYm" kind="modal" identifier="MNSSegueShowSql" id="N5f-Be-IgC"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TYp-rG-qRH" customClass="MTClipboardView">
@@ -849,40 +810,34 @@
                                             <outlet property="delegate" destination="6Ud-Rv-UQO" id="q1z-eq-xa9"/>
                                         </connections>
                                     </tableView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageClip.png" translatesAutoresizingMaskIntoConstraints="NO" id="iMI-Ee-ffN"/>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="iMI-Ee-ffN" firstAttribute="top" secondItem="TYp-rG-qRH" secondAttribute="top" constant="23" id="FJX-50-Jbk"/>
-                                    <constraint firstItem="iMI-Ee-ffN" firstAttribute="centerX" secondItem="0Le-GO-xmI" secondAttribute="centerX" type="default" id="HBD-dS-uQo"/>
+                                    <constraint firstItem="0Le-GO-xmI" firstAttribute="top" secondItem="TYp-rG-qRH" secondAttribute="top" constant="20" symbolic="YES" type="default" id="9ej-cq-ZwH"/>
                                     <constraint firstItem="0Le-GO-xmI" firstAttribute="leading" secondItem="TYp-rG-qRH" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Lwt-Q0-9aQ"/>
                                     <constraint firstAttribute="trailing" secondItem="0Le-GO-xmI" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="fAh-B7-U2a"/>
-                                    <constraint firstAttribute="bottom" secondItem="0Le-GO-xmI" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="nZo-LJ-JD3"/>
-                                    <constraint firstItem="0Le-GO-xmI" firstAttribute="top" secondItem="TYp-rG-qRH" secondAttribute="top" constant="20" symbolic="YES" type="default" id="wBi-bT-iYG"/>
+                                    <constraint firstAttribute="bottom" secondItem="0Le-GO-xmI" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="vwO-bZ-a6w"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="KBE-nZ-iUw" firstAttribute="leading" secondItem="KGO-Qx-zB3" secondAttribute="leading" type="default" id="8qs-YT-ynf"/>
-                            <constraint firstItem="KBE-nZ-iUw" firstAttribute="trailing" secondItem="KGO-Qx-zB3" secondAttribute="trailing" type="default" id="8rT-6q-CKu"/>
+                            <constraint firstItem="TYp-rG-qRH" firstAttribute="bottom" secondItem="xVO-9D-O7m" secondAttribute="top" type="default" id="0Pl-e0-WKd"/>
                             <constraint firstItem="xVO-9D-O7m" firstAttribute="bottom" secondItem="KGO-Qx-zB3" secondAttribute="bottom" type="default" id="Ak4-pi-r8c"/>
                             <constraint firstItem="xVO-9D-O7m" firstAttribute="trailing" secondItem="KGO-Qx-zB3" secondAttribute="trailing" type="default" id="T3A-2r-sxJ"/>
                             <constraint firstItem="xVO-9D-O7m" firstAttribute="leading" secondItem="KGO-Qx-zB3" secondAttribute="leading" type="default" id="UzW-Um-6bn"/>
-                            <constraint firstItem="KBE-nZ-iUw" firstAttribute="top" secondItem="KGO-Qx-zB3" secondAttribute="top" type="default" id="Y9o-ju-N9E"/>
                             <constraint firstItem="TYp-rG-qRH" firstAttribute="trailing" secondItem="KGO-Qx-zB3" secondAttribute="trailing" type="default" id="cGu-R9-88a"/>
-                            <constraint firstItem="xVO-9D-O7m" firstAttribute="top" secondItem="TYp-rG-qRH" secondAttribute="bottom" type="default" id="eUR-EL-KXZ"/>
-                            <constraint firstItem="TYp-rG-qRH" firstAttribute="top" secondItem="KBE-nZ-iUw" secondAttribute="bottom" type="default" id="kLm-uf-Vzc"/>
+                            <constraint firstItem="TYp-rG-qRH" firstAttribute="top" secondItem="KGO-Qx-zB3" secondAttribute="top" type="default" id="u01-8I-gvM"/>
                             <constraint firstItem="TYp-rG-qRH" firstAttribute="leading" secondItem="KGO-Qx-zB3" secondAttribute="leading" type="default" id="wN4-VW-Rj4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Query Builder" id="fNz-nH-6xs">
-                        <barButtonItem key="leftBarButtonItem" title="Reports" id="ZB9-dz-LPj">
+                        <barButtonItem key="leftBarButtonItem" title="Reports" style="plain" id="ZB9-dz-LPj">
                             <connections>
                                 <action selector="done:" destination="6Ud-Rv-UQO" id="0TF-cb-avV"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="Haa-K9-U4H">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="Haa-K9-U4H">
                             <connections>
                                 <action selector="edit:" destination="6Ud-Rv-UQO" id="oHR-Sa-een"/>
                             </connections>
@@ -6576,9 +6531,6 @@
         <image name="UIImageAlignVerticalCenter20.png" width="20" height="20"/>
         <image name="UIImageArrowDown.png" width="20" height="20"/>
         <image name="UIImageBold20.png" width="20" height="20"/>
-        <image name="UIImageBolt20.png" width="20" height="20"/>
-        <image name="UIImageClip.png" width="80" height="26"/>
-        <image name="UIImageDocument20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageExportTypeAppEngine.png" width="64" height="64"/>
         <image name="UIImageExportTypeCSV.png" width="64" height="64"/>
@@ -6675,7 +6627,6 @@
             <relationships>
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelH2" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="MTGroupByViewController" superclassName="UITableViewController">
@@ -6924,6 +6875,7 @@
                 <relationship kind="action" name="print:"/>
                 <relationship kind="action" name="sendToPdf:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
@@ -6994,6 +6946,7 @@
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
                 <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonAddNewDocument" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
                 <relationship kind="outlet" name="collectionViewQueries" candidateClass="UICollectionView"/>
                 <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
@@ -7090,8 +7043,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="pfP-rZ-fVf"/>
         <segue reference="kPX-hH-DKi"/>
-        <segue reference="amO-vq-5zB"/>
+        <segue reference="pfP-rZ-fVf"/>
     </inferredMetricsTieBreakers>
 </document>
