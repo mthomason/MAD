@@ -502,14 +502,7 @@
                                 </connections>
                             </tableView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="30g-Ln-4LG">
-                                <items>
-                                    <barButtonItem image="UIImageDocumentsAlt20.png" style="plain" id="Clq-gy-5SQ">
-                                        <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
-                                        <connections>
-                                            <action selector="done:" destination="6" id="MBk-6E-Xxd"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
+                                <items/>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
@@ -6491,7 +6484,6 @@
         <image name="UIImageClip.png" width="80" height="26"/>
         <image name="UIImageDocument20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
-        <image name="UIImageDocumentsAlt20.png" width="20" height="20"/>
         <image name="UIImageExportTypeAppEngine.png" width="64" height="64"/>
         <image name="UIImageExportTypeCSV.png" width="64" height="64"/>
         <image name="UIImageExportTypeFacebook.png" width="64" height="64"/>
@@ -6833,10 +6825,7 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
-                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="print:"/>
-                <relationship kind="action" name="refresh:"/>
-                <relationship kind="action" name="sendTo:"/>
                 <relationship kind="action" name="sendToPdf:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
