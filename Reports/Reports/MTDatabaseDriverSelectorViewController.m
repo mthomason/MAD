@@ -10,6 +10,7 @@
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier = @"MTSegueShowSetUpDatasourceSqlServerIdentifier";
 
 @implementation MTDatabaseDriverSelectorViewController
 
