@@ -127,7 +127,7 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
 };
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
-	MTQuerySectionsInstructions = 0,
+	MTQuerySectionsDocumentGroups = 0,
     MTQuerySectionsDatasource = 1,
 	MTQuerySectionsTables = 2,
 	MTQuerySectionsLinks = 3,

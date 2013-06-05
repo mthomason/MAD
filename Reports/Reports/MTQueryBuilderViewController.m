@@ -138,16 +138,15 @@
     //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
     
     NSArray *sections = @[@(MTQuerySectionsDatasource),
-                          @(MTQuerySectionsTables),
-                          @(MTQuerySectionsInstructions)];
+                          @(MTQuerySectionsTables)];
     
-    NSArray *countRowsForSection = @[@(1), @(-1), @(-1)];
+    NSArray *countRowsForSection = @[@(1), @(-1)];
     NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
     
-    NSArray *headersSection = @[h2, h3, h1];
+    NSArray *headersSection = @[h2, h3];
     NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
     
-    NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellInstruction defaultHeight])];
+    NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight])];
     NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
     NSDictionary *tableOutline = @{MTTableSectionSectionsKey : sections,
@@ -162,17 +161,16 @@
     sections = @[@(MTQuerySectionsDatasource),
                  @(MTQuerySectionsTables),
                  @(MTQuerySectionsGroups),
-                 @(MTQuerySectionsPredicate),
-                 @(MTQuerySectionsInstructions)];
+                 @(MTQuerySectionsPredicate)];
     
-    countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
+    countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
     countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
     
-    headersSection = @[h2, h3, h5, h6, h1];
+    headersSection = @[h2, h3, h5, h6];
     headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
     
     heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
-                             @(44.0000f), @(44.0000f), @([UITableViewCellInstruction defaultHeight])];
+                             @(44.0000f), @(44.0000f)];
     heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
     tableOutline = @{MTTableSectionSectionsKey : sections,
@@ -188,18 +186,17 @@
                  @(MTQuerySectionsTables),
                  @(MTQuerySectionsLinks),
                  @(MTQuerySectionsGroups),
-                 @(MTQuerySectionsPredicate),
-                 @(MTQuerySectionsInstructions)];
+                 @(MTQuerySectionsPredicate)];
     
-    countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1), @(-1)];
+    countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
     countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
     
-    headersSection = @[h2, h3, h4, h5, h6, h1];
+    headersSection = @[h2, h3, h4, h5, h6];
     headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys:sections];
     
     
     heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
-                             @(44.0000f), @(44.0000f), @([UITableViewCellInstruction defaultHeight])];
+                             @(44.0000f), @(44.0000f)];
     heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
     
     tableOutline = @{MTTableSectionSectionsKey : sections,
@@ -527,7 +524,7 @@
     NSInteger weight = groupCount - 1;
     NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
     NSUInteger rowFirstTransaction = weight;
-    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsInstructions];
+    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsDocumentGroups];
     NSUInteger rowSecondTransaction = groupCount + 1;
     NSUInteger rowThirdTransaction = groupCount + 3;
     
@@ -666,7 +663,7 @@
     numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
     if (numberOfRows < 0) {
         switch (ts) {
-            case MTQuerySectionsInstructions: {
+            case MTQuerySectionsDocumentGroups: {
                 //The sections are report header, report footer, page header, page footer,
                 //  body, group header, and group footer
                 NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
@@ -858,7 +855,7 @@
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
                             [activateDocument saveContext];
-                                NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsInstructions];
+                                NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
                                 NSInteger headerSectionRow = weightToRemove + 2;
                                 NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
                                 //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
@@ -933,7 +930,7 @@
     switch (section) {
 
         // MARK: Display optional instructions about query builder.
-        case MTQuerySectionsInstructions: {
+        case MTQuerySectionsDocumentGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
@@ -1087,7 +1084,7 @@
         
         switch (section) {
                 
-            case MTQuerySectionsInstructions: {
+            case MTQuerySectionsDocumentGroups: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
                 [[headerView buttonAdd] setHidden:YES];
                 break;
@@ -1147,7 +1144,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == MTQuerySectionsInstructions && [UIDevice isPad] == NO) {
+    if (section == MTQuerySectionsDocumentGroups && [UIDevice isPad] == NO) {
         [self setLastSelectedRowNumber: [indexPath row]];
         [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
     }
@@ -1323,8 +1320,8 @@
     } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
         [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]]];
     } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsInstructions]]]; //Once for group header settings
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsInstructions]]]; //Once for group footer settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups]]]; //Once for group header settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups]]]; //Once for group footer settings
         [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsGroups]]];
     } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
         [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsPredicate]]];
