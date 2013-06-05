@@ -126,14 +126,14 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
     MTDocumentObjectBuilderValue
 };
 
-typedef NS_ENUM(NSUInteger, UIViewControllerSchemaTablesSections) {
-	UIViewControllerSchemaTablesSectionsInstructions = 0,
-    UIViewControllerSchemaTablesSectionsDatasource = 1,
-	UIViewControllerSchemaTablesSectionsTables = 2,
-	UIViewControllerSchemaTablesSectionsLinks = 3,
-	UIViewControllerSchemaTablesSectionsGroups = 4,
-	UIViewControllerSchemaTablesSectionsPredicate = 5,
-    UIViewControllerSchemaTablesSectionsSql = 6
+typedef NS_ENUM(NSUInteger, MTQuerySections) {
+	MTQuerySectionsInstructions = 0,
+    MTQuerySectionsDatasource = 1,
+	MTQuerySectionsTables = 2,
+	MTQuerySectionsLinks = 3,
+	MTQuerySectionsGroups = 4,
+	MTQuerySectionsPredicate = 5,
+    MTQuerySectionsSql = 6
 };
 
 typedef NS_ENUM(NSUInteger, MTControlState) {

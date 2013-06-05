@@ -38,8 +38,8 @@
 
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
-- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
-- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec;
+- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
+- (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
 @end
 
@@ -137,9 +137,9 @@
     
     //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
     
-    NSArray *sections = @[@(UIViewControllerSchemaTablesSectionsDatasource),
-                          @(UIViewControllerSchemaTablesSectionsTables),
-                          @(UIViewControllerSchemaTablesSectionsInstructions)];
+    NSArray *sections = @[@(MTQuerySectionsDatasource),
+                          @(MTQuerySectionsTables),
+                          @(MTQuerySectionsInstructions)];
     
     NSArray *countRowsForSection = @[@(1), @(-1), @(-1)];
     NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
@@ -159,11 +159,11 @@
     
     //Configuration with one schema referenced in the database
     
-    sections = @[@(UIViewControllerSchemaTablesSectionsDatasource),
-                 @(UIViewControllerSchemaTablesSectionsTables),
-                 @(UIViewControllerSchemaTablesSectionsGroups),
-                 @(UIViewControllerSchemaTablesSectionsPredicate),
-                 @(UIViewControllerSchemaTablesSectionsInstructions)];
+    sections = @[@(MTQuerySectionsDatasource),
+                 @(MTQuerySectionsTables),
+                 @(MTQuerySectionsGroups),
+                 @(MTQuerySectionsPredicate),
+                 @(MTQuerySectionsInstructions)];
     
     countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
     countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
@@ -184,12 +184,12 @@
     
     [self setModelWithOneTable: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
     
-    sections = @[@(UIViewControllerSchemaTablesSectionsDatasource),
-                 @(UIViewControllerSchemaTablesSectionsTables),
-                 @(UIViewControllerSchemaTablesSectionsLinks),
-                 @(UIViewControllerSchemaTablesSectionsGroups),
-                 @(UIViewControllerSchemaTablesSectionsPredicate),
-                 @(UIViewControllerSchemaTablesSectionsInstructions)];
+    sections = @[@(MTQuerySectionsDatasource),
+                 @(MTQuerySectionsTables),
+                 @(MTQuerySectionsLinks),
+                 @(MTQuerySectionsGroups),
+                 @(MTQuerySectionsPredicate),
+                 @(MTQuerySectionsInstructions)];
     
     countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1), @(-1)];
     countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
@@ -408,8 +408,8 @@
 
 #pragma mark - Modal helper
 
-- (UIViewControllerSchemaTablesSections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
-    UIViewControllerSchemaTablesSections result = sec;
+- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
+    MTQuerySections result = sec;
     NSArray *sectionTypes = [[[self datamodel] objectForKey: MTTableSectionSectionsKey] retain];
     if ([sectionTypes count] >= sec) {
         result = [[sectionTypes objectAtIndex:sec] integerValue];
@@ -418,7 +418,7 @@
     return result;
 }
 
-- (NSUInteger)sectionPositionForTableSectionType:(UIViewControllerSchemaTablesSections)sec {
+- (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
     NSInteger result = 0;
     NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableViewQueryBuilder] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey] retain];
     NSInteger secPos = 0;
@@ -525,9 +525,9 @@
     NSError *error = nil;
     NSInteger groupCount = [RptqQueryGroup numberOfGroupsForQuery:query];
     NSInteger weight = groupCount - 1;
-    NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsGroups];
+    NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
     NSUInteger rowFirstTransaction = weight;
-    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:UIViewControllerSchemaTablesSectionsInstructions];
+    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsInstructions];
     NSUInteger rowSecondTransaction = groupCount + 1;
     NSUInteger rowThirdTransaction = groupCount + 3;
     
@@ -579,7 +579,7 @@
     
     //NSUInteger indexCounter = [[query hasQueryTables] count] - 1;
     
-    NSUInteger sectionPosition = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsTables];
+    NSUInteger sectionPosition = [self sectionPositionForTableSectionType: MTQuerySectionsTables];
     NSIndexPath *insertedRowIndexPath = [[NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition] retain];
     
     NSDictionary *newLayout = [[self datamodel] retain];
@@ -593,7 +593,7 @@
             NSInteger startIndex = -1;
             NSInteger lengtho = [newLayoutSectionTypes count] - [oldLayoutSectionTypes count];
             for (NSNumber *typenum in newLayoutSectionTypes) {
-                UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                MTQuerySections stsection = [typenum integerValue];
                 if (secctr < [oldLayoutSectionTypes count]) {
                     if (stsection == [[oldLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
                         secctr++;
@@ -659,14 +659,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection: section];
+    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: section];
     
     NSDictionary *rowsDict = [[[self datamodel] objectForKey: MTTableSectionRowKey] retain];
     NSInteger numberOfRows = 0;
     numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
     if (numberOfRows < 0) {
         switch (ts) {
-            case UIViewControllerSchemaTablesSectionsInstructions: {
+            case MTQuerySectionsInstructions: {
                 //The sections are report header, report footer, page header, page footer,
                 //  body, group header, and group footer
                 NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
@@ -674,22 +674,22 @@
                 //NSLog(@"Section Rows:   %d", numberOfRows);
                 break;
             }
-            case UIViewControllerSchemaTablesSectionsTables: {
+            case MTQuerySectionsTables: {
                 numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
                 //NSLog(@"Table Rows:     %d", numberOfRows);
                 break;
             }
-            case UIViewControllerSchemaTablesSectionsLinks: {
+            case MTQuerySectionsLinks: {
                 numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
                 //NSLog(@"Link Rows:      %d", numberOfRows);
                 break;
             }
-            case UIViewControllerSchemaTablesSectionsPredicate: {
+            case MTQuerySectionsPredicate: {
                 numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
                 //NSLog(@"Predicate Rows: %d", numberOfRows);
                 break;
             }
-            case UIViewControllerSchemaTablesSectionsGroups: {
+            case MTQuerySectionsGroups: {
                 numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
                 //NSLog(@"Group Rows:     %d", numberOfRows);
                 break;
@@ -705,19 +705,19 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger section = [indexPath section];
-    UIViewControllerSchemaTablesSections sectionType = [self tableSectionTypeForIndexPathSection: section];
-	return (sectionType == UIViewControllerSchemaTablesSectionsTables ||
-            sectionType == UIViewControllerSchemaTablesSectionsGroups ||
-            sectionType == UIViewControllerSchemaTablesSectionsPredicate ||
-            sectionType == UIViewControllerSchemaTablesSectionsLinks);
+    MTQuerySections sectionType = [self tableSectionTypeForIndexPathSection: section];
+	return (sectionType == MTQuerySectionsTables ||
+            sectionType == MTQuerySectionsGroups ||
+            sectionType == MTQuerySectionsPredicate ||
+            sectionType == MTQuerySectionsLinks);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == UIViewControllerSchemaTablesSectionsGroups) ? YES : NO;
+    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == MTQuerySectionsGroups) ? YES : NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIViewControllerSchemaTablesSections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
+    MTQuerySections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
 
 	switch (editingStyle) {
 
@@ -725,8 +725,8 @@
         case UITableViewCellEditingStyleDelete: {
             switch (ts) {
                     
-                // MARK: Delete UIViewControllerSchemaTablesSectionsTables
-                case UIViewControllerSchemaTablesSectionsTables: {
+                // MARK: Delete MTQuerySectionsTables
+                case MTQuerySectionsTables: {
                     
                     NSArray *deleteRows = nil;
                     NSIndexSet *deleteSections = nil;
@@ -760,7 +760,7 @@
                         NSInteger startIndex = -1;
                         NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
                         for (NSNumber *typenum in oldLayoutSectionTypes) {
-                            UIViewControllerSchemaTablesSections stsection = [typenum integerValue];
+                            MTQuerySections stsection = [typenum integerValue];
                             if (secctr < [newLayoutSectionTypes count]) {
                                 if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
                                     secctr++;
@@ -804,8 +804,8 @@
                     break;
                 }
 
-                // MARK: Delete UIViewControllerSchemaTablesSectionsLinks
-                case UIViewControllerSchemaTablesSectionsLinks: {
+                // MARK: Delete MTQuerySectionsLinks
+                case MTQuerySectionsLinks: {
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
                         NSManagedObjectID *objid = [tvcLink tableID];
@@ -816,8 +816,8 @@
                     break;
                 }
                     
-                // MARK: Delete UIViewControllerSchemaTablesSectionsGroups
-                case UIViewControllerSchemaTablesSectionsGroups: {
+                // MARK: Delete MTQuerySectionsGroups
+                case MTQuerySectionsGroups: {
                     
                     MTReportDocument *activateDocument = [self activeDocument];
                     NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
@@ -858,7 +858,7 @@
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
                             [activateDocument saveContext];
-                                NSInteger section = [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions];
+                                NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsInstructions];
                                 NSInteger headerSectionRow = weightToRemove + 2;
                                 NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
                                 //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
@@ -884,7 +884,7 @@
                     break;
                 }
                 
-                case UIViewControllerSchemaTablesSectionsPredicate: {
+                case MTQuerySectionsPredicate: {
                     UITableViewCellQueryPredicate *tvcPred = (UITableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
@@ -928,12 +928,12 @@
     UITableViewCell *result = nil;
 
     NSInteger row = [indexPath row];
-    UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
 
     switch (section) {
 
         // MARK: Display optional instructions about query builder.
-        case UIViewControllerSchemaTablesSectionsInstructions: {
+        case MTQuerySectionsInstructions: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
@@ -948,7 +948,7 @@
         }
 
         // MARK: Display and identify the data source and data sources
-        case UIViewControllerSchemaTablesSectionsDatasource: {
+        case MTQuerySectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
             NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[self activeDocument] managedObjectContext]];
@@ -969,7 +969,7 @@
         }
 
         // MARK: Display the table names that are used in the query
-        case UIViewControllerSchemaTablesSectionsTables: {
+        case MTQuerySectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             RptqQueryTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
@@ -984,7 +984,7 @@
         }
         
         // MARK: Display the table links or joins that are used in the query.
-        case UIViewControllerSchemaTablesSectionsLinks: {
+        case MTQuerySectionsLinks: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
@@ -1000,7 +1000,7 @@
         }
 
         // MARK: Display the groupings used in the query.
-        case UIViewControllerSchemaTablesSectionsGroups: {
+        case MTQuerySectionsGroups: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
@@ -1012,7 +1012,7 @@
         }
         
         // MARK: Display the predicates or conditions on the query.
-        case UIViewControllerSchemaTablesSectionsPredicate: {
+        case MTQuerySectionsPredicate: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryPredicate *predicate = [[[self fetchedResultsControllerPredicates] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
@@ -1041,7 +1041,7 @@
             break;
         }
         
-        case UIViewControllerSchemaTablesSectionsSql: {
+        case MTQuerySectionsSql: {
             switch (row) {
                 case 0: {
                     static NSString *MyIdentifierUITableViewCellOverride = @"UITableViewCellOverride";
@@ -1087,42 +1087,42 @@
         
         switch (section) {
                 
-            case UIViewControllerSchemaTablesSectionsInstructions: {
+            case MTQuerySectionsInstructions: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
                 [[headerView buttonAdd] setHidden:YES];
                 break;
             }
                 
-            case UIViewControllerSchemaTablesSectionsDatasource: {
+            case MTQuerySectionsDatasource: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
                 [[headerView buttonAdd] setHidden:YES];
                 break;
             }
                 
-            case UIViewControllerSchemaTablesSectionsTables: {
+            case MTQuerySectionsTables: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
                 [[headerView buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             }
                 
-            case UIViewControllerSchemaTablesSectionsLinks: {
+            case MTQuerySectionsLinks: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
                 [[headerView buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             }
                 
-            case UIViewControllerSchemaTablesSectionsGroups: {
+            case MTQuerySectionsGroups: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
                 [[headerView buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             }
                 
-            case UIViewControllerSchemaTablesSectionsPredicate: {
+            case MTQuerySectionsPredicate: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
                 [[headerView buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             }
-            case UIViewControllerSchemaTablesSectionsSql: {
+            case MTQuerySectionsSql: {
                 [[headerView labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
                 [[headerView buttonAdd] setHidden:YES];
                 break;
@@ -1146,8 +1146,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == UIViewControllerSchemaTablesSectionsInstructions && [UIDevice isPad] == NO) {
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
+    if (section == MTQuerySectionsInstructions && [UIDevice isPad] == NO) {
         [self setLastSelectedRowNumber: [indexPath row]];
         [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
     }
@@ -1171,10 +1171,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat result = MNSTableViewCellHeightDefault;
-    UIViewControllerSchemaTablesSections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == UIViewControllerSchemaTablesSectionsSql) {
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
+    if (section == MTQuerySectionsSql) {
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
-    } else if (section == UIViewControllerSchemaTablesSectionsGroups) {
+    } else if (section == MTQuerySectionsGroups) {
         result = 88.0000f;
     } else {
         NSDictionary *tableMetaHeight = [[self datamodel] objectForKey:MTTableSectionRowHeightKey];
@@ -1319,15 +1319,15 @@
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
     if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsTables]]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]]];
     } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsLinks]]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]]];
     } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions]]]; //Once for group header settings
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsInstructions]]]; //Once for group footer settings
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsGroups]]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsInstructions]]]; //Once for group header settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsInstructions]]]; //Once for group footer settings
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsGroups]]];
     } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: UIViewControllerSchemaTablesSectionsPredicate]]];
+        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsPredicate]]];
     }
     
     return [result autorelease];
@@ -1343,7 +1343,7 @@
     NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
     
     for (NSNumber *section in sections) {
-        UIViewControllerSchemaTablesSections updateSection = [section integerValue];
+        MTQuerySections updateSection = [section integerValue];
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             switch(type) {
                 case NSFetchedResultsChangeInsert:
@@ -1371,7 +1371,7 @@
     NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
     
     for (NSNumber *section in sections) {
-        UIViewControllerSchemaTablesSections updateSection = [section integerValue];
+        MTQuerySections updateSection = [section integerValue];
         
         NSIndexPath *path = [NSIndexPath indexPathForRow: [indexPath row]
                                                inSection: updateSection];
