@@ -289,9 +289,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         NSUInteger row = 0;
         NSURL *url = nil;
-        if ([sender isKindOfClass:[MTDocumentTableViewCell class]]) {
+        if ([sender isKindOfClass:[MTTableViewCellDocument class]]) {
             
-            MTDocumentTableViewCell *senderCell = sender;
+            MTTableViewCellDocument *senderCell = sender;
             row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
             url = [[[self availableFilesCache] objectAtIndex: row] retain];
             [self setUrlBeingOpended:url];
@@ -435,6 +435,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else {
 
+
         NSIndexPath *cellPath = [[self collectionViewQueries] indexPathForCell:cell];
         NSURL *fileToAttach = [[self availableFilesCache] objectAtIndex:cellPath.item];
         
@@ -479,6 +480,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [mailComposer setSubject:subject];
                     
                     [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:@"get.mad"];
+                    
+                    if ([UIDevice isPad]) {
+                        [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
+                        [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+                        [mailComposer setProvidesPresentationContextTransitionStyle:YES];
+                        [mailComposer setModalInPopover:NO];
+                    }
                     [self presentViewController:mailComposer animated:YES completion:nil];
                     
                     [data release];
@@ -693,7 +701,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *MyIdentifier = @"UITableViewCellDocument";
-    MTDocumentTableViewCell *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    MTTableViewCellDocument *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
 
     if ([indexPath row] < [[self availableFilesCache] count]) {
         FileRepresentation *fr = [[self availableFilesCacheMetaData] objectAtIndex:[indexPath row]];
@@ -701,7 +709,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[result labelH1] setText: [fr fileName]];
         [self loadTableViewPreviewImageForIndexPath:indexPath];
     } else {
-        [[result imageThumbnail] setImage:[MTDocumentTableViewCell defaultThumbnail]];
+        [[result imageThumbnail] setImage:[MTTableViewCellDocument defaultThumbnail]];
         [[result labelH1] setText: @""];    
     }
     [result setDelegate:self];
@@ -776,7 +784,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [MTDocumentTableViewCell defaultHeight];
+    return [MTTableViewCellDocument defaultHeight];
 }
 
 #pragma mark -
@@ -854,7 +862,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[result labelTitle] setText: [fr fileName]];
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
-        [[result imagePreview] setImage:[MTDocumentTableViewCell defaultThumbnail]];
+        [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
         [[result labelTitle] setText: @""];
     }
     return [result autorelease];
@@ -894,7 +902,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     FileRepresentation *fileRepresentation = [[self availableFilesCacheMetaData] objectAtIndex:[indexPath row]];
     NSBlockOperation *previewLoadingOperation = [NSBlockOperation blockOperationWithBlock:^(void) {
-        MTDocumentTableViewCell *visibleCell = (MTDocumentTableViewCell *)[[self tableViewQueries] cellForRowAtIndexPath:indexPath];
+        MTTableViewCellDocument *visibleCell = (MTTableViewCellDocument *)[[self tableViewQueries] cellForRowAtIndexPath:indexPath];
         NSString *path = [fileRepresentation.previewURL path];
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         [[visibleCell imageThumbnail] setImage: image];

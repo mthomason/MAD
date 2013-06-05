@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDocumentTableViewCell.h"
+#import "MTTableViewCellDocument.h"
 #import "Constants.h"
 
-@implementation MTDocumentTableViewCell
+@implementation MTTableViewCellDocument
 
 @synthesize labelH1, imageThumbnail;
 

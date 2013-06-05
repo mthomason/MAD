@@ -112,7 +112,7 @@ NSString * const MTSegueShowChooseDatasourceIdentifier = @"showChooseDatasource"
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {    
     static NSString *MyIdentifier = @"UITableViewCellDocument";
-    MTDocumentTableViewCell *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    MTTableViewCellDocument *result = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if (!result) {
         UINib *resultCellNib = [UINib nibWithNibName:@"UITableViewCellDocument" bundle:nil];
         [resultCellNib instantiateWithOwner:self options:nil];
@@ -162,7 +162,7 @@ NSString * const MTSegueShowChooseDatasourceIdentifier = @"showChooseDatasource"
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [MTDocumentTableViewCell defaultHeight];
+    return [MTTableViewCellDocument defaultHeight];
 }
 
 @end

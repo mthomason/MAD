@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
-#import "MTDocumentTableViewCell.h"
+#import "MTTableViewCellDocument.h"
 #import "NSFileManager+Common.h"
 #import "Constants.h"
 #import "UIDevice+Hack.h"
@@ -30,7 +30,7 @@
 @property (assign) IBOutlet id <MTTemplateSelectorDelegate> templateSelectorDelegate;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewTemplates;
-@property (assign, nonatomic) IBOutlet MTDocumentTableViewCell *uITableViewCellDocument;
+@property (assign, nonatomic) IBOutlet MTTableViewCellDocument *uITableViewCellDocument;
 
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;

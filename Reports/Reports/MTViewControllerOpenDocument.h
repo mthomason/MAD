@@ -41,7 +41,7 @@ extern NSString * const MTSegueShowOpenDocument;
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
 @property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;
 
-@property (assign, nonatomic) IBOutlet MTDocumentTableViewCell *uITableViewCellDocument;
+@property (assign, nonatomic) IBOutlet MTTableViewCellDocument *uITableViewCellDocument;
 @property (assign, nonatomic) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 
 

@@ -31,8 +31,24 @@
     [super awakeFromNib];
 }
 
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    BOOL result = NO;
+    if (action == @selector(email:) || action == @selector(delete:)) {
+        result = YES;
+    }
+    return result;
+}
+
 - (BOOL)canBecomeFirstResponder {
     return YES;
+}
+
+- (void)delete:(id)sender {
+    [[self delegate] deleteDocumentRepresentedByCell:self];
+}
+
+- (void)email:(id)sender {
+    [[self delegate] emailDocumentRepresentedByCell:self];
 }
 
 @end

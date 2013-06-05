@@ -2,7 +2,6 @@ Before Release
     Document Interaction
     Display YouTube Demo Video
     In App Purchase
-    Fix Group By Table on Query Builder
     Report Viewer Stand Alone Version
 
 Report Designer

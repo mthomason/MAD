@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MTDocumentCellProtocol.h"
 
-@interface MTDocumentTableViewCell : UITableViewCell
+@interface MTTableViewCellDocument : UITableViewCell
 
 @property (nonatomic, assign) IBOutlet UILabel *labelH1;
 @property (nonatomic, assign) IBOutlet UIImageView *imageThumbnail;
