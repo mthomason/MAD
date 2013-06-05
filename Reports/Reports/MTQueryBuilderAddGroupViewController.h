@@ -11,20 +11,20 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryGroup.h"
 #import "RptqDatabaseSchemaField.h"
+#import "MTTableViewController.h"
 
 @class MTQueryBuilderAddGroupViewController;
 
 @protocol MTQueryBuilderAddGroupDelegate
-- (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller;
-- (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder;
+- (void)addQueryGroupWithQueryField:(RptqQueryField *)queryField andSortOrder:(MNSSortOrder)sortOrder;
 @end
 
-@interface MTQueryBuilderAddGroupViewController : UITableViewController
+@interface MTQueryBuilderAddGroupViewController : MTTableViewController
     <UITableViewDelegate,
         MTQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (assign) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddGroupDelegate, MTViewControllerProtocol> delegate;
 
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;

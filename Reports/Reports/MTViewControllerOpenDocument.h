@@ -35,7 +35,7 @@ extern NSString * const MTSegueShowOpenDocument;
         MFMailComposeViewControllerDelegate,
         MTQueryBuilderContainerDelegate,
         MTTemplateSelectorDelegate,
-        MUIViewControllerProtocol,
+        MTViewControllerProtocol,
         MTDocumentCellProtocol>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;

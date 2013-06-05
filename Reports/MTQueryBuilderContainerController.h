@@ -17,7 +17,7 @@
 @end
 
 @interface MTQueryBuilderContainerController : MTViewController
-    <MUIViewControllerProtocol>
+    <MTViewControllerProtocol>
 
 @property (nonatomic, assign) id <MTQueryBuilderContainerDelegate> delegateContentController;
 

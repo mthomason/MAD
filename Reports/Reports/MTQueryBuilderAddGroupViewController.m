@@ -120,11 +120,11 @@
 #pragma mark - Actions
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] uITableViewControllerSchemaAddGroupDidFinish:self];
+    [[self delegate] viewControllerDidCancel:self];
 }
 
 - (IBAction)save:(id)sender {
-    [[self delegate] addGroupDidAddGroupWithQueryField:[self field] andSort:[self sortOrder]];
+    [[self delegate] addQueryGroupWithQueryField:[self field] andSortOrder:[self sortOrder]];
 }
 
 #pragma mark - Table View Sort Type Delegate

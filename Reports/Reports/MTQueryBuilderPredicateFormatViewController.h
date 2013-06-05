@@ -12,15 +12,14 @@
 
 @class MTQueryBuilderPredicateFormatViewController;
 
-@protocol MTQueryBuilderPredicateFormatDelegate <MUIViewControllerProtocol>
-- (void)addPredicateDidCancel:(MTQueryBuilderPredicateFormatViewController *)controller;
-- (void)addRptqPredicate:(RptqQueryPredicate *)predicate;
+@protocol MTQueryBuilderPredicateFormatDelegate <MTViewControllerProtocol>
+- (void)addQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
 
 @interface MTQueryBuilderPredicateFormatViewController : MTTableViewController
-    <MUIViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
+    <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderPredicateFormatDelegate> addPredicateDelegate;
+@property (assign, nonatomic) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
 
 - (IBAction)done:(id)sender;
 

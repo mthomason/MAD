@@ -220,7 +220,7 @@
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerSchemaAddLinkDidFinish: self];
+    [[self delegate] viewControllerDidCancel:self];
 }
 
 #pragma mark - Delegate callbacks

@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MUIViewControllerProtocol
+@protocol MTViewControllerProtocol
 @optional
 - (void)viewControllerDidFinish:(id)sender;
 - (void)viewControllerDidCancel:(id)sender;

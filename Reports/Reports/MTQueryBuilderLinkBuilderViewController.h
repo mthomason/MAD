@@ -15,6 +15,7 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "RptqQueryLinks+Extras.h"
 #import "RptqQueryField+Extras.h"
+#import "MTTableViewController.h"
 
 @class MTQueryBuilderLinkBuilderViewController;
 
@@ -26,11 +27,10 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 };
 
 @protocol MTQueryBuilderLinkBuilderDelegate
-- (void)viewControllerSchemaAddLinkDidFinish:(MTQueryBuilderLinkBuilderViewController *)controller;
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)queryLink;
 @end
 
-@interface MTQueryBuilderLinkBuilderViewController : UITableViewController
+@interface MTQueryBuilderLinkBuilderViewController : MTTableViewController
     <UITableViewDataSource, UITableViewDelegate,
         MTQueryBuilderAddLinkJoinTypeDelegate,
         MTQueryBuilderAddLinkFirstTableDelegate,
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
         MTQueryBuilderAddLinkSecondFieldDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderLinkBuilderDelegate> delegate;
+@property (assign, nonatomic) IBOutlet id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellJoinType;

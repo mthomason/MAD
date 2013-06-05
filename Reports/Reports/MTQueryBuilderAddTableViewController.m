@@ -28,7 +28,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerSchemaAddTableDidFinish: self];
+    [[self delegate] viewControllerDidFinish: self];
 }
 
 #pragma mark -

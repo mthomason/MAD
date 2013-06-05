@@ -18,14 +18,14 @@
 
 @class MTTemplateSelectorViewController;
 
-@protocol MTTemplateSelectorDelegate <MUIViewControllerProtocol>
+@protocol MTTemplateSelectorDelegate <MTViewControllerProtocol>
 @optional
 - (void)uIViewControllerTemplateSelectorRequestOpenOfTemplateAtUrl:(NSURL *)url;    //Copy to correct directory and open
 @end
 
 @interface MTTemplateSelectorViewController : MTViewController
     <UITableViewDataSource, UITableViewDelegate,
-        MUIViewControllerProtocol>
+        MTViewControllerProtocol>
 
 @property (assign) IBOutlet id <MTTemplateSelectorDelegate> templateSelectorDelegate;
 

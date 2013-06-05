@@ -15,6 +15,7 @@
 #import "UITableViewControllerEnterString.h"
 #import "MTActiveDocument.h"
 #import "MTViewControllerValueBasedOnField.h"
+#import "MTTableViewController.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -26,17 +27,16 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @class MTQueryBuilderAddPredicateViewController;
 
 @protocol MTQueryBuilderAddPredicateDelegate
-- (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller;
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
 @end
 
-@interface MTQueryBuilderAddPredicateViewController : UITableViewController
+@interface MTQueryBuilderAddPredicateViewController : MTTableViewController
     <UITableViewDelegate,
         UITableViewControllerOpperatorsDelegate,
         MTQueryBuilderChooseFieldDelegate,
         MTViewControllerValueBasedOnFieldDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate> delegate;
+@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 

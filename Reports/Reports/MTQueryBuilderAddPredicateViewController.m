@@ -126,7 +126,7 @@
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] uITableViewControllerSchemaAddPredicateDidFinish: self];
+    [[self delegate] viewControllerDidCancel: self];
 }
 
 #pragma mark - Delegates

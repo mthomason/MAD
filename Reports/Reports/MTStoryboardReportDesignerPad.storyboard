@@ -752,24 +752,21 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="8Jk-QO-JFx">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="137" id="2Eb-Cy-BZ3"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="nEH-ee-Yyb">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="88" id="7LB-Ef-10v"/>
+                                                        <constraint firstAttribute="width" constant="221" id="0Ua-9H-cuq"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="==" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-dm-kko">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="==" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-dm-kko">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="80" id="fPo-CR-ws0"/>
+                                                        <constraint firstAttribute="width" constant="44" id="aCT-Ia-jCC"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -783,7 +780,8 @@
                                             <constraint firstItem="8Jk-QO-JFx" firstAttribute="top" secondItem="bQK-tD-wcj" secondAttribute="top" constant="11" id="Wtd-qc-k6w"/>
                                             <constraint firstAttribute="bottom" secondItem="TYG-dm-kko" secondAttribute="bottom" constant="21" id="k22-sG-5xn"/>
                                             <constraint firstAttribute="trailing" secondItem="nEH-ee-Yyb" secondAttribute="trailing" constant="20" type="default" id="keI-fo-9Mo"/>
-                                            <constraint firstItem="TYG-dm-kko" firstAttribute="leading" secondItem="bQK-tD-wcj" secondAttribute="leading" constant="110" id="p0r-3A-5K8"/>
+                                            <constraint firstAttribute="trailing" secondItem="8Jk-QO-JFx" secondAttribute="trailing" constant="20" type="default" id="rnS-JJ-ghO"/>
+                                            <constraint firstItem="TYG-dm-kko" firstAttribute="leading" secondItem="bQK-tD-wcj" secondAttribute="leading" constant="20" type="default" id="rvz-dC-PDD"/>
                                             <constraint firstItem="8Jk-QO-JFx" firstAttribute="leading" secondItem="bQK-tD-wcj" secondAttribute="leading" constant="20" type="default" id="xU0-Ci-0tg"/>
                                         </constraints>
                                         <connections>
@@ -6731,7 +6729,7 @@
         <class className="MTGroupByViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
         </class>
-        <class className="MTQueryBuilderAddGroupViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderAddGroupViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddGroupViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6772,7 +6770,7 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="MTQueryBuilderAddPredicateViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderAddPredicateViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddPredicateViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6826,7 +6824,7 @@
                 <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
             </relationships>
         </class>
-        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6846,7 +6844,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderPredicateFormatViewController.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="addPredicateDelegate"/>
+                <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
         <class className="MTQueryBuilderSortTypeViewController" superclassName="UITableViewController">
@@ -7163,7 +7161,7 @@
         <class className="UITableViewCellTableName" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
         </class>
-        <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
+        <class className="UITableViewControllerCoreDataResults" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
         </class>
         <class className="UITableViewControllerEnterString" superclassName="UITableViewController">

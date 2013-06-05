@@ -19,7 +19,7 @@
 #import "RptqDocumentObjectFormula+Extras.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
-@protocol MTReportDesignerObjectSelectorDelegate <MUIViewControllerProtocol>
+@protocol MTReportDesignerObjectSelectorDelegate <MTViewControllerProtocol>
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
 - (void)insertDocumentObjectNewImage:(UIImage *)image;

@@ -14,7 +14,7 @@
 
 @interface MTTableViewController : UITableViewController
 
-@property (assign, nonatomic) IBOutlet id <MUIViewControllerProtocol> delegate;
+@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @end
 

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "MTTableViewController.h"
 
-@interface UITableViewControllerCoreDataResults : UITableViewController
+@interface UITableViewControllerCoreDataResults : MTTableViewController
     <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;

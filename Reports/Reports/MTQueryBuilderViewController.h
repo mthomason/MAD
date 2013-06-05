@@ -37,9 +37,9 @@
         MTQueryBuilderAddLinkFirstTableDelegate,
         MTQueryBuilderAddTableDelegate,
         MTQueryBuilderAddGroupDelegate,
-        MUIViewControllerProtocol,
+        MTViewControllerProtocol,
         MTQueryBuilderLinkBuilderDelegate,
-        MUIViewControllerProtocol,
+        MTViewControllerProtocol,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 

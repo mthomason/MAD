@@ -53,7 +53,7 @@
         MTCollectionViewCellElementDelegate,
         MTReportDesignerSectionViewLayoutLiquidDelegate,
         MTReportDesignerObjectSelectorDelegate,
-        MUIViewControllerProtocol,
+        MTViewControllerProtocol,
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate>
 

@@ -11,8 +11,6 @@
 
 @implementation MTQueryBuilderPredicateFormatViewController
 
-@synthesize addPredicateDelegate = _addPredicateDelegate;
-
 - (void)dealloc {
     [super dealloc];
 }
@@ -50,16 +48,20 @@
     }
 }
 
-- (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller {
-    [[self addPredicateDelegate] addPredicateDidCancel: self];
+- (void)viewControllerDidFinish:(id)sender {
+    [[self delegate] viewControllerDidFinish:sender];
+}
+
+- (void)viewControllerDidCancel:(id)sender {
+    [[self delegate] viewControllerDidCancel:sender];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
-    [[self addPredicateDelegate] addRptqPredicate: predicate];
+    [[self delegate] addQueryPredicate: predicate];
 }
 
 - (IBAction)done:(id)sender {
-    [[self addPredicateDelegate] addPredicateDidCancel: self];
+    [[self delegate] viewControllerDidCancel: self];
 }
 
 @end

@@ -717,7 +717,7 @@
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="ZOV-P5-l2j">
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="137" id="sNh-93-XIP"/>
+                                                                <constraint firstAttribute="width" constant="256" id="EyJ-CM-zly"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -745,9 +745,9 @@
                                                 <constraints>
                                                     <constraint firstItem="ZOV-P5-l2j" firstAttribute="leading" secondItem="QZ4-pa-vsR" secondAttribute="leading" constant="10" type="user" id="FYx-vc-STm"/>
                                                     <constraint firstAttribute="bottom" secondItem="gek-qj-Wtg" secondAttribute="bottom" constant="21" id="LE2-bQ-USa"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ckK-ot-jWx" secondAttribute="trailing" constant="14" id="RyX-cE-b51"/>
                                                     <constraint firstItem="ZOV-P5-l2j" firstAttribute="top" secondItem="QZ4-pa-vsR" secondAttribute="top" constant="11" id="biY-xM-37s"/>
                                                     <constraint firstItem="gek-qj-Wtg" firstAttribute="baseline" secondItem="ckK-ot-jWx" secondAttribute="baseline" type="default" id="h1e-oh-Nau"/>
+                                                    <constraint firstItem="ZOV-P5-l2j" firstAttribute="trailing" secondItem="ckK-ot-jWx" secondAttribute="trailing" type="default" id="nbK-Hq-zya"/>
                                                     <constraint firstItem="gek-qj-Wtg" firstAttribute="centerX" secondItem="QZ4-pa-vsR" secondAttribute="centerX" type="default" id="uNl-gb-07Q"/>
                                                 </constraints>
                                                 <connections>
@@ -3529,7 +3529,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Predicate Format" id="EKL-8Y-m5O">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3yg-DW-myo">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="3yg-DW-myo">
                             <connections>
                                 <action selector="done:" destination="NFZ-c1-UCp" id="NUH-F7-sKX"/>
                             </connections>
@@ -6702,7 +6702,7 @@
         <class className="MTGroupByViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
         </class>
-        <class className="MTQueryBuilderAddGroupViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderAddGroupViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddGroupViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6743,7 +6743,7 @@
                 <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
-        <class className="MTQueryBuilderAddPredicateViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderAddPredicateViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddPredicateViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6768,7 +6768,7 @@
                 <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
             </relationships>
         </class>
-        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="UITableViewController">
+        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
             <relationships>
                 <relationship kind="action" name="cancel:"/>
@@ -6791,7 +6791,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderPredicateFormatViewController.h"/>
             <relationships>
                 <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="addPredicateDelegate"/>
+                <relationship kind="outlet" name="delegate"/>
             </relationships>
         </class>
         <class className="MTQueryBuilderSortTypeViewController" superclassName="UITableViewController">
@@ -7059,9 +7059,6 @@
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
-        </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
         </class>
@@ -7104,7 +7101,7 @@
         <class className="UITableViewCellTableName" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
         </class>
-        <class className="UITableViewControllerCoreDataResults" superclassName="UITableViewController">
+        <class className="UITableViewControllerCoreDataResults" superclassName="MTTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
         </class>
         <class className="UITableViewControllerEnterString" superclassName="UITableViewController">

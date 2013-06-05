@@ -307,8 +307,6 @@
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
                     MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)[navControl topViewController];
                     if (tvc) {
-                        //NSLog(@"Setting add predicate log");
-                        [tvc setAddPredicateDelegate: self];
                         [tvc setDelegate: self];
                         
                     }
@@ -462,21 +460,18 @@
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
-- (void)modalTableViewControllerDidFinish:(id)controller {
+
+- (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
-- (void)addRptqPredicate:(RptqQueryPredicate *)predicate {
+- (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
     [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[self activeDocument] managedObjectContext]];
 
     [[self tableViewQueryBuilder] reloadData];
     [[self activeDocument] saveContext];
-}
-
-- (void)addPredicateDidCancel:(MTQueryBuilderPredicateFormatViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
@@ -486,23 +481,7 @@
     [[self activeDocument] saveContext];
 }
 
-- (void)viewControllerSchemaAddLinkDidFinish:(MTQueryBuilderAddLinkFirstTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-- (void)viewControllerSchemaAddTableDidFinish:(MTQueryBuilderAddTableViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-- (void)uITableViewControllerSchemaAddGroupDidFinish:(MTQueryBuilderAddGroupViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-- (void)uITableViewControllerSchemaAddPredicateDidFinish:(MTQueryBuilderAddPredicateViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-- (void)addGroupDidAddGroupWithQueryField:(RptqQueryField *)queryField andSort:(MNSSortOrder)sortOrder {
+- (void)addQueryGroupWithQueryField:(RptqQueryField *)queryField andSortOrder:(MNSSortOrder)sortOrder {
 
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
@@ -883,6 +862,7 @@
                 case MTQuerySectionsPredicate: {
 
                     MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+                    
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
                         [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
