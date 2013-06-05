@@ -573,30 +573,46 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     UIDocumentState state = [[self activeDocument] documentState];
     switch ([[self activeDocument] documentState]) {
         case UIDocumentStateClosed:
-            [self enableUserInteraction];
+            [self enableUserInteraction:[self view]];
             break;
         case UIDocumentStateInConflict:
-            [self enableUserInteraction];
+            [self enableUserInteraction:[self view]];
             break;
         case UIDocumentStateSavingError:
-            [self enableUserInteraction];
+            [self enableUserInteraction:[self view]];
             break;
         case UIDocumentStateEditingDisabled:
-            [self disableUserInteraction];
+            [self disableUserInteraction:[self view]];
             break;
         case UIDocumentStateNormal:
         default:
-            [self enableUserInteraction];
+            [self enableUserInteraction:[self view]];
             break;
     }
     [[self documentStatusView] setDocumentState: state];
 }
 
-- (void)enableUserInteraction {
-    [[self view] setUserInteractionEnabled:YES];
+- (void)enableUserInteraction:(id)sender {
+    if ([sender isKindOfClass:[UIControl class]]) {
+        [sender setEnabled:YES];
+    } else if ([sender isKindOfClass:[UIView class]]) {
+        [sender setUserInteractionEnabled:YES];
+        for (UIView *subview in [sender subviews]) {
+            [self enableUserInteraction:sender];
+        }
+    }
+    [[self view] setUserInteractionEnabled:NO];
 }
 
-- (void)disableUserInteraction {
+- (void)disableUserInteraction:(id)sender {
+    if ([sender isKindOfClass:[UIControl class]]) {
+        [sender setEnabled:NO];
+    } else if ([sender isKindOfClass:[UIView class]]) {
+        [sender setUserInteractionEnabled:NO];
+        for (UIView *subview in [sender subviews]) {
+            [self disableUserInteraction:sender];
+        }
+    }
     [[self view] setUserInteractionEnabled:NO];
 }
 

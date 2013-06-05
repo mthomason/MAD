@@ -2204,12 +2204,6 @@
                                             <action selector="showReportDocumentList:" destination="p7o-3U-Nna" id="SBE-Sr-h8p"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Layout" width="66" id="msA-br-ar6">
-                                        <connections>
-                                            <action selector="showReportDesigner:" destination="p7o-3U-Nna" id="KUe-8Z-j0N"/>
-                                            <segue destination="oy5-et-qFd" kind="modal" identifier="MTSegueIdentifierShowReportDesigerFromSplitView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="SZe-fX-9Gn"/>
-                                        </connections>
-                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="bch-Rv-RFN"/>
                                     <barButtonItem style="plain" id="lut-8m-D87">
                                         <view key="customView" contentMode="scaleToFill" id="Svq-DY-cZu" customClass="MTTitleView">
@@ -2219,6 +2213,12 @@
                                         </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="v6M-6j-rR5"/>
+                                    <barButtonItem title="Layout" width="66" id="msA-br-ar6">
+                                        <connections>
+                                            <action selector="showReportDesigner:" destination="p7o-3U-Nna" id="KUe-8Z-j0N"/>
+                                            <segue destination="oy5-et-qFd" kind="modal" identifier="MTSegueIdentifierShowReportDesigerFromSplitView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="SZe-fX-9Gn"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem title="Edit" id="PNh-su-AUs">
                                         <connections>
                                             <action selector="toggleEditModeQueryDesigner:" destination="p7o-3U-Nna" id="QUG-My-FsA"/>
@@ -6719,13 +6719,6 @@
                 <relationship kind="outlet" name="labelTextTextbox" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MTDocumentTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
-            </relationships>
-        </class>
         <class className="MTGroupByViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
         </class>
@@ -7043,6 +7036,13 @@
                 <relationship kind="action" name="done:"/>
             </relationships>
         </class>
+        <class className="MTTableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+            </relationships>
+        </class>
         <class className="MTTableViewCellQueryPredicate" superclassName="MTAutoLayoutTableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellQueryPredicate.h"/>
             <relationships>
@@ -7064,7 +7064,7 @@
                 <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="templateSelectorDelegate"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTDocumentTableViewCell"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
             </relationships>
         </class>
         <class className="MTTitleView" superclassName="UIView">
@@ -7092,7 +7092,7 @@
                 <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
                 <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTDocumentTableViewCell"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
             </relationships>
         </class>
         <class className="MTViewControllerValueBasedOnField" superclassName="UIViewController">
@@ -7152,7 +7152,7 @@
                 <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="UITableViewCellStoreItemReportTemplate" superclassName="MTDocumentTableViewCell">
+        <class className="UITableViewCellStoreItemReportTemplate" superclassName="MTTableViewCellDocument">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
             <relationships>
                 <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>

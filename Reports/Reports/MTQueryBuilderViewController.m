@@ -471,7 +471,7 @@
 
     [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:[[self activeDocument] managedObjectContext]];
 
-    [[self tableViewQueryBuilder] reloadData];
+    //[[self tableViewQueryBuilder] reloadData];
     [[self activeDocument] saveContext];
 }
 
@@ -503,23 +503,11 @@
     NSInteger weight = groupCount - 1;
     NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
     NSUInteger rowFirstTransaction = weight;
-    NSUInteger secSecondTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsDocumentGroups];
-    NSUInteger rowSecondTransaction = groupCount + 1;
-    NSUInteger rowThirdTransaction = groupCount + 3;
     
     [managedObjectContext save: &error];
-/*
-    NSArray *indexPaths = [NSArray arrayWithObjects:
-                           [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
-                           [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
-                           [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
-                           nil];
-    */
     [[self tableViewQueryBuilder] beginUpdates];
     [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
-    //[[self tableViewQueryBuilder] reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction], [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction]]
-    //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
     [[self activeDocument] saveContext];
     [[self tableViewQueryBuilder] endUpdates];
 
@@ -542,9 +530,6 @@
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:MTTableSectionSectionsKey] retain];
     
     RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
-
-    //Find the position of the table that was added, so it may be inserted at the right index.
-    //RptqQuery *query = [[table inQuery] anyObject];
     
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
     NSArray *queryTablesArray = [[[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]] retain];
@@ -598,9 +583,9 @@
             }
         }
     }
-
+    NSLog(@"Add table at %@", insertedRowIndexPath);
     if (indexSetSections != nil) {
-    
+
         [[self tableViewQueryBuilder] beginUpdates];
         [[self tableViewQueryBuilder] insertSections: indexSetSections
                                     withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -769,15 +754,19 @@
                     if (deleteSections != nil) {
                         [tableView beginUpdates];
                         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
+                        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [[self activeDocument] saveContext];
+                        [tableView endUpdates];
+                    } else {
+                        [tableView beginUpdates];
+                        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [[self activeDocument] saveContext];
                         [tableView endUpdates];
                     }
-                    [reportDocument saveContext];
-                    [tableView beginUpdates];
-                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [tableView endUpdates];
                     
-                    [reportDocument save:nil];
+//                    [reportDocument save:nil];
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+                    
                     [deleteRows release];
                     [deleteSections release];
                     [reportDocument release];
@@ -800,8 +789,7 @@
                 // MARK: Delete MTQuerySectionsGroups
                 case MTQuerySectionsGroups: {
                     
-                    MTReportDocument *activateDocument = [self activeDocument];
-                    NSManagedObjectContext *managedObjectContext = [activateDocument managedObjectContext];
+                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
@@ -838,7 +826,6 @@
                             [managedObjectContext deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
-                            [activateDocument saveContext];
                                 NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
                                 NSInteger headerSectionRow = weightToRemove + 2;
                                 NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
@@ -848,8 +835,12 @@
                                                        //[NSIndexPath indexPathForRow: headerSectionRow inSection: section],
                                                        //[NSIndexPath indexPathForRow: footerSectionRow inSection: section],
                                                        nil];
+                            [tableView beginUpdates];
+
                                 [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: indexPaths
                                                                     withRowAnimation: UITableViewRowAnimationAutomatic];
+                            [[self activeDocument] saveContext];
+                            [tableView endUpdates];
                                 [indexPaths release];
                         }
                         
@@ -858,8 +849,8 @@
                     }
 
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                    [activateDocument saveToURL:[activateDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-                    }];
+                    //[activateDocument saveToURL:[activateDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                    //}];
                     
                     
                     break;
