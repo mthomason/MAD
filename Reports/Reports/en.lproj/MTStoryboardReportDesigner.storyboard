@@ -226,7 +226,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KsD-hB-v0I">
                                 <items>
                                     <navigationItem title="Generated Query" id="2hP-QH-Mo0">
-                                        <barButtonItem key="leftBarButtonItem" style="done" systemItem="done" id="qSs-gO-dN0">
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="qSs-gO-dN0">
                                             <connections>
                                                 <action selector="done:" destination="rH1-dA-DYm" id="m73-s2-yHr"/>
                                             </connections>
@@ -2369,7 +2369,7 @@
             <objects>
                 <tableViewController id="0nn-t6-iT0" customClass="UITableViewControllerEnterString" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wfb-Xo-LaS">
-                        <rect key="frame" x="0.0" y="64" width="320" height="136"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -2423,7 +2423,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="65m-b5-QQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3241" y="-1223"/>
+            <point key="canvasLocation" x="3225" y="-963"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="X8T-uF-K8k">
@@ -3237,7 +3237,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="wlp-wD-qxw" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="QRb-br-u92">
-                        <rect key="frame" x="0.0" y="64" width="320" height="136"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -3519,7 +3519,7 @@
             <objects>
                 <tableViewController id="wxP-IR-8aJ" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Rdv-4D-OQG">
-                        <rect key="frame" x="0.0" y="64" width="320" height="200"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -3626,7 +3626,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="tableViewCellLeftSide" destination="RfV-Gg-TVh" id="Gek-GI-Xzo"/>
                         <outlet property="tableViewCellOperator" destination="ZD6-ch-l5V" id="rEN-sI-L0N"/>
@@ -4082,7 +4081,7 @@
             <objects>
                 <tableViewController id="nlj-fc-eCt" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="xqk-U0-FCm">
-                        <rect key="frame" x="0.0" y="64" width="320" height="200"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -4172,7 +4171,7 @@
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="0nn-t6-iT0" kind="push" identifier="showAddPredicateFovRightSide" id="b8K-B0-dCc"/>
+                                            <segue destination="MxK-vj-cxa" kind="push" identifier="showAddPredicateFovRightSide" id="VHU-mi-xcx"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -4189,7 +4188,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="tableViewCellLeftSide" destination="szN-l0-mKi" id="m4k-bt-6r0"/>
                         <outlet property="tableViewCellOperator" destination="ewr-ta-fpq" id="2SN-yw-mK2"/>
@@ -6510,6 +6508,60 @@
             </objects>
             <point key="canvasLocation" x="1920" y="-2057"/>
         </scene>
+        <!--View Controller Value Based On Field-->
+        <scene sceneID="bAL-MZ-gAf">
+            <objects>
+                <viewController id="MxK-vj-cxa" customClass="MTViewControllerValueBasedOnField" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6OL-cn-abZ">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qHZ-Nx-5zg">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="287" id="TGt-Fu-zt3"/>
+                                </constraints>
+                                <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="MxK-vj-cxa" id="ajh-WI-ENF"/>
+                                    <outlet property="delegate" destination="MxK-vj-cxa" id="dZ3-VI-Utd"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YcM-NG-0vM">
+                                <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="216" type="user" id="qOy-JS-D81"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="YcM-NG-0vM" firstAttribute="leading" secondItem="6OL-cn-abZ" secondAttribute="leading" type="default" id="9o6-MG-xsP"/>
+                            <constraint firstItem="YcM-NG-0vM" firstAttribute="bottom" secondItem="6OL-cn-abZ" secondAttribute="bottom" type="user" id="Dqj-rd-Rul"/>
+                            <constraint firstItem="qHZ-Nx-5zg" firstAttribute="top" secondItem="6OL-cn-abZ" secondAttribute="top" type="default" id="PlC-VJ-mp5"/>
+                            <constraint firstItem="qHZ-Nx-5zg" firstAttribute="trailing" secondItem="6OL-cn-abZ" secondAttribute="trailing" type="default" id="RJf-59-KjM"/>
+                            <constraint firstItem="qHZ-Nx-5zg" firstAttribute="leading" secondItem="6OL-cn-abZ" secondAttribute="leading" type="default" id="dNG-VA-F2T"/>
+                            <constraint firstItem="YcM-NG-0vM" firstAttribute="trailing" secondItem="6OL-cn-abZ" secondAttribute="trailing" type="default" id="jDN-8f-IPA"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="QOn-mA-HcV">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="3kz-l1-rD4">
+                            <connections>
+                                <action selector="done:" destination="MxK-vj-cxa" id="ySF-sx-arq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="pickerViewBackground" destination="YcM-NG-0vM" id="Jbp-8b-w7y"/>
+                        <outlet property="tableViewMain" destination="qHZ-Nx-5zg" id="lqW-I0-Huf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bbk-tB-kXP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2756" y="-663"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>
@@ -6534,6 +6586,9 @@
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="DocumentStatusView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
+        </class>
         <class className="MTAggregateFunctionsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAggregateFunctionsViewController.h"/>
             <relationships>
@@ -6726,6 +6781,7 @@
                 <relationship kind="action" name="addTable:"/>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
                 <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
                 <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
                 <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
@@ -6851,6 +6907,7 @@
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
                 <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
@@ -6944,6 +7001,15 @@
                 <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTDocumentTableViewCell"/>
             </relationships>
         </class>
+        <class className="MTViewControllerValueBasedOnField" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerValueBasedOnField.h"/>
+            <relationships>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="pickerViewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="tableViewHeightConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tableViewMain" candidateClass="UITableView"/>
+            </relationships>
+        </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
@@ -7033,6 +7099,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="kPX-hH-DKi"/>
-        <segue reference="pfP-rZ-fVf"/>
+        <segue reference="CwB-f6-wTT"/>
     </inferredMetricsTieBreakers>
 </document>
