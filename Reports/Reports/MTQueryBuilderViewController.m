@@ -362,20 +362,21 @@
 }
 
 - (IBAction)edit:(id)sender {
+    
     BOOL editing = ![[self tableViewQueryBuilder] isEditing];
-    UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                   target: self
-                                                                                   action: @selector(edit:)];
-    [[self navigationItem] setRightBarButtonItem:barButtonItem];
-    /*
-     NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbar] items]];
-     [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
-     [[self toolbar] setItems: tbItems];
-     [tbItems release];
-     */
+    
+    if ([UIDevice isPad] == NO) {
+
+        UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                       target: self
+                                                                                       action: @selector(edit:)];
+        [[self navigationItem] setRightBarButtonItem:barButtonItem];
+        [barButtonItem release];
+
+    }
+
     [[self tableViewQueryBuilder] setEditing: editing];
-    [barButtonItem release];
 }
 
 #pragma mark Table Header Actions
@@ -507,18 +508,23 @@
     NSUInteger rowThirdTransaction = groupCount + 3;
     
     [managedObjectContext save: &error];
-
+/*
     NSArray *indexPaths = [NSArray arrayWithObjects:
                            [NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction],
                            [NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction],
                            [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction],
                            nil];
-    
-    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: indexPaths
+    */
+    [[self tableViewQueryBuilder] beginUpdates];
+    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
-    
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    //[[self tableViewQueryBuilder] reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowSecondTransaction inSection: secSecondTransaction], [NSIndexPath indexPathForRow: rowThirdTransaction inSection: secSecondTransaction]]
+    //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
     [[self activeDocument] saveContext];
+    [[self tableViewQueryBuilder] endUpdates];
+
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
@@ -839,8 +845,8 @@
                                 //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
                                 NSArray *indexPaths = [[NSArray alloc] initWithObjects:
                                                        indexPath,
-                                                       [NSIndexPath indexPathForRow: headerSectionRow inSection: section],
-                                                       [NSIndexPath indexPathForRow: footerSectionRow inSection: section],
+                                                       //[NSIndexPath indexPathForRow: headerSectionRow inSection: section],
+                                                       //[NSIndexPath indexPathForRow: footerSectionRow inSection: section],
                                                        nil];
                                 [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: indexPaths
                                                                     withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -893,7 +899,35 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-	
+    MTQuerySections ts = [self tableSectionTypeForIndexPathSection: toIndexPath.section];
+    switch (ts) {
+        case MTQuerySectionsGroups: {
+            
+            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+
+            NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
+            NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
+            RptqQueryGroup *fromGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: fromIndex];
+            RptqQueryGroup *toGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: toIndex];
+            NSInteger fromWeight = [[toGroup weight] integerValue];
+            NSInteger toWeight = [[fromGroup weight] integerValue];
+            [toGroup setWeight:@(toWeight)];
+            [fromGroup setWeight:@(fromWeight)];
+            
+
+            //[[self tableViewQueryBuilder] beginUpdates];
+            [[self activeDocument] saveContext];
+            //[[self tableViewQueryBuilder] reloadRowsAtIndexPaths: @[fromIndexPath, toIndexPath]
+            //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+            //[[self tableViewQueryBuilder] endUpdates];
+            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+
+            NSLog(@"%@->%@", fromIndexPath, toIndexPath);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {

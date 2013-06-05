@@ -16,6 +16,8 @@
 @property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
 @property (retain, nonatomic) IBOutlet MTTitleView *titleView;
 
+@property (nonatomic, assign) BOOL isEditing;
+
 - (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
 
@@ -43,6 +45,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setIsEditing:NO];
 
     [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:0]];
     [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:1]];
@@ -107,6 +111,20 @@
 }
 
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
+    
+    [[self queryBuilderController] edit:sender];
+    
+    UIBarButtonSystemItem buttonType = [[[self queryBuilderController] tableViewQueryBuilder] isEditing] ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                   target: self
+                                                                                   action: @selector(toggleEditModeQueryDesigner:)];
+
+    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbarTop] items]];
+    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
+    [[self toolbarTop] setItems: tbItems];
+    [tbItems release];
+
+    /*
     MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
     BOOL isEditing = ![[queryBuilderController tableViewQueryBuilder] isEditing];
 
@@ -114,14 +132,15 @@
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
                                                                                    target: self
                                                                                    action: @selector(toggleEditModeQueryDesigner:)];
+    
     NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbarTop] items]];
     [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
     [[self toolbarTop] setItems: tbItems];
     [tbItems release];
 
-    
+ 
     [[queryBuilderController tableViewQueryBuilder] setEditing:isEditing];
-    [queryBuilderController release];
+    [queryBuilderController release];*/
 }
 
 - (MTQueryBuilderViewController *)queryBuilderController {
