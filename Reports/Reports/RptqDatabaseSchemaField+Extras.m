@@ -138,16 +138,74 @@
 
     NSString *result = nil;
     switch ([[self dataType] integerValue]) {
+        case MTDataTypeBit:
+            result = NSLocalizedString(@"Bit", @"Bit data type.");
+            break;
+        case MTDataTypeBlob:
+            result = NSLocalizedString(@"Blob", @"Blob data type.");
+            break;
         case MTDataTypeDate:
             result = NSLocalizedString(@"Date", @"Date data type.");
+            break;
+        case MTDataTypeDateTime:
+            result = NSLocalizedString(@"Date Time", @"Date data type.");
+            break;
+        case MTDataTypeDecimal:
+            result = NSLocalizedString(@"Decimal", @"Date data type.");
+            break;
+        case MTDataTypeDouble:
+            result = NSLocalizedString(@"Double", @"Date data type.");
+            break;
+        case MTDataTypeEnum:
+            result = NSLocalizedString(@"Enum", @"Date data type.");
+            break;
+        case MTDataTypeFloat:
+            result = NSLocalizedString(@"Float", @"Date data type.");
+            break;
+        case MTDataTypeGeometry:
+            result = NSLocalizedString(@"Geometry", @"Date data type.");
+            break;
         case MTDataTypeImage:
             result = NSLocalizedString(@"Image", @"Image data type.");
+            break;
+        case MTDataTypeInt24:
+            result = NSLocalizedString(@"Int24", @"Image data type.");
+            break;
+        case MTDataTypeInteger:
+            result = NSLocalizedString(@"Integer", @"Image data type.");
+            break;
+        case MTDataTypeLong:
+            result = NSLocalizedString(@"Long", @"Image data type.");
+            break;
+        case MTDataTypeLongLong:
+            result = NSLocalizedString(@"Long Long", @"Image data type.");
             break;
         case MTDataTypeNumber:
             result = NSLocalizedString(@"Number", @"Number data type.");
             break;
+        case MTDataTypeSet:
+            result = NSLocalizedString(@"Set", @"Number data type.");
+            break;
+        case MTDataTypeShort:
+            result = NSLocalizedString(@"Short", @"Number data type.");
+            break;
         case MTDataTypeString:
             result = NSLocalizedString(@"String", @"String data type.");
+            break;
+        case MTDataTypeTime:
+            result = NSLocalizedString(@"Time", @"Number data type.");
+            break;
+        case MTDataTypeTimeStamp:
+            result = NSLocalizedString(@"Time Stamp", @"Number data type.");
+            break;
+        case MTDataTypeUnknown:
+            result = NSLocalizedString(@"Unknown", @"Number data type.");
+            break;
+        case MTDataTypeVarChar:
+            result = NSLocalizedString(@"Var Char", @"Number data type.");
+            break;
+        case MTDataTypeYear:
+            result = NSLocalizedString(@"Year", @"Number data type.");
             break;
         default:
             result = [NSString stringWithFormat:@"Type %d", [[self dataType] integerValue]];
