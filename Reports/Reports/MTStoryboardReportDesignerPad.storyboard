@@ -381,7 +381,7 @@
             <objects>
                 <viewController id="SeT-Hl-V2y" customClass="MTReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RZN-fd-Qgk">
-                        <rect key="frame" x="0.0" y="20" width="768" height="748"/>
+                        <rect key="frame" x="0.0" y="20" width="540" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="40Q-Vk-tKl">
@@ -440,7 +440,7 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
-                    <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemRefresh" destination="cbU-Yf-zEg" id="Tqx-1E-fYe"/>
                         <outlet property="barButtonItemSendToPdf" destination="tzF-47-UAX" id="Au8-WQ-gL7"/>
@@ -5144,7 +5144,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FV0-Ch-g6b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-938" y="1784"/>
+            <point key="canvasLocation" x="-546" y="1668"/>
         </scene>
         <!--Report Designer Font Selector View Controller-->
         <scene sceneID="Pg0-kN-Elh">
@@ -7118,6 +7118,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>

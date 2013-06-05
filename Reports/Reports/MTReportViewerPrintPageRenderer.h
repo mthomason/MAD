@@ -23,6 +23,8 @@
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
 
+@property (nonatomic, assign) BOOL didRefresh;
+
 - (id)initWithDocument:(RptqDocument *)document;
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;

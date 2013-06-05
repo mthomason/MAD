@@ -150,6 +150,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [d5 release];
     
     [self setDebugMode:NO];
+    [self setDidRefresh:NO];
 
     [self setCachedPageSize:CGSizeZero];
     [self setCachedPageRect:CGRectZero];
@@ -816,7 +817,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
 
-    if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO) {
+    if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO || [self didRefresh]) {
+        [self setDidRefresh:NO];
         [self setCachedPageSize:printableSize];
         [self setCachedPageRect:[self printableRect]];
         [self setPrintableSize:printableSize];

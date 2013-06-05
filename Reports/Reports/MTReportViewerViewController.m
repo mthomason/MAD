@@ -138,9 +138,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
 
-    if ([self startedRefresh] == NO && [[self documentReport] hasCachedData] == NO) {
+    NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+ 
+    BOOL hasCachedData = ([query hasQueryCache] != nil);
+    if ([self startedRefresh] == NO && hasCachedData == NO) {
 
         [[self barButtonItemRefresh] setEnabled:NO];
         [[self documentReport] refresh:^(BOOL success) {
@@ -152,6 +157,9 @@
 
         }];
 
+    } else {
+        NSDate *lateRefresh = [[query hasQueryCache] cacheDate];
+        NSLog(@"Last date: %@", lateRefresh);
     }
 }
 
@@ -201,6 +209,18 @@
         
         if (success) {
             [self reloadReportView];
+            if ([self currentPageIndex] + 1 >= [self numberOfPages]) {
+                [self setCurrentPageIndex:[self numberOfPages] - 1];
+            }
+            
+            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
+            [[pageOne view] setFrame:[[self viewContainer] bounds]];
+            [pageOne setDelegate:self];
+            [[self pageController] setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                
+            }];
+            [pageOne release];
+
         }
         [[self barButtonItemRefresh] setEnabled:YES];
         
@@ -208,6 +228,7 @@
 }
 
 - (void)reloadReportView {
+    [[self printPageRendererReport] setDidRefresh:YES];
     [[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self viewContainer] bounds].size];
     NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
     [self setNumberOfPages:numberOfPages];

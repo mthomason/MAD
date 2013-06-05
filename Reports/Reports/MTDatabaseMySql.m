@@ -548,10 +548,14 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    NSString *query = [mnsDatabase getSqlForQuery:rquery];
-    query = [NSString stringWithFormat:@"%@ LIMIT 220", query];
+    NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
+    queryString = [NSString stringWithFormat:@"%@ LIMIT 220", queryString];
 
     RptqQueryCache *queryCache = nil;
+//    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+//    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+
     MysqlServer *serv = [[MysqlServer alloc] init];
     
     [serv setHost:      [[self databaseConnection] server]];
@@ -562,17 +566,9 @@
     NSError *error = nil;
     MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
     if (conn) {
-        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:query onConnection:conn extendedNames:YES];
+        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
         
-        //NSArray *results = [[NSArray alloc] initWithArray:[fetch results]];
-        
-        //if (results != nil) {
-            
-            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
             queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-            [query setHasQueryCache:queryCache];
             
             //[queryCache removeHasValues:[queryCache hasQueryResults]];
             NSUInteger resultCounter = 0;
@@ -602,6 +598,7 @@
                 
                 resultCounter++;
             }
+        
         //}
         //[results release];
         NSError *error = nil;
@@ -609,7 +606,11 @@
     } else {
         [error presentErrorToUser];
     }
-    completion(self, queryCache);
+    [queryCache setCacheDate:[NSDate date]];
+    [query setHasQueryCache:queryCache];
+    [queryCache release];
+    
+    completion(self, [query hasQueryCache]);
 }
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
