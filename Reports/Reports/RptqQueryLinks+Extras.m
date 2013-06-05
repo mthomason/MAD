@@ -124,9 +124,22 @@
 }
 
 - (NSString *)linkDescription {
-    return [NSString stringWithFormat:@"%@ (%@)",
-            [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
-            [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
+    NSString *linkDescription;
+
+    switch ([[self jointype] integerValue]) {
+
+        case MNSLinkTypeLeftOuterJoin:
+            linkDescription = [NSString stringWithFormat:@"%@", [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
+            break;
+            
+        default:
+            linkDescription = [NSString stringWithFormat:@"%@ (%@)",
+                               [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
+                               [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
+            break;
+    }
+    
+    return linkDescription;
 }
 
 // MARK: MTProtocolLog

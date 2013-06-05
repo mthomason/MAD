@@ -128,7 +128,6 @@
     [[self tableViewQueryBuilder] setOpaque: YES];
     [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    NSString *h1 = NSLocalizedString(@"Layout", @"Layout");
     NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
     NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
     NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
@@ -882,7 +881,8 @@
                 }
                 
                 case MTQuerySectionsPredicate: {
-                    UITableViewCellQueryPredicate *tvcPred = (UITableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+
+                    MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
                         [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
@@ -990,7 +990,7 @@
              [NSString stringWithFormat:@"%@.%@", [links tableleft], [links fieldleft]]];
             [[(UITableViewCellQueryLink *)result labelTableRight] setText:
              [NSString stringWithFormat:@"%@.%@", [links tableright], [links fieldright]]];
-            [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [NSString stringWithFormat:@"%@ (%@)", [MNSLinkTypeSymbols objectAtIndex: [[links jointypeenum] integerValue]], [MNSLinkTypeNames objectAtIndex: [[links jointypeenum] integerValue]]]];
+            [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [links linkDescription]];
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
             [links release];
             break;
@@ -1027,10 +1027,10 @@
                 rightFieldDisplay = [[[predicate hasRightField] toString] retain];
             }
             
-            
-            [[(UITableViewCellQueryPredicate *)result labelMain] setText: leftFieldDisplay];
-            [[(UITableViewCellQueryPredicate *)result labelDetail] setText: rightFieldDisplay];
-            [(UITableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
+            [[(MTTableViewCellQueryPredicate *)result labelOpperator] setText: [predicate symbolForComparson]];
+            [[(MTTableViewCellQueryPredicate *)result labelMain] setText: leftFieldDisplay];
+            [[(MTTableViewCellQueryPredicate *)result labelDetail] setText: rightFieldDisplay];
+            [(MTTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
             
             [leftFieldDisplay release];
             [rightFieldDisplay release];
@@ -1171,7 +1171,7 @@
     MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
     if (section == MTQuerySectionsSql) {
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
-    } else if (section == MTQuerySectionsGroups) {
+    } else if (section == MTQuerySectionsGroups || section == MTQuerySectionsPredicate) {
         result = 88.0000f;
     } else {
         NSDictionary *tableMetaHeight = [[self datamodel] objectForKey:MTTableSectionRowHeightKey];

@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewCellQueryPredicate.h"
+#import "MTTableViewCellQueryPredicate.h"
 
-@implementation UITableViewCellQueryPredicate
-
-@synthesize labelDetail = _labelDetail, labelMain = _labelMain;
-@synthesize tableID = _tableID;
+@implementation MTTableViewCellQueryPredicate
 
 - (void)dealloc {
+    [_labelMain release];
+    [_labelDetail release];
+    [_labelOpperator release];
     [_tableID release];
     [super dealloc];
 }
@@ -21,9 +21,6 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
-        //[self setBackgroundView: nil];
-        //[self setSelectedBackgroundView: nil];
         
     }
     return self;
@@ -33,9 +30,6 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
-        //[self setBackgroundView: nil];
-        //[self setSelectedBackgroundView: nil];
         
     }
     return self;

@@ -93,7 +93,7 @@
 		4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
 		4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */; };
 		4C0E7762163B5AEC003B951E /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; };
-		4C0E7763163B5AEC003B951E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4C0E7763163B5AEC003B951E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4C0E7765163B5AEC003B951E /* MTQueryBuilderAddPredicateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0B14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m */; };
 		4C0E7766163B5AEC003B951E /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */; };
@@ -749,7 +749,7 @@
 		4C860B04167EDE7000AC1904 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4C860B05167EDE7000AC1904 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
 		4C860B06167EDE7000AC1904 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
-		4C860B07167EDE7000AC1904 /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4C860B07167EDE7000AC1904 /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4C860B08167EDE7000AC1904 /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4C860B09167EDE7000AC1904 /* MTGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */; };
 		4C860B0A167EDE7000AC1904 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
@@ -1144,7 +1144,7 @@
 		4CA163BF167EB8C500540A14 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4CA163C0167EB8C500540A14 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
 		4CA163C1167EB8C500540A14 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
-		4CA163C2167EB8C500540A14 /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4CA163C2167EB8C500540A14 /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4CA163C3167EB8C500540A14 /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4CA163C4167EB8C600540A14 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4CA163C5167EB8C600540A14 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
@@ -1152,7 +1152,7 @@
 		4CA163C7167EB8C600540A14 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
 		4CA163C8167EB8C600540A14 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
 		4CA163C9167EB8C600540A14 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
-		4CA163CA167EB8C600540A14 /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4CA163CA167EB8C600540A14 /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4CA163CB167EB8C600540A14 /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4CA163CC167EB8CB00540A14 /* MTGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */; };
 		4CA163CD167EB8CB00540A14 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586314E23DDA00184445 /* UIViewTableSectionHeaderDatabaseTable.m */; };
@@ -1339,7 +1339,7 @@
 		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
-		4CC8993714DAFAF80094E17E /* UITableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */; };
+		4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
 		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
 		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
@@ -2468,8 +2468,8 @@
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageBolt20@2x.png"; sourceTree = "<group>"; };
-		4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryPredicate.m; sourceTree = "<group>"; };
-		4CC8993814DAFB430094E17E /* UITableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryPredicate.h; sourceTree = "<group>"; };
+		4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellQueryPredicate.m; sourceTree = "<group>"; };
+		4CC8993814DAFB430094E17E /* MTTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
 		4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryGroup.h; sourceTree = "<group>"; };
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
 		4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPebbled.png; sourceTree = "<group>"; };
@@ -4220,8 +4220,8 @@
 				4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */,
 				4CD0F7D914CD2963003DA079 /* UITableViewCellQueryLink.h */,
 				4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */,
-				4CC8993814DAFB430094E17E /* UITableViewCellQueryPredicate.h */,
-				4CC8993614DAFAF70094E17E /* UITableViewCellQueryPredicate.m */,
+				4CC8993814DAFB430094E17E /* MTTableViewCellQueryPredicate.h */,
+				4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */,
 				4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */,
 				4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */,
 				4C5F02E414BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.h */,
@@ -5399,7 +5399,7 @@
 				4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4C0E7762163B5AEC003B951E /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
-				4C0E7763163B5AEC003B951E /* UITableViewCellQueryPredicate.m in Sources */,
+				4C0E7763163B5AEC003B951E /* MTTableViewCellQueryPredicate.m in Sources */,
 				4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */,
 				4C0E7765163B5AEC003B951E /* MTQueryBuilderAddPredicateViewController.m in Sources */,
 				4C0E7766163B5AEC003B951E /* MTQueryBuilderAddGroupViewController.m in Sources */,
@@ -5615,7 +5615,7 @@
 				4CA163BF167EB8C500540A14 /* UITableViewCellLinkName.m in Sources */,
 				4CA163C0167EB8C500540A14 /* UITableViewCellOverride.m in Sources */,
 				4CA163C1167EB8C500540A14 /* UITableViewCellQueryLink.m in Sources */,
-				4CA163C2167EB8C500540A14 /* UITableViewCellQueryPredicate.m in Sources */,
+				4CA163C2167EB8C500540A14 /* MTTableViewCellQueryPredicate.m in Sources */,
 				4CA163C3167EB8C500540A14 /* UITableViewCellQueryGroup.m in Sources */,
 				4CA163CC167EB8CB00540A14 /* MTGradientView.m in Sources */,
 				4CA163CD167EB8CB00540A14 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
@@ -5800,7 +5800,7 @@
 				4CA163C7167EB8C600540A14 /* UITableViewCellLinkName.m in Sources */,
 				4CA163C8167EB8C600540A14 /* UITableViewCellOverride.m in Sources */,
 				4CA163C9167EB8C600540A14 /* UITableViewCellQueryLink.m in Sources */,
-				4CA163CA167EB8C600540A14 /* UITableViewCellQueryPredicate.m in Sources */,
+				4CA163CA167EB8C600540A14 /* MTTableViewCellQueryPredicate.m in Sources */,
 				4CA163CB167EB8C600540A14 /* UITableViewCellQueryGroup.m in Sources */,
 				4CA163CF167EB8CC00540A14 /* MTGradientView.m in Sources */,
 				4CA163D0167EB8CC00540A14 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
@@ -6009,7 +6009,7 @@
 				4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
 				4C507B1414D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
-				4CC8993714DAFAF80094E17E /* UITableViewCellQueryPredicate.m in Sources */,
+				4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */,
 				4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */,
 				4CD9CB0C14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m in Sources */,
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
@@ -6223,7 +6223,7 @@
 				4C860B04167EDE7000AC1904 /* UITableViewCellLinkName.m in Sources */,
 				4C860B05167EDE7000AC1904 /* UITableViewCellOverride.m in Sources */,
 				4C860B06167EDE7000AC1904 /* UITableViewCellQueryLink.m in Sources */,
-				4C860B07167EDE7000AC1904 /* UITableViewCellQueryPredicate.m in Sources */,
+				4C860B07167EDE7000AC1904 /* MTTableViewCellQueryPredicate.m in Sources */,
 				4C860B08167EDE7000AC1904 /* UITableViewCellQueryGroup.m in Sources */,
 				4C860B09167EDE7000AC1904 /* MTGradientView.m in Sources */,
 				4C860B0A167EDE7000AC1904 /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,

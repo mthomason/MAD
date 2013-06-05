@@ -32,6 +32,10 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
+// FIXME: Left outer join and some other symbols are missing.
+
+#define MNSLinkTypeSymbolsDesired [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
+
 #define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"EQUI JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
 
 
@@ -46,6 +50,8 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 + (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
+- (NSString *)linkDescription;
 
 @end
 

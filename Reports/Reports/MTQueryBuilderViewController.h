@@ -16,7 +16,7 @@
 #import "UITableViewCellOverride.h"
 #import "UITableViewCellQueryInput.h"
 #import "UITableViewCellQueryGroup.h"
-#import "UITableViewCellQueryPredicate.h"
+#import "MTTableViewCellQueryPredicate.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"

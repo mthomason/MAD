@@ -181,7 +181,9 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 - (void)save:(void (^)(BOOL success))completion {
     [self saveToURL: [self fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-      completion(success);
+        if (completion != nil) {
+            completion(success);
+        }
   }];
 }
 

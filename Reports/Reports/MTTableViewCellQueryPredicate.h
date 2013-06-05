@@ -10,11 +10,12 @@
 #import <CoreData/CoreData.h>
 #import "MTAutoLayoutTableViewCell.h"
 
-@interface UITableViewCellQueryPredicate : MTAutoLayoutTableViewCell
+@interface MTTableViewCellQueryPredicate : MTAutoLayoutTableViewCell
 
 @property (retain) NSManagedObjectID *tableID;
 
-@property (nonatomic, assign) IBOutlet UILabel *labelDetail;
-@property (nonatomic, assign) IBOutlet UILabel *labelMain;
+@property (nonatomic, retain) IBOutlet UILabel *labelDetail;
+@property (nonatomic, retain) IBOutlet UILabel *labelMain;
+@property (nonatomic, retain) IBOutlet UILabel *labelOpperator;
 
 @end
