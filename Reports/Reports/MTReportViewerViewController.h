@@ -12,6 +12,7 @@
 #import "MTReportDocument.h"
 #import "MTReportViewerReportViewController.h"
 #import "MTPrintingProtocol.h"
+#import "NSDate+Extras.h"
 
 @interface MTReportViewerViewController : MTViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,

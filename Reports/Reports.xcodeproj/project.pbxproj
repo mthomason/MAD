@@ -660,6 +660,72 @@
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
+		4C6DAA501761AEE000FF770A /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA421761AEE000FF770A /* bkpublic.h */; };
+		4C6DAA511761AEE000FF770A /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA421761AEE000FF770A /* bkpublic.h */; };
+		4C6DAA521761AEE000FF770A /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA421761AEE000FF770A /* bkpublic.h */; };
+		4C6DAA531761AEE000FF770A /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA421761AEE000FF770A /* bkpublic.h */; };
+		4C6DAA541761AEE000FF770A /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA421761AEE000FF770A /* bkpublic.h */; };
+		4C6DAA551761AEE000FF770A /* cspublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA431761AEE000FF770A /* cspublic.h */; };
+		4C6DAA561761AEE000FF770A /* cspublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA431761AEE000FF770A /* cspublic.h */; };
+		4C6DAA571761AEE000FF770A /* cspublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA431761AEE000FF770A /* cspublic.h */; };
+		4C6DAA581761AEE000FF770A /* cspublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA431761AEE000FF770A /* cspublic.h */; };
+		4C6DAA591761AEE000FF770A /* cspublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA431761AEE000FF770A /* cspublic.h */; };
+		4C6DAA5A1761AEE000FF770A /* cstypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA441761AEE000FF770A /* cstypes.h */; };
+		4C6DAA5B1761AEE000FF770A /* cstypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA441761AEE000FF770A /* cstypes.h */; };
+		4C6DAA5C1761AEE000FF770A /* cstypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA441761AEE000FF770A /* cstypes.h */; };
+		4C6DAA5D1761AEE000FF770A /* cstypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA441761AEE000FF770A /* cstypes.h */; };
+		4C6DAA5E1761AEE000FF770A /* cstypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA441761AEE000FF770A /* cstypes.h */; };
+		4C6DAA5F1761AEE000FF770A /* ctpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA451761AEE000FF770A /* ctpublic.h */; };
+		4C6DAA601761AEE000FF770A /* ctpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA451761AEE000FF770A /* ctpublic.h */; };
+		4C6DAA611761AEE000FF770A /* ctpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA451761AEE000FF770A /* ctpublic.h */; };
+		4C6DAA621761AEE000FF770A /* ctpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA451761AEE000FF770A /* ctpublic.h */; };
+		4C6DAA631761AEE000FF770A /* ctpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA451761AEE000FF770A /* ctpublic.h */; };
+		4C6DAA641761AEE000FF770A /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA461761AEE000FF770A /* odbcss.h */; };
+		4C6DAA651761AEE000FF770A /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA461761AEE000FF770A /* odbcss.h */; };
+		4C6DAA661761AEE000FF770A /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA461761AEE000FF770A /* odbcss.h */; };
+		4C6DAA671761AEE000FF770A /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA461761AEE000FF770A /* odbcss.h */; };
+		4C6DAA681761AEE000FF770A /* odbcss.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA461761AEE000FF770A /* odbcss.h */; };
+		4C6DAA691761AEE000FF770A /* sqldb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA471761AEE000FF770A /* sqldb.h */; };
+		4C6DAA6A1761AEE000FF770A /* sqldb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA471761AEE000FF770A /* sqldb.h */; };
+		4C6DAA6B1761AEE000FF770A /* sqldb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA471761AEE000FF770A /* sqldb.h */; };
+		4C6DAA6C1761AEE000FF770A /* sqldb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA471761AEE000FF770A /* sqldb.h */; };
+		4C6DAA6D1761AEE000FF770A /* sqldb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA471761AEE000FF770A /* sqldb.h */; };
+		4C6DAA6E1761AEE000FF770A /* sqlfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA481761AEE000FF770A /* sqlfront.h */; };
+		4C6DAA6F1761AEE000FF770A /* sqlfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA481761AEE000FF770A /* sqlfront.h */; };
+		4C6DAA701761AEE000FF770A /* sqlfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA481761AEE000FF770A /* sqlfront.h */; };
+		4C6DAA711761AEE000FF770A /* sqlfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA481761AEE000FF770A /* sqlfront.h */; };
+		4C6DAA721761AEE000FF770A /* sqlfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA481761AEE000FF770A /* sqlfront.h */; };
+		4C6DAA731761AEE000FF770A /* sybdb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA491761AEE000FF770A /* sybdb.h */; };
+		4C6DAA741761AEE000FF770A /* sybdb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA491761AEE000FF770A /* sybdb.h */; };
+		4C6DAA751761AEE000FF770A /* sybdb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA491761AEE000FF770A /* sybdb.h */; };
+		4C6DAA761761AEE000FF770A /* sybdb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA491761AEE000FF770A /* sybdb.h */; };
+		4C6DAA771761AEE000FF770A /* sybdb.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA491761AEE000FF770A /* sybdb.h */; };
+		4C6DAA781761AEE000FF770A /* syberror.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4A1761AEE000FF770A /* syberror.h */; };
+		4C6DAA791761AEE000FF770A /* syberror.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4A1761AEE000FF770A /* syberror.h */; };
+		4C6DAA7A1761AEE000FF770A /* syberror.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4A1761AEE000FF770A /* syberror.h */; };
+		4C6DAA7B1761AEE000FF770A /* syberror.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4A1761AEE000FF770A /* syberror.h */; };
+		4C6DAA7C1761AEE000FF770A /* syberror.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4A1761AEE000FF770A /* syberror.h */; };
+		4C6DAA7D1761AEE000FF770A /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4B1761AEE000FF770A /* sybfront.h */; };
+		4C6DAA7E1761AEE000FF770A /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4B1761AEE000FF770A /* sybfront.h */; };
+		4C6DAA7F1761AEE000FF770A /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4B1761AEE000FF770A /* sybfront.h */; };
+		4C6DAA801761AEE000FF770A /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4B1761AEE000FF770A /* sybfront.h */; };
+		4C6DAA811761AEE000FF770A /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4B1761AEE000FF770A /* sybfront.h */; };
+		4C6DAA821761AEE000FF770A /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */; };
+		4C6DAA831761AEE000FF770A /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */; };
+		4C6DAA841761AEE000FF770A /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */; };
+		4C6DAA851761AEE000FF770A /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */; };
+		4C6DAA861761AEE000FF770A /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */; };
+		4C6DAA871761AEE000FF770A /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4E1761AEE000FF770A /* libsybdb.a */; };
+		4C6DAA881761AEE000FF770A /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4E1761AEE000FF770A /* libsybdb.a */; };
+		4C6DAA891761AEE000FF770A /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4E1761AEE000FF770A /* libsybdb.a */; };
+		4C6DAA8A1761AEE000FF770A /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4E1761AEE000FF770A /* libsybdb.a */; };
+		4C6DAA8B1761AEE000FF770A /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA4E1761AEE000FF770A /* libsybdb.a */; };
+		4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
+		4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
+		4C6DAA951761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
+		4C6DAA961761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
+		4C6DAA971761AF7500FF770A /* MTTdsClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6DAA921761AF7500FF770A /* MTTdsClient.h */; };
+		4C6DAA981761B00F00FF770A /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */; };
 		4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; };
 		4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; };
 		4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
@@ -1335,12 +1401,22 @@
 		4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
 		4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
 		4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
+		4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
+		4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
+		4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
+		4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
+		4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
 		4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
 		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
+		4CCBDAC817603DEB003E9E1D /* README-libsybdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */; };
+		4CCBDAC917603DEB003E9E1D /* README-libsybdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */; };
+		4CCBDACA17603DEB003E9E1D /* README-libsybdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */; };
+		4CCBDACB17603DEB003E9E1D /* README-libsybdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */; };
+		4CCBDACC17603DEB003E9E1D /* README-libsybdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */; };
 		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
 		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
 		4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
@@ -1895,6 +1971,20 @@
 			remoteGlobalIDString = 4CD98B9B163F7CDD0096D7BC;
 			remoteInfo = MySqlClientObjectiveC;
 		};
+		4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CEBFA071760EF8B00FFA4F4;
+			remoteInfo = libTdsClient;
+		};
+		4CEBFA391760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CEBFA181760EF8B00FFA4F4;
+			remoteInfo = libTdsClientTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -2108,6 +2198,19 @@
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4C6DAA421761AEE000FF770A /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = bkpublic.h; sourceTree = "<group>"; };
+		4C6DAA431761AEE000FF770A /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = cspublic.h; sourceTree = "<group>"; };
+		4C6DAA441761AEE000FF770A /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = cstypes.h; sourceTree = "<group>"; };
+		4C6DAA451761AEE000FF770A /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ctpublic.h; sourceTree = "<group>"; };
+		4C6DAA461761AEE000FF770A /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = odbcss.h; sourceTree = "<group>"; };
+		4C6DAA471761AEE000FF770A /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sqldb.h; sourceTree = "<group>"; };
+		4C6DAA481761AEE000FF770A /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sqlfront.h; sourceTree = "<group>"; };
+		4C6DAA491761AEE000FF770A /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sybdb.h; sourceTree = "<group>"; };
+		4C6DAA4A1761AEE000FF770A /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = syberror.h; sourceTree = "<group>"; };
+		4C6DAA4B1761AEE000FF770A /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sybfront.h; sourceTree = "<group>"; };
+		4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+		4C6DAA4E1761AEE000FF770A /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libsybdb.a; path = ../../StaticLibraries/freetds/Fat/lib/libsybdb.a; sourceTree = "<group>"; };
+		4C6DAA921761AF7500FF770A /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MTTdsClient.h; path = libTdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellDocument.h; sourceTree = "<group>"; };
 		4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellDocument.m; sourceTree = "<group>"; };
 		4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
@@ -2464,6 +2567,8 @@
 		4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGradientView.m; sourceTree = "<group>"; };
 		4CC39D61175E4A4800865CCA /* DocumentStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentStatusView.h; sourceTree = "<group>"; };
 		4CC39D62175E4A4800865CCA /* DocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentStatusView.m; sourceTree = "<group>"; };
+		4CC39D6A175FEBFA00865CCA /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extras.h"; sourceTree = "<group>"; };
+		4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
 		4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBorderedView.m; sourceTree = "<group>"; };
 		4CC8993114DAF87A0094E17E /* UIImageBolt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageBolt20.png; sourceTree = "<group>"; };
@@ -2472,6 +2577,7 @@
 		4CC8993814DAFB430094E17E /* MTTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
 		4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryGroup.h; sourceTree = "<group>"; };
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
+		4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README-libsybdb.txt"; sourceTree = "<group>"; };
 		4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPebbled.png; sourceTree = "<group>"; };
 		4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPebbled@2x.png"; sourceTree = "<group>"; };
 		4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternStationary.png; sourceTree = "<group>"; };
@@ -2724,6 +2830,7 @@
 		4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActiveDocument.m; sourceTree = "<group>"; };
 		4CE9BC7F16EF702600B0808C /* RptqQueryTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTable+Extras.h"; sourceTree = "<group>"; };
 		4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryTable+Extras.m"; sourceTree = "<group>"; };
+		4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libTdsClient.xcodeproj; path = libTdsClient/libTdsClient.xcodeproj; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1334F16CCB2E900FD0F0B /* MTQueryBuilderContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryBuilderContainerController.h; path = ../MTQueryBuilderContainerController.h; sourceTree = "<group>"; };
 		4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryBuilderContainerController.m; path = ../MTQueryBuilderContainerController.m; sourceTree = "<group>"; };
@@ -2855,6 +2962,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6DAA981761B00F00FF770A /* liblibTdsClient.a in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4C8EEC8C1644E8D100FAB2F3 /* libMySqlClientObjectiveC.a in Frameworks */,
@@ -3231,9 +3339,9 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4CF2F27817564C8000DC34E3 /* MessageUI.framework */,
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
 				4C752E0B16EA3A0C001FDAA3 /* README-libmysqlclient.txt */,
+				4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */,
 				4C5482741672D4A800CA24EB /* TODO.txt */,
 				4CE8A03714BFF744007C8345 /* Report.xcdatamodeld */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
@@ -3270,12 +3378,14 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C6DAA411761AEBA00FF770A /* TdsClient */,
 				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
 				4CD98AB7163F7A630096D7BC /* MySqlClient */,
 				4CD98AB6163F7A0B0096D7BC /* MySqlClientLibraryObjectiveC */,
 				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
 				4C1A586B14E247C700184445 /* QuartzCore.framework */,
+				4CF2F27817564C8000DC34E3 /* MessageUI.framework */,
 				4C8C97B414C5C50B007FB629 /* Security.framework */,
 				4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */,
 				4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */,
@@ -3305,6 +3415,7 @@
 		4C3C17D6163F414400A77BA6 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */,
 				4C8EEF891644EC5300FAB2F3 /* SalesforceCommonUtils */,
 				4C8EED071644EB7500FAB2F3 /* RestKit */,
 				4C8EED611644EB7500FAB2F3 /* SalesforceOAuth */,
@@ -3352,6 +3463,44 @@
 			);
 			name = "Template Files";
 			path = Reports;
+			sourceTree = "<group>";
+		};
+		4C6DAA411761AEBA00FF770A /* TdsClient */ = {
+			isa = PBXGroup;
+			children = (
+				4C6DAA921761AF7500FF770A /* MTTdsClient.h */,
+				4C6DAA4F1761AEE000FF770A /* freetds */,
+			);
+			name = TdsClient;
+			sourceTree = "<group>";
+		};
+		4C6DAA4D1761AEE000FF770A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C6DAA421761AEE000FF770A /* bkpublic.h */,
+				4C6DAA431761AEE000FF770A /* cspublic.h */,
+				4C6DAA441761AEE000FF770A /* cstypes.h */,
+				4C6DAA451761AEE000FF770A /* ctpublic.h */,
+				4C6DAA461761AEE000FF770A /* odbcss.h */,
+				4C6DAA471761AEE000FF770A /* sqldb.h */,
+				4C6DAA481761AEE000FF770A /* sqlfront.h */,
+				4C6DAA491761AEE000FF770A /* sybdb.h */,
+				4C6DAA4A1761AEE000FF770A /* syberror.h */,
+				4C6DAA4B1761AEE000FF770A /* sybfront.h */,
+				4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */,
+			);
+			name = include;
+			path = ../../StaticLibraries/freetds/Fat/include;
+			sourceTree = "<group>";
+		};
+		4C6DAA4F1761AEE000FF770A /* freetds */ = {
+			isa = PBXGroup;
+			children = (
+				4C6DAA4D1761AEE000FF770A /* include */,
+				4C6DAA4E1761AEE000FF770A /* libsybdb.a */,
+			);
+			name = freetds;
+			path = libTdsClient;
 			sourceTree = "<group>";
 		};
 		4C6DF38E16D5F5D500BDC0C1 /* Open Document */ = {
@@ -4150,6 +4299,8 @@
 		4CDB624B14E38C8400A5389E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				4CC39D6A175FEBFA00865CCA /* NSDate+Extras.h */,
+				4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */,
 				4C5625E91759730200433E88 /* UIImage+Resize.h */,
 				4C5625E51759730100433E88 /* UIImage+Resize.m */,
 				4C5625EA1759730200433E88 /* UIImage+Alpha.h */,
@@ -4230,6 +4381,15 @@
 				4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */,
 			);
 			name = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		4CEBFA331760EF8B00FFA4F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */,
+				4CEBFA3A1760EF8C00FFA4F4 /* libTdsClientTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4CF1329416CA1E4900FD0F0B /* Report Desinger */ = {
@@ -4464,6 +4624,10 @@
 					ProductGroup = 4C9962F116401CF800B7BACC /* Products */;
 					ProjectRef = 4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */;
 				},
+				{
+					ProductGroup = 4CEBFA331760EF8B00FFA4F4 /* Products */;
+					ProjectRef = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -4489,6 +4653,20 @@
 			fileType = archive.ar;
 			path = libMySqlClientObjectiveC.a;
 			remoteRef = 4C9962F416401CF800B7BACC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibTdsClient.a;
+			remoteRef = 4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CEBFA3A1760EF8C00FFA4F4 /* libTdsClientTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = libTdsClientTests.octest;
+			remoteRef = 4CEBFA391760EF8C00FFA4F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4759,6 +4937,20 @@
 				4C0AFCDF16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 				4C752E0E16EA3A0C001FDAA3 /* README-libmysqlclient.txt in Resources */,
 				4C752E1016EA3A0C001FDAA3 /* README.txt in Resources */,
+				4CCBDAC917603DEB003E9E1D /* README-libsybdb.txt in Resources */,
+				4C6DAA511761AEE000FF770A /* bkpublic.h in Resources */,
+				4C6DAA561761AEE000FF770A /* cspublic.h in Resources */,
+				4C6DAA5B1761AEE000FF770A /* cstypes.h in Resources */,
+				4C6DAA601761AEE000FF770A /* ctpublic.h in Resources */,
+				4C6DAA651761AEE000FF770A /* odbcss.h in Resources */,
+				4C6DAA6A1761AEE000FF770A /* sqldb.h in Resources */,
+				4C6DAA6F1761AEE000FF770A /* sqlfront.h in Resources */,
+				4C6DAA741761AEE000FF770A /* sybdb.h in Resources */,
+				4C6DAA791761AEE000FF770A /* syberror.h in Resources */,
+				4C6DAA7E1761AEE000FF770A /* sybfront.h in Resources */,
+				4C6DAA831761AEE000FF770A /* tds_sysdep_public.h in Resources */,
+				4C6DAA881761AEE000FF770A /* libsybdb.a in Resources */,
+				4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4850,6 +5042,20 @@
 				4CE3142E1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314331694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4C0AFCE116B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
+				4CCBDACB17603DEB003E9E1D /* README-libsybdb.txt in Resources */,
+				4C6DAA531761AEE000FF770A /* bkpublic.h in Resources */,
+				4C6DAA581761AEE000FF770A /* cspublic.h in Resources */,
+				4C6DAA5D1761AEE000FF770A /* cstypes.h in Resources */,
+				4C6DAA621761AEE000FF770A /* ctpublic.h in Resources */,
+				4C6DAA671761AEE000FF770A /* odbcss.h in Resources */,
+				4C6DAA6C1761AEE000FF770A /* sqldb.h in Resources */,
+				4C6DAA711761AEE000FF770A /* sqlfront.h in Resources */,
+				4C6DAA761761AEE000FF770A /* sybdb.h in Resources */,
+				4C6DAA7B1761AEE000FF770A /* syberror.h in Resources */,
+				4C6DAA801761AEE000FF770A /* sybfront.h in Resources */,
+				4C6DAA851761AEE000FF770A /* tds_sysdep_public.h in Resources */,
+				4C6DAA8A1761AEE000FF770A /* libsybdb.a in Resources */,
+				4C6DAA961761AF7500FF770A /* MTTdsClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4946,6 +5152,20 @@
 				4CE3142D1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314321694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4C0AFCE016B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
+				4CCBDACA17603DEB003E9E1D /* README-libsybdb.txt in Resources */,
+				4C6DAA521761AEE000FF770A /* bkpublic.h in Resources */,
+				4C6DAA571761AEE000FF770A /* cspublic.h in Resources */,
+				4C6DAA5C1761AEE000FF770A /* cstypes.h in Resources */,
+				4C6DAA611761AEE000FF770A /* ctpublic.h in Resources */,
+				4C6DAA661761AEE000FF770A /* odbcss.h in Resources */,
+				4C6DAA6B1761AEE000FF770A /* sqldb.h in Resources */,
+				4C6DAA701761AEE000FF770A /* sqlfront.h in Resources */,
+				4C6DAA751761AEE000FF770A /* sybdb.h in Resources */,
+				4C6DAA7A1761AEE000FF770A /* syberror.h in Resources */,
+				4C6DAA7F1761AEE000FF770A /* sybfront.h in Resources */,
+				4C6DAA841761AEE000FF770A /* tds_sysdep_public.h in Resources */,
+				4C6DAA891761AEE000FF770A /* libsybdb.a in Resources */,
+				4C6DAA951761AF7500FF770A /* MTTdsClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5213,6 +5433,20 @@
 				4C6B943B16E67992007795F6 /* Default-568h@2x.png in Resources */,
 				4C752E0D16EA3A0C001FDAA3 /* README-libmysqlclient.txt in Resources */,
 				4C752E0F16EA3A0C001FDAA3 /* README.txt in Resources */,
+				4CCBDAC817603DEB003E9E1D /* README-libsybdb.txt in Resources */,
+				4C6DAA501761AEE000FF770A /* bkpublic.h in Resources */,
+				4C6DAA551761AEE000FF770A /* cspublic.h in Resources */,
+				4C6DAA5A1761AEE000FF770A /* cstypes.h in Resources */,
+				4C6DAA5F1761AEE000FF770A /* ctpublic.h in Resources */,
+				4C6DAA641761AEE000FF770A /* odbcss.h in Resources */,
+				4C6DAA691761AEE000FF770A /* sqldb.h in Resources */,
+				4C6DAA6E1761AEE000FF770A /* sqlfront.h in Resources */,
+				4C6DAA731761AEE000FF770A /* sybdb.h in Resources */,
+				4C6DAA781761AEE000FF770A /* syberror.h in Resources */,
+				4C6DAA7D1761AEE000FF770A /* sybfront.h in Resources */,
+				4C6DAA821761AEE000FF770A /* tds_sysdep_public.h in Resources */,
+				4C6DAA871761AEE000FF770A /* libsybdb.a in Resources */,
+				4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5309,6 +5543,20 @@
 				4CE3142F1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CE314341694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4C0AFCE216B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard in Resources */,
+				4CCBDACC17603DEB003E9E1D /* README-libsybdb.txt in Resources */,
+				4C6DAA541761AEE000FF770A /* bkpublic.h in Resources */,
+				4C6DAA591761AEE000FF770A /* cspublic.h in Resources */,
+				4C6DAA5E1761AEE000FF770A /* cstypes.h in Resources */,
+				4C6DAA631761AEE000FF770A /* ctpublic.h in Resources */,
+				4C6DAA681761AEE000FF770A /* odbcss.h in Resources */,
+				4C6DAA6D1761AEE000FF770A /* sqldb.h in Resources */,
+				4C6DAA721761AEE000FF770A /* sqlfront.h in Resources */,
+				4C6DAA771761AEE000FF770A /* sybdb.h in Resources */,
+				4C6DAA7C1761AEE000FF770A /* syberror.h in Resources */,
+				4C6DAA811761AEE000FF770A /* sybfront.h in Resources */,
+				4C6DAA861761AEE000FF770A /* tds_sysdep_public.h in Resources */,
+				4C6DAA8B1761AEE000FF770A /* libsybdb.a in Resources */,
+				4C6DAA971761AF7500FF770A /* MTTdsClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5560,6 +5808,7 @@
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5762,6 +6011,7 @@
 				4C5625F81759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626061759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5964,6 +6214,7 @@
 				4C5625F71759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626051759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6170,6 +6421,7 @@
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6372,6 +6624,7 @@
 				4C5625F91759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626071759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6698,7 +6951,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6719,7 +6972,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;

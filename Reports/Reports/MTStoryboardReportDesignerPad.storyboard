@@ -401,6 +401,27 @@
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="AGP-MF-pDa">
                                 <items>
+                                    <barButtonItem style="plain" id="DgS-MX-bQQ">
+                                        <view key="customView" opaque="NO" contentMode="scaleToFill" id="wum-Ih-w2S">
+                                            <rect key="frame" x="12" y="6" width="279" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="DateTime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Du-PE-HeA">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="250" id="tyH-tc-Raa"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="6Du-PE-HeA" firstAttribute="leading" secondItem="wum-Ih-w2S" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Iau-hh-h2I"/>
+                                                <constraint firstItem="6Du-PE-HeA" firstAttribute="centerY" secondItem="wum-Ih-w2S" secondAttribute="centerY" type="default" id="qP9-Kh-ly6"/>
+                                            </constraints>
+                                        </view>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="OWL-ua-FQ2"/>
                                     <barButtonItem title="Print" id="sVX-X1-Pl8">
                                         <connections>
@@ -444,6 +465,7 @@
                     <connections>
                         <outlet property="barButtonItemRefresh" destination="cbU-Yf-zEg" id="Tqx-1E-fYe"/>
                         <outlet property="barButtonItemSendToPdf" destination="tzF-47-UAX" id="Au8-WQ-gL7"/>
+                        <outlet property="labelDateLastRefreshed" destination="6Du-PE-HeA" id="INm-NY-AKx"/>
                         <outlet property="printButton" destination="sVX-X1-Pl8" id="QEY-hT-s4C"/>
                         <outlet property="toolbarBottom" destination="AGP-MF-pDa" id="ZVl-zq-D64"/>
                         <outlet property="toolbarTop" destination="40Q-Vk-tKl" id="7Zx-cb-bP1"/>
@@ -455,7 +477,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dm9-l4-59o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="598" y="5303"/>
+            <point key="canvasLocation" x="828" y="5310"/>
         </scene>
         <!--View Controller Open Document-->
         <scene sceneID="Vfa-NU-wS3">
@@ -6994,6 +7016,7 @@
                 <relationship kind="action" name="sendToPdf:"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
@@ -7118,9 +7141,6 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>

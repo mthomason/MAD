@@ -59,12 +59,6 @@ NSString * const MTPersistentStoreAliasUserPreferences              = @"preferen
 
 NSString * const TEMPLATES                                          = @"Templates";
 
-NSString * const MTDatabaseUsernameKey                              = @"MTDatabaseUsernameKey";
-NSString * const MTDatabasePasswordKey                              = @"MTDatabasePasswordKey";
-NSString * const MTDatabaseDatabaseKey                              = @"MTDatabaseDatabaseKey";
-NSString * const MTDatabasePortKey                                  = @"MTDatabasePortKey";
-NSString * const MTDatabaseHostKey                                  = @"MTDatabaseHostKey";
-
 NSString * const NSDATABASE_SF_OAUTH_KEY                            = @"3MVG9QDx8IX8nP5Secp_EepwcYY2I1BT8m812vnIvve_DEHnQPt5437rXOvFPJY4g41lAc.IXZKILutC_CDLk";
 NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL                  = @"eda://reports.everydayapps.com/";
 

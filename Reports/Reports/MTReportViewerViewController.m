@@ -36,11 +36,23 @@
 
 @property (nonatomic, assign) BOOL pageIsAnimating;
 
+@property (nonatomic, retain) IBOutlet UILabel *labelDateLastRefreshed;
+
+@property (nonatomic, retain) NSDate *lastCacheDate;
+@property (nonatomic, assign) NSTimer *timerLabelTimeSinceRefreh;
+
 @end
 
 @implementation MTReportViewerViewController
 
 - (void)dealloc {
+    if (_timerLabelTimeSinceRefreh != nil) {
+        if ([_timerLabelTimeSinceRefreh isValid]) {
+            [_timerLabelTimeSinceRefreh invalidate];
+        }
+        _timerLabelTimeSinceRefreh = nil;
+    }
+
     [_printPageRenderForPrinting release];
     [_initalViewControllers release];
     [_printPageRendererReport release];
@@ -54,6 +66,7 @@
     [_barButtonItemRefresh release];
     [_printButton release];
     [_barButtonItemSendToPdf release];
+    [_labelDateLastRefreshed release];
     [super dealloc];
 }
 
@@ -67,7 +80,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _timerLabelTimeSinceRefreh = nil;
+    _lastCacheDate = nil;
+    [[self labelDateLastRefreshed] setText:@""];
     [self setPageIsAnimating:NO];
     
     [self setStartedRefresh:NO];
@@ -149,19 +164,89 @@
 
         [[self barButtonItemRefresh] setEnabled:NO];
         [[self documentReport] refresh:^(BOOL success) {
-
+            
             if (success) {
                 [self reloadReportView];
+                
+                NSDate *lastD = [[NSDate date] retain];
+                [self setLastCacheDate: lastD];
+                [lastD release];
+                
+                [self updateLateRefreshedLabel:self];
+
             }
             [[self barButtonItemRefresh] setEnabled:YES];
 
         }];
 
     } else {
-        NSDate *lateRefresh = [[query hasQueryCache] cacheDate];
-        NSLog(@"Last date: %@", lateRefresh);
+        NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
+        NSString *timeInterval;
+        if (lastRefresh != nil) {
+            
+            NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+            [self setLastCacheDate: lastD];
+            [lastD release];
+
+            [self updateLateRefreshedLabel:self];
+
+        } else {
+            timeInterval = NSLocalizedString(@"No cached data.", @"No cached data.");
+        }
     }
 }
+
+- (void)updateLateRefreshedLabel:(id)sender {
+
+    MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+    
+    
+    CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
+    CGFloat width = [[self view] bounds].size.width - offsetX - 105.0000f;
+
+    [[self labelDateLastRefreshed] setText:[dateStringAndInterval former]];
+    CGSize printSize = [[dateStringAndInterval former] sizeWithFont:[[self labelDateLastRefreshed] font]];
+    CGSize targetSize = CGSizeMake(printSize.width, [[self labelDateLastRefreshed] frame].size.height);
+    CGSize labelSize = [[self labelDateLastRefreshed] systemLayoutSizeFittingSize:targetSize];
+    [[self labelDateLastRefreshed] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width, labelSize.height)];
+    [[[self labelDateLastRefreshed] superview] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width - offsetX, labelSize.height)];
+    MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
+
+    NSTimeInterval updateLabelInSeconds;
+    
+    switch (resolution) {
+        case MTDateResolutionDay:
+            updateLabelInSeconds = 86400.0;
+            break;
+        case MTDateResolutionHour:
+            updateLabelInSeconds = 3600.0;
+            break;
+        case MTDateResolutionMinute:
+            updateLabelInSeconds = 60.0;
+            break;
+        case MTDateResolutionSecond:
+            updateLabelInSeconds = 1.0;
+            break;
+        case MTDateResolutionMillisecond:
+            updateLabelInSeconds = 0.1;
+            break;
+        default:
+            updateLabelInSeconds = 86400;
+            break;
+    }
+    if ([self timerLabelTimeSinceRefreh] != nil) {
+        if ([[self timerLabelTimeSinceRefreh] isValid]) {
+            [[self timerLabelTimeSinceRefreh] invalidate];
+        }
+        [self setTimerLabelTimeSinceRefreh:nil];
+    }
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:self
+                                        selector:@selector(updateLateRefreshedLabel:) userInfo:nil
+                                         repeats:NO];
+    [self setTimerLabelTimeSinceRefreh:t];
+}
+
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -221,9 +306,14 @@
             }];
             [pageOne release];
 
+            NSDate *lastD = [[NSDate date] retain];
+            [self setLastCacheDate: lastD];
+            [lastD release];
+            
+            [self updateLateRefreshedLabel:self];
+
         }
         [[self barButtonItemRefresh] setEnabled:YES];
-        
     }];
 }
 
@@ -353,4 +443,8 @@
     
 }
 
+- (void)viewDidUnload {
+    [self setLabelDateLastRefreshed:nil];
+    [super viewDidUnload];
+}
 @end

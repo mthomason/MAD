@@ -207,12 +207,6 @@ extern NSString * const MTDocumentExtentionMobleApplicationDocumentReport;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 
-extern NSString * const MTDatabaseUsernameKey;
-extern NSString * const MTDatabasePasswordKey;
-extern NSString * const MTDatabaseDatabaseKey;
-extern NSString * const MTDatabasePortKey;
-extern NSString * const MTDatabaseHostKey;
-
 extern NSString * const NSDATABASE_SF_OAUTH_KEY;
 extern NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL;
 
