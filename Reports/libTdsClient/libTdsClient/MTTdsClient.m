@@ -1,0 +1,797 @@
+//
+//  libTdsClient.m
+//  libTdsClient
+//
+//  Created by Michael Thomason on 6/6/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTTdsClient.h"
+
+#import "sybdb.h"
+
+@interface MTTdsClient()
+
+@property (nonatomic, copy) NSDictionary *credentals;
+
+@end
+
+@implementation MTTdsClient
+
+NSString * const MTDatabaseKeyUsername                              = @"MTDatabaseKeyUsername";
+NSString * const MTDatabaseKeyPassword                              = @"MTDatabaseKeyPassword";
+NSString * const MTDatabaseKeyDatabase                              = @"MTDatabaseKeyDatabase";
+NSString * const MTDatabasePortKey                                  = @"MTDatabaseKeyPort";
+NSString * const MTDatabaseKeyHost                                  = @"MTDatabaseKeyHost";
+NSString * const MTDatabaseKeyServer                                = @"MTDatabaseKeyServer";
+NSString * const MTDatabaseKeyAppName                               = @"MTDatabaseKeyAppName";
+
+- (void)dealloc {
+    [_credentals release];
+    [super dealloc];
+}
+
+- (id)initWithCredentals:(NSDictionary *)credentals {
+
+    self = [super init];
+    if (self) {
+
+        if (credentals == nil) {
+            credentals = @{MTDatabaseKeyUsername    : @"sa",
+                           MTDatabaseKeyPassword    : @"1noniceguy",
+                           MTDatabaseKeyDatabase    : @"master",
+                           MTDatabaseKeyHost        : @"MICHAEL-PC",
+                           MTDatabaseKeyServer      : @"10.0.1.3",
+//                           MTDatabaseKeyServer      : @"SQLSERVERDEV",
+//                           MTDatabaseHostKey        : @"MICHAEL-PC\\SQLSERVERDEV",
+                           MTDatabaseKeyAppName     : @"MAD Designer"};
+        }
+
+        [self setCredentals:[credentals copy]];
+        
+    }
+    return self;
+}
+
+- (id)runQuery:(NSString *)sql {
+    
+    DBPROCESS *dbconn;
+    LOGINREC *login;
+    char hostname[30];
+    int max_len = 30;
+    NSError *error = nil;
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    
+    NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
+    [janFirst1990Components setYear:    1900];
+    [janFirst1990Components setMonth:   1];
+    [janFirst1990Components setDay:     0];
+    [janFirst1990Components setHour:    0];
+    [janFirst1990Components setMinute:  0];
+    [janFirst1990Components setSecond:  0];
+    
+    NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
+    
+
+    
+    /* Init the DB library */
+    if (dbinit() == FAIL) {
+        NSString *message = @"Could not init db.";
+        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+        error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
+    }
+    
+    if ((error == nil) && ((login = dblogin()) == FAIL)) {
+        NSString *message = @"Could not initialize dblogin() structure.";
+        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+        error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+    }
+
+    char *h = (char *)[[[self credentals] objectForKey:MTDatabaseKeyHost] cStringUsingEncoding:NSUTF8StringEncoding];
+    char *s = (char *)[[[self credentals] objectForKey:MTDatabaseKeyServer] cStringUsingEncoding:NSUTF8StringEncoding];
+
+    if (error == nil) {
+        /* Initialize the login params in the structure */
+        DBSETLUSER(login, [[[self credentals] objectForKey:MTDatabaseKeyUsername] cStringUsingEncoding:NSUTF8StringEncoding]);
+        DBSETLPWD(login, [[[self credentals] objectForKey:MTDatabaseKeyPassword] cStringUsingEncoding:NSUTF8StringEncoding]);
+        DBSETLAPP(login, [[[self credentals] objectForKey:MTDatabaseKeyAppName] cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+        //if (gethostname(h, max_len) == 0) {
+        //    DBSETLHOST(login, h);
+        //}
+
+        //if (gethostname(hostname, max_len) == 0) {
+        //    DBSETLHOST(login, hostname);
+        //}
+
+        //if (gethostname(hostname, max_len) == 0) {
+            //DBSETLHOST(login, h);
+        //}
+
+ }
+    
+    if ((error == nil) && ((dbconn = dbopen(login, s)) == NULL)) {
+        
+        NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", h];
+        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+        error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+
+    }
+    
+    RETCODE success = SUCCEED;
+    if (error == nil) {
+        
+        dbcmd(dbconn,
+              "SELECT NDB_No, FdGrp_Cd, Long_Desc, Pro_factor, Fat_Factor, N_Factor, TestBigInt, TestBinary50, TestBit, TestChar, TestDate, TestDateTime, TestDateTime2, TestDateTimeOffset, TestDecimal, TestFloat, TestGeography, TestGeometry, TestHierarchyId, TestImage, TestInt, TestMoney, TestNChar, TestNText, TestNumeric, TestNVarChar50, TestNVarCharMax, TestReal, TestSmallDateTime, TestSmallInt, TestSmallMoney, TestSqlVariant, TestText, TestTime, TestTimestamp, TestTinyInt, TestXml FROM food_des");
+        
+        success = dbsqlexec(dbconn);
+        
+        if (success != SUCCEED) {
+
+            NSString *message = @"Sql Syntax Error";
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+            error = [NSError errorWithDomain:@"MTDatabaseTds" code:3 userInfo:errorInfo];
+
+        }
+        
+    }
+    
+
+    if (error == nil) {
+        
+        static NSString *MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
+        static NSString *MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
+        static NSString *MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
+        static NSString *MTDatabaseColumnDataLenId      = @"MTDatabaseColumnDataLenId";
+        static NSString *MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
+        static NSString *MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
+
+        NSInteger numberOfColumns = dbnumcols(dbconn);
+        NSMutableArray *colmunHolder = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
+
+        static int disregardedBind = -1023;
+        
+        NSMutableDictionary *counters = [[NSMutableDictionary alloc] initWithDictionary:
+                                  
+                                  @{
+                                         @(CHARBIND)            : @(0),
+                                         @(STRINGBIND)          : @(0),
+                                         @(NTBSTRINGBIND)       : @(0),
+                                         @(VARYCHARBIND)        : @(0),
+                                         @(VARYBINBIND)         : @(0),
+                                         @(TINYBIND)            : @(0),
+                                         @(SMALLBIND)           : @(0),
+                                         @(INTBIND)             : @(0),
+                                         @(FLT8BIND)            : @(0),
+                                         @(REALBIND)            : @(0),
+                                         @(DATETIMEBIND)        : @(0),
+                                         @(SMALLDATETIMEBIND)   : @(0),
+                                         @(BINARYBIND)          : @(0),
+                                         @(BITBIND)             : @(0),
+                                         @(NUMERICBIND)         : @(0),
+                                         @(DECIMALBIND)         : @(0),
+                                         @(BIGINTBIND)          : @(0),
+                                         @(MAXBINDTYPES)        : @(0),
+
+                                         @(SYBCHAR)             : @(0),
+                                         @(SYBVARCHAR)          : @(0),
+                                         @(SYBINTN)             : @(0),
+                                         @(SYBINT1)             : @(0),
+                                         @(SYBINT2)             : @(0),
+                                         @(SYBINT4)             : @(0),
+                                         @(SYBINT8)             : @(0),
+                                         @(SYBFLT8)             : @(0),
+                                         @(SYBDATETIME)         : @(0),
+                                         @(SYBBIT)              : @(0),
+                                         @(SYBBITN)             : @(0),
+                                         @(SYBTEXT)             : @(0),
+                                         @(SYBNTEXT)            : @(0),
+                                         @(SYBIMAGE)            : @(0),
+                                         @(SYBMONEY4)           : @(0),
+                                         @(SYBMONEY)            : @(0),
+                                         @(SYBDATETIME4)        : @(0),
+                                         @(SYBREAL)             : @(0),
+                                         @(SYBBINARY)           : @(0),
+                                         @(SYBVOID)             : @(0),
+                                         @(SYBVARBINARY)        : @(0),
+                                         @(SYBNUMERIC)          : @(0),
+                                         @(SYBDECIMAL)          : @(0),
+                                         @(SYBFLTN)             : @(0),
+                                         @(SYBMONEYN)           : @(0),
+                                         @(SYBDATETIMN)         : @(0),
+                                         @(SYBNVARCHAR)         : @(0),
+                                         
+                                         @(disregardedBind)     : @(0)
+                                         
+                                         }
+                                  
+                                  ];
+        
+        for (NSInteger columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
+
+            DBINT columnOffsetCtr = columnCtr + 1;
+            DBINT columnType = dbcoltype(dbconn, columnOffsetCtr);
+            DBINT columnTypeUser = dbcolutype(dbconn, columnOffsetCtr);
+            const char *typeForDisplay = dbprtype(columnType);
+            const char *typeForDisplayUser = dbprtype(columnTypeUser);
+            NSLog(@"\nType:\t\t%d) %s\nUser Type:\t%d) %s", columnType, typeForDisplay, columnTypeUser, typeForDisplayUser);
+            if (columnType >= 0) {
+                                
+                DBINT columnNumberBytes = dbdatlen(dbconn, columnOffsetCtr);
+                DBINT columnLength      = dbcollen(dbconn, columnOffsetCtr);
+                char *columnName        = dbcolname(dbconn, columnOffsetCtr);
+                
+                NSNumber *columnNumber = [[NSNumber alloc] initWithInt:columnCtr];
+                NSNumber *columnTypeNumber = [[NSNumber alloc] initWithInt:columnType];
+                NSString *columnNameString = [[NSString alloc] initWithCString:columnName
+                                                                      encoding:NSStringEncodingConversionAllowLossy];
+                
+                
+                NSNumber *columnDataLen = [[NSNumber alloc] initWithInteger:columnNumberBytes];
+                NSNumber *columTypeKey = @(columnType);
+                NSInteger columnIndexOfType = [[counters objectForKey:columTypeKey] integerValue];
+                
+                NSNumber *columnIndexOfTypeNumber = [[NSNumber alloc] initWithInteger:columnIndexOfType];
+                NSNumber *columnLen = [[NSNumber alloc] initWithInteger: columnLength];
+                NSDictionary *dictionary = @{MTDatabaseColumnTypeId : columnTypeNumber,
+                                             MTDatabaseColumnNameId : columnNameString,
+                                             MTDatabaseColumnNumberId : columnNumber,
+                                             MTDatabaseColumnDataLenId :columnDataLen,
+                                             MTDatabaseColumnIndexOfType: columnIndexOfTypeNumber,
+                                             MTDatabaseColumnLenId: columnLen};
+                columnIndexOfType++;
+                [counters setObject:@(columnIndexOfType) forKey:columTypeKey];
+                
+                [dictionary retain];
+                [colmunHolder addObject:dictionary];
+                [dictionary release];
+
+                [columnLen release];
+                [columnIndexOfTypeNumber release];
+                [columnNameString release];
+                [columnTypeNumber release];
+                [columnNumber release];
+                [columnDataLen release];
+            }
+        }
+        
+        NSMutableArray *results = [[NSMutableArray alloc] init];
+        
+        while (dbresults(dbconn) != NO_MORE_RESULTS) {
+            
+            NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+            
+            NSInteger resultCountForType = [[counters objectForKey:@(CHARBIND)] integerValue];
+            char *charBind[resultCountForType];
+            
+            
+            for (NSInteger i=0; i<resultCountForType; i++) {
+                charBind[i] = '\0';
+            }
+            
+            resultCountForType = [[counters objectForKey:@(SYBINT1)] integerValue];
+            int8_t sybInt1Bind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBINT2)] integerValue];
+            int8_t sybInt2Bind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBINT4)] integerValue];
+            NSInteger sybInt4Bind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBINT8)] integerValue];
+            long long sybInt8Bind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBFLT8)] integerValue];
+            double sybFlt8Bind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBMONEY4)] integerValue];
+            DBCHAR *sybMoney4Bind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBMONEY)] integerValue];
+            DBCHAR *sybMoneyBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBMONEYN)] integerValue];
+            DBCHAR *sybMoneyNBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBNUMERIC)] integerValue];
+            DBNUMERIC *sybNumericBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBDECIMAL)] integerValue];
+            DBDECIMAL *sybDecimalBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBFLTN)] integerValue];
+            double sybFltNBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBCHAR)] integerValue];
+            char *sybCharBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(STRINGBIND)] integerValue];
+            char *stringBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBVARCHAR)] integerValue];
+            char *sybVarCharBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBNVARCHAR)] integerValue];
+            char *sybnVarCharBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBTEXT)] integerValue];
+            char *sybTextBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBNTEXT)] integerValue];
+            char *sybnTextBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBDATETIME)] integerValue];
+            DBDATETIME *sybDateTimeBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBDATETIME4)] integerValue];
+            DBDATETIME4 *sybDateTime4Bind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBDATETIMN)] integerValue];
+            DBDATETIME *sybDateTimnBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SMALLDATETIMEBIND)] integerValue];
+            char *smallDateTimeBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBIMAGE)] integerValue];
+            DBINT sybImageBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBBINARY)] integerValue];
+            DBINT sybBinaryBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBVARBINARY)] integerValue];
+            void *sybVarBinaryBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBVOID)] integerValue];
+            void *sybVoidBind[resultCountForType];
+
+            resultCountForType = [[counters objectForKey:@(SYBBIT)] integerValue];
+            BOOL sybBitBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBBITN)] integerValue];
+            BOOL sybBitNBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBINTN)] integerValue];
+            void *sybIntnBind[resultCountForType];
+            
+            resultCountForType = [[counters objectForKey:@(SYBREAL)] integerValue];
+            double sybRealBind[resultCountForType];
+
+            for (NSDictionary *columnMetaData in colmunHolder) {
+
+                
+                int columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
+                int columnLength = [[columnMetaData objectForKey:MTDatabaseColumnLenId] intValue];
+                int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
+                int columnIndexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
+                int columnOffsetNumber = columnNumber + 1;
+                
+                switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
+
+                    case SYBCHAR:
+                        sybCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                        dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybCharBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBVARCHAR:
+                        sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                        dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBTEXT:
+                        sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                        dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybTextBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBNTEXT:
+                        sybnTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                        dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybnTextBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBNVARCHAR:
+                        sybnVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
+                        dbbind(dbconn, columnOffsetNumber, SYBNVARCHAR, columnLength, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBINTN:
+                        dbbind(dbconn, columnOffsetNumber, INTBIND, columnLength, (BYTE *)&sybIntnBind[columnIndexOfType]);
+                        break;
+                    case SYBINT1:
+                        dbbind(dbconn, columnOffsetNumber, INTBIND, columnLength, (BYTE *)&sybInt1Bind[columnIndexOfType]);
+                        break;
+                    case SYBINT2:
+                        dbbind(dbconn, columnOffsetNumber, INTBIND, columnLength, (BYTE *)&sybInt2Bind[columnIndexOfType]);
+                        break;
+                    case SYBINT4:
+                        dbbind(dbconn, columnOffsetNumber, INTBIND, columnLength, (BYTE *)&sybInt4Bind[columnIndexOfType]);
+                        break;
+                    case SYBINT8:
+                        dbbind(dbconn, columnOffsetNumber, BIGINTBIND, columnLength, (BYTE *)&sybInt8Bind[columnIndexOfType]);
+                        break;
+                    case SYBFLT8:
+                        dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
+                        break;
+                    case SYBBIT:
+                        dbbind(dbconn, columnOffsetNumber, BITBIND, columnLength, (BYTE *)&sybBitBind[columnIndexOfType]);
+                        break;
+                    case SYBBITN:
+                        dbbind(dbconn, columnOffsetNumber, BITBIND, columnLength, (BYTE *)&sybBitNBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBREAL:
+                        dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybRealBind[columnIndexOfType]);
+                        break;
+                    case SYBNUMERIC: {
+                        size_t s = sizeof(DBDECIMAL);
+                        sybNumericBind[columnIndexOfType] = malloc(s);
+                        dbbind(dbconn, columnOffsetNumber, NUMERICBIND, s, (BYTE *)sybNumericBind[columnIndexOfType]);
+                        break;
+                    }
+                    case SYBDECIMAL: {
+                        size_t s = sizeof(DBDECIMAL);
+                        sybDecimalBind[columnIndexOfType] = malloc(s);
+                        dbbind(dbconn, columnOffsetNumber, DECIMALBIND, s, (BYTE *)sybDecimalBind[columnIndexOfType]);
+                        break;
+                    }
+                    case SYBFLTN:
+                        dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybFltNBind[columnIndexOfType]);
+                        break;
+                    case SYBMONEYN:
+                        sybMoneyNBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
+                        dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
+                        break;
+                    case SYBMONEY4:
+                        sybMoney4Bind[columnIndexOfType] = malloc(sizeof(DBMONEY4));
+                        dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)sybMoney4Bind[columnIndexOfType]);
+                        break;
+                    case SYBMONEY:
+                        sybMoneyBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
+                        dbbind(dbconn, columnOffsetNumber, SMALLMONEYBIND, columnLength, (BYTE *)sybMoneyBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBDATETIME:
+                        sybDateTimeBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
+                        dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimeBind[columnIndexOfType]);
+                        break;
+                        
+                    case SYBDATETIMN:
+                        sybDateTimnBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
+                        dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimnBind[columnIndexOfType]);
+
+                        break;
+                        
+                    case SYBDATETIME4:
+                        sybDateTime4Bind[columnIndexOfType] = malloc(sizeof(DBDATETIME4));
+                        dbbind(dbconn, columnOffsetNumber, SMALLDATETIMEBIND, sizeof(DBDATETIME4), (BYTE *)sybDateTime4Bind[columnIndexOfType]);
+                        
+                        break;
+                        
+                    case SYBIMAGE:
+                        dbbind(dbconn, columnOffsetNumber, BINARYBIND, sizeof(sybImageBind), (BYTE *)sybImageBind[columnIndexOfType]);
+                        break;
+
+                    case SYBBINARY:
+                        break;
+
+                    case SYBVOID:
+                        break;
+                    
+                    case SYBVARBINARY:
+                        break;
+                    default:
+                        break;
+                }
+            
+            }
+            
+            
+            /* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
+            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                /* do RowByAgonizingRow processing */
+                
+                for (NSDictionary *columnMetaData in colmunHolder) {
+                    
+                    /*
+                     NSDictionary *dictionary = @{MTDatabaseColumnTypeId : columnTypeNumber,
+                     MTDatabaseColumnNameId : columnNameString,
+                     MTDatabaseColumnNumberId : columnNumber,
+                     MTDatabaseColumnDataLenId :columnDataLen,
+                     MTDatabaseColumnIndexOfType: columnIndexOfTypeNumber};
+                     */
+                    NSInteger indexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] integerValue];
+                    
+                    NSString *fieldName = [columnMetaData objectForKey:MTDatabaseColumnNameId];
+                    
+                    NSInteger columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] integerValue];
+                    
+                    switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
+                            
+                        case SYBCHAR: {
+                            char *sybChar = sybCharBind[indexOfType];
+                            if (sybChar != nil) {
+                                NSString *object = [[NSString alloc] initWithCString: sybChar
+                                                                            encoding: NSStringEncodingConversionAllowLossy];
+
+                                NSLog(@"%@\t\t(SYBCHAR):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+                        case SYBVARCHAR: {
+                            char *sybVarChar = sybVarCharBind[indexOfType];
+                            if (sybVarChar != nil) {
+                                NSString *object = [[NSString alloc] initWithCString: sybVarChar
+                                                                            encoding: NSStringEncodingConversionAllowLossy];
+                                NSLog(@"%@\t\t(SYBVARCHAR):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+                        case SYBNVARCHAR: {
+                            char *sybnVarChar = sybnVarCharBind[indexOfType];
+                            if (sybnVarChar != nil) {
+                                NSString *object = [[NSString alloc] initWithCString: sybnVarChar
+                                                                            encoding: NSStringEncodingConversionAllowLossy];
+                                NSLog(@"%@\t\t(SYBNVARCHAR):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+                        case SYBTEXT: {
+                            char *sybText = sybnVarCharBind[indexOfType];
+                            if (sybText != nil) {
+                                NSString *object = [[NSString alloc] initWithCString: sybText
+                                                                            encoding: NSStringEncodingConversionAllowLossy];
+                                NSLog(@"%@\t\t(SYBTEXT):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+                        case SYBNTEXT: {
+                            char *sybnTest = sybnVarCharBind[indexOfType];
+                            if (sybnTest != nil) {
+                                NSString *object = [[NSString alloc] initWithCString: sybnTest
+                                                                            encoding: NSStringEncodingConversionAllowLossy];
+                                NSLog(@"%@\t\t(SYBNTEXT):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+
+                        case SYBINTN: {
+                            void *integer = sybIntnBind[indexOfType];
+                            if (integer != nil) {
+                                NSNumber *object = [[NSNumber alloc] initWithInteger:(NSInteger)integer];
+                                NSLog(@"%@\t\t(SYBCHAR):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                                [resultsForRow setObject:object forKey:fieldName];
+                                [object release];
+                            }
+                            break;
+                        }
+                        case SYBINT1: {
+                            //void *integer = sybInt1Bind[indexOfType];
+                            NSNumber *object = [[NSNumber alloc] initWithInt:sybInt1Bind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBINTN):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBINT2: {
+                            NSNumber *object = [[NSNumber alloc] initWithInt:sybInt2Bind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBINT2):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBINT4: {
+                            NSNumber *object = [[NSNumber alloc] initWithInteger:sybInt4Bind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBINT4):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBINT8: {
+                            NSNumber *object = [[NSNumber alloc] initWithLongLong:sybInt8Bind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBINT8):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBFLT8: {
+                            NSNumber *object = [[NSNumber alloc] initWithDouble:sybFlt8Bind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBFLT8):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBDATETIME4: {
+                            
+                            DBDATETIME4 smallDate = *sybDateTime4Bind[indexOfType];
+                            
+                            NSDateComponents *offsetCompsDays = [[NSDateComponents alloc] init];
+                            [offsetCompsDays setDay: smallDate.days];
+                            
+                            NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1990 options:0];
+                            
+                            
+                            NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit)
+                                                                                      fromDate:object];
+
+                            NSDateComponents *offsetCompsWithMinutes = [[NSDateComponents alloc] init];
+                            
+                            NSInteger hours = smallDate.minutes / 60;
+                            NSInteger minutes = smallDate.minutes - (hours * 60);
+                            [offsetCompsWithMinutes setHour:    hours];
+                            [offsetCompsWithMinutes setMinute:  minutes];
+                            [offsetCompsWithMinutes setYear:    smallDaysComponentsPart1.year];
+                            [offsetCompsWithMinutes setMonth:   smallDaysComponentsPart1.month];
+                            [offsetCompsWithMinutes setDay:     smallDaysComponentsPart1.day];
+                            [offsetCompsWithMinutes setSecond:  0];
+
+                            NSDate *newDate = [[gregorian dateFromComponents:offsetCompsWithMinutes] retain];
+                            
+                            NSLog(@"%@\t\t(SYBDATETIME4):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], newDate);
+                            [resultsForRow setObject:newDate forKey:fieldName];
+                            [newDate release];
+                            break;
+                        }
+                            
+                        case SYBDATETIME: {
+                            DBDATEREC dateinfo;
+                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (columnNumber + 1))), sizeof(DBDATETIME));
+                            dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
+                            
+                            NSDateComponents *comps = [[NSDateComponents alloc] init];
+                            [comps setYear:     dateinfo.dateyear];
+                            [comps setMonth:    dateinfo.datemonth + 1];
+                            [comps setDay:      dateinfo.datedmonth];
+                            [comps setHour:     dateinfo.datehour];
+                            [comps setMinute:     dateinfo.dateminute];
+                            [comps setSecond:     dateinfo.datesecond];
+                            [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
+                            NSCalendar *gregorian = [[NSCalendar alloc]
+                                                     initWithCalendarIdentifier:NSGregorianCalendar];
+                            NSDate *date = [[gregorian dateFromComponents:comps] retain];
+                            NSLog(@"%@\t\t(SYBDATETIME):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], date);
+                            [resultsForRow setObject:date forKey:fieldName];
+                            [date release];
+                            break;
+                        }
+                            
+                        case SYBDATETIMN: {
+
+                            DBDATEREC dateinfo;
+                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (columnNumber + 1))), sizeof(DBDATETIME));
+                            dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
+                            
+                            NSDateComponents *comps = [[NSDateComponents alloc] init];
+                            [comps setYear:     dateinfo.dateyear];
+                            [comps setMonth:    dateinfo.datemonth + 1];
+                            [comps setDay:      dateinfo.datedmonth];
+                            [comps setHour:     dateinfo.datehour];
+                            [comps setMinute:     dateinfo.dateminute];
+                            [comps setSecond:     dateinfo.datesecond];
+                            [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
+                            NSCalendar *gregorian = [[NSCalendar alloc]
+                                                     initWithCalendarIdentifier:NSGregorianCalendar];
+                            NSDate *date = [[gregorian dateFromComponents:comps] retain];
+                            NSLog(@"%@\t\t(SYBDATETIMN):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], date);
+                            [resultsForRow setObject:date forKey:fieldName];
+                            [date release];
+                            break;
+                        }
+                            
+                        case SYBBIT: {
+                            NSNumber *object = [[NSNumber alloc] initWithBool:(BOOL)sybBitBind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBBIT):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        
+                        case SYBBITN: {
+                            NSNumber *object = [[NSNumber alloc] initWithInt:(BOOL)sybBitNBind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBBITN):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+
+                        case SYBIMAGE: {
+                            NSLog(@"%@\t\t(SYBMONEY): Not supported", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))]);
+                            break;
+                        }
+                        
+                        case SYBMONEY4: {
+                            NSLog(@"%@\t\t(SYBMONEY4):\t\t%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], sybMoneyBind[indexOfType]);
+                            break;
+                        }
+                        case SYBMONEY: {
+                            NSLog(@"%@\t\t(SYBMONEY):\t\t%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], sybMoneyBind[indexOfType]);
+                            break;
+                        }
+                        case SYBREAL: {
+                            NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
+                            NSLog(@"%@\t\t(SYBREAL):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            [resultsForRow setObject:object forKey:fieldName];
+                            [object release];
+                            break;
+                        }
+                        case SYBBINARY: {
+                            NSLog(@"Not supported");
+                            break;
+                        }
+                        case SYBVOID: {
+                            NSLog(@"Not supported");
+                            break;
+                        }
+                        case SYBVARBINARY: {
+                            NSLog(@"Not supported");
+                            break;
+                        }
+                        case SYBNUMERIC: {
+                            DBNUMERIC *decimalNumber = sybDecimalBind[indexOfType];
+                            //NSNumber *object = [[NSNumber alloc] initWithDouble:sybNumericBind[indexOfType]];
+                            //NSLog(@"%@\t\t(SYBNUMERIC):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
+                            //[resultsForRow setObject:object forKey:fieldName];
+                            //[object release];
+                            break;
+                        }
+                        case SYBDECIMAL: {
+                            DBDECIMAL *decimalNumber = sybDecimalBind[indexOfType];
+                            double d =  0;
+                            DBINT len = dbconvert_ps(NULL, SYBDECIMAL, (BYTE *)decimalNumber, sizeof(DBDECIMAL), SYBFLT8, (BYTE *)&d, sizeof(double), NULL);
+                            if (len == FAIL) {
+                                [resultsForRow setObject:@"NAN" forKey:fieldName];
+                            } else {
+                                NSNumber *n = [@(d) retain];
+                                [resultsForRow setObject:n forKey:fieldName];
+                                [n release];
+                            }
+                            NSLog(@"%@\t\t(SYBDECIMAL):\t\t(%hhu,%hhu)->%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], decimalNumber->precision, decimalNumber->scale, decimalNumber->array);
+                            break;
+                        }
+                            
+                        case SYBFLTN: {
+                            NSLog(@"%@\t\t(SYBFLTN):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], @"FIXME");
+                            break;
+                        }
+                        case SYBMONEYN: {
+                            NSLog(@"%@\t\t(SYBMONEYN):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], @"FIXME");
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            resultCountForType = [[counters objectForKey:@(SYBCHAR)] integerValue];
+            for (NSInteger i=0; i<resultCountForType; i++) {
+                free(sybCharBind[i]);
+            }
+            
+            [results addObject: resultsForRow];
+            [resultsForRow release];
+            
+        }
+        
+        
+    }
+    
+    dbclose(dbconn);
+	
+    [janFirst1990 release];
+    [janFirst1990Components release];
+    
+    return 0;
+    
+}
+
+@end

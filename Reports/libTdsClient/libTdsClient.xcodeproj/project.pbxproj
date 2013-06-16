@@ -1,0 +1,489 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
+		4CEBFA101760EF8B00FFA4F4 /* MTTdsClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */; };
+		4CEBFA121760EF8B00FFA4F4 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */; };
+		4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */; };
+		4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */; };
+		4CEBFA1D1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
+		4CEBFA201760EF8B00FFA4F4 /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */; };
+		4CEBFA261760EF8B00FFA4F4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CEBFA241760EF8B00FFA4F4 /* InfoPlist.strings */; };
+		4CEBFA291760EF8B00FFA4F4 /* libTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBFA281760EF8B00FFA4F4 /* libTdsClientTests.m */; };
+		4CEBFA3E176110A200FFA4F4 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA3D176110A200FFA4F4 /* libsybdb.a */; };
+		4CEBFA3F176110A200FFA4F4 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA3D176110A200FFA4F4 /* libsybdb.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4CEBFA1E1760EF8B00FFA4F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CEBF9FF1760EF8B00FFA4F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CEBFA061760EF8B00FFA4F4;
+			remoteInfo = libTdsClient;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4CEBFA051760EF8B00FFA4F4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				4CEBFA101760EF8B00FFA4F4 /* MTTdsClient.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibTdsClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4CEBFA0E1760EF8B00FFA4F4 /* libTdsClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libTdsClient-Prefix.pch"; sourceTree = "<group>"; };
+		4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTTdsClient.h; sourceTree = "<group>"; };
+		4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTTdsClient.m; sourceTree = "<group>"; };
+		4CEBFA181760EF8B00FFA4F4 /* libTdsClientTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libTdsClientTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		4CEBFA231760EF8B00FFA4F4 /* libTdsClientTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libTdsClientTests-Info.plist"; sourceTree = "<group>"; };
+		4CEBFA251760EF8B00FFA4F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4CEBFA271760EF8B00FFA4F4 /* libTdsClientTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libTdsClientTests.h; sourceTree = "<group>"; };
+		4CEBFA281760EF8B00FFA4F4 /* libTdsClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libTdsClientTests.m; sourceTree = "<group>"; };
+		4CEBFA3D176110A200FFA4F4 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../StaticLibraries/freetds/Fat/lib/libsybdb.a; sourceTree = "<group>"; };
+		4CEBFA41176110CE00FFA4F4 /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
+		4CEBFA42176110CE00FFA4F4 /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
+		4CEBFA43176110CE00FFA4F4 /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
+		4CEBFA44176110CE00FFA4F4 /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
+		4CEBFA45176110CF00FFA4F4 /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
+		4CEBFA46176110CF00FFA4F4 /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
+		4CEBFA47176110CF00FFA4F4 /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
+		4CEBFA48176110CF00FFA4F4 /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
+		4CEBFA49176110CF00FFA4F4 /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
+		4CEBFA4A176110CF00FFA4F4 /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
+		4CEBFA4B176110CF00FFA4F4 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CEBFA041760EF8B00FFA4F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */,
+				4CEBFA3E176110A200FFA4F4 /* libsybdb.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CEBFA141760EF8B00FFA4F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */,
+				4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */,
+				4CEBFA1D1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */,
+				4CEBFA201760EF8B00FFA4F4 /* liblibTdsClient.a in Frameworks */,
+				4CEBFA3F176110A200FFA4F4 /* libsybdb.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4CEBF9FE1760EF8B00FFA4F4 = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA0C1760EF8B00FFA4F4 /* libTdsClient */,
+				4CEBFA211760EF8B00FFA4F4 /* libTdsClientTests */,
+				4CEBFA091760EF8B00FFA4F4 /* Frameworks */,
+				4CEBFA081760EF8B00FFA4F4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CEBFA081760EF8B00FFA4F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */,
+				4CEBFA181760EF8B00FFA4F4 /* libTdsClientTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CEBFA091760EF8B00FFA4F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA3C1761108600FFA4F4 /* freetds */,
+				4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */,
+				4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */,
+				4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CEBFA0C1760EF8B00FFA4F4 /* libTdsClient */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA3B1760EF9E00FFA4F4 /* TdsClientLibrary */,
+				4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */,
+				4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */,
+				4CEBFA0D1760EF8B00FFA4F4 /* Supporting Files */,
+			);
+			path = libTdsClient;
+			sourceTree = "<group>";
+		};
+		4CEBFA0D1760EF8B00FFA4F4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA0E1760EF8B00FFA4F4 /* libTdsClient-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CEBFA211760EF8B00FFA4F4 /* libTdsClientTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA271760EF8B00FFA4F4 /* libTdsClientTests.h */,
+				4CEBFA281760EF8B00FFA4F4 /* libTdsClientTests.m */,
+				4CEBFA221760EF8B00FFA4F4 /* Supporting Files */,
+			);
+			path = libTdsClientTests;
+			sourceTree = "<group>";
+		};
+		4CEBFA221760EF8B00FFA4F4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA231760EF8B00FFA4F4 /* libTdsClientTests-Info.plist */,
+				4CEBFA241760EF8B00FFA4F4 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CEBFA3B1760EF9E00FFA4F4 /* TdsClientLibrary */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = TdsClientLibrary;
+			sourceTree = "<group>";
+		};
+		4CEBFA3C1761108600FFA4F4 /* freetds */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA40176110CE00FFA4F4 /* include */,
+				4CEBFA3D176110A200FFA4F4 /* libsybdb.a */,
+			);
+			name = freetds;
+			sourceTree = "<group>";
+		};
+		4CEBFA40176110CE00FFA4F4 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4CEBFA41176110CE00FFA4F4 /* bkpublic.h */,
+				4CEBFA42176110CE00FFA4F4 /* cspublic.h */,
+				4CEBFA43176110CE00FFA4F4 /* cstypes.h */,
+				4CEBFA44176110CE00FFA4F4 /* ctpublic.h */,
+				4CEBFA45176110CF00FFA4F4 /* odbcss.h */,
+				4CEBFA46176110CF00FFA4F4 /* sqldb.h */,
+				4CEBFA47176110CF00FFA4F4 /* sqlfront.h */,
+				4CEBFA48176110CF00FFA4F4 /* sybdb.h */,
+				4CEBFA49176110CF00FFA4F4 /* syberror.h */,
+				4CEBFA4A176110CF00FFA4F4 /* sybfront.h */,
+				4CEBFA4B176110CF00FFA4F4 /* tds_sysdep_public.h */,
+			);
+			name = include;
+			path = ../../StaticLibraries/freetds/Fat/include;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4CEBFA061760EF8B00FFA4F4 /* libTdsClient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CEBFA2C1760EF8B00FFA4F4 /* Build configuration list for PBXNativeTarget "libTdsClient" */;
+			buildPhases = (
+				4CEBFA031760EF8B00FFA4F4 /* Sources */,
+				4CEBFA041760EF8B00FFA4F4 /* Frameworks */,
+				4CEBFA051760EF8B00FFA4F4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libTdsClient;
+			productName = libTdsClient;
+			productReference = 4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4CEBFA171760EF8B00FFA4F4 /* libTdsClientTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CEBFA2F1760EF8B00FFA4F4 /* Build configuration list for PBXNativeTarget "libTdsClientTests" */;
+			buildPhases = (
+				4CEBFA131760EF8B00FFA4F4 /* Sources */,
+				4CEBFA141760EF8B00FFA4F4 /* Frameworks */,
+				4CEBFA151760EF8B00FFA4F4 /* Resources */,
+				4CEBFA161760EF8B00FFA4F4 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CEBFA1F1760EF8B00FFA4F4 /* PBXTargetDependency */,
+			);
+			name = libTdsClientTests;
+			productName = libTdsClientTests;
+			productReference = 4CEBFA181760EF8B00FFA4F4 /* libTdsClientTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4CEBF9FF1760EF8B00FFA4F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+			};
+			buildConfigurationList = 4CEBFA021760EF8B00FFA4F4 /* Build configuration list for PBXProject "libTdsClient" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4CEBF9FE1760EF8B00FFA4F4;
+			productRefGroup = 4CEBFA081760EF8B00FFA4F4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4CEBFA061760EF8B00FFA4F4 /* libTdsClient */,
+				4CEBFA171760EF8B00FFA4F4 /* libTdsClientTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CEBFA151760EF8B00FFA4F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CEBFA261760EF8B00FFA4F4 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CEBFA161760EF8B00FFA4F4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CEBFA031760EF8B00FFA4F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CEBFA121760EF8B00FFA4F4 /* MTTdsClient.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CEBFA131760EF8B00FFA4F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CEBFA291760EF8B00FFA4F4 /* libTdsClientTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CEBFA1F1760EF8B00FFA4F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CEBFA061760EF8B00FFA4F4 /* libTdsClient */;
+			targetProxy = 4CEBFA1E1760EF8B00FFA4F4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4CEBFA241760EF8B00FFA4F4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CEBFA251760EF8B00FFA4F4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4CEBFA2A1760EF8B00FFA4F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VALID_ARCHS = armv7;
+			};
+			name = Debug;
+		};
+		4CEBFA2B1760EF8B00FFA4F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
+			};
+			name = Release;
+		};
+		4CEBFA2D1760EF8B00FFA4F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libTdsClient.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4CEBFA2E1760EF8B00FFA4F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libTdsClient.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4CEBFA301760EF8B00FFA4F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				INFOPLIST_FILE = "libTdsClientTests/libTdsClientTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4CEBFA311760EF8B00FFA4F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				INFOPLIST_FILE = "libTdsClientTests/libTdsClientTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CEBFA021760EF8B00FFA4F4 /* Build configuration list for PBXProject "libTdsClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CEBFA2A1760EF8B00FFA4F4 /* Debug */,
+				4CEBFA2B1760EF8B00FFA4F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CEBFA2C1760EF8B00FFA4F4 /* Build configuration list for PBXNativeTarget "libTdsClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CEBFA2D1760EF8B00FFA4F4 /* Debug */,
+				4CEBFA2E1760EF8B00FFA4F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CEBFA2F1760EF8B00FFA4F4 /* Build configuration list for PBXNativeTarget "libTdsClientTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CEBFA301760EF8B00FFA4F4 /* Debug */,
+				4CEBFA311760EF8B00FFA4F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4CEBF9FF1760EF8B00FFA4F4 /* Project object */;
+}
