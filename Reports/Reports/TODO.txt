@@ -45,3 +45,4 @@ Future
     Expand report elements to add a chart type.
     Expand data model to hold a dashboad type as it now holds a report type.
     Add the ability to save queries for KPI's.
+

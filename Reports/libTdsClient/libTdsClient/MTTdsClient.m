@@ -124,8 +124,11 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
     if (error == nil) {
         
         dbcmd(dbconn,
-              "SELECT NDB_No, FdGrp_Cd, Long_Desc, Pro_factor, Fat_Factor, N_Factor, TestBigInt, TestBinary50, TestBit, TestChar, TestDate, TestDateTime, TestDateTime2, TestDateTimeOffset, TestDecimal, TestFloat, TestGeography, TestGeometry, TestHierarchyId, TestImage, TestInt, TestMoney, TestNChar, TestNText, TestNumeric, TestNVarChar50, TestNVarCharMax, TestReal, TestSmallDateTime, TestSmallInt, TestSmallMoney, TestSqlVariant, TestText, TestTime, TestTimestamp, TestTinyInt, TestXml FROM food_des");
+              "SELECT NDB_No, FdGrp_Cd, Long_Desc, Pro_factor, Fat_Factor, N_Factor, TestNumeric2, TestDecimal FROM food_des");
         
+        /*
+         , TestBigInt, TestBinary50, TestBit, TestChar, TestDate, TestDateTime, TestDateTime2, TestDateTimeOffset, TestDecimal, TestFloat, TestHierarchyId, TestImage, TestInt, TestMoney, TestNChar, TestNText, TestNumeric2, TestNVarChar50, TestNVarCharMax, TestReal, TestSmallDateTime, TestSmallInt, TestSmallMoney, TestSqlVariant, TestText, TestTime, TestTimestamp, TestTinyInt, TestXml
+         */
         success = dbsqlexec(dbconn);
         
         if (success != SUCCEED) {
@@ -224,36 +227,48 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                 char *columnName        = dbcolname(dbconn, columnOffsetCtr);
                 
                 NSNumber *columnNumber = [[NSNumber alloc] initWithInt:columnCtr];
+                
                 NSNumber *columnTypeNumber = [[NSNumber alloc] initWithInt:columnType];
                 NSString *columnNameString = [[NSString alloc] initWithCString:columnName
                                                                       encoding:NSStringEncodingConversionAllowLossy];
                 
                 
                 NSNumber *columnDataLen = [[NSNumber alloc] initWithInteger:columnNumberBytes];
-                NSNumber *columTypeKey = @(columnType);
+                NSNumber *columTypeKey = [@(columnType) retain];
                 NSInteger columnIndexOfType = [[counters objectForKey:columTypeKey] integerValue];
                 
                 NSNumber *columnIndexOfTypeNumber = [[NSNumber alloc] initWithInteger:columnIndexOfType];
                 NSNumber *columnLen = [[NSNumber alloc] initWithInteger: columnLength];
-                NSDictionary *dictionary = @{MTDatabaseColumnTypeId : columnTypeNumber,
-                                             MTDatabaseColumnNameId : columnNameString,
-                                             MTDatabaseColumnNumberId : columnNumber,
-                                             MTDatabaseColumnDataLenId :columnDataLen,
-                                             MTDatabaseColumnIndexOfType: columnIndexOfTypeNumber,
-                                             MTDatabaseColumnLenId: columnLen};
-                columnIndexOfType++;
-                [counters setObject:@(columnIndexOfType) forKey:columTypeKey];
                 
-                [dictionary retain];
+                NSDictionary *dictionary = [[NSDictionary alloc] initWithDictionary:@{MTDatabaseColumnTypeId : columnTypeNumber,             //Type
+                                             MTDatabaseColumnNameId : columnNameString,             //Name
+                                             MTDatabaseColumnNumberId : columnNumber,               //Index
+                                             MTDatabaseColumnDataLenId :columnDataLen,              //Data length
+                                             MTDatabaseColumnIndexOfType: columnIndexOfTypeNumber,  //Index of type
+                                             MTDatabaseColumnLenId: columnLen}];                     //Column lenght
+                
+                
                 [colmunHolder addObject:dictionary];
+                
                 [dictionary release];
 
+                
+                columnIndexOfType++;
+                
+                NSNumber *n = [@(columnIndexOfType) retain];
+                [counters setObject:n forKey:columTypeKey];
+                [n release];
+                
                 [columnLen release];
                 [columnIndexOfTypeNumber release];
                 [columnNameString release];
                 [columnTypeNumber release];
+                
                 [columnNumber release];
+
                 [columnDataLen release];
+                
+                [columTypeKey release];
             }
         }
         
@@ -297,9 +312,11 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
             
             resultCountForType = [[counters objectForKey:@(SYBNUMERIC)] integerValue];
             DBNUMERIC *sybNumericBind[resultCountForType];
+            DBINT sybNumericBindNull[resultCountForType];
 
             resultCountForType = [[counters objectForKey:@(SYBDECIMAL)] integerValue];
             DBDECIMAL *sybDecimalBind[resultCountForType];
+            DBINT sybDecimalBindNull[resultCountForType];
 
             resultCountForType = [[counters objectForKey:@(SYBFLTN)] integerValue];
             double sybFltNBind[resultCountForType];
@@ -391,7 +408,7 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                         
                     case SYBNVARCHAR:
                         sybnVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                        dbbind(dbconn, columnOffsetNumber, SYBNVARCHAR, columnLength, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+                        dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybnVarCharBind[columnIndexOfType]);
                         break;
                         
                     case SYBINTN:
@@ -423,31 +440,35 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                         dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybRealBind[columnIndexOfType]);
                         break;
                     case SYBNUMERIC: {
-                        size_t s = sizeof(DBDECIMAL);
-                        sybNumericBind[columnIndexOfType] = malloc(s);
+                        size_t s = sizeof(DBNUMERIC);
+                        sybNumericBind[columnIndexOfType] = (DBDECIMAL *) calloc(1, s);
+                        memset(sybNumericBind[columnIndexOfType], 0, sizeof(*sybNumericBind[columnIndexOfType]));
                         dbbind(dbconn, columnOffsetNumber, NUMERICBIND, s, (BYTE *)sybNumericBind[columnIndexOfType]);
+                        dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
                         break;
                     }
                     case SYBDECIMAL: {
                         size_t s = sizeof(DBDECIMAL);
-                        sybDecimalBind[columnIndexOfType] = malloc(s);
+                        sybDecimalBind[columnIndexOfType] = (DBDECIMAL *) calloc(1, s);
+                        memset(sybDecimalBind[columnIndexOfType], 0, sizeof(*sybDecimalBind[columnIndexOfType]));
                         dbbind(dbconn, columnOffsetNumber, DECIMALBIND, s, (BYTE *)sybDecimalBind[columnIndexOfType]);
+                        dbnullbind(dbconn, columnOffsetNumber, &sybDecimalBindNull[columnIndexOfType]);
                         break;
                     }
                     case SYBFLTN:
                         dbbind(dbconn, columnOffsetNumber, FLT8BIND, columnLength, (BYTE *)&sybFltNBind[columnIndexOfType]);
                         break;
                     case SYBMONEYN:
-                        sybMoneyNBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
-                        dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
+                        //sybMoneyNBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
+                        //dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
                         break;
                     case SYBMONEY4:
-                        sybMoney4Bind[columnIndexOfType] = malloc(sizeof(DBMONEY4));
-                        dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)sybMoney4Bind[columnIndexOfType]);
+                        //sybMoney4Bind[columnIndexOfType] = malloc(sizeof(DBMONEY4));
+                        //dbbind(dbconn, columnOffsetNumber, MONEYBIND, columnLength, (BYTE *)sybMoney4Bind[columnIndexOfType]);
                         break;
                     case SYBMONEY:
-                        sybMoneyBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
-                        dbbind(dbconn, columnOffsetNumber, SMALLMONEYBIND, columnLength, (BYTE *)sybMoneyBind[columnIndexOfType]);
+                        //sybMoneyBind[columnIndexOfType] = malloc(sizeof(DBMONEY));
+                        //dbbind(dbconn, columnOffsetNumber, SMALLMONEYBIND, columnLength, (BYTE *)sybMoneyBind[columnIndexOfType]);
                         break;
                         
                     case SYBDATETIME:
@@ -491,7 +512,7 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                 /* do RowByAgonizingRow processing */
                 
                 for (NSDictionary *columnMetaData in colmunHolder) {
-                    
+                    [columnMetaData retain];
                     /*
                      NSDictionary *dictionary = @{MTDatabaseColumnTypeId : columnTypeNumber,
                      MTDatabaseColumnNameId : columnNameString,
@@ -499,11 +520,14 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                      MTDatabaseColumnDataLenId :columnDataLen,
                      MTDatabaseColumnIndexOfType: columnIndexOfTypeNumber};
                      */
-                    NSInteger indexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] integerValue];
+                    NSLog(@"%@", columnMetaData);
                     
-                    NSString *fieldName = [columnMetaData objectForKey:MTDatabaseColumnNameId];
+                    int indexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
                     
-                    NSInteger columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] integerValue];
+                    NSString *fieldName = [[columnMetaData objectForKey:MTDatabaseColumnNameId] retain];
+                    
+                    NSInteger columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
+                    NSInteger columnLength = [[columnMetaData objectForKey:MTDatabaseColumnLenId] intValue];
                     
                     switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
                             
@@ -736,25 +760,73 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                             break;
                         }
                         case SYBNUMERIC: {
-                            DBNUMERIC *decimalNumber = sybDecimalBind[indexOfType];
-                            //NSNumber *object = [[NSNumber alloc] initWithDouble:sybNumericBind[indexOfType]];
-                            //NSLog(@"%@\t\t(SYBNUMERIC):\t\t%@", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], object);
-                            //[resultsForRow setObject:object forKey:fieldName];
-                            //[object release];
+                            DBNUMERIC *decimalNumber = sybNumericBind[indexOfType];
+                            if (sybNumericBindNull[indexOfType] != -1) {
+                                double d =  0;
+                                DBINT len = dbconvert_ps(NULL, SYBNUMERIC, (BYTE *)decimalNumber, sizeof(DBNUMERIC), SYBFLT8, (BYTE *)&d, sizeof(double), NULL);
+                                if (len == FAIL) {
+                                    [resultsForRow setObject:@"NAN" forKey:fieldName];
+                                } else {
+                                    //                                NSNumber *n = [@(d) retain];
+                                    //                                [resultsForRow setObject:n forKey:fieldName];
+                                    //                                [n release];
+                                    NSLog(@"%f", d);
+                                }
+                                NSLog(@"%@\t\t(SYBDECIMAL):\t\t(%hhu,%hhu)->%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], decimalNumber->precision, decimalNumber->scale, decimalNumber->array);
+                            } else {
+                                [resultsForRow setObject:@"NULL" forKey:fieldName];
+                            }
                             break;
                         }
+                            
                         case SYBDECIMAL: {
                             DBDECIMAL *decimalNumber = sybDecimalBind[indexOfType];
-                            double d =  0;
-                            DBINT len = dbconvert_ps(NULL, SYBDECIMAL, (BYTE *)decimalNumber, sizeof(DBDECIMAL), SYBFLT8, (BYTE *)&d, sizeof(double), NULL);
-                            if (len == FAIL) {
-                                [resultsForRow setObject:@"NAN" forKey:fieldName];
+                            if (sybNumericBindNull[indexOfType] != -1) {
+                                
+                                //This is the biggest datatype, and the database can hold values so large that it
+                                //  will crash out the convert function, and not be able to store as NSNumber.
+                                
+                                //There are two ways to store this.  NSNumber is better, but may be more risky in small cases.
+                                
+                                //NSString may be a more safe way to store, but less useful now.  If storing large numbers, they
+                                //  will likley need to be flagged as DECIMAL type, stored as a string, and converted for math
+                                //  operations.  That sucks, so lets do number for now until we think we should do it some other way.
+                                
+                                if (YES) {
+
+                                    double d =  0.0;
+                                    DBINT len = dbconvert_ps(NULL, SYBDECIMAL, (BYTE *)decimalNumber, sizeof(DBDECIMAL), SYBFLT8, (BYTE *)&d, sizeof(double), NULL);
+                                    if (len == FAIL) {
+                                        [resultsForRow setObject:@"NAN" forKey:fieldName];
+                                    } else {
+                                        NSNumber *n = [@(d) retain];
+                                        [resultsForRow setObject:n forKey:fieldName];
+                                        [n release];
+                                    }
+                                    NSLog(@"%@\t\t(SYBDECIMAL):\t\t(%hhu,%hhu)->%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], decimalNumber->precision, decimalNumber->scale, decimalNumber->array);
+                                    
+                                } else {
+                                    
+                                    size_t s = sizeof(char) * ( columnLength + 1 );
+                                    char c[s];
+                                    DBINT len = dbconvert_ps(NULL, SYBDECIMAL, (BYTE *)decimalNumber, sizeof(DBDECIMAL), SYBTEXT, (BYTE *)c, -1, NULL);
+                                    NSLog(@"%s", c);
+                                    NSString *numericString = [[NSString alloc] initWithCString:c encoding:NSStringEncodingConversionAllowLossy];
+                                    NSLog(@"%@", numericString);
+                                    if (len == FAIL) {
+                                        [resultsForRow setObject:@"NAN" forKey:fieldName];
+                                    } else {
+                                        [resultsForRow setObject:numericString forKey:fieldName];
+                                    }
+                                    [numericString release];
+                                    NSLog(@"%@\t\t(SYBDECIMAL):\t\t(%hhu,%hhu)->%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], decimalNumber->precision, decimalNumber->scale, decimalNumber->array);
+                                }
+                                
                             } else {
-                                NSNumber *n = [@(d) retain];
-                                [resultsForRow setObject:n forKey:fieldName];
-                                [n release];
+                                
+                                [resultsForRow setObject:@"NULL" forKey:fieldName];
+
                             }
-                            NSLog(@"%@\t\t(SYBDECIMAL):\t\t(%hhu,%hhu)->%s", [fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))], decimalNumber->precision, decimalNumber->scale, decimalNumber->array);
                             break;
                         }
                             
@@ -769,6 +841,9 @@ NSString * const MTDatabaseKeyAppName                               = @"MTDataba
                         default:
                             break;
                     }
+                    
+                    [fieldName release];
+                    [columnMetaData release];
                 }
             }
             
