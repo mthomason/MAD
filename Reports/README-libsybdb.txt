@@ -1,0 +1,1 @@
+This is for Free TDS, which should render SQL Server.
