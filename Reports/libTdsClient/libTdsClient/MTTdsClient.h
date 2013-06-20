@@ -12,14 +12,14 @@
 #include "sybdb.h"
 
 @interface MTTdsClient : NSObject
-
+/*
 extern NSString * const MTDatabaseUsernameKey;
 extern NSString * const MTDatabasePasswordKey;
 extern NSString * const MTDatabaseDatabaseKey;
 extern NSString * const MTDatabasePortKey;
 extern NSString * const MTDatabaseHostKey;
 extern NSString * const MTDatabaseKeyAppName;
-
+*/
 - (id)initWithCredentals:(NSDictionary *)credentals;
 - (id)runQuery:(NSString *)sql;
 

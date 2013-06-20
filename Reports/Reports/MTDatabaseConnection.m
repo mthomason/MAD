@@ -8,6 +8,9 @@
 
 #import "MTDatabaseConnection.h"
 
+// FIXME: No constant provided by iOS.
+NSString *const MTBundleDisplayName = @"CFBundleDisplayName";
+
 @implementation MTDatabaseConnection
 
 - (void)dealloc {
@@ -15,7 +18,12 @@
     [_password release];
     [_server release];
     [_database release];
+    [_server release];
     [super dealloc];
+}
+
+- (NSString *)appname {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];;
 }
 
 @end

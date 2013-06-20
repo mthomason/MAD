@@ -2,7 +2,7 @@
 //  RptqUserCredentals.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/13/13.
+//  Created by Michael Thomason on 6/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -27,6 +27,12 @@
 @property (nonatomic, retain) NSString * sf_login_redirect_uri;
 @property (nonatomic, retain) NSString * sf_password;
 @property (nonatomic, retain) NSString * sf_username;
+@property (nonatomic, retain) NSString * tds_username;
+@property (nonatomic, retain) NSString * tds_password;
+@property (nonatomic, retain) NSString * tds_database;
+@property (nonatomic, retain) NSString * tds_server;
+@property (nonatomic, retain) NSString * tds_host;
+@property (nonatomic, retain) NSNumber * tds_port;
 @property (nonatomic, retain) RptqDatabase *inDatabase;
 
 @end

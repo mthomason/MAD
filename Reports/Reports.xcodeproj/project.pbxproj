@@ -609,6 +609,11 @@
 		4C515ED7174134960004A664 /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */; };
 		4C515ED8174134960004A664 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C515ED9174134960004A664 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
+		4C517B4217716C6E00AA44FB /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */; };
+		4C517B4317716C6E00AA44FB /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */; };
+		4C517B4417716C6E00AA44FB /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */; };
+		4C517B4517716C6E00AA44FB /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */; };
+		4C517B4617716C6E00AA44FB /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */; };
 		4C5625E01758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5625E11758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
 		4C5625E21758A17F00433E88 /* CloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* CloudManager.m */; };
@@ -762,6 +767,12 @@
 		4C8155C517009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */; };
 		4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C71700C90700D5330E /* MTGroupByViewController.m */; };
 		4C8155C91700C90700D5330E /* MTGroupByViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C71700C90700D5330E /* MTGroupByViewController.m */; };
+		4C81BB94176F644200E7B98C /* File in Resources */ = {isa = PBXBuildFile; fileRef = 4C81BB93176F644200E7B98C /* File */; };
+		4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
+		4C81BB9C1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
+		4C81BB9D1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
+		4C81BB9E1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
+		4C81BB9F1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
 		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C85C6AA14FF72F3003785AC /* MTReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MTReportViewerViewController.m */; };
@@ -973,11 +984,6 @@
 		4C8BA8FC1741666200B646E2 /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA8F91741666200B646E2 /* RptqQueryCache.m */; };
 		4C8BA8FD1741666200B646E2 /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA8F91741666200B646E2 /* RptqQueryCache.m */; };
 		4C8BA8FE1741666200B646E2 /* RptqQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA8F91741666200B646E2 /* RptqQueryCache.m */; };
-		4C8BA9081741666300B646E2 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9071741666300B646E2 /* RptqUserCredentals.m */; };
-		4C8BA9091741666300B646E2 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9071741666300B646E2 /* RptqUserCredentals.m */; };
-		4C8BA90A1741666300B646E2 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9071741666300B646E2 /* RptqUserCredentals.m */; };
-		4C8BA90B1741666300B646E2 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9071741666300B646E2 /* RptqUserCredentals.m */; };
-		4C8BA90C1741666300B646E2 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA9071741666300B646E2 /* RptqUserCredentals.m */; };
 		4C8BA90F1741666300B646E2 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA90E1741666300B646E2 /* RptqQuerySort.m */; };
 		4C8BA9101741666300B646E2 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA90E1741666300B646E2 /* RptqQuerySort.m */; };
 		4C8BA9111741666300B646E2 /* RptqQuerySort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA90E1741666300B646E2 /* RptqQuerySort.m */; };
@@ -2148,6 +2154,8 @@
 		4C50DF8E16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageViewController.m; sourceTree = "<group>"; };
 		4C50DF9116B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
+		4C517B4017716C6E00AA44FB /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
+		4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
 		4C5482741672D4A800CA24EB /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = Reports/TODO.txt; sourceTree = "<group>"; };
 		4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentCellProtocol.h; sourceTree = "<group>"; };
 		4C5625DE1758A17D00433E88 /* CloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudManager.h; sourceTree = "<group>"; };
@@ -2198,19 +2206,19 @@
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4C6DAA421761AEE000FF770A /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = bkpublic.h; sourceTree = "<group>"; };
-		4C6DAA431761AEE000FF770A /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = cspublic.h; sourceTree = "<group>"; };
-		4C6DAA441761AEE000FF770A /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = cstypes.h; sourceTree = "<group>"; };
-		4C6DAA451761AEE000FF770A /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = ctpublic.h; sourceTree = "<group>"; };
-		4C6DAA461761AEE000FF770A /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = odbcss.h; sourceTree = "<group>"; };
-		4C6DAA471761AEE000FF770A /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sqldb.h; sourceTree = "<group>"; };
-		4C6DAA481761AEE000FF770A /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sqlfront.h; sourceTree = "<group>"; };
-		4C6DAA491761AEE000FF770A /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sybdb.h; sourceTree = "<group>"; };
-		4C6DAA4A1761AEE000FF770A /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = syberror.h; sourceTree = "<group>"; };
-		4C6DAA4B1761AEE000FF770A /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = sybfront.h; sourceTree = "<group>"; };
-		4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = tds_sysdep_public.h; sourceTree = "<group>"; };
-		4C6DAA4E1761AEE000FF770A /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libsybdb.a; path = ../../StaticLibraries/freetds/Fat/lib/libsybdb.a; sourceTree = "<group>"; };
-		4C6DAA921761AF7500FF770A /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = MTTdsClient.h; path = libTdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
+		4C6DAA421761AEE000FF770A /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
+		4C6DAA431761AEE000FF770A /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
+		4C6DAA441761AEE000FF770A /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
+		4C6DAA451761AEE000FF770A /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
+		4C6DAA461761AEE000FF770A /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
+		4C6DAA471761AEE000FF770A /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
+		4C6DAA481761AEE000FF770A /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
+		4C6DAA491761AEE000FF770A /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
+		4C6DAA4A1761AEE000FF770A /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
+		4C6DAA4B1761AEE000FF770A /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
+		4C6DAA4C1761AEE000FF770A /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+		4C6DAA4E1761AEE000FF770A /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../StaticLibraries/freetds/Fat/lib/libsybdb.a; sourceTree = "<group>"; };
+		4C6DAA921761AF7500FF770A /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MTTdsClient.h; path = libTdsClient/libTdsClient/MTTdsClient.h; sourceTree = "<group>"; };
 		4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewCellDocument.h; sourceTree = "<group>"; };
 		4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellDocument.m; sourceTree = "<group>"; };
 		4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
@@ -2241,6 +2249,9 @@
 		4C8155C317009E7000D5330E /* MTAggregateFunctionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAggregateFunctionsViewController.m; sourceTree = "<group>"; };
 		4C8155C61700C90600D5330E /* MTGroupByViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGroupByViewController.h; sourceTree = "<group>"; };
 		4C8155C71700C90700D5330E /* MTGroupByViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGroupByViewController.m; sourceTree = "<group>"; };
+		4C81BB93176F644200E7B98C /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
+		4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSqlServer.h; sourceTree = "<group>"; };
+		4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSqlServer.m; sourceTree = "<group>"; };
 		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
 		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -2273,8 +2284,6 @@
 		4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTResizeHandleView.m; sourceTree = "<group>"; };
 		4C8BA8F81741666200B646E2 /* RptqQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQueryCache.h; sourceTree = "<group>"; };
 		4C8BA8F91741666200B646E2 /* RptqQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQueryCache.m; sourceTree = "<group>"; };
-		4C8BA9061741666300B646E2 /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
-		4C8BA9071741666300B646E2 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
 		4C8BA90D1741666300B646E2 /* RptqQuerySort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqQuerySort.h; sourceTree = "<group>"; };
 		4C8BA90E1741666300B646E2 /* RptqQuerySort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuerySort.m; sourceTree = "<group>"; };
 		4C8BA9141741666400B646E2 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
@@ -3186,6 +3195,8 @@
 				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
 				4CF2F2711754F8F200DC34E3 /* MTPaper.h */,
 				4CF2F2721754F8F200DC34E3 /* MTPaper.m */,
+				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
+				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -3327,10 +3338,10 @@
 			children = (
 				4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */,
 				4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */,
-				4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */,
-				4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */,
 				4CE8A04714C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.h */,
 				4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */,
+				4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */,
+				4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */,
 			);
 			name = "Database Driver Setup";
 			path = Reports;
@@ -3339,6 +3350,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C81BB93176F644200E7B98C /* File */,
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
 				4C752E0B16EA3A0C001FDAA3 /* README-libmysqlclient.txt */,
 				4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */,
@@ -3548,6 +3560,8 @@
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
 			isa = PBXGroup;
 			children = (
+				4C517B4017716C6E00AA44FB /* RptqUserCredentals.h */,
+				4C517B4117716C6E00AA44FB /* RptqUserCredentals.m */,
 				4CF2F26A17525A1800DC34E3 /* RptqDocumentSectionRows.h */,
 				4CF2F26B17525A1800DC34E3 /* RptqDocumentSectionRows.m */,
 				4CF2F26317525A1700DC34E3 /* RptqDocumentSection.h */,
@@ -3584,8 +3598,6 @@
 				4C8BA9151741666400B646E2 /* RptqDocumentObject.m */,
 				4C8BA90D1741666300B646E2 /* RptqQuerySort.h */,
 				4C8BA90E1741666300B646E2 /* RptqQuerySort.m */,
-				4C8BA9061741666300B646E2 /* RptqUserCredentals.h */,
-				4C8BA9071741666300B646E2 /* RptqUserCredentals.m */,
 				4C8BA8F81741666200B646E2 /* RptqQueryCache.h */,
 				4C8BA8F91741666200B646E2 /* RptqQueryCache.m */,
 				4CB457581705F6DB005269B7 /* RptqDocumentObjectGroupKey.h */,
@@ -5447,6 +5459,7 @@
 				4C6DAA821761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA871761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */,
+				4C81BB94176F644200E7B98C /* File in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5779,7 +5792,6 @@
 				4C6C9B281733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
 				4CB53B4C17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
 				4C8BA8FB1741666200B646E2 /* RptqQueryCache.m in Sources */,
-				4C8BA9091741666300B646E2 /* RptqUserCredentals.m in Sources */,
 				4C8BA9101741666300B646E2 /* RptqQuerySort.m in Sources */,
 				4C8BA9171741666400B646E2 /* RptqDocumentObject.m in Sources */,
 				4C8BA9251741666400B646E2 /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -5809,6 +5821,8 @@
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C81BB9C1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
+				4C517B4317716C6E00AA44FB /* RptqUserCredentals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5983,7 +5997,6 @@
 				4C515EBE1741348F0004A664 /* UIView+Animations.m in Sources */,
 				4C515EBF1741348F0004A664 /* UIDevice+Hack.m in Sources */,
 				4C8BA8FD1741666200B646E2 /* RptqQueryCache.m in Sources */,
-				4C8BA90B1741666300B646E2 /* RptqUserCredentals.m in Sources */,
 				4C8BA9121741666300B646E2 /* RptqQuerySort.m in Sources */,
 				4C8BA9191741666400B646E2 /* RptqDocumentObject.m in Sources */,
 				4C8BA9271741666400B646E2 /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -6012,6 +6025,8 @@
 				4C5626061759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C81BB9E1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
+				4C517B4517716C6E00AA44FB /* RptqUserCredentals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6186,7 +6201,6 @@
 				4C515EB91741348E0004A664 /* UIView+Animations.m in Sources */,
 				4C515EBA1741348E0004A664 /* UIDevice+Hack.m in Sources */,
 				4C8BA8FC1741666200B646E2 /* RptqQueryCache.m in Sources */,
-				4C8BA90A1741666300B646E2 /* RptqUserCredentals.m in Sources */,
 				4C8BA9111741666300B646E2 /* RptqQuerySort.m in Sources */,
 				4C8BA9181741666400B646E2 /* RptqDocumentObject.m in Sources */,
 				4C8BA9261741666400B646E2 /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -6215,6 +6229,8 @@
 				4C5626051759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C81BB9D1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
+				4C517B4417716C6E00AA44FB /* RptqUserCredentals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6392,7 +6408,6 @@
 				4C6C9B271733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
 				4CB53B4B17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
 				4C8BA8FA1741666200B646E2 /* RptqQueryCache.m in Sources */,
-				4C8BA9081741666300B646E2 /* RptqUserCredentals.m in Sources */,
 				4C8BA90F1741666300B646E2 /* RptqQuerySort.m in Sources */,
 				4C8BA9161741666400B646E2 /* RptqDocumentObject.m in Sources */,
 				4C8BA9241741666400B646E2 /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -6422,6 +6437,8 @@
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
+				4C517B4217716C6E00AA44FB /* RptqUserCredentals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6596,7 +6613,6 @@
 				4C515ED8174134960004A664 /* UIView+Animations.m in Sources */,
 				4C515ED9174134960004A664 /* UIDevice+Hack.m in Sources */,
 				4C8BA8FE1741666200B646E2 /* RptqQueryCache.m in Sources */,
-				4C8BA90C1741666300B646E2 /* RptqUserCredentals.m in Sources */,
 				4C8BA9131741666300B646E2 /* RptqQuerySort.m in Sources */,
 				4C8BA91A1741666400B646E2 /* RptqDocumentObject.m in Sources */,
 				4C8BA9281741666400B646E2 /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -6625,6 +6641,8 @@
 				4C5626071759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C81BB9F1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
+				4C517B4617716C6E00AA44FB /* RptqUserCredentals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

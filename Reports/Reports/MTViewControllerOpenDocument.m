@@ -343,7 +343,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
-        if ([UIDevice isPad] == YES) {
+        if ([UIDevice isPad]) {
             shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
             [self setShouldShowAddDocumentPopover:NO];
             [[self buttonAddNewDocument] setEnabled:NO];

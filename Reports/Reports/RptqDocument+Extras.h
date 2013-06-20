@@ -15,8 +15,10 @@
 #import "Constants.h"
 #import "RptqQuery.h"
 #import "RptqDocumentSection+Extras.h"
+
 #import "MTDatabaseSalesForce.h"
 #import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
 
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"

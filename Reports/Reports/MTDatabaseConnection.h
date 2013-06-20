@@ -17,7 +17,10 @@
 @property (copy) NSString *password;
 @property (copy) NSString *server;
 @property (copy) NSString *database;
+@property (copy) NSString *host;
 @property (assign) NSInteger port;
+
+- (NSString *)appname;
 
 @end
 

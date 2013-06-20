@@ -161,7 +161,7 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MNSSegueShowSql]) {
-        if ([UIDevice isPad] == YES && [self showSqlIsVisable]) {
+        if ([UIDevice isPad] && [self showSqlIsVisable]) {
             shouldPerformSegueWithIdentifier = NO;
             [[self showSqlPopoverController] dismissPopoverAnimated:YES];
             [self setShowSqlIsVisable:NO];

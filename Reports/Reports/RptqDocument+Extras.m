@@ -213,14 +213,26 @@
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
         if (connectionSettings != nil) {
-            [userCredentals setMysql_host:[connectionSettings server]];
-            [userCredentals setMysql_database:[connectionSettings database]];
-            [userCredentals setMysql_port:@([connectionSettings port])];
-            [userCredentals setMysql_username:[connectionSettings username]];
-            [userCredentals setMysql_password:[connectionSettings password]];
+            [userCredentals setMysql_host:      [connectionSettings server]];
+            [userCredentals setMysql_database:  [connectionSettings database]];
+            [userCredentals setMysql_port:    @([connectionSettings port])];
+            [userCredentals setMysql_username:  [connectionSettings username]];
+            [userCredentals setMysql_password:  [connectionSettings password]];
         }
+
     } else if ([[database identifier] isEqualToString:[MTDatabaseSalesForce identifier]]) {
         
+    
+    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+        MTDatabaseConnection *connectionSettings = [database connectionSettings];
+        if (connectionSettings != nil) {
+            [userCredentals setTds_server:      [connectionSettings server]];
+            [userCredentals setTds_host:        [connectionSettings server]];
+            [userCredentals setTds_username:    [connectionSettings username]];
+            [userCredentals setTds_password:    [connectionSettings password]];
+            [userCredentals setTds_database:    [connectionSettings database]];
+            [userCredentals setTds_port:      @([connectionSettings port])];
+        }
     }
     
     [rptqDatabase setOwnedByUser: userCredentals];
