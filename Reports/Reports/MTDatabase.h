@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (id)connectionSettings;
 
+- (NSString *)selectPart;
+
 @end
 
 #endif

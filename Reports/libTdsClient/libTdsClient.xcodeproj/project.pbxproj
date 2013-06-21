@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
-		4CEBFA101760EF8B00FFA4F4 /* MTTdsClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */; };
-		4CEBFA121760EF8B00FFA4F4 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */; };
 		4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */; };
 		4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */; };
 		4CEBFA1D1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
@@ -37,7 +35,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				4CEBFA101760EF8B00FFA4F4 /* MTTdsClient.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,8 +44,6 @@
 		4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibTdsClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CEBFA0E1760EF8B00FFA4F4 /* libTdsClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libTdsClient-Prefix.pch"; sourceTree = "<group>"; };
-		4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTTdsClient.h; sourceTree = "<group>"; };
-		4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTTdsClient.m; sourceTree = "<group>"; };
 		4CEBFA181760EF8B00FFA4F4 /* libTdsClientTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libTdsClientTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -129,8 +124,6 @@
 			isa = PBXGroup;
 			children = (
 				4CEBFA3B1760EF9E00FFA4F4 /* TdsClientLibrary */,
-				4CEBFA0F1760EF8B00FFA4F4 /* MTTdsClient.h */,
-				4CEBFA111760EF8B00FFA4F4 /* MTTdsClient.m */,
 				4CEBFA0D1760EF8B00FFA4F4 /* Supporting Files */,
 			);
 			path = libTdsClient;
@@ -296,7 +289,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CEBFA121760EF8B00FFA4F4 /* MTTdsClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

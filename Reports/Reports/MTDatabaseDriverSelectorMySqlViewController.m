@@ -27,6 +27,9 @@
     [_tableViewCellDatabase release];
     [_textFieldDatabase release];
     [_textFieldReportName release];
+    [_databaseType release];
+    [_tableViewCellDocumentName release];
+    [_tableViewCells release];
     [super dealloc];
 }
 
@@ -129,7 +132,12 @@
             [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
             [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
             
-            MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+            id databaseMySql;
+            if ([[self databaseType] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
+                databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+            } else if ([[self databaseType] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
+                databaseMySql = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
+            }
             
             [documentReport addDatasourceToReport: databaseMySql completion: ^(BOOL success, NSError *error) {
                 
@@ -284,16 +292,9 @@
 - (IBAction)done:(id)sender {
     [[self delegate] viewControllerDidFinish: self];
 }
-
-- (IBAction)usernameDidEndOnExit:(id)sender {
-/*    if ([sender isKindOfClass: [UITextField class]]) {
-        [self setInputUsername:[(UITextField *)sender text]];
-    }
-    if ([[self textFieldPassword] canBecomeFirstResponder]) {
-        [[self textFieldPassword] becomeFirstResponder];
-    }*/
-}
-
+- (IBAction)documentNameDidEndOnExit:(id)sender { }
+- (IBAction)schemaDidEndOnExit:(id)sender { }
+- (IBAction)usernameDidEndOnExit:(id)sender { }
 - (IBAction)passwordDidEndOnExit:(id)sender {
     if ([[self textFieldHost] canBecomeFirstResponder]) {
         [[self textFieldHost] becomeFirstResponder];
@@ -323,6 +324,8 @@
 }
 
 - (void)viewDidUnload {
+    [self setTableViewCellDocumentName:nil];
+    [self setTableViewCells:nil];
     [super viewDidUnload];
 }
 @end

@@ -15,6 +15,7 @@
 #import "MTDatabaseConnection.h"
 #import "MTReportDocument.h"
 #import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
 #import "AppDelegate.h"
 #import "NSURL+Document.h"
 #import "MTAlertView.h"
@@ -24,11 +25,15 @@
     <UITableViewDelegate,
         UITextFieldDelegate, UIAlertViewDelegate>
 
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDocumentName;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellUsername;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPassword;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellHost;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellPort;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDatabase;
+
+@property (retain, nonatomic) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+
 
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldUsername;
@@ -37,6 +42,8 @@
 @property (retain, nonatomic) IBOutlet UITextField *textFieldPort;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldDatabase;
 @property (retain, nonatomic) IBOutlet UITextField *textFieldReportName;
+
+@property (nonatomic, copy) NSString *databaseType;
 
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;

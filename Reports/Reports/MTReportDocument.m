@@ -47,9 +47,9 @@
         sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
         [mnsDatabase cacheReportQueryForManagedObjectContext: managedObjectContext completion: ^(MTDatabase *database, RptqQueryCache *cache) {
             
-            [self save: ^(BOOL success) {
+            //[self save: ^(BOOL success) {
                 completion(YES);
-            }];
+            //}];
             
         }];
     } else {

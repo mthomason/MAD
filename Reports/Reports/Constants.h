@@ -156,6 +156,10 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 	MTHorizontalAlignmentNatrual = 4
 };
 
+extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
+extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
+extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
+
 extern NSString * const MTDocumentTypeUtiMad;
 extern NSString * const MTDocumentTypeExtentionMad;
 

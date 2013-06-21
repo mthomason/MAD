@@ -239,7 +239,6 @@
                     [tvc release];
                 }
             }
-            
             [navControl release];
         }
         [[segue destinationViewController] setDelegate:self];
@@ -754,11 +753,13 @@
                     if (deleteSections != nil) {
                         [tableView beginUpdates];
                         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
+                        NSLog(@"Deleted table at %@.", indexPath);
                         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                         [[self activeDocument] saveContext];
                         [tableView endUpdates];
                     } else {
                         [tableView beginUpdates];
+                        NSLog(@"Deleted table at %@.", indexPath);
                         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                         [[self activeDocument] saveContext];
                         [tableView endUpdates];

@@ -11,6 +11,10 @@
 #pragma mark - Customizable Constants
 #pragma mark Common UI Strings
 
+NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier = @"MTSegueShowSetUpDatasourceTdsIdentifier";
+
 NSString * const MTDocumentTypeUtiMad                               = @"com.everydayapps.productivity.mad";
 NSString * const MTDocumentTypeExtentionMad                         = @"mad";
 

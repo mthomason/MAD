@@ -8,13 +8,7 @@
 
 #import "MTDatabaseDriverSelectorViewController.h"
 
-NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
-NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
-NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier = @"MTSegueShowSetUpDatasourceSqlServerIdentifier";
-
 @implementation MTDatabaseDriverSelectorViewController
-
-//@synthesize delegate = _delegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,9 +22,21 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier = @"MTSegueShowSe
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier] ||
-        [[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
+
+    if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
+
         [[segue destinationViewController] setDelegate:self];
+        [(MTDatabaseDriverSelectorMySqlViewController *)[segue destinationViewController] setDatabaseType:MTSegueShowSetUpDatasourceMySqlIdentifier];
+
+    } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
+    
+        [[segue destinationViewController] setDelegate:self];
+        [(MTDatabaseDriverSelectorMySqlViewController *)[segue destinationViewController] setDatabaseType:MTSegueShowSetUpDatasourceSqlServerIdentifier];
+
+    } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
+    
+        [[segue destinationViewController] setDelegate:self];
+
     }
 }
 

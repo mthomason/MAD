@@ -30,8 +30,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     
-    MTTdsClient *tdsClient = [[MTTdsClient alloc] initWithCredentals:nil];
-    [tdsClient runQuery:@""];
+    //MTTdsClient *tdsClient = [[MTTdsClient alloc] initWithCredentals:nil];
+    //[tdsClient runQuery:@""];
     
 
     

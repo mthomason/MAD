@@ -63,7 +63,8 @@
 }
 
 - (NSString *)tableFieldKey {
-    return [[self toString] lowercaseString];
+    return [self toString];
+//    return [[self toString] lowercaseString];
 }
 
 - (NSString *)display {

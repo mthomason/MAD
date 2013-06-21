@@ -23,7 +23,9 @@
 + (id)databaseForRptqDatabase:(RptqDatabase *)database {
     id result = nil;
     RptqUserCredentals *userCredentals = [database ownedByUser];    
+
     if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
         [databaseConnection setUsername:    [userCredentals mysql_username]];
         [databaseConnection setPassword:    [userCredentals mysql_password]];
@@ -33,10 +35,26 @@
         MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
         result = databaseMySql;
         [databaseMySql autorelease];
+
+    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+
+        MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
+        [databaseConnection setUsername:    [userCredentals tds_username]];
+        [databaseConnection setPassword:    [userCredentals tds_password]];
+        [databaseConnection setServer:      [userCredentals tds_server]];
+        [databaseConnection setHost:        [userCredentals tds_host]];
+        [databaseConnection setDatabase:    [userCredentals tds_database]];
+        [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
+        MTDatabaseSqlServer *databaseTds = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
+        result = databaseTds;
+        [databaseTds autorelease];
+        
     } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSalesForce identifier]]) {
+
         MTDatabaseSalesForce *databaseSalesForce = [[MTDatabaseSalesForce alloc] init];
         result = databaseSalesForce;
         [databaseSalesForce autorelease];
+
     }
     return result;
 }
@@ -49,13 +67,17 @@
     return self;
 }
 
+- (NSString *)selectPart {
+    return @"SELECT\n";
+}
+
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
     if ([[query hasQueryTables] count] > 0) {
         
-        [result appendString:@"SELECT\n"];
+        [result appendString:[self selectPart]];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
