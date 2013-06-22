@@ -981,7 +981,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 if (nextGroup != nil) {
                     [self cacheGroupLevel: nextGroup
                               groupedRows: obj
-                         groupedRowsLevel: groupedRowsLevel
+                         groupedRowsLevel: groupedRowsLevel + 1
                             detailPrinted: detailPrinted];
                 } else {
                     [self cacheDetailLevelWithDetails:obj
@@ -1195,7 +1195,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)cacheDetailWithValueDictionary:(NSDictionary *)values {
     id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
     NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
     [sectionData setObject:MTPageDetail forKey:MTReportSectionType];
     [sectionData setObject:newValue forKey:MTReportSectionValues];

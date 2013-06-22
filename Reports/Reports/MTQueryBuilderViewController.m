@@ -764,8 +764,6 @@
                         [[self activeDocument] saveContext];
                         [tableView endUpdates];
                     }
-                    
-//                    [reportDocument save:nil];
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                     
                     [deleteRows release];
@@ -817,9 +815,7 @@
                             NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
                             NSArray *sections = [[sectionsToRemove allObjects] retain];
                             if ([sections count] == 2) {
-                                //[managedObjectContext deleteObject: [sections objectAtIndex: 0]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-                                //[managedObjectContext deleteObject: [sections objectAtIndex: 1]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
                             }
                             [sections release];
@@ -827,33 +823,22 @@
                             [managedObjectContext deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
-                                NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
-                                NSInteger headerSectionRow = weightToRemove + 2;
-                                NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
-                                //NSLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
-                                NSArray *indexPaths = [[NSArray alloc] initWithObjects:
-                                                       indexPath,
-                                                       //[NSIndexPath indexPathForRow: headerSectionRow inSection: section],
-                                                       //[NSIndexPath indexPathForRow: footerSectionRow inSection: section],
-                                                       nil];
+                            NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
+                            NSInteger headerSectionRow = weightToRemove + 2;
+                            NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
+                            MTLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
+                            
                             [tableView beginUpdates];
-
-                                [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: indexPaths
-                                                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+                            [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: @[indexPath]
+                                                                withRowAnimation: UITableViewRowAnimationAutomatic];
                             [[self activeDocument] saveContext];
                             [tableView endUpdates];
-                                [indexPaths release];
                         }
                         
                         [groups release];
                         
                     }
-
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                    //[activateDocument saveToURL:[activateDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-                    //}];
-                    
-                    
                     break;
                 }
                 
@@ -894,9 +879,8 @@
     MTQuerySections ts = [self tableSectionTypeForIndexPathSection: toIndexPath.section];
     switch (ts) {
         case MTQuerySectionsGroups: {
-            
-            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
+            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
             RptqQueryGroup *fromGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: fromIndex];
@@ -905,16 +889,10 @@
             NSInteger toWeight = [[fromGroup weight] integerValue];
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
-            
-
-            //[[self tableViewQueryBuilder] beginUpdates];
             [[self activeDocument] saveContext];
-            //[[self tableViewQueryBuilder] reloadRowsAtIndexPaths: @[fromIndexPath, toIndexPath]
-            //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
-            //[[self tableViewQueryBuilder] endUpdates];
             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
-            NSLog(@"%@->%@", fromIndexPath, toIndexPath);
+            MTLog(@"%@->%@", fromIndexPath, toIndexPath);
             break;
         }
         default:
@@ -1007,7 +985,6 @@
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
-//            [result setBackgroundColor:[UIColor whiteColor]];
             [[result backgroundView] setBackgroundColor:[UIColor whiteColor]];
             [[(UITableViewCellQueryGroup *)result labelMain] setText: [group fieldNameNice]];
             [[(UITableViewCellQueryGroup *)result labelDetail] setText: [group sortDisplayNice]];

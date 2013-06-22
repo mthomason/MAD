@@ -8,8 +8,6 @@
 
 #import "AppDelegate.h"
 
-#import "MTTdsClient.h"
-
 @interface AppDelegate()
 
 @end
@@ -28,13 +26,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    
-    //MTTdsClient *tdsClient = [[MTTdsClient alloc] initWithCredentals:nil];
-    //[tdsClient runQuery:@""];
-    
 
-    
     //[self checkUserICloudPreferenceAndSetupIfNecessary];
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);

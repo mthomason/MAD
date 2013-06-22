@@ -268,11 +268,6 @@
 
 
 - (void)repositionLayouts:(NSArray *)layouts forLayout:(MTCollectionViewLayoutLiquidAttributes *)layoutToReposition {
-    //NSLog(@"%d\trepositionLayouts\nLayouts\t\t%@\nlayoutToReposition\t\t%@-%@", self.collectionView.tag, layouts, layoutToReposition.description, NSStringFromCGRect([layoutToReposition frame]));
-
-    if ([[layoutToReposition description] isEqualToString: @"quotes.author"]) {
-        BOOL yes = YES;
-    }
 
     NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] initWithArray:[self layout:layoutToReposition overlapWithLayout:layouts]];
     
@@ -303,8 +298,6 @@
                 for (NSValue *availablePositionsValue in availablePositionsOrdered) {
                     CGRect availableRect = [availablePositionsValue CGRectValue];
 
-                    //CGFloat d = CGDistance(availableRect.origin, layoutToChange.frame.origin);
-                    
                     CGFloat d = CGDistance(availableRect.origin, layoutToReposition.frame.origin);
                     if (indexOfNearestPosition == -1 || d > distanceToNearest) {
                         distanceToNearest = d;

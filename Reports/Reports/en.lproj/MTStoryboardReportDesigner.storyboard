@@ -2105,9 +2105,6 @@
                                             <constraint firstItem="kc7-r7-WMz" firstAttribute="leading" secondItem="YNj-V7-h67" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="PnE-9b-B8K"/>
                                             <constraint firstItem="YNj-V7-h67" firstAttribute="centerY" secondItem="paF-FI-VfZ" secondAttribute="centerY" type="default" id="RhA-zA-qDZ"/>
                                         </constraints>
-                                        <connections>
-                                            <segue destination="kBv-k8-rjV" kind="push" identifier="MTSegueShowSetUpDatasourceSalesForceIdentifier" id="R8Z-F3-0B1"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTSegueShowSetUpDatasourceSqlServerIdentifier" rowHeight="73" id="Wga-HD-L77">
                                         <rect key="frame" x="0.0" y="146" width="320" height="73"/>
@@ -2136,6 +2133,9 @@
                                             <constraint firstItem="EQe-eC-Pet" firstAttribute="top" secondItem="Wga-HD-L77" secondAttribute="top" constant="25" id="Xvx-L0-NCP"/>
                                             <constraint firstAttribute="trailing" secondItem="EQe-eC-Pet" secondAttribute="trailing" constant="20" type="default" id="bQc-bw-44T"/>
                                         </constraints>
+                                        <connections>
+                                            <segue destination="c9T-2m-ezv" kind="push" identifier="MTSegueShowSetUpDatasourceTdsIdentifier" id="6OV-Tv-oV7"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -2339,84 +2339,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRV-Pt-bRy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="838" y="4376"/>
-        </scene>
-        <!--Database Driver Selector Salesforce View Controller - New Report-->
-        <scene sceneID="xoV-Fn-aBA">
-            <objects>
-                <tableViewController id="kBv-k8-rjV" customClass="MTDatabaseDriverSelectorSalesforceViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="McJ-nn-a7d">
-                        <rect key="frame" x="0.0" y="94" width="320" height="348"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <sections>
-                            <tableViewSection id="6cw-3H-8w4">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="fmG-G9-glP">
-                                        <rect key="frame" x="0.0" y="10" width="320" height="46"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Blank" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Wyu-01-7og">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="120" id="9Bf-tx-PAl"/>
-                                                        <constraint firstAttribute="height" constant="31" id="9E2-Sq-qkC"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
-                                                    <connections>
-                                                        <action selector="nicknameDidEndOnExit:" destination="kBv-k8-rjV" eventType="editingDidEndOnExit" id="1fd-wW-7Xt"/>
-                                                        <outlet property="delegate" destination="kBv-k8-rjV" id="dUl-QQ-con"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Report Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="sWE-Sz-IdV">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="132" id="zpg-MA-jdj"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="Wyu-01-7og" firstAttribute="top" secondItem="fmG-G9-glP" secondAttribute="top" constant="7" id="IEI-AA-Fhj"/>
-                                            <constraint firstItem="Wyu-01-7og" firstAttribute="centerY" secondItem="sWE-Sz-IdV" secondAttribute="centerY" type="default" id="gXw-Iu-zsG"/>
-                                            <constraint firstItem="sWE-Sz-IdV" firstAttribute="leading" secondItem="fmG-G9-glP" secondAttribute="leading" constant="30" id="l6u-Qy-pkR"/>
-                                            <constraint firstItem="Wyu-01-7og" firstAttribute="leading" secondItem="sWE-Sz-IdV" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="nkh-oy-oky"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="hgn-aD-xpY">
-                                <cells/>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="delegate" destination="kBv-k8-rjV" id="dsO-qM-fZA"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="New Report" prompt="Set inital settings." id="FeH-R0-4Nu">
-                        <barButtonItem key="backBarButtonItem" title="Datasource" id="p79-5X-izU"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="hwc-gt-l7V">
-                            <connections>
-                                <action selector="save:" destination="kBv-k8-rjV" id="DFl-VE-2EE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="saveButton" destination="hwc-gt-l7V" id="Zai-fX-7Oe"/>
-                        <outlet property="tableViewCellNickname" destination="fmG-G9-glP" id="0AD-2K-qkM"/>
-                        <outlet property="textFieldNickname" destination="Wyu-01-7og" id="gqT-bI-kts"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="m57-np-sdJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2544" y="-2092"/>
         </scene>
         <!--Table View Controller Enter String - Comparson Value-->
         <scene sceneID="W8B-nC-nxl">
@@ -6616,6 +6538,294 @@
             </objects>
             <point key="canvasLocation" x="2756" y="-663"/>
         </scene>
+        <!--Database Driver Selector My Sql View Controller - SQL Server-->
+        <scene sceneID="uTI-q1-IJ8">
+            <objects>
+                <tableViewController id="c9T-2m-ezv" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="h1v-Ht-WS5">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Report Settings" id="1JD-bJ-Y5A">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="icG-bE-339">
+                                        <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Report" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-7Q-J1P">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="Skc-3O-EMe"/>
+                                                        <constraint firstAttribute="height" constant="31" id="XOy-dn-KBI"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <connections>
+                                                        <action selector="documentNameDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="iv8-rp-aBM"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="VI5-4i-fM2"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Report Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="G5N-7y-USC">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="p9W-o5-xQ4"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="y1h-7Q-J1P" firstAttribute="top" secondItem="icG-bE-339" secondAttribute="top" constant="7" id="15l-ah-dVV"/>
+                                            <constraint firstItem="y1h-7Q-J1P" firstAttribute="leading" secondItem="G5N-7y-USC" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Bf9-Lx-Dcs"/>
+                                            <constraint firstItem="G5N-7y-USC" firstAttribute="leading" secondItem="icG-bE-339" secondAttribute="leading" constant="30" id="BgU-8B-U3r"/>
+                                            <constraint firstItem="G5N-7y-USC" firstAttribute="centerY" secondItem="y1h-7Q-J1P" secondAttribute="centerY" type="default" id="SMB-YS-52t"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Credentials" id="qXG-CH-pAj">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bXs-q2-Fox">
+                                        <rect key="frame" x="0.0" y="138" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="sa" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SO2-Ez-7xK">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="gZz-Ky-QXr"/>
+                                                        <constraint firstAttribute="width" constant="120" id="odx-Du-fqH"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <connections>
+                                                        <action selector="usernameDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="Bx7-qH-VeF"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="Pvz-f7-HBo"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Username" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="yOJ-L2-teY">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="oHJ-LW-ITp"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="yOJ-L2-teY" firstAttribute="leading" secondItem="bXs-q2-Fox" secondAttribute="leading" constant="30" id="8PA-pU-ZMQ"/>
+                                            <constraint firstItem="SO2-Ez-7xK" firstAttribute="centerY" secondItem="yOJ-L2-teY" secondAttribute="centerY" type="default" id="D2P-Xa-eqa"/>
+                                            <constraint firstItem="SO2-Ez-7xK" firstAttribute="leading" secondItem="yOJ-L2-teY" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Vql-Xh-tPL"/>
+                                            <constraint firstItem="yOJ-L2-teY" firstAttribute="centerY" secondItem="bXs-q2-Fox" secondAttribute="centerY" type="default" id="hV4-2a-aIx"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Wn4-i8-fuV">
+                                        <rect key="frame" x="0.0" y="183" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1noniceguy" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="N1Q-qU-GqE">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="Sih-RE-X3e"/>
+                                                        <constraint firstAttribute="height" constant="31" id="fQz-iD-KZc"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <action selector="passwordDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="yru-QL-X0J"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="iuf-rr-k4e"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wNK-80-MK7">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="84n-hZ-02x"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="wNK-80-MK7" firstAttribute="leading" secondItem="Wn4-i8-fuV" secondAttribute="leading" constant="30" id="Gkg-0q-ffo"/>
+                                            <constraint firstItem="wNK-80-MK7" firstAttribute="centerY" secondItem="N1Q-qU-GqE" secondAttribute="centerY" type="default" id="PIb-14-GXO"/>
+                                            <constraint firstItem="N1Q-qU-GqE" firstAttribute="leading" secondItem="wNK-80-MK7" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="kpP-Hg-FIh"/>
+                                            <constraint firstItem="N1Q-qU-GqE" firstAttribute="top" secondItem="Wn4-i8-fuV" secondAttribute="top" constant="6" id="q9h-VV-bFa"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="SQL Server Database" id="UPA-Cf-LP6">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Rbd-Ff-LQi">
+                                        <rect key="frame" x="0.0" y="274" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0.1.3" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H3u-Ly-9ie">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="CGC-CN-qpX"/>
+                                                        <constraint firstAttribute="width" constant="120" id="YgT-YV-uDZ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <connections>
+                                                        <action selector="hostDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="c9G-em-UUz"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="uCs-KZ-4VR"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Host" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="34N-hB-yRT">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="mzv-li-cTp"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="34N-hB-yRT" firstAttribute="centerY" secondItem="H3u-Ly-9ie" secondAttribute="centerY" type="default" id="2Lk-Al-Bu1"/>
+                                            <constraint firstItem="H3u-Ly-9ie" firstAttribute="centerY" secondItem="Rbd-Ff-LQi" secondAttribute="centerY" type="default" id="PIc-3Z-BA0"/>
+                                            <constraint firstItem="H3u-Ly-9ie" firstAttribute="leading" secondItem="34N-hB-yRT" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="cCe-Ij-wAf"/>
+                                            <constraint firstItem="34N-hB-yRT" firstAttribute="leading" secondItem="Rbd-Ff-LQi" secondAttribute="leading" constant="30" id="zg6-5v-mfi"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="pxh-Zm-pzg">
+                                        <rect key="frame" x="0.0" y="319" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1433" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YlA-4N-c55">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="dqF-ym-g8t"/>
+                                                        <constraint firstAttribute="width" constant="120" id="sOH-Qx-jbi"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <connections>
+                                                        <action selector="portDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="jdT-Qa-RWV"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="p8K-tc-Agp"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Port" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wAG-ck-0vh">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="ujo-sW-cwb"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="wAG-ck-0vh" firstAttribute="leading" secondItem="pxh-Zm-pzg" secondAttribute="leading" constant="30" id="MfD-mv-dL7"/>
+                                            <constraint firstItem="YlA-4N-c55" firstAttribute="leading" secondItem="wAG-ck-0vh" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Pw8-dj-AZH"/>
+                                            <constraint firstItem="YlA-4N-c55" firstAttribute="centerY" secondItem="wAG-ck-0vh" secondAttribute="centerY" type="default" id="phc-4D-fCi"/>
+                                            <constraint firstItem="YlA-4N-c55" firstAttribute="centerY" secondItem="pxh-Zm-pzg" secondAttribute="centerY" type="default" id="xPG-x7-c0i"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Pxn-fk-SPn">
+                                        <rect key="frame" x="0.0" y="363" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="master" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OVU-zs-dy2">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="9TI-sy-zy5"/>
+                                                        <constraint firstAttribute="height" constant="31" id="MiS-sd-Fho"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <connections>
+                                                        <action selector="schemaDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="IsD-Tz-Ae5"/>
+                                                        <outlet property="delegate" destination="c9T-2m-ezv" id="8T4-UV-RTF"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5LG-Bj-JHz">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="H1C-tL-VGm"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="5LG-Bj-JHz" firstAttribute="leading" secondItem="Pxn-fk-SPn" secondAttribute="leading" constant="30" id="9EU-kT-oj3"/>
+                                            <constraint firstItem="OVU-zs-dy2" firstAttribute="leading" secondItem="5LG-Bj-JHz" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="C8O-vq-e4R"/>
+                                            <constraint firstItem="5LG-Bj-JHz" firstAttribute="centerY" secondItem="OVU-zs-dy2" secondAttribute="centerY" type="default" id="a5B-6Y-UJZ"/>
+                                            <constraint firstItem="OVU-zs-dy2" firstAttribute="top" secondItem="Pxn-fk-SPn" secondAttribute="top" constant="6" id="hLe-Uv-3kR"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="c9T-2m-ezv" id="3W1-pV-ADP"/>
+                            <outlet property="delegate" destination="c9T-2m-ezv" id="Jsc-ZF-KVH"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="SQL Server" id="Jfz-11-hdv">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="xAv-et-weQ">
+                            <connections>
+                                <action selector="save:" destination="c9T-2m-ezv" id="6U8-FM-6zI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="tableViewCellDatabase" destination="Pxn-fk-SPn" id="anG-RP-wt7"/>
+                        <outlet property="tableViewCellDocumentName" destination="icG-bE-339" id="hpd-kR-Ddh"/>
+                        <outlet property="tableViewCellHost" destination="Rbd-Ff-LQi" id="Id2-KM-Nj2"/>
+                        <outlet property="tableViewCellPassword" destination="Wn4-i8-fuV" id="BNX-hm-c8y"/>
+                        <outlet property="tableViewCellPort" destination="pxh-Zm-pzg" id="f5P-Bt-Cno"/>
+                        <outlet property="tableViewCellUsername" destination="bXs-q2-Fox" id="9l3-hK-m48"/>
+                        <outlet property="textFieldDatabase" destination="OVU-zs-dy2" id="5Mr-b0-j3e"/>
+                        <outlet property="textFieldHost" destination="H3u-Ly-9ie" id="CKF-wD-aUF"/>
+                        <outlet property="textFieldPassword" destination="N1Q-qU-GqE" id="iMQ-8N-nQa"/>
+                        <outlet property="textFieldPort" destination="YlA-4N-c55" id="M37-i0-1f7"/>
+                        <outlet property="textFieldReportName" destination="y1h-7Q-J1P" id="6va-o3-PHr"/>
+                        <outlet property="textFieldUsername" destination="SO2-Ez-7xK" id="3k3-eS-0ks"/>
+                        <outletCollection property="tableViewCells" destination="Pxn-fk-SPn" id="P21-98-KyJ"/>
+                        <outletCollection property="tableViewCells" destination="pxh-Zm-pzg" id="wig-CJ-JSl"/>
+                        <outletCollection property="tableViewCells" destination="Rbd-Ff-LQi" id="IWb-HJ-XnO"/>
+                        <outletCollection property="tableViewCells" destination="Wn4-i8-fuV" id="Zs0-1j-qzJ"/>
+                        <outletCollection property="tableViewCells" destination="bXs-q2-Fox" id="onA-Uu-xXk"/>
+                        <outletCollection property="tableViewCells" destination="icG-bE-339" id="kxw-0y-Y2b"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n7F-0w-CHY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2544" y="-2112"/>
+        </scene>
     </scenes>
     <resources>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>
@@ -6639,6 +6849,504 @@
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="DocumentStatusView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
+        </class>
+        <class className="MTAggregateFunctionsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAggregateFunctionsViewController.h"/>
+            <relationships>
+                <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTAutoLayoutTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAutoLayoutTableViewCell.h"/>
+        </class>
+        <class className="MTClipboardView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTClipboardView.h"/>
+        </class>
+        <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imagePreview" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorMySqlViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorMySqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hostDidEndOnExit:"/>
+                <relationship kind="action" name="passwordDidEndOnExit:"/>
+                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="usernameDidEndOnExit:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="tableViewCellDatabase" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellDocumentName" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldDatabase" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldReportName" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+                <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewAggregateViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewAggregateViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellAggrageFunction" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateGroupBy" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateInput" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewStaticLabelViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewStaticLabelViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelTextLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextTextbox" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MTGroupByViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
+        </class>
+        <class className="MTQueryBuilderAddGroupViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddGroupViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellField" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellSort" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkJoinTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkJoinTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddPredicateViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddPredicateViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellLeftSide" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellOperator" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellRightSide" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderChooseFieldViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderChooseFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderNavigationController.h"/>
+        </class>
+        <class className="MTQueryBuilderPredicateFormatViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderPredicateFormatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderSortTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderSortTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerDocumentObjectFormat" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerDocumentObjectFormat.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellCurrency" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellCurrencyLocation" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellDecimals" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="controlsToDisableNumeric" candidateClass="UIControl"/>
+                <relationship kind="outletCollection" name="viewsToDisableNumeric" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSelectorViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFontAmericanTypewriter" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontArial" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourier" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourierNew" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontGeorgia" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelvetica" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelveticaNeue" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTimesNewRoman" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTrebuchet" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontVerdana" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontZapfino" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="controlValueChanged:"/>
+                <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonUnderline" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fontLabelTableViewCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="labelFontName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelFontSize" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeWidth" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="segControlFontStyle" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlHorizontalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlVerticalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="stepperFontSize" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeHeight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeWidth" candidateClass="UIStepper"/>
+                <relationship kind="outletCollection" name="groupTableViewCellLayout" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="groupTableViewCellStyle" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="steppers" candidateClass="UIStepper"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerObjectSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerObjectSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="objectSelectorDelegate"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerSectionLayoutSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelNumberOfRows" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rowsStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerToolBoxViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerToolBoxViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="valueChanged:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemFontSelector" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="sceneSelector" candidateClass="UISegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="doneReports:"/>
+                <relationship kind="action" name="info:"/>
+                <relationship kind="action" name="showObjects:"/>
+                <relationship kind="action" name="showSettings:"/>
+                <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolboxView" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="MTReportViewerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="print:"/>
+                <relationship kind="action" name="sendToPdf:"/>
+                <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTSettingsViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTShowSqlViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTShowSqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="MTStoreTemplatesViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTStoreTemplatesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewCellQueryPredicate" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellQueryPredicate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelOpperator" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTTemplateSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTemplateSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="tableViewTemplates" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="templateSelectorDelegate"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="MTTitleView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerOpenDocument" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
+            <relationships>
+                <relationship kind="action" name="add:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonAddNewDocument" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
+                <relationship kind="outlet" name="collectionViewQueries" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerValueBasedOnField" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerValueBasedOnField.h"/>
+            <relationships>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="pickerViewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="tableViewHeightConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tableViewMain" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewController.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
+        </class>
+        <class className="UITableViewCellInstruction" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelGroupType" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelGroupTypeDetail" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellOverride" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
+        </class>
+        <class className="UITableViewCellQueryGroup" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryGroup.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellQueryInput" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
+        </class>
+        <class className="UITableViewCellQueryLink" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelJoinDesc" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellStoreItemReportTemplate" superclassName="MTTableViewCellDocument">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellStoreItemReportTemplate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="buyNow" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellTableName" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
+        </class>
+        <class className="UITableViewControllerCoreDataResults" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
+        </class>
+        <class className="UITableViewControllerEnterString" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerOpperators" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerOpperators.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

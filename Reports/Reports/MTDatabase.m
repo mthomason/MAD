@@ -168,7 +168,6 @@
         NSString *rightValue = nil;
         
         MTDataType leftFieldDataType = MTDataTypeUnknown;
-        BOOL leftFieldIsNumeric = NO;
         
         if ([queryPredicate hasLeftField] != nil) {
             

@@ -1917,7 +1917,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)pinchView:(UIPinchGestureRecognizer *)gestureRecognizer {
-    
+    /*
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
             break;
@@ -1949,7 +1949,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         case UIGestureRecognizerStateEnded: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateEnded
             break;
         }
-    }
+    }*/
 }
 
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId

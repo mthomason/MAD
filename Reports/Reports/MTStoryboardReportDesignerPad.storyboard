@@ -1551,7 +1551,7 @@
                                             <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Report 1" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v5s-tM-fR1">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Report" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v5s-tM-fR1">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="298" id="N6V-hx-9W8"/>
                                                         <constraint firstAttribute="height" constant="31" id="P6Z-BT-uTs"/>
@@ -2404,41 +2404,8 @@
                                             <segue destination="Y5P-d4-fMD" kind="push" identifier="MTSegueShowSetUpDatasourceMySqlIdentifier" id="qac-aE-v6c"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="73" id="jaT-Iu-kcA">
-                                        <rect key="frame" x="0.0" y="73" width="540" height="73"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="520" height="72"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Saleforce.com" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" preferredMaxLayoutWidth="188" translatesAutoresizingMaskIntoConstraints="NO" id="78j-sM-vTF">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="188" id="Nc2-u6-17B"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageExportTypeSalesforce.png" translatesAutoresizingMaskIntoConstraints="NO" id="T6o-wN-0mv">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="64" id="LLe-JJ-0xf"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstItem="T6o-wN-0mv" firstAttribute="top" secondItem="jaT-Iu-kcA" secondAttribute="top" constant="5" id="IXw-Ct-bn3"/>
-                                            <constraint firstItem="T6o-wN-0mv" firstAttribute="leading" secondItem="jaT-Iu-kcA" secondAttribute="leading" constant="20" type="default" id="Lwk-qC-7Eq"/>
-                                            <constraint firstItem="78j-sM-vTF" firstAttribute="top" secondItem="jaT-Iu-kcA" secondAttribute="top" constant="25" id="dFX-UM-mDM"/>
-                                            <constraint firstItem="78j-sM-vTF" firstAttribute="leading" secondItem="T6o-wN-0mv" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="qTN-aE-FPT"/>
-                                        </constraints>
-                                        <connections>
-                                            <segue destination="mRr-kJ-O1k" kind="push" identifier="MTSegueShowSetUpDatasourceSalesForceIdentifier" id="rOY-EX-34Y"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="73" id="pqH-yF-ugX">
-                                        <rect key="frame" x="0.0" y="146" width="540" height="73"/>
+                                        <rect key="frame" x="0.0" y="73" width="540" height="73"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="520" height="72"/>
@@ -2833,85 +2800,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vh3-zv-MDP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-902" y="3776"/>
-        </scene>
-        <!--Database Driver Selector Salesforce View Controller - New Report-->
-        <scene sceneID="CGF-bU-4kw">
-            <objects>
-                <tableViewController id="mRr-kJ-O1k" customClass="MTDatabaseDriverSelectorSalesforceViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Tub-bb-aEd">
-                        <rect key="frame" x="0.0" y="94" width="540" height="526"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                        <sections>
-                            <tableViewSection id="TBQ-NY-1mW">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="zlU-KH-P2R">
-                                        <rect key="frame" x="0.0" y="30" width="540" height="46"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="1" width="478" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Blank" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="HVB-Dr-pkS">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="31" id="bOJ-yu-MHF"/>
-                                                        <constraint firstAttribute="width" constant="120" id="gmz-n6-drO"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
-                                                    <connections>
-                                                        <action selector="nicknameDidEndOnExit:" destination="mRr-kJ-O1k" eventType="editingDidEndOnExit" id="UJo-4n-1L3"/>
-                                                        <outlet property="delegate" destination="mRr-kJ-O1k" id="6z0-t1-82G"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Report Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="jMp-vz-BMS">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="132" id="prG-Fp-rKp"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="HVB-Dr-pkS" firstAttribute="leading" secondItem="jMp-vz-BMS" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="La8-0z-Alo"/>
-                                            <constraint firstItem="HVB-Dr-pkS" firstAttribute="top" secondItem="zlU-KH-P2R" secondAttribute="top" constant="7" id="LmX-lT-0P2"/>
-                                            <constraint firstItem="jMp-vz-BMS" firstAttribute="leading" secondItem="zlU-KH-P2R" secondAttribute="leading" constant="51" id="eTO-It-PcI"/>
-                                            <constraint firstItem="HVB-Dr-pkS" firstAttribute="centerY" secondItem="jMp-vz-BMS" secondAttribute="centerY" type="default" id="ugG-hr-mnK"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="UZg-6f-O03">
-                                <cells/>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="delegate" destination="mRr-kJ-O1k" id="Rag-lG-gI0"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="New Report" prompt="Set inital settings." id="Yn0-ff-eXx">
-                        <barButtonItem key="backBarButtonItem" title="Datasource" id="gQ7-n5-yde"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="4xN-Eh-cOe">
-                            <connections>
-                                <action selector="save:" destination="mRr-kJ-O1k" id="wGy-yl-g8J"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
-                    <connections>
-                        <outlet property="saveButton" destination="4xN-Eh-cOe" id="KhB-Y3-Ddz"/>
-                        <outlet property="tableViewCellNickname" destination="zlU-KH-P2R" id="IOl-HF-rOl"/>
-                        <outlet property="textFieldNickname" destination="HVB-Dr-pkS" id="uHu-YV-gb3"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Sew-0b-7JW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-142" y="-1879"/>
         </scene>
         <!--Table View Controller Enter String - Comparson Value-->
         <scene sceneID="YOl-eN-V30">
@@ -6947,7 +6835,6 @@
         <image name="UIImageBold20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageExportTypeMySQL.png" width="64" height="64"/>
-        <image name="UIImageExportTypeSalesforce.png" width="64" height="18"/>
         <image name="UIImageItalic20.png" width="20" height="20"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
@@ -6996,19 +6883,6 @@
                 <relationship kind="outlet" name="textFieldReportName" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
                 <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
-            </relationships>
-        </class>
-        <class className="MTDatabaseDriverSelectorSalesforceViewController" superclassName="MTTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorSalesforceViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="nicknameDidEndOnExit:"/>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="tableViewCellConnectionCreate" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="tableViewCellNickname" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="textFieldNickname" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="MTDatabaseDriverSelectorViewController" superclassName="MTTableViewController">

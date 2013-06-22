@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1CDB841774E53500CFD2C8 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
+		4C1CDB851774E53500CFD2C8 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
 		4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
 		4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */; };
 		4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */; };
@@ -41,6 +43,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1CDB821774E53500CFD2C8 /* MTTdsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTdsClient.h; sourceTree = "<group>"; };
+		4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTdsClient.m; sourceTree = "<group>"; };
 		4CEBFA071760EF8B00FFA4F4 /* liblibTdsClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibTdsClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CEBFA0E1760EF8B00FFA4F4 /* libTdsClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libTdsClient-Prefix.pch"; sourceTree = "<group>"; };
@@ -159,6 +163,8 @@
 		4CEBFA3B1760EF9E00FFA4F4 /* TdsClientLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				4C1CDB821774E53500CFD2C8 /* MTTdsClient.h */,
+				4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */,
 			);
 			name = TdsClientLibrary;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C1CDB841774E53500CFD2C8 /* MTTdsClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CEBFA291760EF8B00FFA4F4 /* libTdsClientTests.m in Sources */,
+				4C1CDB851774E53500CFD2C8 /* MTTdsClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
