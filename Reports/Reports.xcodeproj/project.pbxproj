@@ -778,6 +778,16 @@
 		4C76B6F01776191E004AA7F9 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76B6ED1776191E004AA7F9 /* RptqUserCredentals.m */; };
 		4C76B6F11776191E004AA7F9 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76B6ED1776191E004AA7F9 /* RptqUserCredentals.m */; };
 		4C76B6F21776191E004AA7F9 /* RptqUserCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76B6ED1776191E004AA7F9 /* RptqUserCredentals.m */; };
+		4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
+		4C76B6F6177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
+		4C76B6F7177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
+		4C76B6F8177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
+		4C76B6F9177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
+		4C76B6FA177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */; };
+		4C76B6FB177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */; };
+		4C76B6FC177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */; };
+		4C76B6FD177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */; };
+		4C76B6FE177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */; };
 		4C76F0B114B4F132005DCE49 /* MTReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MTReportDesignerViewController.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
@@ -2213,6 +2223,8 @@
 		4C76B6E61776191E004AA7F9 /* RptqQuerySort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqQuerySort.m; sourceTree = "<group>"; };
 		4C76B6EC1776191E004AA7F9 /* RptqUserCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqUserCredentals.h; sourceTree = "<group>"; };
 		4C76B6ED1776191E004AA7F9 /* RptqUserCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqUserCredentals.m; sourceTree = "<group>"; };
+		4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeSqlServer@2x.png"; sourceTree = SOURCE_ROOT; };
+		4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeSqlServer.png; path = ../../../../Downloads/UIImageExportTypeSqlServer.png; sourceTree = "<group>"; };
 		4C76F0B014B4F132005DCE49 /* MTReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerViewController.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* MTReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerViewController.h; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageToolbarDatabase.png; sourceTree = "<group>"; };
@@ -3049,6 +3061,8 @@
 		4C00816E14B6C4F8003DF437 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */,
+				4C76B6F4177648EB004AA7F9 /* UIImageExportTypeSqlServer.png */,
 				4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */,
 				4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */,
 				4CE314131694BCEC00114431 /* UIImageAlignTop20.png */,
@@ -4911,6 +4925,8 @@
 				4C6DAA831761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA881761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */,
+				4C76B6F6177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
+				4C76B6FB177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5016,6 +5032,8 @@
 				4C6DAA851761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA8A1761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA961761AF7500FF770A /* MTTdsClient.h in Resources */,
+				4C76B6F8177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
+				4C76B6FD177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5126,6 +5144,8 @@
 				4C6DAA841761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA891761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA951761AF7500FF770A /* MTTdsClient.h in Resources */,
+				4C76B6F7177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
+				4C76B6FC177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5408,6 +5428,8 @@
 				4C6DAA871761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4C81BB94176F644200E7B98C /* File in Resources */,
+				4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
+				4C76B6FA177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5518,6 +5540,8 @@
 				4C6DAA861761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA8B1761AEE000FF770A /* libsybdb.a in Resources */,
 				4C6DAA971761AF7500FF770A /* MTTdsClient.h in Resources */,
+				4C76B6F9177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
+				4C76B6FE177648EB004AA7F9 /* UIImageExportTypeSqlServer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

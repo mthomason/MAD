@@ -399,7 +399,7 @@
                                                         <constraint firstAttribute="width" constant="250" id="tyH-tc-Raa"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1670,7 +1670,7 @@
                                         <rect key="frame" x="0.0" y="278" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0.1.3" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q51-fE-7g7">
@@ -2382,7 +2382,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="520" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MySQL Native Driver" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="at7-mI-3Ml">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MySQL Native" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="at7-mI-3Ml">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="208" id="woH-Yn-45G"/>
                                                     </constraints>
@@ -2411,15 +2411,15 @@
                                             <rect key="frame" x="0.0" y="0.0" width="520" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SQL Server Driver" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xyi-S2-E7R">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SQL Server / Sybase / TDS" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xyi-S2-E7R">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="208" id="wbh-Qh-eQg"/>
+                                                        <constraint firstAttribute="width" constant="408" id="IzA-8b-CSa"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="PqK-sG-yw1"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageExportTypeSqlServer.png" translatesAutoresizingMaskIntoConstraints="NO" id="PqK-sG-yw1"/>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -6835,6 +6835,7 @@
         <image name="UIImageBold20.png" width="20" height="20"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageExportTypeMySQL.png" width="64" height="64"/>
+        <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageItalic20.png" width="20" height="20"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>

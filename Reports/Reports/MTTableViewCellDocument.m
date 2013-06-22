@@ -8,6 +8,7 @@
 
 #import "MTTableViewCellDocument.h"
 #import "Constants.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation MTTableViewCellDocument
 
@@ -23,7 +24,8 @@
 
 - (void)awakeFromNib {
     [[self imageThumbnail] setContentMode:UIViewContentModeScaleAspectFit];
-
+    //[[[self imageThumbnail] layer] setBorderWidth:1.0000f];
+    //[[[self imageThumbnail] layer] setBorderColor:[[UIColor blackColor] CGColor]];
     [super awakeFromNib];
 }
 

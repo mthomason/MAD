@@ -28,15 +28,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    //NSLog(@"Bounds %@", NSStringFromCGRect(self.bounds));
-    //[[[self delegate] delegate] reloadReportView];
-    //[[[[self delegate] delegate] printPageRendererReport] setPrintableSize:[self bounds].size];
-    //[[[[self delegate] delegate] printPageRendererReport] cachePrintPageRenderData];
-    //[self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
-    //[super drawRect:rect];
     [[self delegate] drawView:self inRect:rect];
 }
 
