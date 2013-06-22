@@ -23,4 +23,6 @@
 + (NSString *)applicationDocumentsDirectory;
 + (NSString *)applicationLibraryTemplatesDirectory;
 
++ (NSURL *)localTemporaryDirectory;
+
 @end

@@ -2,7 +2,7 @@
 //  RptqQueryTable.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/14/13.
+//  Created by Michael Thomason on 6/22/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,15 +15,15 @@
 @implementation RptqQueryTable
 
 @dynamic alias;
-@dynamic dropIndex;
-@dynamic identifier;
 @dynamic designerInitalLayout;
 @dynamic designerOriginX;
 @dynamic designerOriginY;
 @dynamic designerSizeHeight;
 @dynamic designerSizeWidth;
+@dynamic dropIndex;
+@dynamic identifier;
 @dynamic databaseSchemaTable;
-@dynamic inQuery;
 @dynamic hasQueryFields;
+@dynamic inQuery;
 
 @end

@@ -121,6 +121,10 @@
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
 
++ (NSURL *)localTemporaryDirectory {
+    return  [[NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES] URLByAppendingPathComponent:@"tmp" isDirectory:YES];
+}
+
 + (NSString *)applicationLibraryTemplatesDirectory {
     NSString *applicationLibrary = [[[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:TEMPLATES] retain];
     if (![[NSFileManager defaultManager] fileExistsAtPath:applicationLibrary]) {

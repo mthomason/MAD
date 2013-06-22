@@ -8,8 +8,6 @@
 
 #import "MTDatabaseConnection.h"
 
-// FIXME: No constant provided by iOS.
-NSString *const MTBundleDisplayName = @"CFBundleDisplayName";
 
 @implementation MTDatabaseConnection
 

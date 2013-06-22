@@ -67,8 +67,6 @@
             NSString *driverType = [[db databaseDriverType] retain];
             if ([driverType isEqualToString: [MTDatabaseMySql identifier]]) {
 
-            } else if ([driverType isEqualToString: [MTDatabaseSalesForce identifier]]) {
-                
             }
             [driverType release];
         }
@@ -220,9 +218,6 @@
             [userCredentals setMysql_password:  [connectionSettings password]];
         }
 
-    } else if ([[database identifier] isEqualToString:[MTDatabaseSalesForce identifier]]) {
-        
-    
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
         if (connectionSettings != nil) {

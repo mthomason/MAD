@@ -160,6 +160,8 @@ extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 
+extern NSString * const MTBundleDisplayName;
+
 extern NSString * const MTDocumentTypeUtiMad;
 extern NSString * const MTDocumentTypeExtentionMad;
 

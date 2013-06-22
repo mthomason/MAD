@@ -2,13 +2,12 @@
 //  RptqQueryCache.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/13/13.
+//  Created by Michael Thomason on 6/22/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqQueryCache.h"
 #import "RptqQuery.h"
-#import "RptqQueryResultFields.h"
 
 
 @implementation RptqQueryCache
@@ -18,7 +17,5 @@
 @dynamic filename;
 @dynamic identifier;
 @dynamic hasQuery;
-@dynamic hasQueryResultFields;
-@dynamic hasQueryResults;
 
 @end

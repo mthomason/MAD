@@ -16,7 +16,7 @@
 #import "RptqQuery.h"
 #import "RptqDocumentSection+Extras.h"
 
-#import "MTDatabaseSalesForce.h"
+//#import "MTDatabaseSalesForce.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 

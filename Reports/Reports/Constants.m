@@ -15,6 +15,8 @@ NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier = @"MTSegueShowSetUpD
 NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
+NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
+
 NSString * const MTDocumentTypeUtiMad                               = @"com.everydayapps.productivity.mad";
 NSString * const MTDocumentTypeExtentionMad                         = @"mad";
 

@@ -827,7 +827,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
         RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
-        RptqQueryCache *queryCache = [query hasQueryCache];
+        //RptqQueryCache *queryCache = [query hasQueryCache];
         
         SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[query managedObjectContext]];
         for (RptqDocumentSection *sec in enumerator) {
@@ -840,29 +840,25 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         [[self temporaryLayoutByPage] removeAllObjects];
         [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
+        //NSMutableDictionary *rd = [[NSMutableDictionary alloc] initWithCapacity:[[queryCache hasQueryResultFields] count]];
         
-        for (RptqQueryResultFields *queryResultField in [queryCache hasQueryResultFields]) {
-            for (RptqQueryResultValues *queryResultValue in [queryResultField hasValues]) {
         
-                id results = [cachedResultsForReport objectForKey:[queryResultValue rowId]];
-                
-                NSMutableDictionary *resultDictionary = [[NSMutableDictionary alloc] initWithDictionary:results];
-                
-                id queryResultCValue = [[queryResultValue cachedValue] retain];
-                
-                id obj1 = queryResultCValue == nil ? @"" : queryResultCValue;
-                [resultDictionary setObject: obj1
-                                     forKey: [queryResultField fieldname]];
-                
-                [cachedResultsForReport setObject: resultDictionary
-                                           forKey: [queryResultValue rowId]];
+        NSError *error = nil;
+        NSArray *cachedResultsForReportSerialized = nil;
+        NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
 
-                [queryResultCValue release];
-                [resultDictionary release];
+        if (name) {
+            NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+            //NSData *readData = [NSData dataWithContentsOfFile:path];
+            NSData *readData = [NSData dataWithContentsOfURL:url options:0 error:&error];
+            if (readData) {
+                error = nil;
+                cachedResultsForReportSerialized = [[NSPropertyListSerialization propertyListWithData:readData options:0 format:nil error:&error] retain];
             }
         }
-        
-        NSSet *resultsByRowSet = [NSSet setWithArray:[cachedResultsForReport allValues]];
+
+        NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
+        //NSSet *resultsByRowSet = [NSSet setWithArray:[cachedResultsForReport allValues]];
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
@@ -881,13 +877,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [sortDescriptor release];
         }
         
-        [self setCachedSortedSortDescriptorsGroup:[sortedSortDescriptorsGroup copy]];
+        [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
         [sortedSortDescriptorsGroup release];
 
         NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         sortedResultsByRow = [sortedResultsByRow retain];
         
-        [self setCachedDataByReport:[sortedResultsByRow copy]];
+        [self setCachedDataByReport:sortedResultsByRow];
         
         id groupedRows = [[self cachedGroupedResults:sortedResultsByRow
                                          level:0] retain];
@@ -923,12 +919,26 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cachePageFooterWithValueDictionary:groupedRows];
         
-        [[self temporaryLayoutByPage] addObject:[[self temporaryLayoutForPage] copy]];
-        [[self temporaryDataByPage] addObject:[[self temporaryDataForPage] copy]];
+        id tlfp = [[self temporaryLayoutForPage] copy];
+        [[self temporaryLayoutByPage] addObject:tlfp];
+        [tlfp release];
         
-        [self setCachedDataByGroup:[groupedRows copy]];
-        [self setCachedLayoutByPage:[[self temporaryLayoutByPage] copy]];
-        [self setCachedDataByPage:[[self temporaryDataByPage] copy]];
+        id tdfp = [[self temporaryDataForPage] copy];
+        [[self temporaryDataByPage] addObject:tdfp];
+        [tdfp release];
+        
+        id gr = [groupedRows copy];
+        [self setCachedDataByGroup: gr];
+        [gr release];
+        
+        id tlbp = [[self temporaryLayoutByPage] copy];
+        [self setCachedLayoutByPage: tlbp];
+        [tlbp release];
+        
+        id tdbp = [[self temporaryDataByPage] copy];
+        [self setCachedDataByPage: tdbp];
+        [tdbp release];
+
         
         [cachedResultsForReport release];
         [groupedRows release];
@@ -1059,8 +1069,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                       level: (level + 1)];
                 
                 [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
-                //[resultsDictionary setObject:resultOfNextGroup forKey:@(groupResultIndexForLevel)];
-                
                 
                 [resultsForGroup removeAllObjects];
                 
@@ -1105,8 +1113,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setPrintableSpaceUsedPageHeight:newHeight];
         [self cachePageFooterWithValueDictionary:groupedRows];
         
-        [[self temporaryLayoutByPage] addObject:[[self temporaryLayoutForPage] copy]];
-        [[self temporaryDataByPage] addObject:[[self temporaryDataForPage] copy]];
+        id layoutToAdd = [[self temporaryLayoutForPage] copy];
+        [[self temporaryLayoutByPage] addObject:layoutToAdd];
+        [layoutToAdd release];
+
+        id dataToAdd = [[self temporaryDataForPage] copy];
+        [[self temporaryDataByPage] addObject:dataToAdd];
+        [dataToAdd release];
         
         [self setPrintableSpaceUsedPageHeight: (CGPointZero.y + [[[[self document] hasPageHeaderSection] layoutHeight] floatValue])];
 
@@ -1120,89 +1133,33 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [[self temporaryLayoutForPage] removeAllObjects];
     [[self temporaryDataForPage] removeAllObjects];
     
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTPageHeader forKey:MTReportSectionType];
-    if (newValue != nil) {
-        [sectionData setObject:newValue forKey:MTReportSectionValues];
-    }
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject:  @{MTReportSectionType : MTPageHeader}];
 }
 
 - (void)cachePageFooterWithValueDictionary:(NSDictionary *)values {
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTPageFooter forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject:  @{MTReportSectionType : MTPageFooter}];
 }
 
 - (void)cacheReportHeaderWithValueDictionary:(NSDictionary *)values {
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTReportHeader forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportHeader}];
 }
 
 - (void)cacheReportFooterWithValueDictionary:(NSDictionary *)values {
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTReportFooter forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportFooter}];
 }
 
 - (void)cacheGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTReportGroupHeader forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    NSNumber *groupLevelObject = [[NSNumber alloc] initWithInteger:groupLevel];
-    [sectionData setObject:groupLevelObject forKey:MTReportGroupLevel];
-    [groupLevelObject release];
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportGroupHeader, MTReportGroupLevel : @(groupLevel)}];
 }
 
 - (void)cacheGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
-    id newValue = [values copy];
-    //NSLog(@"NewValue: %@", NSStringFromClass([newValue class]));
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTReportGroupFooter forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    NSNumber *groupLevelObject = [[NSNumber alloc] initWithInteger:groupLevel];
-    [sectionData setObject:groupLevelObject forKey:MTReportGroupLevel];
-    [groupLevelObject release];
-    [[self temporaryLayoutForPage] addObject: sectionData];
-    [sectionData release];
-    [newValue release];
+    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportGroupFooter, MTReportGroupLevel : @(groupLevel)}];
 }
 
 - (void)cacheDetailWithValueDictionary:(NSDictionary *)values {
-    id newValue = [values copy];
-    NSMutableDictionary *sectionData = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [sectionData setObject:MTPageDetail forKey:MTReportSectionType];
-    [sectionData setObject:newValue forKey:MTReportSectionValues];
-    [[self temporaryLayoutForPage] addObject: sectionData];
+    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTPageDetail}];
     [[self temporaryDataForPage] addObject:@([self temporaryCachedDetailCounter])];
     self.temporaryCachedDetailCounter++;
-    [sectionData release];
-    [newValue release];
 }
 
 @end

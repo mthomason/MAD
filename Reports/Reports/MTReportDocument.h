@@ -22,7 +22,6 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
-#import "RptqQueryResultFields+Extras.h"
 #import "MTDocument.h"
 
 @interface MTReportDocument : MTDocument

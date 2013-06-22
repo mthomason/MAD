@@ -270,31 +270,20 @@
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
         queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
         NSUInteger resultCounter = 0;
-        for (NSDictionary *result in [fetch results]) {
-            if (resultCounter == 0) {
-                NSUInteger fieldCounter = 0;
-                for (NSString *key in [result keyEnumerator]) {
-                    RptqQueryResultFields *queryResultField = [RptqQueryResultFields initObjectForManagedObjectContext:managedObjectContext];
-                    [queryResultField setFieldname:key];
-                    [queryResultField setResultOrder:@(fieldCounter)];
-                    [queryCache addHasQueryResultFieldsObject:queryResultField];
-                    fieldCounter++;
-                }
-            }
-            
-            for (RptqQueryResultFields *queryResultField in [[queryCache hasQueryResultFields] objectEnumerator]) {
-                id object = [result objectForKey:[queryResultField fieldname]];
-                RptqQueryResultValues *queryResultValue = [RptqQueryResultValues initObjectForManagedObjectContext:managedObjectContext];
-                [queryResultValue setRowId:@(resultCounter)];
-                [queryResultValue setCachedValue: object];
-                [queryResultField addHasValuesObject:queryResultValue];
-                
-            }
-            
-            resultCounter++;
+        
+        NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
+                                                                         format:NSPropertyListBinaryFormat_v1_0
+                                                                        options:0
+                                                                          error:NULL];
+        
+        NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
+        NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+        if (error) {
+            error = nil;
+            [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
         }
-        NSError *error = nil;
-        [managedObjectContext save:&error];
+
     } else {
         [error presentErrorToUser];
     }

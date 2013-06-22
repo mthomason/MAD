@@ -2,7 +2,7 @@
 //  RptqQueryField.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/13/13.
+//  Created by Michael Thomason on 6/22/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -14,29 +14,29 @@
 @interface RptqQueryField : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqQueryTable *inQueryTable;
 @property (nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
-@property (nonatomic, retain) NSSet *inDataObject;
 @property (nonatomic, retain) NSSet *inAggregateObject;
+@property (nonatomic, retain) NSSet *inDataObject;
 @property (nonatomic, retain) NSSet *inQueryGroup;
 @property (nonatomic, retain) NSSet *inQueryLinkLeft;
 @property (nonatomic, retain) NSSet *inQueryLinkRight;
 @property (nonatomic, retain) NSSet *inQueryPredicateLeft;
 @property (nonatomic, retain) NSSet *inQueryPredicateRight;
 @property (nonatomic, retain) NSSet *inQuerySort;
+@property (nonatomic, retain) RptqQueryTable *inQueryTable;
 @end
 
 @interface RptqQueryField (CoreDataGeneratedAccessors)
-
-- (void)addInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
-- (void)removeInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
-- (void)addInDataObject:(NSSet *)values;
-- (void)removeInDataObject:(NSSet *)values;
 
 - (void)addInAggregateObjectObject:(RptqDocumentObjectAggregate *)value;
 - (void)removeInAggregateObjectObject:(RptqDocumentObjectAggregate *)value;
 - (void)addInAggregateObject:(NSSet *)values;
 - (void)removeInAggregateObject:(NSSet *)values;
+
+- (void)addInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
+- (void)removeInDataObjectObject:(RptqDocumentObjectLabelDataField *)value;
+- (void)addInDataObject:(NSSet *)values;
+- (void)removeInDataObject:(NSSet *)values;
 
 - (void)addInQueryGroupObject:(RptqQueryGroup *)value;
 - (void)removeInQueryGroupObject:(RptqQueryGroup *)value;

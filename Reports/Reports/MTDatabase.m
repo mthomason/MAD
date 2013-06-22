@@ -8,7 +8,7 @@
 
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
-#import "MTDatabaseSalesForce.h"
+//#import "MTDatabaseSalesForce.h"
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
@@ -49,12 +49,6 @@
         result = databaseTds;
         [databaseTds autorelease];
         
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSalesForce identifier]]) {
-
-        MTDatabaseSalesForce *databaseSalesForce = [[MTDatabaseSalesForce alloc] init];
-        result = databaseSalesForce;
-        [databaseSalesForce autorelease];
-
     }
     return result;
 }

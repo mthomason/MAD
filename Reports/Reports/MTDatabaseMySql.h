@@ -26,8 +26,6 @@
 #import "RptqQueryLinks+Extras.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqQueryResultFields+Extras.h"
-#import "RptqQueryResultValues+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqQueryPredicate+Extras.h"
 

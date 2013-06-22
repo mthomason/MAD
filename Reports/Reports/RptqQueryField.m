@@ -2,7 +2,7 @@
 //  RptqQueryField.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/13/13.
+//  Created by Michael Thomason on 6/22/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -20,15 +20,15 @@
 @implementation RptqQueryField
 
 @dynamic identifier;
-@dynamic inQueryTable;
 @dynamic databaseSchemaField;
-@dynamic inDataObject;
 @dynamic inAggregateObject;
+@dynamic inDataObject;
 @dynamic inQueryGroup;
 @dynamic inQueryLinkLeft;
 @dynamic inQueryLinkRight;
 @dynamic inQueryPredicateLeft;
 @dynamic inQueryPredicateRight;
 @dynamic inQuerySort;
+@dynamic inQueryTable;
 
 @end

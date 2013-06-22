@@ -11,6 +11,7 @@
 #import "MTDatabaseField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDocument+Extras.h"
+#import "NSFileManager+Common.h"
 
 extern NSString * const MTDatabaseConnectionUsername;
 extern NSString * const MTDatabaseConnectionPassword;
