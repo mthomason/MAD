@@ -451,10 +451,10 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemPrint" destination="sVX-X1-Pl8" id="2Pi-qH-JpI"/>
                         <outlet property="barButtonItemRefresh" destination="cbU-Yf-zEg" id="Tqx-1E-fYe"/>
                         <outlet property="barButtonItemSendToPdf" destination="tzF-47-UAX" id="Au8-WQ-gL7"/>
                         <outlet property="labelDateLastRefreshed" destination="6Du-PE-HeA" id="INm-NY-AKx"/>
-                        <outlet property="printButton" destination="sVX-X1-Pl8" id="QEY-hT-s4C"/>
                         <outlet property="toolbarBottom" destination="AGP-MF-pDa" id="ZVl-zq-D64"/>
                         <outlet property="toolbarTop" destination="40Q-Vk-tKl" id="7Zx-cb-bP1"/>
                         <outlet property="viewBackground" destination="RZN-fd-Qgk" id="yEy-If-GP9"/>

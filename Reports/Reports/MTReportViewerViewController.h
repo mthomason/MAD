@@ -13,6 +13,7 @@
 #import "MTReportViewerReportViewController.h"
 #import "MTPrintingProtocol.h"
 #import "NSDate+Extras.h"
+#import "DocumentStatusView.h"
 
 @interface MTReportViewerViewController : MTViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
@@ -20,8 +21,6 @@
 
 @property (nonatomic, retain) MTReportDocument *documentReport;
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *printButton;
 
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;

@@ -107,14 +107,11 @@
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner];
-    [[vc view] setBounds:[[self view] bounds]];
+    CGSize contentSize =  [[self tableView] contentSize];
+    [[vc view] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, contentSize.width, contentSize.height)];
     [[vc view] setCenter:[[self view] center]];
     [[self view] addSubview: [vc view]];
-
-    
-    
     
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocument];

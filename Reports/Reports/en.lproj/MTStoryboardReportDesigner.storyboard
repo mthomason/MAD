@@ -366,26 +366,10 @@
                             </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="z6W-8h-kya">
                                 <items>
-                                    <barButtonItem style="plain" id="aAE-lW-kO8">
-                                        <view key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" id="htS-aR-m2V">
-                                            <rect key="frame" x="12" y="6" width="150" height="33"/>
+                                    <barButtonItem width="180" style="plain" id="fdf-2L-ZRr">
+                                        <view key="customView" opaque="NO" contentMode="scaleToFill" id="UOx-xf-cKR" customClass="DocumentStatusView">
+                                            <rect key="frame" x="12" y="6" width="180" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DateTime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a8F-qI-Sm3">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="150" id="uNC-Rx-L5X"/>
-                                                        <constraint firstAttribute="height" constant="21" id="zVc-zk-JNy"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstItem="a8F-qI-Sm3" firstAttribute="centerY" secondItem="htS-aR-m2V" secondAttribute="centerY" type="default" id="qtz-eA-Xcc"/>
-                                                <constraint firstItem="a8F-qI-Sm3" firstAttribute="leading" secondItem="htS-aR-m2V" secondAttribute="leading" constant="10" id="uM6-WO-RKD"/>
-                                            </constraints>
                                         </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MKP-fh-mIM"/>
@@ -420,8 +404,10 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="labelDateLastRefreshed" destination="a8F-qI-Sm3" id="3Rp-Sr-CKc"/>
-                        <outlet property="printButton" destination="DID-rD-aUM" id="jCQ-9L-Kag"/>
+                        <outlet property="barButtonItemPrint" destination="DID-rD-aUM" id="Ahb-lA-GSl"/>
+                        <outlet property="barButtonItemRefresh" destination="dHk-yi-Ofz" id="Pgo-3L-Nsl"/>
+                        <outlet property="barButtonItemSendToPdf" destination="3cT-7h-31P" id="hNj-mJ-g1L"/>
+                        <outlet property="documentStatusView" destination="UOx-xf-cKR" id="ntq-BD-qhy"/>
                         <outlet property="viewBackground" destination="qss-v8-rBe" id="opr-tF-kEL"/>
                         <outlet property="viewContainer" destination="Osy-v2-DAi" id="cZ5-pF-wHh"/>
                     </connections>
@@ -1653,6 +1639,10 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <connections>
+                                                        <action selector="schemaDidEndOnExit:" destination="OZq-ny-MYn" eventType="editingDidEndOnExit" id="AT2-it-nJ8"/>
+                                                        <outlet property="delegate" destination="OZq-ny-MYn" id="2b6-ZE-OLB"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pFO-PU-tlN">
                                                     <constraints>
@@ -1769,7 +1759,10 @@
                         <outlet property="tableViewCellPassword" destination="5lw-iI-Tiu" id="SCe-qE-isP"/>
                         <outlet property="tableViewCellPort" destination="X4p-iK-ttL" id="jUc-QK-JUj"/>
                         <outlet property="tableViewCellUsername" destination="4Hc-yN-gxL" id="nsC-NO-IVy"/>
+                        <outlet property="textFieldDatabase" destination="G2O-Pv-hlp" id="ULm-nB-5h9"/>
+                        <outlet property="textFieldHost" destination="44Z-eU-J47" id="DIs-C4-Wpn"/>
                         <outlet property="textFieldPassword" destination="b6f-Wi-K0w" id="Zol-E2-fb9"/>
+                        <outlet property="textFieldPort" destination="A4e-nG-poN" id="TeE-dq-aUh"/>
                         <outlet property="textFieldReportName" destination="x90-TL-CIK" id="noF-1C-ANO"/>
                         <outlet property="textFieldUsername" destination="Yrx-Rz-Oez" id="M4b-bB-R7C"/>
                     </connections>
@@ -7117,9 +7110,11 @@
             <relationships>
                 <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="doneReports:"/>
+                <relationship kind="action" name="hideToolbox:"/>
                 <relationship kind="action" name="info:"/>
                 <relationship kind="action" name="showObjects:"/>
                 <relationship kind="action" name="showSettings:"/>
+                <relationship kind="action" name="showToolbox:" candidateClass="MTToolboxType"/>
                 <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
@@ -7135,14 +7130,13 @@
         <class className="MTReportViewerViewController" superclassName="MTViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
             <relationships>
-                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="print:"/>
-                <relationship kind="action" name="refresh:"/>
                 <relationship kind="action" name="sendToPdf:"/>
+                <relationship kind="outlet" name="barButtonItemPrint" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
                 <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="printButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>

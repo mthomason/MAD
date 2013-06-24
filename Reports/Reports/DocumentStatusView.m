@@ -3,37 +3,83 @@
 @interface DocumentStatusView()
 
 @property (nonatomic, assign) UIDocumentState state;
+@property (nonatomic, retain) NSString *message;
+@property (atomic, retain) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, assign) BOOL active;
 
 @end
 
 @implementation DocumentStatusView
 
+- (void)dealloc {
+    [_activityIndicator release];
+    [_message release];
+    [super dealloc];
+}
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self setBackgroundColor: [UIColor clearColor]];
         [self setDocumentState: UIDocumentStateNormal];
+        [self setMessage:@""];
     }
     
     return self;
 }
-
 
 - (CGSize)sizeThatFits:(CGSize)size {
     return CGSizeMake(size.height + 80, size.height);
 }
 
 - (void)setDocumentState:(UIDocumentState)documentState {
-    [self setNeedsDisplay];
     [self setState:documentState];
+    [self setNeedsDisplay];
 }
 
+- (void)setDocumentMessage:(NSString *)message {
+    [self setMessage:message];
+    [self setNeedsDisplay];
+}
+
+- (CGRect)statusIndicatorRectForRect:(CGRect)rect {
+    rect = CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.height, rect.size.height);
+    return CGRectInset(rect, 3.0000f, 3.0000f);;
+}
+
+- (void)setActivityState:(BOOL)active {
+    @synchronized([self activityIndicator]) {
+        [self setActive:active];
+        if (active) {
+            if ([self activityIndicator] == nil) {
+                UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:[self statusIndicatorRectForRect:[self frame]]];
+                [activityIndicator setHidesWhenStopped:YES];
+                [self addSubview:activityIndicator];
+                [self setActivityIndicator:activityIndicator];
+                [activityIndicator release];
+            }
+            [[self activityIndicator] startAnimating];
+        } else {
+            [[self activityIndicator] stopAnimating];
+            //[[self activityIndicator] removeFromSuperview];
+            //[[self activityIndicator] release];
+            //[self setActivityIndicator:nil];
+        }
+        [self setNeedsDisplay];
+    }
+}
+
+//Draw a circluar status indicator on the left.  Draw
+//  a label on the right.  The diameter of the status indicator
+//  is related to the height.
 - (void)drawRect:(CGRect)rect {
-    rect = CGRectInset(rect, 3.0000f, 3.0000f);
+    
+    //Draw status indicator
+    CGRect statusIndicatorBox = [self statusIndicatorRectForRect:rect];
+
     CGMutablePathRef circlePath = CGPathCreateMutable();
-    CGPathAddArc(circlePath, NULL, CGRectGetMidX(rect), CGRectGetMidY(rect), CGRectGetWidth(rect) / 2.0000f, 0.0000f, M_PI, NO);
-    CGPathAddArc(circlePath, NULL, CGRectGetMidX(rect), CGRectGetMidY(rect), CGRectGetWidth(rect) / 2.0000f, M_PI, 0.0000f, NO);
+    CGPathAddArc(circlePath, NULL, CGRectGetMidX(statusIndicatorBox), CGRectGetMidY(statusIndicatorBox), CGRectGetWidth(statusIndicatorBox) / 2.0000f, 0.0000f, M_PI, NO);
+    CGPathAddArc(circlePath, NULL, CGRectGetMidX(statusIndicatorBox), CGRectGetMidY(statusIndicatorBox), CGRectGetWidth(statusIndicatorBox) / 2.0000f, M_PI, 0.0000f, NO);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, circlePath);
@@ -67,10 +113,37 @@
     }
     [[UIColor blackColor] setStroke];
     
+    if ([self active]) {
+        [[UIColor clearColor] set];
+    }
+    
     CGContextSetLineWidth(currentContext, 3.0000f);
     
     CGContextDrawPath(currentContext, kCGPathEOFillStroke);
     CGPathRelease(circlePath);
+    
+    //Draw label
+    if ([self active] == NO) {
+        [[UIColor lightTextColor] set];
+        
+       // CGRect labelBox = CGRectMake(CGPointZero.x + rect.size.height, CGPointZero.y + 9.0000f, rect.size.width - rect.size.height, rect.size.height - 13.0000f);
+        
+        CGFloat actualFontSize = 9.0000f;
+        UIFont *desiredfont = [UIFont boldSystemFontOfSize:9.0000f];
+        
+        CGSize constrainedSize = CGSizeMake((rect.size.width - rect.size.height), rect.size.height);
+        CGSize actualLabelBoxSize = [[self message] sizeWithFont:desiredfont
+                                               constrainedToSize:constrainedSize
+                                                   lineBreakMode:NSLineBreakByWordWrapping];
+//        CGSize actualLabelBoxSize = [[self message] sizeWithFont:desiredfont
+//                                                     minFontSize:11.0000f
+//                                                  actualFontSize:&actualFontSize
+//                                                        forWidth:(rect.size.width - rect.size.height)
+//                                                   lineBreakMode:NSLineBreakByCharWrapping];
+        CGFloat inset = (rect.size.height - actualLabelBoxSize.height) / 2.0000f;
+        CGRect printbox = CGRectMake(CGPointZero.x + rect.size.height, CGPointZero.y + inset, actualLabelBoxSize.width, actualLabelBoxSize.height);
+        [[self message] drawInRect:printbox withFont:[UIFont boldSystemFontOfSize:actualFontSize] lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentCenter];
+    }
 }
 
 @end
