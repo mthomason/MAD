@@ -297,8 +297,9 @@
             CGFloat originPointY        = [[element dropPointY] floatValue];
             CGRect elementCanvasRect    = [element frameInSectionForSpacingWithOriginPoint:CGPointMake(originPointX, originPointY)];
 
-            if (elementCanvasRect.size.height > resultHeight) {
-                resultHeight = elementCanvasRect.size.height;
+            CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
+            if (totalHeight > resultHeight) {
+                resultHeight = totalHeight;
                 [section setLayoutHeight:@(resultHeight)];
             }
         }

@@ -172,7 +172,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 - (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin {
 
     CGRect result               = [self paddingViewFrame];
-    CGFloat x                   = [[self paddingLeft] floatValue] + result.origin.x + [[self dropPointX] floatValue] + origin.x;
+    CGFloat x                   = [[self paddingLeft] floatValue] + result.origin.x + [[self dropPointX] floatValue];
     CGFloat y                   = [[self paddingTop] floatValue] + result.origin.y + [[self dropPointY] floatValue] + origin.y;
     CGFloat width               = result.size.width;
     CGFloat height              = result.size.height;

@@ -334,11 +334,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 }
 
             }
-        
+            sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
+            CGFloat sectionHeight = sizeHeight;
             sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             
-            CGFloat sectionHeight = CGSizeZero.height;
-            
+//            CGFloat sectionHeight = CGSizeZero.height;
+/*
             for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
 
                 CGFloat rowHeight = CGSizeZero.height;
@@ -356,7 +357,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 }
                 
             }
-            
+            */
             [[UIBezierPath bezierPathWithRect:sectionRect] fill];
             
             id obj = [pageSection objectForKey:MTReportSectionValues];
@@ -541,13 +542,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                         CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
-
+                        NSLog(@"%@", NSStringFromCGRect(elementCanvasRect));
 
                         if (drawingObject == nil) {
                             
                             NSMutableAttributedString *dObject = [[NSMutableAttributedString alloc] initWithString: displayString
                                                                                    attributes: [self attributesForDocumentObject:item]];
                             [dObject drawInRect:elementCanvasRect];
+                            
+                            //[dObject drawInRect:elementCanvasRect lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentCenter];
                             [dObject release];
 
                         } else {
@@ -580,14 +583,33 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     NSLog(@"%@", fontname);
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
     UIFont *customFont = [font font];
-    //    UIFont *customFont = [UIFont systemFontOfSize:[[documentObject fontsize] floatValue]];
     NSNumber *underline = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     NSNumber *strikethough = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-//    NSNumber *strokeWidth = [[documentObject bold] boolValue] ? @(3.0000f) : @(0.0000f);
-    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    switch ([[documentObject horizontalAlignment] integerValue]) {
+        case MTHorizontalAlignmentLeft:
+            [paragraphStyle setAlignment:NSTextAlignmentLeft];
+            break;
+        case MTHorizontalAlignmentRight:
+            [paragraphStyle setAlignment:NSTextAlignmentRight];
+            break;
+        case MTHorizontalAlignmentCenter:
+            [paragraphStyle setAlignment:NSTextAlignmentCenter];
+            break;
+        case MTHorizontalAlignmentJustified:
+            [paragraphStyle setAlignment:NSTextAlignmentJustified];
+            break;
+        case MTHorizontalAlignmentNatrual:
+            [paragraphStyle setAlignment:NSTextAlignmentNatural];
+            break;
+        default:
+            break;
+    }
     return @{NSFontAttributeName : customFont,
              NSUnderlineStyleAttributeName : underline,
-             NSStrikethroughStyleAttributeName : strikethough};
+             NSStrikethroughStyleAttributeName : strikethough,
+             NSParagraphStyleAttributeName: [paragraphStyle autorelease]};
 
 }
 
