@@ -81,7 +81,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
 
+@property (retain, nonatomic) IBOutlet UIToolbar *toolbarBottom;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *buttonAddNewDocument;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *buttonLicensing;
 @end
 
 @implementation MTViewControllerOpenDocument
@@ -96,12 +98,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_availableFilesCacheMetaData release];
     [_availableFilesCache release];
     [_tableViewQueries release];
-    [_toolbar release];
     [_barButtonItemTitle release];
     [_collectionViewQueries release];
     [_titleView release];
     [_openDocumentPopoverController release];
     [_buttonAddNewDocument release];
+    [_toolbar release];
+    [_toolbarBottom release];
+    [_buttonLicensing release];
     [super dealloc];
 }
 
@@ -226,6 +230,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [fileMetaCache release];
     
     [self updateFileList];
+    if (![SKPaymentQueue canMakePayments]) {
+        [[self toolbarBottom] setItems:@[]];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -285,6 +292,41 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         [[segue destinationViewController] setDelegate:self];
         
+    } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
+
+        NSUInteger row = 0;
+        NSURL *url = nil;
+        if ([sender isKindOfClass:[MTTableViewCellDocument class]]) {
+            
+            MTTableViewCellDocument *senderCell = sender;
+            row = [[[self tableViewQueries] indexPathForCell:senderCell] row];
+            url = [[[self availableFilesCache] objectAtIndex: row] retain];
+            [self setUrlBeingOpended:url];
+            
+        } else if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+            
+            MTCollectionViewCellDocument *senderCell = sender;
+            row = [[[self collectionViewQueries] indexPathForCell:senderCell] row];
+            url = [[[self availableFilesCache] objectAtIndex: row] retain];
+            [self setUrlBeingOpended:url];
+        }
+
+        [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+                                        withWrapper:[MTReportDocument class]
+                               andCompletionHandler:^(id managedDocument, BOOL success) {
+                                   
+                                   if (success) {
+                                       [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                                       MTReportViewerViewController *viewControllerReportViewer = [segue destinationViewController];
+                                       [viewControllerReportViewer setDelegate:self];
+                                       [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
+                                   }
+                                   
+                               }];
+
+        
+
+        
     } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
         
         NSUInteger row = 0;
@@ -323,7 +365,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
             }
             [navControl release];
-            
         } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
             
             MTQueryBuilderContainerController *splitViewController = (MTQueryBuilderContainerController* )[[segue destinationViewController] retain];
@@ -906,7 +947,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSString *path = [fileRepresentation.previewURL path];
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         [[visibleCell imageThumbnail] setImage: image];
-        [visibleCell setNeedsLayout];
+        [visibleCell setNeedsLayout];        
         [_previewLoadingOperations removeObjectForKey:indexPath];
     }];
     _previewLoadingOperations[indexPath] = previewLoadingOperation;

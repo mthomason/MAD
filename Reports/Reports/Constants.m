@@ -62,6 +62,9 @@ NSString * const MYSQLDATABASEDATA_FILENAME                         = @"mydata";
 NSString * const MTPersistentStoreAliasMad                          = @"analyitics";
 NSString * const MTPersistentStoreAliasUserPreferences              = @"preferences";
 
+NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1   = @"com.everydayapps.mad.designer.subscription.year";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1    = @"com.everydayapps.mad.viewer.subscription.month";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1     = @"com.everydayapps.mad.viewer.subscription.year";
 
 NSString * const TEMPLATES                                          = @"Templates";
 
@@ -106,6 +109,7 @@ NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddG
 NSString * const MNSIdentifierSegueShowReportLayout                 = @"showReportLayout";
 NSString * const MNSIdentifierSegueShowReportViewerFromQuery        = @"showReportViewerFromQuery";
 NSString * const MNSSegueShowSql                                    = @"MNSSegueShowSql";
+NSString * const MTSegueOpenInViewer                                = @"MTSegueOpenInViewer";
 
 NSString * const KEY_DB_TYPE_SF     = @"Salesforce.com";
 NSString * const KEY_DB_TYPE_DB     = @"Database.com";

@@ -11,6 +11,7 @@
 #import "MTReportDocument.h"
 #import "UIDevice+Hack.h"
 #import "CloudManager.h"
+#import "MTStoreKitController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

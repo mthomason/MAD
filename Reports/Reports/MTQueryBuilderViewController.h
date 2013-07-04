@@ -29,6 +29,7 @@
 #import "MTViewTableHeader.h"
 #import "MTReportDocument.h"
 #import "UIDevice+Hack.h"
+#import "MTLog.h"
 
 @interface MTQueryBuilderViewController : MTViewController
     <UITableViewDataSource,

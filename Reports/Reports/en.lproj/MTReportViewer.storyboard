@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="w67-I1-BvF">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller Open Document-->
+        <scene sceneID="qz6-ZR-IGZ">
+            <objects>
+                <viewController id="w67-I1-BvF" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="F4E-Tw-JfL">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="upf-G5-c6o">
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="E0a-pd-OHT"/>
+                                    <barButtonItem title="MAD Viewer" style="plain" id="xi2-bp-Qf9">
+                                        <connections>
+                                            <action selector="about:" destination="w67-I1-BvF" id="437-Dz-cj1"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Ied-6N-WBv"/>
+                                    <barButtonItem style="plain" systemItem="edit" id="kRT-ay-Tgf">
+                                        <connections>
+                                            <action selector="edit:" destination="w67-I1-BvF" id="ChC-ab-LuE"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="BRB-9Q-XSz">
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="6lh-iw-V0c" customClass="MTTableViewCellDocument">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="73"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cly-0Y-nTi">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="64" id="gfw-vH-VnE"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Example Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="KWL-Kn-bLo">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="HcR-pH-Vr0"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="Cly-0Y-nTi" firstAttribute="centerY" secondItem="6lh-iw-V0c" secondAttribute="centerY" type="default" id="5B2-6e-O2Y"/>
+                                            <constraint firstItem="KWL-Kn-bLo" firstAttribute="leading" secondItem="Cly-0Y-nTi" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="K7F-Nt-KBG"/>
+                                            <constraint firstItem="KWL-Kn-bLo" firstAttribute="top" secondItem="6lh-iw-V0c" secondAttribute="top" constant="25" id="a7O-Me-fM4"/>
+                                            <constraint firstAttribute="trailing" secondItem="KWL-Kn-bLo" secondAttribute="trailing" constant="20" type="default" id="bky-6v-X7m"/>
+                                            <constraint firstItem="Cly-0Y-nTi" firstAttribute="leading" secondItem="6lh-iw-V0c" secondAttribute="leading" constant="20" type="default" id="s4L-eH-gcg"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageThumbnail" destination="Cly-0Y-nTi" id="B5k-NT-cLV"/>
+                                            <outlet property="labelH1" destination="KWL-Kn-bLo" id="OH7-s6-JBm"/>
+                                            <segue destination="jnz-LH-jZ5" kind="modal" identifier="MTSegueOpenInViewer" id="ObA-MZ-EkU"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="w67-I1-BvF" id="AHe-IG-bgW"/>
+                                    <outlet property="delegate" destination="w67-I1-BvF" id="0rM-Ed-7C1"/>
+                                </connections>
+                            </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="tTo-Lc-fTk">
+                                <items/>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="BRB-9Q-XSz" firstAttribute="top" secondItem="upf-G5-c6o" secondAttribute="bottom" type="default" id="4RY-Lc-eaN"/>
+                            <constraint firstItem="BRB-9Q-XSz" firstAttribute="leading" secondItem="F4E-Tw-JfL" secondAttribute="leading" type="default" id="8Er-h6-j0L"/>
+                            <constraint firstItem="upf-G5-c6o" firstAttribute="trailing" secondItem="F4E-Tw-JfL" secondAttribute="trailing" type="default" id="ISO-Zf-jwJ"/>
+                            <constraint firstItem="tTo-Lc-fTk" firstAttribute="leading" secondItem="F4E-Tw-JfL" secondAttribute="leading" type="default" id="QOl-Nk-7sP"/>
+                            <constraint firstItem="BRB-9Q-XSz" firstAttribute="trailing" secondItem="F4E-Tw-JfL" secondAttribute="trailing" type="default" id="RIs-FJ-D4U"/>
+                            <constraint firstItem="tTo-Lc-fTk" firstAttribute="trailing" secondItem="F4E-Tw-JfL" secondAttribute="trailing" type="default" id="Rbx-hF-gWJ"/>
+                            <constraint firstItem="upf-G5-c6o" firstAttribute="leading" secondItem="F4E-Tw-JfL" secondAttribute="leading" type="default" id="arK-RC-kVH"/>
+                            <constraint firstItem="upf-G5-c6o" firstAttribute="top" secondItem="F4E-Tw-JfL" secondAttribute="top" type="default" id="dr1-tq-hOj"/>
+                            <constraint firstItem="tTo-Lc-fTk" firstAttribute="bottom" secondItem="F4E-Tw-JfL" secondAttribute="bottom" type="default" id="lOE-HT-sQH"/>
+                            <constraint firstItem="tTo-Lc-fTk" firstAttribute="top" secondItem="BRB-9Q-XSz" secondAttribute="bottom" type="default" id="qYP-4x-Vx6"/>
+                        </constraints>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <connections>
+                        <outlet property="barButtonItemTitle" destination="xi2-bp-Qf9" id="Fdx-jJ-jS2"/>
+                        <outlet property="tableViewQueries" destination="BRB-9Q-XSz" id="MRB-ta-GN1"/>
+                        <outlet property="toolbar" destination="upf-G5-c6o" id="7wH-sO-EJR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LLl-Bh-yBY" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="25" y="329"/>
+        </scene>
+        <!--Report Viewer View Controller-->
+        <scene sceneID="dcC-jJ-Men">
+            <objects>
+                <viewController id="jnz-LH-jZ5" customClass="MTReportViewerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="brS-L0-fbF">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="qWa-gW-3hv">
+                                <items>
+                                    <barButtonItem image="UIImageArrowDown.png" id="lwA-6T-tQI">
+                                        <connections>
+                                            <action selector="done:" destination="jnz-LH-jZ5" id="Pob-kM-ku7"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ouh-Er-glS"/>
+                                    <barButtonItem systemItem="refresh" id="SBd-Gy-C7f">
+                                        <connections>
+                                            <action selector="refresh:" destination="jnz-LH-jZ5" id="icO-ko-BSV"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="Vwt-I3-pib">
+                                <items>
+                                    <barButtonItem width="180" style="plain" id="dgT-jZ-EJg">
+                                        <view key="customView" opaque="NO" contentMode="scaleToFill" id="1uG-GS-Sy8" customClass="DocumentStatusView">
+                                            <rect key="frame" x="12" y="6" width="180" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="dnM-xC-a5w"/>
+                                    <barButtonItem title="Print" id="cUE-gE-i1w">
+                                        <connections>
+                                            <action selector="print:" destination="jnz-LH-jZ5" id="0Nl-zt-qx5"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="PDF" id="vmw-1G-IV6">
+                                        <connections>
+                                            <action selector="sendToPdf:" destination="jnz-LH-jZ5" id="siF-4n-a75"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQy-g8-XiQ">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qWa-gW-3hv" firstAttribute="top" secondItem="brS-L0-fbF" secondAttribute="top" type="default" id="01C-wZ-7vc"/>
+                            <constraint firstItem="Vwt-I3-pib" firstAttribute="leading" secondItem="brS-L0-fbF" secondAttribute="leading" type="default" id="5nu-Cc-pgP"/>
+                            <constraint firstItem="Vwt-I3-pib" firstAttribute="bottom" secondItem="brS-L0-fbF" secondAttribute="bottom" type="default" id="Dkl-ty-BoL"/>
+                            <constraint firstItem="Vwt-I3-pib" firstAttribute="top" secondItem="RQy-g8-XiQ" secondAttribute="bottom" type="default" id="LNw-WS-auq"/>
+                            <constraint firstItem="Vwt-I3-pib" firstAttribute="trailing" secondItem="brS-L0-fbF" secondAttribute="trailing" type="default" id="bXn-jc-ebx"/>
+                            <constraint firstItem="RQy-g8-XiQ" firstAttribute="leading" secondItem="brS-L0-fbF" secondAttribute="leading" type="default" id="kPG-dU-IwV"/>
+                            <constraint firstItem="RQy-g8-XiQ" firstAttribute="top" secondItem="qWa-gW-3hv" secondAttribute="bottom" type="default" id="lA0-Fv-D3x"/>
+                            <constraint firstItem="qWa-gW-3hv" firstAttribute="trailing" secondItem="brS-L0-fbF" secondAttribute="trailing" type="default" id="naR-nZ-ryW"/>
+                            <constraint firstItem="qWa-gW-3hv" firstAttribute="leading" secondItem="brS-L0-fbF" secondAttribute="leading" type="default" id="noO-lt-TuJ"/>
+                            <constraint firstItem="RQy-g8-XiQ" firstAttribute="trailing" secondItem="brS-L0-fbF" secondAttribute="trailing" type="default" id="rmy-0Y-nYQ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="barButtonItemPrint" destination="cUE-gE-i1w" id="W5p-e1-wpH"/>
+                        <outlet property="barButtonItemRefresh" destination="SBd-Gy-C7f" id="MDN-MI-1sV"/>
+                        <outlet property="barButtonItemSendToPdf" destination="vmw-1G-IV6" id="o2i-Pg-4xK"/>
+                        <outlet property="documentStatusView" destination="1uG-GS-Sy8" id="g89-0I-nhN"/>
+                        <outlet property="viewBackground" destination="brS-L0-fbF" id="x45-Lj-wXd"/>
+                        <outlet property="viewContainer" destination="RQy-g8-XiQ" id="143-0k-jUS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MVR-Qd-GiW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="500" y="334"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="UIImageArrowDown.png" width="20" height="20"/>
+        <image name="UIImageDocumentBlank.png" width="64" height="64"/>
+    </resources>
+    <classes>
+        <class className="DocumentStatusView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
+        </class>
+        <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imagePreview" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTReportViewerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="print:"/>
+                <relationship kind="action" name="sendToPdf:"/>
+                <relationship kind="outlet" name="barButtonItemPrint" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewCellDocument" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTTitleView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerOpenDocument" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
+            <relationships>
+                <relationship kind="action" name="add:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonAddNewDocument" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
+                <relationship kind="outlet" name="collectionViewQueries" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+    </classes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

@@ -6,14 +6,6 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#define MT_DEBUG_MODE
-
-#ifdef MT_DEBUG_MODE
-#define MTLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
-#else
-#define MTLog( s, ... )
-#endif
-
 #pragma mark - Layout
 
 // MARK: Margin
@@ -156,6 +148,10 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 	MTHorizontalAlignmentNatrual = 4
 };
 
+extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
+extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
+extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
+
 extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
@@ -239,6 +235,7 @@ extern NSString * const MNSIdentifierUIViewControllerTableHeaderQuery;
 extern NSString * const MUIViewControllerActivitySpinner;
 
 // MARK: Segue Identifiers
+extern NSString * const MTSegueOpenInViewer;
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;
 extern NSString * const MNSIdentifierSegueShowDatabasesDrivers;
 extern NSString * const MNSIdentifierSegueShowAddDatabaseDrivers;

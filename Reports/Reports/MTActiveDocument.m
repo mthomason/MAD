@@ -26,14 +26,10 @@ static MTActiveDocument *sharedSingleton = nil;
             sharedSingleton = [[super allocWithZone:NULL] init];
             [sharedSingleton setDocument:nil];
         }
-        //MTReportDocument *reportDocument = [[MTReportDocument alloc] init];
-        //[sharedSingleton setDocument:reportDocument];
-        //[reportDocument release];
     }
 }
 
 + (MTActiveDocument *)sharedDocument {
-    //NSLog(@"%@", sharedSingleton);
     return sharedSingleton;
 }
 

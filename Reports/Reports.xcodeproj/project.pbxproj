@@ -31,6 +31,26 @@
 		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C00819614B84293003DF437 /* PreferencesApplication.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C00819414B84293003DF437 /* PreferencesApplication.xcdatamodeld */; };
+		4C0081D51781C33000874849 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081D41781C33000874849 /* MTStoreKitController.m */; };
+		4C0081D61781C33000874849 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081D41781C33000874849 /* MTStoreKitController.m */; };
+		4C0081D71781C33000874849 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081D41781C33000874849 /* MTStoreKitController.m */; };
+		4C0081D81781C33000874849 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081D41781C33000874849 /* MTStoreKitController.m */; };
+		4C0081D91781C33000874849 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081D41781C33000874849 /* MTStoreKitController.m */; };
+		4C0081DC1781D8C200874849 /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081DB1781D8C200874849 /* MTLog.m */; };
+		4C0081DD1781D8C200874849 /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081DB1781D8C200874849 /* MTLog.m */; };
+		4C0081DE1781D8C200874849 /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081DB1781D8C200874849 /* MTLog.m */; };
+		4C0081DF1781D8C200874849 /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081DB1781D8C200874849 /* MTLog.m */; };
+		4C0081E01781D8C200874849 /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081DB1781D8C200874849 /* MTLog.m */; };
+		4C0081EA17849A4A00874849 /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* VerificationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0081EB17849A4A00874849 /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* VerificationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0081EC17849A4A00874849 /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* VerificationController.m */; };
+		4C0081ED17849A4A00874849 /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* VerificationController.m */; };
+		4C0081EE17849A4A00874849 /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* VerificationController.m */; };
+		4C0081F817853E8600874849 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081F617853E8500874849 /* SFHFKeychainUtils.m */; };
+		4C0081F917853E8600874849 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081F617853E8500874849 /* SFHFKeychainUtils.m */; };
+		4C0081FA17853E8600874849 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081F617853E8500874849 /* SFHFKeychainUtils.m */; };
+		4C0081FB17853E8600874849 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081F617853E8500874849 /* SFHFKeychainUtils.m */; };
+		4C0081FC17853E8600874849 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081F617853E8500874849 /* SFHFKeychainUtils.m */; };
 		4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
 		4C0AFC3A16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
 		4C0AFC3B16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
@@ -1127,8 +1147,8 @@
 		4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C955D771644FC5700F890D2 /* MTTemplateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */; };
 		4C955D781644FC5700F890D2 /* MTTemplateSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */; };
-		4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */; };
-		4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */; };
+		4C97F0FE163E1D8B006ABD35 /* MTReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FA163E1D8B006ABD35 /* MTReportViewerPad.storyboard */; };
+		4C97F0FF163E1D8B006ABD35 /* MTReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C97F0FC163E1D8B006ABD35 /* MTReportViewer.storyboard */; };
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -1887,6 +1907,19 @@
 		4CE9BC2616EF59CC00B0808C /* MTActiveDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */; };
 		4CE9BC8116EF702600B0808C /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */; };
 		4CE9BC8216EF702600B0808C /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */; };
+		4CE9F2B21778B489009F11AF /* liblibTdsClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */; };
+		4CE9F2BA1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */; };
+		4CE9F2BB1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */; };
+		4CE9F2BC1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */; };
+		4CE9F2BD1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */; };
+		4CE9F2BE1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */; };
+		4CE9F3181778DCC0009F11AF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE9F3171778DCC0009F11AF /* StoreKit.framework */; };
+		4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE9F3171778DCC0009F11AF /* StoreKit.framework */; };
+		4CE9F31C177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
+		4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
+		4CE9F31E177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
+		4CE9F31F177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
+		4CE9F320177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
 		4CF1335116CCB2EE00FD0F0B /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */; };
 		4CF1335216CCB2EE00FD0F0B /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */; };
 		4CF1335516CD1FE400FD0F0B /* MTQueryBuilderAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */; };
@@ -2001,6 +2034,14 @@
 		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageWrench20.png; sourceTree = "<group>"; };
 		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageWrench20@2x.png"; sourceTree = "<group>"; };
 		4C00819514B84293003DF437 /* PreferencesApplication.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PreferencesApplication.xcdatamodel; sourceTree = "<group>"; };
+		4C0081D31781C33000874849 /* MTStoreKitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStoreKitController.h; sourceTree = "<group>"; };
+		4C0081D41781C33000874849 /* MTStoreKitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStoreKitController.m; sourceTree = "<group>"; };
+		4C0081DA1781D8C200874849 /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLog.h; sourceTree = "<group>"; };
+		4C0081DB1781D8C200874849 /* MTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLog.m; sourceTree = "<group>"; };
+		4C0081E817849A4A00874849 /* VerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationController.m; sourceTree = "<group>"; };
+		4C0081E917849A4A00874849 /* VerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerificationController.h; sourceTree = "<group>"; };
+		4C0081F617853E8500874849 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		4C0081F717853E8500874849 /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
 		4C0AFC3816B1C2750007964D /* MTSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSqlite3.h; sourceTree = "<group>"; };
@@ -2008,7 +2049,7 @@
 		4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPad.storyboard; path = Reports/MTStoryboardReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewTableHeader.m; sourceTree = "<group>"; };
-		4C0E785B163B5AEC003B951E /* ReportViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReportViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* ReportViewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ReportViewer-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/ReportViewer-Info.plist"; sourceTree = "<absolute>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
@@ -2443,8 +2484,8 @@
 		4C9514ED15108206004AF941 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
 		4C955D761644FC5700F890D2 /* MTTemplateSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTemplateSelectorViewController.m; sourceTree = "<group>"; };
-		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPad.storyboard; sourceTree = "<group>"; };
-		4C97F0FD163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/ReportViewerPhone.storyboard; sourceTree = "<group>"; };
+		4C97F0FB163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTReportViewerPad.storyboard; sourceTree = "<group>"; };
+		4C97F0FD163E1D8B006ABD35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTReportViewer.storyboard; sourceTree = "<group>"; };
 		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
@@ -2817,6 +2858,13 @@
 		4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActiveDocument.m; sourceTree = "<group>"; };
 		4CE9BC7F16EF702600B0808C /* RptqQueryTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTable+Extras.h"; sourceTree = "<group>"; };
 		4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryTable+Extras.m"; sourceTree = "<group>"; };
+		4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Designer.entitlements"; sourceTree = "<group>"; };
+		4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Viewer.entitlements"; sourceTree = "<group>"; };
+		4CE9F2B81778D0AD009F11AF /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		4CE9F3171778DCC0009F11AF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLicensingViewController.h; sourceTree = "<group>"; };
+		4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLicensingViewController.m; sourceTree = "<group>"; };
 		4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libTdsClient.xcodeproj; path = libTdsClient/libTdsClient.xcodeproj; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1334F16CCB2E900FD0F0B /* MTQueryBuilderContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryBuilderContainerController.h; path = ../MTQueryBuilderContainerController.h; sourceTree = "<group>"; };
@@ -2863,6 +2911,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */,
+				4CE9F2B21778B489009F11AF /* liblibTdsClient.a in Frameworks */,
 				4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F2A167643C9004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */,
@@ -2942,6 +2992,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CE9F3181778DCC0009F11AF /* StoreKit.framework in Frameworks */,
 				4C6DAA981761B00F00FF770A /* liblibTdsClient.a in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */,
@@ -3170,6 +3221,17 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
+		4C0081E11784968B00874849 /* MTStoreKit */ = {
+			isa = PBXGroup;
+			children = (
+				4C0081D31781C33000874849 /* MTStoreKitController.h */,
+				4C0081D41781C33000874849 /* MTStoreKitController.m */,
+				4C0081E917849A4A00874849 /* VerificationController.h */,
+				4C0081E817849A4A00874849 /* VerificationController.m */,
+			);
+			name = MTStoreKit;
+			sourceTree = "<group>";
+		};
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3320,6 +3382,10 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C0081E11784968B00874849 /* MTStoreKit */,
+				4CE9F3171778DCC0009F11AF /* StoreKit.framework */,
+				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
+				4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */,
 				4C81BB93176F644200E7B98C /* File */,
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
 				4C752E0B16EA3A0C001FDAA3 /* README-libmysqlclient.txt */,
@@ -3332,10 +3398,16 @@
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C5625DE1758A17D00433E88 /* CloudManager.h */,
 				4C5625DF1758A17E00433E88 /* CloudManager.m */,
+				4C0081DA1781D8C200874849 /* MTLog.h */,
+				4C0081DB1781D8C200874849 /* MTLog.m */,
+				4CE9F2B81778D0AD009F11AF /* KeychainItemWrapper.h */,
+				4CE9F2B91778D0AD009F11AF /* KeychainItemWrapper.m */,
+				4C0081F717853E8500874849 /* SFHFKeychainUtils.h */,
+				4C0081F617853E8500874849 /* SFHFKeychainUtils.m */,
 				4C384E3A14B29789007B4F48 /* MTStoryboardReportDesigner.storyboard */,
 				4C0AFCDD16B595FC0007964D /* MTStoryboardReportDesignerPad.storyboard */,
-				4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */,
-				4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */,
+				4C97F0FC163E1D8B006ABD35 /* MTReportViewer.storyboard */,
+				4C97F0FA163E1D8B006ABD35 /* MTReportViewerPad.storyboard */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
@@ -3349,7 +3421,7 @@
 			isa = PBXGroup;
 			children = (
 				4C384E2414B29789007B4F48 /* MAD Designer.app */,
-				4C0E785B163B5AEC003B951E /* ReportViewer.app */,
+				4C0E785B163B5AEC003B951E /* MAD Viewer.app */,
 				4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */,
 				4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */,
 				4C860BAE167EDE7000AC1904 /* MTDataStructures Test.octest */,
@@ -4265,6 +4337,8 @@
 				4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */,
 				4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */,
 				4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */,
+				4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */,
+				4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */,
 			);
 			name = "View Controllers";
 			path = Reports;
@@ -4496,7 +4570,7 @@
 			);
 			name = "MAD Viewer";
 			productName = TheReportViewer;
-			productReference = 4C0E785B163B5AEC003B951E /* ReportViewer.app */;
+			productReference = 4C0E785B163B5AEC003B951E /* MAD Viewer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4C1B7A53163E0D9400E331AA /* MySqlClientTest */ = {
@@ -4813,8 +4887,8 @@
 				4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */,
 				4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */,
-				4C97F0FE163E1D8B006ABD35 /* ReportViewerPad.storyboard in Resources */,
-				4C97F0FF163E1D8B006ABD35 /* ReportViewerPhone.storyboard in Resources */,
+				4C97F0FE163E1D8B006ABD35 /* MTReportViewerPad.storyboard in Resources */,
+				4C97F0FF163E1D8B006ABD35 /* MTReportViewer.storyboard in Resources */,
 				4CD98C73163F7DE70096D7BC /* gcc_builtins.h in Resources */,
 				4CD98C77163F7DE70096D7BC /* generic-msvc.h in Resources */,
 				4CD98C7B163F7DE70096D7BC /* nolock.h in Resources */,
@@ -5791,6 +5865,12 @@
 				4C76B6E11776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
 				4C76B6E81776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6EF1776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
+				4CE9F2BB1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */,
+				4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
+				4C0081D61781C33000874849 /* MTStoreKitController.m in Sources */,
+				4C0081DD1781D8C200874849 /* MTLog.m in Sources */,
+				4C0081EB17849A4A00874849 /* VerificationController.m in Sources */,
+				4C0081F917853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5991,6 +6071,12 @@
 				4C76B6E31776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
 				4C76B6EA1776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6F11776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
+				4CE9F2BD1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */,
+				4CE9F31F177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
+				4C0081D81781C33000874849 /* MTStoreKitController.m in Sources */,
+				4C0081DF1781D8C200874849 /* MTLog.m in Sources */,
+				4C0081ED17849A4A00874849 /* VerificationController.m in Sources */,
+				4C0081FB17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6191,6 +6277,12 @@
 				4C76B6E21776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
 				4C76B6E91776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6F01776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
+				4CE9F2BC1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */,
+				4CE9F31E177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
+				4C0081D71781C33000874849 /* MTStoreKitController.m in Sources */,
+				4C0081DE1781D8C200874849 /* MTLog.m in Sources */,
+				4C0081EC17849A4A00874849 /* VerificationController.m in Sources */,
+				4C0081FA17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6395,6 +6487,12 @@
 				4C76B6E01776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
 				4C76B6E71776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6EE1776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
+				4CE9F2BA1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */,
+				4CE9F31C177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
+				4C0081D51781C33000874849 /* MTStoreKitController.m in Sources */,
+				4C0081DC1781D8C200874849 /* MTLog.m in Sources */,
+				4C0081EA17849A4A00874849 /* VerificationController.m in Sources */,
+				4C0081F817853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6595,6 +6693,12 @@
 				4C76B6E41776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
 				4C76B6EB1776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6F21776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
+				4CE9F2BE1778D0AE009F11AF /* KeychainItemWrapper.m in Sources */,
+				4CE9F320177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
+				4C0081D91781C33000874849 /* MTStoreKitController.m in Sources */,
+				4C0081E01781D8C200874849 /* MTLog.m in Sources */,
+				4C0081EE17849A4A00874849 /* VerificationController.m in Sources */,
+				4C0081FC17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6652,20 +6756,20 @@
 			path = en.lproj;
 			sourceTree = "<group>";
 		};
-		4C97F0FA163E1D8B006ABD35 /* ReportViewerPad.storyboard */ = {
+		4C97F0FA163E1D8B006ABD35 /* MTReportViewerPad.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C97F0FB163E1D8B006ABD35 /* en */,
 			);
-			name = ReportViewerPad.storyboard;
+			name = MTReportViewerPad.storyboard;
 			sourceTree = "<group>";
 		};
-		4C97F0FC163E1D8B006ABD35 /* ReportViewerPhone.storyboard */ = {
+		4C97F0FC163E1D8B006ABD35 /* MTReportViewer.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C97F0FD163E1D8B006ABD35 /* en */,
 			);
-			name = ReportViewerPhone.storyboard;
+			name = MTReportViewer.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -6674,7 +6778,7 @@
 		4C0E7859163B5AEC003B951E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6686,7 +6790,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "ReportViewer-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -6708,9 +6812,9 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = ReportViewer;
-				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				PRODUCT_NAME = "MAD Viewer";
+				PROVISIONING_PROFILE = "309E54E3-D817-4D5D-B5C1-5BA3986C11AE";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "309E54E3-D817-4D5D-B5C1-5BA3986C11AE";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7, armv7s";
 				WRAPPER_EXTENSION = app;
@@ -6720,9 +6824,9 @@
 		4C0E785A163B5AEC003B951E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Reports.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Everyday Apps LLC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports/APIs\"",
@@ -6732,7 +6836,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "ReportViewer-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -6750,9 +6854,9 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = ReportViewer;
-				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				PRODUCT_NAME = "MAD Viewer";
+				PROVISIONING_PROFILE = "C0AEBDFD-F59E-4DB5-B6B2-36AD2495B200";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C0AEBDFD-F59E-4DB5-B6B2-36AD2495B200";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7, armv7s";
 				WRAPPER_EXTENSION = app;
@@ -6956,7 +7060,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -6985,8 +7089,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				PROVISIONING_PROFILE = "E101EE7D-0417-4834-BFE1-C7052353C486";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E101EE7D-0417-4834-BFE1-C7052353C486";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
@@ -6997,9 +7101,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Everyday Apps LLC";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7025,8 +7129,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FA3A71F-57D4-4F21-BE2A-FA3C70281574";
+				PROVISIONING_PROFILE = "8E84EA38-2681-4D3E-9DE2-524039A4D36E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8E84EA38-2681-4D3E-9DE2-524039A4D36E";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;

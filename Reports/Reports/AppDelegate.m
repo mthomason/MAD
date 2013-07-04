@@ -25,18 +25,23 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    [MTStoreKitController sharedObject];
 
     //[self checkUserICloudPreferenceAndSetupIfNecessary];
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
+
         UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
                                                           action: @selector(email:)];
         UIMenuController *menu = [UIMenuController sharedMenuController];
         [menu setMenuItems:@[menuItem]];
         [menuItem release];
         dispatch_async(dispatch_get_main_queue(), ^{
+
         });
     });
 
@@ -112,8 +117,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     // If no user choice is recorded, use a UIAlert to fetch the user's preference.
     
     id currentToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* userICloudChoice = [userDefaults stringForKey:@"com.apple.CloudNotes.UseICloudStorage"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userICloudChoice = [userDefaults stringForKey:@"com.apple.CloudNotes.UseICloudStorage"];
     
     if ([userICloudChoice isEqualToString:@"YES"]) {
         [self checkUbiquitousTokenFromPreviousLaunch:currentToken];
