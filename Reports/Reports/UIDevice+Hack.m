@@ -10,13 +10,22 @@
 
 @implementation UIDevice (Hack)
 
++ (NSUInteger)deviceSystemMajorVersion {
+    static NSUInteger _deviceSystemMajorVersion = -1;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _deviceSystemMajorVersion = [[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] intValue];
+    });
+    return _deviceSystemMajorVersion;
+}
+
 + (BOOL)isPad {
-    
-    static NSNumber *isPad;
-    if (!isPad) {
-        isPad = @([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-    }
-    return [isPad boolValue];
+    static BOOL _isPad;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _isPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+    });
+    return _isPad;
 }
 
 @end

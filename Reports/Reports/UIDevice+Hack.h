@@ -10,6 +10,7 @@
 
 @interface UIDevice (Hack)
 
++ (NSUInteger)deviceSystemMajorVersion;
 + (BOOL)isPad;
 
 @end

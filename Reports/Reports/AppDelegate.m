@@ -26,6 +26,11 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    
+    //UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    //UIViewController *initViewController = [storyBoard instantiateInitialViewController];
+    //[[self window] setRootViewController:initViewController];
+    
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     [MTStoreKitController sharedObject];
@@ -63,11 +68,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    static NSNumber *isPad;
-    if (!isPad) {
-        isPad = @([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-    }
-    return   [isPad boolValue] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+    return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 #pragma mark - Actions
