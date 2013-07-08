@@ -104,4 +104,10 @@
     [alertView autorelease];
 }
 
++ (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {
+    return @{NSLocalizedDescriptionKey :         title,
+             NSLocalizedFailureReasonErrorKey :  message};
+    
+}
+
 @end

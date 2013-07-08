@@ -10,7 +10,7 @@
 #import <StoreKit/StoreKit.h>
 #import "MTLog.h"
 #import "NSError+UserInterface.h"
-#import "VerificationController.h"
+#import "MTVerificationController.h"
 
 typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);
 typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *error);

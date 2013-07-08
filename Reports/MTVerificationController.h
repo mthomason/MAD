@@ -2,6 +2,7 @@
 #import <StoreKit/StoreKit.h>
 #import "NSData+Base64.h"
 #import "MTLog.h"
+#import "NSError+UserInterface.h"
 
 #define IS_IOS6_AWARE (__IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_1)
 
@@ -11,19 +12,19 @@
 #define KNOWN_TRANSACTIONS_KEY              @"knownIAPTransactions"
 #define ITC_CONTENT_PROVIDER_SHARED_SECRET  @"your secret here"
 
-char* base64_encode(const void* buf, size_t size);
-void * base64_decode(const char* s, size_t * data_len);
+typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSDictionary *receiptData, NSDate *purcahseDate);
 
-@interface VerificationController : NSObject {
+@interface MTVerificationController : NSObject {
     NSMutableDictionary *transactionsReceiptStorageDictionary;
 }
 
-+ (VerificationController *) sharedInstance;
-
++ (MTVerificationController *) sharedInstance;
 
 // Checking the results of this is not enough.
 // The final verification happens in the connection:didReceiveData: callback within
 // this class.  So ensure IAP feaures are unlocked from there.
 - (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction;
+- (void)verifyPurchase:(SKPaymentTransaction *)transaction
+            completion:(MTVerificationControllerVerifyPurchaseCompletion)completion;
 
 @end

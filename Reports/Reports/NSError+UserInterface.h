@@ -17,4 +17,6 @@
 - (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain andCompletion:(void (^)(BOOL success))completion;
 - (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion;
 
++ (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message;
+
 @end

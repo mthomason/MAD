@@ -1,42 +1,45 @@
-#import "VerificationController.h"
+#import "MTVerificationController.h"
 
-static VerificationController *singleton;
+static MTVerificationController *singleton;
 
+@interface MTVerificationController()
 
-@implementation VerificationController
+@property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
+@property (nonatomic, copy) NSDictionary *receiptData;
+@property (nonatomic, copy) NSDate *purchaseDate;
+@property (nonatomic, strong) NSError *failureReason;
 
-+ (VerificationController *)sharedInstance
-{
-	if (singleton == nil)
-    {
-		singleton = [[VerificationController alloc] init];
+@end
+
+@implementation MTVerificationController
+
++ (MTVerificationController *)sharedInstance {
+	if (singleton == nil) {
+		singleton = [[MTVerificationController alloc] init];
 	}
 	return singleton;
 }
 
 
-- (id)init
-{
+- (id)init {
 	self = [super init];
-	if (self != nil)
-    {
+	if (self != nil) {
         transactionsReceiptStorageDictionary = [[NSMutableDictionary alloc] init];
+        [self setReceiptData:nil];
+        [self setFailureReason:nil];
 	}
 	return self;
 }
 
 
-- (NSDictionary *)dictionaryFromPlistData:(NSData *)data
-{
+- (NSDictionary *)dictionaryFromPlistData:(NSData *)data {
     NSError *error;
     NSDictionary *dictionaryParsed = [NSPropertyListSerialization propertyListWithData:data
                                                                                options:NSPropertyListImmutable
                                                                                 format:nil
                                                                                  error:&error];
-    if (!dictionaryParsed)
-    {
-        if (error)
-        {
+    if (!dictionaryParsed) {
+        if (error) {
 #warning Handle the error here.
         }
         return nil;
@@ -45,16 +48,13 @@ static VerificationController *singleton;
 }
 
 
-- (NSDictionary *)dictionaryFromJSONData:(NSData *)data
-{
+- (NSDictionary *)dictionaryFromJSONData:(NSData *)data {
     NSError *error;
     NSDictionary *dictionaryParsed = [NSJSONSerialization JSONObjectWithData:data
                                                                      options:0
                                                                        error:&error];
-    if (!dictionaryParsed)
-    {
-        if (error)
-        {
+    if (!dictionaryParsed) {
+        if (error) {
 #warning Handle the error here.
         }
         return nil;
@@ -67,11 +67,9 @@ static VerificationController *singleton;
 
 // This method should be called once a transaction gets to the SKPaymentTransactionStatePurchased or SKPaymentTransactionStateRestored state
 // Call it with the SKPaymentTransaction.transactionReceipt
-- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction
-{
+- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction {
     BOOL isOk = [self isTransactionAndItsReceiptValid:transaction];
-    if (!isOk)
-    {
+    if (!isOk) {
         // There was something wrong with the transaction we got back, so no need to call verifyReceipt.
         return isOk;
     }
@@ -90,7 +88,7 @@ static VerificationController *singleton;
     
 #warning Check for the correct itms verify receipt URL
     // Use ITMS_SANDBOX_VERIFY_RECEIPT_URL while testing against the sandbox.
-    NSString *serverURL = ITMS_PROD_VERIFY_RECEIPT_URL;
+    NSString *serverURL = ITMS_SANDBOX_VERIFY_RECEIPT_URL;//ITMS_PROD_VERIFY_RECEIPT_URL;
     
     // Create the POST request to the server.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:serverURL]];
@@ -104,13 +102,19 @@ static VerificationController *singleton;
     return isOk;
 }
 
+- (void)verifyPurchase:(SKPaymentTransaction *)transaction completion:(MTVerificationControllerVerifyPurchaseCompletion)completion {
+    [self setVerifyPurchaseCompletion:completion];
+    BOOL result = [self verifyPurchase:transaction];
+    if (result == NO) {
+        completion(NO, nil, @{}, nil);
+    } else {
+    }
+}
 
 // Check the validity of the receipt.  If it checks out then also ensure the transaction is something
 // we haven't seen before and then decode and save the purchaseInfo from the receipt for later receipt validation.
-- (BOOL)isTransactionAndItsReceiptValid:(SKPaymentTransaction *)transaction
-{
-    if (!(transaction && transaction.transactionReceipt && [transaction.transactionReceipt length] > 0))
-    {
+- (BOOL)isTransactionAndItsReceiptValid:(SKPaymentTransaction *)transaction {
+    if (!(transaction && transaction.transactionReceipt && [transaction.transactionReceipt length] > 0)) {
         // Transaction is not valid.
         return NO;
     }
@@ -121,7 +125,7 @@ static VerificationController *singleton;
     NSString *transactionPurchaseInfo = [receiptDict objectForKey:@"purchase-info"];
     NSString *decodedPurchaseInfo   = [self decodeBase64:transactionPurchaseInfo length:nil];
     NSDictionary *purchaseInfoDict  = [self dictionaryFromPlistData:[decodedPurchaseInfo dataUsingEncoding:NSUTF8StringEncoding]];
-    
+    [self setReceiptData:[purchaseInfoDict copy]];
     NSString *transactionId         = [purchaseInfoDict objectForKey:@"transaction-id"];
     NSString *purchaseDateString    = [purchaseInfoDict objectForKey:@"purchase-date"];
     NSString *signature             = [receiptDict objectForKey:@"signature"];
@@ -132,12 +136,13 @@ static VerificationController *singleton;
     
     NSDate *purchaseDate = [dateFormat dateFromString:[purchaseDateString stringByReplacingOccurrencesOfString:@"Etc/" withString:@""]];
     
+    [self setPurchaseDate:[purchaseDate copy]];
     
-    if (![self isTransactionIdUnique:transactionId])
-    {
-        // We've seen this transaction before.
-        // Had [transactionsReceiptStorageDictionary objectForKey:transactionId]
-        // Got purchaseInfoDict
+    //Already validate this transaction?
+    if ([self isTransactionIdUnique:transactionId] == NO) {
+        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Duplicate Transaction" andMessage:@"Transaction already recorded."];
+        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
+        [self setFailureReason:error];
         return NO;
     }
     
@@ -146,14 +151,18 @@ static VerificationController *singleton;
     BOOL result = checkReceiptSecurity(transactionPurchaseInfo, signature,
                                        (__bridge CFDateRef)(purchaseDate));
     
-    if (!result)
-    {
+    if (!result) {
+        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bogus Receipt" andMessage:@"Receipt failed authentication."];
+        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
+        [self setFailureReason:error];
         return NO;
     }
     
     // Ensure the transaction itself is legit
-    if (![self doTransactionDetailsMatchPurchaseInfo:transaction withPurchaseInfo:purchaseInfoDict])
-    {
+    if (![self doTransactionDetailsMatchPurchaseInfo:transaction withPurchaseInfo:purchaseInfoDict]) {
+        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bogus Details" andMessage:@"Transaction details failed sanity check."];
+        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
+        [self setFailureReason:error];
         return NO;
     }
     
@@ -251,21 +260,68 @@ static VerificationController *singleton;
 }
 
 
-- (BOOL)doesTransactionInfoMatchReceipt:(NSString*) receiptString
-{
+- (BOOL)doesTransactionInfoMatchReceipt:(NSString*)receiptString status:(NSInteger *)receiptStatus; {
     // Convert the responseString into a dictionary and pull out the receipt data.
     NSDictionary *verifiedReceiptDictionary = [self dictionaryFromJSONData:[receiptString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Check the status of the verifyReceipt call
     id status = [verifiedReceiptDictionary objectForKey:@"status"];
-    if (!status)
-    {
+    if (!status) {
+        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bad Verification Data" andMessage:@"Bad status data from verification server."];
+        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
+        [self setFailureReason:error];
         return NO;
     }
     int verifyReceiptStatus = [status integerValue];
+    *receiptStatus = verifyReceiptStatus;
+    switch (verifyReceiptStatus) {
+        case 0:         //Good
+            break;
+        case 21006:     //Good but expired autorenewing subscription
+            break;
+        case 21008:     //Trying to verify a production receipt with the sandbox server... don't ship this.
+            break;
+        case 21000: {
+            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
+            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
+            [self setFailureReason:error];
+            break;
+        }
+        case 21002: {
+            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
+            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
+            [self setFailureReason:error];
+            break;
+        }
+        case 21003: {
+            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"The receipt could not be authenticated."];
+            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
+            [self setFailureReason:error];
+            break;
+        }
+        case 21004: {
+            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
+            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
+            [self setFailureReason:error];
+            break;
+        }
+        case 21005: {
+            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"The receipt server is not currently available. Please try again later."];
+            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
+            [self setFailureReason:error];
+            break;
+        }
+        case 21007: {
+            //Trying to verify a sandbox receipt with the production server... try to verify with
+            //  the sandbox server.
+            break;
+        }
+        default:
+            break;
+    }
+    
     // 21006 = This receipt is valid but the subscription has expired.
-    if (0 != verifyReceiptStatus && 21006 != verifyReceiptStatus)
-    {
+    if (0 != verifyReceiptStatus && 21006 != verifyReceiptStatus) {
         return NO;
     }
     
@@ -278,8 +334,7 @@ static VerificationController *singleton;
     // Get the transaction's receipt data from the transactionsReceiptStorageDictionary
     NSDictionary *purchaseInfoFromTransaction = [transactionsReceiptStorageDictionary objectForKey:transactionIdFromVerifiedReceipt];
     
-    if (!purchaseInfoFromTransaction)
-    {
+    if (!purchaseInfoFromTransaction) {
         // We didn't find a receipt for this transaction.
         return NO;
     }
@@ -290,31 +345,26 @@ static VerificationController *singleton;
     
     // Verify all the receipt specifics to ensure everything matches up as expected
     if (![[verifiedReceiptReceiptDictionary objectForKey:@"bid"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"bid"]])
-    {
+          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"bid"]]) {
         failCount++;
     }
     
     if (![[verifiedReceiptReceiptDictionary objectForKey:@"product_id"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"product-id"]])
-    {
+          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"product-id"]]) {
         failCount++;
     }
     
     if (![[verifiedReceiptReceiptDictionary objectForKey:@"quantity"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"quantity"]])
-    {
+          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"quantity"]]) {
         failCount++;
     }
     
     if (![[verifiedReceiptReceiptDictionary objectForKey:@"item_id"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"item-id"]])
-    {
+          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"item-id"]]) {
         failCount++;
     }
     
-    if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"identifierForVendor")])
-    {
+    if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"identifierForVendor")]) {
         // iOS 6 (or later)
         NSString *localIdentifier                   = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         NSString *purchaseInfoUniqueVendorId        = [purchaseInfoFromTransaction objectForKey:@"unique-vendor-identifier"];
@@ -344,41 +394,34 @@ static VerificationController *singleton;
 
 #pragma mark NSURLConnectionDelegate (for the verifyReceipt connection)
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    
+    //Receipt data from iTunes server...
     NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
-    // So we got some receipt data. Now does it all check out?
-    BOOL isOk = [self doesTransactionInfoMatchReceipt:responseString];
-    
-    if (isOk)
-    {
-        //Validation suceeded. Unlock content here.
-#warning Validation suceeded. Unlock content here.
-
+    NSInteger status = 0;
+    BOOL isOk = [self doesTransactionInfoMatchReceipt:responseString status:&status];
+    if (status == 21007) {
+#warning Try again on sandbox server.
     }
+    [self verifyPurchaseCompletion](isOk, [self failureReason], [self receiptData], [self purchaseDate]);
 }
 
 
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
-    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])
-    {
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+
+    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         SecTrustRef trust = [[challenge protectionSpace] serverTrust];
         NSError *error = nil;
         BOOL didUseCredential = NO;
         BOOL isTrusted = [self validateTrust:trust error:&error];
-        if (isTrusted)
-        {
+        if (isTrusted) {
             NSURLCredential *trust_credential = [NSURLCredential credentialForTrust:trust];
-            if (trust_credential)
-            {
+            if (trust_credential) {
                 [[challenge sender] useCredential:trust_credential forAuthenticationChallenge:challenge];
                 didUseCredential = YES;
             }
         }
-        if (!didUseCredential)
-        {
+        if (!didUseCredential) {
             [[challenge sender] cancelAuthenticationChallenge:challenge];
         }
     } else {
@@ -387,25 +430,21 @@ static VerificationController *singleton;
 }
 
 // NOTE: These are needed for 4.x (as willSendRequestForAuthenticationChallenge: is not supported)
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
-{
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     return [[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])
     {
         SecTrustRef trust = [[challenge protectionSpace] serverTrust];
         NSError *error = nil;
         BOOL didUseCredential = NO;
         BOOL isTrusted = [self validateTrust:trust error:&error];
-        if (isTrusted)
-        {
+        if (isTrusted) {
             NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
-            if (credential)
-            {
+            if (credential) {
                 [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
                 didUseCredential = YES;
             }
@@ -422,8 +461,7 @@ static VerificationController *singleton;
 #pragma mark
 #pragma mark NSURLConnection - Trust validation
 
-- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError **)error
-{
+- (BOOL)validateTrust:(SecTrustRef)trust error:(NSError **)error {
     
     // Include some Security framework SPIs
     extern CFStringRef kSecTrustInfoExtendedValidationKey;
@@ -431,18 +469,16 @@ static VerificationController *singleton;
     
     BOOL trusted = NO;
     SecTrustResultType trust_result;
-    if ((noErr == SecTrustEvaluate(trust, &trust_result)) && (trust_result == kSecTrustResultUnspecified))
-    {
+    if ((noErr == SecTrustEvaluate(trust, &trust_result)) && (trust_result == kSecTrustResultUnspecified)) {
         NSDictionary *trust_info = (__bridge_transfer NSDictionary *)SecTrustCopyInfo(trust);
         id hasEV = [trust_info objectForKey:(__bridge NSString *)kSecTrustInfoExtendedValidationKey];
         trusted =  [hasEV isKindOfClass:[NSValue class]] && [hasEV boolValue];
     }
     
-    if (trust)
-    {
-        if (!trusted && error)
-        {
+    if (trust) {
+        if (!trusted && error) {
             *error = [NSError errorWithDomain:@"kSecTrustError" code:(NSInteger)trust_result userInfo:nil];
+            [self setFailureReason:*error];
         }
         return trusted;
     }
@@ -631,8 +667,7 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
     require_noerr(SecTrustCreateWithCertificates(leaf, policy, &trust), outLabel);
     require_noerr(SecTrustSetAnchorCertificates(trust, (__bridge CFArrayRef) anchors), outLabel);
     
-    if (purchaseDate)
-    {
+    if (purchaseDate) {
         require_noerr(SecTrustSetVerifyDate(trust, purchaseDate), outLabel);
     }
     
@@ -696,21 +731,5 @@ outLabel:
     MTLog(@"decodeBase64: %@", decodedString);
     return decodedString;
 }
-/*
-char* base64_encode(const void* buf, size_t size) {
-    NSData *dataToEncode = [NSData dataWithBytes:buf length:size];
-    NSString *encodedString = [dataToEncode base64EncodedString];
-    return (char *)[encodedString cStringUsingEncoding:NSASCIIStringEncoding];
-}
 
-void * base64_decode(const char* s, size_t * data_len) {
-    NSString *encodedString = [NSString stringWithUTF8String:s];
-    NSData *decodedData = [NSData dataFromBase64String:encodedString];
-    //NSString *decodedString = [[NSString alloc] initWithData:decodedData
-//                                                    encoding:NSASCIIStringEncoding];
-    data_len = [decodedData length];
-    return (void *)CFBridgingRetain(decodedData);
-//    return (void *)[decodedString cStringUsingEncoding:NSASCIIStringEncoding];
-}
-*/
 @end

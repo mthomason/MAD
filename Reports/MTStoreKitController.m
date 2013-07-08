@@ -153,7 +153,7 @@ static MTStoreKitController *sharedSingleton = nil;
                 [defaultStore setArray:updatedTransactionData forKey:@"transactions"];
                 [updatedTransactionData release];
 
-                BOOL validTransaction = [[VerificationController sharedInstance] verifyPurchase:transaction];
+                BOOL validTransaction = [[MTVerificationController sharedInstance] verifyPurchase:transaction];
                 NSError *resultError = nil;
                 if (validTransaction == NO) {
                     NSString *title = NSLocalizedString(@"Receipt Failed Varification", @"Receipt Failed Varification");
