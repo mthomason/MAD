@@ -125,7 +125,6 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
     if (document != nil) {
-        
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
         UIImage *thumbnail = [[printPageRender thumbnail] retain];
         [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
@@ -152,7 +151,13 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
         NSError *filePresenterError = nil;
         
         UIImage *thumbnail = [(NSDictionary *)content objectForKey:MTDocumentInfoKeyThumbnail];
-    
+    /*
+        if ([UIDevice isModernOS]) {
+            UIColor *tintColor = [[[[UIApplication sharedApplication] delegate] window] tintColor];
+            [[thumbnail layer] setBorderColor:[tintColor CGColor]];
+            [[thumbnail layer] setBorderWidth:1.0000f];
+        }
+*/        
         [UIImagePNGRepresentation(thumbnail) writeToURL:thumbnailUrl atomically:NO];
 
         NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];

@@ -193,20 +193,31 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [self cachePrintPageRenderDataForSize:letterRect.size];
     CGFloat scale = 128.0000 / (letterRect.size.height > letterRect.size.width > 0.0f ? letterRect.size.height : (letterRect.size.width == 0.0000f? letterRect.size.width : 1.0000f));
     UIGraphicsBeginImageContextWithOptions(letterRect.size, YES, 0.0000f);
-    
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, letterRect);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextAddPath(context, path);
-    [[UIColor whiteColor] set];
+    [[UIColor whiteColor] setFill];
+    //[[UIColor blackColor] setStroke];
     CGContextDrawPath(context, kCGPathFill);
     
     [self drawPageAtIndex:0 inRect:letterRect];
 
+    //CGContextRef c = UIGraphicsGetCurrentContext();
+    //CGContextSetRGBStrokeColor(c, 0.0000f, 0.0000f, 1.0000f, 1.0000f);
+    
+    //CGContextStrokeRect(c, letterRect);
+    //CGContextAddPath(context, path);
+    //[[UIColor blackColor] setStroke];
+    //CGContextDrawPath(context, kCGPathStroke);
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+
+
     UIImage *result = [image thumbnailImage:64.0000f interpolationQuality:kCGInterpolationLow];
     UIGraphicsEndImageContext();
-    return [[result retain] autorelease];
+    result = [[UIImage imageWithBorder:result] retain];
+    return [result autorelease];
 }
 
 #pragma mark - UIPrintPageRenderer Overrides

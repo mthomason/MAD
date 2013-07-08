@@ -13,4 +13,6 @@
 + (NSUInteger)deviceSystemMajorVersion;
 + (BOOL)isPad;
 
++ (BOOL)isLagacyOS;
++ (BOOL)isModernOS;
 @end

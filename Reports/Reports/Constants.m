@@ -37,8 +37,18 @@ NSString * const MNSStringInterfaceButtonTitleTryAgainDesc          = @"Try Agai
 NSString * const MNSStringInterfaceButtonTitleAbort                 = @"Abort Application";
 NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Button Title";
 
+// MARK: Storyboard Identifiers
+
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
+
+NSString * const MTStoryboardReportDesignerLagacy                   = @"MTStoryboardReportDesignerOS6";
+NSString * const MTStoryboardReportDesignerPadLagacy                = @"MTStoryboardReportDesignerPadOS6";
+
+NSString * const MTStoryboardReportViewer                           = @"MTStoryboardReportViewer";
+NSString * const MTStoryboardReportViewerPad                        = @"MTStoryboardReportViewerPad";
+NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryboardReportViewerOS6";
+NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
 
 CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
 CGFloat const MNSAnimationDurationShowFromBottomHalf = 0.3500f;
@@ -85,8 +95,6 @@ CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
 CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
-// MARK: Storyboard Identifiers
-NSString * const MNSIdentifierStoryboardReportDesignerPhone         = @"MTStoryboardReportDesigner";
 
 // MARK: View Controller Identifiers
 NSString * const MNSIdentifierUIViewControllerTableHeaderTables     = @"UIViewControllerTableHeaderTables";

@@ -13,3 +13,9 @@
 #else
     #define MTLog( s, ... )
 #endif
+
+#ifdef MTDebugMode
+    #define MTLogStatic( s, ... ) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+    #define MTLogStatic( s, ... )
+#endif

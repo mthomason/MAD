@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTDocumentCellProtocol.h"
+#import "UIDevice+Hack.h"
 
 @interface MTTableViewCellDocument : UITableViewCell
 

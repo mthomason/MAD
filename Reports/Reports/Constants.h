@@ -170,8 +170,17 @@ extern NSString * const MNSStringInterfaceButtonTitleTryAgainDesc;
 extern NSString * const MNSStringInterfaceButtonTitleAbort;
 extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
 
+// MARK: Storyboard Identifiers
+
 extern NSString * const MTStoryboardReportDesigner;
 extern NSString * const MTStoryboardReportDesignerPad;
+extern NSString * const MTStoryboardReportDesignerLagacy;
+extern NSString * const MTStoryboardReportDesignerPadLagacy;
+
+extern NSString * const MTStoryboardReportViewer;
+extern NSString * const MTStoryboardReportViewerPad;
+extern NSString * const MTStoryboardReportViewerLagacy;
+extern NSString * const MTStoryboardReportViewerPadLagacy;
 
 extern CGFloat const MNSAnimationDurationShowFromBottom;
 extern CGFloat const MNSAnimationDurationShowFromBottomHalf;
@@ -222,7 +231,6 @@ extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
 
 // MARK: Storyboard References
-extern NSString * const MNSIdentifierStoryboardReportDesignerPhone;
 
 // MARK: View Controller Identifiers
 extern NSString * const MNSIdentifierUIViewControllerTableHeaderTables;

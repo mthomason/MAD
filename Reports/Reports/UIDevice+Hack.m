@@ -8,6 +8,8 @@
 
 #import "UIDevice+Hack.h"
 
+const int MTModernOSMajorVersion = 7;
+
 @implementation UIDevice (Hack)
 
 + (NSUInteger)deviceSystemMajorVersion {
@@ -26,6 +28,14 @@
         _isPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
     });
     return _isPad;
+}
+
++ (BOOL)isLagacyOS {
+    return [UIDevice deviceSystemMajorVersion] < MTModernOSMajorVersion;
+}
+
++ (BOOL)isModernOS {
+    return [UIDevice deviceSystemMajorVersion] >= MTModernOSMajorVersion;
 }
 
 @end

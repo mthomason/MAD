@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 
+NSString * const MTBundleIdDesigner     = @"com.everydayapps.mad.designer";
+NSString * const MTBundleIdViewer       = @"com.everydayapps.mad.viewer";
+
 @interface AppDelegate()
 
 @end
@@ -16,7 +19,7 @@
 
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
-    NSLog(@"%@", exception);
+    MTLogStatic(@"%@", exception);
 }
 
 - (void)dealloc {
@@ -26,13 +29,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    
-    //UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-    //UIViewController *initViewController = [storyBoard instantiateInitialViewController];
-    //[[self window] setRootViewController:initViewController];
-    
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: [AppDelegate storyboardName]
+                                                         bundle: nil];
+    [window setRootViewController:[storyBoard instantiateInitialViewController]];
+    [window makeKeyAndVisible];
+    [self setWindow: window];
+    [window release];
+
     [MTStoreKitController sharedObject];
 
     //[self checkUserICloudPreferenceAndSetupIfNecessary];
@@ -74,14 +80,44 @@ void uncaughtExceptionHandler(NSException *exception) {
 #pragma mark - Actions
 
 + (NSString *)storyboardName {
-    NSString *storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-    return storyboardName;
+    static NSString *_storyboardName;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if ([[AppDelegate bundleId] isEqualToString:MTBundleIdDesigner]) {
+            if ([UIDevice isModernOS]) {
+                _storyboardName = [UIDevice isPad] ?
+                MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+            } else {
+                _storyboardName = [UIDevice isPad] ?
+                MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesignerLagacy;
+            }
+        } else {
+            if ([UIDevice isModernOS]) {
+                _storyboardName = [UIDevice isPad] ?
+                MTStoryboardReportViewerPad : MTStoryboardReportViewer;
+            } else {
+                _storyboardName = [UIDevice isPad] ?
+                MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewerLagacy;
+            }
+        }
+    });
+    
+    return _storyboardName;
+}
+
++ (NSString *)bundleId {
+    static NSString *_bundleId;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _bundleId = [[NSBundle mainBundle] bundleIdentifier];
+    });
+    return _bundleId;
 }
 
 #pragma mark - iCloud
 
-- (void)checkUbiquitousTokenFromPreviousLaunch:(id)currentToken
-{
+- (void)checkUbiquitousTokenFromPreviousLaunch:(id)currentToken {
     // Fetch a previously stored value for the ubiquity identity token from NSUserDefaults.
     // That value can be compared to the current token to determine if the iCloud login has changed since the last launch of our application
     
@@ -96,22 +132,19 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
-- (void)storeCurrentUbiquityToken:(id)currentToken
-{
+- (void)storeCurrentUbiquityToken:(id)currentToken {
     // Write the ubquity identity token to NSUserDefaults if it exists.
     // Otherwise, remove the key.
     
     if (currentToken) {
         NSData* newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
         [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:@"com.apple.CloudNotes.UbiquityIdentityToken"];
-    }
-    else {
+    } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"com.apple.CloudNotes.UbiquityIdentityToken"];
     }
 }
 
-- (void)checkUserICloudPreferenceAndSetupIfNecessary
-{
+- (void)checkUserICloudPreferenceAndSetupIfNecessary {
     // Check to see whether the user has previously selected the iCloud storage option.
     // If so, check the iCloud storage state from previous launch.
     // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
@@ -129,12 +162,10 @@ void uncaughtExceptionHandler(NSException *exception) {
         if ([userICloudChoice length] == 0) {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Choose Storage Option" message:@"Should documents be stored in iCloud or on just this device?" delegate:self cancelButtonTitle:@"Local only" otherButtonTitles:@"iCloud", nil];
             [alert show];
-        }
-        else if ([userICloudChoice isEqualToString:@"YES"]) {
+        } else if ([userICloudChoice isEqualToString:@"YES"]) {
             [[CloudManager sharedManager] setIsCloudEnabled:YES];
         }
-    }
-    else {
+    } else {
         [[CloudManager sharedManager] setIsCloudEnabled:NO];
         
         // Since the user is signed out of iCloud, reset the preference to not use iCloud, so if they sign in again we will prompt them to move data

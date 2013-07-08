@@ -12,11 +12,16 @@
 #import "UIDevice+Hack.h"
 #import "CloudManager.h"
 #import "MTStoreKitController.h"
+#import "MTLog.h"
+
+extern NSString * const MTBundleIdDesigner;
+extern NSString * const MTBundleIdViewer;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 + (NSString *)storyboardName;
++ (NSString *)bundleId;
 
 @end

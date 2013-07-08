@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="w67-I1-BvF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4457.9" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="w67-I1-BvF">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <development version="4600" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.9"/>
     </dependencies>
     <scenes>
         <!--View Controller Open Document-->
@@ -12,7 +14,8 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="upf-G5-c6o">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="upf-G5-c6o">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="E0a-pd-OHT"/>
                                     <barButtonItem title="MAD Viewer" style="plain" id="xi2-bp-Qf9">
@@ -29,6 +32,7 @@
                                 </items>
                             </toolbar>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="BRB-9Q-XSz">
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="6lh-iw-V0c" customClass="MTTableViewCellDocument">
@@ -39,11 +43,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cly-0Y-nTi">
+                                                    <rect key="frame" x="20" y="5" width="64" height="64"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="64" id="gfw-vH-VnE"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Example Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="KWL-Kn-bLo">
+                                                    <rect key="frame" x="92" y="25" width="208" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="HcR-pH-Vr0"/>
                                                     </constraints>
@@ -73,7 +79,8 @@
                                     <outlet property="delegate" destination="w67-I1-BvF" id="0rM-Ed-7C1"/>
                                 </connections>
                             </tableView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="tTo-Lc-fTk">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="tTo-Lc-fTk">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
                                 <items/>
                             </toolbar>
                         </subviews>
@@ -91,6 +98,7 @@
                             <constraint firstItem="tTo-Lc-fTk" firstAttribute="top" secondItem="BRB-9Q-XSz" secondAttribute="bottom" type="default" id="qYP-4x-Vx6"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
                         <outlet property="barButtonItemTitle" destination="xi2-bp-Qf9" id="Fdx-jJ-jS2"/>
@@ -110,7 +118,8 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="qWa-gW-3hv">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="qWa-gW-3hv">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
                                     <barButtonItem image="UIImageArrowDown.png" id="lwA-6T-tQI">
                                         <connections>
@@ -125,7 +134,8 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="Vwt-I3-pib">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="Vwt-I3-pib">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
                                 <items>
                                     <barButtonItem width="180" style="plain" id="dgT-jZ-EJg">
                                         <view key="customView" opaque="NO" contentMode="scaleToFill" id="1uG-GS-Sy8" customClass="DocumentStatusView">
@@ -147,6 +157,7 @@
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQy-g8-XiQ">
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -164,6 +175,7 @@
                             <constraint firstItem="RQy-g8-XiQ" firstAttribute="trailing" secondItem="brS-L0-fbF" secondAttribute="trailing" type="default" id="rmy-0Y-nYQ"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="barButtonItemPrint" destination="cUE-gE-i1w" id="W5p-e1-wpH"/>
                         <outlet property="barButtonItemRefresh" destination="SBd-Gy-C7f" id="MDN-MI-1sV"/>
@@ -179,82 +191,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="UIImageArrowDown.png" width="20" height="20"/>
+        <image name="UIImageArrowDown.png" width="15" height="15"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>
     </resources>
-    <classes>
-        <class className="DocumentStatusView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
-        </class>
-        <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imagePreview" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MTReportViewerViewController" superclassName="MTViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="print:"/>
-                <relationship kind="action" name="sendToPdf:"/>
-                <relationship kind="outlet" name="barButtonItemPrint" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
-                <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
-                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
-                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
-            </relationships>
-        </class>
-        <class className="MTTableViewCellDocument" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellDocument.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="labelH1" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MTTitleView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
-            <relationships>
-                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MTViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MTViewControllerOpenDocument" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
-            <relationships>
-                <relationship kind="action" name="add:"/>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="action" name="edit:"/>
-                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="buttonAddNewDocument" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
-                <relationship kind="outlet" name="collectionViewQueries" candidateClass="UICollectionView"/>
-                <relationship kind="outlet" name="tableViewQueries" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="uITableViewCellDocument" candidateClass="MTTableViewCellDocument"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="UICollectionReusableView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
-        </class>
-        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

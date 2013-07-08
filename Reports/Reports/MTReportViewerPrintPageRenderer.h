@@ -20,6 +20,7 @@
 #import "RptqDocumentSectionRows+Extras.h"
 #import "RptqDocumentSection+Extras.h"
 #import "MTPaper.h"
+#import "UIImage+Border.h"
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
 
