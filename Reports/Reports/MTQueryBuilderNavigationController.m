@@ -12,8 +12,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];    
-    [[UINavigationBar appearanceWhenContainedIn: [self class], nil] setTintColor: [UIColor edaBlueDark]];
-    [[UIToolbar appearanceWhenContainedIn: [self class], nil] setTintColor: [UIColor edaBlueDark]];
+    if ([UIDevice isLagacyOS]) {
+        [[UINavigationBar appearanceWhenContainedIn: [self class], nil] setTintColor: [UIColor edaBlueDark]];
+        [[UIToolbar appearanceWhenContainedIn: [self class], nil] setTintColor: [UIColor edaBlueDark]];
+    }
 }
 
 @end

@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIColor+EverydayApps.h"
+#import "UIDevice+Hack.h"
 
 @interface UINavigationControllerModelControllers : UINavigationController
 

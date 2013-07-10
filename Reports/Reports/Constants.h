@@ -155,7 +155,7 @@ extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
-
+extern NSString * const MTSegueLicensing;
 extern NSString * const MTBundleDisplayName;
 
 extern NSString * const MTDocumentTypeUtiMad;

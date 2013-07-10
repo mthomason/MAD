@@ -237,8 +237,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
     
     // MARK: Setup horizontal constraints.
-    [[self view] removeConstraints:[self layoutConstraintsToRemove]];
+    if ([self layoutConstraintsToRemove] == nil) {
+        [self setLayoutConstraintsToRemove:@[]];
+    }
     
+    [[self view] removeConstraints:[self layoutConstraintsToRemove]];
+
     NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
     NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
@@ -534,18 +538,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:@"showSettings"]) {
-        UINavigationController *navController = [[segue destinationViewController] retain];
-        if (navController) {
-            if ([[navController viewControllers] count] > 0) {
-                MTSettingsViewController *tvcSettings = [[[navController viewControllers] objectAtIndex: 0] retain];
-                [tvcSettings setDelegate:self];
-                [tvcSettings release];
-            }
-        }
-        [navController release];
-    
-    } else if ([[segue identifier] isEqualToString:@"showObjects"]) {
+    if ([[segue identifier] isEqualToString:@"showObjects"]) {
         
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
@@ -1222,14 +1215,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (IBAction)showObjects:(id)sender {
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showObjects" sender:sender];
-    } else {
-        [self deselectAllElementsAnimated:YES];
-    }
-}
-
-- (IBAction)showSettings:(id)sender {
-    if (![self dismissAllPopovers]) {
-        [self performSegueWithIdentifier:@"showSettings" sender:sender];
     } else {
         [self deselectAllElementsAnimated:YES];
     }

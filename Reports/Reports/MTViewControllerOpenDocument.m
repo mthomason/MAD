@@ -272,23 +272,27 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTTemplateSelectorViewController class]]) {
                     if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                         [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
                         [[self openDocumentPopoverController] setDelegate:self];
                     }
-                    MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[[navControl topViewController] retain];
-                    if (tvc) {
-                        [tvc setDelegate:self];
-                        [tvc setTemplateSelectorDelegate:self];
-                    }
-                    [tvc release];
+                    MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[navControl topViewController];
+                    [tvc setDelegate:self];
+                    [tvc setTemplateSelectorDelegate:self];
                 }
             }
-            
-            [navControl release];
+        }
+        [[segue destinationViewController] setDelegate:self];
+        
+    } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
+
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [segue destinationViewController];
+            id tvc = [navControl topViewController];
+            [tvc setDelegate:self];
         }
         [[segue destinationViewController] setDelegate:self];
         

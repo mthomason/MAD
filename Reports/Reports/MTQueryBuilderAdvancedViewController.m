@@ -86,6 +86,7 @@
 }
 
 - (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     [[self scrollView] setBounds:[[self backgroundContainer] bounds]];
     [[self scrollView] setCenter:[[self backgroundContainer] center]];
     [[self contentView] setBounds:[[self backgroundContainer] bounds]];

@@ -40,7 +40,7 @@
 @interface MTReportDesignerViewController : MTViewController
     <UITableViewDataSource,
         UIPopoverControllerDelegate,
-        UITableViewDelegate,
+        /*UITableViewDelegate,*/
         UIPopoverControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
@@ -63,7 +63,6 @@
 - (IBAction)done:(id)sender;
 - (IBAction)info:(id)sender;
 - (IBAction)showObjects:(id)sender;
-- (IBAction)showSettings:(id)sender;
 
 @end
 
