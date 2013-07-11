@@ -333,9 +333,9 @@
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="E7v-7q-ygd" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="qEc-8J-yoE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qEc-8J-yoE">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -344,7 +344,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="Eep-NO-f2F" kind="relationship" relationship="rootViewController" id="J0J-Qd-Qas"/>
+                        <segue destination="F7A-ai-FfA" kind="relationship" relationship="rootViewController" id="lrs-4A-qdn"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HQU-sr-pjq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1255,7 +1255,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="87W-C5-2vr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1008" y="-2367"/>
+            <point key="canvasLocation" x="443" y="-596"/>
         </scene>
         <!--Database Driver Selector View Controller - New Report-->
         <scene sceneID="fhe-9S-gQo">
@@ -5696,73 +5696,60 @@
             <point key="canvasLocation" x="2544" y="-2000"/>
         </scene>
         <!--View Controller Open Document - MAD Designer-->
-        <scene sceneID="pg7-tO-Ixt">
+        <scene sceneID="8fZ-iQ-Ovc">
             <objects>
-                <viewController id="Eep-NO-f2F" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="dlk-f0-GsS"/>
-                        <viewControllerLayoutGuide type="bottom" id="eWC-iq-3F9"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" contentMode="scaleToFill" id="EUE-2S-Apb">
-                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="aPp-Tw-Ygp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="08P-c7-DTi">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="372"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="ZY2-aU-5S0" customClass="MTTableViewCellDocument">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="73"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZY2-aU-5S0" id="drK-wD-wCg">
-                                            <rect key="frame" x="0.0" y="0.0" width="322" height="72"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="rlQ-2f-HuJ">
-                                                    <rect key="frame" x="21" y="4" width="64" height="64"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="64" id="Ypt-Kf-4yk"/>
-                                                        <constraint firstAttribute="height" constant="64" id="gvX-n9-apS"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Example Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZsI-6H-AgU">
-                                                    <rect key="frame" x="93" y="25" width="208" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                    <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="rlQ-2f-HuJ" firstAttribute="centerY" secondItem="drK-wD-wCg" secondAttribute="centerY" id="5Ow-GL-CmV"/>
-                                                <constraint firstItem="ZsI-6H-AgU" firstAttribute="leading" secondItem="rlQ-2f-HuJ" secondAttribute="trailing" constant="8" symbolic="YES" id="KsL-RQ-TVC"/>
-                                                <constraint firstItem="ZsI-6H-AgU" firstAttribute="top" secondItem="drK-wD-wCg" secondAttribute="top" constant="25" id="WNw-TL-Ze1"/>
-                                                <constraint firstAttribute="bottom" secondItem="ZsI-6H-AgU" secondAttribute="bottom" constant="26" id="lmS-we-IoX"/>
-                                                <constraint firstAttribute="trailing" secondItem="ZsI-6H-AgU" secondAttribute="trailing" constant="21" id="tgB-TA-qSs"/>
-                                                <constraint firstItem="rlQ-2f-HuJ" firstAttribute="leading" secondItem="drK-wD-wCg" secondAttribute="leading" constant="21" id="yFY-02-BQq"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="imageThumbnail" destination="rlQ-2f-HuJ" id="5d3-kt-CKL"/>
-                                            <outlet property="labelH1" destination="ZsI-6H-AgU" id="Jz7-KG-2eW"/>
-                                            <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="8pp-8u-QbG"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="WHw-lv-Vkd">
+                            <size key="itemSize" width="90" height="90"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="kX7-C7-2bB" customClass="MTCollectionViewCellDocument">
+                                <rect key="frame" x="0.0" y="64" width="80" height="110"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="110"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="0YV-JU-3qm">
+                                            <rect key="frame" x="8" y="9" width="64" height="64"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="770" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="80" translatesAutoresizingMaskIntoConstraints="NO" id="Xld-Tx-Hvx">
+                                            <rect key="frame" x="0.0" y="76" width="80" height="27"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="highlightedColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Xld-Tx-Hvx" secondAttribute="bottom" constant="7" id="IM5-Ud-pCL"/>
+                                    <constraint firstItem="Xld-Tx-Hvx" firstAttribute="top" secondItem="0YV-JU-3qm" secondAttribute="bottom" constant="3" id="OhH-IG-V0K"/>
+                                    <constraint firstAttribute="centerX" secondItem="0YV-JU-3qm" secondAttribute="centerX" id="SsH-IZ-kdw"/>
+                                    <constraint firstItem="Xld-Tx-Hvx" firstAttribute="leading" secondItem="kX7-C7-2bB" secondAttribute="leading" id="eYo-eN-9po"/>
+                                    <constraint firstItem="0YV-JU-3qm" firstAttribute="top" secondItem="kX7-C7-2bB" secondAttribute="top" constant="9" id="hF1-oB-wsD"/>
+                                    <constraint firstItem="Xld-Tx-Hvx" firstAttribute="trailing" secondItem="kX7-C7-2bB" secondAttribute="trailing" id="m85-0S-kOn"/>
+                                </constraints>
+                                <size key="customSize" width="80" height="110"/>
                                 <connections>
-                                    <outlet property="dataSource" destination="Eep-NO-f2F" id="xjt-mo-ghI"/>
-                                    <outlet property="delegate" destination="Eep-NO-f2F" id="2KP-hf-dBK"/>
+                                    <outlet property="imagePreview" destination="0YV-JU-3qm" id="ibt-ot-oFF"/>
+                                    <outlet property="labelTitle" destination="Xld-Tx-Hvx" id="jir-Ra-YyW"/>
+                                    <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="Jqw-pd-Sji"/>
                                 </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="08P-c7-DTi" secondAttribute="centerX" id="1cM-QA-HT5"/>
-                            <constraint firstItem="08P-c7-DTi" firstAttribute="bottom" secondItem="EUE-2S-Apb" secondAttribute="bottom" id="Dw1-3E-sVg"/>
-                            <constraint firstItem="08P-c7-DTi" firstAttribute="trailing" secondItem="EUE-2S-Apb" secondAttribute="trailing" id="FiI-Os-3ad"/>
-                            <constraint firstItem="08P-c7-DTi" firstAttribute="top" secondItem="EUE-2S-Apb" secondAttribute="top" id="XCh-FD-NfW"/>
-                            <constraint firstItem="08P-c7-DTi" firstAttribute="leading" secondItem="EUE-2S-Apb" secondAttribute="leading" id="rmS-aV-tMO"/>
-                            <constraint firstAttribute="centerY" secondItem="08P-c7-DTi" secondAttribute="centerY" id="wjN-JC-Xck"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="F7A-ai-FfA" id="I2h-Bg-KnJ"/>
+                            <outlet property="delegate" destination="F7A-ai-FfA" id="d0M-Ci-4rZ"/>
+                        </connections>
+                    </collectionView>
                     <toolbarItems>
                         <barButtonItem title="Licensing" id="zMO-ce-SKv">
                             <connections>
@@ -5770,29 +5757,23 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="MAD Designer" id="ph5-ib-mB3">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="AID-cf-g1N">
+                    <navigationItem key="navigationItem" title="MAD Designer" id="a4d-fw-yba">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="iyD-6j-8TM">
                             <connections>
-                                <segue destination="L7q-hL-LvR" kind="modal" identifier="showAddDocument" modalTransitionStyle="crossDissolve" id="8Ub-Zn-V8l"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="tCf-WQ-sSQ">
-                            <connections>
-                                <action selector="edit:" destination="Eep-NO-f2F" id="9wr-m9-VDD"/>
+                                <segue destination="L7q-hL-LvR" kind="modal" identifier="showAddDocument" id="DGo-M3-pv2"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="tableViewQueries" destination="08P-c7-DTi" id="8XD-QO-Wjh"/>
-                        <outlet property="view" destination="EUE-2S-Apb" id="P5j-34-KHk"/>
+                        <outlet property="buttonAddNewDocument" destination="iyD-6j-8TM" id="hKt-QC-Oyx"/>
+                        <outlet property="buttonLicensing" destination="zMO-ce-SKv" id="o5k-xa-RUW"/>
                     </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="X5S-1e-XQC" sceneMemberID="firstResponder"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OgQ-be-sJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-182" y="437"/>
+            <point key="canvasLocation" x="-176" y="399"/>
         </scene>
     </scenes>
     <resources>

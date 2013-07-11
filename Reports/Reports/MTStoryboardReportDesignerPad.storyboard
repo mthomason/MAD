@@ -403,12 +403,15 @@
                         <viewControllerLayoutGuide type="bottom" id="Y5Y-fG-IuQ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dWp-mH-JN8">
-                        <rect key="frame" x="0.0" y="64" width="1024" height="655"/>
+                        <rect key="frame" x="0.0" y="64" width="1024" height="660"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0AK-Vg-PMR">
-                                <rect key="frame" x="0.0" y="44" width="1024" height="661"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0AK-Vg-PMR">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="806"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="806" id="BqH-Jt-s6M"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rIb-WD-NMo">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -467,14 +470,17 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="0AK-Vg-PMR" firstAttribute="trailing" secondItem="dWp-mH-JN8" secondAttribute="trailing" id="43U-8y-Fs8"/>
-                            <constraint firstItem="0AK-Vg-PMR" firstAttribute="leading" secondItem="dWp-mH-JN8" secondAttribute="leading" id="HvT-SB-Ajm"/>
+                            <constraint firstItem="0AK-Vg-PMR" firstAttribute="trailing" secondItem="dWp-mH-JN8" secondAttribute="trailing" id="bxi-rY-Zr4"/>
+                            <constraint firstItem="0AK-Vg-PMR" firstAttribute="top" secondItem="dWp-mH-JN8" secondAttribute="top" id="g2g-MG-ssx"/>
+                            <constraint firstItem="0AK-Vg-PMR" firstAttribute="leading" secondItem="dWp-mH-JN8" secondAttribute="leading" id="iGV-dQ-Gnn"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems>
+                        <barButtonItem title="License" id="q2g-g5-6Su"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Designer" id="6uJ-QP-n8G">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="UHb-dU-qeB">
                             <connections>
@@ -490,7 +496,7 @@
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <outlet property="buttonAddNewDocument" destination="UHb-dU-qeB" id="cZh-h1-koe"/>

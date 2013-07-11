@@ -24,10 +24,8 @@
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
 
-@interface MTViewControllerOpenDocument : UIViewController
+@interface MTViewControllerOpenDocument : UICollectionViewController
     <UIPopoverControllerDelegate,
-        UITableViewDataSource,
-        UITableViewDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
@@ -38,14 +36,7 @@ extern NSString * const MTSegueShowOpenDocument;
         MTViewControllerProtocol,
         MTDocumentCellProtocol>
 
-@property (retain, nonatomic) IBOutlet UITableView *tableViewQueries;
-@property (retain, nonatomic) IBOutlet UICollectionView *collectionViewQueries;
-
-@property (assign, nonatomic) IBOutlet MTTableViewCellDocument *uITableViewCellDocument;
-@property (assign, nonatomic) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
-
-
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, assign) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 
 - (IBAction)add:(id)sender;
 - (IBAction)done:(id)sender;
