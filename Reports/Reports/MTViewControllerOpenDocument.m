@@ -219,7 +219,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [tapGestureRecognizer release];
     
     [[[self titleView] label] setText:NSLocalizedString(@"Reports", @"Reports")];
-    [self updateFileList];
 
     NSMutableArray *fileUrlCache = [[NSMutableArray alloc] init];
     [self setAvailableFilesCache: fileUrlCache];
@@ -228,17 +227,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSMutableArray *fileMetaCache = [[NSMutableArray alloc] init];
     [self setAvailableFilesCacheMetaData: fileMetaCache];
     [fileMetaCache release];
-    
-    [self updateFileList];
+
     if (![SKPaymentQueue canMakePayments]) {
         [[self toolbarBottom] setItems:@[]];
     }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [[self tableViewQueries] reloadData];
+    [self updateFileList];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -300,6 +299,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         NSUInteger row = 0;
         NSURL *url = nil;
+        
         if ([sender isKindOfClass:[MTTableViewCellDocument class]]) {
             
             MTTableViewCellDocument *senderCell = sender;
@@ -442,7 +442,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 thumbnailPath = [thumbnailPath URLByAppendingPathComponent:MTDocumentInfoKeyThumbnail isDirectory:NO];
                 NSString* previewFilePath = [thumbnailPath path];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:previewFilePath]) {
-                    NSLog(@"Got a local thumbnail.");
                     NSURL *previewUrl = [thumbnailPath retain];
                     fileRepresentation.previewURL = previewUrl;
                     [previewUrl release];
@@ -457,6 +456,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [dataDirectoryURL release];
         [documentsDirectoryURL release];
     }
+    [[self tableViewQueries] reloadData];
+    [[self collectionViewQueries] reloadData];
+
 }
 
 #pragma mark - Delegates
@@ -569,15 +571,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     
                 }];
                 [[MTActiveDocument sharedDocument] setActiveDocument: nil];
-                [[self tableViewQueries] reloadData];
-                [[self collectionViewQueries] reloadData];
+                //[[self tableViewQueries] reloadData];
+                //[[self collectionViewQueries] reloadData];
             }
             [self dismissViewControllerAnimated:animated completion:nil];
         }];
     } else {
-        [self updateFileList];
-        [[self tableViewQueries] reloadData];
-        [[self collectionViewQueries] reloadData];
+        //[self updateFileList];
+        //[[self tableViewQueries] reloadData];
+        //[[self collectionViewQueries] reloadData];
         [self dismissViewControllerAnimated:animated completion:nil];
     }
     [documentReport release];
@@ -914,7 +916,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    [self updateFileList];
     return [[self availableFilesCache] count];
 }
 

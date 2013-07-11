@@ -62,9 +62,9 @@
     [super viewDidLoad];
 
     if ([UIDevice isPad] == NO) {
-        [[self navigationItem] setPrompt: NSLocalizedString(@"Set inital settings.", @"Set inital settings.")];
+        [[self navigationItem] setPrompt: NSLocalizedString(@"Set connection settings.", @"Set connection settings.")];
     }
-    [self setTitle: NSLocalizedString(@"Inital Settings", @"Inital Settings")];
+    [self setTitle: NSLocalizedString(@"Connection Settings", @"Connection Settings")];
     [self setClearsSelectionOnViewWillAppear: YES];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];

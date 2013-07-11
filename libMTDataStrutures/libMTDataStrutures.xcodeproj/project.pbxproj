@@ -252,6 +252,7 @@
 		4C4C6F0B167635B8004A3B04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				DSTROOT = /tmp/libMTDataStrutures.dst;
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -271,6 +272,7 @@
 		4C4C6F0C167635B8004A3B04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC";
 				DSTROOT = /tmp/libMTDataStrutures.dst;
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (

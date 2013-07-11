@@ -632,11 +632,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             DBINT sybBinaryBindNull[resultCountForType];
             
             resultCountForType = [[counters objectForKey:@(SYBVARBINARY)] integerValue];
-            void *sybVarBinaryBind[resultCountForType];
+            //void *sybVarBinaryBind[resultCountForType];
             DBINT sybVarBinaryBindNull[resultCountForType];
             
             resultCountForType = [[counters objectForKey:@(SYBVOID)] integerValue];
-            void *sybVoidBind[resultCountForType];
+            //void *sybVoidBind[resultCountForType];
             DBINT sybVoidBindNull[resultCountForType];
             
             resultCountForType = [[counters objectForKey:@(SYBBIT)] integerValue];
@@ -651,7 +651,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 
                 int columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
                 int columnLength = [[columnMetaData objectForKey:MTDatabaseColumnLenId] intValue];
-                int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
+                //int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
                 int columnIndexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
                 int columnOffsetNumber = columnNumber + 1;
                 

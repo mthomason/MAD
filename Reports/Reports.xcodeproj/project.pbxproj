@@ -338,11 +338,6 @@
 		4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */; };
 		4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */; };
-		4C1CDB7D17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */; };
-		4C1CDB7E17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */; };
-		4C1CDB7F17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */; };
-		4C1CDB8017739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */; };
-		4C1CDB8117739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */; };
 		4C202131163DD4090058F869 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C202132163DD4090058F869 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C202133163DD4090058F869 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
@@ -2106,8 +2101,6 @@
 		4C1B7A5E163E0D9400E331AA /* MySqlClientTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySqlClientTest.h; sourceTree = "<group>"; };
 		4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySqlClientTest.m; sourceTree = "<group>"; };
 		4C1B7A61163E0D9400E331AA /* MySqlClientTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MySqlClientTest-Prefix.pch"; sourceTree = "<group>"; };
-		4C1CDB7B17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorTdsViewController.h; sourceTree = "<group>"; };
-		4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorTdsViewController.m; sourceTree = "<group>"; };
 		4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReportsGeneralTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReportsGeneralTest-Info.plist"; sourceTree = "<group>"; };
@@ -3421,8 +3414,6 @@
 			children = (
 				4CE8A04714C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.h */,
 				4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */,
-				4C1CDB7B17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.h */,
-				4C1CDB7C17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m */,
 				4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */,
 				4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */,
 				4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */,
@@ -5923,7 +5914,6 @@
 				4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9C1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
-				4C1CDB7E17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */,
 				4C76B6B01776191B004AA7F9 /* RptqQueryTable.m in Sources */,
 				4C76B6B71776191C004AA7F9 /* RptqQueryField.m in Sources */,
 				4C76B6BE1776191D004AA7F9 /* RptqDocumentSectionRows.m in Sources */,
@@ -6129,7 +6119,6 @@
 				4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9E1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
-				4C1CDB8017739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */,
 				4C76B6B21776191B004AA7F9 /* RptqQueryTable.m in Sources */,
 				4C76B6B91776191C004AA7F9 /* RptqQueryField.m in Sources */,
 				4C76B6C01776191D004AA7F9 /* RptqDocumentSectionRows.m in Sources */,
@@ -6336,7 +6325,6 @@
 				4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9D1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
-				4C1CDB7F17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */,
 				4C76B6B11776191B004AA7F9 /* RptqQueryTable.m in Sources */,
 				4C76B6B81776191C004AA7F9 /* RptqQueryField.m in Sources */,
 				4C76B6BF1776191D004AA7F9 /* RptqDocumentSectionRows.m in Sources */,
@@ -6548,7 +6536,6 @@
 				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
-				4C1CDB7D17739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */,
 				4C76B6AF1776191B004AA7F9 /* RptqQueryTable.m in Sources */,
 				4C76B6B61776191C004AA7F9 /* RptqQueryField.m in Sources */,
 				4C76B6BD1776191D004AA7F9 /* RptqDocumentSectionRows.m in Sources */,
@@ -6754,7 +6741,6 @@
 				4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9F1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
-				4C1CDB8117739DB400CFD2C8 /* MTDatabaseDriverSelectorTdsViewController.m in Sources */,
 				4C76B6B31776191B004AA7F9 /* RptqQueryTable.m in Sources */,
 				4C76B6BA1776191C004AA7F9 /* RptqQueryField.m in Sources */,
 				4C76B6C11776191D004AA7F9 /* RptqDocumentSectionRows.m in Sources */,

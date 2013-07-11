@@ -253,8 +253,6 @@
     queryString = [NSString stringWithFormat:@"%@ LIMIT 220", queryString];
 
     RptqQueryCache *queryCache = nil;
-//    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-//    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
     MysqlServer *serv = [[MysqlServer alloc] init];
@@ -269,8 +267,7 @@
     if (conn) {
         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
         queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-        NSUInteger resultCounter = 0;
-        
+
         NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
                                                                          format:NSPropertyListBinaryFormat_v1_0
                                                                         options:0

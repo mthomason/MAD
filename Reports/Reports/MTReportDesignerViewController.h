@@ -38,9 +38,7 @@
 #import "DocumentStatusView.h"
 
 @interface MTReportDesignerViewController : MTViewController
-    <UITableViewDataSource,
-        UIPopoverControllerDelegate,
-        /*UITableViewDelegate,*/
+    <UIPopoverControllerDelegate,
         UIPopoverControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
