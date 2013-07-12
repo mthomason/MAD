@@ -14,7 +14,7 @@
 
 @interface MTShowSqlViewController : MTViewController
 
-@property (retain, nonatomic) IBOutlet UITextView *textView;
+@property (nonatomic, retain) IBOutlet UITextView *textView;
 
 - (IBAction)done:(id)sender;
 

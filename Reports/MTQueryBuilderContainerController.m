@@ -10,11 +10,11 @@
 
 @interface MTQueryBuilderContainerController ()
 
-@property (retain, nonatomic) IBOutlet UIView *leftView;
-@property (retain, nonatomic) IBOutlet UIView *rightView;
-@property (retain, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
-@property (retain, nonatomic) IBOutlet MTTitleView *titleView;
+@property (nonatomic, retain) IBOutlet UIView *leftView;
+@property (nonatomic, retain) IBOutlet UIView *rightView;
+@property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
 
 @property (nonatomic, assign) BOOL isEditing;
 

@@ -15,8 +15,8 @@ extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellAggregateInput;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateInput;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
 
 @end

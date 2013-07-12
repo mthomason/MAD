@@ -24,7 +24,7 @@
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSettingsDelegate> delegate;
 
-@property (retain, nonatomic) IBOutlet UILabel *labelFontName;
+@property (nonatomic, retain) IBOutlet UILabel *labelFontName;
 
 - (void)chooseFont:(MTFont *)font;
 

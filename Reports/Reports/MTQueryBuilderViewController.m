@@ -15,16 +15,16 @@
 
 @interface MTQueryBuilderViewController()
 
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (retain, nonatomic) IBOutlet UIToolbar *toolbarTop;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
 
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerTables;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerLinks;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerGroups;
-@property (retain, nonatomic) NSFetchedResultsController *fetchedResultsControllerPredicates;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerTables;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerLinks;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
-@property (retain, nonatomic) UIFont *boldSystemFont;
-@property (retain, nonatomic) NSArray *tableSectionTitles;
+@property (nonatomic, retain) UIFont *boldSystemFont;
+@property (nonatomic, retain) NSArray *tableSectionTitles;
 
 @property (nonatomic, assign) BOOL beganUpdates;
 

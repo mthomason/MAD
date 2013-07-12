@@ -10,12 +10,12 @@
 
 @interface MTReportDesignerDocumentObjectFormat ()
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellDecimals;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellCurrency;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDecimals;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellCurrency;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
 
 
-@property (retain, nonatomic) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
+@property (nonatomic, retain) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
 @property (nonatomic, retain) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
 @end
 

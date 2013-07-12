@@ -59,18 +59,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @end
 
 @interface MTViewControllerOpenDocument()
-@property (retain, nonatomic) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
+
+@property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
+@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonAddNewDocument;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonLicensing;
 
 @property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
-@property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) NSMutableArray *availableFilesCacheMetaData;
-
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
-@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *buttonAddNewDocument;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *buttonLicensing;
+@property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
 
 @property (nonatomic, retain) MTQueryBuilderAdvancedViewController *advancedQueryBuilder;
 @property (nonatomic, retain) MTQueryBuilderViewController *standardQueryBuilder;
@@ -78,11 +78,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) UILongPressGestureRecognizer *longPressGestureRecognizer;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureRecognizer;
 
+@property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
-
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
-
-@property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
 
 @end
 
@@ -332,36 +330,21 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         row = [[[self collectionView] indexPathForCell:senderCell] row];
         url = [[[self availableFilesCache] objectAtIndex: row] retain];
         [self setUrlBeingOpended:url];
+
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             
-            UINavigationController *navControl = [[segue destinationViewController] retain];
-            if ([navControl topViewController]) {
-                if (row < [[self availableFilesCache] count]) {
-                    
-                    if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-                        MTQueryBuilderViewController *tvc = [(MTQueryBuilderViewController *)[navControl topViewController] retain];
-                        if (tvc) {
-                            [self setupQueryDesignerController:tvc usingFileAtUrl:url];
-                        } else {
-                            @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                                           reason: [NSString stringWithFormat:@"Could not find MTViewControllerQueryBuilder in %@.", NSStringFromSelector(_cmd)]
-                                                         userInfo: nil];
-                        }
-                        [tvc release];
-                    }
-                }
-            }
-            [navControl release];
+            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+            [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
+            
         } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
-            
-            MTQueryBuilderContainerController *splitViewController = (MTQueryBuilderContainerController* )[[segue destinationViewController] retain];
-            [splitViewController setDelegateContentController: self];
-            [splitViewController setDelegate:self];
-            [splitViewController setDocumentToOpen:url];
-            [splitViewController release];
-            
+            MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController* )[segue destinationViewController];
+            [queryBuilderViewController setDelegateContentController: self];
+            [queryBuilderViewController setDelegate:self];
+            [queryBuilderViewController setDocumentToOpen:url];
+        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue destinationViewController];
+            [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
         }
-        
         
         [url release];
         
@@ -541,7 +524,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     [self setShouldShowAddDocumentPopover:YES];
     [[self buttonAddNewDocument] setEnabled:YES];
-
+    [self updateFileList];
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {

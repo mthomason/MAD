@@ -15,7 +15,7 @@
 @interface UITableViewControllerFieldOrCustomValue : MTQueryBuilderChooseFieldViewController
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segmentedControlDisplayType;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlDisplayType;
 
 - (IBAction)segmentedControlValueChanged:(id)sender;
 

@@ -19,12 +19,12 @@
     <UITableViewDelegate,
         UITextFieldDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellNickname;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellConnectionCreate;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellNickname;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellConnectionCreate;
 
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *saveButton;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
-@property (retain, nonatomic) IBOutlet UITextField *textFieldNickname;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *saveButton;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
+@property (nonatomic, retain) IBOutlet UITextField *textFieldNickname;
 
 - (void)test:(id)sender;
 - (IBAction)save:(id)sender;

@@ -13,14 +13,14 @@
 @interface MTSettingsViewController : MTTableViewController
     <UITableViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellPrint;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellExport;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellFind;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellReportSetup;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellRuler;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellSettings;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellHelp;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableCellStore;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellPrint;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellExport;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellFind;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellReportSetup;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellRuler;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellSettings;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellHelp;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellStore;
 
 - (IBAction)done:(id)sender;
 

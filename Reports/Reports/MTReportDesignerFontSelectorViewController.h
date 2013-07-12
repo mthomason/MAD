@@ -22,17 +22,17 @@
     <UITableViewDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontArial;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontCourierNew;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontCourier;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontGeorgia;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontHelvetica;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontHelveticaNeue;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontTimesNewRoman;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontVerdana;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFontZapfino;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontArial;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontCourierNew;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontCourier;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontGeorgia;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontHelvetica;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontHelveticaNeue;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontTimesNewRoman;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontTrebuchet;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontVerdana;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontZapfino;
 
 - (void)setSelectedFont:(MTFont *)font;
 

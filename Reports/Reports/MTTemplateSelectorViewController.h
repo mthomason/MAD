@@ -29,7 +29,7 @@
 
 @property (assign) IBOutlet id <MTTemplateSelectorDelegate> templateSelectorDelegate;
 
-@property (retain, nonatomic) IBOutlet UITableView *tableViewTemplates;
+@property (nonatomic, retain) IBOutlet UITableView *tableViewTemplates;
 @property (assign, nonatomic) IBOutlet MTTableViewCellDocument *uITableViewCellDocument;
 
 - (IBAction)done:(id)sender;

@@ -41,14 +41,14 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellJoinType;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellJoinType;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableOne;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFieldOne;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellTableTwo;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellFieldTwo;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableOne;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFieldOne;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableTwo;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFieldTwo;
 
 @property (assign) MNSLinkPart currentlyEditingPart;
 @property (assign) MNSLinkType linkType;

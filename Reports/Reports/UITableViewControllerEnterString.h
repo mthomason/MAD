@@ -17,7 +17,7 @@
 @interface UITableViewControllerEnterString : UITableViewController
 
 @property (assign, nonatomic) IBOutlet id <UITableViewControllerEnterStringDelegate> enterStringDelegate;
-@property (retain, nonatomic) IBOutlet UITextField *textField;
+@property (nonatomic, retain) IBOutlet UITextField *textField;
 
 - (IBAction)done:(id)sender;
 

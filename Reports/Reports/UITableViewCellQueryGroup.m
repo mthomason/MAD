@@ -10,7 +10,7 @@
 
 @interface UITableViewCellQueryGroup ()
 
-@property (retain, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
+@property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
 
 @end
 

@@ -40,9 +40,9 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellLeftSide;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellRightSide;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellOperator;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellLeftSide;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellRightSide;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellOperator;
 
 @property (assign) MNSPredicateOperator predicateOperator;
 @property (copy) NSString *leftValue;

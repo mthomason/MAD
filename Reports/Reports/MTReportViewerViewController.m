@@ -43,7 +43,7 @@
 @property (nonatomic, assign) NSTimer *timerLabelTimeSinceRefreh;
 
 @property (atomic, assign) BOOL isRefreshing;
-@property (retain, nonatomic) IBOutlet DocumentStatusView *documentStatusView;
+@property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
 @end
 
