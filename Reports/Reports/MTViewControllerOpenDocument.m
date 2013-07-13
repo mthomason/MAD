@@ -274,15 +274,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTTemplateSelectorViewController class]]) {
-                    if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                        [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
-                        [[self openDocumentPopoverController] setDelegate:self];
-                    }
-                    MTTemplateSelectorViewController *tvc = (MTTemplateSelectorViewController *)[navControl topViewController];
-                    [tvc setDelegate:self];
-                    [tvc setTemplateSelectorDelegate:self];
+                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                    [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
+                    [[self openDocumentPopoverController] setDelegate:self];
                 }
+                [(MTViewController *)[navControl topViewController] setDelegate:self];
             }
         }
         [[segue destinationViewController] setDelegate:self];
