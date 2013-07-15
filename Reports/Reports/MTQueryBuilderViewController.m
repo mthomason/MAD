@@ -124,8 +124,11 @@
     
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-    [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
-    [[self tableViewQueryBuilder] setOpaque: YES];
+    if ([UIDevice isLagacyOS]) {
+        [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
+        [[self tableViewQueryBuilder] setOpaque: YES];
+    }
+    
     [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
@@ -208,7 +211,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    [[self toolbar] setTintColor:[UIColor edaBlueDark]];
+    if ([UIDevice isLagacyOS]) {
+        [[self toolbar] setTintColor:[UIColor edaBlueDark]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

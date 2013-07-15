@@ -97,7 +97,9 @@
     [super viewDidLoad];
     [self setShowSqlIsVisable:NO];
     UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
-    [containerView setBackgroundColor:[UIColor paperGraphPaper]];
+    if ([UIDevice isLagacyOS]) {
+        [containerView setBackgroundColor:[UIColor paperGraphPaper]];
+    }
     [self setContentView:containerView];
     [containerView release];
 
@@ -126,7 +128,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[self toolbarBottom] setTintColor:[UIColor edaBlueDark]];
+    if ([UIDevice isLagacyOS]) {
+        [[self toolbarBottom] setTintColor:[UIColor edaBlueDark]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -59,6 +59,8 @@
     if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
             [[segue destinationViewController] setDelegate: self];
+        } else if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
         }
     }    
 }
@@ -69,7 +71,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
     [[self toolbarTop] setTintColor:[UIColor edaBlueDark]];
 
     UIView *leftView = [[self leftView] retain];
@@ -90,6 +91,7 @@
     
     [leftView release];
     [rightView release];
+
 }
 
 - (id)leftViewController {

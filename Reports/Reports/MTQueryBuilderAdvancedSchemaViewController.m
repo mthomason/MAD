@@ -69,7 +69,9 @@
     [[self schemaTableViewController] setDataSource:self];
     [[self schemaTableViewController] setDelegate:self];
     [[self schemaTableViewController] reloadData];
-    [[self toolbar] setTintColor:[UIColor edaGreenDark]];
+    if ([UIDevice isLagacyOS]) {
+        [[self toolbar] setTintColor:[UIColor edaGreenDark]];
+    }
     [[[self containerView] layer] setCornerRadius: 25.0000f];
     [[self containerView] setClipsToBounds: YES];
     [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
@@ -178,13 +180,6 @@
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
     CGRect rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
     return [[self schemaTableViewController] convertRect:rectForRow toView:containerView];
-}
-
-- (void)viewDidUnload {
-    [self setTitleView:nil];
-    [self setToolbar:nil];
-    [self setContainerView:nil];
-    [super viewDidUnload];
 }
 
 #pragma mark - UIScrollViewDelegate

@@ -6,84 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3697.3"/>
     </dependencies>
     <scenes>
-        <!--Template Selector View Controller - Templates-->
-        <scene sceneID="F6q-Ap-wl0">
-            <objects>
-                <viewController id="GWk-3f-Lwl" customClass="MTTemplateSelectorViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="GHA-i9-F1a">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8ak-PQ-eRf">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellDocument" rowHeight="73" id="NjH-tx-gYJ" customClass="MTTableViewCellDocument">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="73"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="301" height="72"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="eH3-b2-hY5">
-                                                    <rect key="frame" x="21" y="5" width="64" height="64"/>
-                                                </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blank Report" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mx0-j0-DZa">
-                                                    <rect key="frame" x="93" y="25" width="188" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="4hI-0n-A2B"/>
-                                                        <constraint firstAttribute="width" constant="188" id="Rfo-DI-0Ps"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstItem="Mx0-j0-DZa" firstAttribute="top" secondItem="NjH-tx-gYJ" secondAttribute="top" constant="25" id="QKR-Ln-SMz"/>
-                                            <constraint firstItem="eH3-b2-hY5" firstAttribute="leading" secondItem="NjH-tx-gYJ" secondAttribute="leading" constant="20" type="default" id="QkB-Cg-e3t"/>
-                                            <constraint firstItem="eH3-b2-hY5" firstAttribute="centerY" secondItem="NjH-tx-gYJ" secondAttribute="centerY" type="default" id="f0S-Jx-a64"/>
-                                            <constraint firstItem="Mx0-j0-DZa" firstAttribute="leading" secondItem="eH3-b2-hY5" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="fYS-63-x10"/>
-                                        </constraints>
-                                        <connections>
-                                            <outlet property="imageThumbnail" destination="eH3-b2-hY5" id="3NA-oR-q5Q"/>
-                                            <outlet property="labelH1" destination="Mx0-j0-DZa" id="DND-cI-Ux8"/>
-                                            <segue destination="ZV6-4A-f9x" kind="push" identifier="showChooseDatasource" id="Gaa-0Y-kkk"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="GWk-3f-Lwl" id="Jak-dj-KYF"/>
-                                    <outlet property="delegate" destination="GWk-3f-Lwl" id="mmq-qU-iWg"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="8ak-PQ-eRf" firstAttribute="leading" secondItem="GHA-i9-F1a" secondAttribute="leading" type="default" id="2qH-sX-c6w"/>
-                            <constraint firstItem="8ak-PQ-eRf" firstAttribute="bottom" secondItem="GHA-i9-F1a" secondAttribute="bottom" type="default" id="CPO-xm-Hhw"/>
-                            <constraint firstItem="8ak-PQ-eRf" firstAttribute="top" secondItem="GHA-i9-F1a" secondAttribute="top" type="default" id="cqy-DS-P0g"/>
-                            <constraint firstItem="8ak-PQ-eRf" firstAttribute="trailing" secondItem="GHA-i9-F1a" secondAttribute="trailing" type="default" id="i4t-Al-Oyd"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Templates" id="tj5-M3-CmT">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="wIu-q5-7uU">
-                            <connections>
-                                <action selector="cancel:" destination="GWk-3f-Lwl" id="0ch-Oh-rxO"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="tableViewTemplates" destination="8ak-PQ-eRf" id="c3k-Vr-IsS"/>
-                        <outlet property="view" destination="GHA-i9-F1a" id="F25-cz-6F0"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IvO-ic-iVU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1460" y="-2367"/>
-        </scene>
         <!--Store Templates View Controller-->
         <scene sceneID="fdY-w9-c9p">
             <objects>
@@ -122,11 +44,7 @@
                                         </view>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="lqe-6w-6lO"/>
-                                    <barButtonItem systemItem="done" id="nG1-gD-6gA">
-                                        <connections>
-                                            <action selector="done:" destination="GWk-3f-Lwl" id="GSV-jE-qv0"/>
-                                        </connections>
-                                    </barButtonItem>
+                                    <barButtonItem systemItem="done" id="nG1-gD-6gA"/>
                                 </items>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="JD5-Ji-EDZ">
@@ -2034,7 +1952,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="GWk-3f-Lwl" kind="relationship" relationship="rootViewController" id="v3e-wS-LLt"/>
+                        <segue destination="ZV6-4A-f9x" kind="relationship" relationship="rootViewController" id="n9F-20-Jtq"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="87W-C5-2vr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2375,7 +2293,11 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="New Report" prompt="Choose a datasource." id="cwb-UU-Yfc">
-                        <barButtonItem key="backBarButtonItem" title="Templates" id="0Da-oW-edy"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="sZp-oN-1o1">
+                            <connections>
+                                <action selector="cancel:" destination="ZV6-4A-f9x" id="Imk-v8-AGx"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Svy-aS-E0S" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -328,12 +328,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self setUrlBeingOpended:url];
 
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            
-            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
-            [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
-            
+            if ([UIDevice isPad]) {
+                MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
+                [queryBuilderViewController setDelegateContentController: self];
+                [queryBuilderViewController setDelegate:self];
+                [queryBuilderViewController setDocumentToOpen:url];
+            } else {
+                MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+                [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
+            }
+
         } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
-            MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController* )[segue destinationViewController];
+            MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
             [queryBuilderViewController setDelegateContentController: self];
             [queryBuilderViewController setDelegate:self];
             [queryBuilderViewController setDocumentToOpen:url];
