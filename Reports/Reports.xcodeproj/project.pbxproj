@@ -297,16 +297,8 @@
 		4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
 		4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
-		4C0E784E163B5AEC003B951E /* UIImageExportTypeSalesforce@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */; };
-		4C0E784F163B5AEC003B951E /* UIImageExportTypeSalesforce.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */; };
-		4C0E7850163B5AEC003B951E /* UIImageExportTypeFacebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */; };
-		4C0E7851163B5AEC003B951E /* UIImageExportTypeFacebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */; };
-		4C0E7852163B5AEC003B951E /* UIImageExportTypeTwitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */; };
-		4C0E7853163B5AEC003B951E /* UIImageExportTypeTwitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */; };
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
-		4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */; };
-		4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C0EF6D4178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6CC178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard */; };
 		4C0EF6D9178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6CE178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard */; };
 		4C0EF6E2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */; };
@@ -356,16 +348,8 @@
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
 		4C2AC30315358DA600738091 /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
-		4C2AC30615358F0200738091 /* UIImageExportTypeSalesforce@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */; };
-		4C2AC30715358F0200738091 /* UIImageExportTypeSalesforce.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */; };
-		4C2AC30A15358FBA00738091 /* UIImageExportTypeFacebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */; };
-		4C2AC30B15358FBA00738091 /* UIImageExportTypeFacebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */; };
-		4C2AC30E1535910900738091 /* UIImageExportTypeTwitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */; };
-		4C2AC30F1535910900738091 /* UIImageExportTypeTwitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */; };
 		4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
-		4C2AC3161535926100738091 /* UIImageExportTypeRSS.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */; };
-		4C2AC3171535926100738091 /* UIImageExportTypeRSS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */; };
 		4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
 		4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
@@ -401,22 +385,6 @@
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
 		4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
-		4C43F21B178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
-		4C43F21C178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
-		4C43F21D178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
-		4C43F21E178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
-		4C43F21F178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
-		4C43F220178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
-		4C43F221178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
-		4C43F222178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
-		4C43F226178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */; };
-		4C43F227178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */; };
-		4C43F228178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */; };
-		4C43F229178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */; };
-		4C43F22A178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
-		4C43F22B178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
-		4C43F22C178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
-		4C43F22D178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
 		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
@@ -4795,7 +4763,6 @@
 				4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */,
 				4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */,
 				4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */,
-				4C43F21F178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C0E77C9163B5AEC003B951E /* UIImageStrikethrough20@2x.png in Resources */,
 				4C0E77CA163B5AEC003B951E /* UIImageUnderline20.png in Resources */,
 				4C0E77CB163B5AEC003B951E /* UIImageUnderline20@2x.png in Resources */,
@@ -4891,7 +4858,6 @@
 				4C0E7827163B5AEC003B951E /* UIImagePatternMetallicFlecks@2x.png in Resources */,
 				4C0E7828163B5AEC003B951E /* UIImagePatternMetallicFlecks2.png in Resources */,
 				4C0E7829163B5AEC003B951E /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
-				4C43F21B178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */,
 				4C0E782A163B5AEC003B951E /* UIImagePatternNotebook.png in Resources */,
 				4C0E782B163B5AEC003B951E /* UIImagePatternNotebook@2x.png in Resources */,
 				4C0E782C163B5AEC003B951E /* UIImagePatternPeachPebbled.png in Resources */,
@@ -4928,16 +4894,8 @@
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */,
 				4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */,
-				4C0E784E163B5AEC003B951E /* UIImageExportTypeSalesforce@2x.png in Resources */,
-				4C0E784F163B5AEC003B951E /* UIImageExportTypeSalesforce.png in Resources */,
-				4C0E7850163B5AEC003B951E /* UIImageExportTypeFacebook.png in Resources */,
-				4C0E7851163B5AEC003B951E /* UIImageExportTypeFacebook@2x.png in Resources */,
-				4C0E7852163B5AEC003B951E /* UIImageExportTypeTwitter.png in Resources */,
-				4C0E7853163B5AEC003B951E /* UIImageExportTypeTwitter@2x.png in Resources */,
 				4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */,
 				4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */,
-				4C0E7856163B5AEC003B951E /* UIImageExportTypeRSS.png in Resources */,
-				4C0E7857163B5AEC003B951E /* UIImageExportTypeRSS@2x.png in Resources */,
 				4CD98C73163F7DE70096D7BC /* gcc_builtins.h in Resources */,
 				4CD98C77163F7DE70096D7BC /* generic-msvc.h in Resources */,
 				4CD98C7B163F7DE70096D7BC /* nolock.h in Resources */,
@@ -5062,9 +5020,7 @@
 				4CD98C7D163F7DE70096D7BC /* nolock.h in Resources */,
 				4CD98C81163F7DE70096D7BC /* rwlock.h in Resources */,
 				4CD98C85163F7DE70096D7BC /* x86-gcc.h in Resources */,
-				4C43F21D178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */,
 				4CD98C89163F7DE70096D7BC /* base64.h in Resources */,
-				4C43F221178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4CD98C8D163F7DE70096D7BC /* config-win.h in Resources */,
 				4CD98C91163F7DE70096D7BC /* decimal.h in Resources */,
 				4CD98C95163F7DE70096D7BC /* errmsg.h in Resources */,
@@ -5132,7 +5088,6 @@
 				4C8EC09D167A487600F37DA7 /* MTLinkedList.h in Resources */,
 				4C8EC0A1167A487600F37DA7 /* MTQueue.h in Resources */,
 				4C8EC0A5167A487600F37DA7 /* MTStack.h in Resources */,
-				4C43F22C178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 				4C8EC0AA167A489200F37DA7 /* libMTDataStrutures.h in Resources */,
 				4CA162C1167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4CF8D41C1685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
@@ -5152,7 +5107,6 @@
 				4C6DAA711761AEE000FF770A /* sqlfront.h in Resources */,
 				4C6DAA761761AEE000FF770A /* sybdb.h in Resources */,
 				4C6DAA7B1761AEE000FF770A /* syberror.h in Resources */,
-				4C43F228178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4C6DAA801761AEE000FF770A /* sybfront.h in Resources */,
 				4C6DAA851761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA8A1761AEE000FF770A /* libsybdb.a in Resources */,
@@ -5187,7 +5141,6 @@
 				4CD98CBC163F7DE70096D7BC /* my_attribute.h in Resources */,
 				4CD98CC0163F7DE70096D7BC /* my_base.h in Resources */,
 				4CD98CC4163F7DE70096D7BC /* my_bit.h in Resources */,
-				4C43F227178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4CD98CC8163F7DE70096D7BC /* my_bitmap.h in Resources */,
 				4CD98CCC163F7DE70096D7BC /* my_charsets.h in Resources */,
 				4CD98CD0163F7DE70096D7BC /* my_config.h in Resources */,
@@ -5198,7 +5151,6 @@
 				4CD98CE4163F7DE70096D7BC /* my_global.h in Resources */,
 				4CD98CE8163F7DE70096D7BC /* my_libwrap.h in Resources */,
 				4CD98CEC163F7DE70096D7BC /* my_list.h in Resources */,
-				4C43F21C178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */,
 				4CD98CF0163F7DE70096D7BC /* my_md5.h in Resources */,
 				4CD98CF4163F7DE70096D7BC /* my_net.h in Resources */,
 				4CD98CF8163F7DE70096D7BC /* my_no_pthread.h in Resources */,
@@ -5237,7 +5189,6 @@
 				4CD98D7C163F7DE70096D7BC /* violite.h in Resources */,
 				4CD98D80163F7DE70096D7BC /* waiting_threads.h in Resources */,
 				4CD98D84163F7DE70096D7BC /* wqueue.h in Resources */,
-				4C43F220178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C4C6F23167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C4C6F26167642D9004A3B04 /* MTGraph.h in Resources */,
 				4C4C6F29167642D9004A3B04 /* MTVertex.h in Resources */,
@@ -5273,7 +5224,6 @@
 				4C6DAA951761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4C76B6F7177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4C178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
-				4C43F22B178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5298,7 +5248,6 @@
 				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
 				4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */,
 				4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */,
-				4C43F226178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4C00816D14B6C4EF003DF437 /* UIImageJustified20@2x.png in Resources */,
 				4C00817714B6CAAF003DF437 /* UIImageBold20.png in Resources */,
 				4C00817814B6CAAF003DF437 /* UIImageBold20@2x.png in Resources */,
@@ -5434,16 +5383,8 @@
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */,
 				4C2AC30315358DA600738091 /* UIImageExportTypeCSV@2x.png in Resources */,
-				4C2AC30615358F0200738091 /* UIImageExportTypeSalesforce@2x.png in Resources */,
-				4C2AC30715358F0200738091 /* UIImageExportTypeSalesforce.png in Resources */,
-				4C2AC30A15358FBA00738091 /* UIImageExportTypeFacebook.png in Resources */,
-				4C2AC30B15358FBA00738091 /* UIImageExportTypeFacebook@2x.png in Resources */,
-				4C2AC30E1535910900738091 /* UIImageExportTypeTwitter.png in Resources */,
-				4C2AC30F1535910900738091 /* UIImageExportTypeTwitter@2x.png in Resources */,
 				4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */,
 				4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */,
-				4C2AC3161535926100738091 /* UIImageExportTypeRSS.png in Resources */,
-				4C2AC3171535926100738091 /* UIImageExportTypeRSS@2x.png in Resources */,
 				4CD98C72163F7DE70096D7BC /* gcc_builtins.h in Resources */,
 				4CD98C76163F7DE70096D7BC /* generic-msvc.h in Resources */,
 				4CD98C7A163F7DE70096D7BC /* nolock.h in Resources */,
@@ -5496,7 +5437,6 @@
 				4CD98D36163F7DE70096D7BC /* mysql_version.h in Resources */,
 				4CD98D3A163F7DE70096D7BC /* mysql_version.h.in in Resources */,
 				4C0EF6E2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard in Resources */,
-				4C43F22A178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 				4CD98D3E163F7DE70096D7BC /* mysqld_error.h in Resources */,
 				4CD98D42163F7DE70096D7BC /* rijndael.h in Resources */,
 				4CD98D46163F7DE70096D7BC /* mysys_err.h in Resources */,
@@ -5588,7 +5528,6 @@
 				4C860B6C167EDE7000AC1904 /* my_attribute.h in Resources */,
 				4C860B6D167EDE7000AC1904 /* my_base.h in Resources */,
 				4C860B6E167EDE7000AC1904 /* my_bit.h in Resources */,
-				4C43F229178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4C860B6F167EDE7000AC1904 /* my_bitmap.h in Resources */,
 				4C860B70167EDE7000AC1904 /* my_charsets.h in Resources */,
 				4C860B71167EDE7000AC1904 /* my_config.h in Resources */,
@@ -5599,7 +5538,6 @@
 				4C860B76167EDE7000AC1904 /* my_global.h in Resources */,
 				4C860B77167EDE7000AC1904 /* my_libwrap.h in Resources */,
 				4C860B78167EDE7000AC1904 /* my_list.h in Resources */,
-				4C43F21E178C8E430069FD5B /* MTStoryboardReportViewer.storyboard in Resources */,
 				4C860B79167EDE7000AC1904 /* my_md5.h in Resources */,
 				4C860B7A167EDE7000AC1904 /* my_net.h in Resources */,
 				4C860B7B167EDE7000AC1904 /* my_no_pthread.h in Resources */,
@@ -5638,7 +5576,6 @@
 				4C860B9C167EDE7000AC1904 /* violite.h in Resources */,
 				4C860B9D167EDE7000AC1904 /* waiting_threads.h in Resources */,
 				4C860B9E167EDE7000AC1904 /* wqueue.h in Resources */,
-				4C43F222178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C860B9F167EDE7000AC1904 /* MTEdge.h in Resources */,
 				4C860BA0167EDE7000AC1904 /* MTGraph.h in Resources */,
 				4C860BA1167EDE7000AC1904 /* MTVertex.h in Resources */,
@@ -5674,7 +5611,6 @@
 				4C6DAA971761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4C76B6F9177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4E178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
-				4C43F22D178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

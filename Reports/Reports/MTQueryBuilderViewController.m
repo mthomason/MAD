@@ -353,7 +353,9 @@
                     }
                 }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportLayout]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
+        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            [(MTViewController *)[[segue destinationViewController] topViewController] setDelegate: self];
+        } else {
             [[segue destinationViewController] setDelegate: self];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
