@@ -86,9 +86,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IvO-ic-iVU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1460" y="-2367"/>
+            <point key="canvasLocation" x="1540" y="-3023"/>
         </scene>
-        <!--Show Sql View Controller-->
+        <!--Show Sql View Controller - Generated Query-->
         <scene sceneID="56L-Y0-5R1">
             <objects>
                 <viewController id="rH1-dA-DYm" customClass="MTShowSqlViewController" sceneMemberID="viewController">
@@ -97,11 +97,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Ygr-xb-dMA"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Pbw-kj-pie">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvg-qk-tUM">
-                                <rect key="frame" x="0.0" y="44" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -114,47 +114,64 @@
                                 </attributedString>
                                 <textInputTraits key="textInputTraits"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KsD-hB-v0I">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <items>
-                                    <navigationItem title="Generated Query" id="2hP-QH-Mo0">
-                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="qSs-gO-dN0">
-                                            <connections>
-                                                <action selector="done:" destination="rH1-dA-DYm" id="m73-s2-yHr"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCS-bz-ltl">
-                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                                <items/>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vvg-qk-tUM" firstAttribute="leading" secondItem="Pbw-kj-pie" secondAttribute="leading" id="8ll-Xl-iuv"/>
-                            <constraint firstItem="vvg-qk-tUM" firstAttribute="trailing" secondItem="Pbw-kj-pie" secondAttribute="trailing" id="PIp-kD-2GF"/>
-                            <constraint firstItem="vvg-qk-tUM" firstAttribute="top" secondItem="KsD-hB-v0I" secondAttribute="bottom" id="PSr-Ow-xuj"/>
-                            <constraint firstItem="KsD-hB-v0I" firstAttribute="top" secondItem="Pbw-kj-pie" secondAttribute="top" id="PoY-J5-psP"/>
-                            <constraint firstItem="FCS-bz-ltl" firstAttribute="top" secondItem="vvg-qk-tUM" secondAttribute="bottom" id="SMe-3c-rcL"/>
-                            <constraint firstItem="FCS-bz-ltl" firstAttribute="bottom" secondItem="Pbw-kj-pie" secondAttribute="bottom" id="dKG-Ry-ZU0"/>
-                            <constraint firstItem="FCS-bz-ltl" firstAttribute="leading" secondItem="Pbw-kj-pie" secondAttribute="leading" id="i9V-7d-BkI"/>
-                            <constraint firstItem="FCS-bz-ltl" firstAttribute="trailing" secondItem="Pbw-kj-pie" secondAttribute="trailing" id="mK9-wv-5cP"/>
-                            <constraint firstItem="KsD-hB-v0I" firstAttribute="leading" secondItem="Pbw-kj-pie" secondAttribute="leading" id="sMx-OR-P2s"/>
-                            <constraint firstItem="KsD-hB-v0I" firstAttribute="trailing" secondItem="Pbw-kj-pie" secondAttribute="trailing" id="xZR-eg-gAt"/>
+                            <constraint firstItem="vvg-qk-tUM" firstAttribute="top" secondItem="Pbw-kj-pie" secondAttribute="top" id="Ah0-lM-JxH"/>
+                            <constraint firstAttribute="bottom" secondItem="vvg-qk-tUM" secondAttribute="bottom" id="FxJ-uZ-SXL"/>
+                            <constraint firstAttribute="trailing" secondItem="vvg-qk-tUM" secondAttribute="trailing" id="bBp-bj-86Z"/>
+                            <constraint firstItem="vvg-qk-tUM" firstAttribute="leading" secondItem="Pbw-kj-pie" secondAttribute="leading" id="uAc-v8-ooU"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Generated Query" id="Cgk-lk-y7r">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="qSs-gO-dN0">
+                            <connections>
+                                <action selector="done:" destination="rH1-dA-DYm" id="m73-s2-yHr"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="textView" destination="vvg-qk-tUM" id="dQr-83-O3N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="soU-uQ-lkM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1138" y="1041"/>
+            <point key="canvasLocation" x="1592" y="1036"/>
         </scene>
-        <!--Report Designer View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="0gM-YA-W6b">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="xr3-YA-WVo" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="16W-b9-OS4">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="rH1-dA-DYm" kind="relationship" relationship="rootViewController" id="otK-fR-Lzv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qxW-Ro-eBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1148" y="1036"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="w7D-aP-uPq">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="rCj-aP-1mR" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mrR-aO-68b">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="d6e-CT-kmt" kind="relationship" relationship="rootViewController" id="vHD-hA-uba"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I7B-Jq-sLa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="634" y="2166"/>
+        </scene>
+        <!--Report Designer View Controller - MAD Designer-->
         <scene sceneID="Lfd-iY-3rn">
             <objects>
                 <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d6e-CT-kmt" customClass="MTReportDesignerViewController" sceneMemberID="viewController">
@@ -163,31 +180,20 @@
                         <viewControllerLayoutGuide type="bottom" id="1yV-MO-XLd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="lLt-so-kJY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="9VI-qP-p12">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <items>
-                                    <barButtonItem title="Query" width="66" id="UFx-y1-7e8">
-                                        <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
-                                        <connections>
-                                            <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="vRz-Yl-3Fc"/>
-                                    <barButtonItem systemItem="play" id="vKG-yA-osd">
-                                        <connections>
-                                            <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromDesign" id="amO-vq-5zB"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM" customClass="UIScrollViewSection">
-                                <rect key="frame" x="0.0" y="44" width="320" height="142"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="186"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="186" placeholder="YES" id="ogQ-rN-fyr"/>
+                                </constraints>
                             </scrollView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-my-rda">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-my-rda">
                                 <rect key="frame" x="0.0" y="186" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="WPC-Ug-qPX"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem width="32" style="plain" id="NSP-KA-FIv">
                                         <view key="customView" opaque="NO" contentMode="scaleToFill" id="LFo-Tb-2Xi" customClass="DocumentStatusView">
@@ -204,29 +210,38 @@
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNt-T0-zvD">
-                                <rect key="frame" x="0.0" y="230" width="320" height="250"/>
+                                <rect key="frame" x="0.0" y="230" width="320" height="186"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="cSM-my-rda" firstAttribute="top" secondItem="lLt-so-kJY" secondAttribute="top" constant="186" id="9Ky-S3-Osk"/>
-                            <constraint firstItem="lma-we-TIM" firstAttribute="top" secondItem="9VI-qP-p12" secondAttribute="bottom" id="AJw-h9-uIq"/>
                             <constraint firstAttribute="bottom" secondItem="XNt-T0-zvD" secondAttribute="bottom" id="Ge5-Lb-we4"/>
                             <constraint firstItem="lma-we-TIM" firstAttribute="trailing" secondItem="lLt-so-kJY" secondAttribute="trailing" id="HxP-fm-rzv"/>
-                            <constraint firstItem="9VI-qP-p12" firstAttribute="leading" secondItem="lLt-so-kJY" secondAttribute="leading" id="JLs-Ro-38h"/>
                             <constraint firstItem="cSM-my-rda" firstAttribute="top" secondItem="lma-we-TIM" secondAttribute="bottom" id="Jtp-qv-FMi"/>
                             <constraint firstItem="XNt-T0-zvD" firstAttribute="trailing" secondItem="lLt-so-kJY" secondAttribute="trailing" id="L35-u6-bvG"/>
                             <constraint firstItem="XNt-T0-zvD" firstAttribute="top" secondItem="cSM-my-rda" secondAttribute="bottom" id="S5h-He-pEN"/>
-                            <constraint firstItem="9VI-qP-p12" firstAttribute="top" secondItem="lLt-so-kJY" secondAttribute="top" id="UAH-3q-bhY"/>
                             <constraint firstItem="cSM-my-rda" firstAttribute="trailing" secondItem="lLt-so-kJY" secondAttribute="trailing" id="arh-cQ-8Qu"/>
                             <constraint firstItem="XNt-T0-zvD" firstAttribute="leading" secondItem="lLt-so-kJY" secondAttribute="leading" id="dgf-mv-e3R"/>
-                            <constraint firstItem="9VI-qP-p12" firstAttribute="trailing" secondItem="lLt-so-kJY" secondAttribute="trailing" id="eLg-Kf-Woj"/>
                             <constraint firstItem="lma-we-TIM" firstAttribute="leading" secondItem="lLt-so-kJY" secondAttribute="leading" id="rAL-Ic-8Cd"/>
                             <constraint firstItem="cSM-my-rda" firstAttribute="leading" secondItem="lLt-so-kJY" secondAttribute="leading" id="xVF-Ul-5NJ"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="MAD Designer" id="akg-b9-CTJ">
+                        <barButtonItem key="leftBarButtonItem" title="Query" width="66" id="UFx-y1-7e8">
+                            <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
+                            <connections>
+                                <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="vKG-yA-osd">
+                            <connections>
+                                <segue destination="yU8-vi-ajy" kind="modal" identifier="showReportViewerFromDesign" id="amO-vq-5zB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
@@ -234,7 +249,6 @@
                         <outlet property="designScrollView" destination="lma-we-TIM" id="H8I-0A-d89"/>
                         <outlet property="documentStatusView" destination="LFo-Tb-2Xi" id="S10-1b-6j1"/>
                         <outlet property="toolbarBottom" destination="cSM-my-rda" id="psB-WE-cMp"/>
-                        <outlet property="toolbarTop" destination="9VI-qP-p12" id="6uA-15-dB6"/>
                         <outlet property="toolboxView" destination="XNt-T0-zvD" id="H84-bL-bjA"/>
                         <outlet property="view" destination="lLt-so-kJY" id="nov-Zf-9lU"/>
                         <outletCollection property="layoutConstraintsToRemove" destination="9Ky-S3-Osk" id="eJB-KP-Wf8"/>
@@ -243,7 +257,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dta-0E-vs3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1138" y="1697"/>
+            <point key="canvasLocation" x="1026" y="2210"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="Ts3-uT-wQ7">
@@ -349,7 +363,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HQU-sr-pjq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-560" y="437"/>
+            <point key="canvasLocation" x="-916" y="393"/>
         </scene>
         <!--Query Builder Navigation Controller-->
         <scene sceneID="whu-Gh-wLK">
@@ -563,12 +577,12 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yR6-Fx-fTB"/>
                                     <barButtonItem title="Show SQL" id="8Sz-vr-PDm">
                                         <connections>
-                                            <segue destination="rH1-dA-DYm" kind="modal" identifier="MNSSegueShowSql" id="N5f-Be-IgC"/>
+                                            <segue destination="xr3-YA-WVo" kind="modal" identifier="MNSSegueShowSql" id="MtU-Xq-54I"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem title="Designer" id="76r-VE-2fP">
                                         <connections>
-                                            <segue destination="d6e-CT-kmt" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="jCL-NW-r6y"/>
+                                            <segue destination="rCj-aP-1mR" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="HYa-TG-WXa"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -1238,7 +1252,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M4a-1x-QI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2544" y="-2670"/>
+            <point key="canvasLocation" x="2536" y="-3342"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ccn-3q-IDa">
@@ -1255,7 +1269,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="87W-C5-2vr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="443" y="-596"/>
+            <point key="canvasLocation" x="1123" y="-3023"/>
         </scene>
         <!--Database Driver Selector View Controller - New Report-->
         <scene sceneID="fhe-9S-gQo">
@@ -1349,7 +1363,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Svy-aS-E0S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1994" y="-2367"/>
+            <point key="canvasLocation" x="1986" y="-3023"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="31M-jb-Dc6">
@@ -1366,7 +1380,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pzn-bp-uqB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1138" y="-1521"/>
+            <point key="canvasLocation" x="1174" y="-1885"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Aby-QO-zRg">
@@ -1481,7 +1495,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="65m-b5-QQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3241" y="-1745"/>
+            <point key="canvasLocation" x="3121" y="-2681"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="X8T-uF-K8k">
@@ -1628,7 +1642,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Rm-04-Mi7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1138" y="393"/>
+            <point key="canvasLocation" x="1148" y="393"/>
         </scene>
         <!--Query Builder Add Link First Table View Controller - Select First Table-->
         <scene sceneID="4LL-vK-QZK">
@@ -1817,7 +1831,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nnx-pY-sa1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1138" y="-177"/>
+            <point key="canvasLocation" x="1148" y="-181"/>
         </scene>
         <!--Query Builder Link Builder View Controller - Link Builder-->
         <scene sceneID="GP1-D4-kAr">
@@ -2057,7 +2071,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nci-gr-x4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1592" y="393"/>
+            <point key="canvasLocation" x="1994" y="349"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="hWE-8O-gLX">
@@ -2292,7 +2306,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1s2-Wk-e0O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="-1008"/>
+            <point key="canvasLocation" x="2692" y="-1112"/>
         </scene>
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="upS-Pr-eds">
@@ -2571,7 +2585,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0gK-QK-f5R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1553" y="-1521"/>
+            <point key="canvasLocation" x="1589" y="-1885"/>
         </scene>
         <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="RWe-Po-EfT">
@@ -2691,7 +2705,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhV-EG-fB7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1994" y="-1521"/>
+            <point key="canvasLocation" x="2030" y="-1885"/>
         </scene>
         <!--Query Builder Add Link First Field View Controller - Select First Field-->
         <scene sceneID="cPE-Bs-c3D">
@@ -3647,7 +3661,7 @@
                 </navigationItem>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u2A-dm-LGS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="470" y="1917"/>
+            <point key="canvasLocation" x="-878" y="1777"/>
         </scene>
         <!--Report Designer Font Settings View Controller-->
         <scene sceneID="Dyt-zX-TJM">
@@ -5693,7 +5707,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n7F-0w-CHY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2544" y="-2000"/>
+            <point key="canvasLocation" x="2536" y="-2672"/>
         </scene>
         <!--View Controller Open Document - MAD Designer-->
         <scene sceneID="8fZ-iQ-Ovc">
@@ -5800,7 +5814,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="FvY-6k-f7g"/>
-        <segue reference="pfP-rZ-fVf"/>
+        <segue reference="CwB-f6-wTT"/>
+        <segue reference="kPX-hH-DKi"/>
     </inferredMetricsTieBreakers>
 </document>

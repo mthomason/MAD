@@ -441,7 +441,7 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="sgt-Wk-J85" id="yza-s9-kgO"/>
                                     <outlet property="labelTitle" destination="i5u-xm-65h" id="FFB-L7-U3c"/>
-                                    <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" id="oYq-R1-ivL"/>
+                                    <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="oYq-R1-ivL"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -2266,6 +2266,7 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageExportTypeSqlServer.png" translatesAutoresizingMaskIntoConstraints="NO" id="uvn-eO-nqj">
                                                     <rect key="frame" x="21" y="29" width="64" height="15"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="445-2n-v9B"/>
                                                         <constraint firstAttribute="width" constant="64" id="YY7-8b-xI3"/>
                                                     </constraints>
                                                 </imageView>
@@ -6576,6 +6577,10 @@
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageExportTypeAppEngine.png" translatesAutoresizingMaskIntoConstraints="NO" id="YF2-ET-dgm">
                                                     <rect key="frame" x="21" y="29" width="15" height="15"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="CFP-w8-S5n"/>
+                                                        <constraint firstAttribute="width" constant="15" id="SJG-8Y-Xwc"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

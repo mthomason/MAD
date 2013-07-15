@@ -248,10 +248,15 @@
         }
         [[segue destinationViewController] setDelegate:self];
 
-    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK: Prepair to show sql.
-
-        [[segue destinationViewController] setDelegate: self];
-
+    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
+        MTViewController *viewController;
+        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            viewController = (MTViewController *)[[segue destinationViewController] topViewController];
+        } else {
+            viewController = [segue destinationViewController];
+        }
+        [viewController setDelegate:self];
+        
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {

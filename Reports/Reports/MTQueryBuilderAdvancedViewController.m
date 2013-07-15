@@ -362,6 +362,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:MNSSegueShowSql]) {
+        MTViewController *viewController;
         if ([UIDevice isPad]) {
             [self setShowSqlIsVisable:YES];
             UIPopoverController *popoverController = [[(UIStoryboardPopoverSegue *)segue popoverController] retain];
@@ -372,6 +373,13 @@
         } else {
             [[segue destinationViewController] setDelegate: self];
         }
+        
+        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            viewController = (MTViewController *)[[segue destinationViewController] topViewController];
+        } else {
+            viewController = [segue destinationViewController];
+        }
+        [viewController setDelegate:self];
     }
 
 }
