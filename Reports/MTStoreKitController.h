@@ -12,6 +12,27 @@
 #import "NSError+UserInterface.h"
 #import "MTVerificationController.h"
 
+extern NSString * const MTStoreKitTransactionReceipt;
+extern NSString * const MTStoreKitTransactionDate;
+extern NSString * const MTStoreKitTransactionIdentifier;
+extern NSString * const MTStoreKitTransactionsIdentifier;
+
+//Keys returned by iTunes Receipt
+extern NSString * const MTStoreKitIdentifierReceiptBid;
+extern NSString * const MTStoreKitIdentifierReceiptBrvs;
+extern NSString * const MTStoreKitIdentifierReceiptQuantity;
+extern NSString * const MTStoreKitIdentifierReceiptItemId;
+extern NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDate;
+extern NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDateMs;
+extern NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDatePst;
+extern NSString * const MTStoreKitIdentifierReceiptOriginalTransactionId;
+extern NSString * const MTStoreKitIdentifierReceiptProductId;
+extern NSString * const MTStoreKitIdentifierReceiptPurchaseDate;
+extern NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs;
+extern NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst;
+extern NSString * const MTStoreKitIdentifierReceiptTransactionId;
+extern NSString * const MTStoreKitIdentifierReceiptUniqueId;
+
 typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);
 typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *error);
 
@@ -25,5 +46,7 @@ typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *err
                               completion:(MTStoreKitInitalizeProductsCompletion)completion;
 - (void)purchaseProductWithIdentifier:(SKProduct *)product
                            completion:(MTStoreKitPurchaseProductWithIdentifierCompletion) completion;
+
++ (NSArray *)transactions;
 
 @end

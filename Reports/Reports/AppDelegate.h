@@ -23,5 +23,7 @@ extern NSString * const MTBundleIdViewer;
 
 + (NSString *)storyboardName;
 + (NSString *)bundleId;
++ (BOOL)isMadViewer;
++ (BOOL)isMadDesigner;
 
 @end

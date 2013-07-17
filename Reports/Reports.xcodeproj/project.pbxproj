@@ -340,6 +340,8 @@
 		4C2279AB167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C2279AC167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C2279AD167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
+		4C2670F21794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2670F11794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m */; };
+		4C2670F31794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2670F11794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m */; };
 		4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */; };
 		4C28FB8F16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */; };
 		4C2AC2F81535736200738091 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2F71535736200738091 /* icon.png */; };
@@ -2078,6 +2080,8 @@
 		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C2279A6167712D600B1150D /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = ../libMTDataStrutures/libMTDataStrutures/MTObject.h; sourceTree = "<group>"; };
 		4C2279A7167712D600B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = ../libMTDataStrutures/libMTDataStrutures/MTPair.h; sourceTree = "<group>"; };
+		4C2670F01794490A00690133 /* MTStoreKitController+NonRenewableLicensing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTStoreKitController+NonRenewableLicensing.h"; sourceTree = "<group>"; };
+		4C2670F11794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTStoreKitController+NonRenewableLicensing.m"; sourceTree = "<group>"; };
 		4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
 		4C2AC2F71535736200738091 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -3211,6 +3215,8 @@
 				4C0081D41781C33000874849 /* MTStoreKitController.m */,
 				4C0081E917849A4A00874849 /* MTVerificationController.h */,
 				4C0081E817849A4A00874849 /* MTVerificationController.m */,
+				4C2670F01794490A00690133 /* MTStoreKitController+NonRenewableLicensing.h */,
+				4C2670F11794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m */,
 			);
 			name = MTStoreKit;
 			sourceTree = "<group>";
@@ -5866,6 +5872,7 @@
 				4C0081DD1781D8C200874849 /* MTLog.m in Sources */,
 				4C0081EB17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081F917853E8600874849 /* SFHFKeychainUtils.m in Sources */,
+				4C2670F31794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6488,6 +6495,7 @@
 				4C0081DC1781D8C200874849 /* MTLog.m in Sources */,
 				4C0081EA17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081F817853E8600874849 /* SFHFKeychainUtils.m in Sources */,
+				4C2670F21794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

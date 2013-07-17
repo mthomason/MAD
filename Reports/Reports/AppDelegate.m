@@ -106,6 +106,26 @@ void uncaughtExceptionHandler(NSException *exception) {
     return _storyboardName;
 }
 
++ (BOOL)isMadViewer {
+    static BOOL _isMadViewer;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *bundleId = [AppDelegate bundleId];
+        _isMadViewer = [bundleId isEqualToString:MTBundleIdMadViewer];
+    });
+    return _isMadViewer;
+}
+
++ (BOOL)isMadDesigner {
+    static BOOL _isMadDesigner;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *bundleId = [AppDelegate bundleId];
+        _isMadDesigner = [bundleId isEqualToString:MTBundleIdMadDesigner];
+    });
+    return _isMadDesigner;
+}
+
 + (NSString *)bundleId {
     static NSString *_bundleId;
     static dispatch_once_t onceToken;

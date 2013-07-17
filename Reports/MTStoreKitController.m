@@ -11,6 +11,23 @@
 NSString * const MTStoreKitTransactionReceipt       = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate          = @"MTStoreKitTransactionDate";
 NSString * const MTStoreKitTransactionIdentifier    = @"MTStoreKitTransactionIdentifier";
+NSString * const MTStoreKitTransactionsIdentifier   = @"MTStoreKitTransactionsIdentifier";
+
+//Keys returned by iTunes
+NSString * const MTStoreKitIdentifierReceiptBid                     = @"bid";
+NSString * const MTStoreKitIdentifierReceiptBrvs                    = @"brvs";
+NSString * const MTStoreKitIdentifierReceiptQuantity                = @"quantity";
+NSString * const MTStoreKitIdentifierReceiptItemId                  = @"item-id";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDate    = @"original-purchase-date";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDateMs  = @"original-purchase-date-ms";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDatePst = @"original-purchase-date-pst";
+NSString * const MTStoreKitIdentifierReceiptOriginalTransactionId   = @"original-transaction-id";
+NSString * const MTStoreKitIdentifierReceiptProductId               = @"product-id";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDate            = @"purchase-date";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs          = @"purchase-date-ms";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst         = @"purchase-date-pst";
+NSString * const MTStoreKitIdentifierReceiptTransactionId           = @"transaction-id";
+NSString * const MTStoreKitIdentifierReceiptUniqueId                = @"unique-identifier";
 
 @interface MTStoreKitController ()
     <SKPaymentTransactionObserver, SKProductsRequestDelegate>
@@ -81,6 +98,12 @@ static MTStoreKitController *sharedSingleton = nil;
         SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdSet];
         [request setDelegate:self];
         [request start];
+    } else if ([[self products] count] == 0) {
+        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey :         @"Product Load Failed",
+                                    NSLocalizedFailureReasonErrorKey :  @"Try again later."};
+        completion(NO, [NSError errorWithDomain:@"MTStoreKitController" code:5 userInfo:errorInfo]);
+    } else {
+        completion(YES, nil);
     }
 }
 
@@ -93,6 +116,23 @@ static MTStoreKitController *sharedSingleton = nil;
 
 - (void)restorePurchases {
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+}
+
++ (NSArray *)transactions {
+    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+    return [[[defaultStore arrayForKey:MTStoreKitTransactionsIdentifier] retain] autorelease];
+}
+
++ (void)archiveTransactionData:(NSDictionary *)transactionData {
+    
+    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+    NSArray *transactionDatum = [defaultStore arrayForKey:MTStoreKitTransactionsIdentifier];
+    
+    NSMutableArray *updatedTransactionData = [[NSMutableArray alloc] initWithArray:transactionDatum];
+    [updatedTransactionData addObject:transactionData];
+    [defaultStore setArray:updatedTransactionData forKey:MTStoreKitTransactionsIdentifier];
+    [updatedTransactionData release];
+    
 }
 
 #pragma mark - SKRequestDelegate Protocol
@@ -142,30 +182,24 @@ static MTStoreKitController *sharedSingleton = nil;
 
 				MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
                 
-                //Only finalize payment if able to save transaction data to iCloud
-                NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-                NSDictionary *transactionData = @{MTStoreKitTransactionReceipt      : [transaction transactionReceipt],
-                                                  MTStoreKitTransactionDate         : [transaction transactionDate],
-                                                  MTStoreKitTransactionIdentifier   : [transaction transactionIdentifier]};
-                NSArray *transactionDatum = [defaultStore arrayForKey:@"transactions"];
-                NSMutableArray *updatedTransactionData = [[NSMutableArray alloc] initWithArray:transactionDatum];
-                [updatedTransactionData addObject:transactionData];
-                [defaultStore setArray:updatedTransactionData forKey:@"transactions"];
-                [updatedTransactionData release];
+                [[MTVerificationController sharedInstance] verifyPurchase:transaction completion:^(BOOL validTransaction, NSError *error, NSDictionary *receiptData, NSDate *purcahseDate) {
+                    
+                    if (validTransaction) {
+                        NSDictionary *transactionData = @{MTStoreKitTransactionReceipt      : [transaction transactionReceipt],
+                                                          MTStoreKitTransactionDate         : [transaction transactionDate],
+                                                          MTStoreKitTransactionIdentifier   : [transaction transactionIdentifier]};
+                        
+                        NSMutableDictionary *completeTransactionData = [[NSMutableDictionary alloc] initWithDictionary:transactionData];
+                        [receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                            [completeTransactionData setObject:obj forKey:key];
+                        }];
+                        [MTStoreKitController archiveTransactionData:completeTransactionData];
+                        [completeTransactionData release];
+                    }
+                    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                    [self purchaseProductWithIdentifierCompletion](validTransaction, error);
 
-                BOOL validTransaction = [[MTVerificationController sharedInstance] verifyPurchase:transaction];
-                NSError *resultError = nil;
-                if (validTransaction == NO) {
-                    NSString *title = NSLocalizedString(@"Receipt Failed Varification", @"Receipt Failed Varification");
-                    NSString *message = NSLocalizedString(@"Attempt to process bogus receipt failed.", @"Attempt to process bogus receipt failed.");
-                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey :         title,
-                                                NSLocalizedFailureReasonErrorKey :  message};
-                    resultError = [NSError errorWithDomain:@"MTStoreKitController" code:3 userInfo:errorInfo];
-                }
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-                [self purchaseProductWithIdentifierCompletion](validTransaction, resultError);
-                //[[self purchaseProductWithIdentifierCompletion] release];
-                //[self setPurchaseProductWithIdentifierCompletion:nil];
+                }];
 				break;
             }
 
@@ -180,17 +214,17 @@ static MTStoreKitController *sharedSingleton = nil;
                 NSDictionary *transactionData = @{MTStoreKitTransactionReceipt      : [origionalTransaction transactionReceipt],
                                                   MTStoreKitTransactionDate         : [origionalTransaction transactionDate],
                                                   MTStoreKitTransactionIdentifier   : [origionalTransaction transactionIdentifier]};
-                NSArray *transactionDatum = [defaultStore arrayForKey:@"transactions"];
+                NSArray *transactionDatum = [defaultStore arrayForKey:MTStoreKitTransactionsIdentifier];
                 NSMutableArray *updatedTransactionData = [[NSMutableArray alloc] initWithArray:transactionDatum];
                 [updatedTransactionData addObject:transactionData];
-                [defaultStore setArray:updatedTransactionData forKey:@"transactions"];
+                [defaultStore setArray:updatedTransactionData forKey:MTStoreKitTransactionsIdentifier];
                 [updatedTransactionData release];
                 
                 
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 
                 for (id product in [self products]) {
-                    NSLog(@"Product: %@", product);
+                    MTLog(@"Product: %@", product);
                     if ([[[transaction payment] productIdentifier] isEqualToString:@"com.everydayapps.quotationary.export.email.csv"]) {
                         UIAlertView *av = [[UIAlertView alloc] initWithTitle: @"Item Enabled"
                                                                      message:@"Item Export to CSV is enabled."

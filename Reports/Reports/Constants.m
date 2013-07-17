@@ -8,8 +8,20 @@
 
 #import "Constants.h"
 
-#pragma mark - Customizable Constants
-#pragma mark Common UI Strings
+#pragma mark - Constants
+
+#pragma mark Bundle Ids
+
+NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
+NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
+
+#pragma mark Product Ids
+
+NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1   = @"com.everydayapps.mad.designer.subscription.year";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1    = @"com.everydayapps.mad.viewer.subscription.month";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1     = @"com.everydayapps.mad.viewer.subscription.year";
+
+#pragma mark Storyboard Segues
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier          = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier     = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
@@ -28,6 +40,8 @@ NSString * const MTDocumentExtentionMobleApplicationDocumentReport  = @"madr";
 NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
 NSString * const MTCollectionElementKindSectionLabel                = @"MTCollectionElementKindSectionLabel";
+
+#pragma mark Common UI Strings
 
 NSString * const MNSStringInterfaceButtonTitleContinue              = @"Continue";
 NSString * const MNSStringInterfaceButtonTitleContinueDesc          = @"Continue Button Title";
@@ -72,10 +86,6 @@ NSString * const APPLICATIONDATA_FILENAME                           = @"appdata"
 NSString * const MYSQLDATABASEDATA_FILENAME                         = @"mydata";
 NSString * const MTPersistentStoreAliasMad                          = @"analyitics";
 NSString * const MTPersistentStoreAliasUserPreferences              = @"preferences";
-
-NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1   = @"com.everydayapps.mad.designer.subscription.year";
-NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1    = @"com.everydayapps.mad.viewer.subscription.month";
-NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1     = @"com.everydayapps.mad.viewer.subscription.year";
 
 NSString * const TEMPLATES                                          = @"Templates";
 

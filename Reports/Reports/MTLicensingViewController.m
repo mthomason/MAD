@@ -56,32 +56,46 @@
     NSArray *productIdentifiers = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1,
                                     MTStoreKitProductIdentifierViewerSubscriptionMonth1,
                                     MTStoreKitProductIdentifierViewerSubscriptionYear1];
-    [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIdentifiers
-                                                     completion: ^(BOOL success, NSError *error) {
+
+    [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIdentifiers completion: ^(BOOL success, NSError *error) {
+        
+        if ([MTStoreKitController licensedUser]) {
+            NSLog(@"Done paid");
+        }
+
         [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
         [[self buttonBuyNow] setEnabled:success];
         [[self buttonBuyNow] setHidden:!success];
         NSArray *products = [[MTStoreKitController sharedObject] products];
+        
+        NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
+        [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
         
         for (SKProduct *product in products) {
 
             NSLog(@"Product %@", product);
             if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
                 
-                NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
-                [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
                 [priceFormatter setLocale:[product priceLocale]];
                 NSString *priceString = [priceFormatter stringFromNumber:[product price]];
                 [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
                 
-                [priceFormatter release];
-                                
-            } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
+            } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
+
+                [priceFormatter setLocale:[product priceLocale]];
+                NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
                 
-            } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
+            } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
+
+                [priceFormatter setLocale:[product priceLocale]];
+                NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
                 
             }
         }
+        [priceFormatter release];
+                                                         
     }];
     [super viewWillAppear:animated];
 }

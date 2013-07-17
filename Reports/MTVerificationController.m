@@ -103,11 +103,10 @@ static MTVerificationController *singleton;
 }
 
 - (void)verifyPurchase:(SKPaymentTransaction *)transaction completion:(MTVerificationControllerVerifyPurchaseCompletion)completion {
-    [self setVerifyPurchaseCompletion:completion];
+    [self setVerifyPurchaseCompletion:[completion copy]];
     BOOL result = [self verifyPurchase:transaction];
     if (result == NO) {
-        completion(NO, nil, @{}, nil);
-    } else {
+        [self verifyPurchaseCompletion](NO, nil, @{}, nil);
     }
 }
 
@@ -176,29 +175,24 @@ static MTVerificationController *singleton;
 }
 
 // Make sure the transaction details actually match the purchase info
-- (BOOL)doTransactionDetailsMatchPurchaseInfo:(SKPaymentTransaction *)transaction withPurchaseInfo:(NSDictionary *)purchaseInfoDict
+- (BOOL)doTransactionDetailsMatchPurchaseInfo:(SKPaymentTransaction *)transaction withPurchaseInfo:(NSDictionary *)purchaseInfoDict {
 
-{
-    if (!transaction || !purchaseInfoDict)
-    {
+    if (!transaction || !purchaseInfoDict) {
         return NO;
     }
     
     int failCount = 0;
     
-    if (![transaction.payment.productIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"product-id"]])
-    {
+    if (![transaction.payment.productIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"product-id"]]) {
         
         failCount++;
     }
     
-    if (transaction.payment.quantity != [[purchaseInfoDict objectForKey:@"quantity"] intValue])
-    {
+    if (transaction.payment.quantity != [[purchaseInfoDict objectForKey:@"quantity"] intValue]) {
         failCount++;
     }
     
-    if (![transaction.transactionIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"transaction-id"]])
-    {
+    if (![transaction.transactionIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"transaction-id"]]) {
         failCount++;
     }
     
@@ -206,8 +200,7 @@ static MTVerificationController *singleton;
     // Optionally check the requestData.
     // Optionally check the dates.
     
-    if (failCount != 0)
-    {
+    if (failCount != 0) {
         return NO;
     }
     
@@ -217,21 +210,18 @@ static MTVerificationController *singleton;
 
 
 
-- (BOOL)isTransactionIdUnique:(NSString *)transactionId
-{
+- (BOOL)isTransactionIdUnique:(NSString *)transactionId {
     NSString *transactionDictionary = KNOWN_TRANSACTIONS_KEY;
     // Save the transactionId to the standardUserDefaults so we can check against that later
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults synchronize];
     
-    if (![defaults objectForKey:transactionDictionary])
-    {
+    if (![defaults objectForKey:transactionDictionary]) {
         [defaults setObject:[[NSMutableDictionary alloc] init] forKey:transactionDictionary];
         [defaults synchronize];
     }
     
-    if (![[defaults objectForKey:transactionDictionary] objectForKey:transactionId])
-    {
+    if (![[defaults objectForKey:transactionDictionary] objectForKey:transactionId]) {
         return YES;
     }
     // The transaction already exists in the defaults.
@@ -239,8 +229,7 @@ static MTVerificationController *singleton;
 }
 
 
-- (void)saveTransactionId:(NSString *)transactionId
-{
+- (void)saveTransactionId:(NSString *)transactionId {
     // Save the transactionId to the standardUserDefaults so we can check against that later
     // If dictionary exists already then retrieve it and add new transactionID
     // Regardless save transactionID to dictionary which gets saved to NSUserDefaults
@@ -248,15 +237,13 @@ static MTVerificationController *singleton;
     NSString *transactionDictionary = KNOWN_TRANSACTIONS_KEY;
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
                                        [defaults objectForKey:transactionDictionary]];
-    if (!dictionary)
-    {
+    if (!dictionary) {
         dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:1], transactionId, nil];
     } else {
         [dictionary setObject:[NSNumber numberWithInt:1] forKey:transactionId];
     }
     [defaults setObject:dictionary forKey:transactionDictionary];
     [defaults synchronize];
-    
 }
 
 
