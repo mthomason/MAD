@@ -3402,7 +3402,6 @@
 			children = (
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C0081E11784968B00874849 /* MTStoreKit */,
-				4CE9F3171778DCC0009F11AF /* StoreKit.framework */,
 				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
 				4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */,
 				4C81BB93176F644200E7B98C /* File */,
@@ -3463,6 +3462,7 @@
 				4C384E2814B29789007B4F48 /* UIKit.framework */,
 				4C384E2A14B29789007B4F48 /* Foundation.framework */,
 				4C384E2C14B29789007B4F48 /* CoreGraphics.framework */,
+				4CE9F3171778DCC0009F11AF /* StoreKit.framework */,
 				4C202130163DD4090058F869 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;

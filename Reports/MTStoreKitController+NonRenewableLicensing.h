@@ -9,8 +9,15 @@
 #import "MTStoreKitController.h"
 #import "AppDelegate.h"
 
+typedef void (^MTStoreKitNonRenewableLicensedUser)(BOOL isLicensedUser, NSDate *experationDate);
+extern const NSTimeInterval MTTimeIntervalHour;
+extern const NSTimeInterval MTTimeIntervalDay;
+extern const NSTimeInterval MTTimeIntervalMonth;
+extern const NSTimeInterval MTTimeIntervalYear;
+
 @interface MTStoreKitController (NonRenewableLicensing)
 
-+ (BOOL)licensedUser;
++ (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
++ (NSDate *)experationDate;
 
 @end

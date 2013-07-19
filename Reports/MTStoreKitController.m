@@ -332,7 +332,7 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
-    NSLog(@"Transactions: %@", [queue transactions]);
+    MTLog(@"Transactions: %@", [queue transactions]);
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore setArray:[queue transactions] forKey:MTStoreKitTransactionsIdentifier];
 

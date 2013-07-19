@@ -30,7 +30,7 @@
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
 
 @property (copy) MTBlockCompletion standardCompletion;
-
+@property (copy) MTStoreKitNonRenewableLicensedUser licenseUserCompletion;
 
 @end
 
@@ -38,6 +38,7 @@
 
 - (void)dealloc {
     [_standardCompletion release];
+    [_licenseUserCompletion release];
     [_buttonBuyNow release];
     [_labelDesignerLicenseOneYearTitle release];
     [_labelDesignerLicenseOneYearDesc1 release];
@@ -58,9 +59,70 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    MTStoreKitNonRenewableLicensedUser licenseUserCompletion = ^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser) {
+            [self showLicensingDetailsWithExperationDate:experationDate];
+            [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
+            BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
+            [[self buttonBuyNow] setEnabled:allowPurchase];
+            [[self buttonBuyNow] setHidden:!allowPurchase];
+            
+        } else {
+            [self hideLicensingDetails];
+            [[self buttonBuyNow] setHidden:YES];
+            [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
+            
+            NSArray *productIdentifiers = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1,
+                                            MTStoreKitProductIdentifierViewerSubscriptionMonth1,
+                                            MTStoreKitProductIdentifierViewerSubscriptionYear1];
+            
+            [self disableUserInterface];
+            
+            MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
+                
+                [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
+                [self enableUserInterface];
+                [[self buttonBuyNow] setEnabled:success];
+                [[self buttonBuyNow] setHidden:NO];
+                NSArray *products = [[MTStoreKitController sharedObject] products];
+                
+                NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
+                [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                
+                for (SKProduct *product in products) {
+                    
+                    NSLog(@"Product %@", product);
+                    if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
+                        
+                        [priceFormatter setLocale:[product priceLocale]];
+                        NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        
+                    } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
+                        
+                        [priceFormatter setLocale:[product priceLocale]];
+                        NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        
+                    } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
+                        
+                        [priceFormatter setLocale:[product priceLocale]];
+                        NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        
+                    }
+                }
+                [priceFormatter release];
+            };
+            [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIdentifiers
+                                                                       completion: initalizationComplete];
+        }
+    };
+    [self setLicenseUserCompletion:licenseUserCompletion];
+    
     MTBlockCompletion completion = ^(BOOL success, NSError *error){
         [self enableUserInterface];
-        [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
+        [MTStoreKitController licensedUser:[self licenseUserCompletion]];
         if (success == NO) {
             [error presentErrorToUser];
         }
@@ -73,71 +135,18 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[self buttonBuyNow] setTitle:@"" forState:UIControlStateDisabled];
+    //[[self buttonBuyNow] setTitle:@"" forState:UIControlStateDisabled];
     [[self buttonBuyNow] setHidden:YES];
 
-    if ([MTStoreKitController licensedUser]) {
-        [self showLicensingDetails];
-        MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Licensed User", @"Licensed User")
-                                                            message: NSLocalizedString(@"This software is fully licensed and activated.", @"This software is fully licensed and activated.")
-                                                  cancelButtonTitle: NSLocalizedString(@"Continue", @"Continue") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) { } onCancel:^{
-                                                      [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
-                                                  }];
-        [alertView show];
-        [alertView autorelease];
-    } else {
-        [self hideLicensingDetails];
-        [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
-        
-        NSArray *productIdentifiers = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1,
-                                        MTStoreKitProductIdentifierViewerSubscriptionMonth1,
-                                        MTStoreKitProductIdentifierViewerSubscriptionYear1];
-        
-        [self disableUserInterface];
-        
-        MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
-            
-            [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
-            [self enableUserInterface];
-            [[self buttonBuyNow] setEnabled:success];
-            [[self buttonBuyNow] setHidden:!success];
-            NSArray *products = [[MTStoreKitController sharedObject] products];
-            
-            NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
-            [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-            
-            for (SKProduct *product in products) {
-                
-                NSLog(@"Product %@", product);
-                if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
-                    
-                    [priceFormatter setLocale:[product priceLocale]];
-                    NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                    [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
-                    
-                } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
-                    
-                    [priceFormatter setLocale:[product priceLocale]];
-                    NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                    [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
-                    
-                } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
-                    
-                    [priceFormatter setLocale:[product priceLocale]];
-                    NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                    [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
-                    
-                }
-            }
-            [priceFormatter release];
-        };
-        [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIdentifiers
-                                                                   completion: initalizationComplete];
-    }
+    [MTStoreKitController licensedUser:[self licenseUserCompletion]];
     
 }
 
-- (void)showLicensingDetails {
+- (void)showLicensingDetailsWithExperationDate:(NSDate *)experationDate {
+    NSString *dateString = [NSDateFormatter localizedStringFromDate:experationDate
+                                                          dateStyle:NSDateFormatterLongStyle
+                                                          timeStyle:NSDateFormatterNoStyle];
+    [[self labelDesignerValueExpires] setText:dateString];
     [[self labelsShowWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setHidden: NO];
     }];
@@ -178,6 +187,7 @@
 }
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
+    [[self buttonBuyNow] setHidden:YES];
     [self disableUserInterface];
     [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
     MTStoreKitController *storeKit = [MTStoreKitController sharedObject];
