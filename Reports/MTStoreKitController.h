@@ -32,6 +32,7 @@ extern NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs;
 extern NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst;
 extern NSString * const MTStoreKitIdentifierReceiptTransactionId;
 extern NSString * const MTStoreKitIdentifierReceiptUniqueId;
+extern NSString * const MTStoreKitIdentifierReceiptCancellationDate;
 
 typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 //typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);

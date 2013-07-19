@@ -13,6 +13,11 @@ const NSTimeInterval MTTimeIntervalDay = MTTimeIntervalHour * 24 /*hours*/;
 const NSTimeInterval MTTimeIntervalMonth = MTTimeIntervalDay * 30.4368 /*days*/;
 const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
+@interface MTStoreKitController ()
+@property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
+
+@end
+
 @implementation MTStoreKitController (NonRenewableLicensing)
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
@@ -37,12 +42,58 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     completion(isLicensedUser, experationDate);
 }
 
++ (NSDate *)dateFromReceiptString:(NSString *)dateString {
+    static NSDateFormatter *receiptDateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
+        receiptDateFormatter = dateFormat;
+    });
+    return [receiptDateFormatter dateFromString:[dateString stringByReplacingOccurrencesOfString:@"Etc/" withString:@""]];
+}
+
 + (NSDate *)experationDate {
     
     NSDate *experationDate = nil;
     
     NSMutableArray *transactions = [[NSMutableArray alloc] initWithArray:[MTStoreKitController transactions]];
+    NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        NSDictionary *transactionData = evaluatedObject;
+        return ([transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] != nil);
+    }];
     
+    NSArray *refundTransactions = [transactions filteredArrayUsingPredicate:canceledReceipts];
+    NSPredicate *nonRefundedReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+
+        BOOL refunded = NO;
+        NSDictionary *transactionData = evaluatedObject;
+        
+        //Only goes though this if a refunded transaction exist.
+        for (NSDictionary *refundTransaction in refundTransactions) {
+            NSString *refundTransactionOrigionalTransactionId = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptOriginalTransactionId];
+            if (refundTransactionOrigionalTransactionId) {
+                NSString *origionalTransactionId = [transactionData objectForKey:MTStoreKitIdentifierReceiptTransactionId];
+                if ([origionalTransactionId isEqualToString:refundTransactionOrigionalTransactionId]) {
+                    NSString *refundTransactionCancelDate = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptCancellationDate];
+                    NSDate *refundDate = nil;
+                    if (refundTransactionCancelDate != nil) {
+                        refundDate = [MTStoreKitController dateFromReceiptString:refundTransactionCancelDate];
+                        if ([refundDate compare:[NSDate date]] == NSOrderedAscending) {
+                            refunded = YES;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ([transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] != nil) {
+            refunded = YES;
+        }
+        
+        return !refunded;
+    }];
+    [transactions filterUsingPredicate:nonRefundedReceipts];
     
     if ([transactions count] > 0) {
         

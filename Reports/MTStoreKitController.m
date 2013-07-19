@@ -29,6 +29,7 @@ NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs          = @"purchase
 NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst         = @"purchase-date-pst";
 NSString * const MTStoreKitIdentifierReceiptTransactionId           = @"transaction-id";
 NSString * const MTStoreKitIdentifierReceiptUniqueId                = @"unique-identifier";
+NSString * const MTStoreKitIdentifierReceiptCancellationDate        = @"cancellation-date";
 
 @interface MTStoreKitController ()
     <SKPaymentTransactionObserver, SKProductsRequestDelegate>
@@ -127,6 +128,7 @@ static MTStoreKitController *sharedSingleton = nil;
 
 
 - (void)restorePurchases:(MTBlockCompletion)completion {
+    /*
     if ([self restoringPurchases] == NO) {
         [self setRestoringPurchasesCompletion:[completion copy]];
         [self setRestoringPurchases:YES];
@@ -134,7 +136,11 @@ static MTStoreKitController *sharedSingleton = nil;
         [self setRestoredTransactionArray:[defaultStore arrayForKey:MTStoreKitTransactionsIdentifier]];
         [defaultStore setArray:@[] forKey:MTStoreKitTransactionsIdentifier];
         [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    } else {
+        completion(NO, nil);
     }
+    */
+    completion(NO, nil);
 }
 
 + (NSArray *)transactions {
@@ -185,7 +191,7 @@ static MTStoreKitController *sharedSingleton = nil;
         NSString *productId = [completeTransactionData objectForKey:MTStoreKitIdentifierReceiptProductId];
         SKProduct *product = [self productForIdentifier:productId];
         if (product != nil) {
-            NSString *messageFormat = NSLocalizedString(@"Succesfully activated \"%@.\"", @"Shows the name of the items purchased and activated.");
+            NSString *messageFormat = NSLocalizedString(@"Succesfully activated \"%@\"", @"Shows the name of the items purchased and activated.");
             NSString *message = [NSString stringWithFormat:messageFormat, [product localizedDescription]];
             MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.")
                                                                 message: message
@@ -271,39 +277,8 @@ static MTStoreKitController *sharedSingleton = nil;
             }
 
 			case SKPaymentTransactionStateRestored: {
-				MTLog(@"SKPaymentTransactionStateRestored %@", transaction);
-				MTLog(@"SKPaymentTransactionStateRestored %@", transaction.payment);
-
-                SKPaymentTransaction *origionalTransaction = [transaction originalTransaction];
-                
-                //Only finalize payment if able to save transaction data to iCloud
-                NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-                NSDictionary *transactionData = @{MTStoreKitTransactionReceipt      : [origionalTransaction transactionReceipt],
-                                                  MTStoreKitTransactionDate         : [origionalTransaction transactionDate],
-                                                  MTStoreKitTransactionIdentifier   : [origionalTransaction transactionIdentifier]};
-                NSArray *transactionDatum = [defaultStore arrayForKey:MTStoreKitTransactionsIdentifier];
-                NSMutableArray *updatedTransactionData = [[NSMutableArray alloc] initWithArray:transactionDatum];
-                [updatedTransactionData addObject:transactionData];
-                [defaultStore setArray:updatedTransactionData forKey:MTStoreKitTransactionsIdentifier];
-                [updatedTransactionData release];
-                
-                
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-                
-                for (id product in [self products]) {
-                    MTLog(@"Product: %@", product);
-                    if ([[[transaction payment] productIdentifier] isEqualToString:@"com.everydayapps.quotationary.export.email.csv"]) {
-                        UIAlertView *av = [[UIAlertView alloc] initWithTitle: @"Item Enabled"
-                                                                     message:@"Item Export to CSV is enabled."
-                                                                    delegate:nil
-                                                           cancelButtonTitle:nil
-                                                           otherButtonTitles:@"Continue", nil];
-                        [av show];
-                        [av release];
-                    }
-                }
-                
-				break;
+                //Since the non-renewable subscription is consumable, don't restore... hope it's saved to iCloud.
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];				break;
                 
             }
 
@@ -323,22 +298,22 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
-    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-    [defaultStore setArray:[self restoredTransactionArray] forKey:MTStoreKitTransactionsIdentifier];
-    [self setRestoredTransactionArray:nil];
-    [self setRestoringPurchases:NO];
-    [self restoringPurchasesCompletion](NO, error);
-    [self setRestoringPurchasesCompletion:nil];
+//    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+//    [defaultStore setArray:[self restoredTransactionArray] forKey:MTStoreKitTransactionsIdentifier];
+//    [self setRestoredTransactionArray:nil];
+//    [self setRestoringPurchases:NO];
+//    [self restoringPurchasesCompletion](NO, error);
+//    [self setRestoringPurchasesCompletion:nil];
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
-    MTLog(@"Transactions: %@", [queue transactions]);
-    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-    [defaultStore setArray:[queue transactions] forKey:MTStoreKitTransactionsIdentifier];
+//    MTLog(@"Transactions: %@", [queue transactions]);
+//    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+//    [defaultStore setArray:[queue transactions] forKey:MTStoreKitTransactionsIdentifier];
 
-    [self setRestoringPurchases:NO];
-    [self restoringPurchasesCompletion](YES, nil);
-    [self setRestoringPurchasesCompletion:nil];
+//    [self setRestoringPurchases:NO];
+//    [self restoringPurchasesCompletion](YES, nil);
+//    [self setRestoringPurchasesCompletion:nil];
 }
 
 @end

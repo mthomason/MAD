@@ -63,7 +63,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RMR-VH-Q6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1145" y="835"/>
+            <point key="canvasLocation" x="-1061" y="1615"/>
         </scene>
         <!--Report Designer View Controller-->
         <scene sceneID="raX-g6-TgL">
@@ -161,7 +161,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="00r-rl-oe4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1919" y="1839"/>
+            <point key="canvasLocation" x="-1942" y="1947"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="3nK-bo-OeN">
@@ -326,7 +326,14 @@
                             <outlet property="delegate" destination="QJG-oZ-V0Y" id="W4H-pW-0Cb"/>
                         </connections>
                     </collectionView>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="7xP-KL-wf1"/>
+                        <barButtonItem title="Licensing" id="wlU-ow-urJ">
+                            <connections>
+                                <segue destination="u90-Xe-Z0K" kind="modal" identifier="MTSegueLicensing" modalPresentationStyle="formSheet" id="ntr-SY-GaQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Designer" id="1oN-Yn-kRb">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="UHb-dU-qeB">
                             <connections>
@@ -343,6 +350,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="buttonAddNewDocument" destination="UHb-dU-qeB" id="PK5-9U-THb"/>
+                        <outlet property="buttonLicensing" destination="wlU-ow-urJ" id="9CM-Xw-JkN"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nkj-ux-94g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -352,12 +360,17 @@
         <!--Navigation Controller-->
         <scene sceneID="p64-Ol-eJg">
             <objects>
-                <navigationController definesPresentationContext="YES" id="ma4-EE-vwH" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="ma4-EE-vwH" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gcw-eu-Mwx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="zMd-4W-0jA">
+                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="QJG-oZ-V0Y" kind="relationship" relationship="rootViewController" id="GKN-m5-Y63"/>
                     </connections>
@@ -1204,7 +1217,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Portrait" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="ZEh-QR-euK">
@@ -1223,7 +1236,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Landscape" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="7oJ-su-Qx3">
@@ -1904,7 +1917,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="tuv-YN-HsQ">
@@ -1939,7 +1952,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Copyright" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="RIw-j7-YyK">
@@ -1974,7 +1987,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Paper Size" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="6WH-W5-YbI">
@@ -1996,7 +2009,7 @@
                                         <rect key="frame" x="0.0" y="132" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Orientation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="XDy-u1-1f6">
@@ -2043,7 +2056,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Letter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="pvg-Rt-XNd">
@@ -2062,7 +2075,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Legal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Qbq-qR-vch">
@@ -2081,7 +2094,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="A4" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="m8h-s6-7te">
@@ -2455,7 +2468,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DKU-et-BX3">
@@ -2700,7 +2713,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="aHa-yk-HSK">
@@ -2746,6 +2759,238 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5xy-VS-FRj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="688" y="186"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="KDJ-lv-J9L">
+            <objects>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="u90-Xe-Z0K" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zOv-sU-5Y6">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="IU6-PR-89u">
+                        <rect key="frame" x="0.0" y="576" width="540" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="Y11-Xa-h0m" kind="relationship" relationship="rootViewController" id="5C0-Z9-XZA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="adF-bg-mp0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="372" y="1361"/>
+        </scene>
+        <!--Licensing View Controller - Software Licensing-->
+        <scene sceneID="8kR-gL-x04">
+            <objects>
+                <tableViewController id="Y11-Xa-h0m" customClass="MTLicensingViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="UZO-ec-Fuk">
+                        <rect key="frame" x="0.0" y="64" width="540" height="512"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="DBl-vl-UII">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="344" id="IF7-ec-dKc">
+                                        <rect key="frame" x="0.0" y="0.0" width="540" height="344"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="343"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="All Features for a Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ERy-VI-ofJ">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="199" id="Vge-1T-YPY"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X3B-m9-d1x">
+                                                    <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="73" id="4qO-ob-xVc"/>
+                                                        <constraint firstAttribute="height" constant="36" id="y0g-1P-HfP"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="licenseDesignerOneYear:" destination="Y11-Xa-h0m" eventType="touchUpInside" id="c0N-0M-sD0"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="460" translatesAutoresizingMaskIntoConstraints="NO" id="SvB-Qg-Ot0">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="48" id="5Ee-1e-4iT"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="460" translatesAutoresizingMaskIntoConstraints="NO" id="EsP-p2-fww">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="33" id="wVA-LU-7vT"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Export and share reports.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="460" translatesAutoresizingMaskIntoConstraints="NO" id="kwg-dY-aa5">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="460" id="LnS-MF-DJO"/>
+                                                        <constraint firstAttribute="height" constant="47" id="zYw-L2-wKr"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Print rendered reports to Air Print enabled printers.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" headIndent="50"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="460" translatesAutoresizingMaskIntoConstraints="NO" id="MrZ-fI-iCe">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="33" id="4Um-mA-TRo"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Query result rows are unlimited.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" headIndent="45"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sgV-Li-DrX"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Activated:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6wm-K7-P4U">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="96" id="BYE-ZN-Bc4"/>
+                                                        <constraint firstAttribute="height" constant="21" id="IYe-NZ-axV"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Yes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCK-BM-Tw2">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="86" id="CHR-Kj-PXo"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Expires:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9lo-rR-bY5">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="PLq-gB-P4h"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="January 31, 2357" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ba-Tj-9Of">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="176" id="qz1-Vs-C0d"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="MrZ-fI-iCe" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="118" id="0Pr-hR-VCZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="hCK-BM-Tw2" secondAttribute="trailing" constant="20" type="default" id="0QK-0X-vfq"/>
+                                            <constraint firstItem="SvB-Qg-Ot0" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="74" id="12Z-cT-BjY"/>
+                                            <constraint firstItem="kwg-dY-aa5" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="4v9-fm-HgT"/>
+                                            <constraint firstItem="hCK-BM-Tw2" firstAttribute="baseline" secondItem="6wm-K7-P4U" secondAttribute="baseline" type="default" id="73R-wz-SGi"/>
+                                            <constraint firstItem="MrZ-fI-iCe" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="9fe-zE-Sh0"/>
+                                            <constraint firstItem="2Ba-Tj-9Of" firstAttribute="top" secondItem="hCK-BM-Tw2" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="C5z-Hz-JAR"/>
+                                            <constraint firstItem="6wm-K7-P4U" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="E1r-gA-c10"/>
+                                            <constraint firstItem="ERy-VI-ofJ" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="EVQ-44-cIj"/>
+                                            <constraint firstItem="EsP-p2-fww" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="GGJ-pI-5EN"/>
+                                            <constraint firstItem="sgV-Li-DrX" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="44" id="KrA-9q-wkw"/>
+                                            <constraint firstAttribute="trailing" secondItem="2Ba-Tj-9Of" secondAttribute="trailing" constant="20" type="default" id="SfG-Xj-9i6"/>
+                                            <constraint firstItem="X3B-m9-d1x" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="37" id="UGO-gx-mQz"/>
+                                            <constraint firstItem="9lo-rR-bY5" firstAttribute="top" secondItem="6wm-K7-P4U" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="UmU-oh-2V8"/>
+                                            <constraint firstAttribute="trailing" secondItem="X3B-m9-d1x" secondAttribute="trailing" constant="20" type="default" id="Vgn-3d-mqG"/>
+                                            <constraint firstItem="X3B-m9-d1x" firstAttribute="centerY" secondItem="ERy-VI-ofJ" secondAttribute="centerY" type="default" id="W4b-Si-TBf"/>
+                                            <constraint firstItem="9lo-rR-bY5" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="WOL-nT-ywV"/>
+                                            <constraint firstItem="hCK-BM-Tw2" firstAttribute="top" secondItem="kwg-dY-aa5" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ZO9-YX-SGT"/>
+                                            <constraint firstItem="9lo-rR-bY5" firstAttribute="trailing" secondItem="6wm-K7-P4U" secondAttribute="trailing" type="default" id="bgJ-nh-vdL"/>
+                                            <constraint firstItem="EsP-p2-fww" firstAttribute="trailing" secondItem="MrZ-fI-iCe" secondAttribute="trailing" type="default" id="cS3-V6-dXq"/>
+                                            <constraint firstAttribute="trailing" secondItem="sgV-Li-DrX" secondAttribute="trailing" constant="46" id="hOs-ef-aIL"/>
+                                            <constraint firstItem="6wm-K7-P4U" firstAttribute="top" secondItem="kwg-dY-aa5" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="j5h-Gh-v5F"/>
+                                            <constraint firstItem="MrZ-fI-iCe" firstAttribute="trailing" secondItem="SvB-Qg-Ot0" secondAttribute="trailing" type="default" id="jgC-mJ-fuM"/>
+                                            <constraint firstItem="EsP-p2-fww" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="149" id="mkj-Fa-sI9"/>
+                                            <constraint firstItem="kwg-dY-aa5" firstAttribute="trailing" secondItem="EsP-p2-fww" secondAttribute="trailing" type="default" id="ohw-za-bMJ"/>
+                                            <constraint firstItem="2Ba-Tj-9Of" firstAttribute="top" secondItem="IF7-ec-dKc" secondAttribute="top" constant="265" id="uFW-jm-IsU"/>
+                                            <constraint firstItem="2Ba-Tj-9Of" firstAttribute="baseline" secondItem="9lo-rR-bY5" secondAttribute="baseline" type="default" id="woo-8S-lPl"/>
+                                            <constraint firstItem="SvB-Qg-Ot0" firstAttribute="leading" secondItem="IF7-ec-dKc" secondAttribute="leading" constant="20" type="default" id="x5R-om-2E7"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                    </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="vpf-Re-rUN"/>
+                        <barButtonItem title="Restore" id="MCa-0e-s3y">
+                            <connections>
+                                <action selector="restoreAllTransactions:" destination="Y11-Xa-h0m" id="3tM-Ft-iP8"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Software Licensing" id="Y1O-M8-HMV">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="fhp-D3-GQK">
+                            <connections>
+                                <action selector="done:" destination="Y11-Xa-h0m" id="vCK-fQ-cSv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="activityIndicatorDesignerLicenseOneYear" destination="sgV-Li-DrX" id="Zji-KJ-YTV"/>
+                        <outlet property="buttonBuyNow" destination="X3B-m9-d1x" id="XBt-4H-ncn"/>
+                        <outlet property="buttonDone" destination="fhp-D3-GQK" id="UVj-fT-SFr"/>
+                        <outlet property="buttonRestore" destination="MCa-0e-s3y" id="agU-gP-LNH"/>
+                        <outlet property="labelDesignerKeyActivated" destination="6wm-K7-P4U" id="0kF-9d-J5C"/>
+                        <outlet property="labelDesignerKeyExpires" destination="9lo-rR-bY5" id="epg-Rt-8oI"/>
+                        <outlet property="labelDesignerLicenseOneYearDesc1" destination="SvB-Qg-Ot0" id="rTQ-qf-tym"/>
+                        <outlet property="labelDesignerLicenseOneYearDesc2" destination="MrZ-fI-iCe" id="SiA-6R-IDk"/>
+                        <outlet property="labelDesignerLicenseOneYearDesc3" destination="EsP-p2-fww" id="HSa-kS-sgS"/>
+                        <outlet property="labelDesignerLicenseOneYearDesc4" destination="kwg-dY-aa5" id="eoL-Kz-XFb"/>
+                        <outlet property="labelDesignerLicenseOneYearTitle" destination="ERy-VI-ofJ" id="bw5-AC-xDz"/>
+                        <outlet property="labelDesignerValueActivated" destination="hCK-BM-Tw2" id="ZwV-hU-jfG"/>
+                        <outlet property="labelDesignerValueExpires" destination="2Ba-Tj-9Of" id="Rax-Fa-X0Q"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="hCK-BM-Tw2" id="fwg-dR-0o3"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="2Ba-Tj-9Of" id="xgS-XX-mE0"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="6wm-K7-P4U" id="bRR-jQ-Kj8"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="9lo-rR-bY5" id="UDt-C6-goE"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k56-Io-94P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1267" y="1361"/>
         </scene>
         <!--Report Designer Section Layout Settings View Controller - Layout Settings-->
         <scene sceneID="7dN-g9-S8h">
@@ -2888,7 +3133,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Left Field" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EOI-LV-ZbB">
@@ -2917,7 +3162,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Join Type" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BpX-Ae-CYV">
@@ -2946,7 +3191,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Right Field" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" id="X6w-AJ-0h4">
@@ -3152,7 +3397,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="CiV-jm-1qB">
@@ -3201,7 +3446,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Equal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="vxl-yo-Wrh">
@@ -3227,7 +3472,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Not Equal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="foV-IA-nM5">
@@ -3253,7 +3498,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Greater Than" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="MWB-sV-OM8">
@@ -3279,7 +3524,7 @@
                                         <rect key="frame" x="0.0" y="132" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Greater Than or Equal To" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="M4q-HS-8mq">
@@ -3304,7 +3549,7 @@
                                         <rect key="frame" x="0.0" y="176" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Less Than" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="mhp-Bt-bJ9">
@@ -3329,7 +3574,7 @@
                                         <rect key="frame" x="0.0" y="220" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Less Than or Equal To" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="voc-Y7-bKH">
@@ -3379,7 +3624,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="CFm-hR-DZ0">
@@ -3428,7 +3673,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Ascending" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="86c-xn-9e5">
@@ -3447,7 +3692,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Decending" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="ZPc-LN-MFO">
@@ -3492,7 +3737,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Zzh-xs-n8J">
@@ -3521,7 +3766,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Sort" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="dsf-jX-yBS">
@@ -3591,7 +3836,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field-Operator-Value" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="kgL-eR-ur0">
@@ -3613,7 +3858,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field-Operator-Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="8h4-Lr-PsM">
@@ -3667,7 +3912,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Bpe-Ig-4xu">
@@ -3696,7 +3941,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Operator" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="dB7-hN-Vu4">
@@ -3725,7 +3970,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="yRN-n8-BaL">
@@ -3789,7 +4034,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="QCc-ID-0WR">
@@ -3832,7 +4077,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="d5m-RY-gHQ">
@@ -3868,7 +4113,7 @@
                                 <rect key="frame" x="0.0" y="22" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="P5p-MT-C0A">
@@ -3913,7 +4158,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Inner-Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="jjC-vF-pA9">
@@ -3932,7 +4177,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Equi-Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="bJY-4R-giS">
@@ -3951,7 +4196,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Natural Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="srP-R4-uJa">
@@ -3970,7 +4215,7 @@
                                         <rect key="frame" x="0.0" y="132" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Cross Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="S3F-cI-XW2">
@@ -3989,7 +4234,7 @@
                                         <rect key="frame" x="0.0" y="176" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Left Outer Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Fxk-CZ-iXy">
@@ -4008,7 +4253,7 @@
                                         <rect key="frame" x="0.0" y="220" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Right Outer Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="9Cc-HK-dKk">
@@ -4027,7 +4272,7 @@
                                         <rect key="frame" x="0.0" y="264" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="542" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Full Outer Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="PyK-R7-1T2">
@@ -4228,7 +4473,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="nWi-KT-IPo">
@@ -4257,7 +4502,7 @@
                                         <rect key="frame" x="0.0" y="44" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Operator" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="EAd-L0-Vvv">
@@ -4286,7 +4531,7 @@
                                         <rect key="frame" x="0.0" y="88" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="-1" y="0.0" width="521" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="520" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Value" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="G8g-Ag-K1j">
@@ -4976,7 +5221,7 @@
                                         <rect key="frame" x="0.0" y="10" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="290" height="43"/>
+                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="American Typewriter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="hxX-vb-DwR">
@@ -5234,7 +5479,7 @@
                                                 <rect key="frame" x="0.0" y="22" width="748" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="-1" y="0.0" width="750" height="21"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="748" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWR-Kt-Uxx">
@@ -6198,7 +6443,7 @@
                                         <rect key="frame" x="0.0" y="30" width="768" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="45" y="1" width="703" height="43"/>
+                                            <rect key="frame" x="45" y="1" width="658" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AXV-3A-Jc0">
@@ -6237,7 +6482,7 @@
                                         <rect key="frame" x="0.0" y="75" width="768" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="45" y="0.0" width="703" height="43"/>
+                                            <rect key="frame" x="45" y="0.0" width="658" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3ek-Oz-GVk">
@@ -6276,7 +6521,7 @@
                                         <rect key="frame" x="0.0" y="119" width="768" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="45" y="0.0" width="703" height="43"/>
+                                            <rect key="frame" x="45" y="0.0" width="658" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NcB-L8-Lfw">
@@ -6399,7 +6644,7 @@
                                         <rect key="frame" x="0.0" y="10" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="290" height="43"/>
+                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dne-cT-7ip">
@@ -6454,13 +6699,532 @@
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="DocumentStatusView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DocumentStatusView.h"/>
+        </class>
+        <class className="MTAggregateFunctionsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAggregateFunctionsViewController.h"/>
+            <relationships>
+                <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTAutoLayoutTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTAutoLayoutTableViewCell.h"/>
+        </class>
+        <class className="MTCollectionViewCellDocument" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTCollectionViewCellDocument.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imagePreview" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorMySqlViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorMySqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="hostDidEndOnExit:"/>
+                <relationship kind="action" name="passwordDidEndOnExit:"/>
+                <relationship kind="action" name="portDidEndOnExit:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="usernameDidEndOnExit:"/>
+                <relationship kind="outlet" name="activityIndicatorTestConnection" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="tableViewCellDatabase" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellDocumentName" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellHost" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPassword" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellPort" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellUsername" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="textFieldDatabase" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldHost" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldPort" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldReportName" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldUsername" candidateClass="UITextField"/>
+                <relationship kind="outletCollection" name="tableViewCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTDatabaseDriverSelectorViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDatabaseDriverSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewAggregateViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewAggregateViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellAggrageFunction" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateGroupBy" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellAggregateInput" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTDocumentObjectNewStaticLabelViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTDocumentObjectNewStaticLabelViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelTextLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextTextbox" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MTGroupByViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTGroupByViewController.h"/>
+        </class>
+        <class className="MTLicensingViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTLicensingViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicatorDesignerLicenseOneYear" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="buttonBuyNow" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonDone" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonRestore" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="labelDesignerKeyActivated" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerKeyExpires" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerLicenseOneYearDesc1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerLicenseOneYearDesc2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerLicenseOneYearDesc3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerLicenseOneYearDesc4" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerLicenseOneYearTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerValueActivated" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelDesignerValueExpires" candidateClass="UILabel"/>
+                <relationship kind="outletCollection" name="labelsShowWhenActivated" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddGroupViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddGroupViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellField" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellSort" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkFirstTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkFirstTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkJoinTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkJoinTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondFieldViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddLinkSecondTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddLinkSecondTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddPredicateViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddPredicateViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellLeftSide" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellOperator" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellRightSide" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAddTableViewController" superclassName="UITableViewControllerCoreDataResults">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAddTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAdvancedSchemaViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAdvancedSchemaViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="schemaFieldCell" candidateClass="MTSchemaFieldCell"/>
+                <relationship kind="outlet" name="schemaTableViewController" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderAdvancedViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderAdvancedViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="backgroundContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="containerViewHeightConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="containerViewWidthConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderChooseFieldViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderChooseFieldViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fieldCells" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderContainerController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderContainerController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="leftView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="rightView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderLinkBuilderViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderLinkBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancel:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellJoinType" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableFieldTwo" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableOne" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellTableTwo" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderPredicateFormatViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderPredicateFormatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderSortTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderSortTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTQueryBuilderViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTQueryBuilderViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="addLink:"/>
+                <relationship kind="action" name="addTable:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="tableViewCellInstruction" candidateClass="UITableViewCellInstruction"/>
+                <relationship kind="outlet" name="tableViewCellOverride" candidateClass="UITableViewCellOverride"/>
+                <relationship kind="outlet" name="tableViewCellQueryInput" candidateClass="UITableViewCellQueryInput"/>
+                <relationship kind="outlet" name="tableViewCellQueryLink" candidateClass="UITableViewCellQueryLink"/>
+                <relationship kind="outlet" name="tableViewCellTableName" candidateClass="UITableViewCellTableName"/>
+                <relationship kind="outlet" name="tableViewQueryBuilder" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerDocumentObjectFormat" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerDocumentObjectFormat.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableViewCellCurrency" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellCurrencyLocation" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellDecimals" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="controlsToDisableNumeric" candidateClass="UIControl"/>
+                <relationship kind="outletCollection" name="viewsToDisableNumeric" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSelectorViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="tableViewCellFontAmericanTypewriter" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontArial" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourier" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontCourierNew" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontGeorgia" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelvetica" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontHelveticaNeue" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTimesNewRoman" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontTrebuchet" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontVerdana" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableViewCellFontZapfino" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerFontSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerFontSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="controlValueChanged:"/>
+                <relationship kind="outlet" name="buttonBold" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonItalic" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonStrike" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonUnderline" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="fontLabelTableViewCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="labelFontName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelFontSize" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMarginTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingRight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelPaddingTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelSizeWidth" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="segControlFontStyle" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlHorizontalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControlVerticalAlignment" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="stepperFontSize" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperMarginTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingBottom" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingLeft" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingRight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperPaddingTop" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeHeight" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="stepperSizeWidth" candidateClass="UIStepper"/>
+                <relationship kind="outletCollection" name="groupTableViewCellLayout" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="groupTableViewCellStyle" candidateClass="UITableViewCell"/>
+                <relationship kind="outletCollection" name="steppers" candidateClass="UIStepper"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerObjectSelectorViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerObjectSelectorViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemMain" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="objectSelectorDelegate"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerSectionLayoutSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerSectionLayoutSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="heightStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="labelHeight" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelNumberOfRows" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rowsStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="visibilitySwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerToolBoxViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerToolBoxViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="valueChanged:"/>
+                <relationship kind="outlet" name="backgroundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="navigationItemFontSelector" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemLayout" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="navigationItemStyle" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="sceneSelector" candidateClass="UISegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="MTReportDesignerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="doneReports:"/>
+                <relationship kind="action" name="info:"/>
+                <relationship kind="action" name="showObjects:"/>
+                <relationship kind="outlet" name="barButtonItemInfo" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemObjects" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSettings" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="designScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="informationButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolboxView" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="layoutConstraintsToRemove" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="MTReportViewerViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportViewerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="print:"/>
+                <relationship kind="action" name="sendToPdf:"/>
+                <relationship kind="outlet" name="barButtonItemPrint" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemRefresh" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barButtonItemSendToPdf" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="documentStatusView" candidateClass="DocumentStatusView"/>
+                <relationship kind="outlet" name="labelDateLastRefreshed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="toolbarBottom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="toolbarTop" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="viewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="viewContainer" candidateClass="UIView"/>
+                <relationship kind="outletCollection" name="toolbars" candidateClass="UIToolbar"/>
+            </relationships>
+        </class>
+        <class className="MTSchemaFieldCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSchemaFieldCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="detailLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTSettingsViewController" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="tableCellExport" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellFind" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellHelp" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellPrint" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellReportSetup" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellRuler" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellSettings" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellStore" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="MTShowSqlViewController" superclassName="MTViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTShowSqlViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewCellQueryPredicate" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewCellQueryPredicate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelOpperator" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTTitleView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTitleView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MTViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerOpenDocument" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerOpenDocument.h"/>
+            <relationships>
+                <relationship kind="action" name="add:"/>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="edit:"/>
+                <relationship kind="outlet" name="barButtonItemTitle" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonAddNewDocument" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonLicensing" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="collectionViewCellDocument" candidateClass="MTCollectionViewCellDocument"/>
+                <relationship kind="outlet" name="collectionViewFlowLayout" candidateClass="UICollectionViewFlowLayout"/>
+                <relationship kind="outlet" name="titleView" candidateClass="MTTitleView"/>
+            </relationships>
+        </class>
+        <class className="MTViewControllerValueBasedOnField" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTViewControllerValueBasedOnField.h"/>
+            <relationships>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="pickerViewBackground" candidateClass="UIView"/>
+                <relationship kind="outlet" name="tableViewHeightConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tableViewMain" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewController.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
+        </class>
+        <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>
+        </class>
+        <class className="UITableViewCellInstruction" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellInstruction.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelGroupType" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelGroupTypeDetail" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellOverride" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellOverride.h"/>
+        </class>
+        <class className="UITableViewCellQueryGroup" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryGroup.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelDetail" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelMain" candidateClass="UILabel"/>
+                <relationship kind="outletCollection" name="bogusConstraints" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellQueryInput" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryInput.h"/>
+        </class>
+        <class className="UITableViewCellQueryLink" superclassName="MTAutoLayoutTableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellQueryLink.h"/>
+            <relationships>
+                <relationship kind="outlet" name="labelJoinArrow" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelJoinDesc" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableLeft" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTableRight" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="UITableViewCellTableName" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewCellTableName.h"/>
+        </class>
+        <class className="UITableViewControllerCoreDataResults" superclassName="MTTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerCoreDataResults.h"/>
+        </class>
+        <class className="UITableViewControllerEnterString" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerEnterString.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="outlet" name="enterStringDelegate"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="UITableViewControllerOpperators" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UITableViewControllerOpperators.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="t8b-eT-eWV"/>
         <segue reference="Etx-kq-xDK"/>
+        <segue reference="t8b-eT-eWV"/>
     </inferredMetricsTieBreakers>
 </document>

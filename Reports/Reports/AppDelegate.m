@@ -92,7 +92,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 #pragma mark - Key Value Store Notifications
 
 - (void)keyValueStoreDidChange:(NSNotification *)notification {
-    NSLog(@"%@", notification);
+    MTLog(@"%@", notification);
 }
 
 #pragma mark - Actions
