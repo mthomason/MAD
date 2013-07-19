@@ -12,7 +12,7 @@
 #define KNOWN_TRANSACTIONS_KEY              @"knownIAPTransactions"
 #define ITC_CONTENT_PROVIDER_SHARED_SECRET  @"your secret here"
 
-typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSDictionary *receiptData, NSDate *purcahseDate);
+typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate);
 
 @interface MTVerificationController : NSObject {
     NSMutableDictionary *transactionsReceiptStorageDictionary;
@@ -23,8 +23,8 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 // Checking the results of this is not enough.
 // The final verification happens in the connection:didReceiveData: callback within
 // this class.  So ensure IAP feaures are unlocked from there.
-- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction;
 - (void)verifyPurchase:(SKPaymentTransaction *)transaction
+       onSandboxServer:(BOOL)onSandboxServer
             completion:(MTVerificationControllerVerifyPurchaseCompletion)completion;
 
 @end

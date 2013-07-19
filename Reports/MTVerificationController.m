@@ -67,7 +67,17 @@ static MTVerificationController *singleton;
 
 // This method should be called once a transaction gets to the SKPaymentTransactionStatePurchased or SKPaymentTransactionStateRestored state
 // Call it with the SKPaymentTransaction.transactionReceipt
-- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction {
+- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction onSandboxServer:(BOOL)onSandboxServer {
+    
+    // Use ITMS_SANDBOX_VERIFY_RECEIPT_URL while testing against the sandbox.
+    NSString *serverURL;
+    if (YES) {
+        serverURL = ITMS_SANDBOX_VERIFY_RECEIPT_URL;
+    } else {
+        serverURL = ITMS_PROD_VERIFY_RECEIPT_URL;
+    }
+
+
     BOOL isOk = [self isTransactionAndItsReceiptValid:transaction];
     if (!isOk) {
         // There was something wrong with the transaction we got back, so no need to call verifyReceipt.
@@ -86,10 +96,6 @@ static MTVerificationController *singleton;
     
     NSData *payloadData = [payload dataUsingEncoding:NSUTF8StringEncoding];
     
-#warning Check for the correct itms verify receipt URL
-    // Use ITMS_SANDBOX_VERIFY_RECEIPT_URL while testing against the sandbox.
-    NSString *serverURL = ITMS_SANDBOX_VERIFY_RECEIPT_URL;//ITMS_PROD_VERIFY_RECEIPT_URL;
-    
     // Create the POST request to the server.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:serverURL]];
     [request setHTTPMethod:@"POST"];
@@ -102,11 +108,12 @@ static MTVerificationController *singleton;
     return isOk;
 }
 
-- (void)verifyPurchase:(SKPaymentTransaction *)transaction completion:(MTVerificationControllerVerifyPurchaseCompletion)completion {
+- (void)verifyPurchase:(SKPaymentTransaction *)transaction onSandboxServer:(BOOL)onSandboxServer completion:(MTVerificationControllerVerifyPurchaseCompletion)completion {
     [self setVerifyPurchaseCompletion:[completion copy]];
-    BOOL result = [self verifyPurchase:transaction];
+    BOOL result = [self verifyPurchase:transaction onSandboxServer:onSandboxServer];
     if (result == NO) {
-        [self verifyPurchaseCompletion](NO, nil, @{}, nil);
+        [self verifyPurchaseCompletion](NO, nil, 21004, @{}, nil);
+        [self setVerifyPurchaseCompletion:nil];
     }
 }
 
@@ -264,9 +271,13 @@ static MTVerificationController *singleton;
     switch (verifyReceiptStatus) {
         case 0:         //Good
             break;
-        case 21006:     //Good but expired autorenewing subscription
+        case 21006:
+            //Good but expired autorenewing subscription
+            
             break;
-        case 21008:     //Trying to verify a production receipt with the sandbox server... don't ship this.
+        case 21008:
+            //Trying to verify a production receipt with the sandbox server... don't ship this.
+            //  The code should always try production server first, and then sandbox server.
             break;
         case 21000: {
             NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
@@ -299,8 +310,8 @@ static MTVerificationController *singleton;
             break;
         }
         case 21007: {
-            //Trying to verify a sandbox receipt with the production server... try to verify with
-            //  the sandbox server.
+            //Trying to verify a sandbox receipt with the production server.
+            //  Happens when Apple is testing.  Try to verify with the sandbox server.
             break;
         }
         default:
@@ -370,8 +381,7 @@ static MTVerificationController *singleton;
     }
     // Do additional time checks for the transaction and receipt.
     
-    if(failCount != 0)
-    {
+    if(failCount != 0) {
         return NO;
     }
     
@@ -387,12 +397,10 @@ static MTVerificationController *singleton;
     NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSInteger status = 0;
     BOOL isOk = [self doesTransactionInfoMatchReceipt:responseString status:&status];
-    if (status == 21007) {
-#warning Try again on sandbox server.
+    if ([self verifyPurchaseCompletion] != nil) {
+        [self verifyPurchaseCompletion](isOk, [self failureReason], status, [self receiptData], [self purchaseDate]);
     }
-    [self verifyPurchaseCompletion](isOk, [self failureReason], [self receiptData], [self purchaseDate]);
 }
-
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
 

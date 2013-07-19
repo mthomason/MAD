@@ -10,6 +10,8 @@
 
 #pragma mark - Constants
 
+//BOOL const MTDebug = YES;
+
 #pragma mark Bundle Ids
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";

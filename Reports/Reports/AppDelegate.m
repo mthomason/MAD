@@ -23,6 +23,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
     [_window release];
     [super dealloc];
 }
@@ -41,7 +42,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     [MTStoreKitController sharedObject];
 
-    //[self checkUserICloudPreferenceAndSetupIfNecessary];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyValueStoreDidChange:)
+                                                 name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                               object:nil];
+    
+    BOOL iCloudEnabled = [[NSFileManager defaultManager] ubiquityIdentityToken];
+    NSLog(@"iCloud enabled: %@", iCloudEnabled ? @"YES" : @"NO");
+
+    NSUbiquitousKeyValueStore *keyValueStore = [NSUbiquitousKeyValueStore defaultStore];
+    [keyValueStore synchronize];
+
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
@@ -58,12 +68,14 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     return YES;
 }
-			
+
 - (void)applicationWillResignActive:(UIApplication *)application { }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application { }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application { }
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+}
 
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
@@ -75,6 +87,12 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+#pragma mark - Key Value Store Notifications
+
+- (void)keyValueStoreDidChange:(NSNotification *)notification {
+    NSLog(@"%@", notification);
 }
 
 #pragma mark - Actions

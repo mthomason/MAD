@@ -71,7 +71,7 @@
                 }
             }
             if (isLicensedUser) {
-                break;  //If licensed, then stop checking the receipts
+                break;
             }
         }
         [dateFormat release];

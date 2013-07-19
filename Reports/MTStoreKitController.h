@@ -33,8 +33,10 @@ extern NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst;
 extern NSString * const MTStoreKitIdentifierReceiptTransactionId;
 extern NSString * const MTStoreKitIdentifierReceiptUniqueId;
 
-typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);
-typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *error);
+typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
+//typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);
+//typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *error);
+//typedef void (^MTStoreKitRestoreProductsCompletion)(BOOL success, NSError *error);
 
 @interface MTStoreKitController : NSObject
 
@@ -43,10 +45,10 @@ typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *err
 @property(nonatomic, readonly, retain) NSArray *products;
 
 - (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers
-                              completion:(MTStoreKitInitalizeProductsCompletion)completion;
+                              completion:(MTBlockCompletion)completion;
 - (void)purchaseProductWithIdentifier:(SKProduct *)product
-                           completion:(MTStoreKitPurchaseProductWithIdentifierCompletion) completion;
-
+                           completion:(MTBlockCompletion) completion;
+- (void)restorePurchases:(MTBlockCompletion)completion;
 + (NSArray *)transactions;
 
 @end
