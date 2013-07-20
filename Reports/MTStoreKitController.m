@@ -128,18 +128,6 @@ static MTStoreKitController *sharedSingleton = nil;
 
 
 - (void)restorePurchases:(MTBlockCompletion)completion {
-    /*
-    if ([self restoringPurchases] == NO) {
-        [self setRestoringPurchasesCompletion:[completion copy]];
-        [self setRestoringPurchases:YES];
-        NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-        [self setRestoredTransactionArray:[defaultStore arrayForKey:MTStoreKitTransactionsIdentifier]];
-        [defaultStore setArray:@[] forKey:MTStoreKitTransactionsIdentifier];
-        [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
-    } else {
-        completion(NO, nil);
-    }
-    */
     completion(NO, nil);
 }
 
@@ -222,13 +210,13 @@ static MTStoreKitController *sharedSingleton = nil;
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     if ([self initalizeProductsCompletion]) {
         [self initalizeProductsCompletion](NO, error);
-        //[[self initalizeProductsCompletion] release];
-        //[self setInitalizeProductsCompletion:nil];
     }
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
-    [self initalizeProductsCompletion](YES, nil);
+    if ([self initalizeProductsCompletion]) {
+        [self initalizeProductsCompletion](YES, nil);
+    }
 }
 
 #pragma mark - SKProductsRequestDelegate Protocol
@@ -238,14 +226,6 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 #pragma mark - SKPaymentTransactionObserver Protocol
-
-- (void)paymentQueue:(SKPaymentQueue *)queue removedTransactions:(NSArray *)transactions {
-    
-}
-
-- (void)paymentQueue:(SKPaymentQueue *)queue updatedDownloads:(NSArray *)downloads {
-    
-}
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
 
@@ -297,23 +277,12 @@ static MTStoreKitController *sharedSingleton = nil;
 	}
 }
 
-- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
-//    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-//    [defaultStore setArray:[self restoredTransactionArray] forKey:MTStoreKitTransactionsIdentifier];
-//    [self setRestoredTransactionArray:nil];
-//    [self setRestoringPurchases:NO];
-//    [self restoringPurchasesCompletion](NO, error);
-//    [self setRestoringPurchasesCompletion:nil];
-}
+- (void)paymentQueue:(SKPaymentQueue *)queue removedTransactions:(NSArray *)transactions { }
 
-- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
-//    MTLog(@"Transactions: %@", [queue transactions]);
-//    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-//    [defaultStore setArray:[queue transactions] forKey:MTStoreKitTransactionsIdentifier];
+- (void)paymentQueue:(SKPaymentQueue *)queue updatedDownloads:(NSArray *)downloads { }
 
-//    [self setRestoringPurchases:NO];
-//    [self restoringPurchasesCompletion](YES, nil);
-//    [self setRestoringPurchasesCompletion:nil];
-}
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error { }
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue { }
 
 @end
