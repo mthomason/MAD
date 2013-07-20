@@ -13,7 +13,7 @@
 @property (nonatomic, assign) NSUInteger pageNumber;
 @property (nonatomic, assign) NSUInteger numberOfPages;
 
-@property (atomic, retain) MTReportViewerReportPageView *renderedReportView;
+@property (nonatomic, retain) MTReportViewerReportPageView *renderedReportView;
 
 @property (nonatomic, retain) UIView *pageNumberDisplay;
 

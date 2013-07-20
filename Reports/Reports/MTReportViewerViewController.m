@@ -19,7 +19,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
 
-@property (nonatomic, retain) MTReportViewerReportViewController *pageController;
+@property (nonatomic, retain) UIPageViewController *pageController;
 
 @property (nonatomic, retain) NSArray *initalViewControllers;
 
@@ -94,51 +94,38 @@
     
     [[self view] setBackgroundColor:[UIColor greenColor]];
     
-    MTReportViewerReportViewController *pageController = [[MTReportViewerReportViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
-                                                                                       navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                                                     options:@{}];
-    [[pageController view] setBackgroundColor:[UIColor blueColor]];
-    [pageController setDataSource:self];
-    [pageController setDelegate:self];
-
-    NSUInteger initalNumberOfPagesRequired = 1;
-    NSMutableArray *initalPages = [[NSMutableArray alloc] initWithCapacity:initalNumberOfPagesRequired];
-
-    [self setCurrentPageIndex:0];
-    
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1 ofPages:initalNumberOfPagesRequired];
-    [[pageOne view] setBounds:[[self viewContainer] bounds]];
-    [[pageOne view] setCenter:[[self viewContainer] center]];
-    [pageOne setDelegate:self];
-    [initalPages addObject:pageOne];
-
-    [pageOne release];
-    if (initalNumberOfPagesRequired == 2) {
-        MTReportViewerReportPageViewController *pageTwo = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:2 ofPages:initalNumberOfPagesRequired];
-        [[pageTwo view] setBounds:[[self viewContainer] bounds]];
-        [[pageTwo view] setCenter:[[self viewContainer] center]];
-        [pageTwo setDelegate:self];
-        [initalPages addObject:pageTwo];
-        [pageTwo release];
-    }
-    
-    [pageController setViewControllers:initalPages direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-    
-    }];
-
-    [initalPages release];
-    
-    [[self viewContainer] addSubview:[pageController view]];
-
-    [self setPageController:pageController];
-    [pageController release];
-    
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
+    
+    UIPageViewController *pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                       navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                                     options:@{}];
+    [[pageController view] setBackgroundColor:[UIColor blueColor]];
+    [pageController setDataSource:self];
+    [pageController setDelegate:self];
+
+
+    [self setCurrentPageIndex:0];
+    
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1 ofPages:1];
+    [[pageOne view] setBounds:[[self viewContainer] bounds]];
+    [[pageOne view] setCenter:[[self viewContainer] center]];
+    [pageOne setDelegate:self];
+    
+    [pageController setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+
+    }];
+    [pageOne release];
+    
+    [[self viewContainer] addSubview:[pageController view]];
+    
+    [self setPageController:pageController];
+    [pageController release];
+    
     
 }
 
@@ -167,6 +154,13 @@
     BOOL hasCachedData = ([query hasQueryCache] != nil);
     if ([self startedRefresh] == NO && hasCachedData == NO) {
 
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self refresh:self];
+            });
+        });
+/*
         [[self barButtonItemRefresh] setEnabled:NO];
         [[self documentReport] refresh:^(BOOL success) {
             
@@ -178,12 +172,14 @@
                 [lastD release];
                 
                 [self updateLateRefreshedLabel:self];
+                
+                
 
             }
             [[self barButtonItemRefresh] setEnabled:YES];
 
         }];
-
+*/
     } else {
         NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
         NSString *timeInterval;
@@ -318,11 +314,31 @@
                     
                     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
                     [[pageOne view] setFrame:[[self viewContainer] bounds]];
+
                     [pageOne setDelegate:self];
-                    [[self pageController] setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+
+  //                      UIPageViewController *pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+//                                                                                               navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+//                                                                                                             options:@{}];
+//                        [[pageController view] setBackgroundColor:[UIColor blueColor]];
+//                        [pageController setDataSource:self];
+//                        [pageController setDelegate:self];
                         
-                    }];
+//                        [pageController setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+///                        }];
+
+  //                      [[[self pageController] view] removeFromSuperview];
+   //                     [[self viewContainer] addSubview:[pageController view]];
+   //                     [self setPageController:pageController];
+                        
+                        [[self pageController] setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                        }];
+                    });
                     [pageOne release];
+                    
+                    [[self pageController] setDataSource:self];
                     
                     NSDate *lastD = [[NSDate date] retain];
                     [self setLastCacheDate: lastD];
@@ -471,8 +487,4 @@
     
 }
 
-- (void)viewDidUnload {
-    [self setDocumentStatusView:nil];
-    [super viewDidUnload];
-}
 @end
