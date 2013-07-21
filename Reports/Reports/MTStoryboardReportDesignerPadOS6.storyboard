@@ -84,7 +84,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="gek-bz-TZX"/>
                                     <barButtonItem systemItem="play" id="MOO-Fx-x3Q">
                                         <connections>
-                                            <segue destination="SeT-Hl-V2y" kind="modal" identifier="showReportViewerFromDesign" id="YlD-km-rEj"/>
+                                            <segue destination="hUu-Na-xKL" kind="modal" identifier="MTSegueShowReportViewer" modalPresentationStyle="pageSheet" id="FIH-bJ-OtV"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -162,6 +162,28 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="00r-rl-oe4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1942" y="1947"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4fI-Ir-bUN">
+            <objects>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="hUu-Na-xKL" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="blackOpaque" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="blackOpaque"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="blackOpaque" id="ftA-Nr-QsC">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="3Cd-Vy-XbM">
+                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="PGc-qB-2PZ" kind="relationship" relationship="rootViewController" id="7vy-NU-QS5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ayy-fp-VJw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="605" y="6032"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="3nK-bo-OeN">
@@ -264,6 +286,69 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dm9-l4-59o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="828" y="5310"/>
+        </scene>
+        <!--RepMT Report Viewer Controllerort Viewer Controller2-->
+        <scene sceneID="2LO-om-kxo">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="PGc-qB-2PZ" customClass="MTRepMTReportViewerControllerortViewerController2" sceneMemberID="viewController">
+                    <toolbarItems>
+                        <barButtonItem style="plain" id="Eta-9X-sOg">
+                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="fMX-t7-wwW">
+                                <rect key="frame" x="12" y="6" width="450" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="DateTime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="p6R-mh-Zi4">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="KzR-Iw-1Xx"/>
+                                            <constraint firstAttribute="width" constant="450" type="user" id="uYg-DX-ttJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="p6R-mh-Zi4" firstAttribute="centerY" secondItem="fMX-t7-wwW" secondAttribute="centerY" type="default" id="BCh-Wl-GGF"/>
+                                    <constraint firstItem="p6R-mh-Zi4" firstAttribute="leading" secondItem="fMX-t7-wwW" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="H7v-kP-dNF"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Ir6-8N-CCQ"/>
+                        <barButtonItem title="Print" id="h2c-te-sJM">
+                            <connections>
+                                <action selector="print:" destination="PGc-qB-2PZ" id="c6n-6U-Vmw"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="PDF" id="TTa-fl-Oiv">
+                            <connections>
+                                <action selector="sendToPdf:" destination="PGc-qB-2PZ" id="N4F-fX-U6S"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="yOv-0G-z41">
+                        <barButtonItem key="leftBarButtonItem" image="UIImageArrowDown.png" id="SCY-EH-cTK">
+                            <connections>
+                                <action selector="done:" destination="PGc-qB-2PZ" id="SvE-ch-R59"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Mn2-ea-pMU">
+                            <connections>
+                                <action selector="refresh:" destination="PGc-qB-2PZ" id="yWX-m6-U3s"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="barButtonItemPrint" destination="h2c-te-sJM" id="8dw-jM-CTw"/>
+                        <outlet property="barButtonItemRefresh" destination="Mn2-ea-pMU" id="2ue-wh-ej2"/>
+                        <outlet property="barButtonItemSendToPdf" destination="TTa-fl-Oiv" id="hcS-jv-qGe"/>
+                        <outlet property="labelDateLastRefreshed" destination="p6R-mh-Zi4" id="t0w-oI-rjW"/>
+                    </connections>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YjO-2L-BA1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1587" y="5996"/>
         </scene>
         <!--View Controller Open Document - MAD Designer-->
         <scene sceneID="T6t-KK-tTE">

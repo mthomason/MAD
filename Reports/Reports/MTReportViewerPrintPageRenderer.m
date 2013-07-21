@@ -540,7 +540,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                         CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
-                        NSLog(@"%@", NSStringFromCGRect(elementCanvasRect));
+                        //NSLog(@"%@", NSStringFromCGRect(elementCanvasRect));
 
                         if (drawingObject == nil) {
                             
@@ -578,7 +578,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
     NSString *fontname = [documentObject fontname];
-    NSLog(@"%@", fontname);
+    //NSLog(@"%@", fontname);
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
     UIFont *customFont = [font font];
     NSNumber *underline = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
@@ -836,7 +836,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 //  Data is cached by group, page, and report.
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
-
     if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO || [self didRefresh]) {
         [self setDidRefresh:NO];
         [self setCachedPageSize:printableSize];
@@ -859,6 +858,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
         
         [[self temporaryLayoutByPage] removeAllObjects];
+        [[self temporaryDataByPage] removeAllObjects];
         [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
         //NSMutableDictionary *rd = [[NSMutableDictionary alloc] initWithCapacity:[[queryCache hasQueryResultFields] count]];
         
@@ -966,6 +966,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [sortDescriptor release];
 
     }
+    
 }
 
 - (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup

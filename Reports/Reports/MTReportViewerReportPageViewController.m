@@ -17,6 +17,8 @@
 
 @property (nonatomic, retain) UIView *pageNumberDisplay;
 
+@property (nonatomic, assign) BOOL showPageNumberDisplay;
+
 @end
 
 @implementation MTReportViewerReportPageViewController
@@ -31,6 +33,7 @@
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        [self setShowPageNumberDisplay:NO];
         [self setPageNumber:pageNumber];
         [self setNumberOfPages:numberOfPages];
     }
@@ -62,7 +65,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self pageNumberViewForPageNumber:[self pageNumber] of:[self numberOfPages]];
+    if ([self showPageNumberDisplay]) {
+        [self pageNumberViewForPageNumber:[self pageNumber] of:[self numberOfPages]];
+    } else {
+        [self setShowPageNumberDisplay:YES];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

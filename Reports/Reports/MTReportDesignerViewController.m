@@ -585,16 +585,28 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         }
         MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
         [viewControllerObjectSelector setObjectSelectorDelegate:self];
-        
-    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
-        
-        MTReportViewerViewController *viewControllerReportViewer;
+    } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
+
+        MTReportViewerController *viewControllerReportViewer;
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewControllerReportViewer = (MTReportViewerViewController *)[[segue destinationViewController] topViewController];
+            viewControllerReportViewer = (MTReportViewerController *)[[segue destinationViewController] topViewController];
         } else {
             viewControllerReportViewer = [segue destinationViewController];
         }
-        [viewControllerReportViewer setDelegate:self];
+        [viewControllerReportViewer setViewControllerDelegate:self];
+        [viewControllerReportViewer setDocumentReport:[self activeDocument]];
+        
+        [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
+
+    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
+        
+        MTReportViewerController *viewControllerReportViewer;
+        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            viewControllerReportViewer = (MTReportViewerController *)[[segue destinationViewController] topViewController];
+        } else {
+            viewControllerReportViewer = [segue destinationViewController];
+        }
+        [viewControllerReportViewer setViewControllerDelegate:self];
         [viewControllerReportViewer setDocumentReport:[self activeDocument]];
         
         [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
