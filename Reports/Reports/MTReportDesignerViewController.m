@@ -73,6 +73,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
+@property (nonatomic, retain) NSMutableArray *widthConstraints;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -135,6 +137,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGRect designerFrame = [[self view] frame];
     MTReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [self setActiveDocument:activeDocument];
     [activeDocument release];
@@ -312,10 +315,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
 
     NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
-    NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: -(paddingBorder * 2.0000f)];
+    
+    NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self view] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: - (paddingBorder * 2.0000f)];
     NSLayoutConstraint *rulerConstraintLeading = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeLeading multiplier:1.0000f constant: paddingBorder];
     [[self designScrollView] addConstraint:rulerConstraintHeight];
-    [[self designScrollView] addConstraint:rulerConstraintWidth];
+    [[self view] addConstraint:rulerConstraintWidth];
     [[self designScrollView] addConstraint:rulerConstraintLeading];
     
     [[self designScrollView] addSubview:viewRuler];
@@ -429,20 +433,20 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView
                                                                                  attribute: NSLayoutAttributeWidth
                                                                                  relatedBy: NSLayoutRelationEqual
-                                                                                    toItem: [self designScrollView]
+                                                                                    toItem: [self view]
                                                                                  attribute: NSLayoutAttributeWidth
                                                                                 multiplier: 1.0000f
-                                                                                  constant: -(paddingBorder * 2.0000f)];
-        [[self designScrollView] addConstraint:layoutConstraintWidth];
+                                                                                  constant: - (paddingBorder * 2.0000f)];
+        [[self view] addConstraint:layoutConstraintWidth];
 
         NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: sectionControlView
                                                                                       attribute: NSLayoutAttributeWidth
                                                                                       relatedBy: NSLayoutRelationEqual
-                                                                                         toItem: [self designScrollView]
+                                                                                         toItem: [self view]
                                                                                       attribute: NSLayoutAttributeWidth
                                                                                      multiplier: 0.20000f
                                                                                        constant: 0.0000f];
-        [[self designScrollView] addConstraint:layoutConstraintLabelWidth];
+        [[self view] addConstraint:layoutConstraintLabelWidth];
         
         NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: sectionControlView
                                                                                       attribute: NSLayoutAttributeTrailing
@@ -487,6 +491,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self designScrollView] setScrollEnabled:YES];
     [[self designScrollView] setMaximumZoomScale:1.0000f];
     [[self designScrollView] setMinimumZoomScale:1.0000f];
+    [[self designScrollView] setDelegate:self];
     //[[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
     [[self designScrollView] setBackgroundColor: [UIColor whiteColor]];
     [[self designScrollView] setUserInteractionEnabled:YES];
@@ -619,7 +624,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - UIScrollViewDelegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return nil;
+    return [[[self designScrollView] subviews] objectAtIndex:0];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
