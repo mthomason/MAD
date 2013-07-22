@@ -485,6 +485,8 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     
     [[self designScrollView] addConstraints:labelconstraintsVertical];
     [[self designScrollView] setScrollEnabled:YES];
+    [[self designScrollView] setMaximumZoomScale:1.0000f];
+    [[self designScrollView] setMinimumZoomScale:1.0000f];
     //[[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
     [[self designScrollView] setBackgroundColor: [UIColor whiteColor]];
     [[self designScrollView] setUserInteractionEnabled:YES];
@@ -612,6 +614,24 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
         
     }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return nil;
+}
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
+    
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    
 }
 
 #pragma mark - Document State
