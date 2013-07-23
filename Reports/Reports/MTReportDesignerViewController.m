@@ -224,7 +224,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
     NSString *collectionViewReuseId = [MTCollectionViewCellElement reuseIdentifier];
     NSMutableString *stringContstraintsVertical = [[NSMutableString alloc] initWithString:@"V:|"];
-    NSMutableDictionary *dictionaryViewsVertical = [[NSMutableDictionary alloc] init];
     CGFloat paddingBorder = 3.0000f, paddingLabel = 2.0000f, heightLabel = 22.0000f, cornerRadius = 5.0000f;
     UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
@@ -251,12 +250,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setSectionControlViewsHeighConstraint:dictionarySectionControlViewsHeighConstraint];
     [dictionarySectionControlViewsHeighConstraint release];
 
-    
-    // MARK: Setup horizontal constraints.
-    if ([self layoutConstraintsToRemove] == nil) {
-        [self setLayoutConstraintsToRemove:@[]];
-    }
-    
+    if ([self layoutConstraintsToRemove] == nil) [self setLayoutConstraintsToRemove:@[]];
     [[self view] removeConstraints:[self layoutConstraintsToRemove]];
     
     BOOL skipLayout = [UIDevice isModernOS];
@@ -325,11 +319,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
     [collectionViewReuseIdentifiers release];
     
-
-    
-    
-    
-    
     NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
     NSLayoutConstraint *rulerConstraintTop = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant: paddingBorder];
     NSLayoutConstraint *rulerConstraintLeft = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant: paddingBorder];
@@ -338,8 +327,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self designerContentView] addSubview:viewRuler];
     
     [[self designerContentView] addSubview:viewRuler];
-//    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 3.0000f, @"viewRuler"];
-    [dictionaryViewsVertical setValue:viewRuler forKey:@"viewRuler"];
+
     CGFloat sectionHeights = CGSizeZero.height;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
@@ -371,10 +359,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
         [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
         [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:supplmentaryViewReuseIdHeader];
-        
 
-
-        
         NSUInteger collectionViewTag = [[reportSection identifier] integerValue];
         [collectionView setTag: collectionViewTag];
         [collectionView setDelegate:self];
@@ -413,9 +398,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [labelSectionIdentifer setText:[reportSection localizedDisplayName]];
         [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
-
         [sectionControlView addSubview:labelSectionIdentifer];
-        
+        [labelSectionIdentifer release];
+
         [[self designerContentView] addSubview:sectionControlView];
         
         // MARK: Setup vert auto layout
@@ -432,11 +417,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
         
-        [dictionaryViewsVertical setValue:sectionControlView forKey:labelKey];
-        [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
-        
         CGFloat reportSectionHeight = [[reportSection height] floatValue];
-        
+        sectionHeights += reportSectionHeight;
+
         id constraintItem =  sectionCounter == 0 ? viewRuler : lastCollectionView;
         [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: constraintItem attribute: NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:collectionView attribute:NSLayoutAttributeTop multiplier:1.0000f constant:-paddingTop]];
         [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:reportSectionHeight]];
@@ -446,17 +429,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:collectionView attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:-paddingBorder]];
         [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:heightLabel]];
         [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f]];
-
-        sectionHeights += reportSectionHeight;
-
         
         if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
             [self setReportFooterView:collectionView];
             sectionHeights += paddingTop * 2;
 
         }
-        
-        [labelSectionIdentifer release];
         [sectionControlView release];
         lastCollectionView = [collectionView retain];
         [collectionView release];
@@ -480,24 +458,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [constraint release];
         }
     }
-    [[self designerContentView] setBackgroundColor:[UIColor redColor]];
+    [[self designerContentView] setBackgroundColor:[UIColor clearColor]];
     [[self designerContentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerContentView]
-                                                                      attribute:NSLayoutAttributeHeight
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:nil
-                                                                      attribute:NSLayoutAttributeNotAnAttribute
-                                                                     multiplier:1.0000f
-                                                                       constant:sectionHeights + 50.0000f]];
+    [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:sectionHeights + 50.0000f]];
     [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerScrollView] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f]];
-//    NSLayoutConstraint *verReplacement = [NSLayoutConstraint constraintWithItem:[self reportFooterView]
-//                                                                      attribute:NSLayoutAttributeBottom
-//                                                                      relatedBy:NSLayoutRelationGreaterThanOrEqual
-//                                                                         toItem:[self designerContentView]
-//                                                                      attribute:NSLayoutAttributeBottom
-//                                                                     multiplier:1.0000f
-//                                                                       constant:paddingBorder];
     
     [[self designerScrollView] removeConstraints:@[[self layoutConstraintContainerToDesignerCentery], [self layoutConstraintContainerToDesignerVertSpace]]];
     [[self designerScrollView] setScrollEnabled:YES];
@@ -507,7 +472,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[self designerScrollView] setBounces:NO];
     [[self designerScrollView] setDelegate:self];
     //[[self designerScrollView] setContentSize:CGSizeMake([[self view] frame].size.width, sectionHeights)];
-    //[[self designerScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+    [[self designerScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
     [[self designerScrollView] setBackgroundColor: [UIColor whiteColor]];
     [[self designerScrollView] setUserInteractionEnabled:YES];
     [[self designerScrollView] flashScrollIndicators];
@@ -515,15 +480,19 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [self setViewRuler:viewRuler];
     
     [stringContstraintsVertical release];
-    [dictionaryViewsVertical release];
     [sectionEnumerator release];
     [viewRuler release];
 
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 }
+
 - (void)updateViewConstraints {
     [super updateViewConstraints];
 }
