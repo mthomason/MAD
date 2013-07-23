@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 @property (nonatomic, retain) NSMutableDictionary *sectionBackgroundViews;
 @property (nonatomic, retain) NSMutableDictionary *sectionControlViewsHeighConstraint;
 
-@property (nonatomic, retain) IBOutlet UIScrollView *designScrollView;
+@property (nonatomic, retain) IBOutlet UIScrollView *designerScrollView;
 @property (nonatomic, retain) IBOutlet UIView *designerContentView;
 
 @property (nonatomic, retain) UIToolbar *toolboxToolbar;
@@ -117,7 +117,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [_sectionBackgroundViews release];
     [_sectionViews release];
     [_settingsPopoverController release];
-    [_designScrollView release];
+    [_designerScrollView release];
     [_informationButton release];
     [_barButtonItemInfo release];
     [_barButtonItemSettings release];
@@ -177,7 +177,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [[[self viewControllerSectionLayoutSettings] navigationItem] setRightBarButtonItem:doneButton animated:NO];
     [doneButton release];
     
-    //[[self designScrollView] setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
+    //[[self designerScrollView] setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
 
     if ([UIDevice isPad]) {
         
@@ -277,10 +277,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
         
-        NSLayoutConstraint *layoutConstraintToolbarTopBottomToDesignViewTop = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolbarTopBottomToDesignViewTop = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
         [[self view] addConstraint:layoutConstraintToolbarTopBottomToDesignViewTop];
         
-        NSLayoutConstraint *layoutConstraintToolbarBottomTopToDesignerBottom = [NSLayoutConstraint constraintWithItem: [self designScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolbarBottomTopToDesignerBottom = [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
         [[self view] addConstraint:layoutConstraintToolbarBottomTopToDesignerBottom];
         
         NSLayoutConstraint *layoutConstraintToolboxTopToBottomToolbarBottom = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
@@ -305,10 +305,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         
         [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
         
-        NSLayoutConstraint *layoutConstraintToolbarTopBottomToDesignViewTop = [NSLayoutConstraint constraintWithItem: [self view] attribute: NSLayoutAttributeTop relatedBy: NSLayoutRelationEqual toItem: [self designScrollView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolbarTopBottomToDesignViewTop = [NSLayoutConstraint constraintWithItem: [self view] attribute: NSLayoutAttributeTop relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
         [[self view] addConstraint:layoutConstraintToolbarTopBottomToDesignViewTop];
         
-        NSLayoutConstraint *layoutConstraintToolbarBottomTopToDesignerBottom = [NSLayoutConstraint constraintWithItem: [self designScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolbarBottomTopToDesignerBottom = [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
         [[self view] addConstraint:layoutConstraintToolbarBottomTopToDesignerBottom];
         
         NSLayoutConstraint *layoutConstraintToolboxTopToBottomToolbarBottom = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView] attribute: NSLayoutAttributeTop multiplier: 1.0000f constant: 0.0000f];
@@ -317,7 +317,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         NSLayoutConstraint *layoutConstraintToolboxVisible = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f];
         [[self view] addConstraint:layoutConstraintToolboxVisible];
 
-        
     }
     
 
@@ -327,22 +326,24 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     [collectionViewReuseIdentifiers release];
     
 
+    
+    
+    
+    
     NSLayoutConstraint *rulerConstraintHeight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:24.0000f];
+    NSLayoutConstraint *rulerConstraintTop = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant: paddingBorder];
+    NSLayoutConstraint *rulerConstraintLeft = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant: paddingBorder];
+    NSLayoutConstraint *rulerConstraintRight = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight multiplier:1.0000f constant: -paddingBorder];
+    [[self designerScrollView] addConstraints:@[rulerConstraintTop, rulerConstraintHeight, rulerConstraintLeft, rulerConstraintRight]];
+    [[self designerContentView] addSubview:viewRuler];
     
-    NSLayoutConstraint *rulerConstraintWidth = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self view] attribute:NSLayoutAttributeWidth multiplier:1.0000f constant: - (paddingBorder * 2.0000f)];
-    NSLayoutConstraint *rulerConstraintLeading = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:[self designScrollView] attribute:NSLayoutAttributeLeading multiplier:1.0000f constant: paddingBorder];
-    [[self designScrollView] addConstraint:rulerConstraintHeight];
-    [[self view] addConstraint:rulerConstraintWidth];
-    [[self designScrollView] addConstraint:rulerConstraintLeading];
-    
-    [[self designScrollView] addSubview:viewRuler];
-    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 2.0, @"viewRuler"];
+    [[self designerContentView] addSubview:viewRuler];
+//    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@]", 3.0000f, @"viewRuler"];
     [dictionaryViewsVertical setValue:viewRuler forKey:@"viewRuler"];
     CGFloat sectionHeights = CGSizeZero.height;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
         CGFloat paddingTop = sectionCounter == 0 ? paddingBorder : (2 * paddingBorder);
-
         sectionHeights += paddingTop;
         
         [lastCollectionView  release];  //Should be nil on first pass.
@@ -366,15 +367,10 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [[self holderForLastTouchesByCollectionView] setObject:lastTouches forKey:@(collectionView.tag)];
         [lastTouches release];
         [[self collectionViewReuseIdentifiers] setObject:reuse forKey:[reportSection identifier]];
-        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
 
-        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
-           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
-        
-        [collectionView registerClass:[MTCollectionReuseableViewDefault class]
-           forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
+        [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+        [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:supplmentaryViewReuseIdHeader];
         
 
 
@@ -393,7 +389,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[collectionView layer] setCornerRadius:cornerRadius];
         
-        [[self designScrollView] addSubview:collectionView];
+        [[self designerContentView] addSubview:collectionView];
 
         // MARK: Create label to identify document section.
         UIView *sectionControlView = [[UIView alloc] init];
@@ -420,7 +416,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
         [sectionControlView addSubview:labelSectionIdentifer];
         
-        [[self designScrollView] addSubview:sectionControlView];
+        [[self designerContentView] addSubview:sectionControlView];
         
         // MARK: Setup vert auto layout
         NSString *collectionViewKey = [reportSection sectionKey];
@@ -440,45 +436,19 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [dictionaryViewsVertical setValue:collectionView forKey: collectionViewKey];
         
         CGFloat reportSectionHeight = [[reportSection height] floatValue];
-        [stringContstraintsVertical appendFormat:@"-(==%f@1000)-[%@(>=%f)]-(==%f@1000)-[%@(==%f)]", paddingTop, collectionViewKey, reportSectionHeight, - paddingLabel - heightLabel, labelKey, heightLabel];
         
+        id constraintItem =  sectionCounter == 0 ? viewRuler : lastCollectionView;
+        [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: constraintItem attribute: NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:collectionView attribute:NSLayoutAttributeTop multiplier:1.0000f constant:-paddingTop]];
+        [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:reportSectionHeight]];
+        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeLeft relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft multiplier: 1.0000f constant: paddingBorder]];
+        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -paddingBorder]];
+        [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:collectionView attribute:NSLayoutAttributeRight multiplier:1.0000f constant:-paddingBorder]];
+        [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:collectionView attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:-paddingBorder]];
+        [[self designerContentView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:heightLabel]];
+        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.20000f constant: 0.0000f]];
+
         sectionHeights += reportSectionHeight;
 
-        NSLayoutConstraint *layoutConstraintLeft = [NSLayoutConstraint constraintWithItem: collectionView
-                                                                                attribute: NSLayoutAttributeLeft
-                                                                                relatedBy: NSLayoutRelationEqual
-                                                                                   toItem: [self designScrollView]
-                                                                                attribute: NSLayoutAttributeLeft
-                                                                               multiplier: 1.0000f
-                                                                                 constant: paddingBorder];
-        [[self designScrollView] addConstraint:layoutConstraintLeft];
-
-        NSLayoutConstraint *layoutConstraintWidth = [NSLayoutConstraint constraintWithItem: collectionView
-                                                                                 attribute: NSLayoutAttributeWidth
-                                                                                 relatedBy: NSLayoutRelationEqual
-                                                                                    toItem: [self view]
-                                                                                 attribute: NSLayoutAttributeWidth
-                                                                                multiplier: 1.0000f
-                                                                                  constant: - (paddingBorder * 2.0000f)];
-        [[self view] addConstraint:layoutConstraintWidth];
-
-        NSLayoutConstraint *layoutConstraintLabelWidth = [NSLayoutConstraint constraintWithItem: sectionControlView
-                                                                                      attribute: NSLayoutAttributeWidth
-                                                                                      relatedBy: NSLayoutRelationEqual
-                                                                                         toItem: [self view]
-                                                                                      attribute: NSLayoutAttributeWidth
-                                                                                     multiplier: 0.20000f
-                                                                                       constant: 0.0000f];
-        [[self view] addConstraint:layoutConstraintLabelWidth];
-        
-        NSLayoutConstraint *layoutConstraintLabelRight = [NSLayoutConstraint constraintWithItem: sectionControlView
-                                                                                      attribute: NSLayoutAttributeTrailing
-                                                                                      relatedBy: NSLayoutRelationEqual
-                                                                                         toItem: collectionView
-                                                                                      attribute: NSLayoutAttributeTrailing
-                                                                                     multiplier: 1.0000f
-                                                                                       constant: -paddingLabel];
-        [[self designScrollView] addConstraint:layoutConstraintLabelRight];
         
         if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
             [self setReportFooterView:collectionView];
@@ -496,14 +466,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         sectionCounter++;
     }
     
-    [stringContstraintsVertical appendFormat:@"-(==%f@1000)-|", paddingBorder * 2];
-    
     [lastCollectionView release];
-    NSArray *labelconstraintsVertical = [NSLayoutConstraint constraintsWithVisualFormat: stringContstraintsVertical
-                                                                                options: 0
-                                                                                metrics: nil
-                                                                                  views: dictionaryViewsVertical];
-    for (NSLayoutConstraint *layoutConstraint in labelconstraintsVertical) {
+
+    for (NSLayoutConstraint *layoutConstraint in [[self designerContentView] constraints]) {
         if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
             [layoutConstraint secondItem] == nil &&
             [[layoutConstraint firstItem] isKindOfClass:[MTDocumentSectionView class]]) {
@@ -515,37 +480,37 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [constraint release];
         }
     }
-    [[self designScrollView] addConstraints:labelconstraintsVertical];
-
-    CGFloat c = sectionHeights;///([self reportFooterView].frame.origin.y + [self reportFooterView].frame.size.height + paddingBorder);
-
-    NSLayoutConstraint *layoutConstraintBackgroundViewHeight = [NSLayoutConstraint constraintWithItem: [self designerContentView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: nil attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: c];
-    
     [[self designerContentView] setBackgroundColor:[UIColor redColor]];
-    //[[self designerContentView] setAlpha:0.9800f];
     [[self designerContentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-    //[[self designScrollView] addSubview:[self designerContentView]];
     
-    NSLayoutConstraint *verReplacement = [NSLayoutConstraint constraintWithItem:[self layoutConstraintContainerToDesignerVertSpace].firstItem
-                                                                      attribute:[self layoutConstraintContainerToDesignerVertSpace].firstAttribute
-                                                                      relatedBy:[self layoutConstraintContainerToDesignerVertSpace].relation
-                                                                         toItem:[self reportFooterView]
-                                                                      attribute:[self layoutConstraintContainerToDesignerVertSpace].secondAttribute
-                                                                     multiplier:[self layoutConstraintContainerToDesignerVertSpace].multiplier
-                                                                       constant:[self layoutConstraintContainerToDesignerVertSpace].constant + paddingBorder];
+    [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerContentView]
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:nil
+                                                                      attribute:NSLayoutAttributeNotAnAttribute
+                                                                     multiplier:1.0000f
+                                                                       constant:sectionHeights + 50.0000f]];
+    [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerScrollView] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f]];
+//    NSLayoutConstraint *verReplacement = [NSLayoutConstraint constraintWithItem:[self reportFooterView]
+//                                                                      attribute:NSLayoutAttributeBottom
+//                                                                      relatedBy:NSLayoutRelationGreaterThanOrEqual
+//                                                                         toItem:[self designerContentView]
+//                                                                      attribute:NSLayoutAttributeBottom
+//                                                                     multiplier:1.0000f
+//                                                                       constant:paddingBorder];
     
-    [[self designScrollView] removeConstraints:@[[self layoutConstraintContainerToDesignerCentery], [self layoutConstraintContainerToDesignerVertSpace]]];
-    //[[self designScrollView] addConstraints:@[layoutConstraintBackgroundViewHeight]];
-    [[self designScrollView] addConstraint:verReplacement];
-    
-    [[self designScrollView] setScrollEnabled:YES];
-    [[self designScrollView] setMaximumZoomScale:1.0000f];
-    [[self designScrollView] setMinimumZoomScale:1.0000f];
-    [[self designScrollView] setDelegate:self];
-    //[[self designScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
-    [[self designScrollView] setBackgroundColor: [UIColor whiteColor]];
-    [[self designScrollView] setUserInteractionEnabled:YES];
-    [[self designScrollView] flashScrollIndicators];
+    [[self designerScrollView] removeConstraints:@[[self layoutConstraintContainerToDesignerCentery], [self layoutConstraintContainerToDesignerVertSpace]]];
+    [[self designerScrollView] setScrollEnabled:YES];
+    [[self designerScrollView] setMaximumZoomScale:1.0000f];
+    [[self designerScrollView] setMinimumZoomScale:0.5000f];
+    [[self designerScrollView] setBouncesZoom:NO];
+    [[self designerScrollView] setBounces:NO];
+    [[self designerScrollView] setDelegate:self];
+    //[[self designerScrollView] setContentSize:CGSizeMake([[self view] frame].size.width, sectionHeights)];
+    //[[self designerScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
+    [[self designerScrollView] setBackgroundColor: [UIColor whiteColor]];
+    [[self designerScrollView] setUserInteractionEnabled:YES];
+    [[self designerScrollView] flashScrollIndicators];
     
     [self setViewRuler:viewRuler];
     
@@ -653,7 +618,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [viewControllerReportViewer setViewControllerDelegate:self];
         [viewControllerReportViewer setDocumentReport:[self activeDocument]];
         
-        [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
+        [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
         
@@ -666,7 +631,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
         [viewControllerReportViewer setViewControllerDelegate:self];
         [viewControllerReportViewer setDocumentReport:[self activeDocument]];
         
-        [[self designScrollView] scrollRectToVisible:CGRectZero animated:NO];
+        [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
         
     }
 }
@@ -674,7 +639,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 #pragma mark - UIScrollViewDelegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return nil;//[[[self designScrollView] subviews] objectAtIndex:0];
+    return [self designerContentView];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
@@ -968,12 +933,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     CGRect popoverRect = CGRectZero;
     if ([[self selectedObjectIds] count] == 1) {
         MTElementView *elementView = [[self selectedElementViews] anyObject];
-        popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+        popoverRect = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
     } else if ([[self selectedObjectIds] count] > 1) {
         CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
         NSUInteger counter = 0;
         for (MTElementView *elementView in [self selectedElementViews]) {
-            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
             if (counter == 0) {
                 minx = frame.origin.x;
                 miny = frame.origin.y;
@@ -1031,12 +996,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 
                 CGRect popoverRect = CGRectZero;
                 if ([[self selectedObjectIds] count] == 1) {
-                    popoverRect = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                    popoverRect = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
                 } else if ([[self selectedObjectIds] count] > 1) {
                     CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
                     NSUInteger counter = 0;
                     for (MTElementView *elementView in [self selectedElementViews]) {
-                        CGRect frame = [elementView convertRect:[elementView frame] toView:[self designScrollView]];
+                        CGRect frame = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
                         if (counter == 0) {
                             minx = frame.origin.x;
                             miny = frame.origin.y;
@@ -1053,7 +1018,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                     popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
                 }
                 [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
-                                                                     inView: [self designScrollView]
+                                                                     inView: [self designerContentView]
                                                    permittedArrowDirections: UIPopoverArrowDirectionAny
                                                                    animated: YES];
             }
@@ -1081,7 +1046,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             if ([[self popoverControllerInformation] isPopoverVisible]) {   //Should always eval to true
                 if ([[self selectedObjectIds] count] > 0) {
                     CGRect popoverRect = [self rectForSelectedElements];
-                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designScrollView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
+                    [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designerContentView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
                 } else {
                     [[self popoverControllerInformation] dismissPopoverAnimated:animated];
                 }
@@ -1244,7 +1209,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (MTDocumentSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
     MTDocumentSectionView *documentSectionView = nil;
-    for (id subview in [[self designScrollView] subviews]) {
+    for (id subview in [[self designerContentView] subviews]) {
         if ([subview tag] == identifer && [subview isKindOfClass:[MTDocumentSectionView class]]) {
             documentSectionView = [subview retain];
             break;
@@ -1430,11 +1395,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                         rectToShow = [self rectForSelectedElements];
                     }
 
-                    if (CGRectIntersectsRect(rectToShow, self.designScrollView.frame) == NO) {
+                    if (CGRectIntersectsRect(rectToShow, self.designerScrollView.frame) == NO) {
                         
-                        CGFloat offsetPointY = rectToShow.origin.y + rectToShow.size.height + 5.0000f - [[self designScrollView] frame].size.height;
+                        CGFloat offsetPointY = rectToShow.origin.y + rectToShow.size.height + 5.0000f - [[self designerScrollView] frame].size.height;
                         CGPoint offsetPoint = CGPointMake(CGPointZero.x, offsetPointY);
-                        [[self designScrollView] setContentOffset:offsetPoint animated:YES];
+                        [[self designerScrollView] setContentOffset:offsetPoint animated:YES];
                         
                     }
                 }            
@@ -1495,7 +1460,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
         }
     } else {
-        [[self designScrollView] setContentOffset:CGPointZero animated:NO];
+        [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
         [self dismissViewControllerAnimated:YES completion:^{
         
         }];
@@ -1893,7 +1858,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
-        [[self designScrollView] setContentOffset:CGPointZero animated:NO];
+        [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
         [self dismissViewControllerAnimated:YES completion:^{
 
         }];
@@ -1902,13 +1867,13 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
             } else {
-                [[self designScrollView] setContentOffset:CGPointZero animated:NO];
+                [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
                 [self dismissViewControllerAnimated:YES completion:^{
 
                 }];
             }
         } else {
-            [[self designScrollView] setContentOffset:CGPointZero animated:NO];
+            [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
             [self dismissViewControllerAnimated:YES completion:^{
             }];
         }
@@ -2134,12 +2099,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             
-            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerContentView]];
             [[gestureRecognizer view] setCenter: newCenter];
             [[gestureRecognizer view] setAlpha:0.6000f];
             
-            [[self designScrollView] bringSubviewToFront: [gestureRecognizer view]];
-            newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            [[self designerContentView] bringSubviewToFront: [gestureRecognizer view]];
+            newCenter = [gestureRecognizer locationInView:[self designerContentView]];
             [self setScrollersEnabled: NO];
 
             [[gestureRecognizer view] setCenter: newCenter];
@@ -2147,9 +2112,9 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             {
                 [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:^(BOOL finished) {
                     if (finished) {
-                        CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+                        CGPoint newCenter = [gestureRecognizer locationInView:[self designerContentView]];
                         [[gestureRecognizer view] setCenter: newCenter];
-                        [[self designScrollView] addSubview: [gestureRecognizer view]];
+                        [[self designerContentView] addSubview: [gestureRecognizer view]];
                     }
 
                 }];
@@ -2157,7 +2122,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerContentView]];
             [[gestureRecognizer view] setCenter: newCenter];
             break;
         }
@@ -2173,12 +2138,12 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
             
             // Remove the element from one section and place it into the next new section
             
-            CGPoint newCenter = [gestureRecognizer locationInView:[self designScrollView]];
+            CGPoint newCenter = [gestureRecognizer locationInView:[self designerContentView]];
             UICollectionView *reportSectionCollectionView = nil;
             
             // Try to find the section to place the element view into.
             BOOL addedToNewParent = NO;
-            for (UICollectionView *view in [[self designScrollView] subviews]) {
+            for (UICollectionView *view in [[self designerContentView] subviews]) {
                 if (CGRectContainsPoint([view frame], [[gestureRecognizer view] center]) && ![view isEqual:self]) {
                     if ([view isKindOfClass:[UICollectionView class]]) {
                         reportSectionCollectionView = [[view retain] autorelease];
@@ -2190,7 +2155,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
                 }
             }
             if (!addedToNewParent) {
-                for (UICollectionView *view in [[self designScrollView] subviews]) {
+                for (UICollectionView *view in [[self designerContentView] subviews]) {
                     if ([view isKindOfClass: [UICollectionView class]]) {
                         reportSectionCollectionView = [[view retain] autorelease];
                         addedToNewParent = YES;
@@ -2296,11 +2261,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
-    @synchronized([self designScrollView]) {
-        if ([[self designScrollView] respondsToSelector:@selector(setScrollEnabled:)]) {
-            [[self designScrollView] setScrollEnabled:enabled];
-            [[self designScrollView] flashScrollIndicators];
-            for (UICollectionView *collectionView in [[self designScrollView] subviews]) {
+    @synchronized([self designerScrollView]) {
+        if ([[self designerScrollView] respondsToSelector:@selector(setScrollEnabled:)]) {
+            [[self designerScrollView] setScrollEnabled:enabled];
+            [[self designerScrollView] flashScrollIndicators];
+            for (UICollectionView *collectionView in [[self designerContentView] subviews]) {
                 if ([collectionView isKindOfClass: [UICollectionView class]]) {
                     [collectionView setScrollEnabled:enabled];
                     [collectionView flashScrollIndicators];

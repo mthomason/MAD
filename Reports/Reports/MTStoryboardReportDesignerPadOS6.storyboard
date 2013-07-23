@@ -146,7 +146,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemObjects" destination="Jgg-su-8FN" id="bBA-KX-tW6"/>
-                        <outlet property="designScrollView" destination="wQV-wk-ktS" id="hqu-OY-PZY"/>
+                        <outlet property="designerScrollView" destination="wQV-wk-ktS" id="VBk-tQ-1Ru"/>
                         <outlet property="documentStatusView" destination="DEV-Xq-atR" id="eQq-CU-vnp"/>
                         <outlet property="toolbarBottom" destination="K4W-Fo-5ZQ" id="eq1-zm-gfY"/>
                         <outlet property="toolbarTop" destination="lq1-v2-HyI" id="axn-Qx-9Th"/>

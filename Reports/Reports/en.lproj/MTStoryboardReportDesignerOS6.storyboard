@@ -87,7 +87,7 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM">
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqF-a2-e0e">
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -144,8 +144,8 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemObjects" destination="U4m-Tl-FVb" id="P9q-uL-3Oo"/>
-                        <outlet property="designScrollView" destination="lma-we-TIM" id="H8I-0A-d89"/>
                         <outlet property="designerContentView" destination="jqF-a2-e0e" id="tia-sK-SI6"/>
+                        <outlet property="designerScrollView" destination="lma-we-TIM" id="IUb-Yq-FqX"/>
                         <outlet property="documentStatusView" destination="LFo-Tb-2Xi" id="S10-1b-6j1"/>
                         <outlet property="layoutConstraintContainerToDesignerCentery" destination="J54-SX-nKA" id="NCt-gL-JPa"/>
                         <outlet property="layoutConstraintContainerToDesignerVertSpace" destination="hgN-XS-SuZ" id="fiP-jc-8kX"/>
