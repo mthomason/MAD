@@ -8,8 +8,8 @@
 
 #import "AppDelegate.h"
 
-NSString * const MTBundleIdDesigner     = @"com.everydayapps.mad.designer";
-NSString * const MTBundleIdViewer       = @"com.everydayapps.mad.viewer";
+NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
+NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
 
 @interface AppDelegate()
 
@@ -42,29 +42,19 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     [MTStoreKitController sharedObject];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyValueStoreDidChange:)
-                                                 name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(keyValueStoreDidChange:)
+                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                               object: nil];
     
-    BOOL iCloudEnabled = [[NSFileManager defaultManager] ubiquityIdentityToken];
-    NSLog(@"iCloud enabled: %@", iCloudEnabled ? @"YES" : @"NO");
-
     NSUbiquitousKeyValueStore *keyValueStore = [NSUbiquitousKeyValueStore defaultStore];
     [keyValueStore synchronize];
 
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-
-        UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
-                                                          action: @selector(email:)];
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        [menu setMenuItems:@[menuItem]];
-        [menuItem release];
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-        });
-    });
+    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
+                                                      action: @selector(email:)];
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    [menu setMenuItems:@[menuItem]];
+    [menuItem release];
 
     return YES;
 }
@@ -155,11 +145,13 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 #pragma mark - iCloud
 
+NSString * const MTUbiquityToken = @"com.everydayapps.mad.ubiquityIdentityToken";
+
 - (void)checkUbiquitousTokenFromPreviousLaunch:(id)currentToken {
     // Fetch a previously stored value for the ubiquity identity token from NSUserDefaults.
     // That value can be compared to the current token to determine if the iCloud login has changed since the last launch of our application
     
-    NSData* oldTokenData = [[NSUserDefaults standardUserDefaults] objectForKey:@"com.apple.CloudNotes.UbiquityIdentityToken"];
+    NSData* oldTokenData = [[NSUserDefaults standardUserDefaults] objectForKey:MTUbiquityToken];
     id oldToken = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
     if (oldTokenData && ![oldToken isEqual:currentToken]) {
         // If we had a token, we were signed in before.
@@ -176,9 +168,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     if (currentToken) {
         NSData* newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
-        [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:@"com.apple.CloudNotes.UbiquityIdentityToken"];
+        [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:MTUbiquityToken];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"com.apple.CloudNotes.UbiquityIdentityToken"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTUbiquityToken];
     }
 }
 
@@ -190,7 +182,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     id currentToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userICloudChoice = [userDefaults stringForKey:@"com.apple.CloudNotes.UseICloudStorage"];
+    NSString *userICloudChoice = [userDefaults stringForKey:MTUbiquityToken];
     
     if ([userICloudChoice isEqualToString:@"YES"]) {
         [self checkUbiquitousTokenFromPreviousLaunch:currentToken];
@@ -207,7 +199,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         [[CloudManager sharedManager] setIsCloudEnabled:NO];
         
         // Since the user is signed out of iCloud, reset the preference to not use iCloud, so if they sign in again we will prompt them to move data
-        [userDefaults removeObjectForKey:@"com.apple.CloudNotes.UseICloudStorage"];
+        [userDefaults removeObjectForKey:MTUbiquityToken];
     }
     
     [self storeCurrentUbiquityToken:currentToken];

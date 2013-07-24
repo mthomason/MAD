@@ -163,29 +163,18 @@
     [[document hasPageFooterSection] setVisibility:@YES];
     [[document hasDetailSection] setVisibility:@YES];
 
-    //NSLog(@"Document, %@", document);
-   return [document autorelease];
+    return [document autorelease];
 }
 
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
-    
-    RptqDocument *doc = nil;
+    RptqDocument *document = nil;
     NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
     if (!error) {
-        doc = [documents lastObject];
-    } else {
-        //NSLog(@"Error: %@, %@", [error localizedDescription], [error localizedFailureReason]);
+        document = [documents lastObject];
     }
-
-    //Create the document if it does not exist.
-    if (!doc) {
-        NSLog(@"Failed to create");
-//        doc = [[[RptqDocument createMainDocumentForManagedObjectContext:objectContext] retain] autorelease];
-    }
-
-    return doc;
+    return document;
 }
 
 + (void)addDatabase: (MTDatabase *)database toManagedObjectContext:(NSManagedObjectContext *)objectContext
@@ -237,7 +226,6 @@
     NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
-    //NSUInteger tableCounter = 0;
     [database getTables:^(BOOL success, NSError *error, NSArray *tables) {
         if (success) {
             __block NSUInteger tableCounter = 0;
