@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerViewController.h"
+#import "DesignerSectionLabel.h"
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
@@ -34,6 +35,7 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 @property (nonatomic, assign) BOOL toolboxIsVisible;
 @property (nonatomic, retain) MTElementView *lastElementViewToShowMenu;
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
+@property (nonatomic, retain) MTRulerView *rulerView;
 
 @property (nonatomic, retain) NSMutableDictionary *sectionViews;
 @property (nonatomic, retain) NSMutableDictionary *sectionControlViews;
@@ -74,8 +76,6 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 @property (nonatomic, retain) NSMutableDictionary *holderForLastTouchesByCollectionView;
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
-@property (nonatomic, retain) MTRulerView *viewRuler;
-
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @property (nonatomic, retain) MTReportDocument *activeDocument;
@@ -94,10 +94,10 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_rulerView release];
     [_designerContentView release];
     [_activeDocument release];
     [_reportFooterView release];
-    [_viewRuler release];
     [_navigationControllerSectionLayoutSettings release];
     [_layoutConstraintsReportSectionHeight release];
     [_lastElementViewToShowMenu release];
@@ -160,8 +160,6 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
      [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeLeft   multiplier:1.0000f constant:0.0000f],
      [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeRight  multiplier:1.0000f constant:0.0000f],
      [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self toolbarTop]    attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f]
-     //[NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self toolbarBottom] attribute:NSLayoutAttributeTop    multiplier:1.0000f constant:0.0000f]
-     //[NSLayoutConstraint constraintWithItem:[self toolbarBottom]       attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil                  attribute:NSLayoutAttributeNotAnAttribute    multiplier: 1.0000f constant: 44.0000f]
      ]];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
@@ -325,15 +323,14 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
 
         MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
-        
         [collectionView setObjectIdTag:[reportSection objectID]];
-        NSString *reuse = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
         NSMutableDictionary *lastTouches = [[NSMutableDictionary alloc] init];
         [[self holderForLastTouchesByCollectionView] setObject:lastTouches forKey:@(collectionView.tag)];
         [lastTouches release];
-        [[self collectionViewReuseIdentifiers] setObject:reuse forKey:[reportSection identifier]];
 
-        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: reuse];
+        NSString *documentElementReuseIdentifier = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
+        [[self collectionViewReuseIdentifiers] setObject:documentElementReuseIdentifier forKey:[reportSection identifier]];
+        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
         [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
         [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:supplmentaryViewReuseIdHeader];
 
@@ -351,10 +348,9 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
         [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
         
-        [[self designerContentView] addSubview:collectionView];
 
         // MARK: Create label to identify document section.
-        UIView *sectionControlView = [[UIView alloc] init];
+        DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[reportSection localizedDisplayName]];
         [sectionControlView setBackgroundColor:[UIColor edaYellow]];
         [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[sectionControlView layer] setCornerRadius:MTReportDesignerCornerRadius];
@@ -368,29 +364,21 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
         [sectionControlView addGestureRecognizer:tapGestureRecognizer];
         [tapGestureRecognizer release];
         
-        UILabel *labelSectionIdentifer = [[UILabel alloc] init];
-        [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
-        [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
-        [labelSectionIdentifer setFont:[UIFont systemFontOfSize:8.0000f]];
-        [labelSectionIdentifer setText:[reportSection localizedDisplayName]];
-        [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
-        [sectionControlView addSubview:labelSectionIdentifer];
-        [labelSectionIdentifer release];
+        [collectionView     setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisVertical];
+        [collectionView     setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
+        [sectionControlView setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisHorizontal];
+        [sectionControlView setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
 
-        [[self designerContentView] addSubview:sectionControlView];
         
         // MARK: Setup vert auto layout
         NSString *collectionViewKey = [reportSection sectionKey];
 
+
         [[sectionControlView layer] setBorderColor: [[UIColor blackColor] CGColor]];
         [[sectionControlView layer] setBorderWidth: 1.0000f];
-
         [[collectionView layer] setBorderColor: shadowColor];
         [[collectionView layer] setBorderWidth: 3.0000f];
 
-        [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
-        [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
         
         CGFloat reportSectionHeight = [[reportSection height] floatValue];
@@ -399,23 +387,32 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
         id constraintItem =  sectionCounter == 0 ? viewRuler : lastCollectionView;
         
         [[self designerContentView] addConstraints:@[
-         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
-         [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
+         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
+         [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
+         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
+         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
+         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
          ]];
 
         [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeLeft  relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft  multiplier: 1.0000f constant: MTReportDesignerBorderPadding]];
         [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]];
-        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f]];
+        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f]];
+        
         
         if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
             [self setReportFooterView:collectionView];
         }
-        [sectionControlView release];
+        
+        [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
+        [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
+
+        [[self designerContentView] addSubview:collectionView];
+        [[self designerContentView] addSubview:sectionControlView];
+
         lastCollectionView = [collectionView retain];
+        
         [collectionView release];
+        [sectionControlView release];
         [backgroundView release];
         [flowLayoutDesignerSection release];
 
@@ -424,6 +421,9 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
     sectionHeights += MTReportDesignerBorderPadding;
     
     [lastCollectionView release];
+
+    [self setRulerView:viewRuler];
+    [viewRuler release];
 
     for (NSLayoutConstraint *layoutConstraint in [[self designerContentView] constraints]) {
         if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
@@ -437,8 +437,7 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
             [constraint release];
         }
     }
-    [[self designerScrollView]  setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
-    [[self designerContentView] setBackgroundColor:[UIColor whiteColor]];
+    [[self designerContentView] setBackgroundColor:[UIColor clearColor]];
     [[self designerContentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:sectionHeights];
@@ -451,14 +450,12 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
     [[self designerScrollView] setMaximumZoomScale:2.0000f];
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
     [[self designerScrollView] setDelegate:self];
-    [[self designerScrollView] setBackgroundColor: [UIColor scrollViewTexturedBackgroundColor]];
     [[self designerScrollView] setUserInteractionEnabled:YES];
+    [[self designerScrollView] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
+    [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
     [[self designerScrollView] flashScrollIndicators];
     
-    [self setViewRuler:viewRuler];
-    
     [sectionEnumerator release];
-    [viewRuler release];
 }
 
 - (CGSize)designerContentViewSize {
@@ -565,7 +562,7 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [[self viewRuler] setNeedsDisplay];
+    [[self rulerView] setNeedsDisplay];
     // FIXME: size to fit toolbars... requires moving constraint layout to updateViewConstraints
     //[[self toolbarBottom] sizeToFit];
     //[[self toolbarTop] sizeToFit];
@@ -623,28 +620,11 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
-    
+    [[self rulerView] setNeedsDisplay];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-/*    CGSize boundsSize = [scrollView bounds].size;
-    CGRect frameToCenter = [[self designerContentView] frame];
-    
-    // center horizontally
-    if (frameToCenter.size.width < boundsSize.width) {
-        frameToCenter.origin.x = (boundsSize.width - frameToCenter.size.width) / 2;
-    } else {
-        frameToCenter.origin.x = 0;
-    }
-    
-    // center vertically
-    if (frameToCenter.size.height < boundsSize.height) {
-        frameToCenter.origin.y = (boundsSize.height - frameToCenter.size.height) / 2;
-    } else {
-        frameToCenter.origin.y = 0;
-    }
-    
-    [[self designerContentView] setFrame: frameToCenter];*/
+    [[self rulerView] setNeedsDisplay];
 }
 
 #pragma mark - Document State
@@ -1962,8 +1942,16 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
         
         if (finished) {
             //[self relayoutSectionView:detailSection];
-            [self resizeCollectionView:detailSection forSectionWithId:[detailSection objectIdTag]];
-            [detailSection setNeedsUpdateConstraints];
+            [UIView animateWithDuration:0.3 animations:^{
+                [detailSection invalidateIntrinsicContentSize];
+                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
+                                                                                        fromObjectContext: [[self activeDocument] managedObjectContext]];
+                [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
+                [[self designerContentView] setNeedsUpdateConstraints];
+            }];
+            //[[self designerContentView] setNeedsLayout];
+            //[self resizeCollectionView:detailSection forSectionWithId:[detailSection objectIdTag]];
+//            [detailSection setNeedsUpdateConstraints];
 //            [detailSection setNeedsLayout];
         }
         
@@ -2068,6 +2056,16 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
                 
             } completion:^(BOOL finished) {
                 if (finished) {
+                    
+                    [UIView animateWithDuration:0.3 animations:^{
+                        [svSection invalidateIntrinsicContentSize];
+                        RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [svSection objectIdTag]
+                                                                                                fromObjectContext: [[self activeDocument] managedObjectContext]];
+                        [documentSection setHeight:@([svSection intrinsicContentSize].height)];
+                        [[self designerContentView] setNeedsUpdateConstraints];
+                    }];
+
+                    
                     completion(YES);
                 }
             }];
@@ -2220,9 +2218,13 @@ const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
 
                 } completion:^(BOOL finished) {
                     if (finished) {
-                        [self resizeCollectionView:reportSectionCollectionView forSectionWithId:[reportSectionCollectionView objectIdTag]];
-                        
-                        
+                        [UIView animateWithDuration:0.3 animations:^{
+                            [reportSectionCollectionView invalidateIntrinsicContentSize];
+                            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [reportSectionCollectionView objectIdTag]
+                                                                                                    fromObjectContext: [[self activeDocument] managedObjectContext]];
+                            [documentSection setHeight:@([reportSectionCollectionView intrinsicContentSize].height)];
+                            [[self designerContentView] setNeedsUpdateConstraints];
+                        }];
                     }
                 }];
                 

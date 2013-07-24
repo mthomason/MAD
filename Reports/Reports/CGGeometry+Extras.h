@@ -6,6 +6,8 @@
 //  Copyright 2010 Everyday Apps LLC. All rights reserved.
 //
 
+#import "Constants.h"
+
 /* Make a point from `(x, y)'. */
 
 #define            SQUARE(x)             ( (x) * (x) )
@@ -29,6 +31,12 @@ struct CGLineSegment {
     CGPoint end;
 };
 typedef struct CGLineSegment CGLineSegment;
+
+CG_INLINE CGSize CGSizeFingerDefault();
+CG_INLINE CGSize
+CGSizeFingerDefault() {
+    return CGSizeMake(MTDefaultFingerSizeWidth, MTDefaultFingerSizeHeight);
+}
 
 CG_INLINE CGLine CGLineMake(CGFloat m, CGFloat b);
 CG_INLINE CGLine

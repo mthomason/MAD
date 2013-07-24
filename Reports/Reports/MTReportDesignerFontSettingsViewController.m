@@ -155,7 +155,10 @@
     [[self buttonUnderline] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
     [[self buttonUnderline] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
     [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
-
+    
+    UIColor *tintColor = [UIColor clearColor];
+    [[self segmentedControlHorizontalAlignment] setTintColor:tintColor];
+    [[[[self segmentedControlVerticalAlignment] subviews] objectAtIndex:0] setTintColor:tintColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

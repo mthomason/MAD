@@ -1348,6 +1348,11 @@
 		4CA16484167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
 		4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
+		4CA57A5B179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
+		4CA57A5C179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
+		4CA57A5D179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
+		4CA57A5E179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
+		4CA57A5F179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
@@ -2491,6 +2496,8 @@
 		4CA1634B167CAEA800540A14 /* RptqRelationship+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqRelationship+Extras.m"; sourceTree = "<group>"; };
 		4CA226A516C963CC00315EA2 /* MTDocumentSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentSectionView.h; sourceTree = "<group>"; };
 		4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentSectionView.m; sourceTree = "<group>"; };
+		4CA57A59179FD46200B58871 /* DesignerSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerSectionLabel.h; sourceTree = "<group>"; };
+		4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerSectionLabel.m; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
 		4CAB178F150FE38400BA0A9B /* MTRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTRulerView.h; sourceTree = "<group>"; };
@@ -3084,6 +3091,8 @@
 				4CF8671416D8259400F716A8 /* MTTitleView.m */,
 				4C752E1116EE7F55001FDAA3 /* MTAlertView.h */,
 				4C752E1216EE7F55001FDAA3 /* MTAlertView.m */,
+				4CA57A59179FD46200B58871 /* DesignerSectionLabel.h */,
+				4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -5863,6 +5872,7 @@
 				4C0081EB17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081F917853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 				4C2670F31794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4CA57A5C179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6068,6 +6078,7 @@
 				4C84EEB8178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4C0081ED17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081FB17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
+				4CA57A5E179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6273,6 +6284,7 @@
 				4C84EEB7178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4C0081EC17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081FA17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
+				4CA57A5D179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6483,6 +6495,7 @@
 				4C0081EA17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081F817853E8600874849 /* SFHFKeychainUtils.m in Sources */,
 				4C2670F21794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
+				4CA57A5B179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6688,6 +6701,7 @@
 				4C84EEB9178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4C0081EE17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C0081FC17853E8600874849 /* SFHFKeychainUtils.m in Sources */,
+				4CA57A5F179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

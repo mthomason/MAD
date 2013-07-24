@@ -54,6 +54,8 @@ NSString * const MNSStringInterfaceButtonTitleTryAgainDesc          = @"Try Agai
 NSString * const MNSStringInterfaceButtonTitleAbort                 = @"Abort Application";
 NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Button Title";
 
+const CGFloat MTDefaultFingerSizeWidth = 44.0000f;
+const CGFloat MTDefaultFingerSizeHeight = 44.0000f;
 // MARK: Storyboard Identifiers
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";

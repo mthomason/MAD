@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CGGeometry+Extras.h"
 
 @protocol MTDocumentSectionViewDelegate
 @optional

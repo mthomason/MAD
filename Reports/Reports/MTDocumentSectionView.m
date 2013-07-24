@@ -49,10 +49,6 @@
 }
 
 - (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {
-    //NSLog(@"pinchView");
-    //gestureRecognizer.view.transform  = CGAffineTransformMakeScale(gestureRecognizer.scale, gestureRecognizer.scale);
-    //gestureRecognizer.scale = 1.0f;
-    
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
             break;
@@ -64,7 +60,6 @@
                 CGFloat differenceY = fabsf(locationStart1.y - locationStart0.y);
                 [self setResizeHeightDifferenceInital:differenceY];
                 [self setResizeHeightBoundsHeightInital:[self bounds].size.width];
-                //NSLog(@"Start difference y = %f", differenceY);
             }
             break;
         }
@@ -77,7 +72,6 @@
                 CGFloat newHeight = [self resizeHeightDifferenceInital] + differenceY - [self resizeHeightDifferenceInital];
                 CGRect newBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [self bounds].size.width, newHeight);
                 [self setBounds: newBounds];
-                //NSLog(@"New bounds %@", NSStringFromCGRect(newBounds));
                 [[self sectionDelegate] didUpdateLayout:self];
             }
             break;
@@ -89,13 +83,15 @@
             break;
         }
         case UIGestureRecognizerStateEnded: {       // MARK: UIPinchGestureRecognizer UIGestureRecognizerStateEnded
-            //CGPoint locationEnd0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-            //CGPoint locationEnd1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-            //CGFloat distance = CGDistance(locationEnd0, locationEnd1);
-            //NSLog(@"End distance %f", distance);
             break;
         }
     }
+}
+
+- (CGSize)intrinsicContentSize {
+    CGSize intrinsicContentSize = [[self collectionViewLayout] collectionViewContentSize];
+    CGSize fingerSize = CGSizeFingerDefault();
+    return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + fingerSize.height);
 }
 
 @end
