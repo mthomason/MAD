@@ -42,10 +42,10 @@
 }
 
 - (void)setupGestures {
-    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(resizeHeight:)];
-    [pinchGesture setDelegate:self];
-    [self addGestureRecognizer:pinchGesture];
-    [pinchGesture release];
+    //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(resizeHeight:)];
+    //[pinchGesture setDelegate:self];
+    //[self addGestureRecognizer:pinchGesture];
+    //[pinchGesture release];
 }
 
 - (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {

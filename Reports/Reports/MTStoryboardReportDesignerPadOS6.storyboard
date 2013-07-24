@@ -73,7 +73,6 @@
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS" customClass="UIScrollViewSection"/>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-v2-HyI">
                                 <items>
                                     <barButtonItem title="Query Designer" width="109" id="FWg-Ni-c6x">
@@ -89,6 +88,21 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-wk-ktS">
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6FF-CE-gRW">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="top" secondItem="wQV-wk-ktS" secondAttribute="top" type="default" id="GSq-Es-q4k"/>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="bottom" secondItem="wQV-wk-ktS" secondAttribute="bottom" type="user" id="GiV-87-LNq"/>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="leading" secondItem="wQV-wk-ktS" secondAttribute="leading" type="default" id="LQq-Wb-dE8"/>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="trailing" secondItem="wQV-wk-ktS" secondAttribute="trailing" type="default" id="Ux7-6f-CYO"/>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="centerY" secondItem="wQV-wk-ktS" secondAttribute="centerY" type="user" id="pUf-5F-amj"/>
+                                    <constraint firstItem="6FF-CE-gRW" firstAttribute="centerX" secondItem="wQV-wk-ktS" secondAttribute="centerX" type="user" id="y0Q-Ow-jmT"/>
+                                </constraints>
+                            </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="K4W-Fo-5ZQ">
                                 <items>
                                     <barButtonItem width="32" style="plain" id="mhH-x7-UAm">
@@ -146,8 +160,12 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="barButtonItemObjects" destination="Jgg-su-8FN" id="bBA-KX-tW6"/>
+                        <outlet property="designerContentView" destination="6FF-CE-gRW" id="A26-ZS-q4u"/>
                         <outlet property="designerScrollView" destination="wQV-wk-ktS" id="VBk-tQ-1Ru"/>
                         <outlet property="documentStatusView" destination="DEV-Xq-atR" id="eQq-CU-vnp"/>
+                        <outlet property="layoutConstraintContainerToDesignerCenterX" destination="y0Q-Ow-jmT" id="O56-vB-NL8"/>
+                        <outlet property="layoutConstraintContainerToDesignerCenterY" destination="pUf-5F-amj" id="wry-Li-qI1"/>
+                        <outlet property="layoutConstraintContainerToDesignerVertSpace" destination="GiV-87-LNq" id="E2U-hi-beT"/>
                         <outlet property="toolbarBottom" destination="K4W-Fo-5ZQ" id="eq1-zm-gfY"/>
                         <outlet property="toolbarTop" destination="lq1-v2-HyI" id="axn-Qx-9Th"/>
                         <outlet property="toolboxView" destination="dLN-M6-x2r" id="uzB-vX-5is"/>

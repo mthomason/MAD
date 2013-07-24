@@ -87,7 +87,7 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lma-we-TIM">
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqF-a2-e0e">
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,7 +99,7 @@
                                     <constraint firstItem="jqF-a2-e0e" firstAttribute="top" secondItem="lma-we-TIM" secondAttribute="top" type="default" id="X7w-pP-500"/>
                                     <constraint firstItem="jqF-a2-e0e" firstAttribute="bottom" secondItem="lma-we-TIM" secondAttribute="bottom" type="user" id="hgN-XS-SuZ"/>
                                     <constraint firstItem="jqF-a2-e0e" firstAttribute="trailing" secondItem="lma-we-TIM" secondAttribute="trailing" type="default" id="qBJ-qr-4mD"/>
-                                    <constraint firstItem="jqF-a2-e0e" firstAttribute="centerX" secondItem="lma-we-TIM" secondAttribute="centerX" type="default" id="tvl-02-czG"/>
+                                    <constraint firstItem="jqF-a2-e0e" firstAttribute="centerX" secondItem="lma-we-TIM" secondAttribute="centerX" type="user" id="tvl-02-czG"/>
                                 </constraints>
                             </scrollView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-my-rda">
@@ -147,7 +147,8 @@
                         <outlet property="designerContentView" destination="jqF-a2-e0e" id="tia-sK-SI6"/>
                         <outlet property="designerScrollView" destination="lma-we-TIM" id="IUb-Yq-FqX"/>
                         <outlet property="documentStatusView" destination="LFo-Tb-2Xi" id="S10-1b-6j1"/>
-                        <outlet property="layoutConstraintContainerToDesignerCentery" destination="J54-SX-nKA" id="NCt-gL-JPa"/>
+                        <outlet property="layoutConstraintContainerToDesignerCenterX" destination="tvl-02-czG" id="w1z-2U-dBk"/>
+                        <outlet property="layoutConstraintContainerToDesignerCenterY" destination="J54-SX-nKA" id="WPI-dC-UKD"/>
                         <outlet property="layoutConstraintContainerToDesignerVertSpace" destination="hgN-XS-SuZ" id="fiP-jc-8kX"/>
                         <outlet property="toolbarBottom" destination="cSM-my-rda" id="psB-WE-cMp"/>
                         <outlet property="toolbarTop" destination="9VI-qP-p12" id="6uA-15-dB6"/>

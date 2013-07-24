@@ -149,13 +149,13 @@
     [[document hasReportFooterSection] setHeight:@44.0000f];
     [[document hasPageHeaderSection] setHeight:@44.0000f];
     [[document hasPageFooterSection] setHeight:@44.0000f];
-    [[document hasDetailSection] setHeight:@44.0000f];
+    [[document hasDetailSection] setHeight:@88.0000f];
 
     [[document hasReportHeaderSection] setLayoutHeight:@44.0000f];
     [[document hasReportFooterSection] setLayoutHeight:@44.0000f];
     [[document hasPageHeaderSection] setLayoutHeight:@44.0000f];
     [[document hasPageFooterSection] setLayoutHeight:@44.0000f];
-    [[document hasDetailSection] setLayoutHeight:@44.0000f];
+    [[document hasDetailSection] setLayoutHeight:@88.0000f];
 
     [[document hasReportHeaderSection] setVisibility:@YES];
     [[document hasReportFooterSection] setVisibility:@YES];
