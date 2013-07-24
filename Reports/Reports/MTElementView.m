@@ -37,6 +37,9 @@
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
+@property (nonatomic, assign) CGPoint pinchInitalPointA;
+@property (nonatomic, assign) CGPoint pinchInitalPointB;
+
 @end
 
 @implementation MTElementView
@@ -148,7 +151,12 @@
         [label release];
 
         [self initalDisplaySettings];
-                
+        
+        UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+        [pinchGesture setDelegate:self];
+        [self addGestureRecognizer:pinchGesture];
+        [pinchGesture release];
+        
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver:self
                           selector:@selector(managedObjectContextDidSave:)
@@ -352,6 +360,67 @@
             [[self delegate] didSelectElementView:self];
         } else {
             [[self delegate] didDeselectElementView:self animated:YES];
+        }
+    }
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer {
+    switch ([gestureRecognizer state]) {
+        case UIGestureRecognizerStatePossible:
+            break;
+        case UIGestureRecognizerStateBegan: {
+            if ([gestureRecognizer numberOfTouches] >= 2) {
+                [self setPinchInitalPointA:[gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]]];
+                [self setPinchInitalPointB:[gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]]];
+            }
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {
+            if ([gestureRecognizer numberOfTouches] >= 2) {
+                CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+                CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
+                CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
+                CGFloat newDifferenceX = fabsf(newTouchA.x - newTouchB.x);
+                CGFloat newDifferenceY = fabsf(newTouchA.y - newTouchB.y);
+                CGFloat scaleWidth = differenceX != 0 ? newDifferenceX / differenceX : 1.0000f;
+                CGFloat scaleHeight = differenceY != 0 ? newDifferenceY / differenceY : 1.0000f;
+                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, scaleWidth, scaleHeight);
+                gestureRecognizer.scale = 1.0000f;
+            }
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed: {
+            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, 1.0000f, 1.0000f);
+            [self updateDisplayLabel];
+            [self setNeedsDisplay];
+            gestureRecognizer.scale = 1.0000f;
+            break;
+        }
+        case UIGestureRecognizerStateEnded: {
+            if ([gestureRecognizer numberOfTouches] >= 2) {
+                CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+                CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
+                CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
+                CGFloat newDifferenceX = fabsf(newTouchA.x - newTouchB.x);
+                CGFloat newDifferenceY = fabsf(newTouchA.y - newTouchB.y);
+                CGFloat scaleWidth = differenceX != 0 ? newDifferenceX / differenceX : 1.0000f;
+                CGFloat scaleHeight = differenceY != 0 ? newDifferenceY / differenceY : 1.0000f;
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+                CGFloat sizeWidth = nearbyintf(scaleWidth * [[documentObject sizewidth] floatValue]);
+                CGFloat sizeHeight = nearbyintf(scaleHeight * [[documentObject sizeheight] floatValue]);
+                [documentObject setSizewidth:@(sizeWidth)];
+                [documentObject setSizeheight:@(sizeHeight)];
+                NSError *error = nil;
+                [[self managedObjectContext] save:&error];
+                if (error != nil) {
+                    MTLog(@"%@", error);
+                }
+                gestureRecognizer.scale = 1.0000f;
+            }
+            break;
         }
     }
 }

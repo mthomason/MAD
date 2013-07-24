@@ -32,11 +32,6 @@
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
-
-//- (void)setHighlight:(BOOL)selected;
-//- (BOOL)highlight;
-
-//- (void)setSelected:(BOOL)selected;
 - (BOOL)isSelected;
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
