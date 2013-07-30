@@ -10,6 +10,10 @@
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+    return [[self parentObjectLinkLabel] formattedString:dataType forValue:value];
+}
+
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {

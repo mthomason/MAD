@@ -50,6 +50,7 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 
 - (CGRect)frameInSectionForSpacingWithOriginPoint:(CGPoint)origin;
 - (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin;
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end
 

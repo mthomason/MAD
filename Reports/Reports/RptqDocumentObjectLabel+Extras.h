@@ -15,6 +15,8 @@
 
 @interface RptqDocumentObjectLabel (Extras) <MTProtocolCompare>
 
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+
 @end
 
 #endif

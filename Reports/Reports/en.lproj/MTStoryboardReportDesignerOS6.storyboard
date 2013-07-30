@@ -5285,14 +5285,18 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="gfI-4O-LkF"/>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="gfI-4O-LkF">
+                                                    <connections>
+                                                        <action selector="controlValueChanged:" destination="Wuv-x8-ixk" eventType="valueChanged" id="rpn-mc-mHM"/>
+                                                    </connections>
+                                                </stepper>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="gfI-4O-LkF" firstAttribute="centerY" secondItem="yyi-jj-pAE" secondAttribute="centerY" type="default" id="Yis-fK-qj7"/>
+                                            <constraint firstItem="gfI-4O-LkF" firstAttribute="top" secondItem="yyi-jj-pAE" secondAttribute="top" constant="3" id="KLT-JO-WXi"/>
                                             <constraint firstAttribute="trailing" secondItem="gfI-4O-LkF" secondAttribute="trailing" constant="30" id="awr-qn-JwU"/>
-                                            <constraint firstItem="gfI-4O-LkF" firstAttribute="centerY" secondItem="inl-dX-P0k" secondAttribute="centerY" type="default" id="kX7-AC-Wme"/>
+                                            <constraint firstItem="inl-dX-P0k" firstAttribute="centerY" secondItem="yyi-jj-pAE" secondAttribute="centerY" type="default" id="mSt-wM-Ci6"/>
                                             <constraint firstItem="inl-dX-P0k" firstAttribute="leading" secondItem="yyi-jj-pAE" secondAttribute="leading" constant="20" type="default" id="y79-AB-wz7"/>
                                         </constraints>
                                     </tableViewCell>
@@ -5346,6 +5350,8 @@
                     </tableView>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="labelNumberOfDecimals" destination="inl-dX-P0k" id="4hK-5X-xF8"/>
+                        <outlet property="stepperNumberOfDecimals" destination="gfI-4O-LkF" id="Q24-75-yzl"/>
                         <outlet property="tableViewCellCurrency" destination="VQO-qx-ciE" id="vct-hg-DTi"/>
                         <outlet property="tableViewCellCurrencyLocation" destination="Cgk-OS-Qnm" id="aGp-b0-R2Q"/>
                         <outlet property="tableViewCellDecimals" destination="yyi-jj-pAE" id="zqA-17-361"/>

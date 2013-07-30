@@ -455,6 +455,66 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     return result;
 }
 
+#pragma mark - MTProtocolCompare
+
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+    NSString *result;
+    switch (dataType) {
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        case MTDataTypeImage:
+        case MTDataTypeSet:
+        case MTDataTypeTime:
+        case MTDataTypeTimeStamp:
+        case MTDataTypeYear:
+        case MTDataTypeUnknown:
+            result = NSLocalizedString(@"Not implemented.", @"Not implemented.");
+            //            result = [NSString stringWithFormat:@"%@", value];
+            /*            @throw [NSException exceptionWithName: NSInternalInconsistencyException
+             reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+             userInfo: nil];*/
+            
+            break;
+        case MTDataTypeBlob:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeBit:
+        case MTDataTypeFloat:
+        case MTDataTypeInteger:
+        case MTDataTypeLong:
+        case MTDataTypeLongLong:
+        case MTDataTypeInt24:
+        case MTDataTypeEnum:
+        case MTDataTypeDouble:
+        case MTDataTypeDecimal:
+        case MTDataTypeNumber:
+        {
+            if ([value isKindOfClass:[NSNumber class]]) {
+                NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
+                [formatString appendFormat:@"%d", [[self formatNumericDecimals] integerValue]];
+                [formatString appendString:@"f"];
+                result = [NSString stringWithFormat:formatString, [value floatValue]];
+                [formatString release];
+            } else {
+                result = [NSString stringWithFormat:@"%@", value];
+            }
+            break;
+        }
+        case MTDataTypeString:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        default:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+    }
+    if (result == nil) {
+        result = @"";
+    }
+    return result;
+}
+
+
 #pragma mark - MTProtocolLog
 
 - (NSString *)toString {

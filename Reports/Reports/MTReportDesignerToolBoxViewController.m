@@ -23,12 +23,14 @@
 
 @property (nonatomic, retain) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
 @property (nonatomic, retain) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
+@property (nonatomic, retain) MTReportDesignerDocumentObjectFormat       *tableViewControllerDocumentObjectFormat;
 
 @end
 
 @implementation MTReportDesignerToolBoxViewController
 
 - (void)dealloc {
+    [_tableViewControllerDocumentObjectFormat release];
     [_selectedObjectIds release];
     [_navigationBar release];
     [_navigationItemStyle release];
@@ -78,6 +80,7 @@
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
+    
 }
 
 - (void)viewDidLoad {
@@ -144,7 +147,7 @@
     
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Format", @"Format")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
-    
+        //[newViewController setDelegate:self];
     } else if ([sender selectedSegmentIndex] == 3) {
     
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Grouping", @"Grouping")];

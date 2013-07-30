@@ -13,4 +13,6 @@
 
 @interface RptqDocumentObjectChart (Extras) <RptqDocumentObjectFactory>
 
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+
 @end

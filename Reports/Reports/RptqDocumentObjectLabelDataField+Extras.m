@@ -56,6 +56,10 @@
     }
 }
 
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+    return [[self parentObjectLabelDataField] formattedString:dataType forValue:value];
+}
+
 #pragma mark - RptqDocumentObjectFactory
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

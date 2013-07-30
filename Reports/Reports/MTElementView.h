@@ -21,6 +21,7 @@
 - (void)didDeselectElementView:(id)sender animated:(BOOL)animated;
 - (void)didHighlightElementView:(id)sender;
 - (void)didUnhighlightElementView:(id)sender;
+- (void)sizeChanged:(id)sender;
 @end
 
 @interface MTElementView : UIView
@@ -29,6 +30,9 @@
 @property (nonatomic, assign) id <MTElementViewDelegate> delegate;
 
 @property (nonatomic, assign) BOOL displaySelected;
+
+@property (nonatomic, retain) id container;
+@property (nonatomic, retain) id containerGroup;
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;

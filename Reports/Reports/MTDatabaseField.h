@@ -56,12 +56,6 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 - (SEL)selectorForSorting;
 + (SEL)selectorForSorting:(MTDataType)dataType;
 
-- (NSString *)formattedStringForValue:(id)value;
-+ (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
-
-- (NSString *)sqlPredicateStringForValue:(id)value;
-+ (NSString *)sqlPredicateString:(MTDataType)dataType forValue:(id)value;
-
 @end
 
 #endif

@@ -568,8 +568,10 @@
 }
 
 - (NSAttributedString *)fontSizeStringForSizeInPoints:(CGFloat)points {
-    UIFont *boldFont = [UIFont boldSystemFontOfSize:[[[self labelFontSize] font] pointSize]];
-    UIFont *systemFont = [UIFont systemFontOfSize:[[[self labelFontSize] font] pointSize]];
+    CGFloat pointSize = [[[self labelFontSize] font] pointSize];
+
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:pointSize];
+    UIFont *systemFont = [UIFont systemFontOfSize:pointSize];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
 

@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "MTReportDesignerFontSelectorViewController.h"
+#import "MTReportDesignerDocumentObjectFormat.h"
 #import "MTActiveDocument.h"
 #import "RptqDocumentObject+Extras.h"
 

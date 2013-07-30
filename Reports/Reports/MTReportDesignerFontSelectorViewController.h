@@ -21,7 +21,7 @@
 @interface MTReportDesignerFontSelectorViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontArial;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFontCourierNew;

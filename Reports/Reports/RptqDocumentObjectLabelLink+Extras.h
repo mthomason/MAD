@@ -11,8 +11,11 @@
 
 #import "RptqDocumentObjectLabelLink.h"
 #import "MTProtocolCompare.h"
+#import "MTDatabaseField.h"
 
 @interface RptqDocumentObjectLabelLink (Extras) <MTProtocolCompare>
+
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end
 

@@ -18,5 +18,6 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
 
 + (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType;
 + (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType;
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end

@@ -12,4 +12,6 @@
 
 @interface RptqDocumentObjectImage (Extras)
 
+- (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+
 @end

@@ -501,7 +501,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 
                                 [dataForGroup release];
                                 
-                                displayString = [MTDatabaseField formattedString:aggregateType
+                                displayString = [item formattedString:aggregateType
                                                                         forValue:aggregateResult];
                                 break;
                             }
@@ -519,7 +519,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 NSDictionary *rowData = [self rowDataForRow:detailRowToPrint onPage:index];
                                 id value = [rowData objectForKey: tableFieldKey];
                                 MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-                                displayString = [MTDatabaseField formattedString:dataType
+                                displayString = [item formattedString:dataType
                                                                         forValue:value];
                                 break;
                             }
@@ -801,7 +801,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     NSDictionary *rowData = [self rowDataForRow:row onPage:page];
     id value = [rowData objectForKey: tableFieldKey];
     MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-    result = [[[MTDatabaseField formattedString:dataType
+    result = [[[documentObjectDataField formattedString:dataType
                                        forValue:value] retain] autorelease];
     return result;
 }

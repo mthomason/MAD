@@ -37,9 +37,6 @@
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
-@property (nonatomic, assign) CGPoint pinchInitalPointA;
-@property (nonatomic, assign) CGPoint pinchInitalPointB;
-
 @end
 
 @implementation MTElementView
@@ -56,6 +53,8 @@
     [_paddingView release];
     [_imageView release];
     [_managedObjectContext release];
+    [_container release];
+    [_containerGroup release];
 	[super dealloc];
 }
 
@@ -71,6 +70,13 @@
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Use initWithFrame: andObjectId:.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
+}
+
+- (void)setNeedsDisplay {
+    [super setNeedsDisplay];
+    [[self paddingView] setNeedsDisplay];
+    [[self displayLabel] setNeedsDisplay];
+    [[self visibleView] setNeedsDisplay];
 }
 
 - (void)setAlpha:(CGFloat)alpha {
@@ -118,19 +124,21 @@
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
         [[visibleView layer] setBorderWidth:1.0000f];
+        [[visibleView layer] setBorderColor:[[UIColor greenColor] CGColor]];
         [visibleView setBackgroundColor:[UIColor whiteColor]];
-//        [visibleView setBackgroundColor:[UIColor yellowColor]];
-        [visibleView setAutoresizingMask:UIViewAutoresizingNone];
+        [visibleView setBackgroundColor:[UIColor yellowColor]];
+        [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
         [visibleView release];
         
         UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
+        [[labelBackground layer] setBorderColor:[[UIColor redColor] CGColor]];
         [[labelBackground layer] setBorderWidth:1.0000f];
         [labelBackground setBackgroundColor:[UIColor whiteColor]];
 //        [labelBackground setBackgroundColor:[UIColor whiteColor]];
-        [labelBackground setAutoresizingMask:UIViewAutoresizingNone];
+        [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
         [labelBackground release];
@@ -144,19 +152,14 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         //[label setUserInteractionEnabled:NO];
         [label setBackgroundColor:[UIColor whiteColor]];
-//        [label setBackgroundColor:[UIColor whiteColor]];
-        [label setAutoresizingMask:UIViewAutoresizingNone];
+        [label setBackgroundColor:[UIColor lightGrayColor]];
+        [label setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];
         [label release];
 
         [self initalDisplaySettings];
-        
-        UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
-        [pinchGesture setDelegate:self];
-        [self addGestureRecognizer:pinchGesture];
-        [pinchGesture release];
-        
+                
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver:self
                           selector:@selector(managedObjectContextDidSave:)
@@ -171,9 +174,10 @@
 
     for (id updatedObject in updatedObjects) {
         if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
+            MTLog(@"Updated: %@", [updatedObject objectID]);
+            MTLog(@"Updated: %@", [self objectIdTag]);
             if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
                 [self updateDisplayLabel];
-                [self setNeedsDisplay];
                 break;
             }
         }
@@ -204,10 +208,16 @@
     
     if (documentObject != nil) {
 
-        [[self marginView] setFrame:[documentObject marginViewFrame]];
-        [[self visibleView] setFrame:[documentObject paddingViewFrame]];
-        [[self paddingView] setFrame:[documentObject elementViewFrame]];
-        
+        CGRect marginViewFrame = [documentObject marginViewFrame];
+        CGRect paddingViewFrame = [documentObject paddingViewFrame];
+        CGRect elementViewFrame = [documentObject elementViewFrame];
+        MTLog(@"marginViewFrame:  %@", NSStringFromCGRect(marginViewFrame));
+        MTLog(@"paddingViewFrame: %@", NSStringFromCGRect(paddingViewFrame));
+        MTLog(@"elementViewFrame: %@", NSStringFromCGRect(elementViewFrame));
+        [[self marginView] setFrame: marginViewFrame];
+        [[self visibleView] setFrame: paddingViewFrame];
+        [[self paddingView] setFrame: elementViewFrame];
+
         NSString *fontName = [documentObject fontname];
         CGFloat pointSize = [[documentObject fontsize] floatValue];
         
@@ -272,27 +282,27 @@
             case MTVerticalAlignmentTop: {
                 
                 [[self displayLabel] sizeToFit];
-                CGFloat originX = [[self paddingView] bounds].origin.x;
-                CGFloat originY = [[self paddingView] bounds].origin.y;
-                CGFloat sizeWidth = [[self paddingView] bounds].size.width;
-                CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
+                CGFloat originX = [[self paddingView] frame].origin.x;
+                CGFloat originY = [[self paddingView] frame].origin.y;
+                CGFloat sizeWidth = [[self paddingView] frame].size.width;
+                CGFloat sizeHeight = [[self displayLabel] frame].size.height;
                 
                 [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
                 baselineAdjustment = UIBaselineAdjustmentNone;
                 break;
             }
             case MTVerticalAlignmentCenter: {
-                [[self displayLabel] setFrame:[[self paddingView] bounds]];
+                [[self displayLabel] setFrame:[[self paddingView] frame]];
                 baselineAdjustment = UIBaselineAdjustmentAlignCenters;
                 break;
             }
             case MTVerticalAlignmentBottom: {
                 [[self displayLabel] sizeToFit];
                 
-                CGFloat originX = [[self paddingView] bounds].origin.x;
-                CGFloat originY = [[self paddingView] bounds].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] bounds].size.height;
-                CGFloat sizeWidth = [[self paddingView] bounds].size.width;
-                CGFloat sizeHeight = [[self displayLabel] bounds].size.height;
+                CGFloat originX = [[self paddingView] frame].origin.x;
+                CGFloat originY = [[self paddingView] frame].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] frame].size.height;
+                CGFloat sizeWidth = [[self paddingView] frame].size.width;
+                CGFloat sizeHeight = [[self displayLabel] frame].size.height;
                 [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
                 baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
                 break;
@@ -301,12 +311,18 @@
                 baselineAdjustment = UIBaselineAdjustmentNone;
                 break;
         }
-        [[self displayLabel] setNeedsDisplay];
         [displayFont release];
         [attributtedString release];
     
-    }
 
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
+//        [[self visibleView] setNeedsLayout];
+//        [[self paddingView] setNeedsLayout];
+//        [[self displayLabel] setNeedsLayout];
+//        [[self displayLabel] setNeedsDisplay];
+    }
+//    [self setNeedsDisplay];
 }
 
 #pragma mark - Members
@@ -360,67 +376,6 @@
             [[self delegate] didSelectElementView:self];
         } else {
             [[self delegate] didDeselectElementView:self animated:YES];
-        }
-    }
-}
-
-- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer {
-    switch ([gestureRecognizer state]) {
-        case UIGestureRecognizerStatePossible:
-            break;
-        case UIGestureRecognizerStateBegan: {
-            if ([gestureRecognizer numberOfTouches] >= 2) {
-                [self setPinchInitalPointA:[gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]]];
-                [self setPinchInitalPointB:[gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]]];
-            }
-            break;
-        }
-        case UIGestureRecognizerStateChanged: {
-            if ([gestureRecognizer numberOfTouches] >= 2) {
-                CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-                CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-                CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
-                CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
-                CGFloat newDifferenceX = fabsf(newTouchA.x - newTouchB.x);
-                CGFloat newDifferenceY = fabsf(newTouchA.y - newTouchB.y);
-                CGFloat scaleWidth = differenceX != 0 ? newDifferenceX / differenceX : 1.0000f;
-                CGFloat scaleHeight = differenceY != 0 ? newDifferenceY / differenceY : 1.0000f;
-                gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, scaleWidth, scaleHeight);
-                gestureRecognizer.scale = 1.0000f;
-            }
-            break;
-        }
-        case UIGestureRecognizerStateCancelled:
-        case UIGestureRecognizerStateFailed: {
-            gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, 1.0000f, 1.0000f);
-            [self updateDisplayLabel];
-            [self setNeedsDisplay];
-            gestureRecognizer.scale = 1.0000f;
-            break;
-        }
-        case UIGestureRecognizerStateEnded: {
-            if ([gestureRecognizer numberOfTouches] >= 2) {
-                CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-                CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-                CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
-                CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
-                CGFloat newDifferenceX = fabsf(newTouchA.x - newTouchB.x);
-                CGFloat newDifferenceY = fabsf(newTouchA.y - newTouchB.y);
-                CGFloat scaleWidth = differenceX != 0 ? newDifferenceX / differenceX : 1.0000f;
-                CGFloat scaleHeight = differenceY != 0 ? newDifferenceY / differenceY : 1.0000f;
-                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-                CGFloat sizeWidth = nearbyintf(scaleWidth * [[documentObject sizewidth] floatValue]);
-                CGFloat sizeHeight = nearbyintf(scaleHeight * [[documentObject sizeheight] floatValue]);
-                [documentObject setSizewidth:@(sizeWidth)];
-                [documentObject setSizeheight:@(sizeHeight)];
-                NSError *error = nil;
-                [[self managedObjectContext] save:&error];
-                if (error != nil) {
-                    MTLog(@"%@", error);
-                }
-                gestureRecognizer.scale = 1.0000f;
-            }
-            break;
         }
     }
 }
