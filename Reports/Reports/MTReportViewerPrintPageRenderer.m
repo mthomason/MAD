@@ -153,6 +153,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     [self setCachedPageSize:CGSizeZero];
     [self setCachedPageRect:CGRectZero];
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
+
+        [standardUserDefaults setObject:NSStringFromCGSize(CGSizeZero) forKey:@"MTCachedSizeHorizontal"];
+        [standardUserDefaults setObject:NSStringFromCGSize(CGSizeZero) forKey:@"MTCachedSizeVertical"];
+        [standardUserDefaults synchronize];
+    }
 }
 
 - (id)initWithDocument:(RptqDocument *)document {
@@ -836,7 +843,27 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 //  Data is cached by group, page, and report.
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
-    if (CGSizeEqualToSize([self cachedPageSize], printableSize) == NO || [self didRefresh]) {
+
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    UIManagedDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    BOOL landscape = (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    CGSize cachedSizeHorizontal = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeHorizontal"]);
+    CGSize cachedSizePortrait   = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeVertical"]);
+    BOOL cacheAgain = (landscape ? CGSizeEqualToSize(cachedSizeHorizontal, printableSize) : CGSizeEqualToSize(cachedSizePortrait, printableSize)) ||
+                        [[activeDocument fileURL] isEqual:[standardUserDefaults objectForKey:@"MTCachedFileUrl"]] == NO;
+    
+    if (cacheAgain || [self didRefresh]) {
+        if (landscape) {
+            [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeHorizontal"];
+        } else {
+            [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeVertical"];
+        }
+        [standardUserDefaults setURL:[activeDocument fileURL] forKey:@"MTCachedFileUrl"];
+        [standardUserDefaults synchronize];
+        
         [self setDidRefresh:NO];
         [self setCachedPageSize:printableSize];
         [self setCachedPageRect:[self printableRect]];
@@ -870,24 +897,27 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         if (name) {
             NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
             //NSData *readData = [NSData dataWithContentsOfFile:path];
-            NSData *readData = [NSData dataWithContentsOfURL:url options:0 error:&error];
+            NSData *readData = [[NSData dataWithContentsOfURL:url options:0 error:&error] retain];
             if (readData) {
                 error = nil;
                 cachedResultsForReportSerialized = [[NSPropertyListSerialization propertyListWithData:readData options:0 format:nil error:&error] retain];
             }
+            [readData release];
         }
+        NSLog(@"Step 1");
 
+        //This takes a long time....
         NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
-        //NSSet *resultsByRowSet = [NSSet setWithArray:[cachedResultsForReport allValues]];
+        //NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey
-                                                                       ascending: YES];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
         NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
         
+        NSLog(@"Step 2");
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
@@ -903,6 +933,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         sortedResultsByRow = [sortedResultsByRow retain];
         
+        NSLog(@"Step 3");
+
         [self setCachedDataByReport:sortedResultsByRow];
         
         id groupedRows = [[self cachedGroupedResults:sortedResultsByRow
@@ -919,11 +951,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self cacheReportHeaderWithValueDictionary:groupedRows];
         
         BOOL detailPrinted = NO;
+        NSLog(@"Step 4");
+
         [self cacheGroupLevel:[query firstQueryGroup]
                   groupedRows:groupedRows
              groupedRowsLevel:0
                 detailPrinted:&detailPrinted];
-        
+        NSLog(@"Step 5");
+
         CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] layoutHeight] floatValue];
         
         [self cachePageBreakWithNextItemHeight: reportFooterHeight
@@ -966,7 +1001,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [sortDescriptor release];
 
     }
-    
+
 }
 
 - (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup

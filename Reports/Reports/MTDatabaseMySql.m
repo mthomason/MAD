@@ -250,7 +250,7 @@
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-    queryString = [NSString stringWithFormat:@"%@ LIMIT 220", queryString];
+    queryString = [NSString stringWithFormat:@"%@ LIMIT 2000", queryString];
 
     RptqQueryCache *queryCache = nil;
     RptqQuery *query = [[database hasQueries] anyObject];

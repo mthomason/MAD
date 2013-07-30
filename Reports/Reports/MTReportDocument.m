@@ -44,7 +44,7 @@
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     if ([sqlSelect length] > 0) {
-        sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 220", sqlSelect];
+        sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 2000", sqlSelect];
         [mnsDatabase cacheReportQueryForManagedObjectContext: managedObjectContext completion: ^(MTDatabase *database, RptqQueryCache *cache) {
             
             //[self save: ^(BOOL success) {

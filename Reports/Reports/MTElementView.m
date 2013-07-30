@@ -114,9 +114,7 @@
         [self setDisplayHighlighted: NO];
         
         UIView *marginView = [self retain];
-        //[marginView setFrame: frame];
         [marginView setBackgroundColor:[UIColor whiteColor]];
-//        [marginView setBackgroundColor:[UIColor edaBlackFiftyPercent]];
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
@@ -126,7 +124,6 @@
         [[visibleView layer] setBorderWidth:1.0000f];
         [[visibleView layer] setBorderColor:[[UIColor greenColor] CGColor]];
         [visibleView setBackgroundColor:[UIColor whiteColor]];
-        [visibleView setBackgroundColor:[UIColor yellowColor]];
         [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
@@ -137,7 +134,6 @@
         [[labelBackground layer] setBorderColor:[[UIColor redColor] CGColor]];
         [[labelBackground layer] setBorderWidth:1.0000f];
         [labelBackground setBackgroundColor:[UIColor whiteColor]];
-//        [labelBackground setBackgroundColor:[UIColor whiteColor]];
         [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
@@ -150,9 +146,7 @@
         [imageView release];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        //[label setUserInteractionEnabled:NO];
         [label setBackgroundColor:[UIColor whiteColor]];
-        [label setBackgroundColor:[UIColor lightGrayColor]];
         [label setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];
