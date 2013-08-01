@@ -114,12 +114,11 @@
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
+    [request setFetchLimit: 1];
+    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
     NSError *error = nil;
     NSArray *results = [moc executeFetchRequest:request error:&error];
-    RptqDocumentSection *result = nil;
-    if (results) result = [results lastObject];
-    return result;
+    return [results lastObject];
 }
 
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
@@ -198,7 +197,7 @@
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                                          forQuery:(RptqQuery *)query {
     
-    NSInteger numberOfGroups = [RptqQueryGroup numberOfGroupsForQuery:query];
+    NSInteger numberOfGroups = [[query hasQueryGroups] count];//[RptqQueryGroup numberOfGroupsForQuery:query];
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
         

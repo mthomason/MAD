@@ -8,6 +8,7 @@
 //
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
+#import "SectionEnumerator.h"
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
@@ -174,6 +175,7 @@
 }
 
 - (NSArray *)updatedItemAttributesBySection {
+    
     NSInteger numberOfSections = 1;
     
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
@@ -181,8 +183,7 @@
     for (NSInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
         
         NSInteger numberOfItems = [[self delegate] numberOfItemsInSection:sectionIndex ofCollectionView:[self collectionView]];
-       //NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
-        
+
         NSMutableArray *itemLayouts = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
         
         for (NSInteger itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {

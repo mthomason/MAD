@@ -366,11 +366,6 @@
 		4C3727C3168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */; };
 		4C3727C4168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */; };
 		4C3727C5168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */; };
-		4C3727D5168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */; };
-		4C3727D6168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */; };
-		4C3727D7168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */; };
-		4C3727D8168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */; };
-		4C3727D9168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */; };
 		4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C3727DD168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C3727DE168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */; };
@@ -2106,8 +2101,6 @@
 		4C3727BA168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReuseableViewDefault.m; sourceTree = "<group>"; };
 		4C3727C0168A402A007DA7C3 /* UICollectionReusableView+Reuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionReusableView+Reuse.h"; sourceTree = "<group>"; };
 		4C3727C1168A402A007DA7C3 /* UICollectionReusableView+Reuse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionReusableView+Reuse.m"; sourceTree = "<group>"; };
-		4C3727D3168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewFlowLayoutDesignerSection.h; sourceTree = "<group>"; };
-		4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewFlowLayoutDesignerSection.m; sourceTree = "<group>"; };
 		4C3727DA168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReusableViewFloatingLabel.h; sourceTree = "<group>"; };
 		4C3727DB168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReusableViewFloatingLabel.m; sourceTree = "<group>"; };
 		4C384E2414B29789007B4F48 /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3047,8 +3040,6 @@
 				4CAB1790150FE38400BA0A9B /* MTRulerView.m */,
 				4CC24AA31503E3AB00C4EE98 /* MTGradientView.h */,
 				4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */,
-				4C3727D3168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.h */,
-				4C3727D4168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m */,
 				4C3727B9168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.h */,
 				4C3727BA168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m */,
 				4C3727DA168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.h */,
@@ -5779,7 +5770,6 @@
 				4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4C3727BC168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C3727C3168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
-				4C3727D6168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DD168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED25168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339451693E5B400390B3A /* MTFont.m in Sources */,
@@ -5986,7 +5976,6 @@
 				4C3727B7168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4C3727BE168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C3727C5168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
-				4C3727D8168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DF168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED27168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339471693E5B400390B3A /* MTFont.m in Sources */,
@@ -6174,7 +6163,6 @@
 				4C3727B6168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4C3727BD168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C3727C4168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
-				4C3727D7168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DE168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED26168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339461693E5B400390B3A /* MTFont.m in Sources */,
@@ -6402,7 +6390,6 @@
 				4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4C3727BB168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C3727C2168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
-				4C3727D5168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED24168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339441693E5B400390B3A /* MTFont.m in Sources */,
@@ -6592,7 +6579,6 @@
 				4C860BB6167EE19B00AC1904 /* MTDataStructuresTest.m in Sources */,
 				4CF8D424168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C3727BF168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
-				4C3727D9168AA06B007DA7C3 /* MTCollectionViewFlowLayoutDesignerSection.m in Sources */,
 				4C3727E0168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED28168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339481693E5B400390B3A /* MTFont.m in Sources */,

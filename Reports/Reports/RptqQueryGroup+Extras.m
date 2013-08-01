@@ -140,7 +140,7 @@
     //NSArray *hasQueryGroupsSorted = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
     //return [hasQueryGroupsSorted lastObject];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self inQuery], ([[self weight] integerValue] + 1)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[self weight] integerValue] + 1)];
     [request setPredicate:predicate];
     [request setFetchLimit:1];
     NSError *error = nil;
@@ -151,7 +151,7 @@
 
 - (id)previous {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == %d", [self inQuery], ([[self weight] integerValue] - 1)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[self weight] integerValue] - 1)];
     [request setPredicate:predicate];
     [request setFetchLimit:1];
     NSError *error = nil;

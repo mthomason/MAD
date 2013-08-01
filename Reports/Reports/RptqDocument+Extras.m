@@ -169,6 +169,7 @@
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     RptqDocument *document = nil;
     NSFetchRequest *docFetchRequest = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocument class])];
+    [docFetchRequest setFetchLimit:1];
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
     if (!error) {

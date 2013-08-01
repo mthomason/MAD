@@ -232,7 +232,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[viewRuler layer] setCornerRadius: MTReportDesignerCornerRadius];
     [[viewRuler layer] setMasksToBounds: YES];
     [[viewRuler layer] setBorderColor: shadowColor];
-    [[viewRuler layer] setBorderWidth: 3.0000f];
+    [[viewRuler layer] setBorderWidth: 1.0000f];
     [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
 
 
@@ -389,7 +389,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[sectionControlView layer] setBorderColor: [[UIColor blackColor] CGColor]];
         [[sectionControlView layer] setBorderWidth: 1.0000f];
         [[collectionView layer] setBorderColor: shadowColor];
-        [[collectionView layer] setBorderWidth: 3.0000f];
+        [[collectionView layer] setBorderWidth: 1.0000f];
 
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
         
@@ -1118,7 +1118,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)applyBorderToView:(UIView *)view {
     [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[view layer] setBorderWidth:3.0000f];
+    [[view layer] setBorderWidth:1.0000f];
 }
 
 - (BOOL)removeBorderFromView:(UIView *)view {
@@ -2209,7 +2209,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     if (finished) {
                         CGPoint newCenter = [gestureRecognizer locationInView:[self designerContentView]];
                         [[gestureRecognizer view] setCenter: newCenter];
-                        [[self designerContentView] addSubview: [gestureRecognizer view]];
+                        [[self designerScrollView] addSubview: [gestureRecognizer view]];
                     }
 
                 }];

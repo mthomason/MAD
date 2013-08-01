@@ -50,11 +50,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @property (nonatomic, assign) CGSize cachedPageSize;
 @property (nonatomic, assign) CGRect cachedPageRect;
 
+@property (nonatomic, retain) NSArray *sortedQueryGroups;
+
 @end
 
 @implementation MTReportViewerPrintPageRenderer
 
 - (oneway void)release {
+    [_sortedQueryGroups release];
     
     [_cachedLayoutByPage release];
     [_cachedDataByPage release];
@@ -77,7 +80,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)retain {
     self = [super retain];
     if (self) {
-        
+        [_sortedQueryGroups retain];
         [_cachedLayoutByPage retain];
         [_cachedDataByPage retain];
         [_cachedDataByGroup retain];
@@ -100,7 +103,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)copyWithZone:(NSZone *)zone {
     MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:[self document]];
     if (copy) {
-        
+        [copy setSortedQueryGroups:[self sortedQueryGroups]];
         [copy setDocument:[self document]];
         [copy setCachedLayoutByPage:[self cachedLayoutByPage]];
         [copy setCachedDataByGroup:[self cachedDataByGroup]];
@@ -203,6 +206,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGPathAddRect(path, NULL, letterRect);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextAddPath(context, path);
+    CGPathRelease(path);
+    
     [[UIColor whiteColor] setFill];
     CGContextDrawPath(context, kCGPathFill);
     [self drawPageAtIndex:0 inRect:letterRect];
@@ -408,11 +413,20 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 MTAggregateGroupByType aggregateGroupType = [[aggregateField groupType] integerValue];
 
                                 switch (aggregateGroupType) {
+                                        // FIXME: Check to see which ones of these are correct.
+                                    case MTAggregateGroupByTypePage: {
+                                        //dataForGroup = [[[self cachedDataByPage] objectAtIndex:pageNumber] retain];
                                         
-                                    case MTAggregateGroupByTypePage:
-                                        dataForGroup = [[[self cachedDataByPage] objectAtIndex:pageNumber] retain];
+                                        NSArray *pageIndices = [[self cachedDataByPage] objectAtIndex:index];
+                                        dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
+                                        for (NSNumber *dataIndex in pageIndices) {
+                                            NSInteger i = [dataIndex integerValue];
+                                            id objectToAdd = [[self cachedDataByReport] objectAtIndex: i];
+                                            [(NSMutableArray *)dataForGroup addObject:objectToAdd];
+                                        }
+                                        
                                         break;
-                                        
+                                    }
                                     case MTAggregateGroupByTypeSection:
                                         dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys] retain];
                                         break;
@@ -422,7 +436,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         break;
                                         
                                     default:
-                                        dataForGroup = [[[self cachedDataByReport] objectAtIndex:pageNumber] retain];
+                                        dataForGroup = [[self cachedDataByReport] retain];
                                         break;
                                 }
                                 
@@ -448,7 +462,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         id result = nil;
                                         for (id object in dataForGroup) {
-                                            id n = [self valueForGroupDetailData:object ofType:aggregateGroupType withKey:fieldKey andPage:index];
+                                            id n = [object objectForKey: fieldKey];
                                             if ([n compare:result] == NSOrderedDescending) {result = n;}
                                         }
                                         aggregateResult = result;
@@ -461,8 +475,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         id sum = @(0);
                                         for (id object in dataForGroup) {
-                                            id n = [self valueForGroupDetailData:object ofType:aggregateGroupType withKey:fieldKey andPage:index];
-                                            
+                                            id n = [object objectForKey: fieldKey];
                                             sum = [self sumObject:sum andObject:n forType:aggregateType];
                                             
                                         }
@@ -480,7 +493,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         id result = nil;
                                         for (id object in dataForGroup) {
-                                            id n = [self valueForGroupDetailData:object ofType:aggregateGroupType withKey:fieldKey andPage:index];
+                                            id n = [object objectForKey: fieldKey];
                                             if ([n compare:result] == NSOrderedAscending) {result = n;}
                                         }
                                         aggregateResult = result;
@@ -491,8 +504,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         id sum = @(0);
                                         for (id object in dataForGroup) {
-                                            id n = [self valueForGroupDetailData:object ofType:aggregateGroupType withKey:fieldKey andPage:index];
-
+                                            id n = [object objectForKey: fieldKey];
                                             sum = [self sumObject:sum andObject:n forType:aggregateType];
                                             
                                         }
@@ -611,6 +623,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         default:
             break;
     }
+    [font release];
     return @{NSFontAttributeName : customFont,
              NSUnderlineStyleAttributeName : underline,
              NSStrikethroughStyleAttributeName : strikethough,
@@ -756,24 +769,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [super drawFooterForPageAtIndex:index inRect:footerRect];
 }
 
-- (id)valueForGroupDetailData:(id)object ofType:(MTAggregateGroupByType)groupType withKey:(NSString *)fieldKey andPage:(NSUInteger)page {
-    id value;
-    if (groupType == MTAggregateGroupByTypePage) {
-        NSUInteger row = [object integerValue];
-        NSDictionary *rd = [[self cachedDataByReport] objectAtIndex:row];//[self rowDataForRow:row onPage:page];
-        value = [rd objectForKey: fieldKey];
-        
-    } else if (groupType == MTAggregateGroupByTypeReport) {
-        
-        value = [object objectForKey: fieldKey];
-    } else if (groupType == MTAggregateGroupByTypeSection) {
-        value = [object objectForKey: fieldKey];
-    } else {
-        value = [object objectForKey: fieldKey];
-    }
-    return value;
-}
-
 #pragma mark - Object methods
 
 - (NSDictionary *)rowDataForRow:(NSUInteger)row onPage:(NSUInteger)page {
@@ -881,6 +876,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [sec setLayoutHeight:@(layoutHight)];
             [[sec managedObjectContext] save:nil];
         }
+        [enumerator release];
         
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
         
@@ -900,23 +896,23 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSData *readData = [[NSData dataWithContentsOfURL:url options:0 error:&error] retain];
             if (readData) {
                 error = nil;
-                cachedResultsForReportSerialized = [[NSPropertyListSerialization propertyListWithData:readData options:0 format:nil error:&error] retain];
+                cachedResultsForReportSerialized = [[[NSPropertyListSerialization propertyListWithData:readData options:0 format:nil error:&error] retain] autorelease];
             }
             [readData release];
         }
         NSLog(@"Step 1");
 
         //This takes a long time....
-        NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
-        //NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
+
+        
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
         NSArray *sortedHasQueryGroups = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
+        [self setSortedQueryGroups:sortedHasQueryGroups];
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-        
         NSLog(@"Step 2");
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
@@ -930,7 +926,26 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
         [sortedSortDescriptorsGroup release];
 
-        NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
+        //Get unique, distinct, and sorted... slowly
+        NSDate *start = [NSDate date];
+
+        //NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
+        //NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
+        
+        
+        //NSLog(@"Speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
+        //NSLog(@"Results %@", sortedResultsByRow);
+        //Get unique, distinct, and sorted... quickly
+        NSArray *sortedResultsByRow = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
+        
+        start = [NSDate date];
+
+        //resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
+        //sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
+        
+        NSLog(@"Result speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
+        //NSLog(@"Results %@", sortedResultsByRow);
+        
         sortedResultsByRow = [sortedResultsByRow retain];
         
         NSLog(@"Step 3");
@@ -1025,6 +1040,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             }
 
             [desc release];
+            
+            
             for (id key in loopEnumerator) {
                 id obj = [[groupedRows objectForKey:key] retain];
                 
@@ -1041,7 +1058,20 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
                 [self cacheGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
                 
-                RptqQueryGroup *nextGroup = [queryGroup next];
+                
+                RptqQueryGroup *nextGroup = nil;
+                if ([[self sortedQueryGroups] count] > groupedRowsLevel + 1) {  //Is there a next group?  Short ciruit
+                    if (queryGroup != nil) {
+                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[queryGroup weight] integerValue] + 1)];
+                        NSArray *filteredGroups = [[self sortedQueryGroups] filteredArrayUsingPredicate:predicate];
+                        if ([filteredGroups count] >= 1) {
+                            nextGroup = [filteredGroups objectAtIndex:0];
+                        }
+                    }
+                }
+
+                //This old method was SLOW!!!!
+                //RptqQueryGroup *nextGroup = [queryGroup next];
                 
                 
                 if (nextGroup != nil) {

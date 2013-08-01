@@ -250,7 +250,7 @@
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-    queryString = [NSString stringWithFormat:@"%@ LIMIT 2000", queryString];
+    queryString = [NSString stringWithFormat:@"%@ LIMIT 100000", queryString];
 
     RptqQueryCache *queryCache = nil;
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -280,13 +280,14 @@
             error = nil;
             [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
         }
+        [queryCache setCacheDate:[NSDate date]];
+        [query setHasQueryCache:queryCache];
 
     } else {
         [error presentErrorToUser];
     }
-    [queryCache setCacheDate:[NSDate date]];
-    [query setHasQueryCache:queryCache];
-    [queryCache release];
+  
+    [serv release];
     
     completion(self, [query hasQueryCache]);
 }
@@ -316,8 +317,8 @@
                                  schemaField.name, schemaField.inTable.name];
                 fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
             }
-            
-            completion(success, error, [[[fetch results] retain] autorelease]);
+            [serv release];
+            completion(success, error, [fetch results]);
         });
     });
 
