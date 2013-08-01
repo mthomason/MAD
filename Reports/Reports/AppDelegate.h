@@ -17,7 +17,8 @@
 extern NSString * const MTBundleIdDesigner;
 extern NSString * const MTBundleIdViewer;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder
+    <UIApplicationDelegate, UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 

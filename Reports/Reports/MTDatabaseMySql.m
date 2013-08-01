@@ -66,7 +66,7 @@
                     }
                 }
             }
-            
+            [serv release];
             completion(success, error, results);
         });
     });
@@ -138,10 +138,12 @@
             } else {
                 [error presentErrorToUser];
             }
-//            [resultsDictionary autorelease];
+            [serv release];
+
             [results release];
             NSArray *resultsArray = [[resultsDictionary allValues] retain];
             [resultsDictionary release];
+            
             completion(success, error, [resultsArray autorelease]);
         });
     });

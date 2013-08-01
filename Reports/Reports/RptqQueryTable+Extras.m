@@ -101,9 +101,9 @@
     RptqQuery *query = [RptqDocument queryForActiveDocument];
     NSSet *queryTablesSet = [query hasQueryTables];
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [queryTablesSet sortedArrayUsingDescriptors:@[namesAccending]];
-
-    return [[queryTablesArray retain] autorelease];
+    NSArray *queryTablesArray = [[queryTablesSet sortedArrayUsingDescriptors:@[namesAccending]] retain];
+    [namesAccending release];
+    return [queryTablesArray autorelease];
 }
 
 

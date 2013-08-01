@@ -253,12 +253,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSNumber *groupLevel = nil;
             
             RptqDocumentSection *documentSection = nil;
-            CGFloat sizeHeight = CGSizeZero.height;
             
             if ([MTPageDetail isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasDetailSection];
-                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 [[UIColor whiteColor] set];
                 
@@ -267,7 +265,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } else if ([MTPageHeader isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasPageHeaderSection];
-                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 if ([self debugMode]) {
                     [[UIColor yellowColor] set];
@@ -278,8 +275,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } else if ([MTPageFooter isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasPageFooterSection];
-                sizeHeight = [[documentSection layoutHeight] floatValue];
-                originY = pageRect.origin.y + pageRect.size.height - sizeHeight;
+                CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
+                originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
 
                 if ([self debugMode]) {
                     [[UIColor yellowColor] set];
@@ -292,7 +289,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } else if ([MTReportHeader isEqualToString:pageSectionId]) {
                 
                 documentSection = [[self document] hasReportHeaderSection];
-                sizeHeight = [[documentSection layoutHeight] floatValue];
 
                 if ([self debugMode]) {
                     [[UIColor greenColor] set];
@@ -307,7 +303,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
                 CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
-                sizeHeight = sizeHeightReportFooter;
 
                 if ([self debugMode]) {
                     [[UIColor greenColor] set];
@@ -319,8 +314,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 
                 groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                 documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
-                
-                sizeHeight = [[documentSection layoutHeight] floatValue];
 
                 if ([self debugMode]) {
                     [[UIColor lightGrayColor] set];
@@ -335,7 +328,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 //[groupLevelKeys setObject:@"" atIndexedSubscript:groupLevel];
                 query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                 documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-                sizeHeight = [[documentSection layoutHeight] floatValue];
                 
                 if ([self debugMode]) {
                     [[UIColor lightTextColor] set];
@@ -344,7 +336,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 }
 
             }
-            sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
+            CGFloat sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
             //CGFloat sectionHeight = sizeHeight;
             sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
             

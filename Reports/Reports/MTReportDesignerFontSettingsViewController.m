@@ -397,11 +397,11 @@
         [[self stepperMarginBottom] setValue:[marginBottomHolder doubleValue]];
         
         displayNumber = numberOfMarginLeft == 1 ? marginLeftHolder : nil;
-        [[self labelMarginLeft] setAttributedText: [self marginLeftForValue:marginLeftHolder andFontSize:labelSize]];
+        [[self labelMarginLeft] setAttributedText: [self marginLeftForValue:displayNumber andFontSize:labelSize]];
         [[self stepperMarginLeft] setValue:[marginLeftHolder doubleValue]];
         
         displayNumber = numberOfMarginRight == 1 ? marginRightHolder : nil;
-        [[self labelMarginRight] setAttributedText: [self marginRightForValue:marginRightHolder andFontSize:labelSize]];
+        [[self labelMarginRight] setAttributedText: [self marginRightForValue:displayNumber andFontSize:labelSize]];
         [[self stepperMarginRight] setValue:[marginRightHolder doubleValue]];
 
         displayNumber = numberOfPaddingTop == 1 ? paddingTopHolder : nil;
@@ -726,11 +726,15 @@
     [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
 }
 
+- (void)emptySelector:(id)whofuckingCares {
+    
+}
+
 - (IBAction)controlValueChanged:(id)sender {
     MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
-    SEL valueChangedAction;
+    SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
     
     if ([sender isEqual:[self stepperFontSize]]) {

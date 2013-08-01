@@ -15,7 +15,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemPrint;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
-
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemDone;
 
 @property (nonatomic, assign) NSUInteger numberOfPages;
 @property (nonatomic, assign) NSUInteger currentPageIndex;
@@ -29,12 +29,14 @@
 @property (nonatomic, retain) IBOutlet UILabel *labelDateLastRefreshed;
 
 @property (nonatomic, retain) NSDate *lastCacheDate;
-@property (nonatomic, assign) NSTimer *timerLabelTimeSinceRefreh;
+@property (nonatomic, retain) NSTimer *timerLabelTimeSinceRefreh;
 
 @property (atomic, assign) BOOL isRefreshing;
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
+
+@property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
 @end
 
@@ -42,9 +44,12 @@
 
 - (void)dealloc {
     if (_timerLabelTimeSinceRefreh != nil) {
-        if ([_timerLabelTimeSinceRefreh isValid]) {
-            [_timerLabelTimeSinceRefreh invalidate];
+        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
+            if ([_timerLabelTimeSinceRefreh isValid]) {
+                [_timerLabelTimeSinceRefreh invalidate];
+            }
         }
+        [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
     [_documentStatusView release];
@@ -57,6 +62,7 @@
     [_barButtonItemSendToPdf release];
     [_labelDateLastRefreshed release];
     [_statusLabelWidthConstraint release];
+    [_barButtonItemDone release];
     [super dealloc];
 }
 
@@ -71,6 +77,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setIsRefreshing:NO];
+    [self setUpdatingOfTimerIsPaused:NO];
     _timerLabelTimeSinceRefreh = nil;
     _lastCacheDate = nil;
     [[self labelDateLastRefreshed] setText:@""];
@@ -87,22 +94,15 @@
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
     
-    [[self view] setBackgroundColor:[UIColor blueColor]];
+    [[self view] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
     [self setDataSource:self];
     [self setDelegate:self];
     
     [self setCurrentPageIndex:0];
     
-    //[self reloadReportView];
     UIViewController *blankPage = [[UIViewController alloc] init];
     [self setViewControllers:@[blankPage] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
     [blankPage release];
-    /*
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1 ofPages:1];
-    [pageOne setDelegate:self];
-    [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
-    [pageOne release];
-    */
 
 }
 
@@ -140,70 +140,69 @@
 
     } else {
         NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
-        NSString *timeInterval;
         if (lastRefresh != nil) {
             
             NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
             [self setLastCacheDate: lastD];
             [lastD release];
-            
             [self updateLateRefreshedLabel:self];
             
-        } else {
-            timeInterval = NSLocalizedString(@"No cached data.", @"No cached data.");
         }
     }
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
-    
-    MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
-    
-    
-    CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
-    CGFloat width = [[self view] bounds].size.width - offsetX - 105.0000f;
-    [[self documentStatusView] setDocumentMessage:[dateStringAndInterval former]];
-    [[self labelDateLastRefreshed] setText:[dateStringAndInterval former]];
-    CGSize printSize = [[dateStringAndInterval former] sizeWithFont:[[self labelDateLastRefreshed] font]];
-    CGSize targetSize = CGSizeMake(printSize.width, [[self labelDateLastRefreshed] frame].size.height);
-    CGSize labelSize = [[self labelDateLastRefreshed] systemLayoutSizeFittingSize:targetSize];
-    [[self labelDateLastRefreshed] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width, labelSize.height)];
-    [[[self labelDateLastRefreshed] superview] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width - offsetX, labelSize.height)];
-    MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
-    
-    NSTimeInterval updateLabelInSeconds;
-    
-    switch (resolution) {
-        case MTDateResolutionDay:
-            updateLabelInSeconds = 86400.0;
-            break;
-        case MTDateResolutionHour:
-            updateLabelInSeconds = 3600.0;
-            break;
-        case MTDateResolutionMinute:
-            updateLabelInSeconds = 60.0;
-            break;
-        case MTDateResolutionSecond:
-            updateLabelInSeconds = 1.0;
-            break;
-        case MTDateResolutionMillisecond:
-            updateLabelInSeconds = 0.1;
-            break;
-        default:
-            updateLabelInSeconds = 86400;
-            break;
-    }
-    if ([self timerLabelTimeSinceRefreh] != nil) {
-        if ([[self timerLabelTimeSinceRefreh] isValid]) {
-            [[self timerLabelTimeSinceRefreh] invalidate];
+    if ([self updatingOfTimerIsPaused] == NO) {
+        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+        
+        CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
+        CGFloat width = [[self view] bounds].size.width - offsetX - 105.0000f;
+        [[self documentStatusView] setDocumentMessage:[dateStringAndInterval former]];
+        [[self labelDateLastRefreshed] setText:[dateStringAndInterval former]];
+        CGSize printSize = [[dateStringAndInterval former] sizeWithFont:[[self labelDateLastRefreshed] font]];
+        CGSize targetSize = CGSizeMake(printSize.width, [[self labelDateLastRefreshed] frame].size.height);
+        CGSize labelSize = [[self labelDateLastRefreshed] systemLayoutSizeFittingSize:targetSize];
+        [[self labelDateLastRefreshed] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width, labelSize.height)];
+        [[[self labelDateLastRefreshed] superview] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width - offsetX, labelSize.height)];
+        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
+        
+        NSTimeInterval updateLabelInSeconds;
+        
+        switch (resolution) {
+            case MTDateResolutionDay:
+                updateLabelInSeconds = 86400.0;
+                break;
+            case MTDateResolutionHour:
+                updateLabelInSeconds = 3600.0;
+                break;
+            case MTDateResolutionMinute:
+                updateLabelInSeconds = 60.0;
+                break;
+            case MTDateResolutionSecond:
+                updateLabelInSeconds = 1.0;
+                break;
+            case MTDateResolutionMillisecond:
+                updateLabelInSeconds = 0.1;
+                break;
+            default:
+                updateLabelInSeconds = 86400;
+                break;
         }
-        [self setTimerLabelTimeSinceRefreh:nil];
+        if ([self timerLabelTimeSinceRefreh] != nil) {
+            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+                if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                    [[self timerLabelTimeSinceRefreh] invalidate];
+                }
+            }
+            [self setTimerLabelTimeSinceRefreh:nil];
+        }
+        NSTimer *t = [[NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:self
+                                                    selector:@selector(updateLateRefreshedLabel:) userInfo:nil
+                                                     repeats:NO] retain];
+        [self setTimerLabelTimeSinceRefreh:t];
+        [t release];
+        
     }
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:self
-                                                selector:@selector(updateLateRefreshedLabel:) userInfo:nil
-                                                 repeats:NO];
-    [self setTimerLabelTimeSinceRefreh:t];
-    
 }
 
 
@@ -256,6 +255,7 @@
     dispatch_async(queuePriorityBackground, ^{
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            //[self setIsRefreshing:NO];
             [self reload];
         });
     });
@@ -281,28 +281,24 @@
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
-    
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
-    [[pageOne view] setFrame:[[self view] bounds]];
-    [pageOne setDelegate:self];
-    [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-        
-    }];
-    [pageOne release];
 }
 
 #pragma mark - Actions
 
 - (IBAction)refresh:(id)sender {
     if ([self isRefreshing] == NO) {
-        [[self barButtonItemRefresh] setEnabled:NO];
         [self setIsRefreshing:YES];
         [[self barButtonItemRefresh] setEnabled:NO];
-        [[self labelDateLastRefreshed] setHidden:YES];
-        [[self labelDateLastRefreshed] setText:@""];
+        [[self barButtonItemDone] setEnabled:NO];
+        [[self barButtonItemPrint] setEnabled:NO];
+        [[self barButtonItemSendToPdf] setEnabled:NO];
+
+        //[[self labelDateLastRefreshed] setHidden:YES];
+        [self setUpdatingOfTimerIsPaused:YES];
+        [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
         [[self labelDateLastRefreshed] setNeedsDisplay];
         [[self documentStatusView] setActivityState:YES];
-        
+        [[self barButtonItemDone] setEnabled:NO];
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         
         dispatch_async(queuePriorityBackground, ^{
@@ -313,6 +309,10 @@
                     [[self printPageRendererReport] setDidRefresh:YES];
 
                     dispatch_async(dispatch_get_main_queue(), ^{
+
+                        NSDate *lastD = [[NSDate date] retain];
+                        [self setLastCacheDate: lastD];
+                        [lastD release];
                         [self reload];
                     });
                 }
@@ -342,11 +342,14 @@
             [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
                 if (finished) {
                     [[pageOne view] setNeedsDisplay];
-                    NSDate *lastD = [[NSDate date] retain];
-                    [self setLastCacheDate: lastD];
-                    [lastD release];
-                    
+
+                    [[self barButtonItemRefresh] setEnabled:YES];
+                    [[self barButtonItemDone] setEnabled:YES];
+                    [[self barButtonItemPrint] setEnabled:YES];
+                    [[self barButtonItemSendToPdf] setEnabled:YES];
+
                     [[self labelDateLastRefreshed] setHidden:NO];
+                    [self setUpdatingOfTimerIsPaused:NO];
                     [[self documentStatusView] setActivityState:NO];
                     [self updateLateRefreshedLabel:self];
                     [self setIsRefreshing:NO];
@@ -370,14 +373,37 @@
 }
 
 - (IBAction)sendToPdf:(id)sender {
-    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
-    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
-    [printPageRender writeToPdf:temporaryFile];
-    [printPageRender release];
-    UIDocumentInteractionController *c = [UIDocumentInteractionController interactionControllerWithURL:temporaryFile];
-    [c setDelegate:self];
-    [c presentPreviewAnimated:YES];
+
+    [[self barButtonItemDone] setEnabled:NO];
+    [[self barButtonItemSendToPdf] setEnabled:NO];
+    [[self barButtonItemRefresh] setEnabled:NO];
+    [[self barButtonItemPrint] setEnabled:NO];
+    [self setUpdatingOfTimerIsPaused:YES];
+    [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Exporting data.", @"Exporting data.")];
+    [[self labelDateLastRefreshed] setNeedsDisplay];
+
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+        
+        NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
+        [printPageRender writeToPdf:temporaryFile];
+        [printPageRender release];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setUpdatingOfTimerIsPaused:NO];
+            [self updateLateRefreshedLabel:self];
+            [[self barButtonItemRefresh] setEnabled:YES];
+            [[self barButtonItemDone] setEnabled:YES];
+            [[self barButtonItemPrint] setEnabled:YES];
+            [[self barButtonItemSendToPdf] setEnabled:YES];
+            UIDocumentInteractionController *c = [UIDocumentInteractionController interactionControllerWithURL:temporaryFile];\
+            [c setDelegate:self];
+            [c presentPreviewAnimated:YES];
+        });
+
+    });
 }
 
 - (IBAction)print:(id)sender {

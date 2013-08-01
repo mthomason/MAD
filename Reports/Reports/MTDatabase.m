@@ -27,27 +27,29 @@
     if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        [databaseConnection setUsername:    [userCredentals mysql_username]];
-        [databaseConnection setPassword:    [userCredentals mysql_password]];
-        [databaseConnection setServer:      [userCredentals mysql_host]];
-        [databaseConnection setDatabase:    [userCredentals mysql_database]];
+        [databaseConnection setUsername:    [[userCredentals mysql_username] copy]];
+        [databaseConnection setPassword:    [[userCredentals mysql_password] copy]];
+        [databaseConnection setServer:      [[userCredentals mysql_host] copy]];
+        [databaseConnection setDatabase:    [[userCredentals mysql_database] copy]];
         [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
         MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
         result = databaseMySql;
         [databaseMySql autorelease];
+        [databaseConnection release];
 
     } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        [databaseConnection setUsername:    [userCredentals tds_username]];
-        [databaseConnection setPassword:    [userCredentals tds_password]];
-        [databaseConnection setServer:      [userCredentals tds_server]];
-        [databaseConnection setHost:        [userCredentals tds_host]];
-        [databaseConnection setDatabase:    [userCredentals tds_database]];
-        [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
+        [databaseConnection setUsername:    [[userCredentals tds_username] copy]];
+        [databaseConnection setPassword:    [[userCredentals tds_password] copy]];
+        [databaseConnection setServer:      [[userCredentals tds_server] copy]];
+        [databaseConnection setHost:        [[userCredentals tds_host] copy]];
+        [databaseConnection setDatabase:    [[userCredentals tds_database] copy]];
+        [databaseConnection setPort:        [[userCredentals tds_port] integerValue]];
         MTDatabaseSqlServer *databaseTds = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
         result = databaseTds;
         [databaseTds autorelease];
+        [databaseConnection release];
         
     }
     return result;
@@ -229,7 +231,7 @@
         
         
     };
-    return result;
+    return [result autorelease];
 }
 
 - (NSString *)sqlTableReferenceWithTables:(NSArray *)tables linkDepth:(NSNumber **)linkDepth forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {

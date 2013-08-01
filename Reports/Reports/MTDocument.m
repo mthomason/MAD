@@ -126,8 +126,8 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
     if (document != nil) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-        //UIImage *thumbnail = [[printPageRender thumbnail] retain];
-        UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
+        UIImage *thumbnail = [[printPageRender thumbnail] retain];
+        //UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
         [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
         [thumbnail release];
         [printPageRender release];

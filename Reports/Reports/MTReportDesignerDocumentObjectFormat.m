@@ -117,10 +117,12 @@
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
+- (void)emptySelector:(id)sender {}
+
 - (IBAction)controlValueChanged:(id)sender {
     MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
 
-    SEL valueChangedAction;
+    SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
     
     if ([sender isEqual:[self stepperNumberOfDecimals]]) {

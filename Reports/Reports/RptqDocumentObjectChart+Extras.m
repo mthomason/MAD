@@ -5,7 +5,7 @@
 //  Created by Michael Thomason on 3/17/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
-
+/*
 #import "RptqDocumentObjectChart+Extras.h"
 
 @implementation RptqDocumentObjectChart (Extras)
@@ -104,3 +104,4 @@
 }
 
 @end
+*/

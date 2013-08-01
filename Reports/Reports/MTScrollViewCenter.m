@@ -11,12 +11,11 @@
 @implementation MTScrollViewCenter
 
 - (void)setContentOffset:(CGPoint)point {
-    CGSize viewSize = [self contentSize];
     id retainedDelegate = [[self delegate] retain];
     if (retainedDelegate) {
         UIView *contentView = [[retainedDelegate viewForZoomingInScrollView:self] retain];
         if (contentView) {
-            viewSize = [contentView frame].size;
+            CGSize viewSize = [contentView frame].size;
             CGSize scrollSize = [self bounds].size;
             
             if(viewSize.width < scrollSize.width) {
@@ -29,6 +28,7 @@
         }
         [contentView release];
     }
+    [retainedDelegate release];
     [super setContentOffset: point];
 }
 

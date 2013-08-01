@@ -5,7 +5,7 @@
 //  Created by Michael Thomason on 3/17/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
-
+/*
 #import "RptqDocumentObjectChart.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObjectFactory.h"
@@ -16,3 +16,4 @@
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 
 @end
+*/

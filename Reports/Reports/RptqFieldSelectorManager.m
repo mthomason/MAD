@@ -33,6 +33,7 @@
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
         [self setFields: sectionFields];
         [sectionFields release];
+        [namesAccending release];
 	}
 	return self;
 }

@@ -229,6 +229,7 @@
             } else {
                 displayFont = [stylizedDisplayFont font];
             }
+            [stylizedDisplayFont release];
             [displayFont retain];
         }
         
@@ -240,10 +241,6 @@
         NSDictionary *attributes = @{NSFontAttributeName : displayFont,
                                      NSStrikethroughStyleAttributeName : strikeThroughStyle,
                                      NSUnderlineStyleAttributeName : underlineStyle};
-        if ([string length] <= 0) {
-            BOOL breakp = YES;
-            breakp = NO ? YES : NO;
-        }
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
         

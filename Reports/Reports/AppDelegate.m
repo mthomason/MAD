@@ -143,6 +143,17 @@ void uncaughtExceptionHandler(NSException *exception) {
     return _bundleId;
 }
 
+#pragma mark - Document Interaction Controller Delegate
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
+    return [[self window] rootViewController];
+}
+
+- (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:[controller URL] error:&error];
+}
+
 #pragma mark - iCloud
 
 NSString * const MTUbiquityToken = @"com.everydayapps.mad.ubiquityIdentityToken";

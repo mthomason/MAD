@@ -76,6 +76,7 @@ static MTStoreKitController *sharedSingleton = nil;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
+    //Do not release... this is a singleton yo.
     return [[self sharedObject] retain];
 }
 

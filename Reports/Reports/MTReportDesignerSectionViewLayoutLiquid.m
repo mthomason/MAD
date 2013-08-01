@@ -157,6 +157,8 @@
             itemCounter++;
 
         }
+
+        [layoutAttributesForSection release];
     }
 
     [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:[[itemAttributesBySection objectAtIndex:0] lastObject]];

@@ -193,13 +193,13 @@
                 format = NSLocalizedString(@"%@ milliseconds", @"%@ milliseconds");
             }
             [result appendFormat:format, spelledOut];
-            printedOne = YES;
-            forceInclude = YES;
+            //printedOne = YES;
+            //forceInclude = YES;
             [result appendString:@" "];
             resultResolution = MTDateResolutionMillisecond;
-        } else {
-            forceInclude = NO;
-        }
+        }// else {
+        //    forceInclude = NO;
+        //}
         includedComponetsCounter++;
     }
 
@@ -207,9 +207,6 @@
     
     
     [result appendString: NSLocalizedString(@"ago.", @"ago.")];
-    //if ([result isEqualToString:NSLocalizedString(@"ago.", @"ago.")]) {
-    //    BOOL bre = YES;
-    //}
     NSNumber *resultType = [@(resultResolution) retain];
     MTPair *results = [[MTPair pairWithFormer:result andLatter:@(resultResolution)] retain];
     [resultType release];

@@ -934,6 +934,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
     [(MTElementView *)sender updateDisplayLabel];
     [sender setNeedsDisplay];
+    [sectionEnumerator release];
 }
 
 - (void)didSelectElementView:(id)sender {

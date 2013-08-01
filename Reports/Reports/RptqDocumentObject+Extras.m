@@ -400,7 +400,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
     
     MTDocumentObjectType objectType = [[documentObject type] integerValue];
-    NSManagedObjectContext *managedObjectContext = [[documentObject managedObjectContext] retain];
+    NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
     
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
@@ -423,11 +423,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
             break;
     }
     [managedObjectContext deleteObject: documentObject];
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    if (error) {
-        [error presentErrorToUser];
-    }
+    [managedObjectContext save:nil];
 }
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

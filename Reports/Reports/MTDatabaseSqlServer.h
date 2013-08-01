@@ -12,6 +12,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDocument+Extras.h"
 #import "NSFileManager+Common.h"
+#import "sybdb.h"
 
 extern NSString * const MTDatabaseConnectionUsername;
 extern NSString * const MTDatabaseConnectionPassword;

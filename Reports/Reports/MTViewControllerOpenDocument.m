@@ -299,7 +299,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         MTCollectionViewCellDocument *senderCell = sender;
         row = [[[self collectionView] indexPathForCell:senderCell] row];
-        url = [[[self availableFilesCache] objectAtIndex: row] retain];
+        url = [[self availableFilesCache] objectAtIndex: row];
         [self setUrlBeingOpended:url];
 
         [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]

@@ -623,6 +623,7 @@
     [reportDocument release];
     [indexSetSections release];
     [insertedRowIndexPath release];
+    [namesAccending release];
     
 }
 
@@ -761,7 +762,7 @@
                             deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
                         }
                     }
-                    
+                    [newTableLayout release];
                     if (deleteSections != nil) {
                         [tableView beginUpdates];
                         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];

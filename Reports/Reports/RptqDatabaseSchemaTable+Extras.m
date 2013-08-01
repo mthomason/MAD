@@ -146,11 +146,10 @@
     [tablesInQuery addObject:newQueryTable];
     
     [query setHasQueryTables:tablesInQuery];
-    
-    NSError *error = nil;
-    [managedObjectContext save:&error];
+    [managedObjectContext save:nil];
 
     [newQueryFields release];
+    [tablesInQuery release];
     return [newQueryTable autorelease];
     
 /*

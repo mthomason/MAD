@@ -73,6 +73,7 @@
     [self setDataTables:queryTablesArray];
     [queryTablesArray release];
     [queryTables release];
+    [namesAccending release];
 
 }
 
@@ -145,7 +146,8 @@
         [[cell textLabel] setText: [field name]];
         [[cell detailTextLabel] setText: [[field fieldTypeDisplay] lowercaseString]];
     }
-    
+    [namesAccending release];
+
     return cell;
 }
 
@@ -181,6 +183,8 @@
         NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
         RptqQueryField *queryField = [fieldsArray objectAtIndex: [indexPath row]];
         [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
+        [namesAccending release];
+
     }
 }
 
