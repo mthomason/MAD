@@ -94,13 +94,15 @@
     [self setCurrentPageIndex:0];
     
     //[self reloadReportView];
-    
+    UIViewController *blankPage = [[UIViewController alloc] init];
+    [self setViewControllers:@[blankPage] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
+    [blankPage release];
+    /*
     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:1 ofPages:1];
     [pageOne setDelegate:self];
     [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
     [pageOne release];
-    
-    [self reload];
+    */
 
 }
 
@@ -115,6 +117,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self reload];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -320,10 +323,12 @@
 
 - (void)reload {
 
+    CGSize viewBounds = [[self view] bounds].size;
+
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
-        [[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self view] bounds].size];
+        [[self printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
