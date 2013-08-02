@@ -105,7 +105,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_rulerView release];
     [_designerContentView release];
     [_activeDocument release];
@@ -158,8 +157,29 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - View lifecycle
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [[self rulerView] setNeedsDisplay];
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    CGRect statusViewBounds;
+    if (self.toolbarBottom.frame.size.height < 40.0000f) {
+        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+    } else {
+        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+    }
+    [[self documentStatusView] setBounds:statusViewBounds];
+    [[self documentStatusView] setNeedsDisplay];
 }
 
 - (void)viewDidLoad {
@@ -179,8 +199,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MTReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [self setActiveDocument:activeDocument];
     [activeDocument release];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(documentStateChanged) name:UIDocumentStateChangedNotification object:[self activeDocument]];
     
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
@@ -261,8 +279,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self view] removeConstraints:[self layoutConstraintsToRemove]];
     }
     
-    BOOL skipLayout = [UIDevice isModernOS];
-    BOOL skipTopBar = [UIDevice isPad] == NO && [UIDevice isModernOS];
+    BOOL skipLayout = [UIDevice isModernOS] || [UIDevice isPad] == NO;
+    BOOL skipTopBar = [UIDevice isPad] == NO || [UIDevice isModernOS];
     if (skipLayout == NO) {
 
         NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
@@ -508,9 +526,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
+    
     [defaultCenter addObserver: self
                       selector: @selector(managedObjectContextDidChange:)
                           name: NSManagedObjectContextObjectsDidChangeNotification
@@ -520,29 +544,31 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                       selector: @selector(managedObjectContextDidSave:)
                           name: NSManagedObjectContextDidSaveNotification
                         object: managedObjectContext];
-
+    
     [defaultCenter addObserver: self
                       selector: @selector(didHideMenuNotification:)
                           name: UIMenuControllerDidHideMenuNotification
                         object: nil];
-
+    
     [defaultCenter addObserver: self
                       selector: @selector(didShowMenuNotification:)
                           name: UIMenuControllerDidShowMenuNotification
                         object: nil];
+    
 
+    [defaultCenter addObserver: self
+                      selector: @selector(documentStateChanged)
+                          name: UIDocumentStateChangedNotification
+                        object: [self activeDocument]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[self designerScrollView] setZoomScale:1.0000f animated:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+    
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
+    
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextObjectsDidChangeNotification
                            object: managedObjectContext];
@@ -555,17 +581,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [defaultCenter removeObserver: self
                              name: UIMenuControllerDidShowMenuNotification
                            object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
+                           object: [self activeDocument]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [[self rulerView] setNeedsDisplay];
-    // FIXME: size to fit toolbars... requires moving constraint layout to updateViewConstraints
-    //[[self toolbarBottom] sizeToFit];
-    //[[self toolbarTop] sizeToFit];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -1119,7 +1145,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)applyBorderToView:(UIView *)view {
     [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[view layer] setBorderWidth:1.0000f];
+    [[view layer] setBorderWidth:2.0000f];
 }
 
 - (BOOL)removeBorderFromView:(UIView *)view {

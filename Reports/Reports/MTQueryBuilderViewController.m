@@ -74,6 +74,14 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    CGRect statusViewBounds;
+    if (self.toolbar.frame.size.height < 40.0000f) {
+        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+    } else {
+        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+    }
+    [[self documentStatusView] setBounds:statusViewBounds];
+    [[self documentStatusView] setNeedsDisplay];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -81,16 +89,31 @@
     [self tableViewQueryBuilder].contentSize = CGSizeMake([self tableViewQueryBuilder].frame.size.width, [self tableViewQueryBuilder].contentSize.height);
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    /*CGRect navigationToolbarFrame = self.navigationController.navigationBar.frame;
+    CGRect customToolbarFrame = CGRectMake(self.toolbar.frame.origin.x, self.toolbar.frame.origin.y, self.toolbar.frame.size.width, navigationToolbarFrame.size.height);
+    [UIView animateWithDuration:duration animations:^{
+        self.toolbar.frame = customToolbarFrame;
+    }];*/
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    //CGRect navigationToolbarFrame = self.navigationController.navigationBar.frame;
+    //CGRect customToolbarFrame = CGRectMake(self.toolbar.frame.origin.x, self.toolbar.frame.origin.y, self.toolbar.frame.size.width, navigationToolbarFrame.size.height);
+    //[UIView animateWithDuration:duration animations:^{
+    //    self.toolbar.frame = customToolbarFrame;
+    //}];
+    [[self view] setNeedsLayout];
+}
 
 - (void)documentStateChanged {
     UIDocumentState state = [[self activeDocument] documentState];
-    switch ([[self activeDocument] documentState]) {
+    switch (state) {
         case UIDocumentStateClosed:
-            [self enableUserInteraction];
+            [self disableUserInteraction];
             break;
         case UIDocumentStateInConflict:
             [self enableUserInteraction];
@@ -207,10 +230,15 @@
                      MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
     
     [self setModelWithTwoOrMoreTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
+    [self disableUserInteraction];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(documentStateChanged)
+                                                 name:UIDocumentStateChangedNotification
+                                               object:[self activeDocument]];
     if ([UIDevice isLagacyOS]) {
         [[self toolbar] setTintColor:[UIColor edaBlueDark]];
     }
@@ -218,16 +246,18 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(documentStateChanged)
-                                                 name:UIDocumentStateChangedNotification
-                                               object:[self activeDocument]];
     [[self tableViewQueryBuilder] reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIDocumentStateChangedNotification
+                                                  object: [self activeDocument]];
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
