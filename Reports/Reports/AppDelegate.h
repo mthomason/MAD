@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MTManagedDocumentPreferencesUser.h"
-#import "MTReportDocument.h"
 #import "UIDevice+Hack.h"
 #import "CloudManager.h"
 #import "MTStoreKitController.h"

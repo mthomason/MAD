@@ -18,6 +18,7 @@ extern const NSTimeInterval MTTimeIntervalYear;
 @interface MTStoreKitController (NonRenewableLicensing)
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
+- (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
 + (NSDate *)experationDate;
 
 @end

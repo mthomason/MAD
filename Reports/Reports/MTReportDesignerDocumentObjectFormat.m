@@ -64,6 +64,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -104,14 +105,65 @@
             [(UIControl *)view setEnabled:numericTypeInSet];
         }
     }
+    
+    [self updateDisplay];
 }
 
 
 - (void)updateDisplay {
     if ([[self userSelectedObjectIds] count] == 0) {
-        
+        [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[self tableViewCellCurrency] setAccessoryType:UITableViewCellAccessoryNone];
+        [[self labelNumberOfDecimals] setText:@""];
     } else {
+        [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
+        MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
+            BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
+            if (isCurrency) {
+                accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+        }
+
+        [[self tableViewCellCurrency] setAccessoryType:accessoryType];
+        
+        if ([[self userSelectedObjectIds] count] == 1) {
+            NSManagedObjectID *objectId = [[self userSelectedObjectIds] anyObject];
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId
+                                                                         fromObjectContext:[activeDocument managedObjectContext]];
+            NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
+            [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
+            [[self stepperNumberOfDecimals] setValue:numberOfDec];
+        } else {
+            
+            BOOL allTheSame = NO;
+            NSInteger lastInteger = 0;
+            NSUInteger counter = 0;
+            for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
+                NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
+                if (counter > 0) {
+                    if (lastInteger == currentInteger && allTheSame) {
+                        allTheSame = YES;
+                    } else {
+                        allTheSame = NO;
+                    }
+                    
+                    lastInteger = currentInteger;
+                }
+                counter++;
+            }
+            if (allTheSame) {
+                [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:lastInteger]];
+            } else {
+                [[self labelNumberOfDecimals] setAttributedText:-1];
+            }
+            [[self stepperNumberOfDecimals] setValue:lastInteger];
+        }
+
     }
 }
 #pragma mark -
@@ -129,7 +181,6 @@
         valueChangedAction = @selector(setFormatNumericDecimals:);
         valueThatChanged = @([[self stepperNumberOfDecimals] value]);
         [[self labelNumberOfDecimals] setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
-        
     }
     
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -148,7 +199,12 @@
     
     NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Decimals", "Decimals")
                                                                                                    attributes:boldAttributes];
-    NSString *pointsString = [@" " stringByAppendingFormat:@"%d", numberOfDecimals];
+    NSString *pointsString;
+    if (numberOfDecimals == -1) {
+        pointsString = @"-";
+    } else {
+        pointsString = [@" " stringByAppendingFormat:@"%d", numberOfDecimals];
+    }
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
     [messageSuffix release];
@@ -173,6 +229,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if ([indexPath row] == 1 && [indexPath section] == 0) {
+        MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
+            BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
+            BOOL isCurrencyNow = !isCurrency;
+            [documentObject setFormatNumericCurrency:@(isCurrencyNow)];
+            UITableViewCellAccessoryType newAccessory = isCurrencyNow ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            [[self tableViewCellCurrency] setAccessoryType:newAccessory];
+            [[documentObject managedObjectContext] save:nil];
+        }
+    }
 }
 
 @end

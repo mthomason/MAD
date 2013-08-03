@@ -320,7 +320,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (NSString *)selectPart {
-    return @"SELECT TOP 220\n";
+    return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50";
 }
 
 - (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

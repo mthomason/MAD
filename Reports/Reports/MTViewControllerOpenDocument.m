@@ -309,7 +309,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                    if (success) {
                                        [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
                                        MTReportViewerController *viewControllerReportViewer = [segue destinationViewController];
-                                       [viewControllerReportViewer setDelegate:self];
+                                       [viewControllerReportViewer setViewControllerDelegate:self];
                                        [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
                                    }
                                    

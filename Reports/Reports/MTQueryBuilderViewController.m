@@ -17,6 +17,7 @@
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerLinks;
@@ -61,6 +62,7 @@
     [_toolbar release];
     [_toolbarTop release];
     [_documentStatusView release];
+    [_barButtonItemShowSQL release];
     [super dealloc];
 }
 
@@ -231,6 +233,10 @@
     
     [self setModelWithTwoOrMoreTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
     [self disableUserInteraction];
+    
+    NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
+    [toolbarButtons removeObject:[self barButtonItemShowSQL]];
+    [[self toolbar] setItems:toolbarButtons animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -247,6 +253,14 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
     [[self tableViewQueryBuilder] reloadData];
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser) {
+            NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
+            NSInteger index = [toolbarButtons count] - 1;
+            [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
+            [[self toolbar] setItems:toolbarButtons animated:animated];
+        }
+    }];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

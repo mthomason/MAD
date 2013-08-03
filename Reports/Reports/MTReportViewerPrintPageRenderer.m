@@ -546,6 +546,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             }
                         }
 
+                        
                         //CGRect elementViewFrame = [item elementViewFrame]
                         
                         CGFloat originPointX        = [[item dropPointX] floatValue] + originX;

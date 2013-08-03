@@ -17,6 +17,8 @@ NSString * const MTDocumentObjectDefinationAggregatePivotType = @"MTDocumentObje
 NSString * const MTDocumentObjectDefinationAggregateObjectId = @"MTDocumentObjectDefinationAggregateObjectId";
 NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocumentObjectDefinationAggregateFunctionInputType";
 
+static NSNumberFormatter *currencyNumberFormatter;
+
 
 @implementation RptqDocumentObject (Extras)
 
@@ -65,6 +67,7 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
     [self setDropPointX:@(CGPointZero.x)];
     [self setDropPointY:@(CGPointZero.y)];
     [self setDropIndex:@(lastDropIndex)];
+    
 }
 
 - (void)awakeFromFetch {
@@ -454,6 +457,13 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 #pragma mark - MTProtocolCompare
 
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
+    
+    if (!currencyNumberFormatter) {
+        currencyNumberFormatter = [[NSNumberFormatter alloc] init];
+        [currencyNumberFormatter setLocale:[NSLocale currentLocale]];
+        [currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    }
+    
     NSString *result;
     switch (dataType) {
         case MTDataTypeDate:
@@ -487,11 +497,18 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
         case MTDataTypeNumber:
         {
             if ([value isKindOfClass:[NSNumber class]]) {
-                NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
-                [formatString appendFormat:@"%d", [[self formatNumericDecimals] integerValue]];
-                [formatString appendString:@"f"];
-                result = [NSString stringWithFormat:formatString, [value floatValue]];
-                [formatString release];
+                if ([[self formatNumericCurrency] boolValue]) {
+                    //NSNumberFormatter *currencyNumberFormatter = [[NSNumberFormatter alloc] init];
+                    //[currencyNumberFormatter setLocale:[NSLocale currentLocale]];
+                    //[currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                    result = [currencyNumberFormatter stringFromNumber:value];
+                } else {
+                    NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
+                    [formatString appendFormat:@"%d", [[self formatNumericDecimals] integerValue]];
+                    [formatString appendString:@"f"];
+                    result = [NSString stringWithFormat:formatString, [value floatValue]];
+                    [formatString release];
+                }
             } else {
                 result = [NSString stringWithFormat:@"%@", value];
             }

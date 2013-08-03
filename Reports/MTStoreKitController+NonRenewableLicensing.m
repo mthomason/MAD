@@ -13,33 +13,55 @@ const NSTimeInterval MTTimeIntervalDay = MTTimeIntervalHour * 24 /*hours*/;
 const NSTimeInterval MTTimeIntervalMonth = MTTimeIntervalDay * 30.4368 /*days*/;
 const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
-@interface MTStoreKitController ()
-@property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
-
-@end
 
 @implementation MTStoreKitController (NonRenewableLicensing)
 
-+ (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    NSDate *experationDate = [MTStoreKitController experationDate];
-    
-    BOOL isLicensedUser = NO;
-    if (experationDate != nil) {
-        NSDate *now = [NSDate date];
-        NSComparisonResult dateComparesonResult = [now compare:experationDate];
-        switch (dateComparesonResult) {
-            case NSOrderedAscending:
-                isLicensedUser = YES;   //Only path to redemption
-                break;
-            case NSOrderedSame:
-                break;
-            case NSOrderedDescending:
-                break;
-            default:
-                break;
+
+
+- (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
+    if ([self verifiedUser]) {
+        if ([[self verifiedExperationDate] compare:[NSDate date]] == NSOrderedDescending) {
+            completion(YES, [self verifiedExperationDate]);
+        } else {
+            completion(NO, nil);
         }
+    } else {
+        [MTStoreKitController licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+            [self setVerifiedUser:isLicensedUser];
+            [self setVerifiedExperationDate:experationDate];
+            completion(isLicensedUser, experationDate);
+        }];
     }
-    completion(isLicensedUser, experationDate);
+}
+
++ (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
+
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+        
+        NSDate *experationDate = [MTStoreKitController experationDate];
+        BOOL isLicensedUser = NO;
+        if (experationDate != nil) {
+            NSDate *now = [NSDate date];
+            NSComparisonResult dateComparesonResult = [now compare:experationDate];
+            switch (dateComparesonResult) {
+                case NSOrderedAscending:
+                    isLicensedUser = YES;   //Only path to redemption
+                    break;
+                case NSOrderedSame:
+                    break;
+                case NSOrderedDescending:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            completion(isLicensedUser, experationDate);
+        });
+    });
 }
 
 + (NSDate *)dateFromReceiptString:(NSString *)dateString {

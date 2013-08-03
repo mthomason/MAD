@@ -52,4 +52,9 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 - (void)restorePurchases:(MTBlockCompletion)completion;
 + (NSArray *)transactions;
 
+
+@property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
+@property (nonatomic, assign) BOOL verifiedUser;
+@property (nonatomic, retain) NSDate *verifiedExperationDate;
+
 @end

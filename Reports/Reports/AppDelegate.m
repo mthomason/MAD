@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MTReportDocument.h"
 
 NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";

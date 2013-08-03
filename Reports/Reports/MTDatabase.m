@@ -13,6 +13,12 @@
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
 
+@interface MTDatabase ()
+
+@property (nonatomic, assign, readwrite) BOOL isLicensedUser;
+
+@end
+
 @implementation MTDatabase
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database {
@@ -68,6 +74,18 @@
 }
 
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
+    
+    __block BOOL licensedUser;
+    dispatch_semaphore_t semaphoreIsLicensed = dispatch_semaphore_create(0);
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        licensedUser = isLicensedUser;
+        dispatch_semaphore_signal(semaphoreIsLicensed);
+    }];
+    
+    dispatch_semaphore_wait(semaphoreIsLicensed, DISPATCH_TIME_FOREVER);
+    dispatch_release(semaphoreIsLicensed);
+    
+    [self setIsLicensedUser:licensedUser];
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
@@ -142,10 +160,15 @@
         [graph release];
         
         [result appendString:[self sqlWhereClauseWithQuery:query]];
+        [result appendString:[self sqlLimitClause]];
         
     }
     
     return [result autorelease];
+}
+
+- (NSString *)sqlLimitClause {
+    return @"";
 }
 
 - (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
@@ -361,14 +384,6 @@
     }
     return [result autorelease];
 }
-
-
-/*
-- (NSString *)getSqlForQuery:(RptqQuery *)query {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}*/
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException

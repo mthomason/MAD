@@ -29,6 +29,10 @@
     return self;
 }
 
+- (NSString *)selectPart {
+    return @"SELECT\n";
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
@@ -252,7 +256,6 @@
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-    queryString = [NSString stringWithFormat:@"%@ LIMIT 100000", queryString];
 
     RptqQueryCache *queryCache = nil;
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -324,6 +327,10 @@
         });
     });
 
+}
+
+- (NSString *)sqlLimitClause {
+    return [self isLicensedUser] ? @"" : @"\nLIMIT 50";
 }
 
 - (NSString *)identifier {

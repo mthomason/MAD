@@ -30,6 +30,7 @@
 #import "MTReportDocument.h"
 #import "UIDevice+Hack.h"
 #import "MTLog.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTQueryBuilderViewController : MTViewController
     <UITableViewDataSource,

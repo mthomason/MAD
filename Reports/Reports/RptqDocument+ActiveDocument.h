@@ -10,6 +10,7 @@
 #define Reports_RptqDocument_ActiveDocument_h
 
 #import "RptqDocument.h"
+#import "RptqQuery.h"
 #import "AppDelegate.h"
 
 @interface RptqDocument (ActiveDocument)

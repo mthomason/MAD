@@ -7,6 +7,12 @@
 //
 
 #import "RptqDocument+ActiveDocument.h"
+#import "MTActiveDocument.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+
 
 @implementation RptqDocument (ActiveDocument)
 
