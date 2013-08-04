@@ -288,29 +288,29 @@
         <relationship name="inDatabase" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RptqDatabase" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqDatabaseSchemaField" positionX="0" positionY="0" width="128" height="225"/>
-        <element name="RptqDatabaseSchemaTable" positionX="0" positionY="0" width="128" height="165"/>
-        <element name="RptqDocument" positionX="0" positionY="0" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="0" positionY="0" width="128" height="735"/>
-        <element name="RptqDocumentObjectAggregate" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="RptqDocumentObjectChart" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="RptqDocumentObjectFormula" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="RptqDocumentObjectGroupKey" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqDocumentObjectImage" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqDocumentObjectLabel" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="RptqDocumentObjectLabelDataField" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="RptqDocumentObjectLabelLink" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="RptqDocumentSection" positionX="0" positionY="0" width="128" height="330"/>
-        <element name="RptqDocumentSectionRows" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="RptqQuery" positionX="-639" positionY="-45" width="128" height="225"/>
-        <element name="RptqQueryCache" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="RptqQueryField" positionX="0" positionY="0" width="128" height="210"/>
-        <element name="RptqQueryGroup" positionX="-254" positionY="-225" width="128" height="135"/>
-        <element name="RptqQueryLinks" positionX="-524" positionY="693" width="128" height="270"/>
-        <element name="RptqQueryPredicate" positionX="-209" positionY="639" width="128" height="150"/>
-        <element name="RptqQuerySort" positionX="-560" positionY="303" width="128" height="120"/>
-        <element name="RptqQueryTable" positionX="-666" positionY="429" width="128" height="210"/>
-        <element name="RptqUserCredentals" positionX="-423" positionY="144" width="128" height="360"/>
+        <element name="RptqDatabase" positionX="-299" positionY="-423" width="128" height="150"/>
+        <element name="RptqDatabaseSchemaField" positionX="-99" positionY="-18" width="180" height="225"/>
+        <element name="RptqDatabaseSchemaTable" positionX="-315" positionY="-219" width="198" height="165"/>
+        <element name="RptqDocument" positionX="-594" positionY="-828" width="128" height="285"/>
+        <element name="RptqDocumentObject" positionX="-180" positionY="1047" width="128" height="735"/>
+        <element name="RptqDocumentObjectAggregate" positionX="288" positionY="840" width="198" height="150"/>
+        <element name="RptqDocumentObjectChart" positionX="295" positionY="1575" width="200" height="75"/>
+        <element name="RptqDocumentObjectFormula" positionX="279" positionY="582" width="191" height="120"/>
+        <element name="RptqDocumentObjectGroupKey" positionX="295" positionY="1773" width="173" height="90"/>
+        <element name="RptqDocumentObjectImage" positionX="297" positionY="1656" width="189" height="90"/>
+        <element name="RptqDocumentObjectLabel" positionX="286" positionY="729" width="191" height="90"/>
+        <element name="RptqDocumentObjectLabelDataField" positionX="286" positionY="1107" width="218" height="135"/>
+        <element name="RptqDocumentObjectLabelLink" positionX="288" positionY="1002" width="191" height="105"/>
+        <element name="RptqDocumentSection" positionX="7" positionY="-807" width="128" height="330"/>
+        <element name="RptqDocumentSectionRows" positionX="-576" positionY="1251" width="189" height="120"/>
+        <element name="RptqQuery" positionX="-873" positionY="108" width="128" height="225"/>
+        <element name="RptqQueryCache" positionX="-693" positionY="204" width="128" height="120"/>
+        <element name="RptqQueryField" positionX="-875" positionY="369" width="128" height="210"/>
+        <element name="RptqQueryGroup" positionX="-639" positionY="657" width="128" height="135"/>
+        <element name="RptqQueryLinks" positionX="-882" positionY="603" width="128" height="270"/>
+        <element name="RptqQueryPredicate" positionX="-884" positionY="1062" width="128" height="150"/>
+        <element name="RptqQuerySort" positionX="-893" positionY="1242" width="128" height="120"/>
+        <element name="RptqQueryTable" positionX="-711" positionY="378" width="128" height="210"/>
+        <element name="RptqUserCredentals" positionX="63" positionY="-450" width="128" height="360"/>
     </elements>
 </model>
