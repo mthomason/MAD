@@ -2,7 +2,7 @@
 //  RptqDatabaseSchemaField.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/16/13.
+//  Created by Michael Thomason on 8/4/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,12 +16,12 @@
 @property (nonatomic, retain) NSNumber * dataType;
 @property (nonatomic, retain) NSNumber * dataTypeNative;
 @property (nonatomic, retain) NSString * dataTypeNativeDescription;
+@property (nonatomic, retain) NSNumber * decimals;
 @property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) NSString * label;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * width;
-@property (nonatomic, retain) NSNumber * decimals;
 @property (nonatomic, retain) NSNumber * primaryKey;
+@property (nonatomic, retain) NSNumber * width;
 @property (nonatomic, retain) NSSet *inQuery;
 @property (nonatomic, retain) NSSet *inQueryField;
 @property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;

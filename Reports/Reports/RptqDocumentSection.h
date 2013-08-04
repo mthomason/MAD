@@ -2,7 +2,7 @@
 //  RptqDocumentSection.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/26/13.
+//  Created by Michael Thomason on 8/4/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSNumber * height;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSNumber * layoutHeight;
 @property (nonatomic, retain) NSNumber * marginBottom;
 @property (nonatomic, retain) NSNumber * marginLeft;
 @property (nonatomic, retain) NSNumber * marginRight;
@@ -28,10 +29,13 @@
 @property (nonatomic, retain) NSNumber * type;
 @property (nonatomic, retain) NSNumber * visibility;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSNumber * layoutHeight;
 @property (nonatomic, retain) NSOrderedSet *hasRows;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nonatomic, retain) RptqDocument *inReport;
+@property (nonatomic, retain) RptqDocument *inReportReportHeader;
+@property (nonatomic, retain) RptqDocument *inReportPageHeader;
+@property (nonatomic, retain) RptqDocument *inReportReportFooter;
+@property (nonatomic, retain) RptqDocument *inReportPageFooter;
 @end
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)

@@ -2,7 +2,7 @@
 //  RptqDatabaseSchemaField.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/16/13.
+//  Created by Michael Thomason on 8/4/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -17,12 +17,12 @@
 @dynamic dataType;
 @dynamic dataTypeNative;
 @dynamic dataTypeNativeDescription;
+@dynamic decimals;
 @dynamic identifier;
 @dynamic label;
 @dynamic name;
-@dynamic width;
-@dynamic decimals;
 @dynamic primaryKey;
+@dynamic width;
 @dynamic inQuery;
 @dynamic inQueryField;
 @dynamic inTable;
