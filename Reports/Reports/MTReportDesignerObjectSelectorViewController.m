@@ -152,6 +152,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
     [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
     [self displaySelectedFunction:[self aggregateFunctionType]];
+    [self setAggregateGroupByType:MTAggregateGroupByTypePage];
     
     [self setAggregateFunctionInputType:MTAggregateFunctionInputTypeField];
     [self setAggregateInputField:nil];
@@ -892,9 +893,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         case MTViewTagFieldOrFormulaSelector: {
             
             [self setAggregateFunctionInputType: MTAggregateFunctionInputTypeField];
-            NSManagedObjectID *objectId = [[field objectID] retain];
+            NSManagedObjectID *objectId = [field objectID];
             [self setAggregateInputField: objectId];
-            [objectId release];
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
             [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];

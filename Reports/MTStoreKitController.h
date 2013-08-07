@@ -35,9 +35,6 @@ extern NSString * const MTStoreKitIdentifierReceiptUniqueId;
 extern NSString * const MTStoreKitIdentifierReceiptCancellationDate;
 
 typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
-//typedef void (^MTStoreKitPurchaseProductWithIdentifierCompletion)(BOOL success, NSError *error);
-//typedef void (^MTStoreKitInitalizeProductsCompletion)(BOOL success, NSError *error);
-//typedef void (^MTStoreKitRestoreProductsCompletion)(BOOL success, NSError *error);
 
 @interface MTStoreKitController : NSObject
 
@@ -45,15 +42,14 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
 @property(nonatomic, readonly, retain) NSArray *products;
 
-- (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers
-                              completion:(MTBlockCompletion)completion;
-- (void)purchaseProductWithIdentifier:(SKProduct *)product
-                           completion:(MTBlockCompletion) completion;
+- (void)initalizeProductsWithIdentifiers:(NSArray *)productIdentifiers completion:(MTBlockCompletion)completion;
+- (void)purchaseProductWithIdentifier:(SKProduct *)product completion:(MTBlockCompletion) completion;
 - (void)restorePurchases:(MTBlockCompletion)completion;
 + (NSArray *)transactions;
 
 
 @property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
+
 @property (nonatomic, assign) BOOL verifiedUser;
 @property (nonatomic, retain) NSDate *verifiedExperationDate;
 

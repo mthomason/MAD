@@ -28,6 +28,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqQueryPredicate+Extras.h"
+#import "MTKeyChain.h"
 
 @interface MTDatabaseMySql : MTDatabase
 

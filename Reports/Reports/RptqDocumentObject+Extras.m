@@ -268,8 +268,8 @@ static NSNumberFormatter *currencyNumberFormatter;
 
     [documentObject setOriginx: @(CGPointZero.x)];
     [documentObject setOriginy: @(CGPointZero.y)];
-    [documentObject setSizewidth: @(200.0000f)];
-    [documentObject setSizeheight: @(44.0000f)];
+    [documentObject setSizewidth: @(75.0000f)];
+    [documentObject setSizeheight: @(22.0000f)];
 
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
@@ -326,36 +326,37 @@ static NSNumberFormatter *currencyNumberFormatter;
             
             RptqDocumentObjectAggregate *reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                              insertIntoManagedObjectContext: [document managedObjectContext]];
-            [documentObject setIsAggregate: reportObject];
-            [documentObject setType: @(MTDocumentObjectTypeAggregate)];
 
             NSNumber *groupTypeContainer = [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotType];
             NSNumber *functionInputType = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateFunctionInputType];
 
             MTAggregateFunctionInputType functionType = [functionInputType integerValue];
-            [[documentObject isAggregate] setGroupNumber:   [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
-            [[documentObject isAggregate] setGroupType:     groupTypeContainer];
-            [[documentObject isAggregate] setFunction:      [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregateType]];
+            [reportObject setGroupNumber:   [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
+            [reportObject setGroupType:     groupTypeContainer];
+            [reportObject setFunction:      [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregateType]];
 
             NSManagedObjectID *objectId = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateObjectId];
 
             switch (functionType) {
                 case MTAggregateFunctionInputTypeField: {
                     RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:objectId fromObjectContext:mangedObjectContext];
-                    [[documentObject isAggregate] setAggregateField:field];
-                    [[documentObject isAggregate] setAggregateFunction:nil];
+                    [reportObject setAggregateField:field];
+                    [reportObject setAggregateFunction:nil];
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
                     RptqDocumentObjectFormula *formula = [RptqDocumentObjectFormula getElementForObjectID:objectId fromObjectContext:mangedObjectContext];
-                    [[documentObject isAggregate] setAggregateField:nil];
-                    [[documentObject isAggregate] setAggregateFunction:formula];
+                    [reportObject setAggregateField:nil];
+                    [reportObject setAggregateFunction:formula];
                     break;
                 }
                 default:
                     break;
             }
             
+            [documentObject setIsAggregate: reportObject];
+            [documentObject setType: @(MTDocumentObjectTypeAggregate)];
+
             [reportObject release];
 
             break;
@@ -475,8 +476,8 @@ static NSNumberFormatter *currencyNumberFormatter;
         case MTDataTypeTimeStamp:
         case MTDataTypeYear:
         case MTDataTypeUnknown:
-            result = NSLocalizedString(@"Not implemented.", @"Not implemented.");
-            //            result = [NSString stringWithFormat:@"%@", value];
+            //result = NSLocalizedString(@"Not implemented.", @"Not implemented.");
+                        result = [NSString stringWithFormat:@"%@", value];
             /*            @throw [NSException exceptionWithName: NSInternalInconsistencyException
              reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
              userInfo: nil];*/

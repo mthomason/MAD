@@ -27,7 +27,7 @@
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            [error presentErrorToUserWithTryAgain:^(BOOL success) {
+            [error presentErrorToUserWithContinue:^(BOOL success) {
                 NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
                 NSError *error = nil;
                 [managedObjectContext save:&error];

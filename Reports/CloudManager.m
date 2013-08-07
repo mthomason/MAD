@@ -85,7 +85,7 @@ static CloudManager *__sharedManager;
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                 _dataDirectoryURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MTDocumentTypeUtiMad];
-                dispatch_sync(dispatch_get_main_queue(), ^(void) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:UbiquitousContainerFetchingDidEndNotification object:nil];
                     
                     if (completionHandler) {

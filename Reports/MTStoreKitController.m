@@ -55,20 +55,15 @@ NSString * const MTStoreKitIdentifierReceiptCancellationDate        = @"cancella
 static MTStoreKitController *sharedSingleton = nil;
 
 + (void)initialize {
-    static BOOL initialized = NO;
-    if (initialized == NO) {
-        initialized = YES;
-        if (sharedSingleton == nil) {
-            sharedSingleton = [[super allocWithZone:NULL] init];
-
-            [[SKPaymentQueue defaultQueue] addTransactionObserver: sharedSingleton];
-            [sharedSingleton setProductIdentifiers:nil];
-            [sharedSingleton setProducts:nil];
-            [sharedSingleton setInitalizeProductsCompletion:nil];
-            [sharedSingleton setPurchaseProductWithIdentifierCompletion:nil];
-
-        }
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedSingleton = [[super allocWithZone:NULL] init];
+        [[SKPaymentQueue defaultQueue] addTransactionObserver: sharedSingleton];
+        [sharedSingleton setProductIdentifiers:nil];
+        [sharedSingleton setProducts:nil];
+        [sharedSingleton setInitalizeProductsCompletion:nil];
+        [sharedSingleton setPurchaseProductWithIdentifierCompletion:nil];
+    });
 }
 
 + (MTStoreKitController *)sharedObject {

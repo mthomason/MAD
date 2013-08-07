@@ -1991,7 +1991,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDocumentSection *section = [document hasDetailSection];
-    NSManagedObjectID *sectionID = [section objectID];
+    //NSManagedObjectID *sectionID = [section objectID];
     
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
     

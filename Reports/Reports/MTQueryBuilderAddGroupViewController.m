@@ -12,6 +12,7 @@
 @interface MTQueryBuilderAddGroupViewController ()
 
 @property (nonatomic, retain) RptqQueryField *field;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @end
 
@@ -22,6 +23,7 @@
     [_fieldName release];
     [_tableViewCellField release];
     [_tableViewCellSort release];
+    [_barButtonItemSave release];
     [super dealloc];
 }
 
@@ -41,6 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[self barButtonItemSave] setEnabled:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -89,12 +92,11 @@
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
     [[self navigationController] popToViewController:self animated:YES];
-    NSString *fieldName = [[queryField tableFieldKey] retain];
+    NSString *fieldName = [queryField tableFieldKey];
     [self setField:queryField];
     [self setFieldName:fieldName];
     [[[self tableViewCellField] detailTextLabel] setText: [[queryField display] lowercaseString]];
-    //NSLog(@"%@", NSStringFromCGRect([[self tableViewCellField] detailTextLabel].frame));
-    [fieldName release];
+    [[self barButtonItemSave] setEnabled:YES];
 }
 
 #pragma mark Sort Type

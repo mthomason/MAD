@@ -153,6 +153,18 @@
 
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self updatingOfTimerIsPaused] == NO) {
+        if ([self lastCacheDate] == nil) {
+            NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
+            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+            RptqQuery *query = [[database hasQueries] anyObject];
+            NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+            [self setLastCacheDate: lastD];
+            [lastD release];
+            if ([self lastCacheDate] == nil) {  //I give up
+                [self setLastCacheDate:[NSDate date]];
+            }
+        }
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
         
         CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
@@ -315,6 +327,10 @@
                         [lastD release];
                         [self reload];
                     });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self resetScreen];
+                    });
                 }
             }];
         });
@@ -342,24 +358,29 @@
             [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
                 if (finished) {
                     [[pageOne view] setNeedsDisplay];
-
-                    [[self barButtonItemRefresh] setEnabled:YES];
-                    [[self barButtonItemDone] setEnabled:YES];
-                    [[self barButtonItemPrint] setEnabled:YES];
-                    [[self barButtonItemSendToPdf] setEnabled:YES];
-
-                    [[self labelDateLastRefreshed] setHidden:NO];
-                    [self setUpdatingOfTimerIsPaused:NO];
-                    [[self documentStatusView] setActivityState:NO];
-                    [self updateLateRefreshedLabel:self];
-                    [self setIsRefreshing:NO];
-                    [[self barButtonItemRefresh] setEnabled:YES];
+                    [self resetScreen];
                 }
                 
             }];
             [pageOne release];
         });
     });
+
+}
+
+- (void)resetScreen {
+    
+    [[self barButtonItemRefresh] setEnabled:YES];
+    [[self barButtonItemDone] setEnabled:YES];
+    [[self barButtonItemPrint] setEnabled:YES];
+    [[self barButtonItemSendToPdf] setEnabled:YES];
+    
+    [[self labelDateLastRefreshed] setHidden:NO];
+    [self setUpdatingOfTimerIsPaused:NO];
+    [[self documentStatusView] setActivityState:NO];
+    [self updateLateRefreshedLabel:self];
+    [self setIsRefreshing:NO];
+    [[self barButtonItemRefresh] setEnabled:YES];
 
 }
 

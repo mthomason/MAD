@@ -2430,6 +2430,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="barButtonItemSave" destination="7S4-4h-WaB" id="Jom-m9-V57"/>
                         <outlet property="tableViewCellField" destination="aa3-6a-4fe" id="Kxd-UU-LZb"/>
                         <outlet property="tableViewCellSort" destination="JAr-jg-9nE" id="Ccy-xq-vID"/>
                     </connections>
@@ -5647,6 +5648,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="CwB-f6-wTT"/>
-        <segue reference="kPX-hH-DKi"/>
+        <segue reference="giJ-oQ-sLB"/>
     </inferredMetricsTieBreakers>
 </document>

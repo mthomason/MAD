@@ -178,7 +178,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     NSError *error;
     if ([self managedObjectContext] != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
-            [error presentErrorToUserWithTryAgain:^(BOOL success) {
+            [error presentErrorToUserWithContinue:^(BOOL success) {
                 [self saveContext];
             }];
         }
