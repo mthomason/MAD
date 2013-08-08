@@ -102,13 +102,11 @@
 }
 
 - (RptqQueryGroup *)firstQueryGroup {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == 0", [self objectID]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    RptqQueryGroup *firstGroup = error == nil ? [resultArray lastObject] : nil;
-    return firstGroup;
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == 0"];
+    //NSSet *groups = [[self hasQueryGroups] filteredSetUsingPredicate:predicate];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
+    NSArray *results = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sort]];
+    return ([results count] >= 1) ? [results objectAtIndex:0] : nil;
 }
 
 #pragma mark - MTProtocolCompare

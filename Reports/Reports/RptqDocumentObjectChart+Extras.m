@@ -63,13 +63,8 @@
 #pragma mark - RptqDocumentObjectFactory
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectChart class])];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objectId]];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDocumentObjectChart *result = nil;
-    if (results) result = [results lastObject];
-    return result;
+ NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
+ return result;
 }
 
 + (RptqDocumentObject *)addDocumentObject:(NSDictionary *)documentObjectDefination toDocument:(RptqDocument *)document {

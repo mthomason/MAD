@@ -77,23 +77,15 @@
     return results;
 }
 
-+ (id)getQueryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
-    NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
-    RptqDatabaseSchemaTable *result = nil;
-    if (results) result = [results lastObject];
++ (id)getQueryLinkWithID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
 }
 
-+ (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
-    NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
-    for (RptqQueryLinks *link in results) {
-        [moc deleteObject: link];
++ (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQueryLinks *link = [RptqQueryLinks getQueryLinkWithID:objid fromObjectContext:managedObjectContext];
+    if (link) {
+        [managedObjectContext deleteObject: link];
     }
 }
 

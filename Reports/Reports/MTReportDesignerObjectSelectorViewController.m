@@ -219,8 +219,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     break;
                 }
                 case 5: {
-                    cellIdentifier = MTIdentiferDocumentObjectFormulaCollectionViewCell;
-                    tag = MTDocumentObjectTypeFormula;
+                    cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
+                    tag = MTDocumentObjectTypeGroupKey;
                     break;
                 }
                 case 3: {
@@ -244,12 +244,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     break;
                 }
                 case 9: {
-                    cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
-                    tag = MTDocumentObjectTypeGroupKey;
+                    cellIdentifier = MTIdentiferDocumentObjectFormulaCollectionViewCell;
+                    tag = MTDocumentObjectTypeFormula;
+                    break;
                 }
                 case 4: {
                     cellIdentifier = MTIdentiferDocumentObjectWhitespaceCollectionViewCell;
                     tag = MTDocumentObjectTypeWhtiespace;
+                    break;
                 }
                 default: {
                     break;
@@ -785,7 +787,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             } else if ([self showFieldOrFormulaFormulaPickerViewerController] &&
                        [self showFieldOrFormulaFieldPickerViewController] == NO) {
 
-#warning Implement me when you implement fomulas.
                 @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                                reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                              userInfo: nil];

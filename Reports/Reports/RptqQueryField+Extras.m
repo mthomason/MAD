@@ -71,13 +71,8 @@
     return [[self toStringHumanReadable] lowercaseString];
 }
 
-+ (id)getQueryFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryField class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqQueryField *result = nil;
-    if (results) result = [results lastObject];
++ (id)getQueryFieldForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
 }
 

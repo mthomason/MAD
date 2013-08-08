@@ -36,7 +36,7 @@
 
 + (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-+ (RptqDatabaseSchemaTable *)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
++ (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

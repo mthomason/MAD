@@ -431,14 +431,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
-    
-    NSError *error = nil;
-    NSArray *results = [[managedObjectContext executeFetchRequest:request error:&error] retain];
-    RptqDocumentObject *result = [results lastObject];
-    [results autorelease];
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objid];
     return result;
 }
 

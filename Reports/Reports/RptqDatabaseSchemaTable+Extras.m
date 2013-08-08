@@ -114,13 +114,8 @@
     return result;
 }
 
-+ (RptqDatabaseSchemaTable *)getTableForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objid];
-    NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
-    RptqDatabaseSchemaTable *result = nil;
-    if (results) result = [results lastObject];
++ (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
 }
 

@@ -982,8 +982,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         if ([sender isKindOfClass:[MTElementView class]]) {
             MTElementView *elementView = sender;
             
-            if ([[elementView objectIdTag] isTemporaryID]) {
-                NSLog(@"Fix HERE");
+            NSManagedObjectID *objid = [elementView objectIdTag];
+            if (objid != nil) {
+                if ([objid isTemporaryID]) {
+                    NSLog(@"Fix HERE");
+                }
             }
             
             [[self selectedObjectIds] addObject:[elementView objectIdTag]];

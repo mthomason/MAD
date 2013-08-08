@@ -63,12 +63,7 @@
 #pragma mark - RptqDocumentObjectFactory
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectLabelDataField class])];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objectId]];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDocumentObjectLabelDataField *result = nil;
-    if (results) result = [results lastObject];
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
 }
 

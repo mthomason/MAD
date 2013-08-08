@@ -112,13 +112,9 @@
 
 #pragma mark - Static
 
-+ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
-    [request setFetchLimit: 1];
-    [request setPredicate: [NSPredicate predicateWithFormat:@"self == %@", objid]];
-    NSError *error = nil;
-    NSArray *results = [moc executeFetchRequest:request error:&error];
-    return [results lastObject];
++ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
+    return result;
 }
 
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {

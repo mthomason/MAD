@@ -234,7 +234,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     NSUInteger numberOfGroups = [[query hasQueryGroups] count];
     NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-    
+    NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
     [[UIColor whiteColor] set];
 
     if (index < [[self cachedLayoutByPage] count]) {
@@ -375,15 +375,36 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             }
             
             NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-            NSDictionary *rowData = [self rowDataForRow: detailRowToPrint
-                                                 onPage: index];
+            NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
+            
+            BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+            NSInteger nextDetailRowToPrint = detailRowToPrint;
+            NSInteger nextPageIndex = index;
+            if (useNextRowData) {
+                NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                NSInteger numberOfItemsOnPage = [pageData count];
+                if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
+                    nextDetailRowToPrint++;
+                } else {
+                    nextDetailRowToPrint = 0;
+                    nextPageIndex++;
+                }
+            }
+            NSDictionary *nextRowData = [self rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
+            
             if (rowData != nil) {
 
                 [groupLevelKeys removeAllObjects];
+                [nextGroupLevelKeys removeAllObjects];
                 for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
                     id sortKey = [[rowData objectForKey:[sortDescriptor key]] retain];
                     [groupLevelKeys addObject:sortKey];
                     [sortKey release];
+                    if (nextRowData != nil) {
+                        id sortKeyNext = [[nextRowData objectForKey:[sortDescriptor key]] retain];
+                        if (sortKeyNext) [nextGroupLevelKeys addObject:sortKeyNext];
+                        [sortKeyNext release];
+                    }
                 }
             
                 for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
@@ -395,7 +416,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         switch ([item getType]) {
                                 
                             case MTDocumentObjectTypeAggregate: {
-                                
                                 RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
                                 
                                 RptqQueryField *queryField = [aggregateField aggregateField];
@@ -419,10 +439,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         
                                         break;
                                     }
-                                    case MTAggregateGroupByTypeSection:
-                                        dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys] retain];
+                                    case MTAggregateGroupByTypeSection: {
+                                        BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                                        if (useNextRowData) {
+                                            dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:nextGroupLevelKeys] retain];
+                                        } else {
+                                            dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys] retain];
+                                        }
                                         break;
-                                        
+                                    }
                                     case MTAggregateGroupByTypeReport:
                                         dataForGroup = [[self cachedDataByReport] retain];
                                         break;
@@ -525,10 +550,28 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             
                             case MTDocumentObjectTypeLabelDynamic: {
                                 
+                                NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
+                                NSInteger pageIndex = index;
+
+                                BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                                if (useNextRowData) {
+                                    NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                                    NSInteger numberOfItemsOnPage = [pageData count];
+                                    if (rowToPrint < numberOfItemsOnPage - 1) {
+                                        rowToPrint++;
+                                    } else {
+                                        rowToPrint = 0;
+                                        pageIndex++;
+                                    }
+                                }
+                                
+                                //NSDictionary *rowData = [self rowDataForRow: rowToPrint onPage: pageIndex];
+                                
+                                NSDictionary *rd = useNextRowData ? nextRowData : rowData;
                                 RptqQueryField *queryField = [[item isLabelDataField] referencesQueryField];
                                 NSString *tableFieldKey = [queryField tableFieldKey];
-                                NSDictionary *rowData = [self rowDataForRow:detailRowToPrint onPage:index];
-                                id value = [rowData objectForKey: tableFieldKey];
+                                //NSDictionary *rowData = [self rowDataForRow:rowToPrint onPage:index];
+                                id value = [rd objectForKey: tableFieldKey];
                                 MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
                                 displayString = [item formattedString:dataType
                                                                         forValue:value];
@@ -585,6 +628,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         }
         [pageSectionsToPrint release];
     }
+    [nextGroupLevelKeys release];
     [groupLevelKeys release];
 }
 

@@ -30,7 +30,7 @@
         RptqQuery *query = [[database hasQueries] anyObject];
         [self setManagedObjectContext:managedObjectContext];
         [self setCurrent: 0];
-        [self setTotal: [RptqQueryGroup numberOfGroupsForQuery:query]];
+        [self setTotal: [[query hasQueryGroups] count]];
     }
     return self;
 }

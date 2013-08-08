@@ -90,12 +90,7 @@
 }
 
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"self == %@", objectID];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    RptqDatabaseSchemaField *result = nil;
-    if (results) result = [results lastObject];
+    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectID];
     return result;
 }
 

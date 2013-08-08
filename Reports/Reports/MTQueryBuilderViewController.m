@@ -537,14 +537,14 @@
     [[self activeDocument] saveContext];
 }
 
-- (void)addQueryGroupWithQueryField:(RptqQueryField *)queryField andSortOrder:(MNSSortOrder)sortOrder {
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {
 
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
-
+    RptqQueryField *queryField = [RptqQueryField getQueryFieldForObjectID:queryFieldId fromObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
@@ -554,7 +554,7 @@
 
     
     NSError *error = nil;
-    NSInteger groupCount = [RptqQueryGroup numberOfGroupsForQuery:query];
+    NSInteger groupCount = [[query hasQueryGroups] count];
     NSInteger weight = groupCount - 1;
     NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
     NSUInteger rowFirstTransaction = weight;
@@ -563,7 +563,7 @@
     [[self tableViewQueryBuilder] beginUpdates];
     [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
-    [[self activeDocument] saveContext];
+    //[[self activeDocument] saveContext];
     [[self tableViewQueryBuilder] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
@@ -577,14 +577,15 @@
 
     NSIndexSet *indexSetSections = nil;
     MTReportDocument *reportDocument = [[self activeDocument] retain];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [reportDocument managedObjectContext]];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
     NSDictionary *oldLayout = [[self datamodel] retain];
     NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:MTTableSectionSectionsKey] retain];
     
-    RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:[reportDocument managedObjectContext]];
+    RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
     
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
     NSArray *queryTablesArray = [[[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]] retain];
@@ -638,7 +639,7 @@
             }
         }
     }
-    NSLog(@"Add table at %@", insertedRowIndexPath);
+    //NSLog(@"Add table at %@", insertedRowIndexPath);
     if (indexSetSections != nil) {
 
         [[self tableViewQueryBuilder] beginUpdates];
@@ -657,7 +658,7 @@
         [reportDocument saveContext];
         [[self tableViewQueryBuilder] endUpdates];
     }
-    
+    [managedObjectContext save:nil];
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
     [newLayoutSectionTypes release];
@@ -750,28 +751,26 @@
                 // MARK: Delete MTQuerySectionsTables
                 case MTQuerySectionsTables: {
                     
-                    NSArray *deleteRows = nil;
-                    NSIndexSet *deleteSections = nil;
-                    
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     
                     MTReportDocument *reportDocument = [[self activeDocument] retain];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
-                    // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
+                    NSArray *deleteRows = nil;
+                    NSIndexSet *deleteSections = nil;
                     
-                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];                    
+                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
-
+                    
                     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
                     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
-
+                    
                     deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
                     numberOfTables = numberOfTables - 1;
-
+                    
                     NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];
                     NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:MTTableSectionSectionsKey];
                     NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:MTTableSectionSectionsKey];
@@ -828,6 +827,10 @@
                     [deleteSections release];
                     [reportDocument release];
                     [oldTableLayout release];
+
+                    // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
+                    
+
                     break;
                 }
 

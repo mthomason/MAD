@@ -16,7 +16,7 @@
 @class MTQueryBuilderAddGroupViewController;
 
 @protocol MTQueryBuilderAddGroupDelegate
-- (void)addQueryGroupWithQueryField:(RptqQueryField *)queryField andSortOrder:(MNSSortOrder)sortOrder;
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField andSortOrder:(MNSSortOrder)sortOrder;
 @end
 
 @interface MTQueryBuilderAddGroupViewController : MTTableViewController

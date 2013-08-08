@@ -12,7 +12,8 @@
 @interface MTQueryBuilderAddGroupViewController ()
 
 @property (nonatomic, retain) RptqQueryField *field;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSave;
+@property (nonatomic, retain) NSManagedObjectID *fieldId;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @end
 
@@ -93,6 +94,7 @@
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)queryField {
     [[self navigationController] popToViewController:self animated:YES];
     NSString *fieldName = [queryField tableFieldKey];
+    [self setFieldId:[queryField objectID]];
     [self setField:queryField];
     [self setFieldName:fieldName];
     [[[self tableViewCellField] detailTextLabel] setText: [[queryField display] lowercaseString]];
@@ -126,7 +128,7 @@
 }
 
 - (IBAction)save:(id)sender {
-    [[self delegate] addQueryGroupWithQueryField:[self field] andSortOrder:[self sortOrder]];
+    [[self delegate] addQueryGroupWithQueryField:[self fieldId] andSortOrder:[self sortOrder]];
 }
 
 #pragma mark - Table View Sort Type Delegate
