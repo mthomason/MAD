@@ -10,8 +10,14 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>icon.png</string>
-		<string>icon@2x.png</string>
+		<string>Icon-29-Viewer-Lagacy.png</string>
+		<string>Icon-29-Viewer-Lagacy@2x.png</string>
+		<string>Icon-50-Viewer-Lagacy.png</string>
+		<string>Icon-50-Viewer-Lagacy@2x.png</string>
+		<string>Icon-57-Viewer-Lagacy.png</string>
+		<string>Icon-57-Viewer-Lagacy@2x.png</string>
+		<string>Icon-72-Viewer-Lagacy.png</string>
+		<string>Icon-72-Viewer-Lagacy@2x.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -19,8 +25,14 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>icon.png</string>
-				<string>icon@2x.png</string>
+				<string>Icon-29-Viewer-Lagacy.png</string>
+				<string>Icon-29-Viewer-Lagacy@2x.png</string>
+				<string>Icon-50-Viewer-Lagacy.png</string>
+				<string>Icon-50-Viewer-Lagacy@2x.png</string>
+				<string>Icon-57-Viewer-Lagacy.png</string>
+				<string>Icon-57-Viewer-Lagacy@2x.png</string>
+				<string>Icon-72-Viewer-Lagacy.png</string>
+				<string>Icon-72-Viewer-Lagacy@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
