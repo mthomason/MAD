@@ -398,6 +398,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [nextGroupLevelKeys removeAllObjects];
                 for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
                     id sortKey = [[rowData objectForKey:[sortDescriptor key]] retain];
+                    if (sortKey == nil) {
+                        sortKey = @"(null)";
+                    }
                     [groupLevelKeys addObject:sortKey];
                     [sortKey release];
                     if (nextRowData != nil) {

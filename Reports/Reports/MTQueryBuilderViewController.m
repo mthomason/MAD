@@ -887,12 +887,12 @@
                             NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
                             NSInteger headerSectionRow = weightToRemove + 2;
                             NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
-                            MTLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
+                            //MTLog(@"Index paths: %@, %@, %@", indexPath, [NSIndexPath indexPathForRow: headerSectionRow inSection: section], [NSIndexPath indexPathForRow: footerSectionRow inSection: section]);
                             
                             [tableView beginUpdates];
                             [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: @[indexPath]
                                                                 withRowAnimation: UITableViewRowAnimationAutomatic];
-                            [[self activeDocument] saveContext];
+                            [managedObjectContext save:nil];
                             [tableView endUpdates];
                         }
                         

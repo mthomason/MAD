@@ -940,7 +940,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [objectStr release];
                                             
                                         } else {
-                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
+                                            //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -950,7 +950,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
+                                            //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -960,7 +960,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
+                                            //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -970,7 +970,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
+                                            //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -986,7 +986,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [object release];
                                             }
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1002,7 +1002,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [object release];
                                             }
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1017,7 +1017,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [object release];
                                             }
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1033,7 +1033,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [object release];
                                             }
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1048,7 +1048,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [object release];
                                             }
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1061,7 +1061,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1073,7 +1073,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1085,29 +1085,27 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
                                     case SYBINT4: {
                                         if (sybInt4BindNull[indexOfType] != -1) {
                                             NSNumber *object = [[NSNumber alloc] initWithInteger:sybInt4Bind[indexOfType]];
-                                            //NSLog(@"%@\t\t(SYBINT4):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
+                                            //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
                                     case SYBINT8: {
                                         if (sybInt8BindNull[indexOfType] != -1) {
                                             NSNumber *object = [[NSNumber alloc] initWithLongLong:sybInt8Bind[indexOfType]];
-                                            //NSLog(@"%@\t\t(SYBINT8):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1141,7 +1139,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [resultsForRow setObject:newDate forKey:fieldName];
                                             [newDate release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
                                         break;
                                     }
