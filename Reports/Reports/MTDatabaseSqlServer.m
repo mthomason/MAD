@@ -39,10 +39,10 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(queuePriorityBackground, ^{
+    //    dispatch_async(dispatch_get_main_queue(), ^{
             
 
             [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
@@ -112,8 +112,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
             }];
 
-        });
-    });
+        //});
+    //});
 }
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
@@ -352,12 +352,14 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
     id queryResult = [self runQuery:queryString];
     
+    for (NSDictionary *result in queryResult) {
+        NSLog(@"%@", result);
+        id r = result[@"ABBREV_0.Calcium"];
+        //const char *type = [r objCType];
+    }
 
     NSError *error = nil;
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult
-                                                                    format:NSPropertyListBinaryFormat_v1_0
-                                                                   options:0
-                                                                     error:NULL];
+    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
 
     NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
     NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
@@ -928,10 +930,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             
                                             NSDecimalNumber *decimalNumber = [[NSDecimalNumber alloc] initWithString:objectStr];
                                             if (decimalNumber) {
-                                                [resultsForRow setObject:decimalNumber forKey:fieldName];
-                                                //NSLog(@"%@\t\t(SYBNUMERIC):\t\t(%@)", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], decimalNumber);
+                                                resultsForRow[fieldName] = decimalNumber;
                                             } else {
-                                                [resultsForRow setObject:@"Error" forKey:fieldName];
+                                                resultsForRow[fieldName] = @"Error";
                                             }
                                             
                                             [decimalNumber release];
@@ -946,8 +947,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     case SYBREAL: {
                                         if (sybRealBindNull[indexOfType] != -1) {
                                             NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
-                                            //NSLog(@"%@\t\t(SYBREAL):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
-                                            [resultsForRow setObject:object forKey:fieldName];
+                                            resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
                                             [resultsForRow setObject:@"NULL" forKey:fieldName];
@@ -957,8 +957,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     case SYBFLTN: {
                                         if (sybFltNBindNull[indexOfType] != -1) {
                                             NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
-                                            //NSLog(@"%@\t\t(SYBFLTN):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
-                                            [resultsForRow setObject:object forKey:fieldName];
+                                            resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
                                             [resultsForRow setObject:@"NULL" forKey:fieldName];
@@ -968,8 +967,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     case SYBFLT8: {
                                         if (sybFlt8BindNull[indexOfType] != -1) {
                                             NSNumber *object = [[NSNumber alloc] initWithDouble:sybFlt8Bind[indexOfType]];
-                                            //NSLog(@"%@\t\t(SYBFLT8):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
-                                            [resultsForRow setObject:object forKey:fieldName];
+                                            resultsForRow[fieldName] = object;
                                             [object release];
                                         } else {
                                             [resultsForRow setObject:@"NULL" forKey:fieldName];
@@ -984,9 +982,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybChar != nil) {
                                                 NSString *object = [[NSString alloc] initWithCString: sybChar
                                                                                             encoding: NSStringEncodingConversionAllowLossy];
-                                                
-                                                //NSLog(@"%@\t\t(SYBCHAR):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
-                                                [resultsForRow setObject:object forKey:fieldName];
+                                                resultsForRow[fieldName] = object;
                                                 [object release];
                                             }
                                         } else {
@@ -1100,7 +1096,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
-                                            [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                            [resultsForRow setObject:@"NULL" forKey:fieldName];
                                         }
                                         break;
                                     }
@@ -1372,10 +1368,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         
         __block BOOL continueToGo = YES;
         dispatch_semaphore_t showError = dispatch_semaphore_create(0);
-        [error presentErrorToUserWithContinue:^(BOOL success) {
-            continueToGo = success;
-            dispatch_semaphore_signal(showError);
-        }];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [error presentErrorToUserWithContinue:^(BOOL success) {
+                continueToGo = success;
+                dispatch_semaphore_signal(showError);
+            }];
+        });
         dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
         dispatch_release(showError);
 
@@ -1393,107 +1391,104 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     
     NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [credentals server],  [credentals port], [credentals database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
-            
-            dispatch_semaphore_t semaphoreQueuePriorityBackground = dispatch_semaphore_create(0);
 
-            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            dispatch_async(queuePriorityBackground, ^{
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
 
-                
-                DBPROCESS *dbconn = NULL;
-                LOGINREC *login;
-                char hostname[30];
-                int max_len = 30;
-                NSError *error = nil;
-                
-                
-                /* Init the DB library */
-                if (dbinit() == FAIL) {
-                    NSString *message = @"Could not init db.";
-                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
-                }
-                dberrhandle(err_handler);
-                
-                if ((error == nil) && ((login = dblogin()) == FAIL)) {
-                    NSString *message = @"Could not initialize dblogin() structure.";
-                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
-                }
-                
-                //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
-                char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
-                
-                if (error == nil) {
-                    /* Initialize the login params in the structure */
-                    DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
-                    DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
-                    DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
-                    DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
+                if (success) {
+                    
+                    DBPROCESS *dbconn = NULL;
+                    BOOL connected;
+                    NSError *error = nil;
+                    
+                    //dispatch_semaphore_t semaphoreQueuePriorityBackground = dispatch_semaphore_create(0);
                     
                     
-                    if (gethostname(hostname, max_len) == 0) {
-                        DBSETLHOST(login, hostname);
+                    
+                    LOGINREC *login;
+                    char hostname[30];
+                    int max_len = 30;
+                    
+                    
+                    /* Init the DB library */
+                    if (dbinit() == FAIL) {
+                        NSString *message = @"Could not init db.";
+                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
                     }
+                    dberrhandle(err_handler);
                     
-                    //if (gethostname(hostname, max_len) == 0) {
-                    //DBSETLHOST(login, h);
-                    //}
-                    
-                }
-                
-                if (error == nil) {
-                    if ((dbconn = dbopen(login, s)) == NULL) {
-                        
-                        NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
+                    if ((error == nil) && ((login = dblogin()) == FAIL)) {
+                        NSString *message = @"Could not initialize dblogin() structure.";
                         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                         error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+                    }
+                    
+                    //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
+                    char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
+                    
+                    if (error == nil) {
+                        /* Initialize the login params in the structure */
+                        DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
+                        DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
+                        DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
+                        DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
+                        
+                        
+                        if (gethostname(hostname, max_len) == 0) {
+                            DBSETLHOST(login, hostname);
+                        }
+                        
+                        //if (gethostname(hostname, max_len) == 0) {
+                        //DBSETLHOST(login, h);
+                        //}
                         
                     }
-                }
-                
-                
-                BOOL connected = (error == nil);
-                if (!fromKeyChain && connected) {
                     
-                    dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
-
-                    dispatch_async(dispatch_get_main_queue(), ^{
-
-                        [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
+                    if (error == nil) {
+                        if ((dbconn = dbopen(login, s)) == NULL) {
                             
-                            dispatch_semaphore_signal(semaphoreSaveCredentials);
-                        }];
-                        
-                        
-                    });
-                    dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
-                    dispatch_release(semaphoreSaveCredentials);
-
+                            NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
+                            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                            error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+                            
+                        }
+                    }
                     
+                    
+                    connected = (error == nil);
+                    if (!fromKeyChain && connected) {
+                        dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
+                                dispatch_semaphore_signal(semaphoreSaveCredentials);
+                            }];
+                        });
+                        dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
+                        dispatch_release(semaphoreSaveCredentials);
+
+                    }
+                    
+                    //dispatch_semaphore_signal(semaphoreQueuePriorityBackground);
+                    
+                    //});
+                    
+                    //dispatch_semaphore_wait(semaphoreQueuePriorityBackground, DISPATCH_TIME_FOREVER);
+                    //dispatch_release(semaphoreQueuePriorityBackground);
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        completion(dbconn, connected, error);
+                    });
+                    
+                } else {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        completion(nil, NO, connectionError);
+                    });
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(dbconn, connected, error);
-                });
-
-                dispatch_semaphore_signal(semaphoreQueuePriorityBackground);
-
             });
-            
-            dispatch_semaphore_wait(semaphoreQueuePriorityBackground, DISPATCH_TIME_FOREVER);
-            dispatch_release(semaphoreQueuePriorityBackground);
-
-            
-        } else {
-            completion(nil, NO, connectionError);
-        }
 
     }];
-    
-
 
 }
 

@@ -933,7 +933,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSData *readData = [[NSData dataWithContentsOfURL:url options:0 error:&error] retain];
             if (readData) {
                 error = nil;
-                cachedResultsForReportSerialized = [[[NSPropertyListSerialization propertyListWithData:readData options:0 format:nil error:&error] retain] autorelease];
+                NSPropertyListFormat format;
+                cachedResultsForReportSerialized = [[[NSPropertyListSerialization propertyListWithData:readData options:0 format:&format error:&error] retain] autorelease];
             }
             [readData release];
         }
@@ -951,6 +952,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
         NSLog(@"Step 2");
+        NSString *lastKey;
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
@@ -958,6 +960,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                                            ascending: sortAscending];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
             [sortDescriptor release];
+            lastKey = [[[queryGroup fieldNameQuery] retain] autorelease];
         }
         
         [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
@@ -973,6 +976,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         //NSLog(@"Speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
         //NSLog(@"Results %@", sortedResultsByRow);
         //Get unique, distinct, and sorted... quickly
+        for (NSDictionary *dictionary in cachedResultsForReportSerialized) {
+            id obj = [dictionary objectForKey:@"ABBREV_0.Calcium"];
+            NSLog(@"obj %@", obj);
+        }
         NSArray *sortedResultsByRow = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         
         start = [NSDate date];

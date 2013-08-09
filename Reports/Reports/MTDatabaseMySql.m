@@ -35,71 +35,71 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    dispatch_async(queuePriorityBackground, ^{
-//        dispatch_async(dispatch_get_main_queue(), ^{
+    __block MysqlServer *serv = [[MysqlServer alloc] init];
+    
+    [serv setHost:      [[self databaseConnection] server]];
+    [serv setPort:      [[self databaseConnection] port]];
+    [serv setSchema:    [[self databaseConnection] database]];
+    
+    NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
+    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
+        
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
             
-            __block MysqlServer *serv = [[MysqlServer alloc] init];
-            
-            [serv setHost:      [[self databaseConnection] server]];
-            [serv setPort:      [[self databaseConnection] port]];
-            [serv setSchema:    [[self databaseConnection] database]];
-            
-            NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
-            [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
-
+            if (success) {
+                
+                [serv setUser:      username];
+                [serv setPassword:  password];
+                
+                NSError *error = nil;
+                MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
+                NSMutableArray *results = nil;
+                BOOL success = conn != nil;
+                
                 if (success) {
-
-                    [serv setUser:      username];
-                    [serv setPassword:  password];
-                    
-                    NSError *error = nil;
-                    MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&error];
-                    NSMutableArray *results = nil;
-                    BOOL success = conn != nil;
-                    
-                    if (success) {
-                        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
-                        if (fetch) {
-                            if ([[fetch fields] count] > 0) {
-                                if (!fromKeyChain) {
-                                    dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
+                    MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+                    if (fetch) {
+                        if ([[fetch fields] count] > 0) {
+                            if (!fromKeyChain) {
+                                dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
+                                dispatch_sync(dispatch_get_main_queue(), ^{
                                     [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
                                         dispatch_semaphore_signal(semaphoreSaveCredentials);
                                     }];
-                                    dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
-                                    dispatch_release(semaphoreSaveCredentials);
-                                }
+                                });
+                                dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
+                                dispatch_release(semaphoreSaveCredentials);
                                 
-                                MysqlFetchField *resultsTableName = [[fetch fields] objectAtIndex:0];
-                                results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
-                                
-                                for (NSDictionary *tableName in [fetch results]) {
-                                    NSString *tn = [tableName objectForKey:[resultsTableName name]];
-                                    MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
-                                    [results addObject: databaseTable];
-                                    [databaseTable release];
-                                }
+                            }
+                            
+                            MysqlFetchField *resultsTableName = [[fetch fields] objectAtIndex:0];
+                            results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
+                            
+                            for (NSDictionary *tableName in [fetch results]) {
+                                NSString *tn = [tableName objectForKey:[resultsTableName name]];
+                                MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
+                                [results addObject: databaseTable];
+                                [databaseTable release];
                             }
                         }
                     }
-                    [serv release];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-
-                    completion(success, error, results);
-                    });
-
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-
-                    completion(success, credentialsError, nil);
-                    });
                 }
-            }];
-            
-        //});
-    });
+                [serv release];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    completion(success, error, results);
+                });
+                
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    completion(success, credentialsError, nil);
+                });
+            }
+        });
+    }];
 }
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table

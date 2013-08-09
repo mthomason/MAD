@@ -115,9 +115,9 @@
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocument];
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    dispatch_async(queuePriorityBackground, ^{
+    //dispatch_async(queuePriorityBackground, ^{
 
     [UIManagedDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention
                                     withWrapper:[MTReportDocument class]
@@ -140,6 +140,8 @@
             }
             
             if (database) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+
                 [documentReport addDatasourceToReport: database completion: ^(BOOL success2, NSError *error) {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -189,7 +191,7 @@
                     });
                     
                 }];
-                
+                });
             }
             
             [database release];
@@ -212,7 +214,7 @@
             });
         }
     }];
-    });
+    //});
 
     
     

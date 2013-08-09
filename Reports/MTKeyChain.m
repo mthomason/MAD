@@ -175,8 +175,7 @@ const NSUInteger tagAlertViewAquire = 666;
                                     (id)kSecAttrAccount : MTKeyChainUsernameAccountDesc,
                                     (id)kSecReturnData : @YES};
     NSData *queryUsernameData = NULL;
-    OSStatus queryUsernameStatus = SecItemCopyMatching((CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
-    
+
     NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
     NSDictionary *queryPassword = @{(id)kSecClass : (id)kSecClassGenericPassword,
                                     (id)kSecAttrService : keyPassword,
@@ -184,6 +183,11 @@ const NSUInteger tagAlertViewAquire = 666;
                                     (id)kSecReturnData : @YES};
     
     NSData *queryPasswordData = NULL;
+    
+    //SecItemDelete((CFDictionaryRef)queryUsername);
+    //SecItemDelete((CFDictionaryRef)queryPassword);
+    
+    OSStatus queryUsernameStatus = SecItemCopyMatching((CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
     OSStatus queryPasswordStatus = SecItemCopyMatching((CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     
     //Check items doesn't exist
@@ -223,7 +227,7 @@ const NSUInteger tagAlertViewAquire = 666;
         }
         case stateGetPassword: {
             //Username found.  What about password?
-            dispatch_async(dispatch_get_main_queue(), ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
                 NSString *username = [[[NSString alloc] initWithData:queryUsernameData
                                                             encoding:NSUTF8StringEncoding] autorelease];
                 [self setCredentialsUsername:username];
@@ -236,12 +240,12 @@ const NSUInteger tagAlertViewAquire = 666;
                 [alertView setTag:tagAlertViewAquire];
                 [alertView show];
                 [alertView release];
-            });
+            //});
             break;
         }
         case stateGetUsernameAndPassword: {
             //Username found.  What about password?
-            dispatch_async(dispatch_get_main_queue(), ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
                                                                     message:@"Please enter your credentials."
                                                                    delegate:self
@@ -251,7 +255,7 @@ const NSUInteger tagAlertViewAquire = 666;
                 [alertView setTag:tagAlertViewAquire];
                 [alertView show];
                 [alertView release];
-            });
+            //});
             break;
         }
         default:
@@ -281,6 +285,12 @@ const NSUInteger tagAlertViewAquire = 666;
                         success = YES;
                         username = [[alertView textFieldAtIndex:0] text];
                         password = [[alertView textFieldAtIndex:1] text];
+                        if (username == nil) {
+                            username = @"";
+                        }
+                        if (password == nil) {
+                            password = @"";
+                        }
                         break;
                     default:
                         break;
