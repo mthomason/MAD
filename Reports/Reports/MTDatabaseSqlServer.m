@@ -316,20 +316,24 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
+NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
+
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
     dispatch_async(queuePriorityBackground, ^{
+        
+        NSString *sql = [NSString stringWithFormat:@"%@ %@ "
+                         @"%@"
+                         @" %@;",
+                         MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name];
+        NSArray *resultStrings = [self runQuery:sql];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            completion(YES, nil, resultStrings);
             
-            NSString *sql = [NSString stringWithFormat:@"SELECT TOP 100 %@ "
-                             @"FROM %@;",
-                             schemaField.name, schemaField.inTable.name];
-            
-            completion(YES, nil, [self runQuery:sql]);
-
         });
     });
     
@@ -352,11 +356,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
     id queryResult = [self runQuery:queryString];
     
-    for (NSDictionary *result in queryResult) {
-        NSLog(@"%@", result);
-        id r = result[@"ABBREV_0.Calcium"];
+    //for (NSDictionary *result in queryResult) {
+        //NSLog(@"%@", result);
+        //id r = result[@"ABBREV_0.Calcium"];
         //const char *type = [r objCType];
-    }
+    //}
 
     NSError *error = nil;
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
@@ -398,8 +402,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             
             NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
             
-            NSString *begining = [sql substringToIndex:[sql rangeOfString:@"\nFROM\n"].location];
+            NSString *begining = [sql substringToIndex:[sql rangeOfString:MTSqlFrom].location];
             NSRange rangeOfSelectPart = [begining rangeOfString:[self selectPart]];
+            if (rangeOfSelectPart.location == NSNotFound) {
+                rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
+            }
             NSString *selectColumns = [begining substringFromIndex:rangeOfSelectPart.location + rangeOfSelectPart.length];
             NSArray *columns = [selectColumns componentsSeparatedByString:@","];
             

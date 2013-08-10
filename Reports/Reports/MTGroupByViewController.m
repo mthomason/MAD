@@ -31,7 +31,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         
         NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+        NSString *weight = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
         [request setSortDescriptors: @[sortDescriptor]];
         NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request

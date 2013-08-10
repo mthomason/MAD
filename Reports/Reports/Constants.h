@@ -155,6 +155,8 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
 
+extern NSString * const MTSqlFrom;;
+
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 

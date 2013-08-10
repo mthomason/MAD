@@ -223,44 +223,43 @@
             
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
-                for (RptqQueryGroup *group in groupsUnsorted) {
-                    if ([[group weight] integerValue] == groupNumber) {
-                        NSSet *sections = [[group hasSection] retain];
-                        for (RptqDocumentSection *section in sections) {
-                            if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                                resultSection = [[section retain] autorelease];
-                                break;
-                            }
-                        }                    
-                        [sections release];
+                NSSet *groupsUnsorted = [[query hasQueryGroups] retain];
+                NSString *weight = NSStringFromSelector(@selector(weight));
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+                NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
+                RptqQueryGroup *group = sortedArray[groupNumber];
+
+                NSSet *sections = [[group hasSection] retain];
+                for (RptqDocumentSection *section in sections) {
+                    if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+                        resultSection = [[section retain] autorelease];
                         break;
                     }
                 }
+                [sections release];
+
                 [groupsUnsorted release];
                 break;
             }
             
             case MNSDocumentSectionTypeGroupFooter: {
-                //NSLog(@"Get GF, %d", row);
-                NSInteger body              = 2 + numberOfGroups;
-                NSInteger indentLevel = body - (row - body);
-                NSInteger groupNumber = indentLevel - 2;
-                NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
-                for (RptqQueryGroup *group in groupsUnsorted) {
-                    //NSLog(@"Group Footer Section, %@, %@,\nGroupNumber: %d", group, ([[group weight] integerValue] == groupNumber)?@"YES":@"NO", groupNumber);
-                    if ([[group weight] integerValue] == groupNumber) {
-                        NSSet *sections = [[group hasSection] retain];
-                        for (RptqDocumentSection *section in sections) {
-                            if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                                resultSection = [[section retain] autorelease];
-                                break;
-                            }
-                        }                    
-                        [sections release];
+                NSInteger body          = 2 + numberOfGroups;
+                NSInteger indentLevel   = body - (row - body);
+                NSInteger groupNumber   = indentLevel - 2;
+                NSSet *groupsUnsorted   = [[query hasQueryGroups] retain];
+                NSString *weight = NSStringFromSelector(@selector(weight));
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+                NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
+                RptqQueryGroup *group = sortedArray[groupNumber];
+                NSSet *sections = [[group hasSection] retain];
+                for (RptqDocumentSection *section in sections) {
+                    if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+                        resultSection = [[section retain] autorelease];
                         break;
                     }
                 }
+                [sections release];
+                [groupsUnsorted release];
                 break;
             }
             

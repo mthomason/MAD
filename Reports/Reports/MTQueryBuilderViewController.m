@@ -740,13 +740,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    MTQuerySections ts = [self tableSectionTypeForIndexPathSection:[indexPath section]];
+    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:[indexPath section]];
 
 	switch (editingStyle) {
 
         // MARK: UITableViewCellEditingStyleDelete
         case UITableViewCellEditingStyleDelete: {
-            switch (ts) {
+            switch (querySection) {
                     
                 // MARK: Delete MTQuerySectionsTables
                 case MTQuerySectionsTables: {
@@ -860,14 +860,15 @@
 
                     if (document) {
                         RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                        NSSet *groups = [[query hasQueryGroups] retain];
+                        //NSSet *groups = [[query hasQueryGroups] retain];
                         NSInteger weightToRemove = [indexPath row];
 
                         RptqQueryGroup *groupToRemove = nil;
-                        for (RptqQueryGroup *group in groups) {
+                        for (RptqQueryGroup *group in [query hasQueryGroups]) {
                             if ([[group weight] integerValue] > weightToRemove) {
                                 [group setWeight:[NSNumber numberWithInteger:([[group weight] integerValue] - 1)]];
-                            } else if ([[group weight] integerValue] == weightToRemove) {
+                            } else
+                                if ([[group weight] integerValue] == weightToRemove) {
                                 groupToRemove = group;
                             }
                         }
@@ -884,6 +885,8 @@
                             [managedObjectContext deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
+                            //Reweight Groups
+                            
                             NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
                             NSInteger headerSectionRow = weightToRemove + 2;
                             NSInteger footerSectionRow = 5 + (numberOfGroups * 2) - 1 - 2 - weightToRemove;
@@ -892,11 +895,20 @@
                             [tableView beginUpdates];
                             [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: @[indexPath]
                                                                 withRowAnimation: UITableViewRowAnimationAutomatic];
-                            [managedObjectContext save:nil];
+                            [[query managedObjectContext] save:nil];
+                            NSString *weight = NSStringFromSelector(@selector(weight));
+                            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+                            NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+                            NSUInteger counter = 0;
+                            for (RptqQueryGroup *group in sortedQueryGroups) {
+                                [group setWeight:@(counter)];
+                                counter++;
+                            }
+                            [[query managedObjectContext] save:nil];
                             [tableView endUpdates];
                         }
                         
-                        [groups release];
+                        //[groups release];
                         
                     }
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];

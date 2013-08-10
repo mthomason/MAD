@@ -139,7 +139,7 @@
             [result appendString:[self sqlSelectExpressionWithTables:[topologicalSort toArray]
                                              forManagedObjectContext:[query managedObjectContext]]];
             
-            [result appendString:@"\nFROM\n"];
+            [result appendString:MTSqlFrom];
             
             NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
             NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];

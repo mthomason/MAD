@@ -397,21 +397,23 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [groupLevelKeys removeAllObjects];
                 [nextGroupLevelKeys removeAllObjects];
                 for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
-                    id sortKey = [[rowData objectForKey:[sortDescriptor key]] retain];
+                    id sortKey = [rowData objectForKey:[sortDescriptor key]];
                     if (sortKey == nil) {
                         sortKey = @"(null)";
                     }
+                    [sortKey retain];
                     [groupLevelKeys addObject:sortKey];
                     [sortKey release];
                     if (nextRowData != nil) {
-                        id sortKeyNext = [[nextRowData objectForKey:[sortDescriptor key]] retain];
+                        id sortKeyNext = [nextRowData objectForKey:[sortDescriptor key]];
                         if (sortKeyNext == nil) {
                             sortKeyNext = @"(null)";
                         }
                         if (sortKeyNext) {
+                            [sortKeyNext retain];
                             [nextGroupLevelKeys addObject:sortKeyNext];
+                            [sortKeyNext release];
                         }
-                        [sortKeyNext release];
                     }
                 }
             
@@ -960,7 +962,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
         NSLog(@"Step 2");
-        NSString *lastKey;
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
@@ -968,7 +969,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                                            ascending: sortAscending];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
             [sortDescriptor release];
-            lastKey = [[[queryGroup fieldNameQuery] retain] autorelease];
         }
         
         [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
@@ -984,10 +984,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         //NSLog(@"Speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
         //NSLog(@"Results %@", sortedResultsByRow);
         //Get unique, distinct, and sorted... quickly
-        for (NSDictionary *dictionary in cachedResultsForReportSerialized) {
-            id obj = [dictionary objectForKey:@"ABBREV_0.Calcium"];
-            NSLog(@"obj %@", obj);
-        }
+
         NSArray *sortedResultsByRow = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         
         start = [NSDate date];
@@ -1202,7 +1199,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         for (NSDictionary *result in sortedResults) {
             valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
-            
+            if (valueForField == nil) {
+                valueForField = @"(null)";
+            }
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
 
                 id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup

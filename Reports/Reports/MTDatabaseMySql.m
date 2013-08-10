@@ -400,9 +400,9 @@
                             dispatch_release(semaphoreSaveCredentials);
                         }
                         NSString *sql = [NSString stringWithFormat:@"SELECT %@ "
-                                         @"FROM %@ "
+                                         @"%@ %@ "
                                          @"LIMIT 100;",
-                                         schemaField.name, schemaField.inTable.name];
+                                         schemaField.name, MTSqlFrom, schemaField.inTable.name];
                         fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
                     }
                     [serv release];

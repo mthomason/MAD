@@ -102,10 +102,9 @@
 }
 
 - (RptqQueryGroup *)firstQueryGroup {
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == 0"];
-    //NSSet *groups = [[self hasQueryGroups] filteredSetUsingPredicate:predicate];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"weight" ascending:YES];
-    NSArray *results = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sort]];
+    NSString *weight = NSStringFromSelector(@selector(weight));
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+    NSArray *results = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
     return ([results count] >= 1) ? [results objectAtIndex:0] : nil;
 }
 

@@ -180,6 +180,8 @@
         result = [[resultObject retain] autorelease];
     } else if ([resultObject isKindOfClass:[NSNumber class]]) {
         result = [NSString stringWithFormat:@"%@", resultObject];
+    } else if (resultObject == nil) {
+        result = @"NULL";
     } else {
         result = @"";
     }
@@ -231,11 +233,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)viewDidUnload {
-    [self setTableViewHeightConstraint:nil];
-    [super viewDidUnload];
 }
 
 @end

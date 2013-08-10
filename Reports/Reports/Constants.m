@@ -12,6 +12,8 @@
 
 //BOOL const MTDebug = YES;
 
+NSString * const MTSqlFrom = @"\nFROM\n";
+
 #pragma mark Bundle Ids
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
