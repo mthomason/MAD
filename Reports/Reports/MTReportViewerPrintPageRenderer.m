@@ -405,7 +405,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     [sortKey release];
                     if (nextRowData != nil) {
                         id sortKeyNext = [[nextRowData objectForKey:[sortDescriptor key]] retain];
-                        if (sortKeyNext) [nextGroupLevelKeys addObject:sortKeyNext];
+                        if (sortKeyNext == nil) {
+                            sortKeyNext = @"(null)";
+                        }
+                        if (sortKeyNext) {
+                            [nextGroupLevelKeys addObject:sortKeyNext];
+                        }
                         [sortKeyNext release];
                     }
                 }
@@ -1076,8 +1081,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
             
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
+            [allKeys removeObject:@"(null)"];
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-            NSArray *allKeysSorted = [[allKeys sortedArrayUsingSelector:sortSelector] retain];
+            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
+            [allKeysSorted insertObject:@"(null)" atIndex:0];
             NSEnumerator *loopEnumerator;
 
             if ([desc ascending] == NO) {
@@ -1216,6 +1223,16 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                   level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
+            [resultsDictionary setObject:resultOfNextGroup forKey:key];
+        } else {
+            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
+                                                        level: (level + 1)];
+            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
+            if (key == nil) {
+                NSNull *n = [[NSNull alloc] init];
+                key = @"(null)";
+                [n release];
+            }
             [resultsDictionary setObject:resultOfNextGroup forKey:key];
         }
         
