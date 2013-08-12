@@ -800,7 +800,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSError *error = nil;
     [[reportDocument managedObjectContext] save:&error];
     
-    NSLog(@"error %@", error);
     [reportDocument saveToURL:[reportDocument fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
         if (insertNewSection) {
             NSInteger index = numberOfRows - 1;
@@ -985,7 +984,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             NSManagedObjectID *objid = [elementView objectIdTag];
             if (objid != nil) {
                 if ([objid isTemporaryID]) {
-                    NSLog(@"Fix HERE");
+                    // FIXME: If temporary id.
+                    MTLog(@"Fix HERE");
                 }
             }
             
@@ -1644,7 +1644,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"Display number cell at index path %@", indexPath);
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
@@ -1743,13 +1742,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                             fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    //NSLog(@"Number of items: %d in section: %d", [objects count], section);
     return [objects count];
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"viewForSupplementaryElementOfKind: %@ atIndexPath %@", kind, indexPath);
-
+    
     MTCollectionReuseableViewDefault *result = nil;
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
@@ -1779,12 +1776,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[self activeDocument] managedObjectContext]];
-    //NSLog(@"numberOfSectionsInCollectionView: %d", [[documentSection hasRows] count]);
     return [[documentSection hasRows] count];
 }
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
-    //NSLog(@"numberOfItemsInSection");
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[[self activeDocument] managedObjectContext]];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
@@ -1855,7 +1850,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    //NSLog(@"Perform action yo!!! %@", NSStringFromSelector(action));
     NSInteger row = [indexPath row];
     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];

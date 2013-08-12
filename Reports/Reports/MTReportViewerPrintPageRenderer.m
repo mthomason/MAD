@@ -599,21 +599,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             }
                         }
 
-                        
-                        //CGRect elementViewFrame = [item elementViewFrame]
-                        
                         CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
                         CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
                         CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
-                        //NSLog(@"%@", NSStringFromCGRect(elementCanvasRect));
 
                         if (drawingObject == nil) {
                             
                             NSMutableAttributedString *dObject = [[NSMutableAttributedString alloc] initWithString: displayString
                                                                                    attributes: [self attributesForDocumentObject:item]];
                             [dObject drawInRect:elementCanvasRect];
-                            
-                            //[dObject drawInRect:elementCanvasRect lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentCenter];
                             [dObject release];
 
                         } else {
@@ -948,11 +942,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             }
             [readData release];
         }
-        NSLog(@"Step 1");
 
-        //This takes a long time....
-
-        
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
@@ -977,28 +967,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         //Get unique, distinct, and sorted... slowly
         NSDate *start = [NSDate date];
 
-        //NSSet *resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
-        //NSArray *sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
-        
-        
-        //NSLog(@"Speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
-        //NSLog(@"Results %@", sortedResultsByRow);
-        //Get unique, distinct, and sorted... quickly
-
         NSArray *sortedResultsByRow = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
         
         start = [NSDate date];
-
-        //resultsByRowSet = [NSSet setWithArray:cachedResultsForReportSerialized];
-        //sortedResultsByRow = [resultsByRowSet sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
-        
-        NSLog(@"Result speed: %0.2f", [[NSDate date] timeIntervalSinceDate:start]);
-        //NSLog(@"Results %@", sortedResultsByRow);
-        
         sortedResultsByRow = [sortedResultsByRow retain];
         
-        NSLog(@"Step 3");
-
         [self setCachedDataByReport:sortedResultsByRow];
         
         id groupedRows = [[self cachedGroupedResults:sortedResultsByRow
@@ -1015,14 +988,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self cacheReportHeaderWithValueDictionary:groupedRows];
         
         BOOL detailPrinted = NO;
-        NSLog(@"Step 4");
 
         [self cacheGroupLevel:[query firstQueryGroup]
                   groupedRows:groupedRows
              groupedRowsLevel:0
                 detailPrinted:&detailPrinted];
-        NSLog(@"Step 5");
-
+        
         CGFloat reportFooterHeight = [[[[self document] hasReportFooterSection] layoutHeight] floatValue];
         
         [self cachePageBreakWithNextItemHeight: reportFooterHeight

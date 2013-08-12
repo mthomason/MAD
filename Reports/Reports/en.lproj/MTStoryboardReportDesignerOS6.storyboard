@@ -5643,6 +5643,7 @@
         <class className="MTReportDesignerDocumentObjectFormat" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportDesignerDocumentObjectFormat.h"/>
             <relationships>
+                <relationship kind="action" name="controlValueChanged:"/>
                 <relationship kind="outlet" name="labelNumberOfDecimals" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="stepperNumberOfDecimals" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="tableViewCellCurrency" candidateClass="UITableViewCell"/>
@@ -5852,6 +5853,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="UINavigationControllerModelControllers" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UINavigationControllerModelControllers.h"/>

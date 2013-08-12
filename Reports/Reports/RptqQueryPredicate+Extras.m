@@ -129,6 +129,15 @@
     }
 }
 
++ (void)deletePredicate:(RptqQueryPredicate *)predicate {
+    if (predicate) {
+        NSManagedObjectContext *objectContext = [[predicate managedObjectContext] retain];
+        if (objectContext) {
+            [objectContext deleteObject:predicate];
+        }
+    }
+}
+
 - (NSString *)symbolForComparson {
     return [MNSPredicateOperatorSymbols objectAtIndex:[[self comparson] integerValue]];
 }

@@ -119,7 +119,6 @@
 		4C0E7779163B5AEC003B951E /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
 		4C0E777A163B5AEC003B951E /* MTResizeHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */; };
 		4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
-		4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C0E7790163B5AEC003B951E /* MTReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MTReportViewerViewController.m */; };
 		4C0E7793163B5AEC003B951E /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD8DB7150386CB002B9E77 /* UIColor+PaperPatterns.m */; };
@@ -820,7 +819,6 @@
 		4C84EEB7178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB8178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB9178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
-		4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */; };
 		4C85C6AA14FF72F3003785AC /* MTReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A914FF72F3003785AC /* MTReportViewerViewController.m */; };
 		4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */; };
@@ -861,7 +859,6 @@
 		4C860AF7167EDE7000AC1904 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4C860AF9167EDE7000AC1904 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
-		4C860AFA167EDE7000AC1904 /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4C860AFB167EDE7000AC1904 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
 		4C860AFF167EDE7000AC1904 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
@@ -1153,11 +1150,9 @@
 		4CA163A9167EB8AE00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02D714B9755400C49BE9 /* MTManagedDocumentPreferencesUser.m */; };
 		4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
-		4CA163AC167EB8B300540A14 /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4CA163AE167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CA163AF167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
-		4CA163B0167EB8B300540A14 /* UIGestureRecognizerMove.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */; };
 		4CA163B1167EB8B300540A14 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
 		4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
@@ -2295,8 +2290,6 @@
 		4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSqlServer.m; sourceTree = "<group>"; };
 		4C84EEB3178B43F20028BF49 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Border.h"; sourceTree = "<group>"; };
 		4C84EEB4178B43F20028BF49 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Border.m"; sourceTree = "<group>"; };
-		4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerMove.h; sourceTree = "<group>"; };
-		4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerMove.m; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
 		4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectLabelDataField+Extras.m"; sourceTree = "<group>"; };
 		4C85C6A814FF72F3003785AC /* MTReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerViewController.h; sourceTree = "<group>"; };
@@ -3090,8 +3083,6 @@
 				4C88A9C614EE23CF0069A0AF /* MTResizeHandleView.m */,
 				4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */,
 				4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */,
-				4C85C6A114FCAD29003785AC /* UIGestureRecognizerMove.h */,
-				4C85C6A214FCAD29003785AC /* UIGestureRecognizerMove.m */,
 				4C87407815052D3D007FC473 /* MTClipboardView.h */,
 				4C87407915052D3D007FC473 /* MTClipboardView.m */,
 				4C00816E14B6C4F8003DF437 /* Images */,
@@ -5829,7 +5820,6 @@
 				4C0E7779163B5AEC003B951E /* MTElementView.m in Sources */,
 				4C0E777A163B5AEC003B951E /* MTResizeHandleView.m in Sources */,
 				4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */,
-				4C0E778E163B5AEC003B951E /* UIGestureRecognizerMove.m in Sources */,
 				4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 				4C0E7790163B5AEC003B951E /* MTReportViewerViewController.m in Sources */,
 				4C0E7793163B5AEC003B951E /* UIColor+PaperPatterns.m in Sources */,
@@ -6013,7 +6003,6 @@
 				4CA163A6167EB8AD00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
 				4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
-				4CA163AC167EB8B300540A14 /* UIGestureRecognizerMove.m in Sources */,
 				4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */,
 				4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */,
 				4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */,
@@ -6186,7 +6175,6 @@
 				4CA163A9167EB8AE00540A14 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4CA163AE167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
 				4CA163AF167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
-				4CA163B0167EB8B300540A14 /* UIGestureRecognizerMove.m in Sources */,
 				4CA163B1167EB8B300540A14 /* MTClipboardView.m in Sources */,
 				4CA163B9167EB8BB00540A14 /* UILabelStrikethrough.m in Sources */,
 				4CA163BA167EB8BB00540A14 /* MTElementView.m in Sources */,
@@ -6419,7 +6407,6 @@
 				4C88A9B014ECDE560069A0AF /* MTElementView.m in Sources */,
 				4C88A9C714EE23D00069A0AF /* MTResizeHandleView.m in Sources */,
 				4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */,
-				4C85C6A314FCAD29003785AC /* UIGestureRecognizerMove.m in Sources */,
 				4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 				4C85C6AA14FF72F3003785AC /* MTReportViewerViewController.m in Sources */,
 				4CCD8DB8150386CB002B9E77 /* UIColor+PaperPatterns.m in Sources */,
@@ -6601,7 +6588,6 @@
 				4C860AF7167EDE7000AC1904 /* MTManagedDocumentPreferencesUser.m in Sources */,
 				4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */,
 				4C860AF9167EDE7000AC1904 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
-				4C860AFA167EDE7000AC1904 /* UIGestureRecognizerMove.m in Sources */,
 				4C860AFB167EDE7000AC1904 /* MTClipboardView.m in Sources */,
 				4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */,
 				4C860AFF167EDE7000AC1904 /* MTElementView.m in Sources */,

@@ -60,7 +60,6 @@
 }
 
 - (MTCollectionViewLayoutLiquidAttributes *)placeLayouts:(NSArray *)layoutAttributesForSection forLayout:(MTCollectionViewLayoutLiquidAttributes *)layout {
-    NSLog(@"%d\tplaceLayouts", self.collectionView.tag);
     CGFloat distanceFromDropPoint = -1.0000f;   //Represents an invalid distance
     CGRect nearestRect = CGRectZero;
     
@@ -121,7 +120,6 @@
 }
 
 - (void)prepareLayout {
-    //NSLog(@"%d\tprepareLaout", self.collectionView.tag);
     [super prepareLayout];
     
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithArray:[self updatedItemAttributesBySection]];
@@ -668,9 +666,6 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-
-    //NSLog(@"%d\tlayoutAttributesForElementsInRect %@", self.collectionView.tag, NSStringFromCGRect(rect));
-    
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
     for (NSArray *items in [self itemAttributesBySection]) {
@@ -689,8 +684,6 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"%d\tlayoutAttributesForItemAtIndexPath %@", self.collectionView.tag, indexPath);
-
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
     BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
@@ -726,7 +719,6 @@
             break;
         }
     }
-    //NSLog(@"%d\tinitialLayoutAttributesForAppearingItemAtIndexPath %@:\t\t%@", self.collectionView.tag, indexPath, NSStringFromCGRect(resultLayout.frame));
     return resultLayout;
 
 }

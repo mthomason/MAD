@@ -730,12 +730,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return YES;
 }
 
--(void)tableView:(UITableView*)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender {
-    NSLog(@"Get busy!!!");
-}
+-(void)tableView:(UITableView*)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender { }
+
 -(BOOL)tableView:(UITableView*)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender {
     return YES;
 }
+
 -(BOOL)tableView:(UITableView*)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath*)indexPath {
     return YES;
 }
@@ -750,14 +750,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {
         FileRepresentation *fr = [[self availableFilesCacheMetaData] objectAtIndex:[indexPath row]];
-        //[[result imagePreview] setImage:nil];
         [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
-        NSLog(@"%@", [fr fileName]);
-        NSLog(@"Result: %@", NSStringFromClass([result class]));
-        NSLog(@"ResultLblT: %@", [result labelTitle]);
         [[result labelTitle] setText: [fr fileName]];
-    
-        //[result setBackgroundColor:[UIColor greenColor]];
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
         [[result labelTitle] setText: @"Default Text"];
@@ -783,8 +777,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         [[visibleCell imagePreview] setImage: image];
         [visibleCell setNeedsLayout];
-        NSLog(@"ResultLblT: %@", [visibleCell labelTitle]);
-//        [visibleCell setNeedsDisplay];
         [_previewLoadingOperations removeObjectForKey:indexPath];
     }];
     _previewLoadingOperations[indexPath] = previewLoadingOperation;
@@ -812,9 +804,5 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return [UIDevice isPad] ? 50.0000f : 5.0000f;
 }
-/*
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return  [UIDevice isPad] ? CGSizeMake(150.0000f, 100.0000f) : CGSizeMake(80.0000f, 90.0000f);
-}
-*/
+
 @end

@@ -18,11 +18,11 @@
 - (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
     self = [super initWithFrame:frame];
     if (self) {
-        //NSLog(@"Inital Point: %@", NSStringFromCGPoint( [self center] ));
 
         [self setInitalPoint:[self center]];
         [self setType: position];
         [self setHighlighted: NO];
+
         // Initialization code
 		CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
 		CGFloat colors[] = {
@@ -56,8 +56,6 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    //NSLog(@"Touches Began: %@", NSStringFromCGRect( self.frame ));
-    //NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));
     [self setHighlighted: YES];
 }
 
@@ -66,8 +64,6 @@
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    //NSLog(@"Touches A: %@", NSStringFromCGPoint( [[touches anyObject] locationInView: [self superview]] ));    
-        
     CGPoint pointAfterMove = [self center];
     switch ([self type]) {
         case west:
@@ -91,8 +87,6 @@
             break;
     }
     [[self delegate] resizeHandle:self didMoveToPoint:pointAfterMove];
-
-    
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

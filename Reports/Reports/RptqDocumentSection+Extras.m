@@ -431,25 +431,26 @@
     NSString *result = nil;
     switch ([[self type] integerValue]) {
         case MNSDocumentSectionTypeReportHeader:
-            result = [[NSLocalizedString(@"Report Header", @"Report Header") retain] autorelease];
+            result = NSLocalizedString(@"Report Header", @"Report Header");
             break;
         case MNSDocumentSectionTypePageHeader:
-            result = [[NSLocalizedString(@"Page Header", @"Page Header") retain] autorelease];
+            result = NSLocalizedString(@"Page Header", @"Page Header");
             break;
         case MNSDocumentSectionTypeBody:
-            result = [[NSLocalizedString(@"Report Detail", @" Report Detail") retain] autorelease];
+            result = NSLocalizedString(@"Report Detail", @" Report Detail");
             break;
         case MNSDocumentSectionTypePageFooter:
-            result = [[NSLocalizedString(@"Page Footer", @"Page Footer") retain] autorelease];
+            result = NSLocalizedString(@"Page Footer", @"Page Footer");
             break;
         case MNSDocumentSectionTypeReportFooter:
-            result = [[NSLocalizedString(@"Report Footer", @"Report Footer") retain] autorelease];
+            result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
         case MNSDocumentSectionTypeGroupHeader:
-            result = [[[NSString stringWithFormat:NSLocalizedString(@"Group Header %d", @""), [[[self inGroup] weight] integerValue]] retain] autorelease];
+            result = [[self inGroup] fieldNameQuery];
+            result = [NSString stringWithFormat:NSLocalizedString(@"G%d - %@", @"\"Group Header 1\""), [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
             break;
         case MNSDocumentSectionTypeGroupFooter:
-            result = [[[NSString stringWithFormat:NSLocalizedString(@"Group Footer %d", @""),  [[[self inGroup] weight] integerValue]] retain] autorelease];
+            result = [NSString stringWithFormat:NSLocalizedString(@"G%d - %@", @"\"Group Footer 1\""),  [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
             break;
         default:
             break;

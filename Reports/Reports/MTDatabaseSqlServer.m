@@ -87,7 +87,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                         NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                                        encoding: NSStringEncodingConversionAllowLossy];
                                         MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                                        NSLog(@"%@", table);
+                                        //NSLog(@"%@", table);
                                         [results addObject:table];
                                         [table release];
                                         [tableName release];
@@ -713,35 +713,50 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                             switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
                                     
                                 case SYBCHAR:
-                                    sybCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybCharBind[columnIndexOfType]);
+                                {
+                                    int columnLengthPlusOne = columnLength + 1;
+                                    size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                    sybCharBind[columnIndexOfType] = malloc( size );
+                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybCharBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
                                     break;
-                                    
+                                }
                                 case SYBVARCHAR:
-                                    sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind[columnIndexOfType]);
+                                {
+                                    int columnLengthPlusOne = columnLength + 1;
+                                    size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                    sybVarCharBind[columnIndexOfType] = malloc( size );
+                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybVarCharBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
                                     break;
-                                    
+                                }
                                 case SYBTEXT:
-                                    sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybTextBind[columnIndexOfType]);
+                                {
+                                    int columnLengthPlusOne = columnLength + 1;
+                                    size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                    sybTextBind[columnIndexOfType] = malloc( size );
+                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybTextBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
                                     break;
-                                    
+                                }
                                 case SYBNTEXT:
-                                    sybnTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybnTextBind[columnIndexOfType]);
+                                {
+                                    int columnLengthPlusOne = columnLength + 1;
+                                    size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                    sybnTextBind[columnIndexOfType] = malloc( size );
+                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnTextBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybnTextBindNull[columnIndexOfType]);
                                     break;
-                                    
+                                }
                                 case SYBNVARCHAR:
-                                    sybnVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLength, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+                                {
+                                    int columnLengthPlusOne = columnLength + 1;
+                                    size_t size = sizeof(char) * ( columnLengthPlusOne );
+                                    sybnVarCharBind[columnIndexOfType] = malloc( size );
+                                    dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, columnLengthPlusOne, (BYTE *)sybnVarCharBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
                                     break;
-                                    
+                                }
                                 case SYBINTN:
                                     dbbind(dbconn, columnOffsetNumber, BIGINTBIND, sizeof(long long), (BYTE *)&sybIntnBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybIntnBindNull[columnIndexOfType]);
@@ -1004,7 +1019,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             if (sybVarChar != nil) {
                                                 NSString *object = [[NSString alloc] initWithCString: sybVarChar
                                                                                             encoding: NSStringEncodingConversionAllowLossy];
-                                                //NSLog(@"%@\t\t(SYBVARCHAR):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
                                                 [object release];
                                             }
@@ -1019,7 +1033,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             if (sybnVarChar != nil) {
                                                 NSString *object = [[NSString alloc] initWithCString: sybnVarChar
                                                                                             encoding: NSStringEncodingConversionAllowLossy];
-                                                //NSLog(@"%@\t\t(SYBNVARCHAR):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
                                                 [object release];
                                             }
@@ -1035,7 +1048,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             if (sybText != nil) {
                                                 NSString *object = [[NSString alloc] initWithCString: sybText
                                                                                             encoding: NSStringEncodingConversionAllowLossy];
-                                                //NSLog(@"%@\t\t(SYBTEXT):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
                                                 [object release];
                                             }
@@ -1050,7 +1062,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             if (sybnTest != nil) {
                                                 NSString *object = [[NSString alloc] initWithCString: sybnTest
                                                                                             encoding: NSStringEncodingConversionAllowLossy];
-                                                //NSLog(@"%@\t\t(SYBNTEXT):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
                                                 [object release];
                                             }
@@ -1064,7 +1075,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                         if (sybIntnBindNull[indexOfType] != -1) {
                                             long long integer = sybIntnBind[indexOfType];
                                             NSNumber *object = [[NSNumber alloc] initWithInteger:(NSInteger)integer];
-                                            //NSLog(@"%@\t\t(SYBINTN):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
@@ -1088,7 +1098,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                         if (sybInt2BindNull[indexOfType] != -1) {
                                             int integer = sybInt2Bind[indexOfType];
                                             NSNumber *object = [[NSNumber alloc] initWithInt:integer];
-                                            //NSLog(@"%@\t\t(SYBINT2):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
@@ -1142,7 +1151,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             
                                             NSDate *newDate = [[gregorian dateFromComponents:offsetCompsWithMinutes] retain];
                                             
-                                            NSLog(@"%@\t\t(SYBDATETIME4):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], newDate);
+                                            //NSLog(@"%@\t\t(SYBDATETIME4):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], newDate);
                                             [resultsForRow setObject:newDate forKey:fieldName];
                                             [newDate release];
                                         } else {
@@ -1166,7 +1175,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                                             [comps setSecond:     dateinfo.datesecond];
                                             [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
                                             NSDate *date = [[gregorian dateFromComponents:comps] retain];
-                                            NSLog(@"%@\t\t(SYBDATETIME):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], date);
+                                            //NSLog(@"%@\t\t(SYBDATETIME):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], date);
                                             [resultsForRow setObject:date forKey:fieldName];
                                             [date release];
                                             [comps release];
@@ -1357,7 +1366,11 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr);
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
 
-    int result = INT_CANCEL;
+    __block int result = INT_CANCEL;
+
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
+
     
     if (severity >= 5) {
         NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
@@ -1381,14 +1394,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         });
         dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
         dispatch_release(showError);
-
+        
         if (continueToGo) {
-            result = INT_CANCEL;
+            result = INT_CONTINUE;
         } else {
             result = INT_CANCEL;
         }
     }
     
+    });
     return result;
 }
 
@@ -1396,105 +1410,91 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     
     NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [credentals server],  [credentals port], [credentals database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
-
+        
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         dispatch_async(queuePriorityBackground, ^{
-            //dispatch_async(dispatch_get_main_queue(), ^{
-
-                if (success) {
-                    
-                    DBPROCESS *dbconn = NULL;
-                    BOOL connected;
-                    NSError *error = nil;
-                    
-                    //dispatch_semaphore_t semaphoreQueuePriorityBackground = dispatch_semaphore_create(0);
-                    
-                    
-                    
-                    LOGINREC *login;
-                    char hostname[30];
-                    int max_len = 30;
-                    
-                    
-                    /* Init the DB library */
-                    if (dbinit() == FAIL) {
-                        NSString *message = @"Could not init db.";
-                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
-                    }
-                    dberrhandle(err_handler);
-                    
-                    if ((error == nil) && ((login = dblogin()) == FAIL)) {
-                        NSString *message = @"Could not initialize dblogin() structure.";
-                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
-                    }
-                    
-                    //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
-                    char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
-                    
-                    if (error == nil) {
-                        /* Initialize the login params in the structure */
-                        DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
-                        
-                        
-                        if (gethostname(hostname, max_len) == 0) {
-                            DBSETLHOST(login, hostname);
-                        }
-                        
-                        //if (gethostname(hostname, max_len) == 0) {
-                        //DBSETLHOST(login, h);
-                        //}
-                        
-                    }
-                    
-                    if (error == nil) {
-                        if ((dbconn = dbopen(login, s)) == NULL) {
-                            
-                            NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
-                            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                            error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
-                            
-                        }
-                    }
-                    
-                    
-                    connected = (error == nil);
-                    if (!fromKeyChain && connected) {
-                        dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
-                                dispatch_semaphore_signal(semaphoreSaveCredentials);
-                            }];
-                        });
-                        dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
-                        dispatch_release(semaphoreSaveCredentials);
-
-                    }
-                    
-                    //dispatch_semaphore_signal(semaphoreQueuePriorityBackground);
-                    
-                    //});
-                    
-                    //dispatch_semaphore_wait(semaphoreQueuePriorityBackground, DISPATCH_TIME_FOREVER);
-                    //dispatch_release(semaphoreQueuePriorityBackground);
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        completion(dbconn, connected, error);
-                    });
-                    
-                } else {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        completion(nil, NO, connectionError);
-                    });
+            
+            if (success) {
+                
+                DBPROCESS *dbconn = NULL;
+                BOOL connected;
+                NSError *error = nil;
+                
+                
+                LOGINREC *login;
+                char hostname[30];
+                int max_len = 30;
+                
+                
+                /* Init the DB library */
+                if (dbinit() == FAIL) {
+                    NSString *message = @"Could not init db.";
+                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
+                }
+                dberrhandle(err_handler);
+                
+                if ((error == nil) && ((login = dblogin()) == FAIL)) {
+                    NSString *message = @"Could not initialize dblogin() structure.";
+                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
                 }
                 
-            });
-
+                //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
+                char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
+                
+                if (error == nil) {
+                    /* Initialize the login params in the structure */
+                    DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
+                    DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
+                    DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
+                    DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
+                    
+                    
+                    if (gethostname(hostname, max_len) == 0) {
+                        DBSETLHOST(login, hostname);
+                    }
+                    
+                }
+                
+                if (error == nil) {
+                    if ((dbconn = dbopen(login, s)) == NULL) {
+                        
+                        NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
+                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+                        
+                    }
+                }
+                
+                
+                connected = (error == nil);
+                if (!fromKeyChain && connected) {
+                    dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
+                            dispatch_semaphore_signal(semaphoreSaveCredentials);
+                        }];
+                    });
+                    dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
+                    dispatch_release(semaphoreSaveCredentials);
+                    
+                }
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    completion(dbconn, connected, error);
+                });
+                
+            } else {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    completion(nil, NO, connectionError);
+                });
+            }
+            
+        });
+        
     }];
-
+    
 }
 
 - (NSString *)identifier {

@@ -35,10 +35,7 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 }
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        
+    
         NSDate *experationDate = [MTStoreKitController experationDate];
         BOOL isLicensedUser = NO;
         if (experationDate != nil) {
@@ -56,12 +53,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
                     break;
             }
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            completion(isLicensedUser, experationDate);
-        });
-    });
+    
+    completion(isLicensedUser, experationDate);
 }
 
 + (NSDate *)dateFromReceiptString:(NSString *)dateString {

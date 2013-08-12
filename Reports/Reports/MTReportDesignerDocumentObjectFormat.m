@@ -114,7 +114,7 @@
     if ([[self userSelectedObjectIds] count] == 0) {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[self tableViewCellCurrency] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self labelNumberOfDecimals] setText:@""];
+        [[self labelNumberOfDecimals] setText:NSLocalizedString(@"Decimals", "Decimals")];
     } else {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         

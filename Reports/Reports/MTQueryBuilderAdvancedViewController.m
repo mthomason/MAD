@@ -26,6 +26,7 @@
 
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
@@ -53,6 +54,7 @@
     [_containerViewWidthConstraint release];
     [_backgroundContainer release];
     [_toolbarBottom release];
+    [_barButtonItemShowSQL release];
     [super dealloc];
 }
 
@@ -124,6 +126,9 @@
     
     [[self backgroundContainer] addSubview:[self scrollView]];
 
+    NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
+    [toolbarButtons removeObject:[self barButtonItemShowSQL]];
+    [[self toolbarBottom] setItems:toolbarButtons animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -131,6 +136,15 @@
     if ([UIDevice isLagacyOS]) {
         [[self toolbarBottom] setTintColor:[UIColor edaBlueDark]];
     }
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser) {
+            NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
+            NSInteger index = [toolbarButtons count] - 1;
+            [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
+            [[self toolbarBottom] setItems:toolbarButtons animated:animated];
+        }
+    }];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -537,23 +551,19 @@
     if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
         leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
         [connectorView setConnectorPositionB:MNSConnectorPositionA];
-        //NSLog(@"P1");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x + leftCellFrameInView.size.width > rightCellFrameInView.origin.x) {
         [connectorView setConnectorPositionB:MNSConnectorPositionB];
-        //NSLog(@"P2");
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x -= paddingLeft;
     } else if (leftCellFrameInView.origin.x > rightCellFrameInView.origin.x &&
                leftCellFrameInView.origin.x < rightCellFrameInView.origin.x + rightCellFrameInView.size.width) {
         [connectorView setConnectorPositionB:MNSConnectorPositionC];
-        //NSLog(@"P3");
         leftCellAnchorPoint.x += paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;
     } else {
-        //NSLog(@"P4");
         [connectorView setConnectorPositionB:MNSConnectorPositionD];
         leftCellAnchorPoint.x -= paddingLeft;
         rightCellAnchorPoint.x += paddingLeft;

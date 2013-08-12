@@ -48,6 +48,13 @@
     return query;
 }
 
++ (RptqQuery *)queryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    return query;
+}
+
 + (NSArray *)tablesForActiveDocument {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     return [[[RptqDatabaseSchemaTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];

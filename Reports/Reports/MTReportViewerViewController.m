@@ -442,7 +442,7 @@
             [[self barButtonItemRefresh] setEnabled:YES];
             [[self barButtonItemSendToPdf] setEnabled:YES];
             if(!completed && error){
-                NSLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
+                MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
             }
         };
         
@@ -508,12 +508,10 @@
 }
 
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-    NSLog(@"Number of Pages %d", [self numberOfPages]);
     return [self numberOfPages];
 }
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-    NSLog(@"Number of Pages %d", [self currentPageIndex]);
     return [self currentPageIndex];
 }
 

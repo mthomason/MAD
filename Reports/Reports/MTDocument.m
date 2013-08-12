@@ -58,14 +58,14 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
-    NSLog(@"UIManagedDocument error: %@", error.localizedDescription);
+    MTLog(@"UIManagedDocument error: %@", [error localizedDescription]);
     NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
     if(errors != nil && errors.count > 0) {
         for (NSError *error in errors) {
-            NSLog(@"  Error: %@", error.userInfo);
+            MTLog(@"  Error: %@", error.userInfo);
         }
     } else {
-        NSLog(@"  %@", error.userInfo);
+        MTLog(@"  %@", error.userInfo);
     }
 }
 
@@ -76,7 +76,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 #pragma mark - UIManagedDocument
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
-    NSLog(@"RURL %@", absoluteURL);
+    //NSLog(@"RURL %@", absoluteURL);
     
     NSError *readError = nil;
     NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent: MTDocumentInfoKeyThumbnail];
@@ -115,7 +115,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
-    NSLog(@"AURL %@", absoluteURL);
+    //NSLog(@"AURL %@", absoluteURL);
     
     if ([self extraInformation] == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];

@@ -75,94 +75,94 @@
 
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
     
-    __block BOOL licensedUser;
+    __block NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
+
     dispatch_semaphore_t semaphoreIsLicensed = dispatch_semaphore_create(0);
+    
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        licensedUser = isLicensedUser;
+        
+        [self setIsLicensedUser:isLicensedUser];
+                
+        if ([[query hasQueryTables] count] > 0) {
+            
+            [result appendString:[self selectPart]];
+            
+            //Use a graph to represent the query: verticies are tables and edges are links.
+            MTGraph *graph = [[MTGraph alloc] init];
+            NSSet *hasTables = [query hasQueryTables];
+            
+            //Add a vertex to the graph for each edge.
+            for (RptqDatabaseSchemaTable *table in hasTables) {
+                [graph addVertexWithObject:[table objectID]];
+            }
+            
+            //Create an edge in the graph for each query link.
+            NSSet *hasQueryLinks = [query hasQueryLinks];
+            for (RptqQueryLinks *queryLink in hasQueryLinks) {
+                
+                RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
+                RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
+                
+                id objectOrigin =               [tableOrigin objectID];
+                id objectDestination =          [tableDestination objectID];
+                id objectQueryLink =            [queryLink objectID];
+                
+                MTVertex *vertexOrigin =        [[graph vertexForObject:objectOrigin] retain];
+                MTVertex *vertexDestination =   [[graph vertexForObject:objectDestination] retain];
+                
+                [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
+                
+                [vertexOrigin release];
+                [vertexDestination release];
+            }
+            
+            
+            // MARK: Sort the vectors topologically.
+            NSError *error = nil;
+            MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
+            
+            // MARK: Error on circuts or other bad query.
+            if (error) {
+                [error presentErrorToUserWithCompletion:^(BOOL success) {}];
+                [result setString:@""];
+            } else {
+                
+                NSArray *topologicalSortArray = [topologicalSort toArray];
+                
+                // MAKR: List each field in the query.
+                [result appendString:[self sqlSelectExpressionWithTables:[topologicalSort toArray]
+                                                 forManagedObjectContext:[query managedObjectContext]]];
+                
+                [result appendString:MTSqlFrom];
+                
+                NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
+                NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
+                
+                for (MTPair *pair in topologicalSortArray) {
+                    MTVertex *vertexTable = [pair former];
+                    if (vertexTable) {
+                        [vertexTable setSortVertexColor: MTColorWhite];
+                        [vertexArray addObject:vertexTable];
+                    }
+                }
+                [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
+                                               forManagedObjectContext:[query managedObjectContext]]];
+                [vertexArray release];
+                [linkDepth release];
+            }
+            
+            [graph release];
+            
+            [result appendString:[self sqlWhereClauseWithQuery:query]];
+            [result appendString:[self sqlLimitClause]];
+            
+        }
         dispatch_semaphore_signal(semaphoreIsLicensed);
     }];
     
     dispatch_semaphore_wait(semaphoreIsLicensed, DISPATCH_TIME_FOREVER);
     dispatch_release(semaphoreIsLicensed);
     
-    [self setIsLicensedUser:licensedUser];
-    
-    NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
-    
-    if ([[query hasQueryTables] count] > 0) {
-        
-        [result appendString:[self selectPart]];
-        
-        //Use a graph to represent the query: verticies are tables and edges are links.
-        MTGraph *graph = [[MTGraph alloc] init];
-        NSSet *hasTables = [query hasQueryTables];
-        
-        //Add a vertex to the graph for each edge.
-        for (RptqDatabaseSchemaTable *table in hasTables) {
-            [graph addVertexWithObject:[table objectID]];
-        }
-        
-        //Create an edge in the graph for each query link.
-        NSSet *hasQueryLinks = [query hasQueryLinks];
-        for (RptqQueryLinks *queryLink in hasQueryLinks) {
-            
-            RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
-            RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
-            
-            id objectOrigin =               [tableOrigin objectID];
-            id objectDestination =          [tableDestination objectID];
-            id objectQueryLink =            [queryLink objectID];
-            
-            MTVertex *vertexOrigin =        [[graph vertexForObject:objectOrigin] retain];
-            MTVertex *vertexDestination =   [[graph vertexForObject:objectDestination] retain];
-            
-            [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
-            
-            [vertexOrigin release];
-            [vertexDestination release];
-        }
-        
-        
-        // MARK: Sort the vectors topologically.
-        NSError *error = nil;
-        MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
-        
-        // MARK: Error on circuts or other bad query.
-        if (error) {
-            [error presentErrorToUserWithCompletion:^(BOOL success) {}];
-            [result setString:@""];
-        } else {
-            
-            NSArray *topologicalSortArray = [topologicalSort toArray];
-            
-            // MAKR: List each field in the query.
-            [result appendString:[self sqlSelectExpressionWithTables:[topologicalSort toArray]
-                                             forManagedObjectContext:[query managedObjectContext]]];
-            
-            [result appendString:MTSqlFrom];
-            
-            NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
-            NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
-            
-            for (MTPair *pair in topologicalSortArray) {
-                MTVertex *vertexTable = [pair former];
-                if (vertexTable) {
-                    [vertexTable setSortVertexColor: MTColorWhite];
-                    [vertexArray addObject:vertexTable];
-                }
-            }
-            [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
-                                           forManagedObjectContext:[query managedObjectContext]]];
-            [vertexArray release];
-            [linkDepth release];
-        }
-        
-        [graph release];
-        
-        [result appendString:[self sqlWhereClauseWithQuery:query]];
-        [result appendString:[self sqlLimitClause]];
-        
-    }
     
     return [result autorelease];
 }

@@ -66,15 +66,11 @@
 #pragma mark - Static
 
 + (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQuery *query = [RptqDocument queryForActiveDocument];
-    NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    request.predicate = [NSPredicate predicateWithFormat: @"inQuery == %@", [query objectID]];
+    RptqQuery *query = [RptqDocument queryForManagedObjectContext:managedObjectContext];
+    NSSet *queryLinks = [query hasQueryLinks];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
-    [request setSortDescriptors: @[sortDescriptor]];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    return results;
+    NSArray *results = [[queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
+    return [results autorelease];
 }
 
 + (id)getQueryLinkWithID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {

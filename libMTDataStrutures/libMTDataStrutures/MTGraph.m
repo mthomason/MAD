@@ -282,9 +282,6 @@
     [vertex setDfsFoundCounter:*counter];
     
     [*listOfVertices add:[MTPair pairWithFormer:vertex andLatter:*counter]];
-
-    
-    //NSLog(@"(%@) (%d/%d)", [vertex toStringHumanReadable], [[vertex dfsTimestampDiscovered] integerValue], [[vertex dfsTimestampFinished] integerValue]);
 }
 
 #pragma mark - MTProtocolLog
@@ -303,7 +300,6 @@
     for (MTVertex *vertex in [self allVertices]) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
-    //NSLog(@"%@\n--------------------\n", result);
     return [result autorelease];
 }
 
@@ -312,7 +308,6 @@
     for (MTVertex *vertex in [self allVertices]) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
-    //NSLog(@"%@\n--------------------\n", result);
     return [result autorelease];
 }
 

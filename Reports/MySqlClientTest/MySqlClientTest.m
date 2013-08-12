@@ -47,8 +47,7 @@
                             MysqlFetchField *resultsColumnName = [[[fetchCols fields] objectAtIndex:0] retain];
                             NSMutableArray *resultsBuddy = [[NSMutableArray alloc] initWithCapacity:[[fetchCols results] count]];
                             for (NSDictionary *columnName in [fetchCols results]) {
-                                //NSLog(@"%@", resultsColumnName);
-                                //NSLog(@"%@", columnName);
+
                                 switch ([resultsColumnName fieldType]) {
                                     case MYSQL_TYPE_DECIMAL:
                                         break;
@@ -109,9 +108,6 @@
                                     default:
                                         break;
                                 }
-                                //NSLog(@"Name:   %@", [columnName objectForKey:[resultsColumnName name]]);
-                                //NSLog(@"Width:  %d", [resultsColumnName width]);
-                                //NSLog(@"Type:   %d", [resultsColumnName fieldType]);
                                 colctr++;
                             }
                             [resultsBuddy release];
