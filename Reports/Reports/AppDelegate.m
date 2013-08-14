@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "MTReportDocument.h"
+#import "MTViewControllerOpenDocument.h"
+#import "UIManagedDocument+FileOperations.h"
 
 NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
@@ -17,6 +19,8 @@ NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
 @end
 
 @implementation AppDelegate
+
+    UIView* _waitingHudView;
 
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
@@ -31,8 +35,10 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    //Log uncaught errors.
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
+    //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: [AppDelegate storyboardName]
                                                          bundle: nil];
@@ -41,21 +47,32 @@ void uncaughtExceptionHandler(NSException *exception) {
     [self setWindow: window];
     [window release];
 
+    //Startup strore kit.
     [MTStoreKitController sharedObject];
 
+    //Setup iCloud KVS
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(keyValueStoreDidChange:)
                                                  name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
                                                object: nil];
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     
-    NSUbiquitousKeyValueStore *keyValueStore = [NSUbiquitousKeyValueStore defaultStore];
-    [keyValueStore synchronize];
-
-    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
-                                                      action: @selector(email:)];
-    UIMenuController *menu = [UIMenuController sharedMenuController];
-    [menu setMenuItems:@[menuItem]];
-    [menuItem release];
+    /*
+    //Setup iCloud Document Management
+    [self checkUserICloudPreferenceAndSetupIfNecessary];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(willBeginFetchingUbiquitousContainer)
+                                                 name: UbiquitousContainerFetchingWillBeginNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didEndFetchingUbiquitousContainer)
+                                                 name: UbiquitousContainerFetchingDidEndNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(checkUserICloudPreferenceAndSetupIfNecessary)
+                                                 name: NSUbiquityIdentityDidChangeNotification
+                                               object: nil];
+*/
 
     return YES;
 }
@@ -68,12 +85,44 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application { }
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+
+}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [documentReport save:nil];
     [documentReport release];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
+    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
+    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:name
+                                                  withExtension:MTDocumentTypeExtentionMad];
+    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+    NSError* fileWrittingError = nil;
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:nil error:&fileWrittingError];
+    if (fileWrittingError) {
+        fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:nil error:&fileWrittingError];
+    }
+    
+    BOOL savedUrl = fileWrittingError == nil;
+    if (savedUrl) {
+        MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
+        if (openDocumentViewController != nil) {
+            [openDocumentViewController updateFileList];
+            [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:url];
+        }
+        
+    } else {
+        [fileWrittingError presentErrorToUser];
+    }
+    
+    return savedUrl;
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
@@ -155,24 +204,11 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NSFileManager defaultManager] removeItemAtURL:[controller URL] error:&error];
 }
 
-#pragma mark - iCloud
+#pragma mark - iCloud Shit
 
-NSString * const MTUbiquityToken = @"com.everydayapps.mad.ubiquityIdentityToken";
-
-- (void)checkUbiquitousTokenFromPreviousLaunch:(id)currentToken {
-    // Fetch a previously stored value for the ubiquity identity token from NSUserDefaults.
-    // That value can be compared to the current token to determine if the iCloud login has changed since the last launch of our application
-    
-    NSData* oldTokenData = [[NSUserDefaults standardUserDefaults] objectForKey:MTUbiquityToken];
-    id oldToken = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
-    if (oldTokenData && ![oldToken isEqual:currentToken]) {
-        // If we had a token, we were signed in before.
-        // If the token has change, a signout has occurred - either switching to another account or deleting iCloud entirely.
-        
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"iCloud Sign-Out" message:@"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-    }
-}
+NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
+NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
+NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
 
 - (void)storeCurrentUbiquityToken:(id)currentToken {
     // Write the ubquity identity token to NSUserDefaults if it exists.
@@ -180,9 +216,9 @@ NSString * const MTUbiquityToken = @"com.everydayapps.mad.ubiquityIdentityToken"
     
     if (currentToken) {
         NSData* newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
-        [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:MTUbiquityToken];
+        [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:MTICloudUbiquityToken];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTUbiquityToken];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTICloudUbiquityToken];
     }
 }
 
@@ -194,27 +230,87 @@ NSString * const MTUbiquityToken = @"com.everydayapps.mad.ubiquityIdentityToken"
     
     id currentToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userICloudChoice = [userDefaults stringForKey:MTUbiquityToken];
+    BOOL iCloudPrefsSet = [userDefaults boolForKey:MTICloudUserPrefsSet];
+    BOOL iCloudEnabled = [userDefaults boolForKey:MTICloudUserEnabled];
     
-    if ([userICloudChoice isEqualToString:@"YES"]) {
-        [self checkUbiquitousTokenFromPreviousLaunch:currentToken];
+    if (iCloudEnabled) {
+        //Check the Ubiquitous Token from the Previous Launch
+        // Fetch a previously stored value for the ubiquity identity token from NSUserDefaults.
+        // That value can be compared to the current token to determine if the iCloud login has changed since the last launch of our application
+        
+        NSData *oldTokenData = [userDefaults objectForKey:MTICloudUbiquityToken];
+        id oldToken = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
+        if (oldTokenData && ![oldToken isEqual:currentToken]) {
+            // If we had a token, we were signed in before.
+            // If the token has change, a signout has occurred - either switching to another account or deleting iCloud entirely.
+            NSString *title = NSLocalizedString(@"iCloud Sign-Out", @"iCloud Sign-Out");
+            NSString *message = NSLocalizedString(@"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents", @"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents");
+            NSString *cancel = NSLocalizedString(@"OK", @"OK");
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancel otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        }
     }
     
     if (currentToken) {
-        if ([userICloudChoice length] == 0) {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Choose Storage Option" message:@"Should documents be stored in iCloud or on just this device?" delegate:self cancelButtonTitle:@"Local only" otherButtonTitles:@"iCloud", nil];
+        if (iCloudPrefsSet == NO) {
+            
+            NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
+            NSString *message = NSLocalizedString(@"Should documents be stored in iCloud or on just this device?", @"Should documents be stored in iCloud or on just this device?");
+            NSString *cancel = NSLocalizedString(@"Local only", @"Local only");
+            NSString *other = NSLocalizedString(@"iCloud", @"iCloud");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:other, nil];
             [alert show];
-        } else if ([userICloudChoice isEqualToString:@"YES"]) {
+            [alert release];
+        } else {
             [[CloudManager sharedManager] setIsCloudEnabled:YES];
         }
     } else {
         [[CloudManager sharedManager] setIsCloudEnabled:NO];
         
         // Since the user is signed out of iCloud, reset the preference to not use iCloud, so if they sign in again we will prompt them to move data
-        [userDefaults removeObjectForKey:MTUbiquityToken];
+        [userDefaults removeObjectForKey:MTICloudUserEnabled];
+        [userDefaults removeObjectForKey:MTICloudUserPrefsSet];
     }
     
     [self storeCurrentUbiquityToken:currentToken];
+}
+
+- (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserEnabled];
+        [[CloudManager sharedManager] setIsCloudEnabled:YES];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MTICloudUserEnabled];
+        [[CloudManager sharedManager] setIsCloudEnabled:NO];
+    }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserPrefsSet];
+}
+
+- (void)displayWaitingHud {
+    if (!_waitingHudView) {
+        _waitingHudView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+        _waitingHudView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        CGRect hudBounds = _waitingHudView.bounds;
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectZero];
+        label.backgroundColor = [UIColor clearColor];
+        label.text = NSLocalizedString(@"Waiting for iCloud setup...", @"Waiting for iCloud setup...");
+        [label sizeToFit];
+        CGSize labelSize = label.frame.size;
+        label.frame = CGRectMake((CGRectGetWidth(hudBounds) - labelSize.width) / 2.0, (CGRectGetHeight(hudBounds) - labelSize.height) / 2.0, labelSize.width, labelSize.height);
+        [_waitingHudView addSubview:label];
+        [[[UIApplication sharedApplication] keyWindow] addSubview:_waitingHudView];
+    }
+}
+
+- (void)willBeginFetchingUbiquitousContainer {
+    [self performSelector:@selector(displayWaitingHud) withObject:nil afterDelay:0.15];
+}
+
+- (void)didEndFetchingUbiquitousContainer {
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(displayWaitingHud) object:nil];
+    [_waitingHudView removeFromSuperview];
 }
 
 @end

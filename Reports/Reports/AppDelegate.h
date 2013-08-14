@@ -12,6 +12,7 @@
 #import "CloudManager.h"
 #import "MTStoreKitController.h"
 #import "MTLog.h"
+#import "NSURL+Document.h"
 
 extern NSString * const MTBundleIdDesigner;
 extern NSString * const MTBundleIdViewer;
