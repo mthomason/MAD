@@ -9,10 +9,21 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array>
+				<string>MADIcon44x58</string>
+				<string>MADIcon22x29</string>
+				<string>MADIcon64x64</string>
+				<string>MADIcon320x320</string>
+			</array>
 			<key>CFBundleTypeName</key>
 			<string>Mobile Analytics Document</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.everydayapps.productivity.mad</string>
+			</array>
 			<key>NSExportableTypes</key>
 			<array>
 				<string>com.everydayapps.productivity.mad</string>
@@ -93,8 +104,14 @@
 			<array>
 				<string>public.data</string>
 			</array>
+			<key>UTTypeDescription</key>
+			<string>Mobile Analytics Document</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.everydayapps.productivity.mad</string>
+			<key>UTTypeSize320IconFile</key>
+			<string>MADIcon320x320</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>MADIcon64x64</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -102,6 +119,23 @@
 				<key>public.mime-type</key>
 				<string>producitivy/mad</string>
 			</dict>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mobile Analytics Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.everydayapps.productivity.mad</string>
+			<key>UTTypeSize320IconFile</key>
+			<string>MADIcon320x320</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>MADIcon64x64</string>
 		</dict>
 	</array>
 </dict>
