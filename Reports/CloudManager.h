@@ -3,11 +3,11 @@
 
 @interface CloudManager : NSObject 
 
-@property (nonatomic) BOOL isCloudEnabled;
-@property (nonatomic, readonly) NSURL* dataDirectoryURL;
-@property (nonatomic, readonly) NSURL* documentsDirectoryURL;
+@property (nonatomic, assign) BOOL isCloudEnabled;
+@property (nonatomic, retain, readonly) NSURL *dataDirectoryURL;
+@property (nonatomic, retain, readonly) NSURL *documentsDirectoryURL;
 
-+ (CloudManager*)sharedManager;
++ (CloudManager *)sharedManager;
 
 @end
 
