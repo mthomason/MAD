@@ -1,7 +1,19 @@
+//
+//  CloudManager.h
+//  Reports
+//
+//  Created by Michael Thomason on 8/4/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//
+
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
-@interface CloudManager : NSObject 
+NSString * const ICloudStateUpdatedNotification;
+NSString * const UbiquitousContainerFetchingWillBeginNotification;
+NSString * const UbiquitousContainerFetchingDidEndNotification;
+
+@interface CloudManager : NSObject
 
 @property (nonatomic, assign) BOOL isCloudEnabled;
 @property (nonatomic, retain, readonly) NSURL *dataDirectoryURL;
@@ -10,7 +22,3 @@
 + (CloudManager *)sharedManager;
 
 @end
-
-NSString * const ICloudStateUpdatedNotification;
-NSString * const UbiquitousContainerFetchingWillBeginNotification;
-NSString * const UbiquitousContainerFetchingDidEndNotification;
