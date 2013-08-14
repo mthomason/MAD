@@ -18,7 +18,6 @@
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
 + (MTGraph *)graphForQuery:(RptqQuery *)query;
-+ (NSString *)getSqlForQuery:(RptqQuery *)query;
 
 - (RptqQueryGroup *)firstQueryGroup;
 

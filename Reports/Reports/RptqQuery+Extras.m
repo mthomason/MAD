@@ -96,11 +96,6 @@
     return  [graph autorelease];
 }
 
-+ (NSString *)getSqlForQuery:(RptqQuery *)query {
-    MTDatabase *databaseHandler = [MTDatabase databaseObjectForRptqDatabase:[query inDatabase]];
-    return [databaseHandler getSqlForQuery: query];
-}
-
 - (RptqQueryGroup *)firstQueryGroup {
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];

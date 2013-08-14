@@ -36,11 +36,6 @@
     }
 }
 
-+ (NSString *)sqlStatementForActiveDocument {
-    RptqQuery *query = [RptqDocument queryForActiveDocument];
-    return [[[RptqQuery getSqlForQuery:query] retain] autorelease];
-}
-
 + (RptqQuery *)queryForActiveDocument {
     RptqDocument *document = [RptqDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];

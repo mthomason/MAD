@@ -19,7 +19,6 @@
 + (RptqQuery *)queryForActiveDocument;
 + (NSArray *)queryLinksForActiveDocument;
 + (NSArray *)tablesForActiveDocument;
-+ (NSString *)sqlStatementForActiveDocument;
 + (RptqQuery *)queryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
