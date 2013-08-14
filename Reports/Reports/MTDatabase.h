@@ -35,11 +35,13 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
+- (void)emptyCacheWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
 - (NSString *)getSqlForQuery:(RptqQuery *)query;
+- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

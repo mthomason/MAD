@@ -74,7 +74,10 @@
 }
 
 - (NSString *)getSqlForQuery:(RptqQuery *)query {
-    
+    return [self getSqlForQuery:query onlyActiveFields:YES];
+}
+
+- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields {
     __block NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 
     dispatch_semaphore_t semaphoreIsLicensed = dispatch_semaphore_create(0);
@@ -130,31 +133,39 @@
                 NSArray *topologicalSortArray = [topologicalSort toArray];
                 
                 // MAKR: List each field in the query.
-                [result appendString:[self sqlSelectExpressionWithTables:[topologicalSort toArray]
-                                                 forManagedObjectContext:[query managedObjectContext]]];
-                
-                [result appendString:MTSqlFrom];
-                
-                NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
-                NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
-                
-                for (MTPair *pair in topologicalSortArray) {
-                    MTVertex *vertexTable = [pair former];
-                    if (vertexTable) {
-                        [vertexTable setSortVertexColor: MTColorWhite];
-                        [vertexArray addObject:vertexTable];
+                NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray] usingOnlyActiveFields:onlyActiveFields
+                                                            forManagedObjectContext:[query managedObjectContext]];
+                if ([sqlSelectExpression length] > 0) {
+                    [result appendString:sqlSelectExpression];
+
+                    [result appendString:MTSqlFrom];
+                    
+                    NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
+                    NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
+                    
+                    for (MTPair *pair in topologicalSortArray) {
+                        MTVertex *vertexTable = [pair former];
+                        if (vertexTable) {
+                            [vertexTable setSortVertexColor: MTColorWhite];
+                            [vertexArray addObject:vertexTable];
+                        }
                     }
+                    [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
+                                                   forManagedObjectContext:[query managedObjectContext]]];
+                    [vertexArray release];
+                    [linkDepth release];
+
+                } else {
+                    [result setString:@""];
                 }
-                [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
-                                               forManagedObjectContext:[query managedObjectContext]]];
-                [vertexArray release];
-                [linkDepth release];
+                
             }
             
             [graph release];
-            
-            [result appendString:[self sqlWhereClauseWithQuery:query]];
-            [result appendString:[self sqlLimitClause]];
+            if ([result length] > 0) {
+                [result appendString:[self sqlWhereClauseWithQuery:query]];
+                [result appendString:[self sqlLimitClause]];
+            }
             
         }
         dispatch_semaphore_signal(semaphoreIsLicensed);
@@ -169,6 +180,25 @@
 
 - (NSString *)sqlLimitClause {
     return @"";
+}
+
+- (void)emptyCacheWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:managedObjectContext] retain];
+    NSError *error = nil;
+    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:@[] format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
+    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    if (error) {
+        error = nil;
+        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    }
+    
+    [queryCache setCacheDate:[NSDate date]];
+    [query setHasQueryCache:queryCache];
 }
 
 - (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
@@ -228,32 +258,99 @@
     return @"";
 }
 
-- (NSString *)sqlSelectExpressionWithTables:(NSArray *)tables forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (NSString *)sqlSelectExpressionWithTables:(NSArray *)tables usingOnlyActiveFields:(BOOL)onlyActiveFields forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
     NSMutableString *result = [[NSMutableString alloc] init];
-    NSUInteger tableCounter = 0;
-    for (MTPair *pair in tables) {
+    
+    if (onlyActiveFields) {
         
-        MTVertex *queryTable = [pair former];
-        NSManagedObjectID *objectID = [queryTable object];
-        RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
-        if (table != nil) {
-            if (tableCounter != 0) [result appendString:@",\n"];
-            
-            NSString *tableAlias = [[table queryAlias] stringByAppendingString:@"."];
-            
-            NSUInteger fieldCounter = 0;
-            for (RptqQueryField *queryField in [table hasQueryFields]) {
-                RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
-                if (fieldCounter != 0)  [result appendString:@",\n"];
-                NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
-                [result appendFormat: @"\t%@", fieldAlias];
-                fieldCounter++;
+        //Logic to return only needed fields.
+        
+        //Fields in data label.
+        NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+        NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
+        NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
+        [fetchRequestDataField setPredicate:predicateDataField];
+        NSError *fetchFieldsError = nil;
+        NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+        if (fetchFieldsError != nil) {
+            dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+        }
+        [dataObjectFields retain];
+        
+        //Fields in aggregate function.
+        NSString *entityObjectAggregate = NSStringFromClass([RptqDocumentObjectAggregate class]);
+        NSFetchRequest *fetchRequestAggregate = [[NSFetchRequest alloc] initWithEntityName:entityObjectAggregate];
+        NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+        [fetchRequestAggregate setPredicate:predicate];
+        NSError *fetchAggregateError = nil;
+        NSArray *aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
+        if (fetchAggregateError != nil) {
+            aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
+        }
+        [aggregateObjectFields retain];
+        
+        NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count];
+        NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
+
+        for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
+            RptqQueryField *queryField = [dataField referencesQueryField];
+            if (queryField != nil) {
+                [queryFields addObject:queryField];
             }
-            tableCounter++;
+        }
+
+        for (RptqDocumentObjectAggregate *dataField in aggregateObjectFields) {
+            RptqQueryField *queryField = [dataField aggregateField];
+            if (queryField != nil) {
+                [queryFields addObject:queryField];
+            }
         }
         
-        
-    };
+        NSUInteger fieldCounter = 0;
+        for (RptqQueryField *queryField in queryFields) {
+            RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
+            if (fieldCounter != 0)  [result appendString:@",\n"];
+            NSString *tableAlias = [[[queryField inQueryTable] queryAlias] stringByAppendingString:@"."];
+            NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+            [result appendFormat: @"\t%@", fieldAlias];
+            fieldCounter++;
+        }
+        if (fieldCounter == 0) {
+            [result release];
+            result = nil;
+        }
+        [queryFields release];
+        [aggregateObjectFields release];
+        [dataObjectFields release];
+        [fetchRequestDataField release];
+        [fetchRequestAggregate release];
+    } else {
+
+        // Logic to return all fields.
+        NSUInteger tableCounter = 0;
+        for (MTPair *pair in tables) {
+            MTVertex *queryTable = [pair former];
+            NSManagedObjectID *objectID = [queryTable object];
+            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
+            if (table != nil) {
+                if (tableCounter != 0) [result appendString:@",\n"];
+                
+                NSString *tableAlias = [[table queryAlias] stringByAppendingString:@"."];
+                
+                NSUInteger fieldCounter = 0;
+                for (RptqQueryField *queryField in [table hasQueryFields]) {
+                    RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
+                    if (fieldCounter != 0)  [result appendString:@",\n"];
+                    NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+                    [result appendFormat: @"\t%@", fieldAlias];
+                    fieldCounter++;
+                }
+                tableCounter++;
+            }
+        }
+    }
+
     return [result autorelease];
 }
 
