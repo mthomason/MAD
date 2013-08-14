@@ -122,7 +122,7 @@
     
     MTBlockCompletion completion = ^(BOOL success, NSError *error){
         [self enableUserInterface];
-        [MTStoreKitController licensedUser:[self licenseUserCompletion]];
+        [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
         if (success == NO) {
             [error presentErrorToUser];
         }
@@ -138,7 +138,7 @@
     //[[self buttonBuyNow] setTitle:@"" forState:UIControlStateDisabled];
     [[self buttonBuyNow] setHidden:YES];
 
-    [MTStoreKitController licensedUser:[self licenseUserCompletion]];
+    [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
     
 }
 
