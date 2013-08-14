@@ -21,8 +21,8 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @interface MTDocument ()
 
+@property (nonatomic, retain) NSFileWrapper *fileWrapper;
 @property (nonatomic, retain) NSMutableDictionary *extraInformation;        //Structure for extra info
-
 @property (nonatomic, retain) UIImage *thumbnail;
 
 @end
@@ -32,6 +32,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 - (void)dealloc {
     [_extraInformation release];
     [_thumbnail release];
+    [_fileWrapper release];
     [super dealloc];
 }
 
@@ -47,13 +48,58 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     return self;
 }
 
+/*
+ 
+ Printing description of result:
+ {
+    additionalContent =     {
+        generator = "MAD Designer";
+        "thumbnail.png" = "<UIImage: 0x10d6f060>";
+        version = 1;
+    };
+ fileType = "com.everydayapps.productivity.mad";
+ parentContext = "<NSManagedObjectContext: 0x9990070>";
+ }
+
+ */
+
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     id result = [super contentsForType:typeName error:outError];
+    /*
+    NSFileWrapper *wrapper = (NSFileWrapper *)result;
+    NSLog(@"result      (%@:%@): %@", NSStringFromClass([result class]), result, [result isKindOfClass:[NSFileWrapper class]]?@"YES":@"NO");
+    NSLog(@"result      (%@:%@): %@", NSStringFromClass([wrapper class]), wrapper, [wrapper isKindOfClass:[NSFileWrapper class]]?@"YES":@"NO");
+    if ([self fileWrapper] == nil) {
+        
+        //Setup empty file.
+        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
+        [self setFileWrapper:fileWrapper];
+        [fileWrapper release];
+    }
+    
+    @autoreleasepool {
+        NSData *thumbnail = UIImagePNGRepresentation([self thumbnail]);
+        NSFileWrapper *thumbnailFileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:thumbnail];
+        [thumbnailFileWrapper setPreferredFilename:@"thumbnail.png"];
+        [[self fileWrapper] addFileWrapper:thumbnailFileWrapper];
+    }
+    
+    NSFileWrapper *metaFileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
+    [metaFileWrapper release];
+    
+    [self ]
+    contentsAtPath:
+    NSFileWrapper *databaseFileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:];
+    
+//    return  [self fileWrapper];
+*/
     return result;
 }
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
+    //contents = [NSKeyedUnarchiver unarchiveObjectWithData:contents];
     BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
+    //NSLog(@"result(%@): %@", NSStringFromClass([contents class]), contents);
     return result;
 }
 
@@ -76,7 +122,6 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 #pragma mark - UIManagedDocument
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
-    //NSLog(@"RURL %@", absoluteURL);
     
     NSError *readError = nil;
     NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent: MTDocumentInfoKeyThumbnail];
@@ -152,13 +197,6 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
         NSError *filePresenterError = nil;
         
         UIImage *thumbnail = [(NSDictionary *)content objectForKey:MTDocumentInfoKeyThumbnail];
-    /*
-        if ([UIDevice isModernOS]) {
-            UIColor *tintColor = [[[[UIApplication sharedApplication] delegate] window] tintColor];
-            [[thumbnail layer] setBorderColor:[tintColor CGColor]];
-            [[thumbnail layer] setBorderWidth:1.0000f];
-        }
-*/        
         [UIImagePNGRepresentation(thumbnail) writeToURL:thumbnailUrl atomically:NO];
 
         NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];

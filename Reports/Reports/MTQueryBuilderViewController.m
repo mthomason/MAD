@@ -248,6 +248,7 @@
     if ([UIDevice isLagacyOS]) {
         [[self toolbar] setTintColor:[UIColor edaBlueDark]];
     }
+
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
@@ -819,22 +820,41 @@
                     
                     [tableView beginUpdates];
                     
-                    //Delete document data objects related to the table being deleted.
-                    NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
-                    NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-                    NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
-
-                    [fetchReqest setPredicate:documentObjectsPredicate];
-                    NSError *fetchError = nil;
-                    NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
-                    if (fetchError == nil) {
-                        for (RptqDocumentObject *documentObject in objectsToDelete) {
-                            [managedObjectContext deleteObject:[documentObject isLabelDataField]];
-                            [managedObjectContext deleteObject:documentObject];
+                    //Delete document data fields related to the table being deleted.
+                    {
+                        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+                        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+                        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
+                        
+                        [fetchReqest setPredicate:documentObjectsPredicate];
+                        NSError *fetchError = nil;
+                        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
+                        if (fetchError == nil) {
+                            for (RptqDocumentObject *documentObject in objectsToDelete) {
+                                [managedObjectContext deleteObject:[documentObject isLabelDataField]];
+                                [managedObjectContext deleteObject:documentObject];
+                            }
+                            [managedObjectContext save:&fetchError];
                         }
-                        [managedObjectContext save:&fetchError];
                     }
-
+                    //Delete document data objects related to the table being deleted.
+                    {
+                        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+                        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+                        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
+                        
+                        [fetchReqest setPredicate:documentObjectsPredicate];
+                        NSError *fetchError = nil;
+                        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
+                        if (fetchError == nil) {
+                            for (RptqDocumentObject *documentObject in objectsToDelete) {
+                                [managedObjectContext deleteObject:[documentObject isAggregate]];
+                                [managedObjectContext deleteObject:documentObject];
+                            }
+                            [managedObjectContext save:&fetchError];
+                        }
+                    }
+                    
                     //Delete links, groups, and predicates related to the table being deleted.
                     
                     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];

@@ -42,6 +42,8 @@ extern NSString * const MTSegueShowOpenDocument;
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
 
+- (void)updateFileList;
+
 @end
 
 #endif

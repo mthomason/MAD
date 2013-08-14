@@ -455,8 +455,8 @@
         
         controller.showsPageRange = YES;
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
-        [self setPrintPageRenderForPrinting:printPageRender];
-        controller.printPageRenderer = [self printPageRenderForPrinting];
+        [controller setPrintPageRenderer:printPageRender];
+        //[self setPrintPageRenderForPrinting:printPageRender];
         [printPageRender release];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

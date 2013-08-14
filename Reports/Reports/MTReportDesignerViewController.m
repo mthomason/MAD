@@ -913,7 +913,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - Menu Notifications
 
-- (void)didHideMenuNotification:(NSNotification *)notification { }
+- (void)didHideMenuNotification:(NSNotification *)notification {
+    [[self elementViews] enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        [self didDeselectElementView:obj animated:YES];
+    }];
+}
 
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 
@@ -1173,6 +1177,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
         if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
         if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
+        if ([self popoverControllerSectionSettings] != nil) [allpopovers addObject:[self popoverControllerSectionSettings]];
         
         for (UIPopoverController *popoverController in allpopovers) {
             if ([popoverController isPopoverVisible]) {
@@ -1181,6 +1186,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }
         }
         [allpopovers release];
+        [self deselectAllElementsAnimated:YES];
     }
     return result;
 }
@@ -1433,31 +1439,34 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (IBAction)hideToolbox:(id)sender {
-
-    if ([self toolboxIsVisible]) {
-        [self setToolboxIsVisible:NO];
-
-        [[self view] layoutIfNeeded];
-        [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-            [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
-            [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
+    if ([UIDevice isPad]) {
+        [self dismissAllPopovers];
+    } else {
+        if ([self toolboxIsVisible]) {
+            [self setToolboxIsVisible:NO];
+            
             [[self view] layoutIfNeeded];
-
-        } completion:^(BOOL finished) {
-            if (finished) {
-                if ([[[self navigationControllerSectionLayoutSettings] view] superview] != nil) {
-                    [[[self navigationControllerSectionLayoutSettings] view] removeFromSuperview];
+            [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
+            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
+                [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
+                [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
+                [[self view] layoutIfNeeded];
+                
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    if ([[[self navigationControllerSectionLayoutSettings] view] superview] != nil) {
+                        [[[self navigationControllerSectionLayoutSettings] view] removeFromSuperview];
+                    }
+                    if ([[[self viewControllerToolbox] view] superview] != nil) {
+                        [[[self viewControllerToolbox] view] removeFromSuperview];
+                    }
+                    [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
+                    [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
+                    [[self informationButton] setEnabled: YES];
                 }
-                if ([[[self viewControllerToolbox] view] superview] != nil) {
-                    [[[self viewControllerToolbox] view] removeFromSuperview];
-                }
-                [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
-                [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
-                [[self informationButton] setEnabled: YES];
-            }
-        }];
-        [self deselectAllElementsAnimated:YES];
+            }];
+            [self deselectAllElementsAnimated:YES];
+        }
     }
 }
 

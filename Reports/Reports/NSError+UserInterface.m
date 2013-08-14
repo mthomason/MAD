@@ -15,7 +15,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 - (void)presentErrorToUser {
     
     NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
-    NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
+    //NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
     //NSString *abortButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc);
  
     MTBlockErrorDismiss dismissBlock = ^(NSInteger buttonIndex) {
@@ -35,7 +35,9 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
                                                         message: [self localizedFailureReason]
                                               cancelButtonTitle: cancelButtonTitle
-                                               otherButtonTitle: @[continueButtonTitle/*, abortButtonTitle*/] onDismiss:dismissBlock onCancel:nil];
+                                               otherButtonTitle: nil
+                                                      onDismiss: dismissBlock
+                                                       onCancel: nil];
     [alertView show];
     [alertView autorelease];
 

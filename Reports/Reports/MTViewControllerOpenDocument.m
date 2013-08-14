@@ -82,6 +82,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
 
+@property (nonatomic, assign) BOOL needsEmailMenu;
+
 @end
 
 @implementation MTViewControllerOpenDocument
@@ -201,13 +203,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //UINib *nib = [UINib nibWithNibName:[self nibName] bundle:[self nibBundle]];
-    //[[self collectionView] registerNib:nib forCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier];
-    //[[self collectionView] registerClass: [MTCollectionViewCellDocument class]
-    //          forCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier];
-    //[[self  collectionView] setCollectionViewLayout:[self collectionViewFlowLayout]];
-    //[[[self collectionView] collectionViewLayout  ] ];
+
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateEditMode:)];
     [longPressGestureRecognizer setDelegate: self];
     [self setLongPressGestureRecognizer:longPressGestureRecognizer];
@@ -231,12 +227,26 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [fileMetaCache release];
 
     [[self buttonLicensing] setEnabled:[SKPaymentQueue canMakePayments]];
+    
+    [self setNeedsEmailMenu:YES];
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+        if (isLicensedUser) {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
+                                                                  action: @selector(email:)];
+                UIMenuController *menu = [UIMenuController sharedMenuController];
+                [menu setMenuItems:@[menuItem]];
+                [menuItem release];
+            });
+        }
+    }];
     
     [self updateFileList];
 }
@@ -294,61 +304,83 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
 
-        NSUInteger row = 0;
-        NSURL *url = nil;
-        
-        MTCollectionViewCellDocument *senderCell = sender;
-        row = [[[self collectionView] indexPathForCell:senderCell] row];
-        url = [[self availableFilesCache] objectAtIndex: row];
-        [self setUrlBeingOpended:url];
+        BOOL foundUrl = NO;
+        if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+            NSUInteger row = 0;
+            NSURL *url = nil;
+            MTCollectionViewCellDocument *senderCell = sender;
+            row = [[[self collectionView] indexPathForCell:senderCell] row];
+            url = [[self availableFilesCache] objectAtIndex: row];
+            [self setUrlBeingOpended:url];
+            foundUrl = YES;
+        } else if ([segue isKindOfClass:[NSURL class]]) {
+            [self setUrlBeingOpended:(NSURL *)segue];
+            foundUrl = YES;
+        }
 
-        [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
-                                        withWrapper:[MTReportDocument class]
-                               andCompletionHandler:^(id managedDocument, BOOL success) {
-                                   
-                                   if (success) {
-                                       [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                                       MTReportViewerController *viewControllerReportViewer = [segue destinationViewController];
-                                       [viewControllerReportViewer setViewControllerDelegate:self];
-                                       [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
-                                   }
-                                   
-                               }];
-
-        
-
-        
-    } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
-        
-        NSUInteger row = 0;
-        NSURL *url = nil;
-        MTCollectionViewCellDocument *senderCell = sender;
-        row = [[[self collectionView] indexPathForCell:senderCell] row];
-        url = [[[self availableFilesCache] objectAtIndex: row] retain];
-        [self setUrlBeingOpended:url];
-
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            if ([UIDevice isPad]) {
-                MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
-                [queryBuilderViewController setDelegateContentController: self];
-                [queryBuilderViewController setDelegate:self];
-                [queryBuilderViewController setDocumentToOpen:url];
-            } else {
-                MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
-                [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
-            }
-
-        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
-            MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
-            [queryBuilderViewController setDelegateContentController: self];
-            [queryBuilderViewController setDelegate:self];
-            [queryBuilderViewController setDocumentToOpen:url];
-        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue destinationViewController];
-            [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:url];
+        if (foundUrl) {
+            [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+                                            withWrapper:[MTReportDocument class]
+                                   andCompletionHandler:^(id managedDocument, BOOL success) {
+                                       
+                                       if (success) {
+                                           [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                                           MTReportViewerController *viewControllerReportViewer = [segue destinationViewController];
+                                           [viewControllerReportViewer setViewControllerDelegate:self];
+                                           [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
+                                       }
+                                       
+                                   }];
+        } else {
+            NSAssert(foundUrl == NO, @"No URL to open.");
         }
         
-        [url release];
+    } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
+        BOOL foundUrl = NO;
+        if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+
+            NSUInteger row = 0;
+            NSURL *url = nil;
+            MTCollectionViewCellDocument *senderCell = sender;
+            row = [[[self collectionView] indexPathForCell:senderCell] row];
+            url = [[[self availableFilesCache] objectAtIndex: row] retain];
+            if (url != nil) {
+                foundUrl = YES;
+            }
+            [self setUrlBeingOpended:url];
+            [url release];
+            
+        } else if ([segue isKindOfClass:[NSURL class]])  {
+            NSURL *url = (NSURL *)segue;
+            if (url != nil) {
+                [self setUrlBeingOpended:url];
+                foundUrl = YES;
+            }
+        }
+        if (foundUrl) {
+            if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+                if ([UIDevice isPad]) {
+                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
+                    [queryBuilderViewController setDelegateContentController: self];
+                    [queryBuilderViewController setDelegate:self];
+                    [queryBuilderViewController setDocumentToOpen:[self urlBeingOpended]];
+                } else {
+                    MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+                    [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:[self urlBeingOpended]];
+                }
+                
+            } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
+                MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
+                [queryBuilderViewController setDelegateContentController: self];
+                [queryBuilderViewController setDelegate:self];
+                [queryBuilderViewController setDocumentToOpen:[self urlBeingOpended]];
+            } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+                MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue destinationViewController];
+                [self setupQueryDesignerController:queryBuilderViewController usingFileAtUrl:[self urlBeingOpended]];
+            }
+        } else {
+            NSAssert(foundUrl == NO, @"No URL to open.");
+        }
         
     }
 }
@@ -456,31 +488,26 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTReportDocument *documentReport = [[MTReportDocument alloc] initWithFileURL:fileToAttach];
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
-
-            //Close the document
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
-
                     [self emailDocumentRepresentedByCell:[[cell retain] autorelease]];
                 }
-
             }];
             
         } else {
             
-                NSError *error = nil;
-                NSFileCoordinator *cordinator = [[NSFileCoordinator alloc] initWithFilePresenter:documentReport];
+            [documentReport performAsynchronousFileAccessUsingBlock:^{
+                NSString *temporaryDirectory = NSTemporaryDirectory();
+                NSString *temporaryFile = [temporaryDirectory stringByAppendingPathComponent:[[documentReport fileURL] lastPathComponent]];
+                NSURL *saveLocation = [NSURL fileURLWithPath: temporaryFile];
+                BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[saveLocation path]];
+                UIDocumentSaveOperation saveOp = fileExist ? UIDocumentSaveForOverwriting : UIDocumentSaveForCreating;
+                NSLog(@"success");
+                NSError *fileWrapperError = nil;
+                NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
                 
-                [cordinator coordinateReadingItemAtURL:[fileToAttach filePathURL] options:0 error:&error byAccessor:^(NSURL* writingURL) {
-                    
-                    NSError *error = nil;
-                    NSDictionary *fileAsDictionary = [documentReport contentsForType:MTDocumentTypeUtiMad error:&error];
-                    
-                    NSMutableData *data = [[NSMutableData alloc] init];
-                    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-                    [archiver encodeObject:fileAsDictionary];
-                    [archiver finishEncoding];
-                    [archiver release];
+                NSData *data = [[fileWrapper serializedRepresentation] retain];
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     
                     NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
                                                                                                              @"The attached document can be opened with the Mad Viewer available on iOS.")];
@@ -493,7 +520,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [mailComposer setMessageBody:messageBody isHTML:NO];
                     [mailComposer setSubject:subject];
                     
-                    [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:@"get.mad"];
+                    NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
+                    [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
                     
                     if ([UIDevice isPad]) {
                         [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
@@ -503,11 +531,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     }
                     [self presentViewController:mailComposer animated:YES completion:nil];
                     
-                    [data release];
-                    [mailComposer release];
-                    [messageBody release];
                     
-                }];
+                });
+            }];
         }
         
         [documentReport release];

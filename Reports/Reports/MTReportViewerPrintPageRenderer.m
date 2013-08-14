@@ -290,11 +290,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 
                 documentSection = [[self document] hasReportHeaderSection];
 
-                if ([self debugMode]) {
-                    [[UIColor greenColor] set];
-                } else {
-                    [[UIColor whiteColor] set];
-                }
+                [[UIColor whiteColor] set];
                 
             } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                 
@@ -304,36 +300,23 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
                 originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
 
-                if ([self debugMode]) {
-                    [[UIColor greenColor] set];
-                } else {
-                    [[UIColor whiteColor] set];
-                }
+                [[UIColor whiteColor] set];
 
             } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
                 
                 groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                 documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
 
-                if ([self debugMode]) {
-                    [[UIColor lightGrayColor] set];
-                } else {
-                    [[UIColor whiteColor] set];
-                }
+                [[UIColor whiteColor] set];
                 
             } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
                 
                 groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                 
-                //[groupLevelKeys setObject:@"" atIndexedSubscript:groupLevel];
                 query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                 documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
                 
-                if ([self debugMode]) {
-                    [[UIColor lightTextColor] set];
-                } else {
-                    [[UIColor whiteColor] set];
-                }
+                [[UIColor whiteColor] set];
 
             }
             CGFloat sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
@@ -715,15 +698,20 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         case MTDataTypeUnknown:
         case MTDataTypeVarChar:
         default: {
-            if ([obj1 isKindOfClass:[NSString class]] == NO) {
-                obj1 = @"";
-            }
-            if ([obj2 isKindOfClass:[NSString class]]) {
-                result = [obj1 stringByAppendingString:obj2];
+            if ([obj1 isKindOfClass:[NSNumber class]]) {
+                if ([obj2 isKindOfClass:[NSNumber class]]) {
+                    result = @([obj2 doubleValue] + [obj1 doubleValue]);
+                } else {
+                    result = obj1;
+                }
             } else {
-                obj1 = [NSString stringWithFormat:@"%@", obj1];
-                [obj1 appendFormat:@"%@", obj2];
-                result = obj1;
+                if ([obj1 isKindOfClass:[NSString class]] == NO || [obj1 length] <= 0) {
+                    obj1 = @"";
+                }
+                if ([obj2 isKindOfClass:[NSString class]] == NO || [obj2 length] <= 0) {
+                    obj2 = @"";
+                }
+                result = [obj1 stringByAppendingString:obj2];
             }
             break;
         }

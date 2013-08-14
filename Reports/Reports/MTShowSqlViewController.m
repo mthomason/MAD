@@ -7,6 +7,7 @@
 //
 
 #import "MTShowSqlViewController.h"
+#import "RptqQuery+Extras.h"
 
 @interface MTShowSqlViewController ()
 
@@ -24,7 +25,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self textView] setText:[RptqDocument sqlStatementForActiveDocument]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    MTDatabase *databaseHandler = [MTDatabase databaseObjectForRptqDatabase:[query inDatabase]];
+    NSString *sqlStatement = [databaseHandler getSqlForQuery: query onlyActiveFields: NO];
+    if ([sqlStatement length] > 0) {
+        [[self textView] setText:sqlStatement];
+    } else {
+        [[self textView] setText:@""];
+        NSString *title = NSLocalizedString(@"Empty Query", @"Empty Query");
+        NSString *message = NSLocalizedString(@"Add tables to the query and data fields to the designer to generate a query.", @"Add tables to the query and data fields to the designer to generate a query.");
+        NSString *cancel = NSLocalizedString(@"Continue", @"Continue");
+        MTAlertView *alert = [[MTAlertView alloc] initWithTitle: title
+                                                        message: message
+                                              cancelButtonTitle: cancel
+                                               otherButtonTitle: @[]
+                                                      onDismiss: ^(NSInteger buttonIndex) { }
+                                                       onCancel: ^{ }];
+        [alert show];
+        [alert release];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

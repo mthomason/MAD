@@ -2090,7 +2090,7 @@
                             <tableViewSection id="QAu-8f-50p">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="sJO-On-gCz">
-                                        <rect key="frame" x="0.0" y="10" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="10" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -2120,68 +2120,6 @@
                                             <constraint firstItem="S3h-T8-gIH" firstAttribute="centerY" secondItem="gyg-LX-dG6" secondAttribute="centerY" type="default" id="qQ1-2J-yJS"/>
                                         </constraints>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="0x3-aQ-IYw">
-                                        <rect key="frame" x="0.0" y="55" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Height: 44.0 pts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="7gA-sg-6JC">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="158" id="zvM-MU-1Ny"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="88" maximumValue="500" translatesAutoresizingMaskIntoConstraints="NO" id="FfF-QT-ZV6">
-                                                    <connections>
-                                                        <action selector="heightChanged:" destination="jXi-5j-ahn" eventType="valueChanged" id="xyS-od-NIL"/>
-                                                    </connections>
-                                                </stepper>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="FfF-QT-ZV6" firstAttribute="leading" secondItem="7gA-sg-6JC" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="BLs-IC-w7Q"/>
-                                            <constraint firstItem="FfF-QT-ZV6" firstAttribute="centerY" secondItem="7gA-sg-6JC" secondAttribute="centerY" type="default" id="Def-ed-sjW"/>
-                                            <constraint firstItem="FfF-QT-ZV6" firstAttribute="top" secondItem="0x3-aQ-IYw" secondAttribute="top" constant="8" id="Moo-ta-YZf"/>
-                                            <constraint firstItem="7gA-sg-6JC" firstAttribute="leading" secondItem="0x3-aQ-IYw" secondAttribute="leading" constant="30" id="hdC-xb-PeV"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellHeight" id="MJI-Ad-m6V">
-                                        <rect key="frame" x="0.0" y="99" width="320" height="45"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Rows: one" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="5Zx-Wi-Rkb">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="158" id="DjV-RP-Bah"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="256" translatesAutoresizingMaskIntoConstraints="NO" id="dOT-fJ-gmp">
-                                                    <connections>
-                                                        <action selector="numberOfRowsChanged:" destination="jXi-5j-ahn" eventType="valueChanged" id="7n9-YM-G2L"/>
-                                                    </connections>
-                                                </stepper>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="centerY" secondItem="5Zx-Wi-Rkb" secondAttribute="centerY" type="default" id="5QG-Qj-niX"/>
-                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="leading" secondItem="5Zx-Wi-Rkb" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="61A-hl-peJ"/>
-                                            <constraint firstItem="5Zx-Wi-Rkb" firstAttribute="leading" secondItem="MJI-Ad-m6V" secondAttribute="leading" constant="30" id="ENC-Gq-yaC"/>
-                                            <constraint firstItem="dOT-fJ-gmp" firstAttribute="top" secondItem="MJI-Ad-m6V" secondAttribute="top" constant="8" id="t70-0r-E75"/>
-                                        </constraints>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -2193,10 +2131,6 @@
                         <barButtonItem key="backBarButtonItem" title="Query" id="2r1-09-ALb"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="heightStepper" destination="FfF-QT-ZV6" id="EPY-II-Ao8"/>
-                        <outlet property="labelHeight" destination="7gA-sg-6JC" id="U5Z-3j-HcK"/>
-                        <outlet property="labelNumberOfRows" destination="5Zx-Wi-Rkb" id="4fP-co-GSG"/>
-                        <outlet property="rowsStepper" destination="dOT-fJ-gmp" id="u03-qz-KuG"/>
                         <outlet property="visibilitySwitch" destination="S3h-T8-gIH" id="n3W-iq-KtX"/>
                     </connections>
                 </tableViewController>

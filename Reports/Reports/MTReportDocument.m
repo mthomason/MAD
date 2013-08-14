@@ -53,7 +53,8 @@
             }
         }];
     } else {
-        completion(NO);
+        [mnsDatabase emptyCacheWithManagedObjectContext:managedObjectContext];
+        completion(YES);
     }
 }
 
@@ -69,6 +70,18 @@
     [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
+}
+
+- (NSString *)fileNameExtensionForType:(NSString *)typeName saveOperation:(UIDocumentSaveOperation)saveOperation {
+    return MTDocumentTypeExtentionMad;
+}
+
+- (NSString *)fileType {
+    return [MTReportDocument fileType];
+}
+
++ (NSString *)fileType {
+    return MTDocumentTypeUtiMad;
 }
 
 @end

@@ -340,7 +340,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
 }
 
 - (NSString *)selectPart {
-    return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50";
+    return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50\n";
 }
 
 - (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
@@ -1459,11 +1459,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                 
                 if (error == nil) {
                     if ((dbconn = dbopen(login, s)) == NULL) {
-                        
                         NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
                         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                         error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
-                        
                     }
                 }
                 

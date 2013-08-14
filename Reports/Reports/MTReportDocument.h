@@ -33,6 +33,7 @@
 - (void)refresh:(void (^)(BOOL success))completion;
 - (BOOL)hasCachedData;
 - (void)sendTo;
++ (NSString *)fileType;
 
 @end
 

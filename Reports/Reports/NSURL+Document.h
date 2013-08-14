@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "NSFileManager+Common.h"
+#import "CloudManager.h"
 
 @interface NSURL (Document)
 
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
++ (NSURL *)uniqueTmpUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
 
 @end
