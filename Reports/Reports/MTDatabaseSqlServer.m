@@ -166,9 +166,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                         NSInteger typeBind, lengthBind, percisionBind, scaleBind;
                         
                         DBINT nameBindNull, typeBindNull, lengthBindNull, percisionBindNull, scaleBindNull;
-                        
-                        nameBind = malloc( sizeof(char) * ( nameLenght + 1 ) );
-                        dbbind(dbconn, 1, NTBSTRINGBIND, nameBind, (BYTE *)nameBind);
+                        NSInteger nameSize = ( nameLenght + 1 );
+                        nameBind = malloc( sizeof(char) * nameSize );
+                        dbbind(dbconn, 1, NTBSTRINGBIND, ( nameLenght + 1 ), (BYTE *)nameBind);
                         dbnullbind(dbconn, 1, &nameBindNull);
                         
                         dbbind(dbconn, 2, INTBIND, sizeof(NSInteger), (BYTE *)&typeBind);
@@ -202,9 +202,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 const char *typeDesc = dbprtype(typeBind);
                                 NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
                                                                                      encoding: NSStringEncodingConversionAllowLossy];
-                                
-                                [databaseField setFieldTypeNative:typeDescWrapper];
-                                [databaseField setFieldType:[self dataTypeForNativeType:typeBind]];
+                                NSInteger fieldTypeCalculated = [self dataTypeForNativeType:typeBind];
+                                [databaseField setFieldTypeNative:fieldTypeCalculated];
+                                [databaseField setFieldType:[self dataTypeForNativeType:fieldTypeCalculated]];
                                 [databaseField setWidth:lengthBind];
                                 [databaseField setDecimals:scaleBind];
                                 [databaseField setPrimaryKey:0];

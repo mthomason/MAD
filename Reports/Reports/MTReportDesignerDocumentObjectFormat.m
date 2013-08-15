@@ -159,7 +159,9 @@
             if (allTheSame) {
                 [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:lastInteger]];
             } else {
-                [[self labelNumberOfDecimals] setAttributedText:-1];
+                NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
+                [[self labelNumberOfDecimals] setAttributedText:attributedString];
+                [attributedString release];
             }
             [[self stepperNumberOfDecimals] setValue:lastInteger];
         }

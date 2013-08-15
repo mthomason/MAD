@@ -33,7 +33,7 @@
 @property (nonatomic, retain) MAReportDocument *reportDocument;
 
 @property (nonatomic, retain) UIPopoverController *showSqlPopoverController;
-@property (nonatomic, assign) BOOL *showSqlIsVisable;
+@property (nonatomic, assign) BOOL showSqlIsVisable;
 
 @end
 
@@ -311,7 +311,7 @@
     switch (animationType) {
         case 1:
 
-            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
                 //[[viewController view] setTransform:desiredTransform];
             } completion:^(BOOL finished) {}];
@@ -319,7 +319,7 @@
             break;
         case 2:
             
-            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 [[viewController view] setFrame:desiredFrame];
                 [[viewController view] setTransform:desiredTransform];
             } completion:^(BOOL finished) {}];
@@ -348,7 +348,7 @@
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
 
         CGPoint center = CGPointMakeRandomOffscreen();
-        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [[viewController view] setCenter:center];
             //[[viewController view] setTransform:swingTransform];
         } completion:^(BOOL finished) {
@@ -360,7 +360,7 @@
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
         
         CGPoint center = [viewController view].center;
-        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationCurveEaseInOut animations:^{
+        [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [[viewController view] setBounds:CGRectZero];
             [[viewController view] setCenter:center];
             [[viewController view] setTransform:swingTransform];

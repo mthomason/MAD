@@ -23,7 +23,6 @@
 + (id)paperFiberDarkGray;
 + (id)paperFiber1;
 + (id)paperFiber2;
-+ (id)paperFiberDarkGray;
 + (id)paperGoldMetallic;
 + (id)paperGoldParchment;
 + (id)paperGoldVellum;

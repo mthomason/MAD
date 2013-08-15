@@ -221,7 +221,7 @@ static NSNumberFormatter *currencyNumberFormatter;
         
         case MTDocumentObjectTypeGroupKey: {
             NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
-            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
+            NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: @(groupNumber)
                                                                          numberStyle: NSNumberFormatterSpellOutStyle];
             NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
             result = [NSString stringWithFormat:gorupFormatString, [groupNumberText uppercaseString]];

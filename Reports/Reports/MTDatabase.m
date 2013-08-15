@@ -33,10 +33,23 @@
     if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        [databaseConnection setUsername:    [[userCredentals mysql_username] copy]];
-        [databaseConnection setPassword:    [[userCredentals mysql_password] copy]];
-        [databaseConnection setServer:      [[userCredentals mysql_host] copy]];
-        [databaseConnection setDatabase:    [[userCredentals mysql_database] copy]];
+        
+        id username = [[userCredentals mysql_username] copy];
+        [databaseConnection setUsername:    username];
+        [username release];
+        
+        id password = [[userCredentals mysql_password] copy];
+        [databaseConnection setPassword:    password];
+        [password release];
+        
+        id server = [[userCredentals mysql_host] copy];
+        [databaseConnection setServer:      server];
+        [server release];
+        
+        id database = [[userCredentals mysql_database] copy];
+        [databaseConnection setDatabase:    database];
+        [database release];
+        
         [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
         MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
         result = databaseMySql;
@@ -46,11 +59,26 @@
     } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        [databaseConnection setUsername:    [[userCredentals tds_username] copy]];
-        [databaseConnection setPassword:    [[userCredentals tds_password] copy]];
-        [databaseConnection setServer:      [[userCredentals tds_server] copy]];
-        [databaseConnection setHost:        [[userCredentals tds_host] copy]];
-        [databaseConnection setDatabase:    [[userCredentals tds_database] copy]];
+        id username = [[userCredentals tds_username] copy];
+        [databaseConnection setUsername:    username];
+        [username release];
+        
+        id password = [[userCredentals tds_password] copy];
+        [databaseConnection setPassword:    password];
+        [password release];
+        
+        id server = [[userCredentals tds_server] copy];
+        [databaseConnection setServer:      server];
+        [server release];
+        
+        id host = [[userCredentals tds_host] copy];
+        [databaseConnection setHost:        host];
+        [host release];
+        
+        id database = [[userCredentals tds_database] copy];
+        [databaseConnection setDatabase:    database];
+        [database release];
+        
         [databaseConnection setPort:        [[userCredentals tds_port] integerValue]];
         MTDatabaseSqlServer *databaseTds = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
         result = databaseTds;

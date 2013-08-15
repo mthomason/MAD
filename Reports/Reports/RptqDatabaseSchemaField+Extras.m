@@ -82,10 +82,10 @@
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
     [result setLabel:[schemaField label]];
     [result setName:[schemaField name]];
-    [result setFieldType:[schemaField dataType]];
-    [result setFieldTypeNative:[schemaField dataTypeNative]];
-    [result setDecimals:[schemaField decimals]];
-    [result setPrimaryKey:[schemaField primaryKey]];
+    [result setFieldType:(MTDataType)[[schemaField dataType] integerValue]];
+    [result setFieldTypeNative:[[schemaField dataTypeNative] integerValue]];
+    [result setDecimals:[[schemaField decimals] integerValue]];
+    [result setPrimaryKey:[[schemaField primaryKey] boolValue]];
     return [result autorelease];
 }
 
