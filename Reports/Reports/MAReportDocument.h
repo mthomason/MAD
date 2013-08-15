@@ -22,9 +22,9 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
-#import "MTDocument.h"
+#import "MADocument.h"
 
-@interface MTReportDocument : MTDocument
+@interface MAReportDocument : MADocument
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database

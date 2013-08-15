@@ -22,6 +22,6 @@
 @interface MTQueryBuilderAdvancedViewController : UIViewController
     <UIGestureRecognizerDelegate, UIScrollViewDelegate, UIPopoverControllerDelegate, MTQueryBuilderAdvancedSchemaDelegate, MTViewControllerProtocol>
 
-- (void)reloadDocument:(MTReportDocument *)documentReport;
+- (void)reloadDocument:(MAReportDocument *)documentReport;
 
 @end

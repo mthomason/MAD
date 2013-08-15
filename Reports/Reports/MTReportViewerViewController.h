@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
 #import "MTReportViewerReportPageViewController.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "MTPrintingProtocol.h"
 #import "NSDate+Extras.h"
 #import "DocumentStatusView.h"
@@ -19,7 +19,7 @@
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MTPrintingProtocol>
 
-@property (nonatomic, retain) MTReportDocument *documentReport;
+@property (nonatomic, retain) MAReportDocument *documentReport;
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
 

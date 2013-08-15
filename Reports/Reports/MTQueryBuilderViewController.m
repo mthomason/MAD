@@ -33,7 +33,7 @@
 @property (nonatomic, retain) NSMutableDictionary *modelWithOneTable;
 @property (nonatomic, retain) NSMutableDictionary *modelWithTwoOrMoreTables;
 
-@property (nonatomic, retain) MTReportDocument *activeDocument;
+@property (nonatomic, retain) MAReportDocument *activeDocument;
 
 @property (assign) NSInteger lastSelectedRowNumber;
 
@@ -237,6 +237,7 @@
     NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
     [toolbarButtons removeObject:[self barButtonItemShowSQL]];
     [[self toolbar] setItems:toolbarButtons animated:NO];
+    [toolbarButtons release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -255,6 +256,7 @@
             NSInteger index = [toolbarButtons count] - 1;
             [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
             [[self toolbar] setItems:toolbarButtons animated:animated];
+            [toolbarButtons release];
         }
     }];
 }
@@ -587,7 +589,7 @@
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSIndexSet *indexSetSections = nil;
-    MTReportDocument *reportDocument = [[self activeDocument] retain];
+    MAReportDocument *reportDocument = [[self activeDocument] retain];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -925,7 +927,7 @@
                                 NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
                                 
 
-                                MTTableViewCellQueryPredicate *tableViewCellPredicate = (MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:predicateIndexPath] retain];
+                                MTTableViewCellQueryPredicate *tableViewCellPredicate = [(MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:predicateIndexPath] retain] autorelease];
                                 NSError *error = nil;
                                 NSManagedObject *object = nil;
                                 if (tableViewCellPredicate) {
@@ -955,7 +957,6 @@
                                         }
                                     }
                                 }
-
                             }
                         }
                     }
@@ -1123,6 +1124,7 @@
         }
         [managedObjectContext save:nil];
         [query release];
+        [managedObjectContext release];
     }
 }
 
@@ -1437,8 +1439,8 @@
 
 #pragma mark - NSFetchedResultsSetup
 
-- (void)reloadDocument:(MTReportDocument *)documentReport {
-    MTReportDocument *doc = [documentReport retain];
+- (void)reloadDocument:(MAReportDocument *)documentReport {
+    MAReportDocument *doc = [documentReport retain];
     [self setActiveDocument:doc];
     [doc release];
     

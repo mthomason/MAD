@@ -123,13 +123,7 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
             return [purchaseDateA compare:purchaseDateB];
         }];
         
-        NSArray *productIds;
         NSString *bundleId = [AppDelegate bundleId];
-        if ([AppDelegate isMadDesigner]) {
-            productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1];
-        } else if ([AppDelegate isMadViewer]) {
-            productIds = @[MTStoreKitProductIdentifierViewerSubscriptionMonth1, MTStoreKitProductIdentifierViewerSubscriptionYear1];
-        }
         
         for (NSDictionary *transactionData in transactions) {
             NSString *receiptBundleIdentifier = [transactionData objectForKey:MTStoreKitIdentifierReceiptBid];

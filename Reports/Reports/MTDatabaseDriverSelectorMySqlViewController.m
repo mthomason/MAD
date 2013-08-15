@@ -120,10 +120,10 @@
     //dispatch_async(queuePriorityBackground, ^{
 
     [UIManagedDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention
-                                    withWrapper:[MTReportDocument class]
+                                    withWrapper:[MAReportDocument class]
                            andCompletionHandler:^(id managedDocument, BOOL success) {
         if (success) {
-            __block MTReportDocument *documentReport = managedDocument;
+            __block MAReportDocument *documentReport = managedDocument;
             
             MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
             [databaseConnection setUsername:    [[self textFieldUsername] text]];

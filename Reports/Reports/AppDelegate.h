@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTManagedDocumentPreferencesUser.h"
 #import "UIDevice+Hack.h"
-#import "CloudManager.h"
+#import "MACloudManager.h"
 #import "MTStoreKitController.h"
 #import "MTLog.h"
 #import "NSURL+Document.h"

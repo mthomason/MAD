@@ -446,7 +446,6 @@
             result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
         case MNSDocumentSectionTypeGroupHeader:
-            result = [[self inGroup] fieldNameQuery];
             result = [NSString stringWithFormat:NSLocalizedString(@"G%d - %@", @"\"Group Header 1\""), [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
             break;
         case MNSDocumentSectionTypeGroupFooter:

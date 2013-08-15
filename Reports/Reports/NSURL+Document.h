@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NSFileManager+Common.h"
-#import "CloudManager.h"
+#import "MACloudManager.h"
 
 @interface NSURL (Document)
 

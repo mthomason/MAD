@@ -13,7 +13,7 @@
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
 #import "MTProtocolCompare.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows+Extras.h"
 #import "RptqDocumentObject+Extras.h"

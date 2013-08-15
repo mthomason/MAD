@@ -12,7 +12,7 @@
 
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
     
-    NSURL *documentsDirectoryURL = [[[CloudManager sharedManager] documentsDirectoryURL] retain];
+    NSURL *documentsDirectoryURL = [[[MACloudManager sharedManager] documentsDirectoryURL] retain];
 
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *baseUrl = [[documentsDirectoryURL URLByAppendingPathComponent: name] retain];
@@ -34,6 +34,7 @@
         [baseUrlFormatted release];
         ctr++;
     }
+    [documentsDirectoryURL release];
     return [applicationFileUrlWithExtention autorelease];
 }
 
@@ -61,6 +62,7 @@
         [baseUrlFormatted release];
         ctr++;
     }
+    [documentsDirectoryURL release];
     return [applicationFileUrlWithExtention autorelease];
 }
 

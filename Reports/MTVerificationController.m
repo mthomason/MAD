@@ -40,7 +40,7 @@ static MTVerificationController *singleton;
                                                                                  error:&error];
     if (!dictionaryParsed) {
         if (error) {
-#warning Handle the error here.
+            NSAssert(error != nil, @"%@", error);
         }
         return nil;
     }
@@ -55,7 +55,7 @@ static MTVerificationController *singleton;
                                                                        error:&error];
     if (!dictionaryParsed) {
         if (error) {
-#warning Handle the error here.
+            NSAssert(error != nil, @"%@", error);
         }
         return nil;
     }
@@ -326,7 +326,7 @@ static MTVerificationController *singleton;
     // The receipt is valid, so checked the receipt specifics now.
     
     NSDictionary *verifiedReceiptReceiptDictionary  = [verifiedReceiptDictionary objectForKey:@"receipt"];
-    NSString *verifiedReceiptUniqueIdentifier       = [verifiedReceiptReceiptDictionary objectForKey:@"unique_identifier"];
+    // FIXME: never used: NSString *verifiedReceiptUniqueIdentifier       = [verifiedReceiptReceiptDictionary objectForKey:@"unique_identifier"];
     NSString *transactionIdFromVerifiedReceipt      = [verifiedReceiptReceiptDictionary objectForKey:@"transaction_id"];
     
     // Get the transaction's receipt data from the transactionsReceiptStorageDictionary

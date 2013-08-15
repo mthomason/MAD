@@ -56,8 +56,6 @@
         MTReportDesignerSectionLayoutSettingsDelegate>
 
 - (IBAction)doneReports:(id)sender;
-- (void)openReport:(NSURL *)url;
-- (void)openTemplate:(NSURL *)url;
 - (IBAction)done:(id)sender;
 - (IBAction)info:(id)sender;
 - (IBAction)showObjects:(id)sender;

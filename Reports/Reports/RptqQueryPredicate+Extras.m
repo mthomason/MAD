@@ -135,6 +135,7 @@
         if (objectContext) {
             [objectContext deleteObject:predicate];
         }
+        [objectContext release];
     }
 }
 

@@ -72,10 +72,15 @@
             [[self buttonBuyNow] setHidden:YES];
             [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
             
-            NSArray *productIdentifiers = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1,
-                                            MTStoreKitProductIdentifierViewerSubscriptionMonth1,
-                                            MTStoreKitProductIdentifierViewerSubscriptionYear1];
-            
+            NSArray *productIds;
+            if ([AppDelegate isMadDesigner]) {
+                productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1];
+            } else if ([AppDelegate isMadViewer]) {
+                productIds = @[MTStoreKitProductIdentifierViewerSubscriptionMonth1,
+                               MTStoreKitProductIdentifierViewerSubscriptionYear1];
+            } else {
+                productIds = @[];
+            }
             [self disableUserInterface];
             
             MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
@@ -114,7 +119,7 @@
                 }
                 [priceFormatter release];
             };
-            [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIdentifiers
+            [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIds
                                                                        completion: initalizationComplete];
         }
     };

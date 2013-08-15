@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 
-@interface MTReportDocument ()
+@interface MAReportDocument ()
 
 @end
 
-@implementation MTReportDocument
+@implementation MAReportDocument
 
 - (void)dealloc {
     [super dealloc];
@@ -77,7 +77,7 @@
 }
 
 - (NSString *)fileType {
-    return [MTReportDocument fileType];
+    return [MAReportDocument fileType];
 }
 
 + (NSString *)fileType {

@@ -140,11 +140,6 @@
     [[document hasPageFooterSection] setType:        @(MNSDocumentSectionTypePageFooter)];
     [[document hasDetailSection] setType:            @(MNSDocumentSectionTypeBody)];
 
-    //[document setHasDatabaseSchemas:               [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDatabase class]) inManagedObjectContext: objectContext]];
-    //[document setHasQuery:                        [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
-#warning Added Owned by User when creating the schemas.
-    //[[document hasDatabaseSchema] setOwnedByUser: [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext]];
-
     [[document hasReportHeaderSection] setHeight:@44.0000f];
     [[document hasReportFooterSection] setHeight:@44.0000f];
     [[document hasPageHeaderSection] setHeight:@44.0000f];

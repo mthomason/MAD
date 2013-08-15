@@ -1182,7 +1182,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SQL Server / TDS" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="EQe-eC-Pet">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MS SQL Server / TDS" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="EQe-eC-Pet">
                                                     <accessibility key="accessibilityConfiguration" hint="Uses the TDS protocol." label="SQL Server Database Driver"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1289,67 +1289,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FRV-Pt-bRy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1536" y="4603"/>
-        </scene>
-        <!--Table View Controller Enter String - Comparson Value-->
-        <scene sceneID="W8B-nC-nxl">
-            <objects>
-                <tableViewController id="0nn-t6-iT0" customClass="UITableViewControllerEnterString" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wfb-Xo-LaS">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections>
-                            <tableViewSection id="FGj-Sz-yUd">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="cXS-Qb-Esv">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6cw-eS-XAA">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="31" id="nP2-2j-ReP"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                    <connections>
-                                                        <action selector="textFieldDidEndOnExit:" destination="0nn-t6-iT0" eventType="editingDidEndOnExit" id="yBL-7D-FfL"/>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="6cw-eS-XAA" firstAttribute="top" secondItem="cXS-Qb-Esv" secondAttribute="top" constant="6" id="2tH-L1-Cng"/>
-                                            <constraint firstAttribute="trailing" secondItem="6cw-eS-XAA" secondAttribute="trailing" constant="20" type="default" id="bkQ-Wv-3sx"/>
-                                            <constraint firstItem="6cw-eS-XAA" firstAttribute="leading" secondItem="cXS-Qb-Esv" secondAttribute="leading" constant="20" type="default" id="k6Q-2n-mKx"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="delegate" destination="0nn-t6-iT0" id="k5U-gx-qd6"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Comparson Value" id="rBn-8n-6Tn">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="HSH-cM-qBg">
-                            <connections>
-                                <action selector="done:" destination="0nn-t6-iT0" id="3Te-QK-BBQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="textField" destination="6cw-eS-XAA" id="P3n-vw-GwO"/>
-                        <outlet property="view" destination="Wfb-Xo-LaS" id="czy-pr-8gV"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="65m-b5-QQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3281" y="-679"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="X8T-uF-K8k">

@@ -13,7 +13,7 @@
 #import "MTTableViewController.h"
 #import "NSError+UserInterface.h"
 #import "MTDatabaseConnection.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "AppDelegate.h"

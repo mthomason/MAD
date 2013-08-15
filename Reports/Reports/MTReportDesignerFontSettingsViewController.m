@@ -731,7 +731,7 @@
 }
 
 - (IBAction)controlValueChanged:(id)sender {
-    MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction = @selector(emptySelector:);

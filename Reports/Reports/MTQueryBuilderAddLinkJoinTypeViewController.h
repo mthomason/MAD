@@ -12,7 +12,7 @@
 @class MTQueryBuilderAddLinkJoinTypeViewController;
 
 @protocol MTQueryBuilderAddLinkJoinTypeDelegate
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MTReportDocument *)document;
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MAReportDocument *)document;
 @end
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController

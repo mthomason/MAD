@@ -6,22 +6,22 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#import "CloudManager.h"
+#import "MACloudManager.h"
 
 NSString * const ICloudStateUpdatedNotification                     = @"ICloudStateUpdatedNotification";
 NSString * const UbiquitousContainerFetchingWillBeginNotification   = @"UbiquitousContainerFetchingWillBeginNotification";
 NSString * const UbiquitousContainerFetchingDidEndNotification      = @"UbiquitousContainerFetchingDidEndNotification";
 
-static CloudManager *__sharedManager;
+static MACloudManager *__sharedManager;
 
-@interface CloudManager ()
+@interface MACloudManager ()
 
 @property (nonatomic, retain, readwrite) NSURL *dataDirectoryURL;
 @property (nonatomic, retain, readwrite) NSURL *documentsDirectoryURL;
 
 @end
 
-@implementation CloudManager
+@implementation MACloudManager
 
 + (id)allocWithZone:(NSZone *)zone {
     //Do not release... this is a singleton yo.
@@ -46,7 +46,7 @@ static CloudManager *__sharedManager;
     return self;
 }
 
-+ (CloudManager*)sharedManager {
++ (MACloudManager*)sharedManager {
     return __sharedManager;
 }
 

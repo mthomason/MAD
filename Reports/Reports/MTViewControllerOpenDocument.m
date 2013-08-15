@@ -320,7 +320,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         if (foundUrl) {
             [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
-                                            withWrapper:[MTReportDocument class]
+                                            withWrapper:[MAReportDocument class]
                                    andCompletionHandler:^(id managedDocument, BOOL success) {
                                        
                                        if (success) {
@@ -410,7 +410,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [a release];
     [[self availableFilesCacheMetaData] removeAllObjects];
     
-    if ([[CloudManager sharedManager] isCloudEnabled]) {
+    if ([[MACloudManager sharedManager] isCloudEnabled]) {
         /*
         if (_query) {
             [_query startQuery];
@@ -426,12 +426,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
          */
     } else {
-        NSURL *documentsDirectoryURL = [[[CloudManager sharedManager] documentsDirectoryURL] retain];
+        NSURL *documentsDirectoryURL = [[[MACloudManager sharedManager] documentsDirectoryURL] retain];
         NSError *error = nil;
         NSArray *localDocuments = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:documentsDirectoryURL
                                                                 includingPropertiesForKeys:nil options:0 error:&error] retain];
 
-        NSURL *dataDirectoryURL = [[[CloudManager sharedManager] dataDirectoryURL] retain];
+        NSURL *dataDirectoryURL = [[[MACloudManager sharedManager] dataDirectoryURL] retain];
         
         for (NSURL *document in localDocuments) {
             if ([[document pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
@@ -485,7 +485,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSIndexPath *cellPath = [[self collectionView] indexPathForCell:cell];
         NSURL *fileToAttach = [[self availableFilesCache] objectAtIndex:cellPath.item];
         
-        MTReportDocument *documentReport = [[MTReportDocument alloc] initWithFileURL:fileToAttach];
+        MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileToAttach];
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
             [documentReport closeWithCompletionHandler:^(BOOL success) {
@@ -497,42 +497,42 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         } else {
             
             [documentReport performAsynchronousFileAccessUsingBlock:^{
-                NSString *temporaryDirectory = NSTemporaryDirectory();
-                NSString *temporaryFile = [temporaryDirectory stringByAppendingPathComponent:[[documentReport fileURL] lastPathComponent]];
-                NSURL *saveLocation = [NSURL fileURLWithPath: temporaryFile];
-                BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[saveLocation path]];
-                UIDocumentSaveOperation saveOp = fileExist ? UIDocumentSaveForOverwriting : UIDocumentSaveForCreating;
-                NSLog(@"success");
                 NSError *fileWrapperError = nil;
                 NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
                 
-                NSData *data = [[fileWrapper serializedRepresentation] retain];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
-                                                                                                             @"The attached document can be opened with the Mad Viewer available on iOS.")];
-                    
-                    NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
-                    [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-                    
-                    MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
-                    [mailComposer setMailComposeDelegate: self];
-                    [mailComposer setMessageBody:messageBody isHTML:NO];
-                    [mailComposer setSubject:subject];
-                    
-                    NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
-                    [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
-                    
-                    if ([UIDevice isPad]) {
-                        [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
-                        [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-                        [mailComposer setProvidesPresentationContextTransitionStyle:YES];
-                        [mailComposer setModalInPopover:NO];
-                    }
-                    [self presentViewController:mailComposer animated:YES completion:nil];
-                    
-                    
-                });
+                if (fileWrapperError != nil) {  //Try again.
+                    NSData *data = [[fileWrapper serializedRepresentation] retain];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
+                                                                                                                 @"The attached document can be opened with the Mad Viewer available on iOS.")];
+                        
+                        NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
+                        [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
+                        
+                        MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
+                        [mailComposer setMailComposeDelegate: self];
+                        [mailComposer setMessageBody:messageBody isHTML:NO];
+                        [mailComposer setSubject:subject];
+                        
+                        NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
+                        [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
+                        
+                        if ([UIDevice isPad]) {
+                            [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
+                            [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+                            [mailComposer setProvidesPresentationContextTransitionStyle:YES];
+                            [mailComposer setModalInPopover:NO];
+                        }
+                        [self presentViewController:mailComposer animated:YES completion:nil];
+                        
+                        [messageBody release];
+                        
+                    });
+
+                }
+                
+                [fileWrapper release];
             }];
         }
         
@@ -556,7 +556,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     if (documentReport != nil) {
         [documentReport saveToURL:[documentReport fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             if (success) {
@@ -609,7 +609,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         
         [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
-                                        withWrapper:[MTReportDocument class]
+                                        withWrapper:[MAReportDocument class]
                                andCompletionHandler:^(id managedDocument, BOOL success) {
             
             if (success) {
@@ -627,7 +627,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
     [tvc setDelegate: self];
     [UIManagedDocument openManagedDocumentAtUrl:url
-                                    withWrapper:[MTReportDocument class]
+                                    withWrapper:[MAReportDocument class]
                            andCompletionHandler:^(id managedDocument, BOOL success) {
                                
                                if (success) {

@@ -13,12 +13,12 @@ NSString * const ICloudStateUpdatedNotification;
 NSString * const UbiquitousContainerFetchingWillBeginNotification;
 NSString * const UbiquitousContainerFetchingDidEndNotification;
 
-@interface CloudManager : NSObject
+@interface MACloudManager : NSObject
 
 @property (nonatomic, assign) BOOL isCloudEnabled;
 @property (nonatomic, retain, readonly) NSURL *dataDirectoryURL;
 @property (nonatomic, retain, readonly) NSURL *documentsDirectoryURL;
 
-+ (CloudManager *)sharedManager;
++ (MACloudManager *)sharedManager;
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDocument.h"
+#import "MADocument.h"
 #import "MTReportViewerPrintPageRenderer.h"
 
 NSString *MTDocumentInfoKeyThumbnail = @"thumbnail.png";
@@ -19,7 +19,7 @@ NSString *MTDocumentInfoKeyMetaEditor = @"editor";
 NSString *MTDocumentInfoKeyMetaFileVersion = @"fileversion";
 NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
-@interface MTDocument ()
+@interface MADocument ()
 
 @property (nonatomic, retain) NSFileWrapper *fileWrapper;
 @property (nonatomic, retain) NSMutableDictionary *extraInformation;        //Structure for extra info
@@ -27,7 +27,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @end
 
-@implementation MTDocument
+@implementation MADocument
 
 - (void)dealloc {
     [_extraInformation release];

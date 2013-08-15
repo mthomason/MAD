@@ -7,7 +7,7 @@
 //
 
 #import "NSManagedObjectID+Extras.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "NSError+UserInterface.h"
 #import "AppDelegate.h"
 
@@ -17,7 +17,7 @@
 
 - (NSString *)toStringHumanReadable {
     NSString *result = nil;
-    MTReportDocument *document = [[MTActiveDocument sharedDocument] activeDocument];
+    MAReportDocument *document = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
     NSError *error = nil;
     id existingObject = [managedObjectContext existingObjectWithID:self error:&error];

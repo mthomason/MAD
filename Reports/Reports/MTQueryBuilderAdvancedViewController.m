@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
-@property (nonatomic, retain) MTReportDocument *reportDocument;
+@property (nonatomic, retain) MAReportDocument *reportDocument;
 
 @property (nonatomic, retain) UIPopoverController *showSqlPopoverController;
 @property (nonatomic, assign) BOOL *showSqlIsVisable;
@@ -129,6 +129,7 @@
     NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
     [toolbarButtons removeObject:[self barButtonItemShowSQL]];
     [[self toolbarBottom] setItems:toolbarButtons animated:NO];
+    [toolbarButtons release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -142,6 +143,7 @@
             NSInteger index = [toolbarButtons count] - 1;
             [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
             [[self toolbarBottom] setItems:toolbarButtons animated:animated];
+            [toolbarButtons release];
         }
     }];
 
@@ -286,7 +288,6 @@
 
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
         desiredFrame = [self desiredFrameForTableId:[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId]];
-        desiredCenter = CGCenterOfRect(desiredFrame);
         animationType = 1;
         [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
 
@@ -619,9 +620,9 @@
 
 #pragma mark Reload document view controllers
 
-- (void)reloadDocument:(MTReportDocument *)documentReport {
+- (void)reloadDocument:(MAReportDocument *)documentReport {
     
-    MTReportDocument *reportDocument = [documentReport retain];
+    MAReportDocument *reportDocument = [documentReport retain];
     [self setReportDocument:reportDocument];
     [reportDocument release];
 

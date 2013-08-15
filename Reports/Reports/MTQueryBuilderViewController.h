@@ -27,7 +27,7 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "UIDevice+Hack.h"
 #import "MTLog.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -57,7 +57,7 @@
 
 @property BOOL debug;
 
-- (void)reloadDocument:(MTReportDocument *)documentReport;
+- (void)reloadDocument:(MAReportDocument *)documentReport;
 
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;

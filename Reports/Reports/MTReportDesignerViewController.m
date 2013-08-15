@@ -80,7 +80,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
-@property (nonatomic, retain) MTReportDocument *activeDocument;
+@property (nonatomic, retain) MAReportDocument *activeDocument;
 
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
@@ -196,7 +196,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
 
-    MTReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [self setActiveDocument:activeDocument];
     [activeDocument release];
     
@@ -708,7 +708,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MTReportDocument *reportDocument = [self activeDocument];
+    MAReportDocument *reportDocument = [self activeDocument];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -736,7 +736,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    MTReportDocument *reportDocument = [self activeDocument];
+    MAReportDocument *reportDocument = [self activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setVisibility: isVisible
                        forSectionAtRow: [self lastSelectedSectionControlPanel]
@@ -748,7 +748,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    MTReportDocument *reportDocument = [self activeDocument];
+    MAReportDocument *reportDocument = [self activeDocument];
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1262,47 +1262,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return [[self sectionControlViews] objectForKey:[documentSection sectionKey]];
 }
 
-- (void)openReport:(NSURL *)url {
-    MTManagedDocumentPreferencesUser *trvFile = [[MTManagedDocumentPreferencesUser alloc] initWithFileURL:url];
-    
-    [trvFile release];
-}
-
-- (void)openTemplate:(NSURL *)url {
-    
-    NSString *origionalFileName = [[url lastPathComponent] retain];
-    
-    NSURL *urlLibraryTemplate = [[NSFileManager applicationLibraryTemplatesDirectoryUrl] retain];
-    NSURL *urlFilenameWithoutExtention = [[[urlLibraryTemplate URLByAppendingPathComponent:origionalFileName] URLByDeletingPathExtension] retain];
-    
-    NSURL *templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentData] retain];
-    NSString *templateDestinationName = [[templateDestination lastPathComponent] retain];
-    
-    BOOL fileWritten = NO;
-    
-    NSInteger ctr = 0;
-    while (!fileWritten) {
-        NSError *error;
-        fileWritten = [[NSFileManager defaultManager] copyItemAtURL:url toURL:templateDestination error:&error];
-        if (!fileWritten) {
-            [templateDestination release];
-            NSString *p = [[[urlFilenameWithoutExtention path] stringByAppendingFormat:@" %d", (ctr + 1)] retain];
-            templateDestination = [[urlFilenameWithoutExtention URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentData] retain];
-            [p release];
-        }
-    }
-    [urlFilenameWithoutExtention release];
-    [urlLibraryTemplate release];
-    [templateDestinationName release];
-    [origionalFileName release];
-    
-    
-    //Now that we copied the file, we open it.  Yay!
-    [self openReport:templateDestination];
-    
-    [templateDestination release];
-}
-
 - (IBAction)done:(id)sender {
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(NO)];
@@ -1335,20 +1294,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (IBAction)showToolbox:(MTToolboxType)tooboxType {
     
-    UIPopoverController *popoverController;
     UIViewController *viewController;
 
     switch (tooboxType) {
 
         case MTToolboxTypeElement:
             [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
-            popoverController = [self popoverControllerInformation];
             [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
             viewController = [[self viewControllerToolbox] retain];
             break;
             
         case MTToolboxTypeSection: {
-            popoverController = [self popoverControllerSectionSettings];
             viewController = [[self navigationControllerSectionLayoutSettings] retain];
             [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:NO animated:NO];
             break;
@@ -1392,7 +1348,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     if (tooboxType == MTToolboxTypeSection) {
                         
-                        MTReportDocument *reportDocument = [self activeDocument];
+                        MAReportDocument *reportDocument = [self activeDocument];
                         
                         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1634,9 +1590,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
-    
-    CGPoint result;
-    
+        
     if ([objects count] > row) {
         NSError *error;
 
@@ -1644,8 +1598,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [documentObject setDropPointX:@(dropPoint.x)];
         [documentObject setDropPointY:@(dropPoint.y)];
         [[documentObject managedObjectContext] save:&error];
-    } else {
-        result = CGPointZero;
     }
 }
 
@@ -2003,7 +1955,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [detailSection performBatchUpdates:^{
         
-        MTReportDocument *reportDocument = [self activeDocument];
+        MAReportDocument *reportDocument = [self activeDocument];
         NSManagedObjectContext *managedObjectContextBlock = [reportDocument managedObjectContext];
         
         

@@ -71,11 +71,11 @@
         CGFloat y1 = placedLayout.frame.origin.y;
         CGFloat y2 = placedLayout.frame.origin.y + placedLayout.frame.size.height;
         
-        CGRect placement0, placement1, placement2, placement3;
+        CGRect placement0, placement1, /*placement2,*/ placement3;
         
         placement0 = CGRectMake(x1, y1, layout.frame.size.width, layout.frame.size.height);
         placement1 = CGRectMake(x2, y1, layout.frame.size.width, layout.frame.size.height);
-        placement2 = CGRectMake(x2, y2, layout.frame.size.width, layout.frame.size.height);
+        //placement2 = CGRectMake(x2, y2, layout.frame.size.width, layout.frame.size.height);
         placement3 = CGRectMake(x1, y2, layout.frame.size.width, layout.frame.size.height);
         
         //BOOL validPoint;

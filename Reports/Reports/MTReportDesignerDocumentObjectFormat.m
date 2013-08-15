@@ -118,7 +118,7 @@
     } else {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
-        MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
@@ -172,7 +172,7 @@
 - (void)emptySelector:(id)sender {}
 
 - (IBAction)controlValueChanged:(id)sender {
-    MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
 
     SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
@@ -231,7 +231,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if ([indexPath row] == 1 && [indexPath section] == 0) {
-        MTReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
             BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];

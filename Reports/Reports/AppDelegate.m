@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "MTReportDocument.h"
+#import "MAReportDocument.h"
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
 
@@ -90,7 +90,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MTReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [documentReport save:nil];
     [documentReport release];
 }
@@ -121,7 +121,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     } else {
         [fileWrittingError presentErrorToUser];
     }
-    
+    [data release];
+    [fileWrapper release];
     return savedUrl;
 }
 
@@ -263,10 +264,10 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
             [alert show];
             [alert release];
         } else {
-            [[CloudManager sharedManager] setIsCloudEnabled:YES];
+            [[MACloudManager sharedManager] setIsCloudEnabled:YES];
         }
     } else {
-        [[CloudManager sharedManager] setIsCloudEnabled:NO];
+        [[MACloudManager sharedManager] setIsCloudEnabled:NO];
         
         // Since the user is signed out of iCloud, reset the preference to not use iCloud, so if they sign in again we will prompt them to move data
         [userDefaults removeObjectForKey:MTICloudUserEnabled];
@@ -279,11 +280,11 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserEnabled];
-        [[CloudManager sharedManager] setIsCloudEnabled:YES];
+        [[MACloudManager sharedManager] setIsCloudEnabled:YES];
     }
     else {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MTICloudUserEnabled];
-        [[CloudManager sharedManager] setIsCloudEnabled:NO];
+        [[MACloudManager sharedManager] setIsCloudEnabled:NO];
     }
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserPrefsSet];
 }
@@ -301,6 +302,7 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
         label.frame = CGRectMake((CGRectGetWidth(hudBounds) - labelSize.width) / 2.0, (CGRectGetHeight(hudBounds) - labelSize.height) / 2.0, labelSize.width, labelSize.height);
         [_waitingHudView addSubview:label];
         [[[UIApplication sharedApplication] keyWindow] addSubview:_waitingHudView];
+        [label release];
     }
 }
 

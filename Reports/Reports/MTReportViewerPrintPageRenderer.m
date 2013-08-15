@@ -620,7 +620,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    NSString *fontname = [documentObject fontname];
+    //NSString *fontname = [documentObject fontname];
     //NSLog(@"%@", fontname);
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
     UIFont *customFont = [font font];

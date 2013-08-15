@@ -17,7 +17,7 @@
 
 extern NSString *MTDocumentInfoKeyThumbnail;
 
-@interface MTDocument : UIManagedDocument
+@interface MADocument : UIManagedDocument
 
 - (void)save:(void (^)(BOOL success))completion;
 - (void)saveContext;
