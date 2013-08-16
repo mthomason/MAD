@@ -11,6 +11,8 @@
 @interface MTLicensingViewController ()
 
 @property (nonatomic, retain) IBOutlet UIButton *buttonBuyNow;
+@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneYear;
+@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneMonth;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonRestore;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonDone;
 
@@ -28,6 +30,7 @@
 @property (retain, nonatomic) IBOutletCollection(UILabel) NSArray *labelsShowWhenActivated;
 
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator2;
 
 @property (copy) MTBlockCompletion standardCompletion;
 @property (copy) MTStoreKitNonRenewableLicensedUser licenseUserCompletion;
@@ -40,18 +43,21 @@
     [_standardCompletion release];
     [_licenseUserCompletion release];
     [_buttonBuyNow release];
+    [_buttonBuyNowViewerOneMonth release];
+    [_buttonBuyNowViewerOneYear release];
     [_labelDesignerLicenseOneYearTitle release];
     [_labelDesignerLicenseOneYearDesc1 release];
     [_labelDesignerLicenseOneYearDesc2 release];
     [_labelDesignerLicenseOneYearDesc3 release];
     [_labelDesignerLicenseOneYearDesc4 release];
+    [_activityIndicator2 release];
     [_activityIndicatorDesignerLicenseOneYear release];
     [_buttonRestore release];
     [_buttonDone release];
     [_labelDesignerKeyActivated release];
     [_labelDesignerKeyExpires release];
     [_labelDesignerValueActivated release];
-    [_labelDesignerValueActivated release];
+    [_labelDesignerValueExpires release];
     [_labelsShowWhenActivated release];
     [super dealloc];
 }
@@ -63,14 +69,28 @@
         if (isLicensedUser) {
             [self showLicensingDetailsWithExperationDate:experationDate];
             [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
+            [[self activityIndicator2] stopAnimating];
             BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
-            [[self buttonBuyNow] setEnabled:allowPurchase];
-            [[self buttonBuyNow] setHidden:!allowPurchase];
-            
+            if ([AppDelegate isMadDesigner]) {
+                [[self buttonBuyNow] setEnabled:allowPurchase];
+                [[self buttonBuyNow] setHidden:!allowPurchase];
+            } else if ([AppDelegate isMadViewer]) {
+                [[self buttonBuyNowViewerOneMonth] setEnabled:allowPurchase];
+                [[self buttonBuyNowViewerOneMonth] setHidden:!allowPurchase];
+                [[self buttonBuyNowViewerOneYear] setEnabled:allowPurchase];
+                [[self buttonBuyNowViewerOneYear] setHidden:!allowPurchase];
+            }
         } else {
             [self hideLicensingDetails];
-            [[self buttonBuyNow] setHidden:YES];
+            if ([AppDelegate isMadDesigner]) {
+                [[self buttonBuyNow] setHidden:YES];
+            } else if ([AppDelegate isMadViewer]) {
+                [[self buttonBuyNowViewerOneYear] setHidden:YES];
+                [[self buttonBuyNowViewerOneMonth] setHidden:YES];
+            }
+            
             [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
+            [[self activityIndicator2] startAnimating];
             
             NSArray *productIds;
             if ([AppDelegate isMadDesigner]) {
@@ -86,9 +106,18 @@
             MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
                 
                 [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
+                [[self activityIndicator2] stopAnimating];
+                
                 [self enableUserInterface];
-                [[self buttonBuyNow] setEnabled:success];
-                [[self buttonBuyNow] setHidden:NO];
+                if ([AppDelegate isMadDesigner]) {
+                    [[self buttonBuyNow] setEnabled:success];
+                    [[self buttonBuyNow] setHidden:NO];
+                } else if ([AppDelegate isMadViewer]) {
+                    [[self buttonBuyNowViewerOneYear] setEnabled:success];
+                    [[self buttonBuyNowViewerOneYear] setHidden:NO];
+                    [[self buttonBuyNowViewerOneMonth] setEnabled:success];
+                    [[self buttonBuyNowViewerOneMonth] setHidden:NO];
+                }
                 NSArray *products = [[MTStoreKitController sharedObject] products];
                 
                 NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
@@ -107,13 +136,13 @@
                         
                         [priceFormatter setLocale:[product priceLocale]];
                         NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        [[self buttonBuyNowViewerOneMonth] setTitle:priceString forState:UIControlStateNormal];
                         
                     } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
                         
                         [priceFormatter setLocale:[product priceLocale]];
                         NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        [[self buttonBuyNowViewerOneYear] setTitle:priceString forState:UIControlStateNormal];
                         
                     }
                 }
@@ -133,15 +162,24 @@
         }
     };
     [self setStandardCompletion:completion];
-    
-    [[[self buttonBuyNow] layer] setCornerRadius:6.6666f];
+    if ([AppDelegate isMadDesigner]) {
+        [[[self buttonBuyNow] layer] setCornerRadius:6.6666f];
+    } else if ([AppDelegate isMadViewer]) {
+        [[[self buttonBuyNowViewerOneYear] layer] setCornerRadius:6.6666f];
+        [[[self buttonBuyNowViewerOneMonth] layer] setCornerRadius:6.6666f];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    //[[self buttonBuyNow] setTitle:@"" forState:UIControlStateDisabled];
     [[self buttonBuyNow] setHidden:YES];
+    if ([AppDelegate isMadDesigner]) {
+        [[self buttonBuyNow] setHidden:YES];
+    } else if ([AppDelegate isMadViewer]) {
+        [[self buttonBuyNowViewerOneYear] setHidden:YES];
+        [[self buttonBuyNowViewerOneMonth] setHidden:YES];
+    }
 
     [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
     
@@ -164,13 +202,23 @@
 }
 
 - (void)disableUserInterface {
-    [[self buttonBuyNow] setEnabled:NO];
+    if ([AppDelegate isMadDesigner]) {
+        [[self buttonBuyNow] setEnabled:NO];
+    } else if ([AppDelegate isMadViewer]) {
+        [[self buttonBuyNowViewerOneYear] setEnabled:NO];
+        [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
+    }
     [[self buttonDone] setEnabled:NO];
     [[self buttonRestore] setEnabled:NO];
 }
 
 - (void)enableUserInterface {
-    [[self buttonBuyNow] setEnabled:YES];
+    if ([AppDelegate isMadDesigner]) {
+        [[self buttonBuyNow] setEnabled:YES];
+    } else if ([AppDelegate isMadViewer]) {
+        [[self buttonBuyNowViewerOneYear] setEnabled:YES];
+        [[self buttonBuyNowViewerOneMonth] setEnabled:YES];
+    }
     [[self buttonDone] setEnabled:YES];
     [[self buttonRestore] setEnabled:YES];
 }
@@ -192,9 +240,15 @@
 }
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
-    [[self buttonBuyNow] setHidden:YES];
+    if ([AppDelegate isMadDesigner]) {
+        [[self buttonBuyNow] setHidden:YES];
+    } else if ([AppDelegate isMadViewer]) {
+        [[self buttonBuyNowViewerOneYear] setHidden:YES];
+        [[self buttonBuyNowViewerOneMonth] setHidden:YES];
+    }
     [self disableUserInterface];
     [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
+    [[self activityIndicator2] startAnimating];
     MTStoreKitController *storeKit = [MTStoreKitController sharedObject];
     NSArray *products = [storeKit products];
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {

@@ -20,6 +20,7 @@
 #import "MTQueryBuilderAdvancedViewController.h"
 #import "MTDocumentCellProtocol.h"
 #import "UIManagedDocument+FileOperations.h"
+#import "MTViewControllerAsyncProtocol.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
@@ -31,10 +32,10 @@ extern NSString * const MTSegueShowOpenDocument;
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
-        MTQueryBuilderContainerDelegate,
         MTTemplateSelectorDelegate,
         MTViewControllerProtocol,
-        MTDocumentCellProtocol>
+        MTDocumentCellProtocol,
+        MTViewControllerAsyncProtocol>
 
 @property (nonatomic, assign) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 

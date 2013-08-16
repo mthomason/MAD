@@ -48,51 +48,8 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     return self;
 }
 
-/*
- 
- Printing description of result:
- {
-    additionalContent =     {
-        generator = "MAD Designer";
-        "thumbnail.png" = "<UIImage: 0x10d6f060>";
-        version = 1;
-    };
- fileType = "com.everydayapps.productivity.mad";
- parentContext = "<NSManagedObjectContext: 0x9990070>";
- }
-
- */
-
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     id result = [super contentsForType:typeName error:outError];
-    /*
-    NSFileWrapper *wrapper = (NSFileWrapper *)result;
-    NSLog(@"result      (%@:%@): %@", NSStringFromClass([result class]), result, [result isKindOfClass:[NSFileWrapper class]]?@"YES":@"NO");
-    NSLog(@"result      (%@:%@): %@", NSStringFromClass([wrapper class]), wrapper, [wrapper isKindOfClass:[NSFileWrapper class]]?@"YES":@"NO");
-    if ([self fileWrapper] == nil) {
-        
-        //Setup empty file.
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
-        [self setFileWrapper:fileWrapper];
-        [fileWrapper release];
-    }
-    
-    @autoreleasepool {
-        NSData *thumbnail = UIImagePNGRepresentation([self thumbnail]);
-        NSFileWrapper *thumbnailFileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:thumbnail];
-        [thumbnailFileWrapper setPreferredFilename:@"thumbnail.png"];
-        [[self fileWrapper] addFileWrapper:thumbnailFileWrapper];
-    }
-    
-    NSFileWrapper *metaFileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
-    [metaFileWrapper release];
-    
-    [self ]
-    contentsAtPath:
-    NSFileWrapper *databaseFileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:];
-    
-//    return  [self fileWrapper];
-*/
     return result;
 }
 

@@ -11,15 +11,12 @@
 #import "MTQueryBuilderViewController.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTTitleView.h"
-
-@protocol MTQueryBuilderContainerDelegate <NSObject>
-- (void)displayContentController:(UIViewController *)contentController;
-@end
+#import "MTViewControllerAsyncProtocol.h"
 
 @interface MTQueryBuilderContainerController : MTViewController
     <MTViewControllerProtocol>
 
-@property (nonatomic, assign) id <MTQueryBuilderContainerDelegate> delegateContentController;
+@property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
 
 @property (nonatomic, retain) NSURL *documentToOpen;
 

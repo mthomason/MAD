@@ -179,12 +179,13 @@
     } else if ([resultObject isKindOfClass:[NSString class]]) {
         result = [[resultObject retain] autorelease];
     } else if ([resultObject isKindOfClass:[NSNumber class]]) {
-        result = [NSString stringWithFormat:@"%@", resultObject];
+        result = [[[(NSNumber *)resultObject stringValue] retain] autorelease];
     } else if (resultObject == nil) {
         result = @"NULL";
     } else {
         result = @"";
     }
+    NSLog(@"%@", result);
     return result;
 //    return [NSString stringWithFormat:@"%@", result];
 }

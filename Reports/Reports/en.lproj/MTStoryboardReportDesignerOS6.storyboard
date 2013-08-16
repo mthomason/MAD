@@ -366,7 +366,23 @@
                                                         <constraint firstAttribute="height" constant="47" id="CQj-WL-9yb"/>
                                                     </constraints>
                                                     <attributedString key="attributedText">
-                                                        <fragment content="•     Access to all future features.">
+                                                        <fragment content="•     Access to future features.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" headIndent="50"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nQc-h2-hDB">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="47" id="3wU-j5-wgw"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Email MAD files.">
                                                             <attributes>
                                                                 <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
@@ -403,7 +419,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="-" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkC-iV-eQO">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Yes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkC-iV-eQO">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="86" id="eaa-fi-6PA"/>
                                                     </constraints>
@@ -428,8 +444,9 @@
                                         <constraints>
                                             <constraint firstItem="tIC-4B-oJn" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="118" id="1ae-UX-9Sk"/>
                                             <constraint firstItem="kkC-iV-eQO" firstAttribute="baseline" secondItem="4se-ty-klg" secondAttribute="baseline" type="default" id="1er-xm-waY"/>
-                                            <constraint firstItem="UWQ-Zi-B1u" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="171" id="2s5-UO-DcY"/>
+                                            <constraint firstAttribute="trailing" secondItem="nQc-h2-hDB" secondAttribute="trailing" constant="20" type="default" id="54E-vB-wWD"/>
                                             <constraint firstItem="Nbe-Jt-RTE" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="5aS-5j-wOI"/>
+                                            <constraint firstItem="nQc-h2-hDB" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="5dA-a6-5ds"/>
                                             <constraint firstAttribute="trailing" secondItem="UWQ-Zi-B1u" secondAttribute="trailing" constant="20" type="default" id="8Bj-4h-fsS"/>
                                             <constraint firstItem="A4w-5t-wMU" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="44" id="GMx-EO-txJ"/>
                                             <constraint firstAttribute="trailing" secondItem="Gwd-g8-UIo" secondAttribute="trailing" constant="20" type="default" id="LSd-aK-xrL"/>
@@ -437,23 +454,25 @@
                                             <constraint firstItem="tIC-4B-oJn" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="OoS-2J-gmJ"/>
                                             <constraint firstItem="bQw-2h-jvG" firstAttribute="baseline" secondItem="ZKQ-ie-GbK" secondAttribute="baseline" type="default" id="PvK-PH-Euy"/>
                                             <constraint firstAttribute="trailing" secondItem="bQw-2h-jvG" secondAttribute="trailing" constant="20" type="default" id="PyL-hZ-cBI"/>
+                                            <constraint firstItem="4se-ty-klg" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="TEv-Gc-pGO"/>
                                             <constraint firstItem="ZKQ-ie-GbK" firstAttribute="trailing" secondItem="4se-ty-klg" secondAttribute="trailing" type="default" id="W1p-Dg-Sug"/>
                                             <constraint firstItem="bQw-2h-jvG" firstAttribute="top" secondItem="kkC-iV-eQO" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="cGE-Ik-cQR"/>
                                             <constraint firstItem="Gwd-g8-UIo" firstAttribute="leading" secondItem="3BE-Lu-Ivb" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="dCt-o6-Thc"/>
                                             <constraint firstItem="ZKQ-ie-GbK" firstAttribute="top" secondItem="4se-ty-klg" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="fOj-iS-d4a"/>
                                             <constraint firstAttribute="trailing" secondItem="tIC-4B-oJn" secondAttribute="trailing" constant="20" type="default" id="fkG-I9-ZTA"/>
                                             <constraint firstItem="bQw-2h-jvG" firstAttribute="leading" secondItem="ZKQ-ie-GbK" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="gJg-tj-QLx"/>
-                                            <constraint firstItem="4se-ty-klg" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="gxx-Jo-O6Y"/>
                                             <constraint firstAttribute="trailing" secondItem="Nbe-Jt-RTE" secondAttribute="trailing" constant="20" type="default" id="hr5-eF-hF4"/>
+                                            <constraint firstAttribute="bottom" secondItem="nQc-h2-hDB" secondAttribute="bottom" constant="123" id="ihV-ua-SEN"/>
                                             <constraint firstItem="4gn-Tp-aoS" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="149" id="j7b-fH-NsW"/>
                                             <constraint firstItem="Nbe-Jt-RTE" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="74" id="jbA-0K-SgU"/>
                                             <constraint firstItem="Gwd-g8-UIo" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="37" id="ng7-wv-GV2"/>
                                             <constraint firstItem="4se-ty-klg" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="p30-GP-kVG"/>
                                             <constraint firstItem="Gwd-g8-UIo" firstAttribute="centerY" secondItem="3BE-Lu-Ivb" secondAttribute="centerY" type="default" id="uFl-gY-f6d"/>
                                             <constraint firstItem="UWQ-Zi-B1u" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="w2U-o4-sIG"/>
-                                            <constraint firstItem="kkC-iV-eQO" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="w5q-T3-Vke"/>
                                             <constraint firstAttribute="trailing" secondItem="4gn-Tp-aoS" secondAttribute="trailing" constant="20" type="default" id="wbD-j3-o4E"/>
+                                            <constraint firstAttribute="bottom" secondItem="ZKQ-ie-GbK" secondAttribute="bottom" constant="34" id="xZw-9r-yaD"/>
                                             <constraint firstItem="3BE-Lu-Ivb" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="xoF-bB-8IC"/>
+                                            <constraint firstItem="kkC-iV-eQO" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="y8l-QV-Wfb"/>
                                             <constraint firstItem="4gn-Tp-aoS" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="yIn-Ap-0e2"/>
                                             <constraint firstItem="A4w-5t-wMU" firstAttribute="centerX" secondItem="Gwd-g8-UIo" secondAttribute="centerX" type="default" id="ynm-hi-dSR"/>
                                             <constraint firstAttribute="trailing" secondItem="kkC-iV-eQO" secondAttribute="trailing" constant="20" type="default" id="zF1-NQ-VOz"/>

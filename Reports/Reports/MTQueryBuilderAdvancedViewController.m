@@ -140,8 +140,7 @@
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
-            NSInteger index = [toolbarButtons count] - 1;
-            [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
+            [toolbarButtons addObject:[self barButtonItemShowSQL]];
             [[self toolbarBottom] setItems:toolbarButtons animated:animated];
             [toolbarButtons release];
         }

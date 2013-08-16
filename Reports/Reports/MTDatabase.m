@@ -34,21 +34,21 @@
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
         
-        id username = [[userCredentals mysql_username] copy];
-        [databaseConnection setUsername:    username];
-        [username release];
+        //id username = [[userCredentals mysql_username] copy];
+        //[databaseConnection setUsername:    username];
+        //[username release];
         
-        id password = [[userCredentals mysql_password] copy];
-        [databaseConnection setPassword:    password];
-        [password release];
+        //id password = [[userCredentals mysql_password] copy];
+        //[databaseConnection setPassword:    password];
+        //[password release];
         
         id server = [[userCredentals mysql_host] copy];
         [databaseConnection setServer:      server];
-        [server release];
+        //[server release];
         
         id database = [[userCredentals mysql_database] copy];
         [databaseConnection setDatabase:    database];
-        [database release];
+        //[database release];
         
         [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
         MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
@@ -59,25 +59,25 @@
     } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        id username = [[userCredentals tds_username] copy];
-        [databaseConnection setUsername:    username];
-        [username release];
+        //id username = [[userCredentals tds_username] copy];
+        //[databaseConnection setUsername:    username];
+        //[username release];
         
-        id password = [[userCredentals tds_password] copy];
-        [databaseConnection setPassword:    password];
-        [password release];
+        //id password = [[userCredentals tds_password] copy];
+        //[databaseConnection setPassword:    password];
+        //[password release];
         
         id server = [[userCredentals tds_server] copy];
         [databaseConnection setServer:      server];
-        [server release];
+        //[server release];
         
         id host = [[userCredentals tds_host] copy];
         [databaseConnection setHost:        host];
-        [host release];
+        //[host release];
         
         id database = [[userCredentals tds_database] copy];
         [databaseConnection setDatabase:    database];
-        [database release];
+        //[database release];
         
         [databaseConnection setPort:        [[userCredentals tds_port] integerValue]];
         MTDatabaseSqlServer *databaseTds = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
@@ -202,7 +202,6 @@
     dispatch_semaphore_wait(semaphoreIsLicensed, DISPATCH_TIME_FOREVER);
     dispatch_release(semaphoreIsLicensed);
     
-    
     return [result autorelease];
 }
 
@@ -227,6 +226,7 @@
     
     [queryCache setCacheDate:[NSDate date]];
     [query setHasQueryCache:queryCache];
+    [queryCache release];
 }
 
 - (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
@@ -260,13 +260,19 @@
         }
         
         if ([queryPredicate hasRightField] != nil) {
-            
-            rightValue = [[[queryPredicate hasRightField] toString] retain];
+                rightValue = [[[queryPredicate hasRightField] toString] retain];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
+            MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
+            BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
             
-            rightValue = [[queryPredicate fieldrightpred] retain];
-            
+            if (isNumeric == NO) {
+                NSString *v = [NSString stringWithFormat:@"\"%@\"",[queryPredicate fieldrightpred]];
+                rightValue = [v retain];
+            } else {
+                rightValue = [[queryPredicate fieldrightpred] retain];
+            }
+
         }
         
         

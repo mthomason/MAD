@@ -204,7 +204,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                                                      encoding: NSStringEncodingConversionAllowLossy];
                                 NSInteger fieldTypeCalculated = [self dataTypeForNativeType:typeBind];
                                 [databaseField setFieldTypeNative:fieldTypeCalculated];
-                                [databaseField setFieldType:[self dataTypeForNativeType:fieldTypeCalculated]];
+                                [databaseField setFieldType:fieldTypeCalculated];
                                 [databaseField setWidth:lengthBind];
                                 [databaseField setDecimals:scaleBind];
                                 [databaseField setPrimaryKey:0];
@@ -329,12 +329,13 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
                          @"%@"
                          @" %@;",
                          MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name];
-        NSArray *resultStrings = [self runQuery:sql];
+        NSArray *resultStrings = [[self runQuery:sql] retain];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(YES, nil, resultStrings);
             
         });
+        [resultStrings release];
     });
     
 }

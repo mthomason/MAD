@@ -36,7 +36,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     //Log uncaught errors.
-    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+//NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -100,22 +100,28 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:name
-                                                  withExtension:MTDocumentTypeExtentionMad];
+    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
+                                                  withExtension:MTDocumentTypeExtentionMad] retain];
+    
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;
-    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:nil error:&fileWrittingError];
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
     if (fileWrittingError) {
         fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:nil error:&fileWrittingError];
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
     }
     
     BOOL savedUrl = fileWrittingError == nil;
     if (savedUrl) {
+        
         MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
         if (openDocumentViewController != nil) {
             [openDocumentViewController updateFileList];
-            [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:url];
+            if ([AppDelegate isMadDesigner]) {
+                [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:destinationUrl];
+            } else if ([AppDelegate isMadViewer]) {
+                [openDocumentViewController performSegueWithIdentifier:MTSegueOpenInViewer sender:destinationUrl];
+            }
         }
         
     } else {
@@ -123,6 +129,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
     [data release];
     [fileWrapper release];
+    [destinationUrl release];
     return savedUrl;
 }
 

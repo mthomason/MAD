@@ -103,7 +103,7 @@
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
-    [[self delegate] viewControllerDidFinish:self];
+    [[self delegate] viewControllerDidFinish:self animated:YES];
 }
 
 - (IBAction)showReportDesigner:(id)sender {

@@ -313,24 +313,35 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             url = [[self availableFilesCache] objectAtIndex: row];
             [self setUrlBeingOpended:url];
             foundUrl = YES;
-        } else if ([segue isKindOfClass:[NSURL class]]) {
-            [self setUrlBeingOpended:(NSURL *)segue];
+        } else if ([sender isKindOfClass:[NSURL class]]) {
+            [self setUrlBeingOpended:(NSURL *)sender];
             foundUrl = YES;
         }
 
+        //UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
         if (foundUrl) {
-            [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+            MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
+            [viewControllerReportViewer setAsyncDelegate:self];
+            [viewControllerReportViewer setViewControllerDelegate:self];
+/*
+            [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+            UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
+            MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[navigationController topViewController];
+            [viewControllerReportViewer loadReport:managedDocument];*/
+/*            [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
                                             withWrapper:[MAReportDocument class]
                                    andCompletionHandler:^(id managedDocument, BOOL success) {
                                        
                                        if (success) {
                                            [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                                           MTReportViewerController *viewControllerReportViewer = [segue destinationViewController];
+                                           UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
+                                           MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[navigationController topViewController];
                                            [viewControllerReportViewer setViewControllerDelegate:self];
-                                           [viewControllerReportViewer setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
+                                           [viewControllerReportViewer loadReport:managedDocument];
                                        }
                                        
-                                   }];
+                                   }];*/
+
         } else {
             NSAssert(foundUrl == NO, @"No URL to open.");
         }
@@ -350,8 +361,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [self setUrlBeingOpended:url];
             [url release];
             
-        } else if ([segue isKindOfClass:[NSURL class]])  {
-            NSURL *url = (NSURL *)segue;
+        } else if ([sender isKindOfClass:[NSURL class]])  {
+            NSURL *url = (NSURL *)sender;
             if (url != nil) {
                 [self setUrlBeingOpended:url];
                 foundUrl = YES;
@@ -462,6 +473,66 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 #pragma mark - Delegates
 
+- (void)displayContentController:(UIViewController *)contentController {
+    //If designer application, then load designer query builder.
+    //  If viewer, load, well, the viewer.
+    if ([AppDelegate isMadDesigner]) {
+        UIViewController *childController = [contentController retain];
+        if ([contentController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *childNavigationController = (UINavigationController *)contentController;
+            if ([[childNavigationController topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+                MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[childNavigationController topViewController] retain];
+                [self setStandardQueryBuilder:queryBuilderViewController];
+                [queryBuilderViewController release];
+                [self setBothContentControllersDisplayed:NO];
+            }
+        } else if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
+            MTQueryBuilderAdvancedViewController *advancedControl = (MTQueryBuilderAdvancedViewController *)contentController;
+            [self setAdvancedQueryBuilder:advancedControl];
+            [self setBothContentControllersDisplayed:NO];
+        } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
+            MTQueryBuilderViewController *queryBuilder = (MTQueryBuilderViewController *)contentController;
+            [self setStandardQueryBuilder:queryBuilder];
+            [queryBuilder setDelegate:self];
+            [self setBothContentControllersDisplayed:YES];
+        }
+        
+        if ([self bothContentControllersDisplayed] && [self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
+            
+            [[self standardQueryBuilder] setDelegate: self];
+            
+            
+            [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+                                            withWrapper:[MAReportDocument class]
+                                   andCompletionHandler:^(id managedDocument, BOOL success) {
+                                       
+                                       if (success) {
+                                           [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                                           [[self standardQueryBuilder] reloadDocument:managedDocument];
+                                           [[self advancedQueryBuilder] reloadDocument:managedDocument];
+                                       }
+                                       
+                                   }];
+            
+        }
+        [childController release];
+    } else if ([AppDelegate isMadViewer]) {
+        MTReportViewerController *viewController = (MTReportViewerController *)contentController;
+        
+        [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
+                                        withWrapper:[MAReportDocument class]
+                               andCompletionHandler:^(id managedDocument, BOOL success) {
+                                
+                                   if (success) {
+                                       [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                                       [viewController loadReport:[[MTActiveDocument sharedDocument] activeDocument]];
+                                       //[viewController reloadReportView];
+                                   }
+                                   
+                               }];
+    }
+}
+
 - (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
     NSIndexPath *cellPath = [[self collectionView] indexPathForCell:cell];
     [self deleteDocumentAtIndexPath:cellPath];
@@ -500,7 +571,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 NSError *fileWrapperError = nil;
                 NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
                 
-                if (fileWrapperError != nil) {  //Try again.
+                if (fileWrapperError == nil) {
                     NSData *data = [[fileWrapper serializedRepresentation] retain];
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         
@@ -530,6 +601,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         
                     });
 
+                } else {
+                    [fileWrapperError presentErrorToUser];
                 }
                 
                 [fileWrapper release];
@@ -579,49 +652,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     [self setShouldShowAddDocumentPopover:YES];
     [[self buttonAddNewDocument] setEnabled:YES];
-}
-
-- (void)displayContentController:(UIViewController *)contentController {
-    UIViewController *childController = [contentController retain];
-
-    if ([contentController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *childNavigationController = (UINavigationController *)contentController;
-        if ([[childNavigationController topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[childNavigationController topViewController] retain];
-            [self setStandardQueryBuilder:queryBuilderViewController];
-            [queryBuilderViewController release];
-            [self setBothContentControllersDisplayed:NO];
-        }
-    } else if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
-        MTQueryBuilderAdvancedViewController *advancedControl = (MTQueryBuilderAdvancedViewController *)contentController;
-        [self setAdvancedQueryBuilder:advancedControl];
-        [self setBothContentControllersDisplayed:NO];
-    } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
-        MTQueryBuilderViewController *queryBuilder = (MTQueryBuilderViewController *)contentController;
-        [self setStandardQueryBuilder:queryBuilder];
-        [queryBuilder setDelegate:self];
-        [self setBothContentControllersDisplayed:YES];
-    }
-    
-    if ([self bothContentControllersDisplayed] && [self advancedQueryBuilder] != nil && [self standardQueryBuilder] != nil) {
-
-        [[self standardQueryBuilder] setDelegate: self];
-        
-        
-        [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
-                                        withWrapper:[MAReportDocument class]
-                               andCompletionHandler:^(id managedDocument, BOOL success) {
-            
-            if (success) {
-                [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                [[self standardQueryBuilder] reloadDocument:managedDocument];
-                [[self advancedQueryBuilder] reloadDocument:managedDocument];
-            }
-            
-        }];
-        
-    }
-    [childController release];
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {

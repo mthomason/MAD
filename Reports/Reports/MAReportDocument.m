@@ -10,12 +10,28 @@
 
 @interface MAReportDocument ()
 
+@property (nonatomic, retain) NSManagedObjectModel *mom;
+
 @end
 
 @implementation MAReportDocument
 
 - (void)dealloc {
+    [_mom release];
     [super dealloc];
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    NSManagedObjectModel *result = [self mom];
+    if (result == nil) {
+        NSString *modelPath = [[NSBundle mainBundle]
+                               pathForResource:@"MAD" ofType:@"momd"];
+        NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
+        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+        [self setMom:mom];
+        [mom release];
+    }
+    return [self mom];
 }
 
 + (NSString *)persistentStoreName {

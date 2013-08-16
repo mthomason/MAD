@@ -381,7 +381,7 @@
             
             NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
             [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
-                
+                NSArray *results = nil;
                 if (success) {
                     [serv setUser:      username];
                     [serv setPassword:  password];
@@ -404,9 +404,10 @@
                                          @"LIMIT 100;",
                                          schemaField.name, MTSqlFrom, schemaField.inTable.name];
                         fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
+                        results = [[fetch results] retain];
                     }
                     [serv release];
-                    completion(success, connError, [fetch results]);
+                    completion(success, connError, [results autorelease]);
                 } else {
                     completion(success, error, nil);
                 }

@@ -15,7 +15,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemPrint;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
 
 @property (nonatomic, assign) NSUInteger numberOfPages;
 @property (nonatomic, assign) NSUInteger currentPageIndex;
@@ -74,6 +74,31 @@
     return self;
 }
 
+- (void)loadReport:(MAReportDocument *)report {
+    [report retain];
+    [self setDocumentReport:report];
+    [report release];
+    NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
+    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+    [self setPrintPageRendererReport: prtingPageRendererReport];
+    //[[self printPageRendererReport] setDidRefresh:YES];
+    //[[self printPageRendererReport] cachePrintPageRenderDataForSize:[[self view] bounds].size];
+    [prtingPageRendererReport release];
+    
+    [self viewDidAppearLogic];
+
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    [self reloadReportView];
+    dispatch_async(queuePriorityBackground, ^{
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            //[self setIsRefreshing:NO];
+            [self reload];
+        });
+    });
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setIsRefreshing:NO];
@@ -89,7 +114,7 @@
     
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    
+
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
@@ -117,12 +142,21 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self reload];
+    if ([self asyncDelegate]) {
+        [[self asyncDelegate] displayContentController:self];
+    } else {
+        [self reload];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    if ([self asyncDelegate] == nil) {
+        [self viewDidAppearLogic];
+    }
+}
+
+- (void)viewDidAppearLogic {
     NSManagedObjectContext *managedObjectContext = [[self documentReport] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -130,14 +164,15 @@
     
     BOOL hasCachedData = ([query hasQueryCache] != nil);
     if ([self startedRefresh] == NO && hasCachedData == NO) {
-        
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        dispatch_async(queuePriorityBackground, ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self refresh:self];
+        if ([self documentReport] != nil) {
+            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(queuePriorityBackground, ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self refresh:self];
+                });
             });
-        });
-
+        }
+        
     } else {
         NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
         if (lastRefresh != nil) {
@@ -167,15 +202,15 @@
         }
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
         
-        CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
-        CGFloat width = [[self view] bounds].size.width - offsetX - 105.0000f;
+        //CGFloat offsetX = CGPointZero.x + [[self labelDateLastRefreshed] frame].origin.x;
+        //CGFloat width = [[self view] bounds].size.width - offsetX - 105.0000f;
         [[self documentStatusView] setDocumentMessage:[dateStringAndInterval former]];
         [[self labelDateLastRefreshed] setText:[dateStringAndInterval former]];
-        CGSize printSize = [[dateStringAndInterval former] sizeWithFont:[[self labelDateLastRefreshed] font]];
-        CGSize targetSize = CGSizeMake(printSize.width, [[self labelDateLastRefreshed] frame].size.height);
-        CGSize labelSize = [[self labelDateLastRefreshed] systemLayoutSizeFittingSize:targetSize];
-        [[self labelDateLastRefreshed] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width, labelSize.height)];
-        [[[self labelDateLastRefreshed] superview] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width - offsetX, labelSize.height)];
+        //CGSize printSize = [[dateStringAndInterval former] sizeWithFont:[[self labelDateLastRefreshed] font]];
+        //CGSize targetSize = CGSizeMake(printSize.width, [[self labelDateLastRefreshed] frame].size.height);
+        //CGSize labelSize = [[self labelDateLastRefreshed] systemLayoutSizeFittingSize:targetSize];
+        //[[self labelDateLastRefreshed] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width, labelSize.height)];
+        //[[[self labelDateLastRefreshed] superview] setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, width - offsetX, labelSize.height)];
         MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
         
         NSTimeInterval updateLabelInSeconds;
@@ -299,73 +334,77 @@
 
 - (IBAction)refresh:(id)sender {
     if ([self isRefreshing] == NO) {
-        [self setIsRefreshing:YES];
-        [[self barButtonItemRefresh] setEnabled:NO];
-        [[self barButtonItemDone] setEnabled:NO];
-        [[self barButtonItemPrint] setEnabled:NO];
-        [[self barButtonItemSendToPdf] setEnabled:NO];
-
-        //[[self labelDateLastRefreshed] setHidden:YES];
-        [self setUpdatingOfTimerIsPaused:YES];
-        [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
-        [[self labelDateLastRefreshed] setNeedsDisplay];
-        [[self documentStatusView] setActivityState:YES];
-        [[self barButtonItemDone] setEnabled:NO];
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        
-        dispatch_async(queuePriorityBackground, ^{
+        //if ([self documentReport] != nil) {
+            [self setIsRefreshing:YES];
+            [[self barButtonItemRefresh] setEnabled:NO];
+            [[self barButtonItemDone] setEnabled:NO];
+            [[self barButtonItemPrint] setEnabled:NO];
+            [[self barButtonItemSendToPdf] setEnabled:NO];
             
-            [[self documentReport] refresh:^(BOOL success) {
+            //[[self labelDateLastRefreshed] setHidden:YES];
+            [self setUpdatingOfTimerIsPaused:YES];
+            [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
+            [[self labelDateLastRefreshed] setNeedsDisplay];
+            [[self documentStatusView] setActivityState:YES];
+            [[self barButtonItemDone] setEnabled:NO];
+            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            
+            dispatch_async(queuePriorityBackground, ^{
                 
-                if (success) {
-                    [[self printPageRendererReport] setDidRefresh:YES];
-
-                    dispatch_async(dispatch_get_main_queue(), ^{
-
-                        NSDate *lastD = [[NSDate date] retain];
-                        [self setLastCacheDate: lastD];
-                        [lastD release];
-                        [self reload];
-                    });
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self resetScreen];
-                    });
-                }
-            }];
-        });
+                [[self documentReport] refresh:^(BOOL success) {
+                    
+                    if (success) {
+                        [[self printPageRendererReport] setDidRefresh:YES];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            NSDate *lastD = [[NSDate date] retain];
+                            [self setLastCacheDate: lastD];
+                            [lastD release];
+                            [self reload];
+                        });
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self resetScreen];
+                        });
+                    }
+                }];
+            });
+       //}
     }
 }
 
 - (void)reload {
-
-    CGSize viewBounds = [[self view] bounds].size;
-
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(queuePriorityBackground, ^{
+    if ([self documentReport] != nil) {
+        CGSize viewBounds = [[self view] bounds].size;
         
-        [[self printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
-            [self setNumberOfPages:numberOfPages];
-
-            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
-            [[pageOne view] setFrame:[[self view] bounds]];
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(queuePriorityBackground, ^{
             
-            [pageOne setDelegate:self];
+            [[self printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
             
-            [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-                if (finished) {
-                    [[pageOne view] setNeedsDisplay];
-                    [self resetScreen];
-                }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
+                [self setNumberOfPages:numberOfPages];
                 
-            }];
-            [pageOne release];
+                MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
+                [[pageOne view] setFrame:[[self view] bounds]];
+                
+                [pageOne setDelegate:self];
+                
+                [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                    if (finished) {
+                        [[pageOne view] setNeedsDisplay];
+                        [self resetScreen];
+                    }
+                    
+                }];
+                [pageOne release];
+            });
         });
-    });
-
+    } else {
+        [self resetScreen];
+    }
 }
 
 - (void)resetScreen {

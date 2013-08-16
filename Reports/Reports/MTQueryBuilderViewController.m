@@ -249,16 +249,17 @@
     if ([UIDevice isLagacyOS]) {
         [[self toolbar] setTintColor:[UIColor edaBlueDark]];
     }
-
-    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        if (isLicensedUser) {
-            NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
-            NSInteger index = [toolbarButtons count] - 1;
-            [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
-            [[self toolbar] setItems:toolbarButtons animated:animated];
-            [toolbarButtons release];
-        }
-    }];
+    if ([self barButtonItemShowSQL] != nil) {   //i.e. iPad version
+        [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+            if (isLicensedUser) {
+                NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
+                NSInteger index = [toolbarButtons count] - 1;
+                [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
+                [[self toolbar] setItems:toolbarButtons animated:animated];
+                [toolbarButtons release];
+            }
+        }];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
