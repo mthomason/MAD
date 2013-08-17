@@ -5244,6 +5244,24 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="79U-In-QRX" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
+                        <barButtonItem style="plain" id="UsT-4a-hIC">
+                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="JNV-T0-P4X">
+                                <rect key="frame" x="12" y="6" width="200" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZqY-X2-IYO">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="196" id="KMM-Ao-IVV"/>
+                                        </constraints>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="ZqY-X2-IYO" firstAttribute="centerX" secondItem="JNV-T0-P4X" secondAttribute="centerX" type="default" id="EJz-ud-2qt"/>
+                                    <constraint firstItem="ZqY-X2-IYO" firstAttribute="top" secondItem="JNV-T0-P4X" secondAttribute="top" constant="6" id="WmH-K2-sc1"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
                         <barButtonItem title="Print" id="4zm-7a-3d9">
                             <connections>
                                 <action selector="print:" destination="79U-In-QRX" id="Qie-0J-I6I"/>
@@ -5253,28 +5271,6 @@
                             <connections>
                                 <action selector="sendToPdf:" destination="79U-In-QRX" id="FTx-HF-bnO"/>
                             </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" id="Qrc-18-w27">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" horizontalCompressionResistancePriority="1000" id="ece-gI-Yvq">
-                                <rect key="frame" x="118" y="6" width="170" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="400" horizontalCompressionResistancePriority="400" text="DateTime" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="180" translatesAutoresizingMaskIntoConstraints="NO" id="b0l-vI-GHC">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="77A-0f-cQU"/>
-                                            <constraint firstAttribute="width" constant="180" id="kUr-Es-zkI"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="b0l-vI-GHC" firstAttribute="leading" secondItem="ece-gI-Yvq" secondAttribute="leading" type="default" id="V1o-oW-g6j"/>
-                                    <constraint firstItem="b0l-vI-GHC" firstAttribute="centerY" secondItem="ece-gI-Yvq" secondAttribute="centerY" type="default" id="d3i-Ny-NuQ"/>
-                                </constraints>
-                            </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="LY8-i3-XLD"/>
                     </toolbarItems>
@@ -5298,7 +5294,9 @@
                         <outlet property="barButtonItemPrint" destination="4zm-7a-3d9" id="lqA-jh-uvE"/>
                         <outlet property="barButtonItemRefresh" destination="XH9-HB-Doe" id="Xlw-w5-8S3"/>
                         <outlet property="barButtonItemSendToPdf" destination="iOd-Yn-se2" id="5SB-u2-rZW"/>
-                        <outlet property="labelDateLastRefreshed" destination="b0l-vI-GHC" id="21r-QN-ur1"/>
+                        <outlet property="barButtonItemSliderView" destination="UsT-4a-hIC" id="sgl-pF-iVt"/>
+                        <outlet property="sliderPagination" destination="ZqY-X2-IYO" id="atK-Fa-pYc"/>
+                        <outlet property="sliderView" destination="JNV-T0-P4X" id="jed-nJ-EXO"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJm-20-R2T" userLabel="First Responder" sceneMemberID="firstResponder"/>

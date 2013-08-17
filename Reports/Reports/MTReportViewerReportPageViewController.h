@@ -18,7 +18,8 @@
 
 @property (nonatomic, retain) RptqDocument *document;
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
-@property (assign, nonatomic) id <MTPrintingProtocol> delegate;
+@property (nonatomic, retain) NSDate *lastCacheDate;
+@property (nonatomic, assign) id <MTPrintingProtocol> delegate;
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
 

@@ -9,9 +9,10 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="GTh-Lk-TuB" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="GrS-YD-ILp">
-                        <rect key="frame" x="0.0" y="64" width="768" height="916"/>
+                        <rect key="frame" x="0.0" y="64" width="1024" height="660"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1eP-LJ-rSx">
                             <size key="itemSize" width="150" height="100"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -60,7 +61,6 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Viewer" id="9PG-OG-sOy"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="buttonLicensing" destination="2gL-Bt-pyc" id="JH7-gl-7VH"/>
@@ -68,20 +68,19 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dti-hA-0Tp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4173" y="-1490"/>
+            <point key="canvasLocation" x="-4013" y="-1542"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="cD2-dF-ZPT">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="jVG-WK-xRf" sceneMemberID="viewController">
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fig-NW-GNf">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Ld3-Ln-bYz">
-                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <rect key="frame" x="0.0" y="724" width="1024" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -103,7 +102,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="P9G-Cr-vj8">
-                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <rect key="frame" x="0.0" y="724" width="1024" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -112,7 +111,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QYh-Ie-oyZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3252" y="-1490"/>
+            <point key="canvasLocation" x="-2912" y="-1514"/>
         </scene>
         <!--Report Viewer Controller - MAD Viewer-->
         <scene sceneID="6C9-fV-8fa">
@@ -121,20 +120,17 @@
                     <toolbarItems>
                         <barButtonItem style="plain" id="uHz-gH-rev">
                             <view key="customView" opaque="NO" contentMode="scaleToFill" id="JPE-VK-ULA">
-                                <rect key="frame" x="12" y="6" width="570" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="12" y="6" width="200" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="DateTime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" id="Mac-Oh-p57">
-                                        <rect key="frame" x="20" y="6" width="550" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="k6a-J7-cU5">
+                                        <rect key="frame" x="0.0" y="6" width="200" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="RQI-SE-dCT"/>
                         <barButtonItem title="Print" id="ssR-ah-hH4">
                             <connections>
                                 <action selector="print:" destination="HT8-qK-NzJ" id="If1-WW-Wba"/>
@@ -163,12 +159,14 @@
                         <outlet property="barButtonItemPrint" destination="ssR-ah-hH4" id="FMg-C5-zkp"/>
                         <outlet property="barButtonItemRefresh" destination="vsy-1Y-vCp" id="n2X-Wo-qxt"/>
                         <outlet property="barButtonItemSendToPdf" destination="fZH-KH-tPC" id="8Jk-bV-Lth"/>
-                        <outlet property="labelDateLastRefreshed" destination="Mac-Oh-p57" id="X3d-lj-2YN"/>
+                        <outlet property="barButtonItemSliderView" destination="uHz-gH-rev" id="JiP-Sy-XeC"/>
+                        <outlet property="sliderPagination" destination="k6a-J7-cU5" id="qvy-Iy-TpA"/>
+                        <outlet property="sliderView" destination="JPE-VK-ULA" id="oux-x7-LoC"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uZg-UU-ynf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2399" y="-1490"/>
+            <point key="canvasLocation" x="-1714" y="-1523"/>
         </scene>
         <!--Licensing View Controller - Software Licensing-->
         <scene sceneID="2Wc-2m-zdA">
@@ -178,6 +176,7 @@
                         <rect key="frame" x="0.0" y="64" width="540" height="512"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <sections>
                             <tableViewSection id="Sd1-zq-EG0">
                                 <cells>
@@ -346,7 +345,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q8D-uP-LIc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2658" y="-218"/>
+            <point key="canvasLocation" x="-2014" y="-582"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lhT-wF-5Pa">
@@ -367,7 +366,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DIz-jz-cX3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3252" y="-218"/>
+            <point key="canvasLocation" x="-2670" y="-582"/>
         </scene>
     </scenes>
     <resources>

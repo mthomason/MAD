@@ -386,6 +386,26 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="bZB-Ze-cgb" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
+                        <barButtonItem style="plain" id="Tmh-RB-3it">
+                            <view key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" horizontalCompressionResistancePriority="1000" id="gkf-HY-6tX">
+                                <rect key="frame" x="12" y="6" width="170" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="J0x-wc-3Vd">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="166" type="user" id="qck-ZX-aQ6"/>
+                                        </constraints>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="J0x-wc-3Vd" firstAttribute="centerX" secondItem="gkf-HY-6tX" secondAttribute="centerX" type="user" id="AJL-ip-cwP"/>
+                                    <constraint firstItem="J0x-wc-3Vd" firstAttribute="leading" secondItem="gkf-HY-6tX" secondAttribute="leading" constant="2" type="user" id="IZe-Y5-WY0"/>
+                                    <constraint firstAttribute="trailing" secondItem="J0x-wc-3Vd" secondAttribute="trailing" constant="2" type="user" id="VzY-Xv-OcA"/>
+                                    <constraint firstItem="J0x-wc-3Vd" firstAttribute="top" secondItem="gkf-HY-6tX" secondAttribute="top" constant="6" id="qye-Qw-4Sm"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
                         <barButtonItem title="Print" id="Bmg-rM-LC6">
                             <connections>
                                 <action selector="print:" destination="bZB-Ze-cgb" id="4ec-FV-leQ"/>
@@ -396,29 +416,6 @@
                                 <action selector="sendToPdf:" destination="bZB-Ze-cgb" id="d7e-wi-jP8"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" id="Tmh-RB-3it">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" horizontalCompressionResistancePriority="1000" id="gkf-HY-6tX">
-                                <rect key="frame" x="118" y="6" width="170" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="400" horizontalCompressionResistancePriority="400" text="DateTime" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="180" translatesAutoresizingMaskIntoConstraints="NO" id="eqh-J1-7YR">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="180" id="3mC-Cu-KOv"/>
-                                            <constraint firstAttribute="height" constant="21" id="PgT-wp-Ugx"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="eqh-J1-7YR" firstAttribute="centerY" secondItem="gkf-HY-6tX" secondAttribute="centerY" type="default" id="fwK-h0-fA2"/>
-                                    <constraint firstItem="eqh-J1-7YR" firstAttribute="leading" secondItem="gkf-HY-6tX" secondAttribute="leading" type="default" id="yZK-US-XoL"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Nid-bE-6UL"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Viewer" id="XVZ-vf-Ppq">
                         <barButtonItem key="leftBarButtonItem" image="UIImageArrowDown.png" id="8LU-p0-pnk">
@@ -440,7 +437,9 @@
                         <outlet property="barButtonItemPrint" destination="Bmg-rM-LC6" id="hjZ-c6-9lm"/>
                         <outlet property="barButtonItemRefresh" destination="lza-ge-zzq" id="YfM-kj-YJE"/>
                         <outlet property="barButtonItemSendToPdf" destination="qGF-CN-p4X" id="7pf-2h-FUq"/>
-                        <outlet property="labelDateLastRefreshed" destination="eqh-J1-7YR" id="b3q-eV-NjU"/>
+                        <outlet property="barButtonItemSliderView" destination="Tmh-RB-3it" id="Ial-EP-aMq"/>
+                        <outlet property="sliderPagination" destination="J0x-wc-3Vd" id="7s6-dc-Nh3"/>
+                        <outlet property="sliderView" destination="gkf-HY-6tX" id="pcb-Q2-iDP"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FKD-tb-7Yz" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -207,29 +207,21 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="PGc-qB-2PZ" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem style="plain" id="Eta-9X-sOg">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="fMX-t7-wwW">
-                                <rect key="frame" x="12" y="6" width="570" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <barButtonItem style="plain" id="BDS-DG-W9Y">
+                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="IeV-Ye-hdd">
+                                <rect key="frame" x="12" y="6" width="200" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="DateTime" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="p6R-mh-Zi4">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="KzR-Iw-1Xx"/>
-                                            <constraint firstAttribute="width" constant="550" id="ugW-l7-Dvq"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="P4H-rB-Mgg"/>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="p6R-mh-Zi4" firstAttribute="centerY" secondItem="fMX-t7-wwW" secondAttribute="centerY" type="default" id="BCh-Wl-GGF"/>
-                                    <constraint firstItem="p6R-mh-Zi4" firstAttribute="leading" secondItem="fMX-t7-wwW" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="H7v-kP-dNF"/>
+                                    <constraint firstItem="P4H-rB-Mgg" firstAttribute="top" secondItem="IeV-Ye-hdd" secondAttribute="top" constant="6" id="aJy-7p-VRC"/>
+                                    <constraint firstAttribute="trailing" secondItem="P4H-rB-Mgg" secondAttribute="trailing" constant="2" type="user" id="lje-zL-m1N"/>
+                                    <constraint firstItem="P4H-rB-Mgg" firstAttribute="leading" secondItem="IeV-Ye-hdd" secondAttribute="leading" constant="2" type="user" id="mkk-Uu-Wjd"/>
                                 </constraints>
                             </view>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Ir6-8N-CCQ"/>
                         <barButtonItem title="Print" id="h2c-te-sJM">
                             <connections>
                                 <action selector="print:" destination="PGc-qB-2PZ" id="c6n-6U-Vmw"/>
@@ -258,7 +250,9 @@
                         <outlet property="barButtonItemPrint" destination="h2c-te-sJM" id="8dw-jM-CTw"/>
                         <outlet property="barButtonItemRefresh" destination="Mn2-ea-pMU" id="2ue-wh-ej2"/>
                         <outlet property="barButtonItemSendToPdf" destination="TTa-fl-Oiv" id="hcS-jv-qGe"/>
-                        <outlet property="labelDateLastRefreshed" destination="p6R-mh-Zi4" id="t0w-oI-rjW"/>
+                        <outlet property="barButtonItemSliderView" destination="BDS-DG-W9Y" id="mhc-up-uQZ"/>
+                        <outlet property="sliderPagination" destination="P4H-rB-Mgg" id="d4d-D0-39B"/>
+                        <outlet property="sliderView" destination="IeV-Ye-hdd" id="9dO-mC-pLN"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YjO-2L-BA1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1235,7 +1229,7 @@
             </objects>
             <point key="canvasLocation" x="-3711" y="-67"/>
         </scene>
-        <!--Query Builder Container Controller - MAD Designer-->
+        <!--Query Builder Container Controller - MAD Query-->
         <scene sceneID="Yeg-pW-w89">
             <objects>
                 <viewController id="p7o-3U-Nna" customClass="MTQueryBuilderContainerController" sceneMemberID="viewController">
@@ -1277,13 +1271,13 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="MAD Designer" id="Zwf-Ph-kvg">
-                        <barButtonItem key="leftBarButtonItem" title="Reports" width="66" id="8iR-qX-Hsr">
+                    <navigationItem key="navigationItem" title="MAD Query" id="Zwf-Ph-kvg">
+                        <barButtonItem key="leftBarButtonItem" title="MAD Selector" width="66" id="8iR-qX-Hsr">
                             <connections>
                                 <action selector="showReportDocumentList:" destination="p7o-3U-Nna" id="SBE-Sr-h8p"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Layout" width="66" id="msA-br-ar6">
+                        <barButtonItem key="rightBarButtonItem" title="MAD Designer" width="66" id="msA-br-ar6">
                             <connections>
                                 <action selector="showReportDesigner:" destination="p7o-3U-Nna" id="KUe-8Z-j0N"/>
                                 <segue destination="oy5-et-qFd" kind="modal" identifier="MTSegueIdentifierShowReportDesigerFromSplitView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="SZe-fX-9Gn"/>
