@@ -583,9 +583,18 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 }
                             }
                             
-                            CGFloat originPointX        = [[item dropPointX] floatValue] + originX;
-                            CGFloat originPointY        = [[item dropPointY] floatValue] + originY;
-                            CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
+                            CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;// originX;
+                            CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;// originY;
+                            
+                            //CGRect result               = [item paddingViewFrame];
+                            //CGFloat x                   = [[item paddingLeft] floatValue] + result.origin.x + [[item dropPointX] floatValue];
+                            //CGFloat y                   = [[item paddingTop] floatValue] + result.origin.y + [[item dropPointY] floatValue] + origin.y;
+                            //CGFloat width               = result.size.width;
+                            //CGFloat height              = result.size.height;
+                            CGRect paddingFrame = [item paddingViewFrame];
+                            CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, paddingFrame.size.width, paddingFrame.size.height);
+                            
+                            //CGRect elementCanvasRect    = [item frameInSectionForDrawingWithOriginPoint:CGPointMake(originPointX, originPointY)];
                             
                             if (drawingObject == nil) {
                                 
@@ -1038,11 +1047,23 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
             
+            BOOL nullGroupExist = NO;
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
-            [allKeys removeObject:@"(null)"];
+            for (id obj in allKeys) {
+                NSString *str = (NSString *)obj;
+                if ([str isEqualToString: @"(null)"]) {
+                    nullGroupExist = YES;
+                    break;
+                }
+            }
+            if (nullGroupExist) {
+                [allKeys removeObject:@"(null)"];
+            }
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
             NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
-            [allKeysSorted insertObject:@"(null)" atIndex:0];
+            if (nullGroupExist) {
+                [allKeysSorted insertObject:@"(null)" atIndex:0];
+            }
             NSEnumerator *loopEnumerator;
 
             if ([desc ascending] == NO) {

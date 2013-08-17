@@ -437,7 +437,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
                 [self setNumberOfPages:numberOfPages];
-                [[self sliderPagination] setMaximumValue:numberOfPages];
+                [[self sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
 
                 MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
                 [[pageOne view] setFrame:[[self view] bounds]];
@@ -574,7 +574,6 @@
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1  ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self view] bounds]];
-            //[[result view] setFrame:[[self viewContainer] bounds]];
             [result autorelease];
         }
     }
@@ -592,7 +591,6 @@
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1 ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self view] bounds]];
-            //            [[result view] setFrame:[[self viewContainer] bounds]];
             [result autorelease];
         }
     }
@@ -616,6 +614,7 @@
         if ([[self viewControllers] count] > 0) {
             MTReportViewerReportPageViewController *pageViewController = [[self viewControllers] objectAtIndex:0];
             [self setCurrentPageIndex:[pageViewController pageNumber] - 1];
+            [[self sliderPagination] setValue:[self currentPageIndex] animated:YES];
         }
     }
     

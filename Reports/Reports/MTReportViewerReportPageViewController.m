@@ -166,7 +166,7 @@
         CGFloat originX = self.renderedReportView.frame.size.width - width;
         CGFloat originY = self.renderedReportView.frame.size.height - height;
         CGRect viewFrame = CGRectMake(originX, originY, width, height);
-        UIView *view = [[UIView alloc] initWithFrame:viewFrame];
+        __block UIView *view = [[UIView alloc] initWithFrame:viewFrame];
         CGRect labelFrame = CGRectMake(CGPointZero.x, CGPointZero.y, viewFrame.size.width, viewFrame.size.height);
         UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
         [label setFont:[UIFont systemFontOfSize:[UIFont systemFontSize]-2.0000f]];
@@ -174,13 +174,26 @@
         [label setTextAlignment:NSTextAlignmentCenter];
         [label setUserInteractionEnabled:NO];
         [view setUserInteractionEnabled:NO];
-        [view setBackgroundColor:[UIColor darkGrayColor]];
+        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.7000f];
+        [view setBackgroundColor:bgColor];
         [label setBackgroundColor:[UIColor clearColor]];
         
         [view addSubview:label];
-        [view setAlpha:1.0000f];
+        [view setAlpha:0.0000f];
         [[view layer] setCornerRadius: 6.0000f];
+        
         [[self renderedReportView] addSubview:view];
+        [UIView animateWithDuration:0.3000f animations:^{
+            [view setAlpha:1.0000f];
+        } completion:^(BOOL finished) {
+            if (finished) {
+                [UIView animateWithDuration:0.30000f delay:5.0000f
+                                    options:UIViewAnimationOptionCurveEaseIn animations:^{
+                                        [view setAlpha:0.0000f];
+                                    } completion:nil];
+            }
+        }];
+
         [self setTimeSinceRefrehLabel:label];
         [self setTimeSinceRefreshView: view];
         [view release];
@@ -200,7 +213,8 @@
     [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]+1.0000f]];
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];
-    [numberView setBackgroundColor:[UIColor darkGrayColor]];
+    UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.7000f];
+    [numberView setBackgroundColor:bgColor];
     [numberView setUserInteractionEnabled:NO];
     [labelView setUserInteractionEnabled:NO];
     [labelView setBackgroundColor:[UIColor clearColor]];
@@ -221,7 +235,6 @@
             } completion:nil ];
         }
     }];
-    
     
     return [numberView autorelease];
 }

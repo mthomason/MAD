@@ -2173,7 +2173,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-
+    
     //CGPoint adjustedCenter = [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     switch ([gestureRecognizer state]) {
             
@@ -2186,9 +2186,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[self designerContentView] bringSubviewToFront: [gestureRecognizer view]];
             newCenter = [gestureRecognizer locationInView:[self designerContentView]];
             [self setScrollersEnabled: NO];
-
+            
             [[gestureRecognizer view] setCenter: newCenter];
-
+            
             {
                 [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:^(BOOL finished) {
                     if (finished) {
@@ -2196,7 +2196,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         [[gestureRecognizer view] setCenter: newCenter];
                         [[self designerScrollView] addSubview: [gestureRecognizer view]];
                     }
-
+                    
                 }];
             }
             break;
@@ -2207,13 +2207,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             break;
         }
         case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
-
+            
             break;
         }
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
         case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-
+            
             [[gestureRecognizer view] setAlpha:1.0000f];
             
             // Remove the element from one section and place it into the next new section
@@ -2251,7 +2251,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [[gestureRecognizer view] setCenter: newCenter];
                 
                 [reportSectionCollectionView performBatchUpdates:^{
-
+                    
                     NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
                     
                     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
@@ -2268,7 +2268,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     NSUInteger sectionZero = 0;
                     RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
-
+                    
                     CGPoint pointInView = [[gestureRecognizer view] frame].origin;
                     CGPoint touchPointInView = [gestureRecognizer locationInView:reportSectionCollectionView];
                     
@@ -2277,6 +2277,176 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     [documentObject setTouchPointX:@(touchPointInView.x)];
                     [documentObject setTouchPointY:@(touchPointInView.y)];
+                    
+                    NSUInteger dropIndex = [documentSection nextDropIndexForSection];
+                    [documentObject setDropIndex:@(dropIndex)];
+                    
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[[sectionRow hasObjects] count]
+                                                                 inSection:sectionZero];
+                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[sectionRow hasObjects]];
+                    
+                    
+                    [hasObjects insertObject:documentObject atIndex:[indexPath item]];
+                    
+                    
+                    
+                    NSArray *indexPaths = [NSArray arrayWithObject: indexPath];
+                    
+                    for (NSIndexPath *indexPath in indexPaths) {
+                        NSMutableDictionary *holderForLastTouches = [[self holderForLastTouchesByCollectionView] objectForKey:@([reportSectionCollectionView tag])];
+                        
+                        [holderForLastTouches setObject:[NSValue valueWithCGPoint:pointInView] forKey:indexPath];
+                        
+                    }
+                    
+                    [sectionRow setHasObjects:hasObjects];
+                    
+                    [managedObjectContext save:nil];
+                    
+                    [reportSectionCollectionView insertItemsAtIndexPaths:indexPaths];
+                    
+                    [hasObjects release];
+                    
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        [self resizeCollectionView:reportSectionCollectionView];
+                    }
+                }];
+                
+            }
+            [self setScrollersEnabled:YES];
+            [[gestureRecognizer view] setNeedsDisplay];
+            
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
+- (void)panPiece2:(UIPanGestureRecognizer *)gestureRecognizer {
+
+    switch ([gestureRecognizer state]) {
+            
+        case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
+            UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+
+            if ([gestureRecognizer numberOfTouches] >= 1) {
+                CGPoint newCenter = [gestureRecognizer locationOfTouch:0 inView:window];
+                [[gestureRecognizer view] setAlpha:0.6000f];
+                
+                [[self designerContentView] bringSubviewToFront: [gestureRecognizer view]];
+                newCenter = [gestureRecognizer locationOfTouch:0 inView:window];
+                [self setScrollersEnabled: NO];
+                
+                [[gestureRecognizer view] setCenter: newCenter];
+                
+                {
+                    [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:^(BOOL finished) {
+                        if (finished) {
+                            CGPoint newCenter = [[self designerScrollView] convertPoint:newCenter fromView:window];
+                            [[gestureRecognizer view] setCenter: newCenter];
+                            [[self designerScrollView] addSubview: [gestureRecognizer view]];
+                        }
+                        
+                    }];
+                }
+            }
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
+            UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+            if ([gestureRecognizer numberOfTouches] >= 1) {
+                CGPoint newCenter = [gestureRecognizer locationOfTouch:0 inView:window];
+                newCenter = [[self designerScrollView] convertPoint:newCenter fromView:window];
+                [[gestureRecognizer view] setCenter: newCenter];
+            }
+            break;
+        }
+        case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
+
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
+        case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
+        case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
+
+            [[gestureRecognizer view] setAlpha:1.0000f];
+            CGPoint newCenter;
+            UICollectionView *reportSectionCollectionView = nil;
+            
+            // Try to find the section to place the element view into.
+            BOOL addedToNewParent = NO;
+            CGSize s = [[gestureRecognizer view] frame].size;
+            CGPoint o = [gestureRecognizer locationInView:[self designerContentView]];
+            CGPoint c = CGCenterOfRect(CGRectMake(o.x, o.y, s.width, s.height));
+            for (UICollectionView *view in [[self designerContentView] subviews]) {
+                if (CGRectContainsPoint([view frame], c) && ![view isEqual:self]) {
+                    if ([view isKindOfClass:[UICollectionView class]]) {
+                        reportSectionCollectionView = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        CGPoint origin = [gestureRecognizer locationInView:reportSectionCollectionView];
+                        CGSize size = [[gestureRecognizer view] frame].size;
+                        newCenter = CGCenterOfRect(CGRectMake(origin.x, origin.y, size.width, size.height));
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        break;
+                    }
+                }
+            }
+            if (!addedToNewParent) {
+                for (UICollectionView *view in [[self designerContentView] subviews]) {
+                    if ([view isKindOfClass: [UICollectionView class]]) {
+                        reportSectionCollectionView = [[view retain] autorelease];
+                        addedToNewParent = YES;
+                        newCenter = CGPointMake([gestureRecognizer view].frame.size.width / 2.0000f, [gestureRecognizer view].frame.size.height / 2.0000f);
+                        [[gestureRecognizer view] setCenter: newCenter];
+                        break;
+                    }
+                }
+            }
+            
+            if (addedToNewParent) {
+                newCenter = CGPointRoundPointToGrid(newCenter);
+                [[gestureRecognizer view] setCenter: newCenter];
+                
+                [reportSectionCollectionView performBatchUpdates:^{
+
+                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                    
+                    NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
+                    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
+                                                                                 fromObjectContext: managedObjectContext];
+                    
+                    CGPoint originPoint = [gestureRecognizer locationInView:reportSectionCollectionView];
+                    [documentObject setOriginx: @(originPoint.x)];
+                    [documentObject setOriginy: @(originPoint.y)];
+                    
+                    //[documentObject setOriginx: @([gestureRecognizer view].frame.origin.x)];
+                    //[documentObject setOriginy: @([gestureRecognizer view].frame.origin.y)];
+                    
+                    
+                    [[gestureRecognizer view] removeFromSuperview];
+                    
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [reportSectionCollectionView objectIdTag]
+                                                                                            fromObjectContext: managedObjectContext];
+                    
+                    NSUInteger sectionZero = 0;
+                    RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
+
+                    CGPoint pointInView = [[gestureRecognizer view] frame].origin;
+                    CGPoint originPointInView = [gestureRecognizer locationInView:reportSectionCollectionView];
+                    CGSize size = [[gestureRecognizer view] frame].size;
+                    CGPoint touchPointInView = CGCenterOfRect(CGRectMake(originPointInView.x, originPointInView.y, size.width, size.height));
+                    
+                    
+                    [documentObject setDropPointX:@(originPoint.x)];
+                    [documentObject setDropPointY:@(originPoint.y)];
+
+                    CGPoint lastTouchPointInView = [gestureRecognizer locationInView:reportSectionCollectionView];
+                    
+                    [documentObject setTouchPointX:@(lastTouchPointInView.x)];
+                    [documentObject setTouchPointY:@(lastTouchPointInView.y)];
                     
                     NSUInteger dropIndex = [documentSection nextDropIndexForSection];
                     [documentObject setDropIndex:@(dropIndex)];

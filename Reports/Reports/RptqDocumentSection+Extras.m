@@ -289,7 +289,11 @@
             
             CGFloat originPointX        = [[element dropPointX] floatValue];
             CGFloat originPointY        = [[element dropPointY] floatValue];
-            CGRect elementCanvasRect    = [element frameInSectionForSpacingWithOriginPoint:CGPointMake(originPointX, originPointY)];
+            
+            CGSize marginSize           = [element marginViewSize];
+            CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
+
+            //CGRect elementCanvasRect    = [element frameInSectionForSpacingWithOriginPoint:CGPointMake(originPointX, originPointY)];
 
             CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
             if (totalHeight > resultHeight) {

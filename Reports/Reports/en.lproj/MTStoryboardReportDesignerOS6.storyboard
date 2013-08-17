@@ -5249,16 +5249,13 @@
                                 <rect key="frame" x="12" y="6" width="200" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZqY-X2-IYO">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="196" id="KMM-Ao-IVV"/>
-                                        </constraints>
-                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ZqY-X2-IYO"/>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="ZqY-X2-IYO" firstAttribute="centerX" secondItem="JNV-T0-P4X" secondAttribute="centerX" type="default" id="EJz-ud-2qt"/>
+                                    <constraint firstItem="ZqY-X2-IYO" firstAttribute="leading" secondItem="JNV-T0-P4X" secondAttribute="leading" constant="2" type="user" id="8rT-vD-0Ou"/>
                                     <constraint firstItem="ZqY-X2-IYO" firstAttribute="top" secondItem="JNV-T0-P4X" secondAttribute="top" constant="6" id="WmH-K2-sc1"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZqY-X2-IYO" secondAttribute="trailing" constant="2" type="user" id="frV-9W-s12"/>
                                 </constraints>
                             </view>
                         </barButtonItem>
