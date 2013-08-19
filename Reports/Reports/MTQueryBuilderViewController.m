@@ -1672,7 +1672,6 @@
     if ([self fetchedResultsControllerTables]) {
         NSError *error = nil;
         [[self fetchedResultsControllerTables] performFetch:&error];
-        if (error) MTLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
     }
     [[self tableViewQueryBuilder] reloadData];
 }
@@ -1681,7 +1680,6 @@
     if ([self fetchedResultsControllerLinks]) {
         NSError *error = nil;
         [[self fetchedResultsControllerLinks] performFetch:&error];
-        if (error) MTLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
     }
     [[self tableViewQueryBuilder] reloadData];
 }
@@ -1690,7 +1688,6 @@
     if ([self fetchedResultsControllerGroups]) {
         NSError *error = nil;
         [[self fetchedResultsControllerGroups] performFetch:&error];
-        if (error) MTLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
     }
     [[self tableViewQueryBuilder] reloadData];
 }
@@ -1699,13 +1696,8 @@
     if ([self fetchedResultsControllerPredicates]) {
         NSError *error = nil;
         [[self fetchedResultsControllerPredicates] performFetch:&error];
-        if (error) MTLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
     }
     [[self tableViewQueryBuilder] reloadData];
 }
 
-- (void)viewDidUnload {
-    [self setDocumentStatusView:nil];
-    [super viewDidUnload];
-}
 @end
