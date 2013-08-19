@@ -54,16 +54,14 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 }
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
-    //contents = [NSKeyedUnarchiver unarchiveObjectWithData:contents];
     BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
-    //NSLog(@"result(%@): %@", NSStringFromClass([contents class]), contents);
     return result;
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     MTLog(@"UIManagedDocument error: %@", [error localizedDescription]);
     NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
-    if(errors != nil && errors.count > 0) {
+    if (errors != nil && errors.count > 0) {
         for (NSError *error in errors) {
             MTLog(@"  Error: %@", error.userInfo);
         }

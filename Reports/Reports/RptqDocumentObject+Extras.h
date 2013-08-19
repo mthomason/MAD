@@ -48,7 +48,6 @@ extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
 - (CGRect)marginViewFrame;
 - (CGRect)elementViewFrame;
 
-- (CGRect)frameInSectionForSpacingWithOriginPoint:(CGPoint)origin;
 - (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin;
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
 - (CGSize)marginViewSize;

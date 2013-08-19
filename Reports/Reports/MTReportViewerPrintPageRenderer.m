@@ -951,7 +951,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [sortedHasQueryGroups release];
         
         NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-        NSLog(@"Step 2");
+        
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);

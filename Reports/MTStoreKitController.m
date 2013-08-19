@@ -229,12 +229,12 @@ static MTStoreKitController *sharedSingleton = nil;
 		switch ([transaction transactionState]) {
                 
 			case SKPaymentTransactionStatePurchasing:
-				MTLog(@"SKPaymentTransactionStatePurchasing");
+				//MTLog(@"SKPaymentTransactionStatePurchasing");
 				break;
             
             case SKPaymentTransactionStatePurchased: {
 
-                MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
+                //MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
                 
                 [[MTVerificationController sharedInstance] verifyPurchase:transaction onSandboxServer:MTDebugOn completion:^(BOOL validTransaction, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate) {
                     
@@ -267,7 +267,7 @@ static MTStoreKitController *sharedSingleton = nil;
 				break;
             }
 			default:
-				MTLog(@"Transaction State Not Found");
+				//MTLog(@"Transaction State Not Found");
 				break;
 		}
 	}

@@ -534,7 +534,7 @@
             [[self barButtonItemRefresh] setEnabled:YES];
             [[self barButtonItemSendToPdf] setEnabled:YES];
             if(!completed && error){
-                MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
+                //MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
             }
         };
         

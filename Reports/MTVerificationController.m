@@ -714,7 +714,7 @@ outLabel:
 
 - (NSString *)encodeBase64:(const uint8_t *)input length:(NSInteger)length {
     NSData *dataToEncode = [NSData dataWithBytes:input length:length];
-    MTLog(@"encodeBase64: %@", [dataToEncode base64EncodedString]);
+    //MTLog(@"encodeBase64: %@", [dataToEncode base64EncodedString]);
     return [dataToEncode base64EncodedString];
 }
 
@@ -723,7 +723,7 @@ outLabel:
     NSData *decodedData = [NSData dataFromBase64String:input];
     NSString *decodedString = [[NSString alloc] initWithData:decodedData
                                                      encoding:NSUTF8StringEncoding];
-    MTLog(@"decodeBase64: %@", decodedString);
+    //MTLog(@"decodeBase64: %@", decodedString);
     return decodedString;
 }
 

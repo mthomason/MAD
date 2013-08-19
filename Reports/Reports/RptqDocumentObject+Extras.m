@@ -166,11 +166,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     return CGRectMake(originX, originY, sizeWidth, sizeHeight);
 }
 
-- (CGRect)frameInSectionForSpacingWithOriginPoint:(CGPoint)origin {
-    CGSize marginSize           = [self marginViewSize];
-    CGRect result               = CGRectMake(origin.x + [[self dropPointX] floatValue], origin.y + [[self dropPointY] floatValue], marginSize.width, marginSize.height);
-    return result;
-}
 
 - (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin {
 

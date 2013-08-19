@@ -185,9 +185,7 @@
     } else {
         result = @"";
     }
-    NSLog(@"%@", result);
     return result;
-//    return [NSString stringWithFormat:@"%@", result];
 }
 
 

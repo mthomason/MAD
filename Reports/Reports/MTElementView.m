@@ -168,8 +168,6 @@
 
     for (id updatedObject in updatedObjects) {
         if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
-            MTLog(@"Updated: %@", [updatedObject objectID]);
-            MTLog(@"Updated: %@", [self objectIdTag]);
             if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
                 [self updateDisplayLabel];
                 break;
@@ -205,9 +203,7 @@
         CGRect marginViewFrame = [documentObject marginViewFrame];
         CGRect paddingViewFrame = [documentObject paddingViewFrame];
         CGRect elementViewFrame = [documentObject elementViewFrame];
-        MTLog(@"marginViewFrame:  %@", NSStringFromCGRect(marginViewFrame));
-        MTLog(@"paddingViewFrame: %@", NSStringFromCGRect(paddingViewFrame));
-        MTLog(@"elementViewFrame: %@", NSStringFromCGRect(elementViewFrame));
+        
         [[self marginView] setFrame: marginViewFrame];
         [[self visibleView] setFrame: paddingViewFrame];
         [[self paddingView] setFrame: elementViewFrame];
