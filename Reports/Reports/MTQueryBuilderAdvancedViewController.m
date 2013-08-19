@@ -110,8 +110,8 @@
     [scrollView setShowsVerticalScrollIndicator:YES];
     [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [scrollView setContentOffset:CGPointZero];
-    [scrollView setMaximumZoomScale:10.0000f];
-    [scrollView setMinimumZoomScale:0.010000f];
+    [scrollView setMaximumZoomScale:1.0000f];
+    [scrollView setMinimumZoomScale:1.0000f];
     [scrollView setZoomScale:1.0000f];
     [scrollView setScrollEnabled:YES];
     [scrollView setBounces:YES];
@@ -273,10 +273,8 @@
 }
 
 - (void)addViewController:(UIViewController *)viewController {
-    //NSLog(@"%@", [viewController view]);
 
     [viewController retain];
-    
     CGFloat animationDuration = 1.0000f;
     CGRect desiredFrame = [[viewController view] frame];
     CGPoint desiredCenter = [[viewController view] center];
@@ -423,7 +421,7 @@
     [[self controllersForObjectIds] setObject:viewController forKey:objectId];
     [objectId release];
     if ([[table designerInitalLayout] boolValue]) {
-        CGFloat originX = 50.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
+        CGFloat originX = 50.0000f * ((([self tableDisplayCounter] + 1) - 9) % 9) + CGPointZero.x;
         CGFloat originY = originX;
         subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
@@ -434,6 +432,17 @@
         [managedObjectContext save:nil];
     } else {
         subviewRect = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
+    }
+    if (CGRectContainsRect([[self scrollView] frame], subviewRect) == NO) {
+        CGFloat originX = 50.0000f + CGPointZero.x;;
+        CGFloat originY = originX;
+        subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);
+        [table setDesignerSizeHeight:@(subviewRect.size.height)];
+        [table setDesignerSizeWidth:@(subviewRect.size.width)];
+        [table setDesignerOriginY:@(subviewRect.origin.x)];
+        [table setDesignerOriginX:@(subviewRect.origin.y)];
+        [table setDesignerInitalLayout:@(NO)];
+        [managedObjectContext save:nil];
     }
     [[viewController view] setFrame: subviewRect];
     
@@ -678,8 +687,9 @@
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             
-            CGPoint newCenter = [gestureRecognizer locationInView:[self view]];
-            [[gestureRecognizer view] setCenter: newCenter];
+            CGPoint gestureLocation = [gestureRecognizer locationInView:[self view]];
+            [[gestureRecognizer view] setCenter: gestureLocation];
+            [[self backgroundContainer] bringSubviewToFront:[gestureRecognizer view]];
             
             break;
         }
@@ -698,21 +708,18 @@
             }
             break;
         }
-        case UIGestureRecognizerStatePossible: {    // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
-            
+        case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
             break;
-        }
         case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
         case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
             
             
-            CGPoint newCenter = [gestureRecognizer locationInView:[self view]];
-            [[gestureRecognizer view] setCenter: newCenter];
+            CGPoint gestureLocation = [gestureRecognizer locationInView:[self view]];
+            [[gestureRecognizer view] setCenter: gestureLocation];
             
             NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
             RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
-            //RptqDatabaseSchemaTable *table = [queryTable databaseSchemaTable];
             [queryTable setDesignerSizeHeight:@([[gestureRecognizer view] frame].size.height)];
             [queryTable setDesignerSizeWidth:@([[gestureRecognizer view] frame].size.width)];
             [queryTable setDesignerOriginY:@([[gestureRecognizer view] frame].origin.y)];
