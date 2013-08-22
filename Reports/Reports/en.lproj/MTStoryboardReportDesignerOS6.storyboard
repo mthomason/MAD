@@ -169,7 +169,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dta-0E-vs3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1378" y="1311"/>
+            <point key="canvasLocation" x="1381" y="1355"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="70K-HK-Yu2">
@@ -255,6 +255,16 @@
                         </connections>
                     </collectionView>
                     <toolbarItems>
+                        <barButtonItem title="Information" id="BTA-Vx-lqr">
+                            <connections>
+                                <segue destination="oOf-pu-Qh7" kind="modal" identifier="MTSegueDetails" id="lgd-Bx-neu"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="About" id="dDO-zV-gm7">
+                            <connections>
+                                <segue destination="ygy-Nr-Ktw" kind="modal" identifier="MTSegueAbout" id="seJ-m6-CGU"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Ih2-iY-cF1"/>
                         <barButtonItem title="Licensing" id="x9M-5p-r1f">
                             <connections>
@@ -308,48 +318,30 @@
                         <sections>
                             <tableViewSection id="QWz-mT-W12">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="344" id="qcG-ZB-wtE">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="344"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="441" id="qcG-ZB-wtE">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="343"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="All Features for a Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3BE-Lu-Ivb">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Activate All Features" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3BE-Lu-Ivb">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="199" id="uiR-WZ-KvD"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gwd-g8-UIo">
-                                                    <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="36" id="a9f-Gg-ftp"/>
-                                                        <constraint firstAttribute="width" constant="73" id="oWN-rh-KQ0"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                    <state key="normal">
-                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="licenseDesignerOneYear:" destination="z4e-mY-E0I" eventType="touchUpInside" id="Zhk-iq-yOE"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Nbe-Jt-RTE">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="48" id="pLX-98-tqE"/>
+                                                        <constraint firstAttribute="height" constant="42" id="Hc4-II-AdX"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="4gn-Tp-aoS">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="33" id="0MH-Xa-gVD"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     View generated SQL.">
                                                             <attributes>
@@ -362,9 +354,6 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="UWQ-Zi-B1u">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="47" id="CQj-WL-9yb"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Access to future features.">
                                                             <attributes>
@@ -378,9 +367,6 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nQc-h2-hDB">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="47" id="3wU-j5-wgw"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Email MAD files.">
                                                             <attributes>
@@ -394,9 +380,6 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="tIC-4B-oJn">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="33" id="cK7-4T-D6T"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Query results are unlimited.">
                                                             <attributes>
@@ -409,7 +392,6 @@
                                                     </attributedString>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="A4w-5t-wMU"/>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Activated:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4se-ty-klg">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="EbM-YD-OHS"/>
@@ -438,43 +420,113 @@
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HWS-K5-Ycy">
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBd-p0-6Xq">
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="36" id="FIc-zu-tgZ"/>
+                                                                <constraint firstAttribute="width" constant="72" id="FhV-Ab-qMd"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseDesignerOneYear:" destination="z4e-mY-E0I" eventType="touchUpInside" id="kns-SG-iNp"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgG-M0-93V">
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="36" id="Nlh-KC-C3z"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseDesignerOneMonth:" destination="z4e-mY-E0I" eventType="touchUpInside" id="DGs-Rp-DKL"/>
+                                                            </connections>
+                                                        </button>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Htr-vP-0g4"/>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="V5y-LC-wOg"/>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Year:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZB-sT-hxL">
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="193" id="Xhd-JN-8TK"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Month:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGo-DJ-L4U">
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="TgG-M0-93V" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="3vW-qr-Gqc"/>
+                                                        <constraint firstItem="TgG-M0-93V" firstAttribute="trailing" secondItem="CBd-p0-6Xq" secondAttribute="trailing" type="default" id="45G-Vc-kCF"/>
+                                                        <constraint firstItem="mGo-DJ-L4U" firstAttribute="bottom" secondItem="V5y-LC-wOg" secondAttribute="bottom" type="default" id="8ST-9h-0pp"/>
+                                                        <constraint firstItem="V5y-LC-wOg" firstAttribute="leading" secondItem="Htr-vP-0g4" secondAttribute="leading" type="default" id="8oo-Tr-JTa"/>
+                                                        <constraint firstItem="TgG-M0-93V" firstAttribute="leading" secondItem="CBd-p0-6Xq" secondAttribute="leading" type="default" id="A1j-T7-weH"/>
+                                                        <constraint firstItem="mGo-DJ-L4U" firstAttribute="leading" secondItem="HWS-K5-Ycy" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="IuQ-1r-6i3"/>
+                                                        <constraint firstItem="Htr-vP-0g4" firstAttribute="centerY" secondItem="CBd-p0-6Xq" secondAttribute="centerY" type="default" id="J2s-wG-6aP"/>
+                                                        <constraint firstItem="mGo-DJ-L4U" firstAttribute="trailing" secondItem="uZB-sT-hxL" secondAttribute="trailing" type="default" id="JlL-cg-GND"/>
+                                                        <constraint firstItem="uZB-sT-hxL" firstAttribute="top" secondItem="Htr-vP-0g4" secondAttribute="top" type="default" id="OPD-8I-4ML"/>
+                                                        <constraint firstItem="TgG-M0-93V" firstAttribute="centerY" secondItem="V5y-LC-wOg" secondAttribute="centerY" type="default" id="SIG-MJ-1Sz"/>
+                                                        <constraint firstItem="Htr-vP-0g4" firstAttribute="centerX" secondItem="CBd-p0-6Xq" secondAttribute="centerX" type="default" id="Zjk-Dw-CiB"/>
+                                                        <constraint firstItem="CBd-p0-6Xq" firstAttribute="top" secondItem="HWS-K5-Ycy" secondAttribute="top" constant="20" symbolic="YES" type="default" id="bF1-SF-ghE"/>
+                                                        <constraint firstItem="uZB-sT-hxL" firstAttribute="leading" secondItem="HWS-K5-Ycy" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="h7s-YZ-MSm"/>
+                                                        <constraint firstItem="CBd-p0-6Xq" firstAttribute="leading" secondItem="HWS-K5-Ycy" secondAttribute="leading" constant="208" id="mEV-rL-qad"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="tIC-4B-oJn" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="118" id="1ae-UX-9Sk"/>
                                             <constraint firstItem="kkC-iV-eQO" firstAttribute="baseline" secondItem="4se-ty-klg" secondAttribute="baseline" type="default" id="1er-xm-waY"/>
+                                            <constraint firstItem="bQw-2h-jvG" firstAttribute="top" secondItem="kkC-iV-eQO" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="3T9-GG-ODJ"/>
                                             <constraint firstAttribute="trailing" secondItem="nQc-h2-hDB" secondAttribute="trailing" constant="20" type="default" id="54E-vB-wWD"/>
                                             <constraint firstItem="Nbe-Jt-RTE" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="5aS-5j-wOI"/>
                                             <constraint firstItem="nQc-h2-hDB" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="5dA-a6-5ds"/>
                                             <constraint firstAttribute="trailing" secondItem="UWQ-Zi-B1u" secondAttribute="trailing" constant="20" type="default" id="8Bj-4h-fsS"/>
-                                            <constraint firstItem="A4w-5t-wMU" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="44" id="GMx-EO-txJ"/>
-                                            <constraint firstAttribute="trailing" secondItem="Gwd-g8-UIo" secondAttribute="trailing" constant="20" type="default" id="LSd-aK-xrL"/>
+                                            <constraint firstAttribute="bottom" secondItem="ZKQ-ie-GbK" secondAttribute="bottom" constant="21" id="8eZ-cY-81c"/>
+                                            <constraint firstItem="4gn-Tp-aoS" firstAttribute="top" secondItem="tIC-4B-oJn" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="HAV-Bd-oKz"/>
+                                            <constraint firstItem="UWQ-Zi-B1u" firstAttribute="top" secondItem="nQc-h2-hDB" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="M3S-Av-48f"/>
+                                            <constraint firstItem="HWS-K5-Ycy" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="10" id="Mwk-0W-ZWL"/>
                                             <constraint firstItem="ZKQ-ie-GbK" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="N5g-E0-4Ho"/>
+                                            <constraint firstItem="4se-ty-klg" firstAttribute="top" secondItem="kkC-iV-eQO" secondAttribute="top" type="default" id="OTQ-hu-gKl"/>
                                             <constraint firstItem="tIC-4B-oJn" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="OoS-2J-gmJ"/>
+                                            <constraint firstItem="3BE-Lu-Ivb" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="20" type="default" id="PiG-T0-KnG"/>
                                             <constraint firstItem="bQw-2h-jvG" firstAttribute="baseline" secondItem="ZKQ-ie-GbK" secondAttribute="baseline" type="default" id="PvK-PH-Euy"/>
                                             <constraint firstAttribute="trailing" secondItem="bQw-2h-jvG" secondAttribute="trailing" constant="20" type="default" id="PyL-hZ-cBI"/>
-                                            <constraint firstItem="4se-ty-klg" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="TEv-Gc-pGO"/>
                                             <constraint firstItem="ZKQ-ie-GbK" firstAttribute="trailing" secondItem="4se-ty-klg" secondAttribute="trailing" type="default" id="W1p-Dg-Sug"/>
-                                            <constraint firstItem="bQw-2h-jvG" firstAttribute="top" secondItem="kkC-iV-eQO" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="cGE-Ik-cQR"/>
-                                            <constraint firstItem="Gwd-g8-UIo" firstAttribute="leading" secondItem="3BE-Lu-Ivb" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="dCt-o6-Thc"/>
-                                            <constraint firstItem="ZKQ-ie-GbK" firstAttribute="top" secondItem="4se-ty-klg" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="fOj-iS-d4a"/>
+                                            <constraint firstItem="nQc-h2-hDB" firstAttribute="top" secondItem="4gn-Tp-aoS" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Wue-mk-D6u"/>
+                                            <constraint firstItem="Nbe-Jt-RTE" firstAttribute="top" secondItem="3BE-Lu-Ivb" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="akj-xG-TPE"/>
+                                            <constraint firstItem="ZKQ-ie-GbK" firstAttribute="top" secondItem="4se-ty-klg" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="f9B-KE-Uzn"/>
                                             <constraint firstAttribute="trailing" secondItem="tIC-4B-oJn" secondAttribute="trailing" constant="20" type="default" id="fkG-I9-ZTA"/>
+                                            <constraint firstItem="HWS-K5-Ycy" firstAttribute="centerX" secondItem="UWQ-Zi-B1u" secondAttribute="centerX" type="default" id="gEQ-Fz-WXd"/>
                                             <constraint firstItem="bQw-2h-jvG" firstAttribute="leading" secondItem="ZKQ-ie-GbK" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="gJg-tj-QLx"/>
                                             <constraint firstAttribute="trailing" secondItem="Nbe-Jt-RTE" secondAttribute="trailing" constant="20" type="default" id="hr5-eF-hF4"/>
-                                            <constraint firstAttribute="bottom" secondItem="nQc-h2-hDB" secondAttribute="bottom" constant="123" id="ihV-ua-SEN"/>
-                                            <constraint firstItem="4gn-Tp-aoS" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="149" id="j7b-fH-NsW"/>
-                                            <constraint firstItem="Nbe-Jt-RTE" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="74" id="jbA-0K-SgU"/>
-                                            <constraint firstItem="Gwd-g8-UIo" firstAttribute="top" secondItem="qcG-ZB-wtE" secondAttribute="top" constant="37" id="ng7-wv-GV2"/>
+                                            <constraint firstItem="tIC-4B-oJn" firstAttribute="top" secondItem="Nbe-Jt-RTE" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="jCe-if-YC1"/>
+                                            <constraint firstAttribute="bottom" secondItem="HWS-K5-Ycy" secondAttribute="bottom" constant="89" id="lel-UZ-hyz"/>
                                             <constraint firstItem="4se-ty-klg" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="p30-GP-kVG"/>
-                                            <constraint firstItem="Gwd-g8-UIo" firstAttribute="centerY" secondItem="3BE-Lu-Ivb" secondAttribute="centerY" type="default" id="uFl-gY-f6d"/>
+                                            <constraint firstItem="HWS-K5-Ycy" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="pLJ-gd-9N8"/>
                                             <constraint firstItem="UWQ-Zi-B1u" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="w2U-o4-sIG"/>
                                             <constraint firstAttribute="trailing" secondItem="4gn-Tp-aoS" secondAttribute="trailing" constant="20" type="default" id="wbD-j3-o4E"/>
-                                            <constraint firstAttribute="bottom" secondItem="ZKQ-ie-GbK" secondAttribute="bottom" constant="34" id="xZw-9r-yaD"/>
                                             <constraint firstItem="3BE-Lu-Ivb" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="xoF-bB-8IC"/>
-                                            <constraint firstItem="kkC-iV-eQO" firstAttribute="top" secondItem="UWQ-Zi-B1u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="y8l-QV-Wfb"/>
                                             <constraint firstItem="4gn-Tp-aoS" firstAttribute="leading" secondItem="qcG-ZB-wtE" secondAttribute="leading" constant="20" type="default" id="yIn-Ap-0e2"/>
-                                            <constraint firstItem="A4w-5t-wMU" firstAttribute="centerX" secondItem="Gwd-g8-UIo" secondAttribute="centerX" type="default" id="ynm-hi-dSR"/>
                                             <constraint firstAttribute="trailing" secondItem="kkC-iV-eQO" secondAttribute="trailing" constant="20" type="default" id="zF1-NQ-VOz"/>
                                         </constraints>
                                     </tableViewCell>
@@ -499,8 +551,10 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="activityIndicatorDesignerLicenseOneYear" destination="A4w-5t-wMU" id="bwy-md-7JR"/>
-                        <outlet property="buttonBuyNow" destination="Gwd-g8-UIo" id="eHb-cq-IZe"/>
+                        <outlet property="activityIndicator2" destination="V5y-LC-wOg" id="p0T-bX-muT"/>
+                        <outlet property="activityIndicatorDesignerLicenseOneYear" destination="Htr-vP-0g4" id="RWO-d7-4RL"/>
+                        <outlet property="buttonBuyNowDesignerOneMonth" destination="TgG-M0-93V" id="47Q-XK-Ptv"/>
+                        <outlet property="buttonBuyNowDesignerOneYear" destination="CBd-p0-6Xq" id="Vu3-9Y-mF3"/>
                         <outlet property="buttonDone" destination="dT1-xM-Bnn" id="AqS-Xm-z5U"/>
                         <outlet property="buttonRestore" destination="RVD-jQ-hHG" id="wsc-gs-fzM"/>
                         <outlet property="labelDesignerKeyActivated" destination="4se-ty-klg" id="a1t-ee-yL8"/>
@@ -512,10 +566,13 @@
                         <outlet property="labelDesignerLicenseOneYearTitle" destination="3BE-Lu-Ivb" id="2Ih-Rd-ME5"/>
                         <outlet property="labelDesignerValueActivated" destination="kkC-iV-eQO" id="DZ4-mA-qTF"/>
                         <outlet property="labelDesignerValueExpires" destination="bQw-2h-jvG" id="qEW-gJ-BZY"/>
+                        <outlet property="viewBuyButtonsBackground" destination="HWS-K5-Ycy" id="jfZ-Fx-7vJ"/>
                         <outletCollection property="labelsShowWhenActivated" destination="kkC-iV-eQO" id="ZWk-LM-Ntc"/>
                         <outletCollection property="labelsShowWhenActivated" destination="bQw-2h-jvG" id="qQY-Eh-exN"/>
                         <outletCollection property="labelsShowWhenActivated" destination="4se-ty-klg" id="bTD-Qi-o5e"/>
                         <outletCollection property="labelsShowWhenActivated" destination="ZKQ-ie-GbK" id="etH-zM-ue2"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="uZB-sT-hxL" id="Ff1-rt-0BM"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="mGo-DJ-L4U" id="JiT-DC-g3N"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n6K-vE-N0Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -542,7 +599,7 @@
             </objects>
             <point key="canvasLocation" x="236" y="1311"/>
         </scene>
-        <!--Query Builder View Controller - Query Builder-->
+        <!--Query Builder View Controller - MAD Query-->
         <scene sceneID="m5M-pU-hVe">
             <objects>
                 <viewController id="6Ud-Rv-UQO" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
@@ -867,7 +924,7 @@
                             <constraint firstItem="TYp-rG-qRH" firstAttribute="leading" secondItem="KGO-Qx-zB3" secondAttribute="leading" type="default" id="wN4-VW-Rj4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Query Builder" id="fNz-nH-6xs">
+                    <navigationItem key="navigationItem" title="MAD Query" id="fNz-nH-6xs">
                         <barButtonItem key="leftBarButtonItem" title="Reports" id="ZB9-dz-LPj">
                             <connections>
                                 <action selector="done:" destination="6Ud-Rv-UQO" id="0TF-cb-avV"/>
@@ -5126,12 +5183,36 @@
                                                         <outlet property="delegate" destination="c9T-2m-ezv" id="uCs-KZ-4VR"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Host" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="34N-hB-yRT">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34N-hB-yRT">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="132" id="mzv-li-cTp"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Host">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" (or ">
+                                                            <attributes>
+                                                                <font key="NSFont" size="12" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="host:port">
+                                                            <attributes>
+                                                                <font key="NSFont" size="12" name="CourierNewPSMT"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=")">
+                                                            <attributes>
+                                                                <font key="NSFont" size="12" name="Helvetica"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -5298,6 +5379,569 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJm-20-R2T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1715" y="3476"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="0Me-tp-dbo">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="oOf-pu-Qh7" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KMR-xC-afu">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="IB5-ZZ-dAV" kind="relationship" relationship="rootViewController" id="gVy-T8-BgG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dtA-FH-lTT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-577" y="5468"/>
+        </scene>
+        <!--Table View Controller About - What is MAD?-->
+        <scene sceneID="GW5-8s-5d5">
+            <objects>
+                <tableViewController id="IB5-ZZ-dAV" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="56Y-yD-xvo">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="rDv-Y0-D1A">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="f2h-35-2Kb">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="599"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QHn-1A-8xR">
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="V9b-gd-8mM">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="MAD">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" is the ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="M">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="obile ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="A">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="nalytics ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="D">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="ocument from Everyday Apps.  MAD Designer allows one to create and distribute MAD files or mobile analytics documents.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Vcx-VI-uW6">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="MAD Designer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" is for analyst to create and distribute analytics documents that reference their companies data.  To use ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="MAD Designer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=", you will need to have access to your companies database.  ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="MAD Designer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" requires the skills of a business analyst and understanding of your companies database.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="IJR-j8-gTk">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="MAD Viewer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" exist for users who do not design documents to view the ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="MAD">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" files with live data.  Get ">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content="MAD Viewer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" from the App Store.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="BYs-P9-SQi">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="MAD Designer">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" currently supports MySQL and Microsoft SQL Server databases.  It does this using native database drivers.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="V9b-gd-8mM" firstAttribute="top" secondItem="QHn-1A-8xR" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="05T-xf-QAV"/>
+                                            <constraint firstItem="Vcx-VI-uW6" firstAttribute="leading" secondItem="f2h-35-2Kb" secondAttribute="leading" constant="20" type="default" id="9MF-5D-H3W"/>
+                                            <constraint firstAttribute="trailing" secondItem="IJR-j8-gTk" secondAttribute="trailing" constant="20" type="default" id="AVg-r1-ubb"/>
+                                            <constraint firstAttribute="trailing" secondItem="V9b-gd-8mM" secondAttribute="trailing" constant="20" type="default" id="CdT-eC-8Pe"/>
+                                            <constraint firstItem="QHn-1A-8xR" firstAttribute="leading" secondItem="f2h-35-2Kb" secondAttribute="leading" constant="20" type="default" id="IRw-dR-ZUt"/>
+                                            <constraint firstAttribute="trailing" secondItem="QHn-1A-8xR" secondAttribute="trailing" constant="20" type="default" id="Ic6-E0-1mG"/>
+                                            <constraint firstAttribute="trailing" secondItem="BYs-P9-SQi" secondAttribute="trailing" constant="20" type="default" id="V6D-sl-emM"/>
+                                            <constraint firstItem="IJR-j8-gTk" firstAttribute="leading" secondItem="f2h-35-2Kb" secondAttribute="leading" constant="20" type="default" id="d9d-q6-CQk"/>
+                                            <constraint firstItem="V9b-gd-8mM" firstAttribute="leading" secondItem="f2h-35-2Kb" secondAttribute="leading" constant="20" type="default" id="hcD-m4-qYW"/>
+                                            <constraint firstItem="BYs-P9-SQi" firstAttribute="top" secondItem="IJR-j8-gTk" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="jl4-iA-jls"/>
+                                            <constraint firstItem="QHn-1A-8xR" firstAttribute="top" secondItem="f2h-35-2Kb" secondAttribute="top" constant="20" type="default" id="nbe-1z-Gvn"/>
+                                            <constraint firstItem="IJR-j8-gTk" firstAttribute="top" secondItem="Vcx-VI-uW6" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="uSr-U2-nR7"/>
+                                            <constraint firstItem="Vcx-VI-uW6" firstAttribute="top" secondItem="V9b-gd-8mM" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="wyS-HN-Ej3"/>
+                                            <constraint firstAttribute="trailing" secondItem="Vcx-VI-uW6" secondAttribute="trailing" constant="20" type="default" id="yTR-yM-hMv"/>
+                                            <constraint firstItem="BYs-P9-SQi" firstAttribute="leading" secondItem="f2h-35-2Kb" secondAttribute="leading" constant="20" type="default" id="zVd-Tm-PPu"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="IB5-ZZ-dAV" id="0wE-hC-OGd"/>
+                            <outlet property="delegate" destination="IB5-ZZ-dAV" id="EAI-nC-O9t"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="What is MAD?" id="Qrc-E1-rZ5">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="HvP-8F-ayb">
+                            <connections>
+                                <action selector="cancel:" destination="IB5-ZZ-dAV" id="pu8-pe-tkj"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Gettings Started" id="Fer-wQ-AAU">
+                            <connections>
+                                <segue destination="vDM-pk-sgo" kind="push" id="wo2-Dj-vPH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oqV-yA-ENu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-210" y="5468"/>
+        </scene>
+        <!--Table View Controller About - Getting Started-->
+        <scene sceneID="Zq0-4p-ylL">
+            <objects>
+                <tableViewController id="vDM-pk-sgo" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zTt-0B-XIy">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="qSx-E5-mHG">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="800" id="gfZ-42-G0X">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="799"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stepping in the Right Direction" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wzr-gO-f90">
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Gettings Started" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7L-yf-6LL">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="iab-4G-LJv">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="You need access to a MySQL or SQL Server database.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="The MAD Datasource" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bh0-Be-2gB">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="upz-tK-sEl">
+                                                    <attributedString key="attributedText">
+                                                        <fragment>
+                                                            <string key="content">Attach your datasource as you are creating a new document.  As the document is being created, you will be prompted for the datasource credentials.  If you choose, these credentials are stored in your keychain; they are never stored inside the MAD file.</string>
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="The MAD Query" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iz0-Bd-m9B">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="b3Q-2M-5NS">
+                                                    <attributedString key="attributedText">
+                                                        <fragment>
+                                                            <string key="content">Once a MAD file is created, you may design a query for it.  The query builder allows you to add tables, link those tables, group the tables, and add predicates.  This feature requires advanced database or data analysis skills.  The user is required to design queries that are sane and efficient.</string>
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vf0-8F-wm3">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Cos-jY-Jlx">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="The designer allows the user to layout and format fields from the database query.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Viewer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ctZ-gG-byb">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Efq-Al-H5t">
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="The viewer allows you to render and refresh your MAD file.  Once rendered, you may print and send to to PDF.">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="iab-4G-LJv" secondAttribute="trailing" constant="20" type="default" id="0HJ-wa-2Mw"/>
+                                            <constraint firstItem="ctZ-gG-byb" firstAttribute="top" secondItem="Cos-jY-Jlx" secondAttribute="bottom" constant="8" type="user" id="47w-wZ-g3D"/>
+                                            <constraint firstItem="upz-tK-sEl" firstAttribute="top" secondItem="bh0-Be-2gB" secondAttribute="bottom" constant="8" type="user" id="5dr-TC-nx1"/>
+                                            <constraint firstAttribute="trailing" secondItem="Efq-Al-H5t" secondAttribute="trailing" constant="20" type="user" id="8kP-FI-Xfc"/>
+                                            <constraint firstItem="N7L-yf-6LL" firstAttribute="top" secondItem="Wzr-gO-f90" secondAttribute="bottom" constant="8" type="user" id="9Uw-UO-jtN"/>
+                                            <constraint firstItem="b3Q-2M-5NS" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="user" id="AHR-a0-vM2"/>
+                                            <constraint firstItem="upz-tK-sEl" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="Cds-WW-9HV"/>
+                                            <constraint firstItem="bh0-Be-2gB" firstAttribute="top" secondItem="iab-4G-LJv" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="E2s-Ur-Uzq"/>
+                                            <constraint firstItem="iz0-Bd-m9B" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="G3W-44-Crs"/>
+                                            <constraint firstAttribute="trailing" secondItem="ctZ-gG-byb" secondAttribute="trailing" constant="20" type="default" id="LYe-Xe-9i5"/>
+                                            <constraint firstItem="ctZ-gG-byb" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="LgV-1x-msm"/>
+                                            <constraint firstItem="Cos-jY-Jlx" firstAttribute="top" secondItem="vf0-8F-wm3" secondAttribute="bottom" constant="8" type="user" id="Pph-1A-m7V"/>
+                                            <constraint firstAttribute="trailing" secondItem="b3Q-2M-5NS" secondAttribute="trailing" constant="20" type="user" id="SJr-xe-9yj"/>
+                                            <constraint firstItem="iab-4G-LJv" firstAttribute="top" secondItem="N7L-yf-6LL" secondAttribute="bottom" constant="8" type="user" id="T8P-hH-kOh"/>
+                                            <constraint firstAttribute="trailing" secondItem="iz0-Bd-m9B" secondAttribute="trailing" constant="20" type="default" id="U5Q-Gy-vFD"/>
+                                            <constraint firstAttribute="trailing" secondItem="N7L-yf-6LL" secondAttribute="trailing" constant="20" type="default" id="XUm-85-hhx"/>
+                                            <constraint firstItem="Efq-Al-H5t" firstAttribute="top" secondItem="ctZ-gG-byb" secondAttribute="bottom" constant="8" type="user" id="aev-X3-ODL"/>
+                                            <constraint firstItem="iab-4G-LJv" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="dY6-Of-v9l"/>
+                                            <constraint firstAttribute="trailing" secondItem="Cos-jY-Jlx" secondAttribute="trailing" constant="20" type="default" id="hHn-eD-R1v"/>
+                                            <constraint firstItem="bh0-Be-2gB" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="hPa-r7-ifJ"/>
+                                            <constraint firstItem="b3Q-2M-5NS" firstAttribute="top" secondItem="iz0-Bd-m9B" secondAttribute="bottom" constant="8" type="user" id="itJ-cM-j6h"/>
+                                            <constraint firstAttribute="trailing" secondItem="bh0-Be-2gB" secondAttribute="trailing" constant="20" type="default" id="l5z-Jo-Sla"/>
+                                            <constraint firstItem="vf0-8F-wm3" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="lcl-yv-hKc"/>
+                                            <constraint firstItem="Efq-Al-H5t" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="user" id="ncU-gI-uGn"/>
+                                            <constraint firstItem="Wzr-gO-f90" firstAttribute="top" secondItem="gfZ-42-G0X" secondAttribute="top" constant="20" type="default" id="p6s-Pk-9A0"/>
+                                            <constraint firstItem="Wzr-gO-f90" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="rB1-22-3Xz"/>
+                                            <constraint firstItem="vf0-8F-wm3" firstAttribute="top" secondItem="b3Q-2M-5NS" secondAttribute="bottom" constant="8" type="user" id="rBd-Fz-54S"/>
+                                            <constraint firstAttribute="trailing" secondItem="Wzr-gO-f90" secondAttribute="trailing" constant="20" type="default" id="tmZ-YK-Qe9"/>
+                                            <constraint firstAttribute="trailing" secondItem="upz-tK-sEl" secondAttribute="trailing" constant="20" type="default" id="uym-6I-Atn"/>
+                                            <constraint firstItem="iz0-Bd-m9B" firstAttribute="top" secondItem="upz-tK-sEl" secondAttribute="bottom" constant="8" type="user" id="wJM-oS-mwV"/>
+                                            <constraint firstAttribute="trailing" secondItem="vf0-8F-wm3" secondAttribute="trailing" constant="20" type="default" id="wOZ-BH-TG1"/>
+                                            <constraint firstItem="Cos-jY-Jlx" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="wXz-Kp-OcL"/>
+                                            <constraint firstItem="N7L-yf-6LL" firstAttribute="leading" secondItem="gfZ-42-G0X" secondAttribute="leading" constant="20" type="default" id="zS8-PJ-G2A"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="vDM-pk-sgo" id="zMp-bB-uFi"/>
+                            <outlet property="delegate" destination="vDM-pk-sgo" id="Hff-nM-1KV"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Getting Started" id="HuL-Eh-Ncs">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="JKx-W8-qPq">
+                            <connections>
+                                <action selector="done:" destination="vDM-pk-sgo" id="OJJ-5U-mrf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="crn-GM-eIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="160" y="5468"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4BZ-16-KLj">
+            <objects>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="ygy-Nr-Ktw" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Zpy-NJ-sdB">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Uvj-MA-2v7">
+                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="uoG-9Y-sVB" kind="relationship" relationship="rootViewController" id="D9x-b5-V3E"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sUC-UO-3LP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-843" y="6356"/>
+        </scene>
+        <!--View Controller About - About-->
+        <scene sceneID="Ipe-qC-QMj">
+            <objects>
+                <viewController id="uoG-9Y-sVB" customClass="MTViewControllerAbout" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dQF-Tc-Rs2">
+                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BKv-JO-KY2">
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fxL-Yp-2qb">
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25S-ih-ayj">
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Version1.0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="huh-Gv-7Hz">
+                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copyright © 2012-2013 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="HpG-kd-KjR">
+                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Software by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="zjh-6d-Iqb">
+                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Artwork by Sean Martin and Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="TeC-EE-vku">
+                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="TeC-EE-vku" firstAttribute="leading" secondItem="fxL-Yp-2qb" secondAttribute="leading" constant="20" type="user" id="12t-bj-97x"/>
+                                            <constraint firstAttribute="trailing" secondItem="huh-Gv-7Hz" secondAttribute="trailing" constant="20" type="user" id="1Lo-Xe-2r6"/>
+                                            <constraint firstItem="25S-ih-ayj" firstAttribute="top" secondItem="fxL-Yp-2qb" secondAttribute="top" constant="20" type="user" id="6bm-65-K7T"/>
+                                            <constraint firstItem="zjh-6d-Iqb" firstAttribute="top" secondItem="HpG-kd-KjR" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="8Hh-wE-Jga"/>
+                                            <constraint firstAttribute="trailing" secondItem="TeC-EE-vku" secondAttribute="trailing" constant="20" type="user" id="Fb6-NZ-30g"/>
+                                            <constraint firstItem="huh-Gv-7Hz" firstAttribute="leading" secondItem="fxL-Yp-2qb" secondAttribute="leading" constant="20" type="user" id="W93-GY-oSt"/>
+                                            <constraint firstAttribute="trailing" secondItem="zjh-6d-Iqb" secondAttribute="trailing" constant="20" type="user" id="Whb-pg-CdK"/>
+                                            <constraint firstAttribute="trailing" secondItem="HpG-kd-KjR" secondAttribute="trailing" constant="20" type="user" id="YI8-Ge-u3t"/>
+                                            <constraint firstAttribute="trailing" secondItem="25S-ih-ayj" secondAttribute="trailing" constant="20" type="user" id="a4k-iv-VvF"/>
+                                            <constraint firstItem="TeC-EE-vku" firstAttribute="top" secondItem="zjh-6d-Iqb" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="cNN-wo-GkQ"/>
+                                            <constraint firstItem="zjh-6d-Iqb" firstAttribute="leading" secondItem="fxL-Yp-2qb" secondAttribute="leading" constant="20" type="user" id="eg4-ox-Pzq"/>
+                                            <constraint firstItem="HpG-kd-KjR" firstAttribute="top" secondItem="huh-Gv-7Hz" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="fDs-c6-gmQ"/>
+                                            <constraint firstItem="HpG-kd-KjR" firstAttribute="leading" secondItem="fxL-Yp-2qb" secondAttribute="leading" constant="20" type="user" id="j0D-VP-0Nn"/>
+                                            <constraint firstItem="huh-Gv-7Hz" firstAttribute="top" secondItem="25S-ih-ayj" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="tY2-SL-zhw"/>
+                                            <constraint firstItem="25S-ih-ayj" firstAttribute="leading" secondItem="fxL-Yp-2qb" secondAttribute="leading" constant="20" type="user" id="uWA-LC-2jC"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="fxL-Yp-2qb" firstAttribute="top" secondItem="BKv-JO-KY2" secondAttribute="top" type="default" id="4MR-sD-794"/>
+                                    <constraint firstItem="fxL-Yp-2qb" firstAttribute="leading" secondItem="BKv-JO-KY2" secondAttribute="leading" type="default" id="Qgw-76-e5E"/>
+                                    <constraint firstItem="fxL-Yp-2qb" firstAttribute="bottom" secondItem="BKv-JO-KY2" secondAttribute="bottom" type="default" id="VW4-VJ-WOj"/>
+                                    <constraint firstItem="fxL-Yp-2qb" firstAttribute="centerY" secondItem="BKv-JO-KY2" secondAttribute="centerY" type="default" id="WjT-qk-hMc"/>
+                                    <constraint firstItem="fxL-Yp-2qb" firstAttribute="trailing" secondItem="BKv-JO-KY2" secondAttribute="trailing" type="default" id="wdv-ci-9aV"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BKv-JO-KY2" firstAttribute="leading" secondItem="dQF-Tc-Rs2" secondAttribute="leading" type="default" id="dtm-bx-EjE"/>
+                            <constraint firstItem="BKv-JO-KY2" firstAttribute="top" secondItem="dQF-Tc-Rs2" secondAttribute="top" type="default" id="loy-vC-jhN"/>
+                            <constraint firstItem="BKv-JO-KY2" firstAttribute="trailing" secondItem="dQF-Tc-Rs2" secondAttribute="trailing" type="default" id="mPA-um-VVA"/>
+                            <constraint firstItem="BKv-JO-KY2" firstAttribute="bottom" secondItem="dQF-Tc-Rs2" secondAttribute="bottom" type="default" id="s2m-XC-m2n"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="g6I-9k-2OZ"/>
+                        <barButtonItem systemItem="compose" id="3i8-NH-MhJ">
+                            <connections>
+                                <action selector="composeEmail:" destination="uoG-9Y-sVB" id="JbP-I0-WgW"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="About" id="qDp-8R-udk">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="bwJ-wI-J4g">
+                            <connections>
+                                <action selector="done:" destination="uoG-9Y-sVB" id="EdH-mv-8pv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ble-iT-7OG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-241" y="6356"/>
         </scene>
     </scenes>
     <resources>

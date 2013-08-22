@@ -119,50 +119,31 @@
                         <sections>
                             <tableViewSection id="Mg7-1w-JGv">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="344" id="iqX-Ue-kQL">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="344"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="400" id="iqX-Ue-kQL">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="343"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="399"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="All Features" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DYK-yQ-DME">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="75n-37-vfA"/>
+                                                        <constraint firstAttribute="width" constant="199" id="lRL-Bq-U19"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0oi-DE-0yy"/>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="clC-XB-icH"/>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5s-RX-sua">
-                                                    <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="73" id="F1w-Fs-bIb"/>
-                                                        <constraint firstAttribute="height" constant="36" id="kYZ-Jd-05b"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                    <state key="normal">
-                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="licenseViewerOneYear:" destination="uCg-06-mn7" eventType="touchUpInside" id="urL-9I-wod"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="ad4-zZ-hgr">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="48" id="vIU-af-x5A"/>
+                                                        <constraint firstAttribute="height" constant="42" id="OXt-oz-FuJ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="3MO-Af-5U5">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="47" id="dSx-4V-Jfz"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Access to future features.">
                                                             <attributes>
@@ -176,9 +157,6 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="3iJ-67-4Sz">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="33" id="fSW-Re-Ffb"/>
-                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Query results are unlimited.">
                                                             <attributes>
@@ -219,78 +197,108 @@
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Year:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ul-nn-09C">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yw0-Xv-vqo">
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5s-RX-sua">
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="73" id="F1w-Fs-bIb"/>
+                                                                <constraint firstAttribute="height" constant="36" id="kYZ-Jd-05b"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseViewerOneYear:" destination="uCg-06-mn7" eventType="touchUpInside" id="urL-9I-wod"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvA-fs-Tnc">
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="36" id="7aS-Ee-08i"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseViewerOneMonth:" destination="uCg-06-mn7" eventType="touchUpInside" id="nAV-ZV-Sp2"/>
+                                                            </connections>
+                                                        </button>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Year:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ul-nn-09C">
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="193" id="149-AT-QzN"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Month:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FdU-vn-tIZ">
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="clC-XB-icH"/>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0oi-DE-0yy"/>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="193" id="149-AT-QzN"/>
+                                                        <constraint firstItem="FdU-vn-tIZ" firstAttribute="leading" secondItem="Yw0-Xv-vqo" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="4nf-IO-J3E"/>
+                                                        <constraint firstItem="0oi-DE-0yy" firstAttribute="top" secondItem="FdU-vn-tIZ" secondAttribute="top" type="default" id="Fhm-kf-Ufq"/>
+                                                        <constraint firstAttribute="bottom" secondItem="FdU-vn-tIZ" secondAttribute="bottom" constant="28" id="GAI-KA-iFb"/>
+                                                        <constraint firstItem="m5s-RX-sua" firstAttribute="top" secondItem="Yw0-Xv-vqo" secondAttribute="top" constant="20" symbolic="YES" type="default" id="HKs-nC-RgP"/>
+                                                        <constraint firstItem="EvA-fs-Tnc" firstAttribute="leading" secondItem="m5s-RX-sua" secondAttribute="leading" type="default" id="KiZ-dA-guo"/>
+                                                        <constraint firstAttribute="trailing" secondItem="EvA-fs-Tnc" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Rnu-bm-LXI"/>
+                                                        <constraint firstItem="clC-XB-icH" firstAttribute="leading" secondItem="0oi-DE-0yy" secondAttribute="leading" type="default" id="U90-e7-Fy7"/>
+                                                        <constraint firstItem="5ul-nn-09C" firstAttribute="top" secondItem="Yw0-Xv-vqo" secondAttribute="top" constant="27" id="WEc-Rh-sCo"/>
+                                                        <constraint firstItem="clC-XB-icH" firstAttribute="top" secondItem="5ul-nn-09C" secondAttribute="top" type="default" id="WbC-He-7kk"/>
+                                                        <constraint firstItem="5ul-nn-09C" firstAttribute="leading" secondItem="Yw0-Xv-vqo" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="eYX-Us-2iS"/>
+                                                        <constraint firstAttribute="trailing" secondItem="m5s-RX-sua" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="i2R-hj-BdE"/>
+                                                        <constraint firstItem="FdU-vn-tIZ" firstAttribute="trailing" secondItem="5ul-nn-09C" secondAttribute="trailing" type="default" id="mTG-L9-po5"/>
+                                                        <constraint firstAttribute="bottom" secondItem="EvA-fs-Tnc" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="p1Z-V8-R6M"/>
+                                                        <constraint firstItem="clC-XB-icH" firstAttribute="centerX" secondItem="m5s-RX-sua" secondAttribute="centerX" type="default" id="vl8-Sb-bPo"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="License for One Month:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FdU-vn-tIZ">
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvA-fs-Tnc">
-                                                    <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="36" id="7aS-Ee-08i"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                    <state key="normal">
-                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <state key="highlighted">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="licenseViewerOneMonth:" destination="uCg-06-mn7" eventType="touchUpInside" id="nAV-ZV-Sp2"/>
-                                                    </connections>
-                                                </button>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="5ul-nn-09C" firstAttribute="trailing" secondItem="FdU-vn-tIZ" secondAttribute="trailing" type="default" id="1LS-ei-urt"/>
                                             <constraint firstItem="3MO-Af-5U5" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="1yr-Id-eDm"/>
-                                            <constraint firstItem="clC-XB-icH" firstAttribute="top" secondItem="3MO-Af-5U5" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="3aG-33-4OV"/>
-                                            <constraint firstAttribute="trailing" secondItem="3iJ-67-4Sz" secondAttribute="trailing" constant="20" type="default" id="4wq-Ba-S8J"/>
-                                            <constraint firstItem="3MO-Af-5U5" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="142" id="7Sc-JP-oeM"/>
-                                            <constraint firstAttribute="bottom" secondItem="FdU-vn-tIZ" secondAttribute="bottom" constant="87" id="AdK-2f-JpK"/>
+                                            <constraint firstItem="DYK-yQ-DME" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="20" type="default" id="Ahu-g4-yXU"/>
+                                            <constraint firstAttribute="bottom" secondItem="ha1-5w-Qxu" secondAttribute="bottom" constant="40" id="Azy-aO-6D9"/>
                                             <constraint firstItem="kDy-62-pr8" firstAttribute="top" secondItem="btS-mw-9Jt" secondAttribute="top" type="default" id="Cfi-0n-hOr"/>
-                                            <constraint firstAttribute="bottom" secondItem="m5s-RX-sua" secondAttribute="bottom" constant="118" id="E39-8R-34v"/>
-                                            <constraint firstItem="0oi-DE-0yy" firstAttribute="top" secondItem="FdU-vn-tIZ" secondAttribute="top" type="default" id="Ex0-E3-wmh"/>
-                                            <constraint firstItem="5ul-nn-09C" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="FHS-dI-AV9"/>
-                                            <constraint firstItem="clC-XB-icH" firstAttribute="centerX" secondItem="m5s-RX-sua" secondAttribute="centerX" type="default" id="IoB-Oq-p4n"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="centerX" secondItem="3iJ-67-4Sz" secondAttribute="centerX" type="default" id="Hhr-1o-i43"/>
+                                            <constraint firstItem="3MO-Af-5U5" firstAttribute="top" secondItem="3iJ-67-4Sz" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="PKq-Nv-Eyp"/>
                                             <constraint firstItem="btS-mw-9Jt" firstAttribute="baseline" secondItem="kDy-62-pr8" secondAttribute="baseline" type="default" id="Rqm-QE-2PB"/>
                                             <constraint firstItem="DYK-yQ-DME" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="RvE-OM-5v1"/>
                                             <constraint firstItem="ha1-5w-Qxu" firstAttribute="baseline" secondItem="S0R-XX-EvI" secondAttribute="baseline" type="default" id="T5G-pO-w4n"/>
-                                            <constraint firstAttribute="trailing" secondItem="ad4-zZ-hgr" secondAttribute="trailing" constant="20" type="default" id="VlR-Kr-lkB"/>
+                                            <constraint firstItem="ha1-5w-Qxu" firstAttribute="top" secondItem="S0R-XX-EvI" secondAttribute="top" type="default" id="WiS-SU-PlR"/>
                                             <constraint firstItem="ha1-5w-Qxu" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="XhU-Js-TFr"/>
                                             <constraint firstItem="3iJ-67-4Sz" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="ZlT-U1-Gkp"/>
                                             <constraint firstItem="kDy-62-pr8" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="atP-0M-cBH"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="centerX" secondItem="3MO-Af-5U5" secondAttribute="centerX" type="default" id="ayX-CF-Uwk"/>
+                                            <constraint firstAttribute="bottom" secondItem="kDy-62-pr8" secondAttribute="bottom" constant="74" id="ayo-kJ-4pe"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="top" secondItem="3MO-Af-5U5" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="bG3-2Q-eTe"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="centerX" secondItem="iqX-Ue-kQL" secondAttribute="centerX" type="default" id="bSI-v8-CxM"/>
                                             <constraint firstItem="S0R-XX-EvI" firstAttribute="leading" secondItem="ha1-5w-Qxu" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="bZr-Nu-kcL"/>
                                             <constraint firstAttribute="trailing" secondItem="btS-mw-9Jt" secondAttribute="trailing" constant="20" type="default" id="biB-vG-oaQ"/>
-                                            <constraint firstItem="btS-mw-9Jt" firstAttribute="top" secondItem="EvA-fs-Tnc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="e5k-3p-Qs4"/>
-                                            <constraint firstItem="ad4-zZ-hgr" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="74" id="ej8-7h-If2"/>
-                                            <constraint firstItem="3iJ-67-4Sz" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="118" id="gzB-J1-sf1"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="centerX" secondItem="ad4-zZ-hgr" secondAttribute="centerX" type="default" id="fgD-W5-VbC"/>
+                                            <constraint firstItem="3iJ-67-4Sz" firstAttribute="top" secondItem="ad4-zZ-hgr" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="gSy-gt-hSZ"/>
                                             <constraint firstAttribute="trailing" secondItem="S0R-XX-EvI" secondAttribute="trailing" constant="20" type="default" id="ig0-64-0Mj"/>
-                                            <constraint firstItem="m5s-RX-sua" firstAttribute="leading" secondItem="DYK-yQ-DME" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="jyW-Dz-tlh"/>
                                             <constraint firstItem="ha1-5w-Qxu" firstAttribute="trailing" secondItem="kDy-62-pr8" secondAttribute="trailing" type="default" id="kFg-Tl-XfN"/>
-                                            <constraint firstItem="EvA-fs-Tnc" firstAttribute="leading" secondItem="m5s-RX-sua" secondAttribute="leading" type="default" id="lwh-nu-l0y"/>
-                                            <constraint firstItem="DYK-yQ-DME" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="42" id="mVE-xf-pge"/>
-                                            <constraint firstAttribute="trailing" secondItem="EvA-fs-Tnc" secondAttribute="trailing" constant="20" type="default" id="n6B-ok-m3w"/>
-                                            <constraint firstAttribute="trailing" secondItem="m5s-RX-sua" secondAttribute="trailing" constant="20" type="default" id="nbG-7v-tM6"/>
-                                            <constraint firstItem="S0R-XX-EvI" firstAttribute="top" secondItem="btS-mw-9Jt" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="o5q-o2-gO0"/>
-                                            <constraint firstItem="ha1-5w-Qxu" firstAttribute="top" secondItem="kDy-62-pr8" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="oc5-g8-d0a"/>
-                                            <constraint firstItem="0oi-DE-0yy" firstAttribute="leading" secondItem="clC-XB-icH" secondAttribute="leading" type="default" id="sjH-wh-aqc"/>
-                                            <constraint firstItem="FdU-vn-tIZ" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="tPa-aB-8QC"/>
-                                            <constraint firstAttribute="trailing" secondItem="3MO-Af-5U5" secondAttribute="trailing" constant="20" type="default" id="v9S-te-IEi"/>
-                                            <constraint firstAttribute="bottom" secondItem="ha1-5w-Qxu" secondAttribute="bottom" constant="21" id="x5c-dM-zd1"/>
+                                            <constraint firstItem="Yw0-Xv-vqo" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="10" id="nOd-wn-qRx"/>
+                                            <constraint firstAttribute="bottom" secondItem="Yw0-Xv-vqo" secondAttribute="bottom" constant="111" id="tY5-wC-JcI"/>
                                             <constraint firstItem="ad4-zZ-hgr" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="xec-kM-c1y"/>
-                                            <constraint firstItem="5ul-nn-09C" firstAttribute="top" secondItem="3MO-Af-5U5" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="yIE-Sm-atV"/>
+                                            <constraint firstItem="ad4-zZ-hgr" firstAttribute="top" secondItem="DYK-yQ-DME" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="xm9-CH-TYK"/>
                                         </constraints>
                                     </tableViewCell>
                                 </cells>
@@ -332,6 +340,8 @@
                         <outletCollection property="labelsShowWhenActivated" destination="S0R-XX-EvI" id="GD2-yY-NnP"/>
                         <outletCollection property="labelsShowWhenActivated" destination="kDy-62-pr8" id="0Wq-Yc-Dw2"/>
                         <outletCollection property="labelsShowWhenActivated" destination="ha1-5w-Qxu" id="cqh-YC-a8J"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="5ul-nn-09C" id="Je5-yR-CLV"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="FdU-vn-tIZ" id="qn7-gI-GBh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LT3-fq-PSW" userLabel="First Responder" sceneMemberID="firstResponder"/>
