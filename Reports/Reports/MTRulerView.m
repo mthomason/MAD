@@ -36,7 +36,7 @@
         CGFloat xPoint = i * eigthInchInPoints;
         CGFloat length = 0.0000f;
         if ((i % 8) == 0) {
-            CGRect locationRect = CGRectMake(xPoint - 2.5000f, rect.size.height - 18.0000f, 5.0000f, 5.0000f);
+            CGRect locationRect = CGRectMake(xPoint - 4.5000f, rect.size.height - 18.0000f, 9.0000f, 5.0000f);
             [[NSString stringWithFormat:@"%d", i / 8] drawInRect: locationRect
                                                     withFont: [UIFont systemFontOfSize: 8.0000f]
                                                lineBreakMode: NSLineBreakByClipping
