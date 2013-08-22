@@ -161,6 +161,7 @@ extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
+extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 

@@ -137,6 +137,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
                 if ([receiptBundleIdentifier isEqualToString:MTBundleIdMadDesigner]) {
                     if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
                         licenseInterval = MTTimeIntervalYear;
+                    } else if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionMonth1]) {
+                        licenseInterval = MTTimeIntervalMonth;
                     }
                 } else if ([receiptBundleIdentifier isEqualToString:MTBundleIdMadViewer]) {
                     if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {

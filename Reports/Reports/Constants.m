@@ -21,9 +21,10 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 
 #pragma mark Product Ids
 
-NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1   = @"com.everydayapps.mad.designer.subscription.year";
-NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1    = @"com.everydayapps.mad.viewer.subscription.month";
-NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1     = @"com.everydayapps.mad.viewer.subscription.year";
+NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1       = @"com.everydayapps.mad.designer.subscription.year";
+NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1      = @"com.everydayapps.mad.designer.subscription.month";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1        = @"com.everydayapps.mad.viewer.subscription.month";
+NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"com.everydayapps.mad.viewer.subscription.year";
 
 #pragma mark Storyboard Segues
 
