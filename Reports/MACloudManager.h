@@ -18,6 +18,7 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 @property (nonatomic, assign) BOOL isCloudEnabled;
 @property (nonatomic, retain, readonly) NSURL *dataDirectoryURL;
 @property (nonatomic, retain, readonly) NSURL *documentsDirectoryURL;
+- (NSURL *)documentsDataDirectoryURL;
 
 + (MACloudManager *)sharedManager;
 

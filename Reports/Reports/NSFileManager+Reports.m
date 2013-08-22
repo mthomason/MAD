@@ -13,11 +13,7 @@
 @implementation NSFileManager (Reports)
 
 + (NSArray *)schemaFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
-}
-
-+ (NSArray *)reportFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:MTDocumentExtentionMobleApplicationDocumentReport];
+    return [NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive];
 }
 
 + (NSArray *)pdfFiles {

@@ -113,7 +113,7 @@
     [[self view] addSubview: [activitySpinnerViewController view]];
     
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
-                                                                   withExtension:MTDocumentExtentionMobleApplicationDocument];
+                                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
     
     //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     

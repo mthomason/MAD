@@ -172,7 +172,6 @@ extern NSString * const MTSegueLicensing;
 extern NSString * const MTBundleDisplayName;
 
 extern NSString * const MTDocumentTypeUtiMad;
-extern NSString * const MTDocumentTypeExtentionMad;
 
 extern NSString * const MTCollectionElementKindSectionLabel;
 
@@ -226,8 +225,8 @@ extern NSString * const MTPersistentStoreAliasMad;
 extern NSString * const MTPersistentStoreAliasUserPreferences;
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
+extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
-extern NSString * const MTDocumentExtentionMobleApplicationDocumentReport;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 

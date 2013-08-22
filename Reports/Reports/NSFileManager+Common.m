@@ -7,6 +7,7 @@
 //
 
 #import "NSFileManager+Common.h"
+#import "MACloudManager.h"
 
 @implementation NSFileManager (Common)
 
@@ -31,6 +32,12 @@
     [documentsDirectoryContents release];
     [documentsDirectoryPath release];
     return [doc autorelease];
+}
+
+
++ (NSMutableArray *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension {
+    NSURL *documentsDataDirectory = [[MACloudManager sharedManager] documentsDataDirectoryURL];
+    return [NSFileManager contentsOfDirectory:[documentsDataDirectory path] withPathExtension:extension];
 }
 
 + (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {

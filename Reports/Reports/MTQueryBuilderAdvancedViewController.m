@@ -452,6 +452,12 @@
     [[viewController view] addGestureRecognizer:panGesture];
     [panGesture release];
     
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
+    [tapGesture setDelegate:self];
+    [tapGesture setNumberOfTapsRequired:1];
+    [[viewController view] addGestureRecognizer:tapGesture];
+    [tapGesture release];
+    
     [self addViewController:viewController];
     
     self.tableDisplayCounter++;
@@ -679,6 +685,18 @@
 
 #pragma mark - Gesture recognizer actions
 
+- (void)tapPiece:(UITapGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
+        UIView *gestureRecognizerView = [gestureRecognizer view];
+        [[self contentView] bringSubviewToFront:gestureRecognizerView];
+        for (UIView *view in [[self contentView] subviews]) {
+            if ([view isKindOfClass:[MTConnectorView class]]) {
+                [[self contentView] bringSubviewToFront:view];
+            }
+        }
+    }
+}
+
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
@@ -686,11 +704,15 @@
     switch ([gestureRecognizer state]) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-            
+            UIView *gestureRecognizerView = [gestureRecognizer view];
             CGPoint gestureLocation = [gestureRecognizer locationInView:[self view]];
-            [[gestureRecognizer view] setCenter: gestureLocation];
-            [[self backgroundContainer] bringSubviewToFront:[gestureRecognizer view]];
-            
+            [gestureRecognizerView setCenter: gestureLocation];
+            [[self contentView] bringSubviewToFront:gestureRecognizerView];
+            for (UIView *view in [[self contentView] subviews]) {
+                if ([view isKindOfClass:[MTConnectorView class]]) {
+                    [[self contentView] bringSubviewToFront:view];
+                }
+            }
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged

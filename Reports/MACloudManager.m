@@ -70,7 +70,7 @@ static MACloudManager *__sharedManager;
     if (isCloudEnabled != _isCloudEnabled) {
         _isCloudEnabled = isCloudEnabled;
         NSURL *oldDataDirectoryURL = [self dataDirectoryURL];
-        NSURL *oldDocumentsDirectoryURL = [self documentsDirectoryURL];
+        NSURL *oldDocumentsDirectoryURL = [self documentsDataDirectoryURL];
         
         [self updateFileStorageContainerURL:^(void) {
             if (isCloudEnabled) {
@@ -91,10 +91,10 @@ static MACloudManager *__sharedManager;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     NSFileManager* fileManager = [[NSFileManager alloc] init];
                     NSURL *newDataDirectoryURL = [self dataDirectoryURL];
-                    NSURL *newDocumentsDirectoryURL = [self documentsDirectoryURL];
+                    NSURL *newDocumentsDirectoryURL = [self documentsDataDirectoryURL];
                     
                     for (NSURL *documentURL in localDocuments) {
-                        if ([[documentURL pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+                        if ([[documentURL pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
                             NSURL *destinationURL = [newDocumentsDirectoryURL URLByAppendingPathComponent:[documentURL lastPathComponent]];
                             [fileManager setUbiquitous:YES itemAtURL:documentURL destinationURL:destinationURL error:nil];
                         }
@@ -115,6 +115,20 @@ static MACloudManager *__sharedManager;
 
 - (NSURL *)documentsDirectoryURL {
     return [[self dataDirectoryURL] URLByAppendingPathComponent:@"Documents"];
+}
+
+- (NSURL *)documentsDataDirectoryURL {
+    NSURL *result = [[self documentsDirectoryURL] URLByAppendingPathComponent:@"Data"];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+        NSString *path = [result path];
+        if ([defaultFileManager fileExistsAtPath:path] == NO) {
+            NSError *error = nil;
+            [defaultFileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+    });
+    return result;
 }
 
 - (void)updateFileStorageContainerURL:(void (^)(void))completionHandler {

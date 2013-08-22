@@ -441,15 +441,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
          */
     } else {
-        NSURL *documentsDirectoryURL = [[[MACloudManager sharedManager] documentsDirectoryURL] retain];
+        NSURL *documentsDirectoryURL = [[[MACloudManager sharedManager] documentsDataDirectoryURL] retain];
         NSError *error = nil;
         NSArray *localDocuments = [[[NSFileManager defaultManager] contentsOfDirectoryAtURL:documentsDirectoryURL
                                                                 includingPropertiesForKeys:nil options:0 error:&error] retain];
 
-        NSURL *dataDirectoryURL = [[[MACloudManager sharedManager] dataDirectoryURL] retain];
+        //NSURL *dataDirectoryURL = [[[MACloudManager sharedManager] dataDirectoryURL] retain];
         
         for (NSURL *document in localDocuments) {
-            if ([[document pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+            if ([[document pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
                 NSString *fileName = [[document lastPathComponent] stringByDeletingPathExtension];
                 FileRepresentation* fileRepresentation = [[FileRepresentation fileRepresentationWithName:fileName
                                                                                                  andUrl:document] retain];
@@ -468,7 +468,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         
         [localDocuments release];
-        [dataDirectoryURL release];
+        //[dataDirectoryURL release];
         [documentsDirectoryURL release];
     }
     [[self collectionView] reloadData];

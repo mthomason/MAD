@@ -89,7 +89,7 @@
 }
 
 - (NSString *)fileNameExtensionForType:(NSString *)typeName saveOperation:(UIDocumentSaveOperation)saveOperation {
-    return MTDocumentTypeExtentionMad;
+    return MTDocumentExtentionMobleApplicationDocumentArchive;
 }
 
 - (NSString *)fileType {

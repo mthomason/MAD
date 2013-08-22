@@ -101,7 +101,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
     NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
-                                                  withExtension:MTDocumentTypeExtentionMad] retain];
+                                                  withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;

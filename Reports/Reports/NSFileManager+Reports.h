@@ -11,6 +11,5 @@
 @interface NSFileManager (Reports)
 
 + (NSArray *)schemaFiles;
-+ (NSArray *)reportFiles;
 
 @end

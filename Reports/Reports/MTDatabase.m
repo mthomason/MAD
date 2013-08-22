@@ -161,7 +161,8 @@
                 NSArray *topologicalSortArray = [topologicalSort toArray];
                 
                 // MAKR: List each field in the query.
-                NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray] usingOnlyActiveFields:onlyActiveFields
+                NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray]
+                                                              usingOnlyActiveFields:onlyActiveFields
                                                             forManagedObjectContext:[query managedObjectContext]];
                 if ([sqlSelectExpression length] > 0) {
                     [result appendString:sqlSelectExpression];
@@ -324,7 +325,31 @@
         }
         [aggregateObjectFields retain];
         
-        NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count];
+        //Fields in query groups.
+        NSString *entityObjectQueryGroup = NSStringFromClass([RptqQueryGroup class]);
+        NSFetchRequest *fetchRequestQueryGroup = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryGroup];
+        NSPredicate *predicateQueryGroups = [NSPredicate predicateWithValue:YES];
+        [fetchRequestQueryGroup setPredicate:predicateQueryGroups];
+        NSError *fetchQueryGroupError = nil;
+        NSArray *queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
+        if (fetchAggregateError != nil) {
+            queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
+        }
+        [queryGroups retain];
+        
+        //Fields in query links.
+        NSString *entityObjectQueryLinks = NSStringFromClass([RptqQueryLinks class]);
+        NSFetchRequest *fetchRequestQueryLinks = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryLinks];
+        NSPredicate *predicateQueryLinks = [NSPredicate predicateWithValue:YES];
+        [fetchRequestQueryLinks setPredicate:predicateQueryLinks];
+        NSError *fetchQueryLinksError = nil;
+        NSArray *queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
+        if (fetchQueryLinksError != nil) {
+            queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
+        }
+        [queryLinks retain];
+        
+        NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count] + [queryGroups count];
         NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
 
         for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
@@ -338,6 +363,24 @@
             RptqQueryField *queryField = [dataField aggregateField];
             if (queryField != nil) {
                 [queryFields addObject:queryField];
+            }
+        }
+        
+        for (RptqQueryGroup *queryGroup in queryGroups) {
+            RptqQueryField *queryField = [queryGroup hasField];
+            if (queryField != nil) {
+                [queryFields addObject:queryField];
+            }
+        }
+        
+        for (RptqQueryLinks *queryLink in queryLinks) {
+            RptqQueryField *queryFieldLeft = [queryLink hasLeftField];
+            if (queryFieldLeft != nil) {
+                [queryFields addObject:queryFieldLeft];
+            }
+            RptqQueryField *queryFieldRight = [queryLink hasRightField];
+            if (queryFieldRight != nil) {
+                [queryFields addObject:queryFieldRight];
             }
         }
         
@@ -355,6 +398,7 @@
             result = nil;
         }
         [queryFields release];
+        [queryGroups release];
         [aggregateObjectFields release];
         [dataObjectFields release];
         [fetchRequestDataField release];
@@ -498,8 +542,15 @@
                 NSString *tableFactor = [self sqlTableReferenceWithTables:destinationVertices linkDepth:linkDepth forManagedObjectContext:managedObjectContext];
                 if ([tableFactor length] > 0) {
                     [result setString: [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-                    [result insertString:@"\t(" atIndex:0];
-                    [result appendString:@")\n\t"];
+                    
+                    if (NO) {   //I would think to group these in parentheses, but some databases don't like that.
+                        [result insertString:@"\t(" atIndex:0];
+                        [result appendString:@")\n\t"];
+                    } else {
+                        [result insertString:@"\t" atIndex:0];
+                        [result appendString:@"\n\t"];
+                    }
+                    
                     for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
                         [result appendFormat:@"\t"];
                     }

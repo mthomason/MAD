@@ -36,12 +36,11 @@ NSString * const MTSegueLicensing                                   = @"MTSegueL
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
 NSString * const MTDocumentTypeUtiMad                               = @"com.everydayapps.productivity.mad";
-NSString * const MTDocumentTypeExtentionMad                         = @"mad";
 
 NSString * const PDF_PATH_EXTENSION                                 = @"pdf";
+NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
 NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
 NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
-NSString * const MTDocumentExtentionMobleApplicationDocumentReport  = @"madr";
 NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
 NSString * const MTCollectionElementKindSectionLabel                = @"MTCollectionElementKindSectionLabel";
