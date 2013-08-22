@@ -50,6 +50,7 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     id result = [super contentsForType:typeName error:outError];
+    NSLog(@"Type: %@, %@", NSStringFromClass([result class]), [self fileURL]);
     return result;
 }
 
@@ -127,7 +128,6 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     if (document != nil) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
         UIImage *thumbnail = [[printPageRender thumbnail] retain];
-        //UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
         [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
         [thumbnail release];
         [printPageRender release];
@@ -136,8 +136,6 @@ NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
         [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
         [thumbnail release];
     }
-
-
     [[self extraInformation] setObject:@(1.0) forKey:MTDocumentInfoKeyVersion];
     [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
 

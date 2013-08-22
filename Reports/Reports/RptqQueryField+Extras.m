@@ -82,6 +82,10 @@
     return [NSString stringWithFormat:@"%@.%@", [[self inQueryTable] alias], [[self databaseSchemaField] name]];
 }
 
+- (NSString *)toStringReverse {
+    return [NSString stringWithFormat:@"%@.%@", [[self databaseSchemaField] name], [[self inQueryTable] alias]];
+}
+
 - (NSString *)toString {
     return [NSString stringWithFormat:@"%@.%@", [[self inQueryTable] queryAlias], [[self databaseSchemaField] name]];
 //    return [self toStringHumanReadable];

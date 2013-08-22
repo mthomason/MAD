@@ -218,10 +218,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellTextFieldIdentifier";
     UITableViewCell *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+    [result setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(20.0000f, 6.0000f, 280.0000f, 31.0000f)];
     [textField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [textField setBorderStyle:UITextBorderStyleBezel];
+    [textField setClearButtonMode:UITextFieldViewModeWhileEditing];
     [[result contentView] addSubview:textField];
     [self setTextField:textField];
     [textField release];

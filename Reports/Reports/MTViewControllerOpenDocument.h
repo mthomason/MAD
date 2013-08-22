@@ -21,6 +21,7 @@
 #import "MTDocumentCellProtocol.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "MTViewControllerAsyncProtocol.h"
+#import "MTViewControllerAbout.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;

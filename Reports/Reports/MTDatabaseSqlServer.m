@@ -1457,7 +1457,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     }
                     
                 }
-                
+                DBSETLSECURE(login);
                 if (error == nil) {
                     if ((dbconn = dbopen(login, s)) == NULL) {
                         NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];

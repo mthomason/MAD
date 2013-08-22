@@ -10,11 +10,16 @@
 
 @interface MTLicensingViewController ()
 
-@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNow;
+@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowDesignerOneYear;
+@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowDesignerOneMonth;
+
 @property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneYear;
 @property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneMonth;
+
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonRestore;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonDone;
+
+@property (nonatomic, retain) IBOutlet UIView *viewBuyButtonsBackground;
 
 @property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearTitle;
 @property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearDesc1;
@@ -26,8 +31,8 @@
 @property (nonatomic, retain) IBOutlet UILabel *labelDesignerValueActivated;
 @property (nonatomic, retain) IBOutlet UILabel *labelDesignerValueExpires;
 
-
-@property (retain, nonatomic) IBOutletCollection(UILabel) NSArray *labelsShowWhenActivated;
+@property (nonatomic, retain) IBOutletCollection(UILabel) NSArray *labelsShowWhenActivated;
+@property (nonatomic, retain) IBOutletCollection(UILabel) NSArray *labelsHideWhenActivated;
 
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator2;
@@ -42,7 +47,8 @@
 - (void)dealloc {
     [_standardCompletion release];
     [_licenseUserCompletion release];
-    [_buttonBuyNow release];
+    [_buttonBuyNowDesignerOneYear release];
+    [_buttonBuyNowDesignerOneMonth release];
     [_buttonBuyNowViewerOneMonth release];
     [_buttonBuyNowViewerOneYear release];
     [_labelDesignerLicenseOneYearTitle release];
@@ -59,6 +65,8 @@
     [_labelDesignerValueActivated release];
     [_labelDesignerValueExpires release];
     [_labelsShowWhenActivated release];
+    [_labelsHideWhenActivated release];
+    [_viewBuyButtonsBackground release];
     [super dealloc];
 }
 
@@ -66,15 +74,22 @@
     [super viewDidLoad];
     
     MTStoreKitNonRenewableLicensedUser licenseUserCompletion = ^(BOOL isLicensedUser, NSDate *experationDate) {
+
         if (isLicensedUser) {
+            
             [self showLicensingDetailsWithExperationDate:experationDate];
             [[self activityIndicatorDesignerLicenseOneYear] stopAnimating];
             [[self activityIndicator2] stopAnimating];
+            
             BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
             if ([AppDelegate isMadDesigner]) {
-                [[self buttonBuyNow] setEnabled:allowPurchase];
-                [[self buttonBuyNow] setHidden:!allowPurchase];
+                [[self viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+                [[self buttonBuyNowDesignerOneYear] setEnabled:allowPurchase];
+                [[self buttonBuyNowDesignerOneYear] setHidden:!allowPurchase];
+                [[self buttonBuyNowDesignerOneMonth] setEnabled:allowPurchase];
+                [[self buttonBuyNowDesignerOneMonth] setHidden:!allowPurchase];
             } else if ([AppDelegate isMadViewer]) {
+                [[self viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor whiteColor] : [UIColor lightGrayColor]];
                 [[self buttonBuyNowViewerOneMonth] setEnabled:allowPurchase];
                 [[self buttonBuyNowViewerOneMonth] setHidden:!allowPurchase];
                 [[self buttonBuyNowViewerOneYear] setEnabled:allowPurchase];
@@ -83,8 +98,11 @@
         } else {
             [self hideLicensingDetails];
             if ([AppDelegate isMadDesigner]) {
-                [[self buttonBuyNow] setHidden:YES];
+                [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+                [[self buttonBuyNowDesignerOneYear] setHidden:YES];
+                [[self buttonBuyNowDesignerOneMonth] setHidden:YES];
             } else if ([AppDelegate isMadViewer]) {
+                [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
                 [[self buttonBuyNowViewerOneYear] setHidden:YES];
                 [[self buttonBuyNowViewerOneMonth] setHidden:YES];
             }
@@ -94,7 +112,8 @@
             
             NSArray *productIds;
             if ([AppDelegate isMadDesigner]) {
-                productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionYear1];
+                productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionMonth1,
+                               MTStoreKitProductIdentifierDesignerSubscriptionYear1];
             } else if ([AppDelegate isMadViewer]) {
                 productIds = @[MTStoreKitProductIdentifierViewerSubscriptionMonth1,
                                MTStoreKitProductIdentifierViewerSubscriptionYear1];
@@ -110,9 +129,13 @@
                 
                 [self enableUserInterface];
                 if ([AppDelegate isMadDesigner]) {
-                    [[self buttonBuyNow] setEnabled:success];
-                    [[self buttonBuyNow] setHidden:NO];
+                    [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+                    [[self buttonBuyNowDesignerOneYear] setEnabled:success];
+                    [[self buttonBuyNowDesignerOneYear] setHidden:NO];
+                    [[self buttonBuyNowDesignerOneMonth] setEnabled:success];
+                    [[self buttonBuyNowDesignerOneMonth] setHidden:NO];
                 } else if ([AppDelegate isMadViewer]) {
+                    [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
                     [[self buttonBuyNowViewerOneYear] setEnabled:success];
                     [[self buttonBuyNowViewerOneYear] setHidden:NO];
                     [[self buttonBuyNowViewerOneMonth] setEnabled:success];
@@ -130,7 +153,13 @@
                         
                         [priceFormatter setLocale:[product priceLocale]];
                         NSString *priceString = [priceFormatter stringFromNumber:[product price]];
-                        [[self buttonBuyNow] setTitle:priceString forState:UIControlStateNormal];
+                        [[self buttonBuyNowDesignerOneYear] setTitle:priceString forState:UIControlStateNormal];
+                        
+                    } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionMonth1]) {
+
+                        [priceFormatter setLocale:[product priceLocale]];
+                        NSString *priceString = [priceFormatter stringFromNumber:[product price]];
+                        [[self buttonBuyNowDesignerOneMonth] setTitle:priceString forState:UIControlStateNormal];
                         
                     } else if ([[product productIdentifier] isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
                         
@@ -162,8 +191,10 @@
         }
     };
     [self setStandardCompletion:completion];
+    [[[self viewBuyButtonsBackground] layer] setCornerRadius:6.6666f];
     if ([AppDelegate isMadDesigner]) {
-        [[[self buttonBuyNow] layer] setCornerRadius:6.6666f];
+        [[[self buttonBuyNowDesignerOneYear] layer] setCornerRadius:6.6666f];
+        [[[self buttonBuyNowDesignerOneMonth] layer] setCornerRadius:6.6666f];
     } else if ([AppDelegate isMadViewer]) {
         [[[self buttonBuyNowViewerOneYear] layer] setCornerRadius:6.6666f];
         [[[self buttonBuyNowViewerOneMonth] layer] setCornerRadius:6.6666f];
@@ -173,10 +204,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[self buttonBuyNow] setHidden:YES];
     if ([AppDelegate isMadDesigner]) {
-        [[self buttonBuyNow] setHidden:YES];
+        //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+        [[self buttonBuyNowDesignerOneYear] setHidden:YES];
+        [[self buttonBuyNowDesignerOneMonth] setHidden:YES];
     } else if ([AppDelegate isMadViewer]) {
+        //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
         [[self buttonBuyNowViewerOneYear] setHidden:YES];
         [[self buttonBuyNowViewerOneMonth] setHidden:YES];
     }
@@ -193,17 +226,24 @@
     [[self labelsShowWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setHidden: NO];
     }];
+    [[self labelsHideWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [obj setHidden: YES];
+    }];
 }
 
 - (void)hideLicensingDetails {
     [[self labelsShowWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setHidden: YES];
     }];
+    [[self labelsHideWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [obj setHidden: NO];
+    }];
 }
 
 - (void)disableUserInterface {
     if ([AppDelegate isMadDesigner]) {
-        [[self buttonBuyNow] setEnabled:NO];
+        [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
+        [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
     } else if ([AppDelegate isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:NO];
         [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
@@ -214,7 +254,8 @@
 
 - (void)enableUserInterface {
     if ([AppDelegate isMadDesigner]) {
-        [[self buttonBuyNow] setEnabled:YES];
+        [[self buttonBuyNowDesignerOneYear] setEnabled:YES];
+        [[self buttonBuyNowDesignerOneMonth] setEnabled:YES];
     } else if ([AppDelegate isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:YES];
         [[self buttonBuyNowViewerOneMonth] setEnabled:YES];
@@ -231,6 +272,10 @@
     [self licenseProductWithIdentifier:MTStoreKitProductIdentifierDesignerSubscriptionYear1];
 }
 
+- (IBAction)licenseDesignerOneMonth:(id)sender {
+    [self licenseProductWithIdentifier:MTStoreKitProductIdentifierDesignerSubscriptionMonth1];
+}
+
 - (IBAction)licenseViewerOneYear:(id)sender {
     [self licenseProductWithIdentifier:MTStoreKitProductIdentifierViewerSubscriptionYear1];
 }
@@ -240,8 +285,10 @@
 }
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
+    [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
     if ([AppDelegate isMadDesigner]) {
-        [[self buttonBuyNow] setHidden:YES];
+        [[self buttonBuyNowDesignerOneYear] setHidden:YES];
+        [[self buttonBuyNowDesignerOneMonth] setHidden:YES];
     } else if ([AppDelegate isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setHidden:YES];
         [[self buttonBuyNowViewerOneMonth] setHidden:YES];

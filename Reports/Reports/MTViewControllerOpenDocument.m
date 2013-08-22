@@ -293,6 +293,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         [[segue destinationViewController] setDelegate:self];
         
+    } else if ([[segue identifier] isEqualToString:@"MTSegueDetails"] || [[segue identifier] isEqualToString:@"MTSegueAbout"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
+        [aboutViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
 
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -629,21 +633,25 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    if (documentReport != nil) {
-        [documentReport saveToURL:[documentReport fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-            if (success) {
-                [documentReport closeWithCompletionHandler:^(BOOL success) {
+    [self dismissViewControllerAnimated:animated completion:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
+        MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+        if (documentReport != nil) {
+            [documentReport saveToURL:[documentReport fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                if (success) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [documentReport closeWithCompletionHandler:^(BOOL success) {
+                            
+                        }];
+                    });
                     
-                }];
-                [[MTActiveDocument sharedDocument] setActiveDocument: nil];
-            }
-            [self dismissViewControllerAnimated:animated completion:nil];
-        }];
-    } else {
-        [self dismissViewControllerAnimated:animated completion:nil];
-    }
-    [documentReport release];
+                }
+                
+            }];
+            [[MTActiveDocument sharedDocument] setActiveDocument: nil];
+        }
+            [documentReport release];
+    });
 }
 
 

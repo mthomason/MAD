@@ -17,5 +17,6 @@
 - (NSString *)tableFieldKey;
 + (id)getQueryFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (RptqQueryField *)createNewQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (NSString *)toStringReverse;
 
 @end

@@ -546,9 +546,15 @@
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissViewControllerAnimated:YES completion:^{ }];
-    
-    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:[[self activeDocument] managedObjectContext]];    
-    [[self activeDocument] saveContext];
+    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:managedObjectContext];
+    [managedObjectContext save:nil];
+    NSInteger suspectedSection = 2;
+    MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
+    if (tableSection == MTQuerySectionsLinks) {
+        NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
+        [[self tableViewQueryBuilder] reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {

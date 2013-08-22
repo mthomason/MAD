@@ -672,26 +672,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)enableUserInteraction:(id)sender {
-    if ([sender isKindOfClass:[UIControl class]]) {
-        [sender setEnabled:YES];
-    } else if ([sender isKindOfClass:[UIView class]]) {
-        [sender setUserInteractionEnabled:YES];
-        for (UIView *subview in [sender subviews]) {
-            [self enableUserInteraction:sender];
-        }
-    }
-    [[self view] setUserInteractionEnabled:NO];
+    [[self view] setUserInteractionEnabled:YES];
 }
 
 - (void)disableUserInteraction:(id)sender {
-    if ([sender isKindOfClass:[UIControl class]]) {
-        [sender setEnabled:NO];
-    } else if ([sender isKindOfClass:[UIView class]]) {
-        [sender setUserInteractionEnabled:NO];
-        for (UIView *subview in [sender subviews]) {
-            [self disableUserInteraction:sender];
-        }
-    }
     [[self view] setUserInteractionEnabled:NO];
 }
 

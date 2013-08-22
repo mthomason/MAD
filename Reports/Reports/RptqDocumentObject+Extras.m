@@ -191,12 +191,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     switch ([[self type] integerValue]) {
     
         case MTDocumentObjectTypeAggregate: {
-            //NSInteger groupNumber = [[[self isGroupKey] groupNumber] integerValue];
-            //NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
-            //                                                             numberStyle: NSNumberFormatterSpellOutStyle];
-            
             RptqDocumentObjectAggregate *aggregateObject = [self isAggregate];
-            //MTAggregateGroupByType groupType = [[aggregateObject groupType] integerValue];
             if ([aggregateObject aggregateField] != nil) {
                 result = [NSString stringWithFormat:@"Aggregate: %@", [[aggregateObject aggregateField] toStringHumanReadable]];
             } else if ([aggregateObject aggregateFunction] != nil) {
@@ -228,7 +223,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         
         case MTDocumentObjectTypeLabelDynamic:
-            result = [[[self isLabelDataField] referencesQueryField] toStringHumanReadable];
+            result = [[[self isLabelDataField] referencesQueryField] toStringReverse];
             break;
         
         case MTDocumentObjectTypeLabelStatic:
