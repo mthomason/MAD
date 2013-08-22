@@ -18,7 +18,7 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Mobile Analytics Document</string>
-			<key>LSHandlerRank</key>
+			<key>LSHandleRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
@@ -34,14 +34,14 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon-29-Designer-Lagacy.png</string>
-		<string>Icon-29-Designer-Lagacy@2x.png</string>
-		<string>Icon-50-Designer-Lagacy.png</string>
-		<string>Icon-50-Designer-Lagacy@2x.png</string>
-		<string>Icon-57-Designer-Lagacy.png</string>
-		<string>Icon-57-Designer-Lagacy@2x.png</string>
-		<string>Icon-72-Designer-Lagacy.png</string>
-		<string>Icon-72-Designer-Lagacy@2x.png</string>
+		<string>Icon-29-Viewer-Lagacy.png</string>
+		<string>Icon-29-Viewer-Lagacy@2x.png</string>
+		<string>Icon-50-Viewer-Lagacy.png</string>
+		<string>Icon-50-Viewer-Lagacy@2x.png</string>
+		<string>Icon-57-Viewer-Lagacy.png</string>
+		<string>Icon-57-Viewer-Lagacy@2x.png</string>
+		<string>Icon-72-Viewer-Lagacy.png</string>
+		<string>Icon-72-Viewer-Lagacy@2x.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -49,21 +49,21 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Icon-29-Designer-Lagacy.png</string>
-				<string>Icon-29-Designer-Lagacy@2x.png</string>
-				<string>Icon-50-Designer-Lagacy.png</string>
-				<string>Icon-50-Designer-Lagacy@2x.png</string>
-				<string>Icon-57-Designer-Lagacy.png</string>
-				<string>Icon-57-Designer-Lagacy@2x.png</string>
-				<string>Icon-72-Designer-Lagacy.png</string>
-				<string>Icon-72-Designer-Lagacy@2x.png</string>
+				<string>Icon-29-Viewer-Lagacy.png</string>
+				<string>Icon-29-Viewer-Lagacy@2x.png</string>
+				<string>Icon-50-Viewer-Lagacy.png</string>
+				<string>Icon-50-Viewer-Lagacy@2x.png</string>
+				<string>Icon-57-Viewer-Lagacy.png</string>
+				<string>Icon-57-Viewer-Lagacy@2x.png</string>
+				<string>Icon-72-Viewer-Lagacy.png</string>
+				<string>Icon-72-Viewer-Lagacy@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.everydayapps.mad.designer</string>
+	<string>com.everydayapps.mad.viewer</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -138,5 +138,7 @@
 			<string>MADIcon64x64</string>
 		</dict>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<false/>
 </dict>
 </plist>
