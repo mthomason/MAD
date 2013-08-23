@@ -196,7 +196,33 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return NO;
+    BOOL result = NO;
+    /*
+    if (action == @selector(paste:)) {
+        NSURL *urlToDrop = [[UIPasteboard generalPasteboard] URL];
+        if (urlToDrop != nil) {
+            result = [[urlToDrop pathExtension]  isEqualToString:MTDocumentExtentionMobleApplicationDocument];
+        }
+    }*/
+    return result;
+}
+
+- (void)paste:(id)sender {
+    NSURL *url = [[UIPasteboard generalPasteboard] URL];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
+    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
+                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+    
+    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+    NSError* fileWrittingError = nil;
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    if (fileWrittingError) {
+        fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    }
+    [self updateFileList];
 }
 
 #pragma mark - UIViewController Overrides
@@ -705,10 +731,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)copy:(id)sender {
     [super copy:sender];
-}
-
-- (void)paste:(id)sender {
-    [super paste:sender];
 }
 
 - (IBAction)delete:(id)sender {

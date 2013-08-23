@@ -137,6 +137,7 @@
     
     [[self sliderPagination] setValue:0.0000f];
     [[self sliderPagination] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
+    [[self sliderPagination] addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     [[self sliderPagination] setMinimumValue:0];
 
 }
@@ -144,29 +145,36 @@
 - (void)sliderChangedPage:(id)sender {
     UISlider *slider = (UISlider *)sender;
     float sliderIndex = lroundf([slider value]); // Rounds float to an integer
-    [slider setValue:sliderIndex];               // Sets your slider to this value
-    [self setCurrentPageIndex:sliderIndex];
-    NSInteger initIndex;
-    if ([self currentPageIndex] < [self numberOfPages]) {
-        initIndex = [self currentPageIndex] + 1;
-    } else {
-        initIndex = [self numberOfPages] > 0 ? [self numberOfPages] : 0;
-    }
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
-    [[pageOne view] setFrame:[[self view] bounds]];
-    
-    [pageOne setDelegate:self];
-    
-    [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-        if (finished) {
-            [[pageOne view] setNeedsDisplay];
-            [self resetScreen];
+    if ((int)sliderIndex != [self currentPageIndex]) {
+        //[slider setValue:sliderIndex];               // Sets your slider to this value
+        [self setCurrentPageIndex:sliderIndex];
+        NSInteger initIndex;
+        if ([self currentPageIndex] < [self numberOfPages]) {
+            initIndex = [self currentPageIndex] + 1;
+        } else {
+            initIndex = [self numberOfPages] > 0 ? [self numberOfPages] : 0;
         }
+        MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
+        [[pageOne view] setFrame:[[self view] bounds]];
         
-    }];
-    [pageOne release];
+        [pageOne setDelegate:self];
+        
+        [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+            if (finished) {
+                [[pageOne view] setNeedsDisplay];
+                [self resetScreen];
+            }
+            
+        }];
+        [pageOne release];
+    }
     
     //[self setViewControllers:<#(NSArray *)#> direction:<#(UIPageViewControllerNavigationDirection)#> animated:YES completion:^(BOOL finished) { }]
+}
+- (IBAction)sliderPageDidFinishDrag:(id)sender {
+    UISlider *slider = (UISlider *)sender;
+    float sliderIndex = lroundf([slider value]); // Rounds float to an integer
+    [slider setValue:sliderIndex];               // Sets your slider to this value
 }
 
 - (void)viewWillLayoutSubviews {

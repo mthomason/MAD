@@ -211,7 +211,11 @@
                                 <rect key="frame" x="12" y="6" width="200" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="P4H-rB-Mgg"/>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="P4H-rB-Mgg">
+                                        <connections>
+                                            <action selector="sliderPageDidFinishDrag:" destination="PGc-qB-2PZ" eventType="touchDragExit" id="Uzr-Pf-OMX"/>
+                                        </connections>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1046,12 +1050,12 @@
                                             <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TDS" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v5s-tM-fR1">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MAD Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="v5s-tM-fR1">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="P6Z-BT-uTs"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                     <connections>
                                                         <action selector="documentNameDidEndOnExit:" destination="o1Y-GK-u8f" eventType="editingDidEndOnExit" id="IdH-t7-bma"/>
                                                         <outlet property="delegate" destination="o1Y-GK-u8f" id="TO2-Rf-BgL"/>
@@ -1088,7 +1092,7 @@
                                             <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="testdb.cqyrz0epxrje.us-east-1.rds.amazonaws.com" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q51-fE-7g7">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q51-fE-7g7">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="HFE-qT-sWC"/>
                                                     </constraints>
@@ -1157,12 +1161,12 @@
                                             <rect key="frame" x="31" y="0.0" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="sr22" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Ux-z1-kEL">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Ux-z1-kEL">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="9rQ-qJ-UVV"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <action selector="schemaDidEndOnExit:" destination="o1Y-GK-u8f" eventType="editingDidEndOnExit" id="gEG-Kr-xTS"/>
                                                         <outlet property="delegate" destination="o1Y-GK-u8f" id="Rfc-0b-VKO"/>
@@ -1237,12 +1241,12 @@
                                             <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MAD" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p4U-5G-8eL">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MAD Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="p4U-5G-8eL">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="YGb-4V-h2h"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                     <connections>
                                                         <action selector="documentNameDidEndOnExit:" destination="Y5P-d4-fMD" eventType="editingDidEndOnExit" id="1Yk-r0-YL5"/>
                                                         <outlet property="delegate" destination="Y5P-d4-fMD" id="C8Z-NT-0Ex"/>
@@ -1279,7 +1283,7 @@
                                             <rect key="frame" x="31" y="1" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="everydayapps.com" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UPu-pK-v3y">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UPu-pK-v3y">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="VA1-Bu-Jho"/>
                                                     </constraints>
@@ -1355,7 +1359,7 @@
                                             <rect key="frame" x="31" y="0.0" width="478" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="quotationary" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Hi-aN-hST">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Hi-aN-hST">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="3Ap-OT-Lde"/>
                                                     </constraints>
@@ -4965,7 +4969,6 @@
                                                         <segment title="" image="UIImageAlignLeft20.png"/>
                                                         <segment title="" image="UIImageAlignCenter20.png"/>
                                                         <segment title="" image="UIImageAlignRight20.png"/>
-                                                        <segment title="" image="UIImageJustified20.png"/>
                                                     </segments>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="SNn-qs-hnu" eventType="valueChanged" id="AxQ-O0-ci0"/>
@@ -6196,7 +6199,6 @@
         <image name="UIImageExportTypeMySQL.png" width="64" height="64"/>
         <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageItalic20.png" width="20" height="20"/>
-        <image name="UIImageJustified20.png" width="20" height="20"/>
         <image name="UIImageStrikethrough20.png" width="20" height="20"/>
         <image name="UIImageUnderline20.png" width="20" height="20"/>
     </resources>

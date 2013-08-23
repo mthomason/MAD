@@ -19,23 +19,31 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    if ([self verifiedUser]) {
-        if ([[self verifiedExperationDate] compare:[NSDate date]] == NSOrderedDescending) {
-            completion(YES, [self verifiedExperationDate]);
+    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (YES) {
+        if ([self verifiedUser]) {
+            if ([[self verifiedExperationDate] compare:[NSDate date]] == NSOrderedDescending) {
+                completion(YES, [self verifiedExperationDate]);
+            } else {
+                completion(NO, nil);
+            }
         } else {
-            completion(NO, nil);
+            [MTStoreKitController licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
+                [self setVerifiedUser:isLicensedUser];
+                [self setVerifiedExperationDate:experationDate];
+                completion(isLicensedUser, experationDate);
+            }];
         }
     } else {
-        [MTStoreKitController licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-            [self setVerifiedUser:isLicensedUser];
-            [self setVerifiedExperationDate:experationDate];
-            completion(isLicensedUser, experationDate);
-        }];
+        completion(NO, nil);
     }
+
 }
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
     
+    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (YES) {
         NSDate *experationDate = [MTStoreKitController experationDate];
         BOOL isLicensedUser = NO;
         if (experationDate != nil) {
@@ -53,8 +61,11 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
                     break;
             }
         }
-    
-    completion(isLicensedUser, experationDate);
+        
+        completion(isLicensedUser, experationDate);
+    } else {
+        completion(NO, nil);
+    }
 }
 
 + (NSDate *)dateFromReceiptString:(NSString *)dateString {

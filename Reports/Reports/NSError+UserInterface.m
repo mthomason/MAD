@@ -105,15 +105,15 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 - (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion {
     
     NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc)];
+    //NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc)];
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
                                                         message: [self localizedFailureReason]
                                               cancelButtonTitle: continueButtonTitle
-                                               otherButtonTitle: otherButtonTitles
+                                               otherButtonTitle: nil
                                                       onDismiss:^(NSInteger buttonIndex) {
 
-                                                          exit(0);
-
+                                                          //exit(0);
+                                                          completion(NO);
                                                       } onCancel:^(){
 
                                                           completion(YES);

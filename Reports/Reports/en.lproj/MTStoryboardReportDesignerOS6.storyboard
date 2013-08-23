@@ -1015,10 +1015,10 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Test Server" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x90-TL-CIK">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MAD Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="x90-TL-CIK">
                                                     <constraints>
+                                                        <constraint firstAttribute="width" constant="120" id="Cdb-BU-IOC"/>
                                                         <constraint firstAttribute="height" constant="31" id="EFu-zw-C7t"/>
-                                                        <constraint firstAttribute="width" constant="120" id="a5M-ri-AhJ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no"/>
@@ -1050,52 +1050,14 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="MySQL Database Settings" id="gEn-Ea-xVG">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="01k-SF-r3r">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="KKL-pS-CjQ">
                                         <rect key="frame" x="0.0" y="138" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="quotationary" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G2O-Pv-hlp">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="31" id="fHP-1J-fpx"/>
-                                                        <constraint firstAttribute="width" constant="120" id="zVf-yl-9xb"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
-                                                    <connections>
-                                                        <action selector="schemaDidEndOnExit:" destination="OZq-ny-MYn" eventType="editingDidEndOnExit" id="AT2-it-nJ8"/>
-                                                        <outlet property="delegate" destination="OZq-ny-MYn" id="2b6-ZE-OLB"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pFO-PU-tlN">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="132" id="Cyc-fd-AH0"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="pFO-PU-tlN" firstAttribute="leading" secondItem="01k-SF-r3r" secondAttribute="leading" constant="30" id="JKg-dQ-PuC"/>
-                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="leading" secondItem="pFO-PU-tlN" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="QhJ-MH-nao"/>
-                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="centerY" secondItem="01k-SF-r3r" secondAttribute="centerY" type="default" id="Ve4-oj-aTf"/>
-                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="centerY" secondItem="pFO-PU-tlN" secondAttribute="centerY" type="default" id="pdS-Ci-YWK"/>
-                                        </constraints>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="KKL-pS-CjQ">
-                                        <rect key="frame" x="0.0" y="183" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="everydayapps.com" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="44Z-eU-J47">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="44Z-eU-J47">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="JUd-ZN-BPK"/>
                                                         <constraint firstAttribute="height" constant="31" id="QDl-44-BRh"/>
@@ -1127,19 +1089,19 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="X4p-iK-ttL">
-                                        <rect key="frame" x="0.0" y="227" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="183" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="A4e-nG-poN">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="A4e-nG-poN">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="XAN-gD-ttF"/>
                                                         <constraint firstAttribute="height" constant="31" id="aWQ-V2-1Go"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                     <connections>
                                                         <action selector="portDidEndOnExit:" destination="OZq-ny-MYn" eventType="editingDidEndOnExit" id="x1X-oD-zUu"/>
                                                         <outlet property="delegate" destination="OZq-ny-MYn" id="uux-jD-w5V"/>
@@ -1162,6 +1124,44 @@
                                             <constraint firstItem="fpz-SH-dra" firstAttribute="centerY" secondItem="A4e-nG-poN" secondAttribute="centerY" type="default" id="p9Y-fD-pGV"/>
                                             <constraint firstItem="A4e-nG-poN" firstAttribute="top" secondItem="X4p-iK-ttL" secondAttribute="top" constant="6" id="pwW-UB-FZh"/>
                                             <constraint firstItem="fpz-SH-dra" firstAttribute="leading" secondItem="X4p-iK-ttL" secondAttribute="leading" constant="30" id="q8e-xp-Pki"/>
+                                        </constraints>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="01k-SF-r3r">
+                                        <rect key="frame" x="0.0" y="227" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G2O-Pv-hlp">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="fHP-1J-fpx"/>
+                                                        <constraint firstAttribute="width" constant="120" id="zVf-yl-9xb"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <connections>
+                                                        <action selector="schemaDidEndOnExit:" destination="OZq-ny-MYn" eventType="editingDidEndOnExit" id="AT2-it-nJ8"/>
+                                                        <outlet property="delegate" destination="OZq-ny-MYn" id="2b6-ZE-OLB"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pFO-PU-tlN">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="132" id="Cyc-fd-AH0"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="top" secondItem="01k-SF-r3r" secondAttribute="top" constant="6" id="EqB-0R-VlS"/>
+                                            <constraint firstItem="pFO-PU-tlN" firstAttribute="leading" secondItem="01k-SF-r3r" secondAttribute="leading" constant="30" id="JKg-dQ-PuC"/>
+                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="leading" secondItem="pFO-PU-tlN" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="QhJ-MH-nao"/>
+                                            <constraint firstItem="G2O-Pv-hlp" firstAttribute="centerY" secondItem="pFO-PU-tlN" secondAttribute="centerY" type="default" id="pdS-Ci-YWK"/>
                                         </constraints>
                                     </tableViewCell>
                                 </cells>
@@ -5129,13 +5129,13 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Report" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-7Q-J1P">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TDS Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-7Q-J1P">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="Skc-3O-EMe"/>
                                                         <constraint firstAttribute="height" constant="31" id="XOy-dn-KBI"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                     <connections>
                                                         <action selector="documentNameDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="iv8-rp-aBM"/>
                                                         <outlet property="delegate" destination="c9T-2m-ezv" id="VI5-4i-fM2"/>
@@ -5171,7 +5171,7 @@
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="testdb.cqyrz0epxrje.us-east-1.rds.amazonaws.com" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H3u-Ly-9ie">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H3u-Ly-9ie">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="CGC-CN-qpX"/>
                                                         <constraint firstAttribute="width" constant="120" id="YgT-YV-uDZ"/>
@@ -5233,13 +5233,13 @@
                                             <rect key="frame" x="10" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="sr22" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OVU-zs-dy2">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Required" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OVU-zs-dy2">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="9TI-sy-zy5"/>
                                                         <constraint firstAttribute="height" constant="31" id="MiS-sd-Fho"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                     <connections>
                                                         <action selector="schemaDidEndOnExit:" destination="c9T-2m-ezv" eventType="editingDidEndOnExit" id="IsD-Tz-Ae5"/>
                                                         <outlet property="delegate" destination="c9T-2m-ezv" id="8T4-UV-RTF"/>

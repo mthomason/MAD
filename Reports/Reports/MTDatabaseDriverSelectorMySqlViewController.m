@@ -112,6 +112,8 @@
     [[activitySpinnerViewController view] setCenter:[[self tableView] center]];
     [[self view] addSubview: [activitySpinnerViewController view]];
     
+    //NSURL *temporaryFileWithExtention = [NSURL uniqueTmpUrlForDocumentWithName:[[self textFieldReportName] text] withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
     
