@@ -1060,16 +1060,24 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [allKeys removeObject:@"(null)"];
             }
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
-            if (nullGroupExist) {
-                [allKeysSorted insertObject:@"(null)" atIndex:0];
-            }
-            NSEnumerator *loopEnumerator;
 
-            if ([desc ascending] == NO) {
-                loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
+            
+            NSMutableArray *allKeysSorted = nil;
+            NSEnumerator *loopEnumerator;
+            
+            if (sortSelector != nil) {
+                NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
+                if (nullGroupExist) {
+                    [allKeysSorted insertObject:@"(null)" atIndex:0];
+                }
+                
+                if ([desc ascending] == NO) {
+                    loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
+                } else {
+                    loopEnumerator = [[allKeysSorted objectEnumerator] retain];
+                }
             } else {
-                loopEnumerator = [[allKeysSorted objectEnumerator] retain];
+                loopEnumerator = [[allKeys objectEnumerator] retain];
             }
 
             [desc release];

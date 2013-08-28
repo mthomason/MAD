@@ -574,10 +574,13 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
        viewControllerAfterViewController:(UIViewController *)viewController {
-    
     MTReportViewerReportPageViewController *result = nil;
     if ([self pageIsAnimating] == NO) {
-        NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+        NSUInteger visablePageNumber = 0;
+        MTReportViewerReportPageViewController * lastPage = (MTReportViewerReportPageViewController *)viewController;
+        if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
+            visablePageNumber = [lastPage pageNumber];
+        }
         if (visablePageNumber + 1 <= [self numberOfPages]) {
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1  ofPages:[self numberOfPages]];
             [result setDelegate: self];
@@ -594,7 +597,11 @@
     
     MTReportViewerReportPageViewController *result = nil;
     if ([self pageIsAnimating] == NO) {
-        NSUInteger visablePageNumber = [(MTReportViewerReportPageViewController *)viewController pageNumber];
+        NSUInteger visablePageNumber = 0;
+        MTReportViewerReportPageViewController * lastPage = (MTReportViewerReportPageViewController *)viewController;
+        if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
+            visablePageNumber = [lastPage pageNumber];
+        }
         if (visablePageNumber - 1 > 0) {
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1 ofPages:[self numberOfPages]];
             [result setDelegate: self];

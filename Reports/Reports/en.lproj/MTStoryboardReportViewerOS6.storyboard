@@ -336,6 +336,7 @@
                         <outlet property="labelDesignerLicenseOneYearTitle" destination="DYK-yQ-DME" id="npT-Qb-ocR"/>
                         <outlet property="labelDesignerValueActivated" destination="btS-mw-9Jt" id="0XW-xc-ESA"/>
                         <outlet property="labelDesignerValueExpires" destination="S0R-XX-EvI" id="2JZ-Ns-hOk"/>
+                        <outlet property="viewBuyButtonsBackground" destination="Yw0-Xv-vqo" id="O8A-gl-3dG"/>
                         <outletCollection property="labelsShowWhenActivated" destination="btS-mw-9Jt" id="pY3-nC-OdY"/>
                         <outletCollection property="labelsShowWhenActivated" destination="S0R-XX-EvI" id="GD2-yY-NnP"/>
                         <outletCollection property="labelsShowWhenActivated" destination="kDy-62-pr8" id="0Wq-Yc-Dw2"/>
@@ -401,15 +402,10 @@
                                 <rect key="frame" x="12" y="6" width="170" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="J0x-wc-3Vd">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="166" type="user" id="qck-ZX-aQ6"/>
-                                        </constraints>
-                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="J0x-wc-3Vd"/>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="J0x-wc-3Vd" firstAttribute="centerX" secondItem="gkf-HY-6tX" secondAttribute="centerX" type="user" id="AJL-ip-cwP"/>
                                     <constraint firstItem="J0x-wc-3Vd" firstAttribute="leading" secondItem="gkf-HY-6tX" secondAttribute="leading" constant="2" type="user" id="IZe-Y5-WY0"/>
                                     <constraint firstAttribute="trailing" secondItem="J0x-wc-3Vd" secondAttribute="trailing" constant="2" type="user" id="VzY-Xv-OcA"/>
                                     <constraint firstItem="J0x-wc-3Vd" firstAttribute="top" secondItem="gkf-HY-6tX" secondAttribute="top" constant="6" id="qye-Qw-4Sm"/>
