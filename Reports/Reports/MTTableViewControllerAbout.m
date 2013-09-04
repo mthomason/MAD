@@ -17,6 +17,10 @@
 
 @implementation MTTableViewControllerAbout
 
+- (IBAction)unwindToAbout:(UIStoryboardSegue *)action {
+    
+}
+
 - (IBAction)cancel:(id)sender {
     [[self delegate] viewControllerDidCancel:self];
 }
@@ -52,7 +56,10 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [[segue destinationViewController] setDelegate:[self delegate]];
+    if ([[segue identifier] isEqualToString:@"MTSegueAboutGettingStarted"] ||
+        [[segue identifier] isEqualToString:@"MTSegueAboutSwipeNext"]) {
+        [[segue destinationViewController] setDelegate:[self delegate]];
+    }
 }
 
 @end

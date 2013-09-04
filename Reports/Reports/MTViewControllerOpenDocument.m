@@ -88,6 +88,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @implementation MTViewControllerOpenDocument
 
+- (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
+    
+}
+
 - (void)dealloc {
     [_advancedQueryBuilder release]; _advancedQueryBuilder = nil;
     [_standardQueryBuilder release]; _standardQueryBuilder = nil;

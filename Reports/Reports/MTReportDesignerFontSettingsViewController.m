@@ -140,25 +140,47 @@
     UIImage *imageButtonHighlighted = [UIImage imageNamed:@"UIButtonHighlighted"];
     UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
 
-    [[self buttonBold] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
-    [[self buttonBold] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
-    [[self buttonBold] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+    if ([UIDevice isLagacyOS]) {
 
-    [[self buttonItalic] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
-    [[self buttonItalic] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
-    [[self buttonItalic] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+        [[self buttonBold] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
+        [[self buttonBold] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
+        [[self buttonBold] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
 
-    [[self buttonStrike] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
-    [[self buttonStrike] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
-    [[self buttonStrike] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+        [[self buttonItalic] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
+        [[self buttonItalic] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
+        [[self buttonItalic] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+        
+        [[self buttonStrike] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
+        [[self buttonStrike] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
+        [[self buttonStrike] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+        
+        [[self buttonUnderline] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
+        [[self buttonUnderline] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
+        [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
 
-    [[self buttonUnderline] setBackgroundImage:[imageButton resizableImage] forState:UIControlStateNormal];
-    [[self buttonUnderline] setBackgroundImage:[imageButtonHighlighted resizableImage] forState:UIControlStateHighlighted];
-    [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
+    } else {
+        [[[self buttonBold] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonBold] layer] setCornerRadius:6.6666f];
+        [[[self buttonBold] layer] setBorderWidth:1.0000f];
+        
+        [[[self buttonItalic] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonItalic] layer] setCornerRadius:6.6666f];
+        [[[self buttonItalic] layer] setBorderWidth:1.0000f];
+        
+        [[[self buttonStrike] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonStrike] layer] setCornerRadius:6.6666f];
+        [[[self buttonStrike] layer] setBorderWidth:1.0000f];
+        
+        [[[self buttonUnderline] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonUnderline] layer] setCornerRadius:6.6666f];
+        [[[self buttonUnderline] layer] setBorderWidth:1.0000f];
+    }
     
-    UIColor *tintColor = [UIColor clearColor];
-    [[self segmentedControlHorizontalAlignment] setTintColor:tintColor];
-    [[[[self segmentedControlVerticalAlignment] subviews] objectAtIndex:0] setTintColor:tintColor];
+    if ([UIDevice isLagacyOS]) {
+        UIColor *tintColor = [UIColor clearColor];
+        [[self segmentedControlHorizontalAlignment] setTintColor:tintColor];
+        [[[[self segmentedControlVerticalAlignment] subviews] objectAtIndex:0] setTintColor:tintColor];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
