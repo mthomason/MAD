@@ -19,6 +19,7 @@ extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
 @property (nonatomic, assign) id <MTAggregateFunctionsViewControllerDelegate> delegate;
 
+@property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
 - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end

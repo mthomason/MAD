@@ -14,11 +14,20 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
-@property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
 
 @end
 
 @implementation MTAggregateFunctionsViewController
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([[segue identifier] isEqualToString:@"MTSegueSelectAggregateFunction"]) {
+        UITableViewCell *tableViewCell = (UITableViewCell *)sender;
+        [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+        [self setSelectedFunctionType: [tableViewCell tag]];
+    }
+}
 
 - (void)dealloc {
     [_tableViewCells release];
@@ -50,11 +59,12 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
                     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
                 }
             }
-
+            
         });
     });
     
 }
+
 
 #pragma mark - View lifecycle
 
@@ -103,10 +113,12 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     
     UITableViewCell *tableViewCell = [[tableView cellForRowAtIndexPath:indexPath] retain];
     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-    _selectedFunctionType = [tableViewCell tag];
+    [self setSelectedFunctionType: [tableViewCell tag]];
     [tableViewCell release];
     
-    [[self delegate] didSelectFunction: [self selectedFunctionType]];
+    if ([self delegate] != nil) {
+        [[self delegate] didSelectFunction: [self selectedFunctionType]];
+    }
 
 }
 

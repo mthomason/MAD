@@ -98,6 +98,7 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
     MTAggregateFunctionTypeCount = 11,
     MTAggregateFunctionTypeMin = 13,
     MTAggregateFunctionTypeMax = 17,
+    MTAggregateFunctionTypeNotSet = 55,
 };
 
 typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {

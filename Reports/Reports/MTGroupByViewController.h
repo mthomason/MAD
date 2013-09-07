@@ -25,4 +25,9 @@ extern NSString * const MTGroupByViewControllerIdentifier;
 
 @property (nonatomic, assign) id <MTGroupByViewControllerDelegate> delegate;
 
+@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
+@property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
+
+- (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber;
+
 @end

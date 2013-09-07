@@ -1062,11 +1062,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Ou4-Iw-Hzk"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jBj-td-YC7">
-                        <rect key="frame" x="0.0" y="94" width="320" height="474"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="wuc-kl-qu5">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="474"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </view>
                         </subviews>
                         <constraints>
@@ -1078,7 +1078,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="CaN-PA-tPc">
-                        <barButtonItem key="rightBarButtonItem" image="UIImageArrowDown.png" id="eOp-gA-XQd">
+                        <barButtonItem key="rightBarButtonItem" image="850E8720-6819-48B8-A433-5EFF79DC9091" id="eOp-gA-XQd">
                             <connections>
                                 <action selector="done:" destination="xa7-Xt-Nbi" id="Bsi-5N-9UF"/>
                             </connections>
@@ -1090,7 +1090,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8t1-gd-Fse" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1978" y="2999"/>
+            <point key="canvasLocation" x="2854" y="4759"/>
         </scene>
         <!--Database Driver Selector My Sql View Controller - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
@@ -1429,8 +1429,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZVp-q4-o3V">
-                                <rect key="frame" x="278" y="2" width="22" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZVp-q4-o3V">
+                                <rect key="frame" x="279" y="-4" width="22" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1542,8 +1542,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKj-6K-1wS">
-                                <rect key="frame" x="278" y="2" width="22" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKj-6K-1wS">
+                                <rect key="frame" x="277" y="-4" width="22" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1717,7 +1717,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gsQ-BL-IIG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="1652"/>
+            <point key="canvasLocation" x="2536" y="1153"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="gRJ-md-9uF">
@@ -2271,7 +2271,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1s2-Wk-e0O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2692" y="-1112"/>
+            <point key="canvasLocation" x="2521" y="-1522"/>
         </scene>
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="upS-Pr-eds">
@@ -2476,7 +2476,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0L7-bY-ucZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2126" y="3663"/>
+            <point key="canvasLocation" x="1978" y="3663"/>
         </scene>
         <!--Query Builder Predicate Format View Controller - Predicate Format-->
         <scene sceneID="LZp-Pu-coV">
@@ -2713,7 +2713,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yij-uv-ODE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="313"/>
+            <point key="canvasLocation" x="2536" y="-185"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8SR-Vf-dVE">
@@ -2723,7 +2723,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="xa7-Xt-Nbi" kind="relationship" relationship="rootViewController" id="qoN-nQ-7ri"/>
+                        <segue destination="V4K-tV-Wdf" kind="relationship" relationship="rootViewController" id="gSJ-uK-y7G"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYL-Lp-DPD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2763,7 +2763,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mv5-WY-ea2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="2966"/>
+            <point key="canvasLocation" x="3268" y="1153"/>
         </scene>
         <!--Query Builder Add Link Second Field View Controller - Select Second Field-->
         <scene sceneID="Uxo-6R-GU2">
@@ -2805,7 +2805,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l5Y-pQ-a74" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="2309"/>
+            <point key="canvasLocation" x="2893" y="1153"/>
         </scene>
         <!--Query Builder Add Link Join Type View Controller - Select Join Type-->
         <scene sceneID="tQn-xe-W8i">
@@ -2956,7 +2956,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1o-O4-sb0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="1002"/>
+            <point key="canvasLocation" x="2188" y="1153"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="bot-DC-b7W">
@@ -2970,8 +2970,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHI-pK-SIA">
-                                <rect key="frame" x="278" y="2" width="22" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHI-pK-SIA">
+                                <rect key="frame" x="279" y="-4" width="22" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -3021,8 +3021,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2i8-hL-q0w">
-                                <rect key="frame" x="278" y="2" width="22" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2i8-hL-q0w">
+                                <rect key="frame" x="277" y="-4" width="22" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -3112,8 +3112,8 @@
                                 <color key="shadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="shadowOffset" width="1" height="1"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zhX-s8-IqR">
-                                <rect key="frame" x="278" y="2" width="22" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zhX-s8-IqR">
+                                <rect key="frame" x="277" y="-4" width="22" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -4217,13 +4217,14 @@
             </objects>
             <point key="canvasLocation" x="-258" y="3940"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--Report Designer Object Selector View Controller - Document Objects-->
         <scene sceneID="v4Q-Qd-L31">
             <objects>
-                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="V4K-tV-Wdf" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="tAp-4x-DRZ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="V4K-tV-Wdf" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="tAp-4x-DRZ">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="u9d-q4-XaX">
                             <size key="itemSize" width="50" height="50"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -4265,6 +4266,9 @@
                                     <constraint firstAttribute="trailing" secondItem="CCI-th-CWD" secondAttribute="trailing" constant="20" id="kiw-U3-KFi"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
+                                <connections>
+                                    <segue destination="grz-Df-V23" kind="push" identifier="MTSegueNewDocumentObjectDynamicLabelIdentifer" id="MIM-db-jZd"/>
+                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="8" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectWhitespaceCollectionViewCell" id="ZOv-eD-d7E">
                                 <rect key="frame" x="170" y="0.0" width="150" height="80"/>
@@ -4300,6 +4304,9 @@
                                     <constraint firstItem="yRX-GP-zFt" firstAttribute="top" secondItem="ZOv-eD-d7E" secondAttribute="top" constant="13" id="x5j-6U-f88"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
+                                <connections>
+                                    <segue destination="fmR-5o-cXk" kind="unwind" identifier="MTSegueChooseWhitespaceSaveIdentifer" unwindAction="unwindToDesigner:" id="0h6-L0-X1K"/>
+                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectLabelCollectionViewCell" id="gfZ-mx-eyU">
                                 <rect key="frame" x="0.0" y="90" width="150" height="80"/>
@@ -4335,6 +4342,9 @@
                                     <constraint firstItem="I3g-Zf-phx" firstAttribute="leading" secondItem="gfZ-mx-eyU" secondAttribute="leading" constant="20" id="yNz-tU-ENy"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
+                                <connections>
+                                    <segue destination="2pr-Qb-pVK" kind="push" id="ahh-m1-Iwq"/>
+                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="f4g-SP-ifp">
                                 <rect key="frame" x="170" y="90" width="150" height="80"/>
@@ -4440,6 +4450,9 @@
                                     <constraint firstItem="KuJ-AG-Exv" firstAttribute="leading" secondItem="afx-kG-EgU" secondAttribute="leading" constant="20" id="vKK-zA-UyO"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
+                                <connections>
+                                    <segue destination="DqB-KB-PyC" kind="push" id="Twf-og-SpO"/>
+                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="jCb-LZ-0jl">
                                 <rect key="frame" x="0.0" y="270" width="150" height="80"/>
@@ -4475,6 +4488,9 @@
                                     <constraint firstItem="M3l-6C-Ic0" firstAttribute="leading" secondItem="jCb-LZ-0jl" secondAttribute="leading" constant="20" id="whn-qa-ngv"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
+                                <connections>
+                                    <segue destination="fmR-5o-cXk" kind="unwind" identifier="MTSegueChooseImageSaveIdentifer" unwindAction="unwindToDesigner:" id="IAX-R8-awZ"/>
+                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="6" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectGroupKeyCollectionViewCell" id="jMP-Hu-6N0">
                                 <rect key="frame" x="170" y="270" width="150" height="80"/>
@@ -4514,15 +4530,25 @@
                         </cells>
                         <connections>
                             <outlet property="dataSource" destination="V4K-tV-Wdf" id="QH2-bJ-3Bj"/>
-                            <outlet property="delegate" destination="V4K-tV-Wdf" id="paz-nk-Gzx"/>
                         </connections>
                     </collectionView>
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Document Objects" id="ArO-uj-tVb">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Z6F-eo-bpN">
+                            <connections>
+                                <segue destination="fmR-5o-cXk" kind="unwind" unwindAction="unwindToDesigner:" id="Xph-Qp-haW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="view" destination="tAp-4x-DRZ" id="Otl-Cf-9ia"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4FE-hR-Scw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="fmR-5o-cXk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-1318" y="3266"/>
+            <point key="canvasLocation" x="1978" y="2999"/>
         </scene>
         <!--Report Designer Document Object Format-->
         <scene sceneID="kMN-fL-Oq2">
@@ -4628,12 +4654,12 @@
             </objects>
             <point key="canvasLocation" x="-620" y="3266"/>
         </scene>
-        <!--Document Object New Static Label View Controller-->
+        <!--Document Object New Static Label View Controller - New Static Label-->
         <scene sceneID="jEa-zS-D43">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewStaticLabelViewControllerIdentifier" id="2pr-Qb-pVK" customClass="MTDocumentObjectNewStaticLabelViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2027" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ckR-ZX-Lrg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4681,28 +4707,35 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <nil key="simulatedStatusBarMetrics"/>
+                    <navigationItem key="navigationItem" title="New Static Label" id="SqB-oZ-13C">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="37A-KW-1Gh">
+                            <connections>
+                                <segue destination="LU4-A6-01r" kind="unwind" identifier="MTSegueNewDocumentObjectStaticLabelSaveIdentifer" unwindAction="unwindToDesigner:" id="ye0-SP-hky"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="labelTextLabel" destination="tcP-AM-LOj" id="5gZ-WU-fWx"/>
                         <outlet property="labelTextTextbox" destination="KLq-Ib-Yse" id="zo0-4k-Vzk"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gLM-OU-FT7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="LU4-A6-01r" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-258" y="3266"/>
+            <point key="canvasLocation" x="2516" y="2350"/>
         </scene>
-        <!--Aggregate Functions View Controller-->
+        <!--Aggregate Functions View Controller - Aggregate Functions-->
         <scene sceneID="qMF-lU-CNY">
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="kfc-Go-Hl2" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="YsU-4W-W8h">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection id="uew-KJ-PBT">
                                 <cells>
-                                    <tableViewCell tag="11" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="WKA-ek-v12" style="IBUITableViewCellStyleDefault" id="1FL-lI-UQW">
+                                    <tableViewCell tag="11" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellCount" textLabel="WKA-ek-v12" style="IBUITableViewCellStyleDefault" id="1FL-lI-UQW">
                                         <rect key="frame" x="0.0" y="35" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1FL-lI-UQW" id="K2q-a6-elx">
@@ -4749,8 +4782,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionCount" unwindAction="unwindToNewAggregateFunction:" id="ell-dv-mqA"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="5" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="vJW-eE-Qed" style="IBUITableViewCellStyleDefault" id="5h9-5I-q5v">
+                                    <tableViewCell tag="5" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellFirst" textLabel="vJW-eE-Qed" style="IBUITableViewCellStyleDefault" id="5h9-5I-q5v">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5h9-5I-q5v" id="xxs-7i-Sye">
@@ -4797,8 +4833,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionFirst" unwindAction="unwindToNewAggregateFunction:" id="P1W-Lx-QCg"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="7" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="uXG-Av-Kbp" style="IBUITableViewCellStyleDefault" id="yXL-5k-tBu">
+                                    <tableViewCell tag="7" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellLast" textLabel="uXG-Av-Kbp" style="IBUITableViewCellStyleDefault" id="yXL-5k-tBu">
                                         <rect key="frame" x="0.0" y="123" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yXL-5k-tBu" id="GEe-5R-xla">
@@ -4845,8 +4884,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionLast" unwindAction="unwindToNewAggregateFunction:" id="qsp-XS-bVH"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="17" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="RsJ-v4-aPE" style="IBUITableViewCellStyleDefault" id="xvK-Gd-wyn">
+                                    <tableViewCell tag="17" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMax" textLabel="RsJ-v4-aPE" style="IBUITableViewCellStyleDefault" id="xvK-Gd-wyn">
                                         <rect key="frame" x="0.0" y="167" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvK-Gd-wyn" id="NxR-Ac-CEQ">
@@ -4893,8 +4935,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionMaximum" unwindAction="unwindToNewAggregateFunction:" id="FyH-sG-Vg0"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="AVq-i7-G3P" style="IBUITableViewCellStyleDefault" id="Bjo-LF-mwu">
+                                    <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMean" textLabel="AVq-i7-G3P" style="IBUITableViewCellStyleDefault" id="Bjo-LF-mwu">
                                         <rect key="frame" x="0.0" y="211" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bjo-LF-mwu" id="NC7-Sn-H13">
@@ -4942,8 +4987,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionMean" unwindAction="unwindToNewAggregateFunction:" id="da3-PA-BHT"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="13" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="By3-ac-yW9" style="IBUITableViewCellStyleDefault" id="DNj-VU-FGi">
+                                    <tableViewCell tag="13" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMin" textLabel="By3-ac-yW9" style="IBUITableViewCellStyleDefault" id="DNj-VU-FGi">
                                         <rect key="frame" x="0.0" y="255" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DNj-VU-FGi" id="Nit-Ch-bFr">
@@ -5011,8 +5059,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionMinimum" unwindAction="unwindToNewAggregateFunction:" id="wpT-qC-MIT"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell tag="2" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="4q5-ZM-qmb" style="IBUITableViewCellStyleDefault" id="2vj-Js-5jF">
+                                    <tableViewCell tag="2" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellSum" textLabel="4q5-ZM-qmb" style="IBUITableViewCellStyleDefault" id="2vj-Js-5jF">
                                         <rect key="frame" x="0.0" y="299" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2vj-Js-5jF" id="QlB-WY-Muw">
@@ -5059,6 +5110,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zVe-Se-p5x" kind="unwind" identifier="MTSegueAggregateFunctionSum" unwindAction="unwindToNewAggregateFunction:" id="HWy-2b-rom"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -5069,7 +5123,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" id="YpA-d3-heA"/>
+                    <navigationItem key="navigationItem" title="Aggregate Functions" id="YpA-d3-heA"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outletCollection property="tableViewCells" destination="2vj-Js-5jF" id="RJP-mY-Nrj"/>
@@ -5082,15 +5136,16 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="teM-rA-Clp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="zVe-Se-p5x" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="94" y="3266"/>
+            <point key="canvasLocation" x="2960" y="3004"/>
         </scene>
-        <!--Document Object New Aggregate View Controller-->
+        <!--Document Object New Aggregate View Controller - New Aggregate Function-->
         <scene sceneID="PaV-8X-hq2">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="DqB-KB-PyC" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2017" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="S6h-xk-UdQ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -5104,10 +5159,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hqs-5G-Czj">
-                                                    <rect key="frame" x="15" y="12" width="191" height="21"/>
+                                                    <rect key="frame" x="15" y="12" width="118" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <attributedString key="attributedText">
-                                                        <fragment content="Aggrage Function ">
+                                                        <fragment content="Function ">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <font key="NSFont" size="17" name="Helvetica-Bold"/>
@@ -5133,6 +5188,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="kfc-Go-Hl2" kind="push" identifier="MTSegueAggregateFunctionChooser" id="7Vu-d0-dZ8"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="wis-r1-BMv" detailTextLabel="Wob-QN-G1h" style="IBUITableViewCellStyleValue1" id="0qI-uE-cmn">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
@@ -5171,6 +5229,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Ibv-MJ-tzZ" kind="push" id="lKB-1q-Zra"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="br6-el-gnb" detailTextLabel="CDj-F5-Wl2" style="IBUITableViewCellStyleValue1" id="Hy0-qg-iQg">
                                         <rect key="frame" x="0.0" y="123" width="320" height="44"/>
@@ -5214,6 +5275,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="ZKJ-dl-Aik" kind="push" identifier="MTSegueGroupByPush" id="M4e-n5-BhK"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -5224,27 +5288,36 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="New Aggregate Function" id="D2f-Zx-FBb">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="s3b-1z-fxY">
+                            <connections>
+                                <segue destination="obb-Ve-335" kind="unwind" identifier="MTSegueNewDocumentObjectAggregateLabelSaveIdentifer" unwindAction="unwindToDesigner:" id="quU-Lm-SHW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="navigationItem" destination="D2f-Zx-FBb" id="DgE-tW-TmE"/>
                         <outlet property="tableViewCellAggrageFunction" destination="29E-ga-Fcs" id="oa7-b7-bLE"/>
                         <outlet property="tableViewCellAggregateGroupBy" destination="Hy0-qg-iQg" id="gI9-IF-Jlp"/>
                         <outlet property="tableViewCellAggregateInput" destination="0qI-uE-cmn" id="V92-SU-I8w"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bg4-jD-bYN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="obb-Ve-335" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-1318" y="3940"/>
+            <point key="canvasLocation" x="2516" y="2999"/>
         </scene>
-        <!--Group By View Controller-->
+        <!--Group By View Controller - Group By-->
         <scene sceneID="cPV-ne-a30">
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="ZKJ-dl-Aik" customClass="MTGroupByViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RuD-x0-UW6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTGroupByTableViewCell" textLabel="3sC-Ub-O24" style="IBUITableViewCellStyleDefault" id="quE-88-xBs">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTGroupByTableViewCell" textLabel="3sC-Ub-O24" style="IBUITableViewCellStyleDefault" id="quE-88-xBs">
                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="quE-88-xBs" id="BUz-I8-xhH">
@@ -5267,6 +5340,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="ctm-VL-BgV" kind="unwind" identifier="MTSegueAggregateGroupTypeSave" unwindAction="unwindToNewAggregateFunction:" id="gEi-D4-jhx"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -5276,12 +5352,13 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" id="J2u-vf-cTw"/>
-                    <nil key="simulatedStatusBarMetrics"/>
+                    <navigationItem key="navigationItem" title="Group By" id="J2u-vf-cTw"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GtG-aJ-LpJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ctm-VL-BgV" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-966" y="3940"/>
+            <point key="canvasLocation" x="2960" y="3663"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="MGX-PM-Jmm">
@@ -5393,7 +5470,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbk-tB-kXP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2516" y="-363"/>
+            <point key="canvasLocation" x="2521" y="-842"/>
         </scene>
         <!--Database Driver Selector My Sql View Controller - SQL Server-->
         <scene sceneID="uTI-q1-IJ8">
@@ -6178,8 +6255,185 @@
             </objects>
             <point key="canvasLocation" x="160" y="5468"/>
         </scene>
+        <!--Query Builder Choose Field View Controller - Select Field-->
+        <scene sceneID="SWP-y2-mAo">
+            <objects>
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldDataObject" id="grz-Df-V23" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="E6S-gK-K4F">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="aZn-rO-7Jv" detailTextLabel="Skp-0w-e9X" style="IBUITableViewCellStyleValue1" id="136-7c-UFR">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="136-7c-UFR" id="HC4-wQ-0wr">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="aZn-rO-7Jv">
+                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Skp-0w-e9X">
+                                            <rect key="frame" x="261" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="1fM-xq-pvJ" kind="unwind" identifier="MTSegueNewDocumentObjectDynamicLabelSaveIdentifer" unwindAction="unwindToDesigner:" id="YRa-Ez-A4V"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="grz-Df-V23" id="9We-6l-ddf"/>
+                            <outlet property="delegate" destination="grz-Df-V23" id="9rj-A3-AFf"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="2sD-P0-rg5"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="stm-Yp-37o" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="1fM-xq-pvJ" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2516" y="1704"/>
+        </scene>
+        <!--Query Builder Choose Field View Controller - Select Field-->
+        <scene sceneID="vnk-CN-e91">
+            <objects>
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="Ibv-MJ-tzZ" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dU3-fL-Oq6">
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="Z03-T5-FMZ" detailTextLabel="4Ra-A0-T7u" style="IBUITableViewCellStyleValue1" id="8Um-Gp-6e3">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Um-Gp-6e3" id="SjU-JS-OgA">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Z03-T5-FMZ">
+                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4Ra-A0-T7u">
+                                            <rect key="frame" x="261" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="INE-ub-iJU" kind="unwind" identifier="MTSegueAggregateFieldSave" unwindAction="unwindToNewAggregateFunction:" id="CNF-oC-1DH"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Ibv-MJ-tzZ" id="6Kh-8L-Yea"/>
+                            <outlet property="delegate" destination="Ibv-MJ-tzZ" id="AfE-lP-KWL"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="DTN-wV-3HG"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0fS-LS-ZdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="INE-ub-iJU" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2960" y="2334"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="850E8720-6819-48B8-A433-5EFF79DC9091" width="20" height="20">
+            <mutableData key="keyedArchiveRepresentation">
+YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
+GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
+c1dOU0NvbG9ygAKADRIgwAAAgAOAC1h7MjAsIDIwfdIVChYYWk5TLm9iamVjdHOhF4AEgArSFQoaHaIb
+HIAFgAaACRAA0iAKISJfEBROU1RJRkZSZXByZXNlbnRhdGlvboAHgAhPEQ6uTU0AKgAABkgAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3d3d3////////////////////
+//////////////////////////////////////////////////////+qqqqqAAAAAAAAAAAAAAAAAAAA
+AAAAAADd3d3d////////////////////////////////////////////////////////////////////
+/yIiIiIAAAAAAAAAAAAAAAAAAAAAAAAAAGZmZmb/////////////////////////////////////////
+//////////////////////+ZmZmZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN3d3d3/////////
+/////////////////////////////////////////////////yIiIiIAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAZmZmZv////////////////////////////////////////////////////+ZmZmZAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAu7u7u///////////////////////////////
+////////////7u7u7hEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABERERE////
+//////////////////////////////////////93d3d3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAC7u7u7////////////////////////////////7u7u7hEREREAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERET/////////////////////////
+//////93d3d3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ALu7u7v/////////////////////7u7u7hEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAIiIiIv////////////////////9mZmZmAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmZmZmf//////////3d3d
+3QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAiIiIi//////////9mZmZmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACZmZmZ3d3d3QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIiIiJVVVVVAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4BAAADAAAAAQAUAAABAQADAAAAAQAUAAAB
+AgADAAAABAAABvYBAwADAAAAAQABAAABBgADAAAAAQACAAABEQAEAAAAAQAAAAgBEgADAAAAAQABAAAB
+FQADAAAAAQAEAAABFgADAAAAAQAUAAABFwAEAAAAAQAABkABHAADAAAAAQABAAABUgADAAAAAQABAAAB
+UwADAAAABAAABv6HcwAHAAAHqAAABwYAAAAAAAgACAAIAAgAAQABAAEAAQAAB6hhcHBsAiAAAG1udHJS
+R0IgWFlaIAfZAAIAGQALABoAC2Fjc3BBUFBMAAAAAGFwcGwAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAA
+ANMtYXBwbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC2Rlc2MA
+AAEIAAAAb2RzY20AAAF4AAAFbGNwcnQAAAbkAAAAOHd0cHQAAAccAAAAFHJYWVoAAAcwAAAAFGdYWVoA
+AAdEAAAAFGJYWVoAAAdYAAAAFHJUUkMAAAdsAAAADmNoYWQAAAd8AAAALGJUUkMAAAdsAAAADmdUUkMA
+AAdsAAAADmRlc2MAAAAAAAAAFEdlbmVyaWMgUkdCIFByb2ZpbGUAAAAAAAAAAAAAABRHZW5lcmljIFJH
+QiBQcm9maWxlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt
+bHVjAAAAAAAAAB4AAAAMc2tTSwAAACgAAAF4aHJIUgAAACgAAAGgY2FFUwAAACQAAAHIcHRCUgAAACYA
+AAHsdWtVQQAAACoAAAISZnJGVQAAACgAAAI8emhUVwAAABYAAAJkaXRJVAAAACgAAAJ6bmJOTwAAACYA
+AAKia29LUgAAABYAAALIY3NDWgAAACIAAALeaGVJTAAAAB4AAAMAZGVERQAAACwAAAMeaHVIVQAAACgA
+AANKc3ZTRQAAACYAAAKiemhDTgAAABYAAANyamFKUAAAABoAAAOIcm9STwAAACQAAAOiZWxHUgAAACIA
+AAPGcHRQTwAAACYAAAPobmxOTAAAACgAAAQOZXNFUwAAACYAAAPodGhUSAAAACQAAAQ2dHJUUgAAACIA
+AARaZmlGSQAAACgAAAR8cGxQTAAAACwAAASkcnVSVQAAACIAAATQYXJFRwAAACYAAATyZW5VUwAAACYA
+AAUYZGFESwAAAC4AAAU+AFYBYQBlAG8AYgBlAGMAbgD9ACAAUgBHAEIAIABwAHIAbwBmAGkAbABHAGUA
+bgBlAHIAaQENAGsAaQAgAFIARwBCACAAcAByAG8AZgBpAGwAUABlAHIAZgBpAGwAIABSAEcAQgAgAGcA
+ZQBuAOgAcgBpAGMAUABlAHIAZgBpAGwAIABSAEcAQgAgAEcAZQBuAOkAcgBpAGMAbwQXBDAEMwQwBDsE
+TAQ9BDgEOQAgBD8EQAQ+BEQEMAQ5BDsAIABSAEcAQgBQAHIAbwBmAGkAbAAgAGcA6QBuAOkAcgBpAHEA
+dQBlACAAUgBWAEKQGnUoACAAUgBHAEIAIIJyX2ljz4/wAFAAcgBvAGYAaQBsAG8AIABSAEcAQgAgAGcA
+ZQBuAGUAcgBpAGMAbwBHAGUAbgBlAHIAaQBzAGsAIABSAEcAQgAtAHAAcgBvAGYAaQBsx3y8GAAgAFIA
+RwBCACDVBLhc0wzHfABPAGIAZQBjAG4A/QAgAFIARwBCACAAcAByAG8AZgBpAGwF5AXoBdUF5AXZBdwA
+IABSAEcAQgAgBdsF3AXcBdkAQQBsAGwAZwBlAG0AZQBpAG4AZQBzACAAUgBHAEIALQBQAHIAbwBmAGkA
+bADBAGwAdABhAGwA4QBuAG8AcwAgAFIARwBCACAAcAByAG8AZgBpAGxmbpAaACAAUgBHAEIAIGPPj/Bl
+h072TgCCLAAgAFIARwBCACAw1zDtMNUwoTCkMOsAUAByAG8AZgBpAGwAIABSAEcAQgAgAGcAZQBuAGUA
+cgBpAGMDkwO1A70DuQO6A8wAIAPAA8EDvwPGA68DuwAgAFIARwBCAFAAZQByAGYAaQBsACAAUgBHAEIA
+IABnAGUAbgDpAHIAaQBjAG8AQQBsAGcAZQBtAGUAZQBuACAAUgBHAEIALQBwAHIAbwBmAGkAZQBsDkIO
+Gw4jDkQOHw4lDkwAIABSAEcAQgAgDhcOMQ5IDicORA4bAEcAZQBuAGUAbAAgAFIARwBCACAAUAByAG8A
+ZgBpAGwAaQBZAGwAZQBpAG4AZQBuACAAUgBHAEIALQBwAHIAbwBmAGkAaQBsAGkAVQBuAGkAdwBlAHIA
+cwBhAGwAbgB5ACAAcAByAG8AZgBpAGwAIABSAEcAQgQeBDEESQQ4BDkAIAQ/BEAEPgREBDgEOwRMACAA
+UgBHAEIGRQZEBkEAIAYqBjkGMQZKBkEAIABSAEcAQgAgBicGRAY5BicGRQBHAGUAbgBlAHIAaQBjACAA
+UgBHAEIAIABQAHIAbwBmAGkAbABlAEcAZQBuAGUAcgBlAGwAIABSAEcAQgAtAGIAZQBzAGsAcgBpAHYA
+ZQBsAHMAZXRleHQAAAAAQ29weXJpZ2h0IDIwMDcgQXBwbGUgSW5jLiwgYWxsIHJpZ2h0cyByZXNlcnZl
+ZC4AWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAdE0AAD3uAAAD0FhZWiAAAAAAAABadQAArHMA
+ABc0WFlaIAAAAAAAACgaAAAVnwAAuDZjdXJ2AAAAAAAAAAEBzQAAc2YzMgAAAAAAAQxCAAAF3v//8yYA
+AAeSAAD9kf//+6L///2jAAAD3AAAwGzSJSYnKFokY2xhc3NuYW1lWCRjbGFzc2VzXxAQTlNCaXRtYXBJ
+bWFnZVJlcKMpKitfEBBOU0JpdG1hcEltYWdlUmVwWk5TSW1hZ2VSZXBYTlNPYmplY3TSJSYtLldOU0Fy
+cmF5oi0r0iUmMDFeTlNNdXRhYmxlQXJyYXmjMC0r0zM0CjU2N1dOU1doaXRlXE5TQ29sb3JTcGFjZUQw
+IDAAEAOADNIlJjk6V05TQ29sb3KiOSvSJSY8PVdOU0ltYWdlojwrXxAPTlNLZXllZEFyY2hpdmVy0UBB
+VHJvb3SAAQAIABEAGgAjAC0AMgA3AEYATABXAF4AZQByAHkAgQCDAIUAigCMAI4AlwCcAKcAqQCrAK0A
+sgC1ALcAuQC7AL0AwgDZANsA3Q+PD5QPnw+oD7sPvw/SD90P5g/rD/MP9g/7EAoQDhAVEB0QKhAvEDEQ
+MxA4EEAQQxBIEFAQUxBlEGgQbQAAAAAAAAIBAAAAAAAAAEIAAAAAAAAAAAAAAAAAABBvA
+</mutableData>
+        </image>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>
         <image name="UIImageAlignCenter20.png" width="20" height="20"/>
         <image name="UIImageAlignLeft20.png" width="20" height="20"/>

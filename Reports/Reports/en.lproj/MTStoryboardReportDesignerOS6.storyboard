@@ -225,8 +225,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="sgt-Wk-J85">
-                                            <rect key="frame" x="13" y="18" width="64" height="64"/>
+                                            <rect key="frame" x="35" y="18" width="20" height="64"/>
                                             <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="fs8-PM-4h5"/>
                                                 <constraint firstAttribute="height" constant="64" type="user" id="iem-zm-0cQ"/>
                                             </constraints>
                                         </imageView>
@@ -992,10 +993,10 @@
             </objects>
             <point key="canvasLocation" x="639" y="624"/>
         </scene>
-        <!--Report Designer Object Selector View Controller-->
+        <!--Report Designer Object Selector View Controller Lagacy-->
         <scene sceneID="G1f-va-kdB">
             <objects>
-                <viewController id="xa7-Xt-Nbi" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
+                <viewController id="xa7-Xt-Nbi" customClass="MTReportDesignerObjectSelectorViewControllerLagacy" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jBj-td-YC7">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1036,7 +1037,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8t1-gd-Fse" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1715" y="2796"/>
+            <point key="canvasLocation" x="2171" y="2010"/>
         </scene>
         <!--Database Driver Selector My Sql View Controller - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
@@ -1932,7 +1933,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AOv-tb-esK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2980" y="45"/>
+            <point key="canvasLocation" x="2968" y="-25"/>
         </scene>
         <!--Query Builder Add Table View Controller - Add Table-->
         <scene sceneID="vSz-bH-FXK">
@@ -2363,7 +2364,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0L7-bY-ucZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3387" y="45"/>
+            <point key="canvasLocation" x="3403" y="-25"/>
         </scene>
         <!--Query Builder Predicate Format View Controller - Predicate Format-->
         <scene sceneID="LZp-Pu-coV">
@@ -3499,7 +3500,7 @@
                 </navigationItem>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u2A-dm-LGS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2109" y="2796"/>
+            <point key="canvasLocation" x="2565" y="2010"/>
         </scene>
         <!--Report Designer Font Settings View Controller-->
         <scene sceneID="Dyt-zX-TJM">
@@ -5448,7 +5449,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YkV-HS-IlF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1336" y="3476"/>
+            <point key="canvasLocation" x="2171" y="2696"/>
         </scene>
         <!--Report Viewer Controller-->
         <scene sceneID="gzl-SM-46W">
@@ -5511,7 +5512,7 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJm-20-R2T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1715" y="3476"/>
+            <point key="canvasLocation" x="2565" y="2696"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0Me-tp-dbo">

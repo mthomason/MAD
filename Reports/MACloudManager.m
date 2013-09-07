@@ -88,6 +88,7 @@ static MACloudManager *__sharedManager;
                                                                                           options:enumerationOptions
                                                                                             error:&readPreviewsError];
                 
+                
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     NSFileManager* fileManager = [[NSFileManager alloc] init];
                     NSURL *newDataDirectoryURL = [self dataDirectoryURL];

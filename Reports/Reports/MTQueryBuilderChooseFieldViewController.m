@@ -44,6 +44,7 @@
 @synthesize excludeTables = _excludeTables;
 
 - (void)dealloc {
+    [_queryField release];
     [_excludeTables release];
     [super dealloc];
 }
@@ -52,6 +53,19 @@
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||
+        [[segue identifier] isEqualToString:@"MTSegueAggregateFieldSave"]) {
+        
+        UITableViewCell *cell = sender;
+        NSIndexPath *indexPath = [[self tableView] indexPathForCell: cell];
+        RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
+        [self setQueryField:queryField];
+    
+    }
 }
 
 - (void)viewDidLoad {
@@ -176,18 +190,28 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
+    if (queryField != nil) {
+        if ([self delegate] != nil) {
+            [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
+        }
+    }
+}
+
+- (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
+    RptqQueryField *queryField = nil;
     RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [[self sectionInfoArray] objectAtIndex:[indexPath section]];
     if ([[[sectionInfo table] hasQueryFields] count] > [indexPath row]) {
         NSSet *fields = [[sectionInfo table] hasQueryFields];
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
         NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
-        RptqQueryField *queryField = [fieldsArray objectAtIndex: [indexPath row]];
+        queryField = [[fieldsArray objectAtIndex: [indexPath row]] retain];
+        [self setQueryField:queryField];
         [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
         [namesAccending release];
-
     }
+    return [queryField autorelease];
 }
-
 
 #pragma mark Section header delegate
 

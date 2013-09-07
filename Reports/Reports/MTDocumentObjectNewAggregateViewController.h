@@ -19,4 +19,10 @@ extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateInput;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
 
+@property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
+@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
+@property (nonatomic, assign) NSInteger groupTypeSectionNumber;
+@property (nonatomic, retain) NSManagedObjectID *fieldObjectId;
+
+
 @end

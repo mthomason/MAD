@@ -147,6 +147,86 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [super dealloc];
 }
 
+NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
+NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
+
+- (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
+
+    if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
+        
+        MTDocumentObjectNewStaticLabelViewController *staticLabelViewController = [action sourceViewController];
+        NSString *labelText = [staticLabelViewController userInputedText];
+        [self insertDocumentObjectNewLabel: labelText];
+        
+    } else if ([[action identifier] isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self insertDocumentObjectWithDefination:
+             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
+        }];
+    } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+        MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
+        RptqQueryField *queryField = [dynamicFieldController queryField];
+        
+        [self insertDocumentObjectWithDefination:
+         @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+           MTDocumentObjectDefinationObject : [queryField objectID]}];
+        
+        }];
+    } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
+        
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
+        [self insertDocumentObjectNewAggregateFunctionWithType:[aggregateViewController aggregateFunctionType]
+                                                     inputType:MTAggregateFunctionInputTypeField
+                                                   inputObject:[aggregateViewController fieldObjectId]
+                                                     groupType:[aggregateViewController aggregateGroupByType]
+                                                   groupNumber:@([aggregateViewController groupTypeSectionNumber])];
+
+    } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                [imagePicker setDelegate: self];
+                [self presentViewController:imagePicker animated:YES completion:NULL];
+                [imagePicker release];
+            }
+        }];
+    }
+
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    BOOL editedImageExist = [info objectForKey:UIImagePickerControllerEditedImage] != nil;
+    UIImage *selectedImage = nil;
+    if (editedImageExist) {
+        selectedImage = [[info objectForKey:UIImagePickerControllerEditedImage] retain];
+    } else {
+        selectedImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
+    }
+    
+
+    if (selectedImage != nil) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self insertDocumentObjectWithDefination:
+             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
+               MTDocumentObjectDefinationObject : selectedImage}];
+        }];
+    }
+
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
 #pragma mark - UIViewController
 
 - (void)didReceiveMemoryWarning {
@@ -1895,12 +1975,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
 }
 
-- (void)insertDocumentObjectDataField:(RptqQueryField *)field {
-    [self insertDocumentObjectWithDefination:
-     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-           MTDocumentObjectDefinationObject : [field objectID]}];
-}
-
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject
@@ -1921,44 +1995,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self insertDocumentObjectWithDefination:
         @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelStatic),
            MTDocumentObjectDefinationObject : labelText}];
-
-}
-
-- (void)insertDocumentObjectNewImage:(UIImage *)image {
-    [self insertDocumentObjectWithDefination:
-        @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
-           MTDocumentObjectDefinationObject : image}];
-}
-
-- (void)insertDocumentObjectWhitespace {
-    [self insertDocumentObjectWithDefination:
-     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
-    [self dismissObjectSelectorViewController];
-}
-
-- (void)insertDocumentObjectNewFormula {
-    [self dismissObjectSelectorViewController];
-    
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-
-}
-
-- (void)insertDocumentObjectNewChart {
-    [self dismissObjectSelectorViewController];
-
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-
-}
-- (void)insertDocumentObjectNewHyperlink {
-    [self dismissObjectSelectorViewController];
-
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
 
 }
 
@@ -1990,17 +2026,27 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         if (finished) {
             //[self relayoutSectionView:detailSection];
+            [detailSection reloadData];
             [UIView animateWithDuration:0.3 animations:^{
-                [detailSection invalidateIntrinsicContentSize];
+                //[[detailSection collectionViewLayout] invalidateLayout];
+                //[detailSection invalidateIntrinsicContentSize];
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
                                                                                         fromObjectContext: [[self activeDocument] managedObjectContext]];
                 [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
                 [[self designerContentView] setNeedsUpdateConstraints];
+                //NSInteger numberOfRows = [[documentSection numberOfRows] integerValue];
+                //for (NSInteger i=0; i<numberOfRows; i++) {
+                //    NSInteger numberOfItems = [detailSection numberOfItemsInSection:0];
+                //    for (NSInteger j=0; j<numberOfItems; j++) {
+                //        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:j];
+                //        UICollectionViewCell *cell = [detailSection cellForItemAtIndexPath:indexPath];
+                //        [[cell contentView] setNeedsDisplay];
+                //    }
+                //}
             }];
             //[[self designerContentView] setNeedsLayout];
             //[self resizeCollectionView:detailSection forSectionWithId:[detailSection objectIdTag]];
 //            [detailSection setNeedsUpdateConstraints];
-//            [detailSection setNeedsLayout];
         }
         
     }];
@@ -2064,7 +2110,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [hasObjects removeObjectAtIndex:deleteIndex];
                 RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
                 [row setHasObjects:hasObjects];
-                [[self activeDocument] saveContext];
+                NSError *error = nil;
+                [[objectToDelete managedObjectContext] save:&error];
                 NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
                 
                 [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];

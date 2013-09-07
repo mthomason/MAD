@@ -413,6 +413,9 @@ static NSNumberFormatter *currencyNumberFormatter;
             [managedObjectContext deleteObject:[documentObject isImage]];
             break;
         }
+        case MTDocumentObjectTypeWhtiespace: {
+            break;
+        }
         default:
             break;
     }

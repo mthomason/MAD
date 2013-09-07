@@ -19,14 +19,14 @@
 #import "RptqDocumentObjectFormula+Extras.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
+extern NSInteger const MTViewTagAggregateFunctions;
+extern NSInteger const MTViewTagGroupByOptions;
+extern NSInteger const MTViewTagDocumentObjectNewAggregate;
+extern NSInteger const MTViewTagDocumentObjectNewLabelStatic;
+extern NSInteger const MTViewTagFieldOrFormulaSelector;
+
 @protocol MTReportDesignerObjectSelectorDelegate <MTViewControllerProtocol>
-- (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
-- (void)insertDocumentObjectNewImage:(UIImage *)image;
-- (void)insertDocumentObjectNewFormula;
-- (void)insertDocumentObjectNewChart;
-- (void)insertDocumentObjectNewHyperlink;
-- (void)insertDocumentObjectWhitespace;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject
@@ -35,15 +35,13 @@
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
-@interface MTReportDesignerObjectSelectorViewController : MTViewController
+@interface MTReportDesignerObjectSelectorViewController : UICollectionViewController
     <MTQueryBuilderChooseFieldDelegate,
         MTAggregateFunctionsViewControllerDelegate,
         MTGroupByViewControllerDelegate,
         UINavigationControllerDelegate,
-        UIImagePickerControllerDelegate,
         UICollectionViewDataSource,
-        UICollectionViewDelegateFlowLayout,
-        UITableViewDelegate>
+        UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, assign) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
 

@@ -14,9 +14,6 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
 
-@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
-@property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;
-
 @end
 
 @implementation MTGroupByViewController
@@ -110,28 +107,79 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSUInteger rowCount = [tableView numberOfRowsInSection:[indexPath section]];
 
+    for (NSInteger i = 0; i < rowCount; i++) {
+        NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:[indexPath section]];
+        UITableViewCell *tableViewCell = [[self tableView] cellForRowAtIndexPath:cellPath];
+        [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
+    }
+    
+    UITableViewCell *cell = [[tableView cellForRowAtIndexPath:indexPath] retain];
+    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    [cell release];
+    
     switch ([indexPath row]) {
         
         case 0:
             [self setGroupType:MTAggregateGroupByTypePage];
-            [[self delegate] didSelectGroupByPage];
+            if ([self delegate] != nil) {
+                [[self delegate] didSelectGroupByPage];
+            }
             break;
         
         case 1:
             [self setGroupType:MTAggregateGroupByTypeReport];
-            [[self delegate] didSelectGroupByReport];
+            if ([self delegate] != nil) {
+                [[self delegate] didSelectGroupByReport];
+            }
             break;
         
         default: {
-            NSUInteger groupNumber = [indexPath row] -2;
+            NSUInteger groupNumber = [indexPath row] - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
-            [[self delegate] didSelectGroupBySectionNumber: groupNumber];
+            if ([self delegate] != nil) {
+                [[self delegate] didSelectGroupBySectionNumber: groupNumber];
+            }
             break;
         }
             
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UITableViewCell *cell = sender;
+    NSIndexPath *indexPath = [[self tableView] indexPathForCell:cell];
+    switch ([indexPath row]) {
+            
+        case 0:
+            [self setGroupType:MTAggregateGroupByTypePage];
+            break;
+            
+        case 1:
+            [self setGroupType:MTAggregateGroupByTypeReport];
+            break;
+            
+        default: {
+            NSUInteger groupNumber = [indexPath row] - 2;
+            [self setGroupType:MTAggregateGroupByTypeSection];
+            [self setGroupTypeSectionWithNumber: groupNumber];
+            break;
+        }
+            
+    }
+    
+}
+
+- (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber {
+    _aggregateGroupType = groupByType;
+    _aggregateGroupNumber = sectionNumber;
+}
+
+- (void)selectGroupType:(MTAggregateGroupByType)groupByType {
+    [self selectGroupType:groupByType withSectionNumber:0];
 }
 
 #pragma mark - Table View Datasource Protocol
@@ -154,10 +202,16 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
         case 0:
             [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage]];
+            if ([self aggregateGroupType] == MTAggregateGroupByTypePage) {
+                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            }
             break;
         
         case 1:
             [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport]];
+            if ([self aggregateGroupType] == MTAggregateGroupByTypeReport) {
+                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            }
             break;
         
         default: {
@@ -165,6 +219,9 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             NSString *sectionNumber = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
             NSString *textLabel = [NSString stringWithFormat:sectionNumber, [[queryGroup weight] integerValue]];
             [[cell textLabel] setText:textLabel];
+            if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && [indexPath row] - 2 == [self aggregateGroupNumber]) {
+                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            }
             break;
         }
 
