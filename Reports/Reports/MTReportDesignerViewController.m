@@ -14,17 +14,18 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeSection = 3,
 };
 
-const CGFloat MTReportDesignerRulerHeight           = 24.0000f;
-const CGFloat MTReportDesignerSectionLabelHeight    = 22.0000f;
-const CGFloat MTReportDesignerBorderPadding         =  3.0000f;
-const CGFloat MTReportDesignerCornerRadius          =  5.0000f;
-
+const CGFloat MTReportDesignerRulerHeight           = 16.0000f;
+const CGFloat MTReportDesignerSectionLabelHeight    = 20.0000f;
+CGFloat MTReportDesignerBorderPadding               =  3.0000f;
+const CGFloat MTReportDesignerBorderPaddingVertical =  3.0000f;
+CGFloat MTReportDesignerCornerRadius                =  5.0000f;
 const CGFloat previousScaleWeight                   =  0.6666f;
 
 @interface MTReportDesignerViewController()
 
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
 
+@property (nonatomic, retain) IBOutlet NSLayoutConstraint *toolbarBottomHeightConstraint;
 @property (nonatomic, retain) UINavigationController *navigationControllerSectionLayoutSettings;
 @property (nonatomic, retain) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
 
@@ -144,6 +145,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_layoutConstraintContainerToDesignerVertSpace release];
     [_layoutConstraintContainerToDesignerCenterY release];
     [_layoutConstraintContainerToDesignerCenterX release];
+    [_toolbarBottomHeightConstraint release];
     [super dealloc];
 }
 
@@ -237,7 +239,35 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [[self rulerView] setNeedsDisplay];
+
+    
+    CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
+    //CGFloat toolBarHeight;
+    if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
+        [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
+            [[self toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
+        } completion:NULL];
+    }
+
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [[self rulerView] setNeedsDisplay];
+    } completion:NULL];
+    
+    CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
+    CGFloat toolBarHeight;
+    if (navigationToolbarFrame.size.height < 40.0000f) {
+        toolBarHeight = 44.0000f;
+    } else {
+        toolBarHeight = 32.0000f;
+    }
+    
+    [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
+        [[self toolbarBottomHeightConstraint] setConstant:toolBarHeight];
+    } completion:NULL];
 }
 
 - (void)awakeFromNib {
@@ -251,10 +281,18 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     CGRect statusViewBounds;
-    if (self.toolbarBottom.frame.size.height < 40.0000f) {
-        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+    if ([[self toolbarBottom] frame].size.height < 40.0000f) {
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
+        }
     } else {
-        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
+        }
     }
     [[self documentStatusView] setBounds:statusViewBounds];
     [[self documentStatusView] setNeedsDisplay];
@@ -262,6 +300,22 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    if ([UIDevice isLagacyOS]) {
+        MTReportDesignerBorderPadding = 3.0000f;
+        MTReportDesignerCornerRadius = 5.0000f;
+    } else {
+        MTReportDesignerBorderPadding = 0.0000f;
+        MTReportDesignerCornerRadius = 0.0000f;
+    }
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    CGFloat toolBarHeight;
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        toolBarHeight = 32.0000f;
+    } else {
+        toolBarHeight = 44.0000f;
+    }
+    [[self toolbarBottomHeightConstraint] setConstant:toolBarHeight];
     
     if ([[[self designerContentView] constraints] count] > 0) {
         [[self designerContentView] removeConstraints:[[self designerContentView] constraints]];
@@ -325,10 +379,18 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
     CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-    [[viewRuler layer] setCornerRadius: MTReportDesignerCornerRadius];
-    [[viewRuler layer] setMasksToBounds: YES];
-    [[viewRuler layer] setBorderColor: shadowColor];
-    [[viewRuler layer] setBorderWidth: 1.0000f];
+
+    if ([UIDevice isLagacyOS]) {
+        [[viewRuler layer] setCornerRadius: MTReportDesignerCornerRadius];
+        [[viewRuler layer] setMasksToBounds: YES];
+        [[viewRuler layer] setBorderColor: shadowColor];
+        [[viewRuler layer] setBorderWidth: 1.0000f];
+    } else {
+
+        [[viewRuler layer] setBorderWidth: 0.5000f];
+        [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
+    
+    }
     [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
 
 
@@ -363,15 +425,13 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
         NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
         NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
         
-        [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight, layoutConstraintToolbarBottomHeight]];
+        [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight]];
         
         NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
         NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
         
-        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
+        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden]];
         
         [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
             [NSLayoutConstraint constraintWithItem: [self toolbarTop]         attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
@@ -411,16 +471,16 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
     [[self designerScrollView] addConstraints:
      @[[NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil                        attribute:NSLayoutAttributeNotAnAttribute multiplier: 1.0000f constant: MTReportDesignerRulerHeight],
-       [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop            multiplier: 1.0000f constant: MTReportDesignerBorderPadding],
+       [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop            multiplier: 1.0000f constant: MTReportDesignerBorderPaddingVertical],
        [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft           multiplier: 1.0000f constant: MTReportDesignerBorderPadding],
        [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight          multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]
        ]];
 
     
-    CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPadding;
+    CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
-        sectionHeights += MTReportDesignerBorderPadding;
+        sectionHeights += MTReportDesignerBorderPaddingVertical;
         
         [lastCollectionView  release];  //Should be nil on first pass.
 
@@ -432,6 +492,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
         [backgroundView setBackgroundColor:[UIColor edaGreenLight]];
+        [backgroundView setBackgroundColor:[UIColor clearColor]];
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
 
@@ -456,13 +517,23 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         [collectionView setAllowsMultipleSelection:YES];
         [collectionView setBackgroundView:backgroundView];
         [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
+        
         
 
         // MARK: Create label to identify document section.
         DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[reportSection localizedDisplayName]];
-        [sectionControlView setBackgroundColor:[UIColor edaYellow]];
+        if ([UIDevice isLagacyOS]) {
+            [sectionControlView setBackgroundColor:[UIColor edaYellow]];
+        } else {
+            [sectionControlView setBackgroundColor:[UIColor clearColor]];
+        }
         [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+        
+        if ([UIDevice isLagacyOS]) {
+            [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
+        }
+
         [[sectionControlView layer] setCornerRadius:MTReportDesignerCornerRadius];
         [sectionControlView setClipsToBounds:YES];
         [sectionControlView setTag:sectionCounter];
@@ -483,11 +554,13 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         // MARK: Setup vert auto layout
         NSString *collectionViewKey = [reportSection sectionKey];
 
-
-        [[sectionControlView layer] setBorderColor: [[UIColor blackColor] CGColor]];
-        [[sectionControlView layer] setBorderWidth: 1.0000f];
-        [[collectionView layer] setBorderColor: shadowColor];
-        [[collectionView layer] setBorderWidth: 1.0000f];
+        if ([UIDevice isLagacyOS]) {
+            [[collectionView layer] setBorderColor: shadowColor];
+            [[collectionView layer] setBorderWidth: 1.0000f];
+        } else {
+            [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+            [[collectionView layer] setBorderWidth: 0.5000f];
+        }
 
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
         
@@ -520,10 +593,10 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         [[self designerContentView] addSubview:sectionControlView];
         
         [[self designerContentView] addConstraints:@[
-         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
+         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
          [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPadding],
+         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
+         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
          [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
          ]];
 
@@ -546,7 +619,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
         sectionCounter++;
     }
-    sectionHeights += MTReportDesignerBorderPadding;
+    sectionHeights += MTReportDesignerBorderPaddingVertical;
     
     [lastCollectionView release];
 
@@ -585,7 +658,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
     [[self designerScrollView] setDelegate:self];
     [[self designerScrollView] setUserInteractionEnabled:YES];
-    [[self designerScrollView] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
+    [[self designerScrollView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
     [[self designerScrollView] flashScrollIndicators];
     
@@ -595,12 +668,12 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 - (CGSize)designerContentViewSize {
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
     CGSize designerContentViewSize = CGSizeMake([[self view] bounds].size.width, CGSizeZero.height);
-    designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPadding;
+    designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
-        designerContentViewSize.height += MTReportDesignerBorderPadding;
+        designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
         designerContentViewSize.height += [[reportSection height] floatValue];
     }
-    designerContentViewSize.height += MTReportDesignerBorderPadding;
+    designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
     [sectionEnumerator release];
     return designerContentViewSize;
 }
@@ -610,17 +683,17 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
     
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
     CGSize designerContentViewSize = CGSizeMake([[self view] bounds].size.width, CGSizeZero.height);
-    designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPadding;
+    designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         CGFloat height = [[reportSection height] floatValue];
         NSString *key = [reportSection sectionKey];
         NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:key];
         [layoutConstraint setConstant:height];
-        designerContentViewSize.height += MTReportDesignerBorderPadding;
+        designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
         designerContentViewSize.height += [[reportSection height] floatValue];
     }
-    designerContentViewSize.height += MTReportDesignerBorderPadding;
+    designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
     [sectionEnumerator release];
 
     [[self layoutConstraintDesignerContentViewHeight] setConstant:designerContentViewSize.height];
@@ -1231,7 +1304,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
-
+//
     //Remove border from element views
     for (MTElementView *elementView in [self selectedElementViews]) {
         [self didDeselectElementView:elementView animated:animated];
@@ -1245,24 +1318,48 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 }
 
 - (void)applyBorderToView:(UIView *)view {
-    [[view layer] setBorderColor:[[UIColor redColor] CGColor]];
-    [[view layer] setBorderWidth:2.0000f];
+    if ([view isKindOfClass:[DesignerSectionLabel class]] && [UIDevice isModernOS]) {
+        DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)view;
+        [sectionLabel dimView];
+    } else {
+        [[view layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[view layer] setBorderWidth:1.0000f];
+    }
 }
 
 - (BOOL)removeBorderFromView:(UIView *)view {
     BOOL result;
-    if ([self isBorderAppliedToView:view]) {
-        result = YES;
-        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[view layer] setBorderWidth:1.0000f];
+    if ([view isKindOfClass:[DesignerSectionLabel class]] && [UIDevice isModernOS]) {
+        DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)view;
+        if ([sectionLabel selected]) {
+            [sectionLabel normalView];
+            result = YES;
+        } else {
+            result = NO;
+        }
+
     } else {
-        result = NO;
+
+        if ([self isBorderAppliedToView:view]) {
+            result = YES;
+            [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+            [[view layer] setBorderWidth:0.0000f];
+        } else {
+            result = NO;
+        }
+
     }
     return result;
 }
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
-    return ([[view layer] borderWidth] > 1.5000f);
+    BOOL result = ([[view layer] borderWidth] > 0.5000f);
+    if (result == NO) {
+        if ([view isKindOfClass:[DesignerSectionLabel class]] && [UIDevice isModernOS]) {
+            result = [(DesignerSectionLabel *)view selected];
+        }
+    }
+    return result;
 }
 
 - (BOOL)dismissAllPopovers {
@@ -1406,7 +1503,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         default:
             break;
     }
-    
+
     if ([UIDevice isLagacyOS] || tooboxType == MTToolboxTypeElement) {
         [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
     }
@@ -1434,8 +1531,13 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
             
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [self setWantsFullScreenLayout:YES];
+                
                 [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
                 [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
+                
+                [[self toolbarBottomHeightConstraint] setConstant:0.0000f];
+            
+
                 [[self view] layoutIfNeeded];
             } completion:^(BOOL finished) {
                 
@@ -1500,9 +1602,11 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
             
             [[self view] layoutIfNeeded];
             [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
+            CGFloat toolboxHeight = self.navigationController.toolbar.frame.size.height;
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
+                [[self toolbarBottomHeightConstraint] setConstant:toolboxHeight];
                 [[self view] layoutIfNeeded];
                 
             } completion:^(BOOL finished) {
@@ -1759,11 +1863,14 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 - (MTElementView *)elementViewForObjectId:(NSManagedObjectID *)objectId inContext:(NSManagedObjectContext *)objectContext {
     MTElementView *elementView = [[MTElementView alloc] initWithObjectId:objectId
                                                          inObjectContext:objectContext];
-    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-    [[elementView layer] setBorderWidth:1.0000f];
     [elementView setDelegate:self];
     [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
+
+    if ([UIDevice isLagacyOS]) {
+        [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
+        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[elementView layer] setBorderWidth:1.0000f];
+    }
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
     [panGesture setMaximumNumberOfTouches:1];

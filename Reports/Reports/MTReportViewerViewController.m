@@ -201,8 +201,22 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
-    //[self reload];
+    CGRect statusViewBounds;
+    if (self.navigationController.toolbar.frame.size.height < 40.0000f) {
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
+        }
+    } else {
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
+        }
+    }
+    [[self documentStatusView] setBounds:statusViewBounds];
+    [[self documentStatusView] setNeedsDisplay];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

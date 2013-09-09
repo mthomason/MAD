@@ -484,7 +484,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 FileRepresentation* fileRepresentation = [[FileRepresentation fileRepresentationWithName:fileName
                                                                                                  andUrl:document] retain];
                 NSURL *thumbnailPath = [document URLByAppendingPathComponent:@"AdditionalContent" isDirectory:YES];
-                thumbnailPath = [thumbnailPath URLByAppendingPathComponent:MTDocumentInfoKeyThumbnail isDirectory:NO];
+                thumbnailPath = [thumbnailPath URLByAppendingPathComponent:[MADocument thumbnailSaveName] isDirectory:NO];
                 NSString* previewFilePath = [thumbnailPath path];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:previewFilePath]) {
                     NSURL *previewUrl = [thumbnailPath retain];
@@ -693,14 +693,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
-    [tvc setDelegate: self];
+    //[tvc setDelegate: self];
     [UIManagedDocument openManagedDocumentAtUrl:url
                                     withWrapper:[MAReportDocument class]
                            andCompletionHandler:^(id managedDocument, BOOL success) {
                                
                                if (success) {
                                    [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                                   [tvc reloadDocument:managedDocument];
+                                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                       dispatch_sync(dispatch_get_main_queue(), ^{
+                                           [tvc reloadDocument:managedDocument];
+                                       });
+                                   });
                                }
                                
                            }];

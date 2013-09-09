@@ -9,15 +9,16 @@
 #import "MADocument.h"
 #import "MTReportViewerPrintPageRenderer.h"
 
-NSString *MTDocumentInfoKeyThumbnail = @"thumbnail.png";
-NSString *MTDocumentInfoKeyMeta = @"meta.plist";
-NSString *MTDocumentInfoKeyVersion = @"version";
-NSString *MTDocumentInfoKeyGenerator = @"generator";
+NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
+NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
+NSString * const MTDocumentInfoKeyThumbnailRetna = @"thumbnail@2x.png";
+NSString * const MTDocumentInfoKeyMeta = @"meta.plist";
+NSString * const MTDocumentInfoKeyVersion = @"version";
+NSString * const MTDocumentInfoKeyGenerator = @"generator";
 
-
-NSString *MTDocumentInfoKeyMetaEditor = @"editor";
-NSString *MTDocumentInfoKeyMetaFileVersion = @"fileversion";
-NSString *MTDocumentInfoKeyMetaDateCreated = @"datacreated";
+NSString * const MTDocumentInfoKeyMetaEditor = @"editor";
+NSString * const MTDocumentInfoKeyMetaFileVersion = @"fileversion";
+NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @interface MADocument ()
 
@@ -75,85 +76,9 @@ NSString * MTDocumentParentContextName          = @"moc";
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     id result = [super contentsForType:typeName error:outError];
     return result;
-    /*
-    if ([self fileWrapper] == nil) {
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
-        [self setFileWrapper:fileWrapper];
-        [fileWrapper release];
-    }
-    
-    NSDictionary *fileWrappers = [[self fileWrapper] fileWrappers];
-    
-    NSDictionary *additionalContent = [result objectForKey:MTDocumentAdditionalContentKey];
-    
-    if (additionalContent != nil) {
-
-        NSFileWrapper *additionalContentFileWrapper = [[fileWrappers objectForKey:MTDocumentAdditionalContentFileName] retain];
-        if (additionalContentFileWrapper == nil) {
-            
-            additionalContentFileWrapper = [[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil];
-            [additionalContentFileWrapper setPreferredFilename:MTDocumentAdditionalContentFileName];
-            [[self fileWrapper] addFileWrapper: additionalContentFileWrapper];
-            
-        }
-        
-        
-        NSString *generator = [additionalContent objectForKey:MTDocumentInfoKeyGenerator];
-        NSData *generatorData = nil;
-        if (generator != nil) {
-            generatorData = [generator dataUsingEncoding:NSUTF8StringEncoding];
-            [additionalContentFileWrapper addRegularFileWithContents:generatorData preferredFilename:MTDocumentGeneratorFileName];
-        }
-        
-        UIImage *thumbnail = [additionalContent objectForKey:MTDocumentInfoKeyThumbnail];
-        NSData *thumbnailData = nil;
-        if (thumbnail != nil) {
-            @autoreleasepool {
-                thumbnailData = UIImagePNGRepresentation(thumbnail);
-                [additionalContentFileWrapper addRegularFileWithContents:generatorData preferredFilename:MTDocumentThumbnailFileName];
-            }
-        }
-        
-        NSNumber *version = [additionalContent objectForKey:MTDocumentInfoKeyVersion];
-        NSData *versionData = nil;
-        if (version != nil) {
-            versionData = [NSKeyedArchiver archivedDataWithRootObject:version];
-            [additionalContentFileWrapper addRegularFileWithContents:generatorData preferredFilename:MTDocumentVersionFileName];
-        }
-        
-        [additionalContentFileWrapper release];
-
-    }
- 
-    NSString *fileType = [[result objectForKey:MTDocumentFileTypeKey] retain];
-
-    if (fileType != nil) {
-    
-        NSFileWrapper *fileTypeFileWrapper = [[fileWrappers objectForKey:MTDocumentTypenFileName] retain];
-        if (fileTypeFileWrapper == nil) {
-            NSData *fileTypeData = [fileType dataUsingEncoding:NSUTF8StringEncoding];
-            [[self fileWrapper] addRegularFileWithContents:fileTypeData preferredFilename:MTDocumentTypenFileName];
-        }
-    }
-
-    NSManagedObjectContext *objectContext = [[result objectForKey:MTDocumentParentContextKey] retain];
-    
-    if (objectContext != nil) {
-        
-        NSFileWrapper *fileTypeFileWrapper = [[fileWrappers objectForKey:MTDocumentParentContextName] retain];
-        if (fileTypeFileWrapper == nil) {
-            NSData *fileTypeData = [objectContext  dataUsingEncoding:NSUTF8StringEncoding];
-            [[self fileWrapper] addRegularFileWithContents:fileTypeData preferredFilename:MTDocumentParentContextName];
-        }
-    }
-
-    
-    NSLog(@"Type: %@, %@", NSStringFromClass([result class]), [self fileURL]);
-    return result;*/
 }
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
-    //NSFileWrapper *contentsFw = contents;
     BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
     return result;
 }
@@ -174,19 +99,23 @@ NSString * MTDocumentParentContextName          = @"moc";
     return [[[self fileURL] lastPathComponent] stringByDeletingPathExtension];
 }
 
++ (NSString *)thumbnailSaveName {
+    return [UIDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
+}
+
 #pragma mark - UIManagedDocument
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
     
     NSError *readError = nil;
-    NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent: MTDocumentInfoKeyThumbnail];
+    NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent: [MADocument thumbnailSaveName]];
     NSData *imageData = [NSData dataWithContentsOfURL: thumbnailUrl options:NSDataReadingUncached error:&readError];
 
     if (imageData != nil && readError == nil) {
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
             [[self extraInformation] setObject:[UIImage imageWithData: imageData]
-                                        forKey:MTDocumentInfoKeyThumbnail];
+                                        forKey:[MADocument thumbnailSaveName]];
         }
     }
     
@@ -221,21 +150,23 @@ NSString * MTDocumentParentContextName          = @"moc";
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
         [self setExtraInformation:extraInfo];
         [extraInfo release];
+        
+        if ([self thumbnail] == nil) {
+            UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
+            [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
+            [self setThumbnail:thumbnail];
+            [thumbnail release];
+        }
     }
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
     if (document != nil) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
         UIImage *thumbnail = [[printPageRender thumbnail] retain];
-        [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
+        [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
         [self setThumbnail:thumbnail];
         [thumbnail release];
         [printPageRender release];
-    } else {
-        UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
-        [[self extraInformation] setObject:thumbnail forKey:MTDocumentInfoKeyThumbnail];
-        [self setThumbnail:thumbnail];
-        [thumbnail release];
     }
     [[self extraInformation] setObject:@(1.0) forKey:MTDocumentInfoKeyVersion];
     [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
@@ -247,10 +178,10 @@ NSString * MTDocumentParentContextName          = @"moc";
 
     if (content) {
 
-        NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent:MTDocumentInfoKeyThumbnail];
+        NSURL *thumbnailUrl = [[absoluteURL URLByAppendingPathComponent:[MADocument thumbnailSaveName]] retain];
         NSError *filePresenterError = nil;
         
-        UIImage *thumbnail = [(NSDictionary *)content objectForKey:MTDocumentInfoKeyThumbnail];
+        UIImage *thumbnail = [[(NSDictionary *)content objectForKey:[MADocument thumbnailSaveName]] retain];
         [UIImagePNGRepresentation(thumbnail) writeToURL:thumbnailUrl atomically:NO];
 
         NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];
@@ -261,6 +192,8 @@ NSString * MTDocumentParentContextName          = @"moc";
         if (filePresenterError != nil) {
             [filePresenterError presentErrorToUser];
         }
+        [thumbnail release];
+        [thumbnailUrl release];
 
     }
     return YES;

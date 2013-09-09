@@ -15,4 +15,6 @@
 
 + (BOOL)isLagacyOS;
 + (BOOL)isModernOS;
++ (BOOL)isRetnaDisplay;
+
 @end

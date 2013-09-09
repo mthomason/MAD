@@ -38,4 +38,10 @@
     }
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
+    [[self navigationItem] setHidesBackButton:NO];
+}
+
 @end

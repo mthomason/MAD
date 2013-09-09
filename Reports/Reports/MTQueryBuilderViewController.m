@@ -15,9 +15,10 @@
 
 @interface MTQueryBuilderViewController()
 
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
+//@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemDone;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerLinks;
@@ -58,57 +59,44 @@
     [_fetchedResultsControllerGroups release];
     [_fetchedResultsControllerPredicates release];
     [_tableSectionTitles release];
-    [_tableViewQueryBuilder release];
-    [_toolbar release];
-    [_toolbarTop release];
     [_documentStatusView release];
     [_barButtonItemShowSQL release];
+    [_barButtonItemEdit release];
+    [_barButtonItemDone release];
     [super dealloc];
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action {
+    
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     CGRect statusViewBounds;
-    if (self.toolbar.frame.size.height < 40.0000f) {
-        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+    if (self.navigationController.toolbar.frame.size.height < 40.0000f) {
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
+        }
     } else {
-        statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+        if ([UIDevice isModernOS]) {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+        } else {
+            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
+        }
     }
     [[self documentStatusView] setBounds:statusViewBounds];
     [[self documentStatusView] setNeedsDisplay];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    [self tableViewQueryBuilder].contentSize = CGSizeMake([self tableViewQueryBuilder].frame.size.width, [self tableViewQueryBuilder].contentSize.height);
+    
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    /*CGRect navigationToolbarFrame = self.navigationController.navigationBar.frame;
-    CGRect customToolbarFrame = CGRectMake(self.toolbar.frame.origin.x, self.toolbar.frame.origin.y, self.toolbar.frame.size.width, navigationToolbarFrame.size.height);
-    [UIView animateWithDuration:duration animations:^{
-        self.toolbar.frame = customToolbarFrame;
-    }];*/
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    
-    //CGRect navigationToolbarFrame = self.navigationController.navigationBar.frame;
-    //CGRect customToolbarFrame = CGRectMake(self.toolbar.frame.origin.x, self.toolbar.frame.origin.y, self.toolbar.frame.size.width, navigationToolbarFrame.size.height);
-    //[UIView animateWithDuration:duration animations:^{
-    //    self.toolbar.frame = customToolbarFrame;
-    //}];
-    [[self view] setNeedsLayout];
 }
 
 - (void)documentStateChanged {
@@ -135,11 +123,11 @@
 }
 
 - (void)enableUserInteraction {
-    [[self view] setUserInteractionEnabled:YES];
+    [[self tableView] setUserInteractionEnabled:YES];
 }
 
 - (void)disableUserInteraction {
-    [[self view] setUserInteractionEnabled:NO];
+    [[self tableView] setUserInteractionEnabled:NO];
 }
 
 #pragma mark - View lifecycle
@@ -149,12 +137,12 @@
     
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-    if ([UIDevice isLagacyOS]) {
-        [[self tableViewQueryBuilder] setBackgroundColor: [UIColor paperGraphPaper]];
-        [[self tableViewQueryBuilder] setOpaque: YES];
-    }
+    //if ([UIDevice isLagacyOS]) {
+    //    [[self tableView] setBackgroundColor: [UIColor paperGraphPaper]];
+    //    [[self tableView] setOpaque: YES];
+    //}
     
-    [[self tableViewQueryBuilder] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    //[[self tableView] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
     NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
@@ -233,29 +221,29 @@
     
     [self setModelWithTwoOrMoreTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
     [self disableUserInteraction];
-    
-    NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
-    [toolbarButtons removeObject:[self barButtonItemShowSQL]];
-    [[self toolbar] setItems:toolbarButtons animated:NO];
+
+    NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
+    [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
+    [self setToolbarItems:toolbarButtons animated:NO];
     [toolbarButtons release];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(documentStateChanged)
                                                  name:UIDocumentStateChangedNotification
                                                object:[self activeDocument]];
-    if ([UIDevice isLagacyOS]) {
-        [[self toolbar] setTintColor:[UIColor edaBlueDark]];
-    }
+
     if ([self barButtonItemShowSQL] != nil) {   //i.e. iPad version
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
-                NSMutableArray *toolbarButtons = [[[self toolbar] items] mutableCopy];
+                NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
                 [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
-                [[self toolbar] setItems:toolbarButtons animated:animated];
+                [self setToolbarItems:toolbarButtons animated:animated];
                 [toolbarButtons release];
             }
         }];
@@ -264,7 +252,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -417,25 +405,39 @@
 
 //Labeled as "Reports"
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish: self];
+    //[[self delegate] viewControllerDidFinish: self];
 }
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = ![[self tableViewQueryBuilder] isEditing];
+    BOOL editing = ![[self tableView] isEditing];
     
     if ([UIDevice isPad] == NO) {
 
-        UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
+        //UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
+
+        NSMutableArray *barButtonItems = [[self toolbarItems] mutableCopy];
+        if (editing) {
+            [barButtonItems removeObject:[self barButtonItemEdit]];
+            [barButtonItems addObject:[self barButtonItemDone]];
+        } else {
+            [barButtonItems removeObject:[self barButtonItemDone]];
+            [barButtonItems addObject:[self barButtonItemEdit]];
+        }
+        [self setToolbarItems:barButtonItems animated:YES];
+        /*
+        [[self barButtonItemEdit] :(editing ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit)];
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
                                                                                        target: self
                                                                                        action: @selector(edit:)];
         [[self navigationItem] setRightBarButtonItem:barButtonItem];
         [barButtonItem release];
+        */
+        [barButtonItems release];
 
     }
 
-    [[self tableViewQueryBuilder] setEditing: editing];
+    [[self tableView] setEditing: editing];
 }
 
 #pragma mark Table Header Actions
@@ -486,7 +488,7 @@
 
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableViewQueryBuilder] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey] retain];
+    NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey] retain];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {
@@ -553,7 +555,7 @@
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
-        [[self tableViewQueryBuilder] reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
+        [[self tableView] reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -580,11 +582,11 @@
     NSUInteger rowFirstTransaction = weight;
     
     [managedObjectContext save: &error];
-    [[self tableViewQueryBuilder] beginUpdates];
-    [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
+    [[self tableView] beginUpdates];
+    [[self tableView] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
     //[[self activeDocument] saveContext];
-    [[self tableViewQueryBuilder] endUpdates];
+    [[self tableView] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
@@ -662,21 +664,21 @@
     //NSLog(@"Add table at %@", insertedRowIndexPath);
     if (indexSetSections != nil) {
 
-        [[self tableViewQueryBuilder] beginUpdates];
-        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+        [[self tableView] beginUpdates];
+        [[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
                                             withRowAnimation: UITableViewRowAnimationAutomatic];
-        [[self tableViewQueryBuilder] insertSections: indexSetSections
+        [[self tableView] insertSections: indexSetSections
                                     withRowAnimation: UITableViewRowAnimationAutomatic];
         [managedObjectContext save:nil];
-        [[self tableViewQueryBuilder] endUpdates];
+        [[self tableView] endUpdates];
 
     } else {
 
-        [[self tableViewQueryBuilder] beginUpdates];
-        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+        [[self tableView] beginUpdates];
+        [[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
                                             withRowAnimation: UITableViewRowAnimationAutomatic];
         [managedObjectContext save:nil];
-        [[self tableViewQueryBuilder] endUpdates];
+        [[self tableView] endUpdates];
     }
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
@@ -1051,7 +1053,7 @@
                             //Reweight Groups
                             
                             [tableView beginUpdates];
-                            [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: @[indexPath]
+                            [[self tableView] deleteRowsAtIndexPaths: @[indexPath]
                                                                 withRowAnimation: UITableViewRowAnimationAutomatic];
                             [[query managedObjectContext] save:nil];
                             NSString *weight = NSStringFromSelector(@selector(weight));
@@ -1321,9 +1323,9 @@
     if ([UIDevice isPad] == NO || YES) {
         MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
 //        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, tableView.frame.size.width, 29.0000f)];
-        if ([UIDevice isPad]) {
-            [headerView setBackgroundColor:[UIColor clearColor]];
-        }
+        //if ([UIDevice isPad]) {
+            //[headerView setBackgroundColor:[UIColor clearColor]];
+        //}
         section = [self tableSectionTypeForIndexPathSection: section];
         
         switch (section) {
@@ -1521,7 +1523,7 @@
         
         frc = nil;
     }
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (NSMutableDictionary *)datamodel {
@@ -1550,7 +1552,7 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
-        [[self tableViewQueryBuilder] beginUpdates];
+        [[self tableView] beginUpdates];
         [self setBeganUpdates: YES];
     }
 }
@@ -1588,12 +1590,12 @@
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             switch(type) {
                 case NSFetchedResultsChangeInsert:
-                    [[self tableViewQueryBuilder] insertSections: [NSIndexSet indexSetWithIndex:updateSection]
+                    [[self tableView] insertSections: [NSIndexSet indexSetWithIndex:updateSection]
                                               withRowAnimation: UITableViewRowAnimationFade];
                     break;
                     
                 case NSFetchedResultsChangeDelete:
-                    [[self tableViewQueryBuilder] deleteSections:
+                    [[self tableView] deleteSections:
                      [NSIndexSet indexSetWithIndex:updateSection] withRowAnimation:UITableViewRowAnimationFade];
                     break;
             }
@@ -1621,24 +1623,24 @@
             if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
-                        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeDelete: {
-                        [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeUpdate: {
-                        [[self tableViewQueryBuilder] reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeMove: {
-                        [[self tableViewQueryBuilder] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
-                        [[self tableViewQueryBuilder] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
@@ -1656,7 +1658,7 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if (self.beganUpdates) [[self tableViewQueryBuilder] endUpdates];
+    if (self.beganUpdates) [[self tableView] endUpdates];
     [self setBeganUpdates:NO];
 }
 
@@ -1679,7 +1681,7 @@
         NSError *error = nil;
         [[self fetchedResultsControllerTables] performFetch:&error];
     }
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (void)performFetchLinks {
@@ -1687,7 +1689,7 @@
         NSError *error = nil;
         [[self fetchedResultsControllerLinks] performFetch:&error];
     }
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (void)performFetchGroups {
@@ -1695,15 +1697,18 @@
         NSError *error = nil;
         [[self fetchedResultsControllerGroups] performFetch:&error];
     }
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (void)performFetchPredicate {
     if ([self fetchedResultsControllerPredicates]) {
         NSError *error = nil;
         [[self fetchedResultsControllerPredicates] performFetch:&error];
+        if (error != nil) {
+            MTLog(@"%@", error);
+        }
     }
-    [[self tableViewQueryBuilder] reloadData];
+    [[self tableView] reloadData];
 }
 
 @end

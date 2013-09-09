@@ -213,9 +213,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [self drawPageAtIndex:0 inRect:letterRect];
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *result = [image thumbnailImage:64.0000f interpolationQuality:kCGInterpolationLow];
+    CGFloat imageSize = 64.0000f * [[UIScreen mainScreen] scale];
+    
+    UIImage *result;
+    if ([UIDevice isLagacyOS]) {
+        UIImage *i = [image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow];
+        result = [[UIImage imageWithBorder:i] retain];
+    } else {
+        result = [[image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow] retain];
+    }
     UIGraphicsEndImageContext();
-    result = [[UIImage imageWithBorder:result] retain];
+
     return [result autorelease];
 }
 
@@ -1050,10 +1058,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             BOOL nullGroupExist = NO;
             NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
             for (id obj in allKeys) {
-                NSString *str = (NSString *)obj;
-                if ([str isEqualToString: @"(null)"]) {
-                    nullGroupExist = YES;
-                    break;
+                if ([obj isKindOfClass:[NSString class]]) {
+                    NSString *str = (NSString *)obj;
+                    if ([str isEqualToString: @"(null)"]) {
+                        nullGroupExist = YES;
+                        break;
+                    }
                 }
             }
             if (nullGroupExist) {

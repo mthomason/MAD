@@ -71,6 +71,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
+    [[self navigationItem] setHidesBackButton:NO];
+    
     [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
 
     rowHeight_ = DEFAULT_ROW_HEIGHT;

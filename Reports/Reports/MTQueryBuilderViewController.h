@@ -32,7 +32,7 @@
 #import "MTLog.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
-@interface MTQueryBuilderViewController : MTViewController
+@interface MTQueryBuilderViewController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         NSFetchedResultsControllerDelegate,
@@ -45,7 +45,7 @@
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableView *tableViewQueryBuilder;
+//@property (nonatomic, retain) IBOutlet UITableView *tableViewQueryBuilder;
 
 @property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;
 @property (assign, nonatomic) IBOutlet UITableViewCellTableName     *tableViewCellTableName;

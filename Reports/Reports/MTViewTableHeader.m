@@ -25,7 +25,7 @@
     if (self) {
 
         [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-        [self setBackgroundColor: [UIColor edaTableHeaderBackground]];
+        //[self setBackgroundColor: [UIColor edaTableHeaderBackground]];
         [self setTranslatesAutoresizingMaskIntoConstraints:YES];
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10.0000f, 3.0000f, 215.0000f, 24.0000f)];
@@ -33,9 +33,10 @@
         [label setTextColor:[UIColor blackColor]];
         [label setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
         [label setFont:[UIFont boldSystemFontOfSize:20.0000f]];
-        [label setHighlightedTextColor:[UIColor whiteColor]];
-        [label setShadowColor:[UIColor whiteColor]];
-        [label setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
+        
+        //[label setHighlightedTextColor:[UIColor whiteColor]];
+        //[label setShadowColor:[UIColor whiteColor]];
+        //[label setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
         [button setFrame:CGRectMake(274.0000f, 0.0000f, 29.0000f, 29.0000f)];

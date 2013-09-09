@@ -7,7 +7,7 @@
 //
 
 #import "MTCollectionViewCellDocument.h"
-
+#import "UIDevice+Hack.h"
 @implementation MTCollectionViewCellDocument
 
 - (void)dealloc {
@@ -18,17 +18,35 @@
 
 - (void)awakeFromNib {
     
-    UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
-    [[selectedBackground layer] setCornerRadius: 5.0000f];
-    [selectedBackground setClipsToBounds:YES];
-
-    [selectedBackground setBackgroundColor:[UIColor edaBlueDarkSelection]];
-    [self setSelectedBackgroundView:selectedBackground];
-    [selectedBackground release];
+    //[[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
+    //[[[self imagePreview] layer] setShadowOffset:CGSizeMake(0.0000f, -1.0000f)];
     
-    [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+    //[[[self imagePreview] layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
+    
+    //[[[self imagePreview] layer] setBorderWidth:0.50000f];
     
     [super awakeFromNib];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        if ([self selectedBackgroundView]) {
+            [[self selectedBackgroundView] setBackgroundColor:[self tintColor]];
+        } else {
+            UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
+            if ([UIDevice isLagacyOS]) {
+                [[selectedBackground layer] setCornerRadius: 5.0000f];
+            }
+            [selectedBackground setClipsToBounds:YES];
+            
+            [self setSelectedBackgroundView:selectedBackground];
+            [selectedBackground release];
+            
+            [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+
+        }
+    }
+    return self;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {

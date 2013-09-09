@@ -67,14 +67,8 @@
     [self setTitle: NSLocalizedString(@"Connection Settings", @"Connection Settings")];
     [self setClearsSelectionOnViewWillAppear: YES];
     
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-    [[self navigationItem] setLeftBarButtonItem:cancel];
     [[self navigationItem] setHidesBackButton:NO];
-    [[self navigationItem] setBackBarButtonItem:cancel];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
-    
-    [cancel release];
-
  }
 
 - (void)viewWillAppear:(BOOL)animated {

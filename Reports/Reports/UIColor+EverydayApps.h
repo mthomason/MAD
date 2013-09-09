@@ -21,5 +21,6 @@
 + (id)edaGreenLight;
 
 + (id)edaTableHeaderBackground;
++ (id)masterTintColor;
 
 @end

@@ -159,19 +159,27 @@
         [[self buttonUnderline] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateSelected];
 
     } else {
-        [[[self buttonBold] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+
+        UIColor *tintColor = [[self view] tintColor];
+        [[[self buttonBold] layer] setBorderColor:[tintColor CGColor]];
         [[[self buttonBold] layer] setCornerRadius:6.6666f];
         [[[self buttonBold] layer] setBorderWidth:1.0000f];
         
-        [[[self buttonItalic] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        //[self setStateInControl:[self buttonBold] forState:<#(MTControlState)#>];
+        /*[[self buttonBold] setTitleColor:tintColor forState:UIControlStateNormal];
+        [[self buttonBold] setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [[self buttonBold] setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];*/
+
+        
+        [[[self buttonItalic] layer] setBorderColor:[tintColor CGColor]];
         [[[self buttonItalic] layer] setCornerRadius:6.6666f];
         [[[self buttonItalic] layer] setBorderWidth:1.0000f];
         
-        [[[self buttonStrike] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonStrike] layer] setBorderColor:[tintColor CGColor]];
         [[[self buttonStrike] layer] setCornerRadius:6.6666f];
         [[[self buttonStrike] layer] setBorderWidth:1.0000f];
         
-        [[[self buttonUnderline] layer] setBorderColor:[[[self view] tintColor] CGColor]];
+        [[[self buttonUnderline] layer] setBorderColor:[tintColor CGColor]];
         [[[self buttonUnderline] layer] setCornerRadius:6.6666f];
         [[[self buttonUnderline] layer] setBorderWidth:1.0000f];
     }
@@ -209,39 +217,64 @@
 
 - (void)setStateInControl:(UIControl *)control forState:(MTControlState)state {
     
+    
     BOOL select, highlight;
+    UIColor *backgroundColor, *titleColor;
     
     switch (state) {
         case MTControlStateOn:
             select = NO;
             highlight = YES;
+            backgroundColor = [[self view] tintColor];
+            titleColor = [UIColor whiteColor];
             break;
         case MTControlStateOff:
             select = NO;
             highlight = NO;
+            backgroundColor = [UIColor clearColor];
+            titleColor = [[self view] tintColor];
             break;
         case MTControlStateAmbiguous:
             select = YES;
             highlight = NO;
+            backgroundColor = [[[self view] tintColor] colorWithAlphaComponent:0.5000f];
+            titleColor = [UIColor whiteColor];
             break;
         default:
             select = NO;
             highlight = NO;
+            backgroundColor = [UIColor clearColor];
+            titleColor = [[self view] tintColor];
             break;
     }
     
-    [control setSelected:select];
-    [control setHighlighted:highlight];
+    
+     [control setSelected:select];
+     [control setHighlighted:highlight];
+    if ([control isKindOfClass:[UIButton class]]) {
+        [control setBackgroundColor:backgroundColor];
+        [control setTintColor:titleColor];
+        [[(UIButton *)control titleLabel] setTextColor:titleColor];
+    }
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
-    
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
             [control setSelected:select];
             [control setHighlighted:highlight];
+            
+            if ([control isKindOfClass:[UIButton class]]) {
+                [control setBackgroundColor:backgroundColor];
+                [control setTintColor:titleColor];
+                [[(UIButton *)control titleLabel] setTextColor:titleColor];
+            }
+            
         }];
-
+        
     });
+    
     
 }
 
@@ -496,17 +529,17 @@
         [self setStateInControl:[self segmentedControlVerticalAlignment] forState:controlStateVerticalAlignment];
         
         
-        [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
-        [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
-        [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
-        [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
-        
         [[self fontLabelTableViewCell] setUserInteractionEnabled:YES];
         [[self stepperFontSize] setUserInteractionEnabled:YES];
         [[self segmentedControlHorizontalAlignment] setUserInteractionEnabled:YES];
         [[self segmentedControlVerticalAlignment] setUserInteractionEnabled:YES];
 
     }
+    [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
+    [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
+    [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
+    [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
+
 }
 
 - (NSAttributedString *)sizeWidthForValue:(NSNumber *)value andFontSize:(CGFloat)fontSize {

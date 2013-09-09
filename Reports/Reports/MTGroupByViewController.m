@@ -71,8 +71,11 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 #pragma mark - View lifecycle
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
+    [[self navigationItem] setHidesBackButton:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

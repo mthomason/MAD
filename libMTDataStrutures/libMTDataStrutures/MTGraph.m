@@ -201,7 +201,7 @@
 
 - (MTLinkedList *)topologicalSortWithError:(NSError **)anError {
     
-    NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
+    NSNumber *counter = @(0);
     
     for (MTVertex *vertex in [self vertices]) {
         [vertex setDfsVertexColor:MTColorWhite];

@@ -34,7 +34,8 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    //[[self window] setTintColor:[UIColor masterTintColor]];
+    
     //Log uncaught errors.
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     

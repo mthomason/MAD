@@ -45,7 +45,7 @@
         [[label layer] setShadowOpacity:1.0000f];
         [[label layer] setShadowRadius:0.0000f];
         [[label layer] setShadowColor:[[UIColor blackColor] CGColor]];
-        [[label layer] setShadowOffset:CGSizeMake(0.0, [UIScreen mainScreen].scale == 1 ? -1 : -1.5)];
+        [[label layer] setShadowOffset:CGSizeMake(0.0, ![UIDevice isRetnaDisplay] ? -1 : -1.5)];
     } else {
         [label setFont:[UIFont boldSystemFontOfSize:20.0000f]];
         [label setTextColor:[UIColor blackColor]];

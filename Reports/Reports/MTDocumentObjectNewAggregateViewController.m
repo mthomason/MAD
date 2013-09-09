@@ -161,6 +161,8 @@ NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSav
     [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
     [self setGroupTypeSectionNumber:0];
     [self setAggregateGroupByType:MTAggregateGroupByTypePage];
+    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
+    [[self navigationItem] setHidesBackButton:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -11,5 +11,9 @@
 @interface DesignerSectionLabel : UIView
 
 - (id)initWithDisplayText:(NSString *)displayText;
+- (void)dimView;
+- (void)normalView;
 
+@property (nonatomic, retain) UILabel *labelSectionIdentifer;
+@property (nonatomic, assign, readonly) BOOL selected;
 @end

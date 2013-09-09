@@ -15,7 +15,7 @@
 #import "NSError+UserInterface.h"
 //#import "MTReportViewerPrintPageRenderer.h"
 
-extern NSString *MTDocumentInfoKeyThumbnail;
+extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @interface MADocument : UIManagedDocument
 
@@ -23,5 +23,6 @@ extern NSString *MTDocumentInfoKeyThumbnail;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 - (NSString *)name;
++ (NSString *)thumbnailSaveName;
 
 @end

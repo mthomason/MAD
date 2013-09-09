@@ -114,16 +114,24 @@
         [self setDisplayHighlighted: NO];
         
         UIView *marginView = [self retain];
-        [marginView setBackgroundColor:[UIColor whiteColor]];
+        if ([UIDevice isLagacyOS]) {
+            [marginView setBackgroundColor:[UIColor whiteColor]];
+        } else {
+            [marginView setBackgroundColor:[UIColor clearColor]];
+        }
         [marginView setClipsToBounds:YES];
         [self setMarginView: marginView];
         [marginView release];
         
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
-        [[visibleView layer] setBorderWidth:1.0000f];
-        [[visibleView layer] setBorderColor:[[UIColor greenColor] CGColor]];
-        [visibleView setBackgroundColor:[UIColor whiteColor]];
+        if ([UIDevice isLagacyOS]) {
+            [[visibleView layer] setBorderWidth:1.0000f];
+            [[visibleView layer] setBorderColor:[[UIColor greenColor] CGColor]];
+            [visibleView setBackgroundColor:[UIColor whiteColor]];
+        } else {
+            [visibleView setBackgroundColor:[UIColor clearColor]];
+        }
         [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self marginView] addSubview: visibleView];
         [self setVisibleView:visibleView];
@@ -131,9 +139,13 @@
         
         UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
         [labelBackground setClipsToBounds:YES];
-        [[labelBackground layer] setBorderColor:[[UIColor redColor] CGColor]];
-        [[labelBackground layer] setBorderWidth:1.0000f];
-        [labelBackground setBackgroundColor:[UIColor whiteColor]];
+        if ([UIDevice isLagacyOS]) {
+            [[labelBackground layer] setBorderColor:[[UIColor blackColor] CGColor]];
+            [[labelBackground layer] setBorderWidth:1.0000f];
+            [labelBackground setBackgroundColor:[UIColor whiteColor]];
+        } else {
+            [labelBackground setBackgroundColor:[UIColor clearColor]];
+        }
         [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self visibleView] addSubview:labelBackground];
         [self setPaddingView:labelBackground];
@@ -146,7 +158,11 @@
         [imageView release];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        [label setBackgroundColor:[UIColor whiteColor]];
+        if ([UIDevice isLagacyOS]) {
+            [label setBackgroundColor:[UIColor whiteColor]];
+        } else {
+            [label setBackgroundColor:[UIColor clearColor]];
+        }
         [label setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [[self paddingView] addSubview:label];
         [self setDisplayLabel:label];

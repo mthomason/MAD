@@ -1,4 +1,6 @@
 #import "DocumentStatusView.h"
+#import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 
 @interface DocumentStatusView()
 
@@ -78,46 +80,46 @@
     CGRect statusIndicatorBox = [self statusIndicatorRectForRect:rect];
 
     CGMutablePathRef circlePath = CGPathCreateMutable();
-    CGPathAddArc(circlePath, NULL, CGRectGetMidX(statusIndicatorBox), CGRectGetMidY(statusIndicatorBox), CGRectGetWidth(statusIndicatorBox) / 2.0000f, 0.0000f, M_PI, NO);
-    CGPathAddArc(circlePath, NULL, CGRectGetMidX(statusIndicatorBox), CGRectGetMidY(statusIndicatorBox), CGRectGetWidth(statusIndicatorBox) / 2.0000f, M_PI, 0.0000f, NO);
+    CGFloat centerX = CGRectGetMidX(statusIndicatorBox),
+            centerY = CGRectGetMidY(statusIndicatorBox),
+            radius = CGRectGetWidth(statusIndicatorBox) / 2.0000f;
+    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, 0.0000f, M_PI, NO);
+    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, M_PI, 0.0000f, NO);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, circlePath);
     
+    UIColor *statusColor;
     switch ([self state]) {
         
         case UIDocumentStateClosed:
-            [[UIColor greenColor] setFill];
+            statusColor = [UIColor greenColor];
             break;
-        
         case UIDocumentStateEditingDisabled:
-            [[UIColor greenColor] setFill];
+            statusColor = [UIColor greenColor];
             break;
-        
         case UIDocumentStateInConflict:
-            [[UIColor yellowColor] setFill];
+            statusColor = [UIColor yellowColor];
             break;
-        
         case UIDocumentStateNormal:
-            [[UIColor greenColor] setFill];
+            statusColor = [UIColor greenColor];
             break;
-        
         case UIDocumentStateSavingError:
-            [[UIColor redColor] setFill];
+            statusColor = [UIColor redColor];
             break;
-        
         default:
-            [[UIColor greenColor] setFill];
+            statusColor = [UIColor greenColor];
             break;
 
     }
+    [statusColor setFill];
     [[UIColor blackColor] setStroke];
     
     if ([self active]) {
         [[UIColor clearColor] set];
     }
-    
-    CGContextSetLineWidth(currentContext, 3.0000f);
+    CGFloat lineWidth = ([UIDevice isModernOS] ? 1.0000f : 3.0000f);
+    CGContextSetLineWidth(currentContext, lineWidth);
     
     CGContextDrawPath(currentContext, kCGPathEOFillStroke);
     CGPathRelease(circlePath);
