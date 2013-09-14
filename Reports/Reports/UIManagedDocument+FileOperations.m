@@ -37,7 +37,7 @@
     id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
     
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
-    NSInferMappingModelAutomaticallyOption : @YES};
+                              NSInferMappingModelAutomaticallyOption : @YES};
     
     [managedDocumentAtUrl setPersistentStoreOptions: options];
     

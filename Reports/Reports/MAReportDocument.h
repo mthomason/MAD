@@ -33,7 +33,10 @@
 - (void)refresh:(void (^)(BOOL success))completion;
 - (BOOL)hasCachedData;
 - (void)sendTo;
+
++ (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 
 @end
 

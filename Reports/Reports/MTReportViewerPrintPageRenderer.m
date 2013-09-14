@@ -1072,8 +1072,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
 
             
-            NSMutableArray *allKeysSorted = nil;
-            NSEnumerator *loopEnumerator;
+            NSEnumerator *loopEnumerator = nil;
             
             if (sortSelector != nil) {
                 NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
@@ -1086,10 +1085,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 } else {
                     loopEnumerator = [[allKeysSorted objectEnumerator] retain];
                 }
+                [allKeysSorted release];
             } else {
                 loopEnumerator = [[allKeys objectEnumerator] retain];
             }
-
+            
             [desc release];
             
             
@@ -1151,7 +1151,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [obj release];
             }
             [loopEnumerator release];
-            [allKeysSorted release];
             [allKeys release];
 
         } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...

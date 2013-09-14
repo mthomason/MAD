@@ -11,6 +11,8 @@
 #import "MTClipboardView.h"
 #import "RptqDocument+ActiveDocument.h"
 
+NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
+
 #pragma mark - Private Category
 
 @interface MTQueryBuilderViewController()
@@ -396,8 +398,63 @@
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
         [[segue destinationViewController] setDelegate: self];
+    } else if ([[segue identifier] isEqualToString:MTSegueCloseDesigner]) {
+/*
+        [[[self activeDocument] managedObjectContext] save:nil];
+        
+        //dispatch_semaphore_t closeWithCompletionHandler = dispatch_semaphore_create(0);
+        //dispatch_async(dispatch_get_main_queue(), ^{
+            [[self activeDocument] closeWithCompletionHandler:^(BOOL success) {
+                //dispatch_semaphore_t deleteFromDisk = dispatch_semaphore_create(0);
+                [MADocument deleteFromDisk:[[self activeDocument] fileURL] completion:^(BOOL success) {
+                    [[MTActiveDocument sharedDocument] setActiveDocument:nil];
+                //    dispatch_semaphore_signal(deleteFromDisk);
+                }];
+                //dispatch_semaphore_wait(deleteFromDisk, DISPATCH_TIME_FOREVER);
+                //dispatch_release(deleteFromDisk);
+                //dispatch_semaphore_signal(closeWithCompletionHandler);
+            }];
+        //});
+//        dispatch_semaphore_wait(closeWithCompletionHandler, DISPATCH_TIME_FOREVER);
+//        dispatch_release(closeWithCompletionHandler);
+        */
     }
 }
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    BOOL shouldPerformSegueWithIdentifier = YES;
+    if ([identifier isEqualToString:MTSegueCloseDesigner]) {
+        NSError *error = nil;
+        [[[self activeDocument] managedObjectContext] save:&error];
+        if (error != nil) {
+            [[[self activeDocument] managedObjectContext] save:&error];
+        }
+        [[self activeDocument] save:^(BOOL success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (success) {
+                    [[self activeDocument] closeWithCompletionHandler:^(BOOL success) {
+                        if (success) {
+                            [[self activeDocument] setSuspended:YES];
+                            [NSFileManager wrapFile:[[self activeDocument] fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                                [MADocument deleteFromDisk:[[self activeDocument] fileURL] completion:^(BOOL success) {
+                                    if ([[[MTActiveDocument sharedDocument] activeDocument] isEqual:[self activeDocument]]) {
+                                        [[MTActiveDocument sharedDocument] setActiveDocument:nil];
+                                    }
+                                }];
+                                
+                            }];
+                        };
+                    }];
+                    
+                }
+            });
+        }];
+    }
+    return shouldPerformSegueWithIdentifier;
+}
+
+
 
 #pragma mark - Toolbar Actions
 
@@ -465,7 +522,6 @@
 #pragma mark - Modal helper
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
-    //[self datamodelForNumberOfTables:numberOfTables];
     MTQuerySections result = section;
     NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
     NSArray *sectionTypes = [[dataModel objectForKey: MTTableSectionSectionsKey] retain];

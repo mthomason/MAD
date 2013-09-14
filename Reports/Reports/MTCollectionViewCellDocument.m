@@ -30,21 +30,18 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        if ([self selectedBackgroundView]) {
-            [[self selectedBackgroundView] setBackgroundColor:[self tintColor]];
-        } else {
-            UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
-            if ([UIDevice isLagacyOS]) {
-                [[selectedBackground layer] setCornerRadius: 5.0000f];
-            }
-            [selectedBackground setClipsToBounds:YES];
-            
-            [self setSelectedBackgroundView:selectedBackground];
-            [selectedBackground release];
-            
-            [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
-
+        UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
+        if ([UIDevice isLagacyOS]) {
+            [[selectedBackground layer] setCornerRadius: 5.0000f];
         }
+        [selectedBackground setClipsToBounds:YES];
+        [selectedBackground setBackgroundColor:[self tintColor]];
+        
+        [self setSelectedBackgroundView:selectedBackground];
+        [selectedBackground release];
+        
+        [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+        
     }
     return self;
 }
@@ -57,6 +54,9 @@
     return result;
 }
 
+//- (void)setSelected:(BOOL)selected {
+//}
+
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
@@ -67,6 +67,14 @@
 
 - (void)email:(id)sender {
     [[self delegate] emailDocumentRepresentedByCell:self];
+}
+
+- (void)dimTint {
+    [[self selectedBackgroundView] setBackgroundColor:[UIColor lightGrayColor]];
+}
+
+- (void)normalizeTint {
+    [[self selectedBackgroundView] setBackgroundColor:[self tintColor]];
 }
 
 @end

@@ -16,7 +16,7 @@
     [_password release];
     [_server release];
     [_database release];
-    [_server release];
+    [_host release];
     [super dealloc];
 }
 

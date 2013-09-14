@@ -614,6 +614,8 @@
 		4C5626051759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626061759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626071759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
+		4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5F02E014B9A91500C49BE9 /* MTReportTemplates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02DF14B9A91500C49BE9 /* MTReportTemplates.m */; };
 		4C5F02E314BA382A00C49BE9 /* MTStoreTemplatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E214BA382A00C49BE9 /* MTStoreTemplatesViewController.m */; };
 		4C5F02E614BA3A6700C49BE9 /* UITableViewCellStoreItemReportTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */; };
@@ -2235,6 +2237,8 @@
 		4C5625EA1759730200433E88 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
+		4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeViewController.h; sourceTree = "<group>"; };
+		4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUpgradeViewController.m; sourceTree = "<group>"; };
 		4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Invoice.trvt; sourceTree = "<group>"; };
 		4C5F02DC14B9A48900C49BE9 /* Blank.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Blank.trvt; sourceTree = "<group>"; };
 		4C5F02DE14B9A91500C49BE9 /* MTReportTemplates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportTemplates.h; sourceTree = "<group>"; };
@@ -3573,6 +3577,8 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */,
+				4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */,
 				4CA96E8C17BD395C0076F66A /* Document Icons */,
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C0081E11784968B00874849 /* MTStoreKit */,
@@ -6337,6 +6343,7 @@
 				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
+				4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */,
 				4CF8670E16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
 				4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */,
@@ -6908,6 +6915,7 @@
 				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
+				4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */,
 				4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,
 				4C752E1316EE7F55001FDAA3 /* MTAlertView.m in Sources */,

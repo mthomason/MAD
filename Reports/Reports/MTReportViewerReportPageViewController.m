@@ -196,6 +196,7 @@
 
         [self setTimeSinceRefrehLabel:label];
         [self setTimeSinceRefreshView: view];
+        [label release];
         [view release];
     }
 

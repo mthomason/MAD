@@ -18,6 +18,4 @@
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
 
-@property (nonatomic, retain) NSURL *documentToOpen;
-
 @end

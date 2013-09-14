@@ -294,8 +294,8 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
-                        <outlet property="buttonAddNewDocument" destination="B97-cO-IHc" id="uQo-qF-oTM"/>
-                        <outlet property="buttonLicensing" destination="x9M-5p-r1f" id="GjM-jq-V4I"/>
+                        <outlet property="barButtonItemAddNewDocument" destination="B97-cO-IHc" id="SnO-da-iiX"/>
+                        <outlet property="barButtonItemLicensing" destination="x9M-5p-r1f" id="JFK-Vo-OaO"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rDn-Bl-1Vg" userLabel="First Responder" sceneMemberID="firstResponder"/>

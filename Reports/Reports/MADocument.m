@@ -8,6 +8,7 @@
 
 #import "MADocument.h"
 #import "MTReportViewerPrintPageRenderer.h"
+#import "UIManagedDocument+FileOperations.h"
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
@@ -72,9 +73,20 @@ NSString * MTDocumentVersionFileName            = @"ver";
 NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
+- (BOOL)hasUnsavedChanges {
+    return [self isSuspended] ? NO : [super hasUnsavedChanges];
+}
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
+    if ([self thumbnailUrl] == nil) {
+        NSURL *urlSaveMad = [NSURL uniqueUrlForDocumentWithName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]
+                              withExtension:MTDocumentExtentionMobleApplicationDocument];
+        [self setThumbnailUrl:[MAReportDocument thumbnailUrlForMadUrl:urlSaveMad]];
+    }
     id result = [super contentsForType:typeName error:outError];
+    
+    
+    
     return result;
 }
 
@@ -106,10 +118,11 @@ NSString * MTDocumentParentContextName          = @"moc";
 #pragma mark - UIManagedDocument
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
-    
     NSError *readError = nil;
-    NSURL *thumbnailUrl = [absoluteURL URLByAppendingPathComponent: [MADocument thumbnailSaveName]];
-    NSData *imageData = [NSData dataWithContentsOfURL: thumbnailUrl options:NSDataReadingUncached error:&readError];
+    NSData *imageData = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[[self thumbnailUrl] path]]) {
+        imageData = [NSData dataWithContentsOfURL: [self thumbnailUrl] options:NSDataReadingUncached error:&readError];
+    }
 
     if (imageData != nil && readError == nil) {
         UIImage *image = [UIImage imageWithData: imageData];
@@ -145,11 +158,15 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
     //NSLog(@"AURL %@", absoluteURL);
-    
-    if ([self extraInformation] == nil) {
-        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
-        [self setExtraInformation:extraInfo];
-        [extraInfo release];
+    id result;
+    if ([self isSuspended]) {
+        result = [NSNull null];
+    } else {
+        if ([self extraInformation] == nil) {
+            NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+            [self setExtraInformation:extraInfo];
+            [extraInfo release];
+        }
         
         if ([self thumbnail] == nil) {
             UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
@@ -157,46 +174,68 @@ NSString * MTDocumentParentContextName          = @"moc";
             [self setThumbnail:thumbnail];
             [thumbnail release];
         }
+        
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+        if (document != nil) {
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+            UIImage *thumbnail = [[printPageRender thumbnail] retain];
+            [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
+            [self setThumbnail:thumbnail];
+            [thumbnail release];
+            [printPageRender release];
+        }
+        [[self extraInformation] setObject:@(1.0) forKey:MTDocumentInfoKeyVersion];
+        [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
+        result = [[[self extraInformation] retain] autorelease];
     }
-    
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
-    if (document != nil) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-        UIImage *thumbnail = [[printPageRender thumbnail] retain];
-        [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
-        [self setThumbnail:thumbnail];
-        [thumbnail release];
-        [printPageRender release];
-    }
-    [[self extraInformation] setObject:@(1.0) forKey:MTDocumentInfoKeyVersion];
-    [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
 
-    return [self extraInformation];
+    return result;
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
 
-    if (content) {
+    BOOL writeAdditionalContent;
+    
+    if (content ==[NSNull null] || [self isSuspended]) {
 
-        NSURL *thumbnailUrl = [[absoluteURL URLByAppendingPathComponent:[MADocument thumbnailSaveName]] retain];
+        writeAdditionalContent  = NO;
+   
+    } else if (content != nil) {
+    
+        writeAdditionalContent  = YES;
+
         NSError *filePresenterError = nil;
         
         UIImage *thumbnail = [[(NSDictionary *)content objectForKey:[MADocument thumbnailSaveName]] retain];
-        [UIImagePNGRepresentation(thumbnail) writeToURL:thumbnailUrl atomically:NO];
+        [UIImagePNGRepresentation(thumbnail) writeToURL:[self thumbnailUrl] atomically:NO];
 
         NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];
         id version = [content objectForKey:MTDocumentInfoKeyVersion];
         id generator = [content objectForKey:MTDocumentInfoKeyGenerator];
         [(NSDictionary *)@{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator} writeToURL:metaUrl atomically:NO];
-        
+
         if (filePresenterError != nil) {
             [filePresenterError presentErrorToUser];
         }
         [thumbnail release];
-        [thumbnailUrl release];
-
+ 
+    } else {
+        writeAdditionalContent = NO;
     }
-    return YES;
+    return writeAdditionalContent;
+}
+
+- (NSString *)fileName {
+    return [MADocument fileNameForMadUrl:[self fileURL]];
+}
+
++ (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
+    if ([[madUrl pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
+
+    } else {
+        
+    }
+    return [[madUrl lastPathComponent] stringByDeletingPathExtension];
 }
 
 - (void)saveContext {
@@ -218,11 +257,88 @@ NSString * MTDocumentParentContextName          = @"moc";
   }];
 }
 
+typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
+
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:[self fileURL] error:&error];
-    BOOL success = error == nil;
-    if (completion != nil) completion(success);
+    
+    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+        NSError *deleteError = nil;
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:[self fileURL] includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+            return YES;
+        }];
+        for (NSURL *file in enumerator) {
+            NSError *error = nil;
+            [fileManager removeItemAtURL:file error:&error];
+        }
+        [[NSFileManager defaultManager] removeItemAtURL:[self fileURL] error:&deleteError];
+        if (deleteError != nil) {
+            MTLog(@"%@", deleteError);
+        }
+        
+        completion(YES);
+    };
+
+    NSAssert([self documentState] == UIDocumentStateClosed, @"Document must be closed to call this!");
+
+    NSError *error;
+    // retrieve the store URL
+    NSURL * storeURL = [[[self managedObjectContext] persistentStoreCoordinator] URLForPersistentStore:[[[[self managedObjectContext] persistentStoreCoordinator] persistentStores] lastObject]];
+    // lock the current context
+    [[self managedObjectContext] lock];
+    [[self managedObjectContext] reset];//to drop pending changes
+    //delete the store from the current managedObjectContext
+    if ([[[self managedObjectContext] persistentStoreCoordinator] removePersistentStore:[[[[self managedObjectContext] persistentStoreCoordinator] persistentStores] lastObject] error:&error])
+    {
+        // remove the file containing the data
+        
+        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+        //recreate the store like in the  appDelegate method
+        [[[self managedObjectContext] persistentStoreCoordinator] addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
+    }
+    [[self managedObjectContext] unlock];
+
+    
+    [self performAsynchronousFileAccessUsingBlock:asyncBlock];
+}
+
++ (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion {
+    
+    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+        NSError *deleteError = nil;
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:fileUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+            MTLog(@"Error %@", error);
+            return YES;
+        }];
+        for (NSURL *file in enumerator) {
+            NSError *error = nil;
+            [fileManager removeItemAtURL:file error:&error];
+            if (error != nil) {
+                MTLog(@"Error %@", error);
+            }
+        }
+        [[NSFileManager defaultManager] removeItemAtURL:fileUrl error:&deleteError];
+        if (deleteError != nil) {
+            MTLog(@"%@", deleteError);
+        }
+        
+        completion(YES);
+    };
+    
+    MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileUrl];
+    BOOL properTypeToWrap = [[fileUrl pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive];
+    if (properTypeToWrap) {
+    
+        if ([documentReport documentState] != UIDocumentStateClosed) {
+            [documentReport closeWithCompletionHandler:^(BOOL success) {
+                [documentReport performAsynchronousFileAccessUsingBlock:asyncBlock];
+            }];
+        } else {
+            [documentReport performAsynchronousFileAccessUsingBlock:asyncBlock];
+        }
+    }
+    [documentReport release];
 }
 
 @end

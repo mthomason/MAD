@@ -45,8 +45,6 @@
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
-//@property (nonatomic, retain) IBOutlet UITableView *tableViewQueryBuilder;
-
 @property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;
 @property (assign, nonatomic) IBOutlet UITableViewCellTableName     *tableViewCellTableName;
 @property (assign, nonatomic) IBOutlet UITableViewCellQueryLink     *tableViewCellQueryLink;

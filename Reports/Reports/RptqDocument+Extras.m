@@ -227,12 +227,8 @@
             __block NSUInteger tableCounter = 0;
             NSUInteger numberOfTables = [tables count];
             for (MTDatabaseTable *databaseTable in tables) {
-                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext
-                                                                               andTable: databaseTable];
-                
-                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                     withConnecitonId: connectionId];
-                
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext andTable: databaseTable];
+                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument withConnecitonId: connectionId];
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
                 NSError *error = nil;
                 [[currentDatabase managedObjectContext] save:&error];

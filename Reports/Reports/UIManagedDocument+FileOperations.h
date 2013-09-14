@@ -15,5 +15,4 @@
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler;
 
-
 @end

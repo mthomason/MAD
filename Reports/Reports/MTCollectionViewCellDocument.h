@@ -23,6 +23,9 @@
 
 @property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
 
+- (void)dimTint;
+- (void)normalizeTint;
+
 @end
 
 #endif

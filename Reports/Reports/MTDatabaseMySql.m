@@ -24,7 +24,9 @@
 - (id)initWithConnectionSettings: (MTDatabaseConnection *)connectionSettings {
     self = [super init];
     if (self) {
-        [self setDatabaseConnection:connectionSettings];
+        MTDatabaseConnection *settings = [connectionSettings retain];
+        [self setDatabaseConnection:settings];
+        [settings release];
     }
     return self;
 }
@@ -36,17 +38,17 @@
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     
-    __block MysqlServer *serv = [[MysqlServer alloc] init];
-    
-    [serv setHost:      [[self databaseConnection] server]];
-    [serv setPort:      [[self databaseConnection] port]];
-    [serv setSchema:    [[self databaseConnection] database]];
-    
     NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
+    
+        __block MysqlServer *serv = [[MysqlServer alloc] init];
         
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        dispatch_async(queuePriorityBackground, ^{
+        [serv setHost:      [[self databaseConnection] server]];
+        [serv setPort:      [[self databaseConnection] port]];
+        [serv setSchema:    [[self databaseConnection] database]];
+
+        //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        //dispatch_async(queuePriorityBackground, ^{
             
             if (success) {
                 
@@ -86,28 +88,28 @@
                         }
                     }
                 }
-                [serv release];
-                dispatch_async(dispatch_get_main_queue(), ^{
+                //dispatch_async(dispatch_get_main_queue(), ^{
                     
                     completion(success, error, results);
-                });
+                //});
                 
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                //dispatch_async(dispatch_get_main_queue(), ^{
                     
                     completion(success, credentialsError, nil);
-                });
+                //});
             }
-        });
+        //});
+        [serv release];
     }];
 }
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    dispatch_async(queuePriorityBackground, ^{
+    //dispatch_async(queuePriorityBackground, ^{
             
             __block MysqlServer *serv = [[MysqlServer alloc] init];
             
@@ -189,17 +191,17 @@
                     NSArray *resultsArray = [[resultsDictionary allValues] retain];
                     [resultsDictionary release];
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    //dispatch_async(dispatch_get_main_queue(), ^{
                         completion(success, error, [resultsArray autorelease]);
-                    });
+                    //});
                     
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    //dispatch_async(dispatch_get_main_queue(), ^{
                         completion(success, credentialsError, nil);
-                    });
+                    //});
                 }
             }];
-    });
+    //});
 }
 
 - (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {

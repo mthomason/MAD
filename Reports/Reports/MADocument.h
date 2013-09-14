@@ -22,7 +22,13 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)save:(void (^)(BOOL success))completion;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
++ (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion;
 - (NSString *)name;
+- (NSString *)fileName;
++ (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSString *)thumbnailSaveName;
+
+@property (nonatomic, retain) NSURL *thumbnailUrl;
+@property (nonatomic, assign, getter = isSuspended) BOOL suspended;
 
 @end

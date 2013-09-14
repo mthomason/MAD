@@ -7,7 +7,9 @@
 //
 
 #import "NSFileManager+Common.h"
+#import "NSURL+Document.h"
 #import "MACloudManager.h"
+#import "MTLog.h"
 
 @implementation NSFileManager (Common)
 
@@ -53,26 +55,26 @@
 }
 
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension {
+    NSString *directoryPath = [directory retain];
     NSMutableArray *result = [[NSMutableArray array] retain];
-	NSArray *directoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:NULL] retain];
-    
-    [directoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-
-		NSString *filePath = [[directory stringByAppendingPathComponent:obj] retain];
-		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
+    NSError *error = nil;
+	NSArray *directoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:&error] retain];
+    for (NSString *filename in directoryContents) {
+        NSString *fullPath = [directoryPath stringByAppendingPathComponent:filename];
+		NSURL *fileURL = [[NSURL fileURLWithPath:fullPath] retain];
 		BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[fileURL path] isDirectory:&isDirectory]) {
             if ([[fileURL pathExtension] isEqualToString:extension]) {
                 [result addObject:fileURL];
             }
-
+            
         }
         
         [fileURL release];
-        [filePath release];
-    }];
+    }
     
     [directoryContents release];
+    [directoryPath release];
     return [result autorelease];
 }
 
@@ -133,6 +135,38 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:applicationLibrary withIntermediateDirectories:YES attributes:nil error:&error];   
     }
 	return [applicationLibrary autorelease];
+}
+
++ (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {
+    NSURL *resultUrl = nil;
+    NSError *fileWrapperError = nil;
+    BOOL success = NO;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: fileToAttach
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    if (fileWrapperError == nil) {
+        NSString *fileName = [[fileToAttach lastPathComponent] stringByDeletingPathExtension];
+        fileName = [fileName stringByAppendingPathExtension:extention];
+        if (overwrite) {
+            resultUrl = [[[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO] retain];
+            NSData *data = [[fileWrapper serializedRepresentation] retain];
+            NSError *errorWriting = nil;
+            success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
+            if (errorWriting != nil) {
+                MTLog(@"%@", errorWriting);
+            }
+            [data release];
+        } else {
+            resultUrl = [[NSURL uniqueUrlForDocumentWithName:fileName
+                                               withExtension:extention] retain];
+            NSData *data = [[fileWrapper serializedRepresentation] retain];
+            success = [data writeToURL:resultUrl atomically:YES];
+            [data release];
+        }
+    }
+    [fileWrapper release];
+    completion(success, [resultUrl autorelease]);
 }
 
 @end

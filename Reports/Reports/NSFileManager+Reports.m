@@ -12,8 +12,12 @@
 
 @implementation NSFileManager (Reports)
 
-+ (NSArray *)schemaFiles {
++ (NSArray *)schemaFilesOld {
     return [NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive];
+}
+
++ (NSArray *)madFiles {
+    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
 }
 
 + (NSArray *)pdfFiles {

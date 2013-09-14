@@ -92,7 +92,7 @@ static MACloudManager *__sharedManager;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     NSFileManager* fileManager = [[NSFileManager alloc] init];
                     NSURL *newDataDirectoryURL = [self dataDirectoryURL];
-                    NSURL *newDocumentsDirectoryURL = [self documentsDataDirectoryURL];
+                    NSURL *newDocumentsDirectoryURL = [self documentsDirectoryURL];
                     
                     for (NSURL *documentURL in localDocuments) {
                         if ([[documentURL pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
@@ -107,6 +107,7 @@ static MACloudManager *__sharedManager;
                             [fileManager setUbiquitous:YES itemAtURL:previewURL destinationURL:destinationURL error:nil];
                         }
                     }
+                    [fileManager release];
                 });
             }
         }];

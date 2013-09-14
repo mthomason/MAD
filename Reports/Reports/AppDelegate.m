@@ -34,10 +34,9 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //[[self window] setTintColor:[UIColor masterTintColor]];
     
     //Log uncaught errors.
-    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -52,11 +51,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     [MTStoreKitController sharedObject];
 
     //Setup iCloud KVS
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(keyValueStoreDidChange:)
-                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                               object: nil];
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver: self
+                      selector: @selector(keyValueStoreDidChange:)
+                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                        object: nil];
+    
+    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+    [defaultStore synchronize];
+    
     
     /*
     //Setup iCloud Document Management
@@ -117,7 +120,6 @@ void uncaughtExceptionHandler(NSException *exception) {
         
         MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
         if (openDocumentViewController != nil) {
-            [openDocumentViewController updateFileList];
             if ([AppDelegate isMadDesigner]) {
                 [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:destinationUrl];
             } else if ([AppDelegate isMadViewer]) {

@@ -26,7 +26,6 @@
 @implementation MTQueryBuilderContainerController
 
 - (void)dealloc {
-    [_documentToOpen release];
     [_leftView release];
     [_rightView release];
     [_bogusConstraints release];

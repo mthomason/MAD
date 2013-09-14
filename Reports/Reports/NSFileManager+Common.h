@@ -25,5 +25,6 @@
 + (NSString *)applicationLibraryTemplatesDirectory;
 
 + (NSURL *)localTemporaryDirectory;
++ (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
 
 @end
