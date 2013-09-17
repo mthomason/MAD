@@ -10,6 +10,7 @@
 #define Reports_MTFont_h
 
 #import <Foundation/Foundation.h>
+#import <CoreText/CoreText.h>
 
 extern NSString * const MTFontFamilyAmericanTypewriter;
 extern NSString * const MTFontFamilyArial;
@@ -33,6 +34,7 @@ extern NSString * const MTFontFamilyZapfino;
 - (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic;
 
 - (UIFont *)font;
+- (CTFontRef)coreTextFont;
 - (UIFont *)standardFont;
 - (UIFont *)italicFont;
 - (UIFont *)boldFont;

@@ -159,7 +159,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                 MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
             } else {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesignerLagacy;
+                MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
             }
         } else {
             if ([UIDevice isModernOS]) {
@@ -167,7 +167,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                 MTStoryboardReportViewerPad : MTStoryboardReportViewer;
             } else {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewerLagacy;
+                MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
             }
         }
     });

@@ -83,23 +83,33 @@ const NSUInteger tagAlertViewAquire = 666;
     return [NSString stringWithFormat:@"p:%@", key];
 }
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key completion:(void(^)(BOOL success, NSError *error))completion {
-    [self setSaveCompletion:completion];
-    [self setSaveUsername:username];
-    [self setSavePassword:password];
-    [self setSaveKey:key];
-    NSString *title = NSLocalizedString(@"Save Credentials", @"Save Credentials");
-    NSString *message = NSLocalizedString(@"Would you like to save the credentials to your key chain?", @"Would you like to save the credentials to your key chain?");
-    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
-    NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
-    UIAlertView *alertViewSaveToKeyChain = [[UIAlertView alloc] initWithTitle:title
-                                                                      message:message
-                                                                     delegate:self
-                                                            cancelButtonTitle:cancelButtonTitle
-                                                            otherButtonTitles:continueButtonTitle, nil];
-    [alertViewSaveToKeyChain setTag:tagAlertViewSave];
-    [alertViewSaveToKeyChain show];
-    [alertViewSaveToKeyChain release];
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error))completion {
+    if (shortCircuit == NO) {
+        [self setSaveCompletion:completion];
+        [self setSaveUsername:username];
+        [self setSavePassword:password];
+        [self setSaveKey:key];
+        
+        NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+        NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
+        if (keyUsername == nil || keyPassword == nil || ![username isEqualToString:keyUsername] || ![password isEqualToString:keyPassword]) {
+            
+            NSString *title = NSLocalizedString(@"Save Credentials", @"Save Credentials");
+            NSString *message = NSLocalizedString(@"Would you like to save the credentials to your key chain?", @"Would you like to save the credentials to your key chain?");
+            NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
+            NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
+            UIAlertView *alertViewSaveToKeyChain = [[UIAlertView alloc] initWithTitle:title
+                                                                              message:message
+                                                                             delegate:self
+                                                                    cancelButtonTitle:cancelButtonTitle
+                                                                    otherButtonTitles:continueButtonTitle, nil];
+            [alertViewSaveToKeyChain setTag:tagAlertViewSave];
+            [alertViewSaveToKeyChain show];
+            [alertViewSaveToKeyChain release];
+        }
+    } else {
+        completion(YES, nil);
+    }
     
 }
 

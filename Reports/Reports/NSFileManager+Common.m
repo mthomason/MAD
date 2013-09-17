@@ -147,8 +147,8 @@
     
     if (fileWrapperError == nil) {
         NSString *fileName = [[fileToAttach lastPathComponent] stringByDeletingPathExtension];
-        fileName = [fileName stringByAppendingPathExtension:extention];
         if (overwrite) {
+            fileName = [fileName stringByAppendingPathExtension:extention];
             resultUrl = [[[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO] retain];
             NSData *data = [[fileWrapper serializedRepresentation] retain];
             NSError *errorWriting = nil;

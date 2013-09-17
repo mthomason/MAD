@@ -375,30 +375,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             foundUrl = YES;
         }
 
-        //UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
         if (foundUrl) {
             MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
             [viewControllerReportViewer setAsyncDelegate:self];
             [viewControllerReportViewer setViewControllerDelegate:self];
-/*
-            [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-            UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
-            MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[navigationController topViewController];
-            [viewControllerReportViewer loadReport:managedDocument];*/
-/*            [UIManagedDocument openManagedDocumentAtUrl:[self urlBeingOpended]
-                                            withWrapper:[MAReportDocument class]
-                                   andCompletionHandler:^(id managedDocument, BOOL success) {
-                                       
-                                       if (success) {
-                                           [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                                           UINavigationController *navigationController = (UINavigationController *)[segue destinationViewController];
-                                           MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[navigationController topViewController];
-                                           [viewControllerReportViewer setViewControllerDelegate:self];
-                                           [viewControllerReportViewer loadReport:managedDocument];
-                                       }
-                                       
-                                   }];*/
-
         } else {
             NSAssert(foundUrl == NO, @"No URL to open.");
         }

@@ -35,7 +35,9 @@
             [[selectedBackground layer] setCornerRadius: 5.0000f];
         }
         [selectedBackground setClipsToBounds:YES];
-        [selectedBackground setBackgroundColor:[self tintColor]];
+        if ([UIDevice isModernOS]) {
+            [selectedBackground setBackgroundColor:[self tintColor]];
+        }
         
         [self setSelectedBackgroundView:selectedBackground];
         [selectedBackground release];

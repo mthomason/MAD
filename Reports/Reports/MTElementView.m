@@ -252,7 +252,8 @@
         
         NSDictionary *attributes = @{NSFontAttributeName : displayFont,
                                      NSStrikethroughStyleAttributeName : strikeThroughStyle,
-                                     NSUnderlineStyleAttributeName : underlineStyle};
+                                     NSUnderlineStyleAttributeName : underlineStyle
+                                     };
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
         

@@ -591,7 +591,9 @@
     MTReportViewerReportPageViewController *result = nil;
     if ([self pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = 0;
-        MTReportViewerReportPageViewController * lastPage = (MTReportViewerReportPageViewController *)viewController;
+        MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
+        [[lastPage view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [[lastPage view] setTranslatesAutoresizingMaskIntoConstraints:YES];
         if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
             visablePageNumber = [lastPage pageNumber];
         }
@@ -599,7 +601,13 @@
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber + 1  ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self view] bounds]];
+            [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+            [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
+            [[result view] setBackgroundColor:[UIColor redColor]];
+            [[self view] setBackgroundColor:[UIColor blueColor]];
+
             [result autorelease];
+            
         }
     }
     return result;
@@ -612,7 +620,7 @@
     MTReportViewerReportPageViewController *result = nil;
     if ([self pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = 0;
-        MTReportViewerReportPageViewController * lastPage = (MTReportViewerReportPageViewController *)viewController;
+        MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
         if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
             visablePageNumber = [lastPage pageNumber];
         }
@@ -620,6 +628,11 @@
             result = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:visablePageNumber - 1 ofPages:[self numberOfPages]];
             [result setDelegate: self];
             [[result view] setFrame:[[self view] bounds]];
+            [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+            [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
+            [[result view] setBackgroundColor:[UIColor redColor]];
+            [[self view] setBackgroundColor:[UIColor blueColor]];
+
             [result autorelease];
         }
     }

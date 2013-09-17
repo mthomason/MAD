@@ -113,15 +113,44 @@
     if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
         
         
+        //Aquire the destination URL.
+        NSString *destinationName = [[[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+//        NSURL *destinationDirectoryUrl = [[url URLByDeletingLastPathComponent] retain];
+        NSURL *destinationDirectoryUrl = [[NSFileManager localTemporaryDirectory] retain];
+        NSURL *destinationUrl = [[destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES] retain];
+        
+        //Remove existing Core Data File.
+        NSFileManager *fileManager = [[NSFileManager defaultManager] retain];
+        BOOL isDirectory;
+        BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
+        if (exists) {
+            NSError *deleteError = nil;
+            if (isDirectory) {
+                NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+                    MTLog(@"Error %@", error);
+                    return YES;
+                }];
+                for (NSURL *file in enumerator) {
+                    NSError *error = nil;
+                    [fileManager removeItemAtURL:file error:&error];
+                    if (error != nil) {
+                        MTLog(@"Error %@", error);
+                    }
+                }
+                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+                if (deleteError != nil) {
+                    MTLog(@"%@", deleteError);
+                }
+            } else {
+                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            }
+        }
+        [fileManager release];
+        
+        //Load MAD File
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
         NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-        NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
-                                                       withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[destinationUrl path]]) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] removeItemAtPath:[destinationUrl path] error:&error];
-        }
+        
         NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
         NSError* fileWrittingError = nil;
         [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
@@ -132,6 +161,8 @@
         if (fileWrittingError == nil) {
             urlToOpen = [destinationUrl retain];
         }
+        [destinationName release];
+        [destinationDirectoryUrl release];
         [data release];
         [fileWrapper release];
         [destinationUrl release];

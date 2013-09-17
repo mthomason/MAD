@@ -11,6 +11,7 @@
 #import "MADocument.h"
 #import "MACloudManager.h"
 #import "MTLog.h"
+#import "NSFileManager+Common.h"
 
 @interface MADUpgradeViewController ()
 
@@ -78,29 +79,28 @@
             NSFileManager *defaultManager = [NSFileManager defaultManager];
             
             //Wrap all modo files from the ~/Documents/Data folder, and save as
-            //  mad files in the ~/Documents/Data folder.
+            //  mad files in the ~/Documents folder.
             NSArray *oldSchemaFiles = [[NSFileManager schemaFilesOld] retain];
             for (NSURL *urlToUpgrade in oldSchemaFiles) {
-                [MADocument wrapFile:urlToUpgrade completion:^(NSURL *resultUrl) {
-                    if (resultUrl) {
-                        NSError *error = nil;
-                        [defaultManager removeItemAtURL:resultUrl error:&error];
-                        if (error != nil) {
-                            MTLog(@"%@", error);
-                        }
+                [NSFileManager wrapFile:urlToUpgrade withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
+                    if (success) {
+                        [MADocument deleteFromDisk:urlToUpgrade completion:^(BOOL success) {
+                            
+                            NSString *path = [[[MACloudManager sharedManager] documentsDataDirectoryURL] path];
+                            NSError *error = nil;
+                            NSArray *contentsOfDirectoryToDelete = [defaultManager contentsOfDirectoryAtPath:path error:&error];
+                            if (error == nil) {
+                                if ([contentsOfDirectoryToDelete count] == 0) {
+                                    [defaultManager removeItemAtPath:path error:&error];
+                                    if (error) {
+                                        MTLog(@"%@", error);
+                                    }
+                                }
+                            }
+                            
+                        }];
                     }
                 }];
-            }
-            NSString *path = [[[MACloudManager sharedManager] documentsDataDirectoryURL] path];
-            NSError *error = nil;
-            NSArray *contentsOfDirectoryToDelete = [defaultManager contentsOfDirectoryAtPath:path error:&error];
-            if (error == nil) {
-                if ([contentsOfDirectoryToDelete count] == 0) {
-                    [defaultManager removeItemAtPath:path error:&error];
-                    if (error) {
-                        MTLog(@"%@", error);
-                    }
-                }
             }
             [oldSchemaFiles release];
             
@@ -111,8 +111,7 @@
     [self performSegueWithIdentifier:@"MTSegueUpgradeComplete" sender:self];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

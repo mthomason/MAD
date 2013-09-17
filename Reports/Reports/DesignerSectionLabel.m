@@ -49,10 +49,12 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if ([self selected]) {
-        [[self labelSectionIdentifer] setTextColor:[[self tintColor] colorWithAlphaComponent:0.500f]];
-    } else {
-        [[self labelSectionIdentifer] setTextColor:[self tintColor]];
+    if ([UIDevice isModernOS]) {
+        if ([self selected]) {
+            [[self labelSectionIdentifer] setTextColor:[[self tintColor] colorWithAlphaComponent:0.500f]];
+        } else {
+            [[self labelSectionIdentifer] setTextColor:[self tintColor]];
+        }
     }
 }
 

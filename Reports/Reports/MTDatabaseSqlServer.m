@@ -1411,97 +1411,99 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     
     NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [credentals server],  [credentals port], [credentals database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        dispatch_async(queuePriorityBackground, ^{
-            
-            if (success) {
+        [username retain]; [password retain];
+        [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(queuePriorityBackground, ^{
                 
-                DBPROCESS *dbconn = NULL;
-                BOOL connected;
-                NSError *error = nil;
-                
-                
-                LOGINREC *login;
-                char hostname[30];
-                int max_len = 30;
-                
-                
-                /* Init the DB library */
-                if (dbinit() == FAIL) {
-                    NSString *message = @"Could not init db.";
-                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
-                }
-                dberrhandle(err_handler);
-                
-                if (error == nil) {
+                if (success) {
                     
-                    if ((login = dblogin()) == FAIL) {
-                        NSString *message = @"Could not initialize dblogin() structure.";
+                    DBPROCESS *dbconn = NULL;
+                    BOOL connected;
+                    NSError *error = nil;
+                    
+                    
+                    LOGINREC *login;
+                    char hostname[30];
+                    int max_len = 30;
+                    
+                    
+                    /* Init the DB library */
+                    if (dbinit() == FAIL) {
+                        NSString *message = @"Could not init db.";
                         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:1 userInfo:errorInfo];
                     }
-                    
-                    //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
-                    char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
+                    dberrhandle(err_handler);
                     
                     if (error == nil) {
-                        /* Initialize the login params in the structure */
-                        DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
-                        DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
                         
-                        
-                        if (gethostname(hostname, max_len) == 0) {
-                            DBSETLHOST(login, hostname);
-                        }
-                        
-                    }
-                    DBSETLSECURE(login);
-                    if (error == nil) {
-                        if ((dbconn = dbopen(login, s)) == NULL) {
-                            NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
+                        if ((login = dblogin()) == FAIL) {
+                            NSString *message = @"Could not initialize dblogin() structure.";
                             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                             error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
                         }
-                    }
-                    
-                    
-                    connected = (error == nil);
-                    if (!fromKeyChain && connected) {
-                        dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
-                                dispatch_semaphore_signal(semaphoreSaveCredentials);
-                            }];
-                        });
-                        dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
-                        dispatch_release(semaphoreSaveCredentials);
                         
+                        //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
+                        char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
+                        
+                        if (error == nil) {
+                            /* Initialize the login params in the structure */
+                            DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
+                            DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
+                            DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
+                            DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
+                            
+                            
+                            if (gethostname(hostname, max_len) == 0) {
+                                DBSETLHOST(login, hostname);
+                            }
+                            
+                        }
+                        DBSETLSECURE(login);
+                        if (error == nil) {
+                            if ((dbconn = dbopen(login, s)) == NULL) {
+                                NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
+                                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                                error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
+                            }
+                        }
+                        
+                        
+                        connected = (error == nil);
+                        if (!fromKeyChain && connected) {
+                            dispatch_semaphore_t semaphoreSaveCredentials = dispatch_semaphore_create(0);
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key completion:^(BOOL success, NSError *error) {
+                                    dispatch_semaphore_signal(semaphoreSaveCredentials);
+                                }];
+                            });
+                            dispatch_semaphore_wait(semaphoreSaveCredentials, DISPATCH_TIME_FOREVER);
+                            dispatch_release(semaphoreSaveCredentials);
+                            
+                        }
+                        
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            completion(dbconn, connected, error);
+                        });
+                        
+                        
+                    } else {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            completion(nil, NO, error);
+                        });
                     }
-                    
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        completion(dbconn, connected, error);
-                    });
                     
                     
                 } else {
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        completion(nil, NO, error);
+                        completion(nil, NO, connectionError);
                     });
                 }
                 
-                
-            } else {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    completion(nil, NO, connectionError);
-                });
-            }
-            
-        });
-        
+            });
+        }];
+        [username release]; [password release];
     }];
     
 }

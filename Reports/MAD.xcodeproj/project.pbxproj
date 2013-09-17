@@ -395,6 +395,8 @@
 		4C47578117B4096700530CAF /* Icon-72-Viewer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C47573B17B4096600530CAF /* Icon-72-Viewer-Lagacy@2x.png */; };
 		4C47578317B4096700530CAF /* Icon-72-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C47573C17B4096600530CAF /* Icon-72-Viewer-Modern.png */; };
 		4C47578517B4096700530CAF /* Icon-72-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C47573D17B4096600530CAF /* Icon-72-Viewer-Modern@2x.png */; };
+		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
+		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
 		4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
 		4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
@@ -2199,6 +2201,7 @@
 		4C47574317B4096600530CAF /* iTunesArtwork-Viewer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47574417B4096600530CAF /* iTunesArtwork-Viewer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Modern.png"; sourceTree = "<group>"; };
 		4C47574517B4096600530CAF /* iTunesArtwork-Viewer-Modern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Modern@2x.png"; sourceTree = "<group>"; };
+		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = ../libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
@@ -3101,6 +3104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
 				4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */,
 				4CE9F2B21778B489009F11AF /* liblibTdsClient.a in Frameworks */,
 				4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */,
@@ -3184,6 +3188,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CE9F3181778DCC0009F11AF /* StoreKit.framework in Frameworks */,
 				4C6DAA981761B00F00FF770A /* liblibTdsClient.a in Frameworks */,
@@ -3624,6 +3629,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C4A68B417E75D3F00FD6A73 /* CoreText.framework */,
 				4C2213AD17D7947800BD36F5 /* Accelerate.framework */,
 				4C6DAA411761AEBA00FF770A /* TdsClient */,
 				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
