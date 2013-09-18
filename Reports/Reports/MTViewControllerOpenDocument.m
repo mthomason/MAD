@@ -407,11 +407,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         if (foundUrl) {
             if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-                if ([UIDevice isPad]) {
-                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
-                    [queryBuilderViewController setDelegateContentController: self];
-                    [queryBuilderViewController setDelegate:self];
-                } else {
+                //if ([UIDevice isPad]) {
+                //    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
+                //    [queryBuilderViewController setDelegateContentController: self];
+                //    [queryBuilderViewController setDelegate:self];
+                //} else {
                     MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                     [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
@@ -419,7 +419,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                             [queryBuilderViewController reloadDocument:managedDocument];
                         }
                     }];
-                }
+                //}
                 
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
                 MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
@@ -765,18 +765,34 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (IBAction)delete:(id)sender {
     if ([self collectionView] != nil) {
-        for (NSUInteger section = 0; section < [[self collectionView] numberOfSections]; section++) {
-            for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:section]; item++) {
+        NSMutableArray *itemsToDelete = [[NSMutableArray alloc] init];
+        NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+        for (NSUInteger section = 0; section < numberOfSections; section++) {
+            NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
                 NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
                 MTCollectionViewCellDocument *documentCell = [(MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:selectedCellLocation] retain];
                 if (documentCell != nil) {
                     if ([documentCell isSelected]) {
-                        [self deleteDocumentAtIndexPath:selectedCellLocation];
+                        [itemsToDelete addObject:selectedCellLocation];
                     }
                 }
                 [documentCell release];
             }
         }
+        NSFileManager *defaultManager = [NSFileManager defaultManager];
+        NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+        for (NSIndexPath *indexPath in itemsToDelete) {
+            NSUInteger index = [indexPath item];
+            NSURL *urlToDelete = [[self availableFilesCache] objectAtIndex:index];
+            NSError *error = nil;
+            [defaultManager removeItemAtURL:urlToDelete error:&error];
+            [indexSet addIndex:index];
+        }
+        [[self availableFilesCache] removeObjectsAtIndexes:indexSet];
+        [[self collectionView] deleteItemsAtIndexPaths:itemsToDelete];
+//        updateFileList
+        [itemsToDelete release];
     }
 }
 
