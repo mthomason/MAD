@@ -667,13 +667,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[self collectionView] setAllowsMultipleSelection:YES];
         [[self navigationItem] setRightBarButtonItem:[self barButtonItemEditDone] animated:YES];
 
-        for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:0]; item++) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
-            UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
-            [cell startWobble];
-            [cell release];
+        NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+        for (NSUInteger section = 0; section < numberOfSections; section++) {
+            NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
+                UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
+                [cell startWobble];
+                [cell release];
+            }
         }
-        
     } else {
         [[self barButtonItemLicensing] setEnabled:YES];
         [[self barButtonItemAddNewDocument] setEnabled:YES];
@@ -722,8 +725,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (IBAction)activity:(id)sender {
     NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity:[[self availableFilesCache] count]];
-    for (NSUInteger section = 0; section < [[self collectionView] numberOfSections]; section++) {
-        for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:section]; item++) {
+    NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+    for (NSUInteger section = 0; section < numberOfSections; section++) {
+        NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+        for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
             NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
             MTCollectionViewCellDocument *documentCell = [(MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:selectedCellLocation] retain];
             if (documentCell != nil) {
@@ -739,8 +744,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
     
-        for (NSUInteger section = 0; section < [[self collectionView] numberOfSections]; section++) {
-            for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:section]; item++) {
+        NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+        for (NSUInteger section = 0; section < numberOfSections; section++) {
+            NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
                 NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
                 MTCollectionViewCellDocument *documentCell = [(MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:selectedCellLocation] retain];
                 if (documentCell != nil) {
@@ -813,8 +820,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)selectionsUpdated {
     NSUInteger selectedCellCounter = 0;
-    for (NSUInteger section = 0; section < [[self collectionView] numberOfSections]; section++) {
-        for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:section]; item++) {
+    NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+    for (NSUInteger section = 0; section < numberOfSections; section++) {
+        NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+        for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
             NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
             UICollectionViewCell *cell = [[self collectionView] cellForItemAtIndexPath:selectedCellLocation];
             if ([cell isSelected]) {
@@ -850,7 +859,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSUInteger numberOfSections = [[self collectionView] numberOfSections];
+    for (NSUInteger section = 0; section < numberOfSections; section++) {
+        NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
+        for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
+            UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
+            [cell startWobble];
+            [cell release];
+        }
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
@@ -921,6 +939,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[result labelTitle] setText: @"Default Text"];
         [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
     }
+    if ([self isEditing]) {
+        [result startWobble];
+    }
+    
     return result;
 }
 

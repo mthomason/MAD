@@ -151,8 +151,12 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[self scrollView] flashScrollIndicators];
-    if ([self didRemoveViewControllers]) {
-        [self reloadDocument:[self reportDocument]];
+    if ([UIDevice isPad] == NO) {   //Pad displays this in container
+        [self reloadDocument:[[MTActiveDocument sharedDocument] activeDocument]];
+    } else {
+        if ([self didRemoveViewControllers]) {
+            [self reloadDocument:[self reportDocument]];
+        }
     }
 }
 

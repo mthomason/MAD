@@ -22,7 +22,8 @@
 #import "UIManagedDocument+FileOperations.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
-    <UITableViewDelegate,
+    <UITableViewDelegate, UIViewControllerTransitioningDelegate,
+        UIViewControllerAnimatedTransitioning,
         UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDocumentName;

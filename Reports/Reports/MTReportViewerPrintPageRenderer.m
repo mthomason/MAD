@@ -735,7 +735,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                              @{NSFontAttributeName : customFont,
                                NSBaselineOffsetAttributeName : @(0.0000f),
                                NSUnderlineStyleAttributeName : [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone),
-                               NSStrikethroughStyleAttributeName : [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone),
+                               NSStrikethroughStyleAttributeName : [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone),
                                NSParagraphStyleAttributeName: paragraphStyle
                                } retain];
     [customFont release];
