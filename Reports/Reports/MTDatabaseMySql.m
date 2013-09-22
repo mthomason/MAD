@@ -47,7 +47,7 @@
             
             if (success) {
                 
-                [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+                [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                     
                     __block MysqlServer *serv = [[MysqlServer alloc] init];
 
@@ -121,7 +121,7 @@
                     [serv setUser:      username];
                     [serv setPassword:  password];
                     
-                    [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+                    [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                         
                         NSError *errorConnection = nil;
                         MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&errorConnection];
@@ -314,7 +314,7 @@
         if (success) {
             [serv setUser:      username];
             [serv setPassword:  password];
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                 NSError *connError = nil;
                 MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
                 if (conn && connError == nil) {
@@ -370,7 +370,7 @@
                 if (success) {
                     [serv setUser:      username];
                     [serv setPassword:  password];
-                    [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+                    [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
 
                         NSArray *results = nil;
                         NSError *connError = nil;

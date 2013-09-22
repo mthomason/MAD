@@ -325,7 +325,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
     
     dispatch_async(queuePriorityBackground, ^{
         
-        NSString *sql = [NSString stringWithFormat:@"%@ %@ "
+        NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT %@ "
                          @"%@"
                          @" %@;",
                          MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name];
@@ -1415,7 +1415,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             [username retain]; [password retain];
             
             
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error) {
+            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                 
                 if (success) {
                     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);

@@ -9,7 +9,7 @@
 #import "MTKeyChain.h"
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
-typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error);
+typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
 
 NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
@@ -83,7 +83,7 @@ const NSUInteger tagAlertViewAquire = 666;
     return [NSString stringWithFormat:@"p:%@", key];
 }
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error))completion {
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
     if (shortCircuit == NO) {
         [self setSaveCompletion:completion];
         [self setSaveUsername:username];
@@ -108,7 +108,7 @@ const NSUInteger tagAlertViewAquire = 666;
             [alertViewSaveToKeyChain release];
         }
     } else {
-        completion(YES, nil);
+        completion(YES, nil, [[username retain] autorelease], [[password retain] autorelease]);
     }
     
 }
@@ -315,7 +315,7 @@ const NSUInteger tagAlertViewAquire = 666;
             if (!canceled) {
                 [self saveUsername:[self saveUsername] andPassword:[self savePassword] forKey:[self saveKey]];
             }
-            [self saveCompletion](!canceled, nil);
+            [self saveCompletion](!canceled, nil, [[[self saveUsername] retain] autorelease], [[[self savePassword] retain] autorelease]);
             break;
         }
         default:
@@ -331,7 +331,7 @@ const NSUInteger tagAlertViewAquire = 666;
             break;
         }
         case tagAlertViewSave: {
-            [self saveCompletion](NO, nil);
+            [self saveCompletion](NO, nil, nil, nil);
             break;
         }
             default:
