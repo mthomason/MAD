@@ -188,7 +188,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:locationInView];
         if (indexPath) {
             UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
-            [cell startWobble];
+            if ([self isEditing]) {
+                [cell startWobble];
+            }
             [cell release];
             [self setEditModeEnabled:YES];
             [[[self collectionView] collectionViewLayout] invalidateLayout];
@@ -865,7 +867,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
             UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
-            [cell startWobble];
+            if ([self isEditing]) {
+                [cell startWobble];
+            }
             [cell release];
         }
     }

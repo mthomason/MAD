@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MTGradientView.h"
+//#import "MTGradientView.h"
 #import "UIColor+EverydayApps.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
@@ -19,7 +19,7 @@
 -(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)section;
 @end
 
-@interface UIViewTableSectionHeaderDatabaseTable : MTGradientView 
+@interface UIViewTableSectionHeaderDatabaseTable : UIView
 
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate;
 -(void)toggleOpenWithUserAction:(BOOL)userAction;

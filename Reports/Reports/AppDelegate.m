@@ -42,6 +42,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: [AppDelegate storyboardName]
                                                          bundle: nil];
+    [window setTintColor:[UIColor tintColor]];
     [window setRootViewController:[storyBoard instantiateInitialViewController]];
     [window makeKeyAndVisible];
     [self setWindow: window];

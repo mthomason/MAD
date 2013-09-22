@@ -11,7 +11,7 @@
 extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 
 @interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
-    <UITableViewDelegate>
+    <UITableViewDelegate, UITextFieldDelegate>
 
 - (NSString *)userInputedText;
 

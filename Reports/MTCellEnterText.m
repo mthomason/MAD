@@ -1,0 +1,18 @@
+//
+//  MTCellEnterText.m
+//  MAD
+//
+//  Created by Michael Thomason on 9/21/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTCellEnterText.h"
+
+@implementation MTCellEnterText
+
+- (void)dealloc {
+    [_textField release];
+    [super dealloc];
+}
+
+@end

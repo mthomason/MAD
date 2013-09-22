@@ -7,19 +7,16 @@
 //
 
 #import "MTViewControllerValueBasedOnField.h"
+#import "MTCellEnterText.h"
 
 @interface MTViewControllerValueBasedOnField ()
 
 @property (nonatomic, retain) IBOutlet UITableView *tableViewMain;
 @property (nonatomic, retain) IBOutlet UIView *pickerViewBackground;
-
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *tableViewHeightConstraint;
-
+@property (nonatomic, retain) IBOutlet UIPickerView *pickerView;
 @property (nonatomic, retain) UITextField *textField;
-@property (nonatomic, retain) UIPickerView *pickerView;
-
+@property (nonatomic, retain) MTCellEnterText *tableViewCellEnterText;
 @property (nonatomic, retain) NSArray *pickerData;
-
 @property (nonatomic, retain) NSDateFormatter *longStyleDateFormatter;
 
 @end
@@ -32,8 +29,8 @@
     [_pickerView release];
     [_pickerViewBackground release];
     [_tableViewMain release];
-    [_tableViewHeightConstraint release];
     [_longStyleDateFormatter release];
+    [_tableViewCellEnterText release];
     [super dealloc];
 }
 
@@ -74,22 +71,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellTextFieldIdentifier";
-
-    [[self tableViewMain] registerClass:[UITableViewCell class] forCellReuseIdentifier:MTTableViewCellTextFieldIdentifier];
-    
-    NSLayoutConstraint *layoutConstraintTableViewHeight = [NSLayoutConstraint constraintWithItem: [self tableViewMain] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self pickerView] attribute: NSLayoutAttributeTop multiplier: 0.0000f constant: 0.0000f];
-    [[self tableViewMain] addConstraint:layoutConstraintTableViewHeight];
-    
-    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:[[self pickerViewBackground] frame]];
-    [pickerView setDelegate:self];
-    [pickerView setDataSource:self];
-    [pickerView setShowsSelectionIndicator:YES];
-    [[self pickerView] setFrame:[[self pickerViewBackground] bounds]];
-    [[self pickerViewBackground] addSubview:pickerView];
-    [self setPickerView:pickerView];
-    [pickerView release];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -125,8 +106,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    CGSize backgroundSize = [[self pickerViewBackground] bounds].size;
-    [[self pickerView] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, backgroundSize.width, backgroundSize.height)];
     [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 
     [[self textField] setText:[self pickerView: [self pickerView]
@@ -144,10 +123,6 @@
     
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Picker View Data Source
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     return 1;
@@ -162,10 +137,6 @@
 }
 
 #pragma mark - Picker View Delegate
-
-//- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-
-//}
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     NSString *result = nil;
@@ -193,18 +164,6 @@
     [[self textField] setText:[self pickerView:pickerView titleForRow:row forComponent:component]];
 }
 
-//- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-    
-//}
-
-//- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
-    
-//}
-
-//- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    
-//}
-
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -216,17 +175,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellTextFieldIdentifier";
-    UITableViewCell *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
-    [result setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(20.0000f, 6.0000f, 280.0000f, 31.0000f)];
-    [textField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [textField setBorderStyle:UITextBorderStyleBezel];
-    [textField setClearButtonMode:UITextFieldViewModeWhileEditing];
-    [[result contentView] addSubview:textField];
-    [self setTextField:textField];
-    [textField release];
+    static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
+    MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+    [self setTextField:[result textField]];
     return result;
 }
 

@@ -191,7 +191,9 @@
         }
     };
     [self setStandardCompletion:completion];
-    [[[self viewBuyButtonsBackground] layer] setCornerRadius:6.6666f];
+    if ([UIDevice isLagacyOS]) {
+        [[[self viewBuyButtonsBackground] layer] setCornerRadius:6.6666f];
+    }
     if ([AppDelegate isMadDesigner]) {
         [[[self buttonBuyNowDesignerOneYear] layer] setCornerRadius:6.6666f];
         [[[self buttonBuyNowDesignerOneMonth] layer] setCornerRadius:6.6666f];

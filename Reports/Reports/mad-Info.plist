@@ -56,11 +56,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>2.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIFileSharingEnabled</key>
@@ -127,5 +127,7 @@
 			<string>MADIcon64x64</string>
 		</dict>
 	</array>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 </dict>
 </plist>

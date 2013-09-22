@@ -47,6 +47,8 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [super viewDidLoad];
     [[self navigationItem] setLeftItemsSupplementBackButton:YES];
     [[self navigationItem] setHidesBackButton:NO];
+    [[self labelTextTextbox] setDelegate:self];
+    [[self labelTextTextbox] becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -63,6 +65,18 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+}
+
+#pragma mark -
+#pragma mark Text Field Delegate Protocol
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if ([[textField text] length] > 0) {
+        [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelSaveIdentifer" sender:self];
+    } else {
+        [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelCancelIdentifer" sender:self];
+    }
+    return YES;
 }
 
 #pragma mark -

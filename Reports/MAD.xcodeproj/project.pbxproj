@@ -428,6 +428,16 @@
 		4C4C78D916962944000ADD1D /* UIButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */; };
 		4C4C78DA16962944000ADD1D /* UIButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D716962944000ADD1D /* UIButtonSelected.png */; };
 		4C4C78DB16962944000ADD1D /* UIButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C78D716962944000ADD1D /* UIButtonSelected.png */; };
+		4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAA17EDEA8D00D10622 /* carat-open.png */; };
+		4C4EBFAD17EDEA8D00D10622 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAA17EDEA8D00D10622 /* carat-open.png */; };
+		4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAB17EDEA8D00D10622 /* carat.png */; };
+		4C4EBFAF17EDEA8D00D10622 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAB17EDEA8D00D10622 /* carat.png */; };
+		4C4EBFB617EDEB9500D10622 /* carat-open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */; };
+		4C4EBFB717EDEB9500D10622 /* carat-open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */; };
+		4C4EBFB817EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
+		4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
+		4C4EBFBC17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
+		4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
 		4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */; };
 		4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m */; };
 		4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
@@ -1865,6 +1875,8 @@
 		4CDBED26168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTReportDesignerSectionView.m */; };
 		4CDBED27168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTReportDesignerSectionView.m */; };
 		4CDBED28168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBED23168B50AB00C5147B /* MTReportDesignerSectionView.m */; };
+		4CDD5ACF17ECDFB00032DF6E /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */; };
+		4CDD5AD017ECDFB00032DF6E /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */; };
 		4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; };
 		4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; };
 		4CE17E2116501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */; };
@@ -2224,6 +2236,12 @@
 		4C4C78D3169624A3000ADD1D /* UIImage+Resizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizable.m"; sourceTree = "<group>"; };
 		4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonSelected@2x.png"; sourceTree = "<group>"; };
 		4C4C78D716962944000ADD1D /* UIButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonSelected.png; sourceTree = "<group>"; };
+		4C4EBFAA17EDEA8D00D10622 /* carat-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open.png"; sourceTree = "<group>"; };
+		4C4EBFAB17EDEA8D00D10622 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
+		4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open@2x.png"; sourceTree = "<group>"; };
+		4C4EBFB517EDEB9500D10622 /* carat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat@2x.png"; sourceTree = "<group>"; };
+		4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
+		4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
@@ -3017,6 +3035,8 @@
 		4CDBCB6516AF91B000E08FAD /* RptqDocument+ActiveDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+ActiveDocument.m"; sourceTree = "<group>"; };
 		4CDBED22168B50AB00C5147B /* MTReportDesignerSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionView.h; sourceTree = "<group>"; };
 		4CDBED23168B50AB00C5147B /* MTReportDesignerSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionView.m; sourceTree = "<group>"; };
+		4CDD5ACD17ECDFB00032DF6E /* UIApplication+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Extras.h"; sourceTree = "<group>"; };
+		4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Extras.m"; sourceTree = "<group>"; };
 		4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerToolBoxViewController.h; sourceTree = "<group>"; };
 		4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerToolBoxViewController.m; sourceTree = "<group>"; };
 		4CE17E1B164E2BF90002F8EA /* MTDatabaseSalesForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSalesForce.h; sourceTree = "<group>"; };
@@ -3464,6 +3484,10 @@
 		4C0E7860163B5C8D003B951E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */,
+				4C4EBFB517EDEB9500D10622 /* carat@2x.png */,
+				4C4EBFAA17EDEA8D00D10622 /* carat-open.png */,
+				4C4EBFAB17EDEA8D00D10622 /* carat.png */,
 				4C94AE0A17C354EB00037FCB /* Launch Images */,
 				4C47571917B4094500530CAF /* Icons */,
 				4C4C78D616962944000ADD1D /* UIButtonSelected@2x.png */,
@@ -3592,6 +3616,8 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4CDD5ACD17ECDFB00032DF6E /* UIApplication+Extras.h */,
+				4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */,
 				4C4A68C017EA02D000FD6A73 /* MTViewControllerActivitySpinner.h */,
 				4C4A68C117EA02D000FD6A73 /* MTViewControllerActivitySpinner.m */,
 				4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */,
@@ -3948,6 +3974,8 @@
 				4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */,
 				4C94AA5117DD8590000F6FCF /* MTStateButton.h */,
 				4C94AA5217DD8590000F6FCF /* MTStateButton.m */,
+				4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */,
+				4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -5215,6 +5243,7 @@
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
 				4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */,
 				4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */,
+				4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */,
 				4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */,
 				4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */,
 				4C0E77BF163B5AEC003B951E /* UIImageJustified20.png in Resources */,
@@ -5278,6 +5307,7 @@
 				4C0E77FD163B5AEC003B951E /* UIImagePatternFibersDarkGray.png in Resources */,
 				4C0E77FE163B5AEC003B951E /* UIImagePatternGoldMetallic.png in Resources */,
 				4C0E77FF163B5AEC003B951E /* UIImagePatternGoldMetallic@2x.png in Resources */,
+				4C4EBFB717EDEB9500D10622 /* carat-open@2x.png in Resources */,
 				4C0E7800163B5AEC003B951E /* UIImagePatternGoldParchment.png in Resources */,
 				4C0E7801163B5AEC003B951E /* UIImagePatternGoldParchment@2x.png in Resources */,
 				4C0E7802163B5AEC003B951E /* UIImagePatternGoldVellum.png in Resources */,
@@ -5358,6 +5388,7 @@
 				4C0E7846163B5AEC003B951E /* UIImageClip@2x.png in Resources */,
 				4C0E7847163B5AEC003B951E /* UIImageClip.png in Resources */,
 				4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */,
+				4C4EBFAF17EDEA8D00D10622 /* carat.png in Resources */,
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C0E784C163B5AEC003B951E /* UIImageExportTypeCSV.png in Resources */,
 				4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */,
@@ -5481,6 +5512,7 @@
 				4C6DAA831761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA881761AEE000FF770A /* libsybdb.a in Resources */,
 				4C94AA3017DCB832000F6FCF /* Icon-76-Designer-Modern.png in Resources */,
+				4C4EBFAD17EDEA8D00D10622 /* carat-open.png in Resources */,
 				4C6DAA941761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4C76B6F6177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
@@ -5794,6 +5826,7 @@
 				4CCD8D59150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png in Resources */,
 				4C94AA4917DCBF0D000F6FCF /* LaunchModernPad.png in Resources */,
 				4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */,
+				4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */,
 				4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */,
 				4CCD8D5C150385DA002B9E77 /* UIImagePatternBlueSpecks.png in Resources */,
 				4C94AA2317DCB71D000F6FCF /* Icon-60-Viewer-Modern@2x.png in Resources */,
@@ -5859,6 +5892,7 @@
 				4CCD8D94150385DA002B9E77 /* UIImagePatternMetallicBlack.png in Resources */,
 				4CCD8D95150385DA002B9E77 /* UIImagePatternMetallicBlack@2x.png in Resources */,
 				4CCD8D96150385DA002B9E77 /* UIImagePatternMetallicFlecks.png in Resources */,
+				4C4EBFB817EDEB9500D10622 /* carat@2x.png in Resources */,
 				4CCD8D97150385DA002B9E77 /* UIImagePatternMetallicFlecks@2x.png in Resources */,
 				4CCD8D98150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png in Resources */,
 				4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
@@ -5932,6 +5966,7 @@
 				4CD98CE2163F7DE70096D7BC /* my_global.h in Resources */,
 				4CD98CE6163F7DE70096D7BC /* my_libwrap.h in Resources */,
 				4CD98CEA163F7DE70096D7BC /* my_list.h in Resources */,
+				4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */,
 				4CD98CEE163F7DE70096D7BC /* my_md5.h in Resources */,
 				4C94AA1217DCB3C9000F6FCF /* Images.xcassets in Resources */,
 				4CD98CF2163F7DE70096D7BC /* my_net.h in Resources */,
@@ -5991,6 +6026,7 @@
 				4CE314211694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
 				4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4C4EBFB617EDEB9500D10622 /* carat-open@2x.png in Resources */,
 				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4C4C78C816961EAC000ADD1D /* UIButton.png in Resources */,
 				4C4C78CA16961EAC000ADD1D /* UIButton@2x.png in Resources */,
@@ -6237,6 +6273,7 @@
 				4C0E7721163B5AEC003B951E /* main.m in Sources */,
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
 				4C0E7725163B5AEC003B951E /* MTReportDesignerViewController.m in Sources */,
+				4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */,
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
 				4C0E7728163B5AEC003B951E /* MTReportDesignerFontSettingsViewController.m in Sources */,
 				4C0E7729163B5AEC003B951E /* UILabelStrikethrough.m in Sources */,
@@ -6393,6 +6430,7 @@
 				4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4CDD5AD017ECDFB00032DF6E /* UIApplication+Extras.m in Sources */,
 				4C5625E11758A17F00433E88 /* MACloudManager.m in Sources */,
 				4C5625EC1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F11759730200433E88 /* UIImage+Alpha.m in Sources */,
@@ -6811,6 +6849,7 @@
 				4C384E3514B29789007B4F48 /* main.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MTReportDesignerViewController.m in Sources */,
+				4C4EBFBC17EE827800D10622 /* MTCellEnterText.m in Sources */,
 				4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */,
 				4CE9985F14B69AA80015C8D1 /* MTReportDesignerFontSettingsViewController.m in Sources */,
 				4C00815714B6BB9F003DF437 /* UILabelStrikethrough.m in Sources */,
@@ -6967,6 +7006,7 @@
 				4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4C84EEB5178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4CF2F2731754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4CDD5ACF17ECDFB00032DF6E /* UIApplication+Extras.m in Sources */,
 				4C5625E01758A17F00433E88 /* MACloudManager.m in Sources */,
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,

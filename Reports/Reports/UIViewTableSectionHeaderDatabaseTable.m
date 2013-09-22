@@ -7,6 +7,8 @@
 //
 
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "UIColor+EverydayApps.h"
+
 @interface UIViewTableSectionHeaderDatabaseTable ()
 
 @property (nonatomic, retain) UILabel *titleLabel;
@@ -47,7 +49,9 @@
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
         [label setText: title];
         [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
-        label.textColor = [UIColor whiteColor];
+        UIColor *tintColor = [[[[UIApplication sharedApplication] delegate] window] tintColor];
+        [label setTextColor:tintColor];
+        //label.textColor = [UIColor whiteColor];
         label.backgroundColor = [UIColor clearColor];
         [self addSubview:label];
         [self setTitleLabel: label];
@@ -55,8 +59,8 @@
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);
-        [button setImage:[UIImage imageNamed:@"carat.png"] forState:UIControlStateNormal];
-        [button setImage:[UIImage imageNamed:@"carat-open.png"] forState:UIControlStateSelected];
+        [button setImage:[UIImage imageNamed:@"carat"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"carat-open"] forState:UIControlStateSelected];
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
         [self setDisclosureButton: button];
@@ -73,7 +77,7 @@
             color = [UIColor colorWithRed:0.4100f green:0.4100f blue:0.5900f alpha:1.000f];
             [colors addObject:(id)[color CGColor]];
         }
-        
+        [self setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     }
     
     return self;
@@ -103,18 +107,18 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { 
-    [self setHighlight: YES];
-    [[self titleLabel] setTextColor:[UIColor darkTextColor]];
+    //[self setHighlight: YES];
+    [[self titleLabel] setTextColor:[UIColor whiteColor]];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self setHighlight: NO];
-    [[self titleLabel] setTextColor:[UIColor whiteColor]];
+    //[self setHighlight: NO];
+    [[self titleLabel] setTextColor:[UIColor tintColor]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self setHighlight: NO];
-    [[self titleLabel] setTextColor:[UIColor whiteColor]];
+    //[self setHighlight: NO];
+    [[self titleLabel] setTextColor:[UIColor tintColor]];
 }
 
 

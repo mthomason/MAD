@@ -27,6 +27,8 @@
 + (id)edaGreenLight                     {vendColor(180.0000f, 216.0000f, 139.0000f);}
 + (id)edaTableHeaderBackground          {return [UIColor colorWithHue:0.5500f saturation:0.8000f brightness:0.8000f alpha:0.5000f];}
 
-+ (id)masterTintColor {return [UIColor redColor];}//vendColor(6.0000f, 156.0000f, 217.0000f);}
++ (id)tintColor {vendColor(2.0000f, 108.0000f, 182.0000f);}
+
+//vendColor(6.0000f, 156.0000f, 217.0000f);}
 
 @end

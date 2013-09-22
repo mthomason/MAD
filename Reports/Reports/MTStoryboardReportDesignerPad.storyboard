@@ -1046,7 +1046,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="4RF-3J-Y9o">
-                        <barButtonItem key="rightBarButtonItem" image="602D8C47-BE2D-466D-9B8E-A770129312DB" id="hnR-yy-eIs">
+                        <barButtonItem key="rightBarButtonItem" image="7D43BB30-FBE6-4CB0-B296-04630B14719B" id="hnR-yy-eIs">
                             <connections>
                                 <action selector="done:" destination="DLd-FH-T8h" id="b8C-c3-dOK"/>
                             </connections>
@@ -6465,7 +6465,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="602D8C47-BE2D-466D-9B8E-A770129312DB" width="20" height="20">
+        <image name="7D43BB30-FBE6-4CB0-B296-04630B14719B" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
