@@ -261,6 +261,21 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    NSAttributedString *attributedString = nil;
+    if ([AppDelegate isMadDesigner]) {
+        attributedString = [AppDelegate attributedStringMadDesigner];
+    } else if ([AppDelegate isMadViewer]) {
+        attributedString = [AppDelegate attributedStringMadViewer];
+    }
+    NSAssert(attributedString != nil, @"Navigation title is not set.");
+    [labelMadDesigner setAttributedText:attributedString];
+    [[self navigationItem] setTitleView:labelMadDesigner];
+    [[[self navigationItem] titleView] sizeToFit];
+    [labelMadDesigner release];
+
     [[self navigationItem] setHidesBackButton:YES];
     
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateEditMode:)];
@@ -289,17 +304,44 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
+                UIMenuController *menu = [UIMenuController sharedMenuController];
+                NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
+                if (menuItems == nil) {
+                    menuItems = [[NSMutableArray alloc] init];
+                }
                 UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
                                                                   action: @selector(email:)];
-                UIMenuController *menu = [UIMenuController sharedMenuController];
-                [menu setMenuItems:@[menuItem]];
+                UIMenuItem *menuItem2 = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
+                                                                  action: @selector(rename:)];
+
+                [menuItems addObject:menuItem];
+                [menuItems addObject:menuItem2];
+                [menu setMenuItems:menuItems];
                 [menuItem release];
+                [menuItem2 release];
+                [menuItems release];
             });
+        } else {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                UIMenuController *menu = [UIMenuController sharedMenuController];
+                NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
+                if (menuItems == nil) {
+                    menuItems = [[NSMutableArray alloc] init];
+                }
+                UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
+                                                                  action: @selector(rename:)];
+                [menuItems addObject:menuItem];
+                [menu setMenuItems:menuItems];
+                [menuItem release];
+                [menuItems release];
+            });
+
         }
     }];
     
@@ -529,7 +571,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self deleteDocumentAtIndexPath:cellPath];
 }
 
-- (void)emailDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
+- (void)rename:(id)sender {
+    
+}
+
+- (void)email:(MTCollectionViewCellDocument *)cell {
     if ([MFMailComposeViewController canSendMail] == NO) {
 
         //Display an alert...
@@ -552,7 +598,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([documentReport documentState] != UIDocumentStateClosed) {
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
-                    [self emailDocumentRepresentedByCell:[[cell retain] autorelease]];
+                    [self email:[[cell retain] autorelease]];
                 }
             }];
             
@@ -669,6 +715,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[self collectionView] setAllowsMultipleSelection:YES];
         [[self navigationItem] setRightBarButtonItem:[self barButtonItemEditDone] animated:YES];
 
+        
         NSUInteger numberOfSections = [[self collectionView] numberOfSections];
         for (NSUInteger section = 0; section < numberOfSections; section++) {
             NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];

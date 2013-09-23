@@ -301,6 +301,14 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    NSAttributedString *attributedString = [AppDelegate attributedStringMadDesigner];
+    [labelMadDesigner setAttributedText:attributedString];
+    [[self navigationItem] setTitleView:labelMadDesigner];
+    [[[self navigationItem] titleView] sizeToFit];
+    [labelMadDesigner release];
+    
     if ([UIDevice isLagacyOS]) {
         MTReportDesignerBorderPadding = 3.0000f;
         MTReportDesignerCornerRadius = 5.0000f;

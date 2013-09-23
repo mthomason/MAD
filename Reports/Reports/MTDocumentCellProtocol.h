@@ -11,6 +11,7 @@
 @protocol MTDocumentCellProtocol <NSObject>
 
 - (void)deleteDocumentRepresentedByCell:(id)cell;
-- (void)emailDocumentRepresentedByCell:(id)cell;
+- (void)email:(id)cell;
+- (void)rename:(id)sender;
 
 @end

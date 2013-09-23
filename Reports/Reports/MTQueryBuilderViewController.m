@@ -137,6 +137,14 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    NSAttributedString *attributedString = [AppDelegate attributedStringMadQuery];
+    [labelMadDesigner setAttributedText:attributedString];
+    [[self navigationItem] setTitleView:labelMadDesigner];
+    [[[self navigationItem] titleView] sizeToFit];
+    [labelMadDesigner release];
+    
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
     //if ([UIDevice isLagacyOS]) {

@@ -26,4 +26,8 @@ extern NSString * const MTBundleIdViewer;
 + (BOOL)isMadViewer;
 + (BOOL)isMadDesigner;
 
++ (NSAttributedString *)attributedStringMadDesigner;
++ (NSAttributedString *)attributedStringMadViewer;
++ (NSAttributedString *)attributedStringMadQuery;
+
 @end

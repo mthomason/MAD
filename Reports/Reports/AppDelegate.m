@@ -10,6 +10,7 @@
 #import "MAReportDocument.h"
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
+#import "UIApplication+Extras.h"
 
 NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
@@ -35,6 +36,17 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //List all fonts
+    
+    NSArray *fontFamilies = [UIFont familyNames];
+    
+    for (int i = 0; i < [fontFamilies count]; i++)
+    {
+        NSString *fontFamily = [fontFamilies objectAtIndex:i];
+        NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
+        NSLog (@"%@: %@", fontFamily, fontNames);
+    }
+    
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
@@ -48,6 +60,11 @@ void uncaughtExceptionHandler(NSException *exception) {
     [self setWindow: window];
     [window release];
 
+    //UIFont *font = [UIFont fontWithName:@"DestructoBeamBB" size:18.0000f];
+    //[[UINavigationBar appearance] setTitleTextAttributes:@{
+    //                                                       UITextAttributeFont            : font
+    //                                                       }];
+    
     //Startup strore kit.
     [MTStoreKitController sharedObject];
 
@@ -149,12 +166,45 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 #pragma mark - Actions
 
++ (NSAttributedString *)attributedStringMadDesigner {
+
+    NSString *title = @"MAD Designer";
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSInteger length = [[attributedStringMadDesigner string] length];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    return [attributedStringMadDesigner autorelease];
+
+}
+
++ (NSAttributedString *)attributedStringMadViewer {
+
+    NSString *title = @"MAD Viewer";
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSInteger length = [[attributedStringMadDesigner string] length];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    return [attributedStringMadDesigner autorelease];
+
+}
+
++ (NSAttributedString *)attributedStringMadQuery {
+
+    NSString *title = @"MAD Query";
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSInteger length = [[attributedStringMadDesigner string] length];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    return [attributedStringMadDesigner autorelease];
+
+}
+
 + (NSString *)storyboardName {
     static NSString *_storyboardName;
 
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([[AppDelegate bundleId] isEqualToString:MTBundleIdDesigner]) {
+        if ([AppDelegate isMadDesigner]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
@@ -162,7 +212,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
             }
-        } else {
+        } else if ([AppDelegate isMadViewer]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportViewerPad : MTStoryboardReportViewer;

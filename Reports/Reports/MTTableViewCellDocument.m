@@ -30,7 +30,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
-    if (action == @selector(email:)) {
+    if (action == @selector(email:) || action == @selector(rename:)) {
         result = YES;
     }
     return result;
@@ -41,7 +41,11 @@
 }
 
 - (void)email:(id)sender {
-    [[self delegate] emailDocumentRepresentedByCell:self];
+    [[self delegate] email:self];
+}
+
+- (void)rename:(id)sender {
+    [[self delegate] rename:self];
 }
 
 @end

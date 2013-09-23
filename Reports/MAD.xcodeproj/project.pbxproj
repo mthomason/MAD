@@ -438,6 +438,12 @@
 		4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
 		4C4EBFBC17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
 		4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
+		4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
+		4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
+		4C4EBFC417EFC2C500D10622 /* destructobeambb_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFC017EFC2C500D10622 /* destructobeambb_bold.ttf */; };
+		4C4EBFC517EFC2C500D10622 /* destructobeambb_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFC017EFC2C500D10622 /* destructobeambb_bold.ttf */; };
+		4C4EBFC617EFC2C500D10622 /* destructobeambb_reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFC117EFC2C500D10622 /* destructobeambb_reg.ttf */; };
+		4C4EBFC717EFC2C500D10622 /* destructobeambb_reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFC117EFC2C500D10622 /* destructobeambb_reg.ttf */; };
 		4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */; };
 		4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m */; };
 		4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
@@ -2242,6 +2248,9 @@
 		4C4EBFB517EDEB9500D10622 /* carat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat@2x.png"; sourceTree = "<group>"; };
 		4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
 		4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
+		4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarbonBlock.ttf; sourceTree = "<group>"; };
+		4C4EBFC017EFC2C500D10622 /* destructobeambb_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = destructobeambb_bold.ttf; sourceTree = "<group>"; };
+		4C4EBFC117EFC2C500D10622 /* destructobeambb_reg.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = destructobeambb_reg.ttf; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
@@ -3469,11 +3478,11 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C4EBFBE17EFC2B700D10622 /* Fonts */,
 				4C94AA3717DCB88A000F6FCF /* Images.xcassets */,
 				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
 				4C3C17D6163F414400A77BA6 /* Libraries */,
 				4C1B7A65163E123200E331AA /* ReportDesigner */,
-				4C1B7A66163E123D00E331AA /* ReportViewer */,
 				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C5F02D914B9A42200C49BE9 /* Template Files */,
@@ -3560,13 +3569,6 @@
 				4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */,
 			);
 			name = ReportDesigner;
-			sourceTree = "<group>";
-		};
-		4C1B7A66163E123D00E331AA /* ReportViewer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ReportViewer;
 			sourceTree = "<group>";
 		};
 		4C202134163DD4090058F869 /* ReportsGeneralTest */ = {
@@ -3805,6 +3807,16 @@
 				4C4C6F20167642D9004A3B04 /* MTVertex.h */,
 			);
 			name = MTDataStructures;
+			sourceTree = "<group>";
+		};
+		4C4EBFBE17EFC2B700D10622 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */,
+				4C4EBFC017EFC2C500D10622 /* destructobeambb_bold.ttf */,
+				4C4EBFC117EFC2C500D10622 /* destructobeambb_reg.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		4C5F02D914B9A42200C49BE9 /* Template Files */ = {
@@ -5270,6 +5282,7 @@
 				4C0E77D8163B5AEC003B951E /* UIImageDocumentsAlt20@2x.png in Resources */,
 				4C0E77DC163B5AEC003B951E /* UIImageBolt20.png in Resources */,
 				4C0E77DD163B5AEC003B951E /* UIImageBolt20@2x.png in Resources */,
+				4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */,
 				4C0E77DE163B5AEC003B951E /* UIImageDocument20.png in Resources */,
 				4C0E77DF163B5AEC003B951E /* UIImageDocument20@2x.png in Resources */,
 				4C0E77E0163B5AEC003B951E /* UIImagePatternPebbled.png in Resources */,
@@ -5304,6 +5317,7 @@
 				4C0E77FA163B5AEC003B951E /* UIImagePatternFibers1@2x.png in Resources */,
 				4C0E77FB163B5AEC003B951E /* UIImagePatternFibers2.png in Resources */,
 				4C0E77FC163B5AEC003B951E /* UIImagePatternFibers2@2x.png in Resources */,
+				4C4EBFC517EFC2C500D10622 /* destructobeambb_bold.ttf in Resources */,
 				4C0E77FD163B5AEC003B951E /* UIImagePatternFibersDarkGray.png in Resources */,
 				4C0E77FE163B5AEC003B951E /* UIImagePatternGoldMetallic.png in Resources */,
 				4C0E77FF163B5AEC003B951E /* UIImagePatternGoldMetallic@2x.png in Resources */,
@@ -5340,6 +5354,7 @@
 				4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */,
 				4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */,
 				4C0E781B163B5AEC003B951E /* UIImagePatternLined@2x.png in Resources */,
+				4C4EBFC717EFC2C500D10622 /* destructobeambb_reg.ttf in Resources */,
 				4C0E781C163B5AEC003B951E /* UIImagePatternLinen.png in Resources */,
 				4C0E781D163B5AEC003B951E /* UIImagePatternLinen@2x.png in Resources */,
 				4C0E781E163B5AEC003B951E /* UIImagePatternLinenWeave.png in Resources */,
@@ -6040,11 +6055,13 @@
 				4C94AA3117DCB832000F6FCF /* Icon-76-Designer-Modern@2x.png in Resources */,
 				4CCBDAC817603DEB003E9E1D /* README-libsybdb.txt in Resources */,
 				4C6DAA501761AEE000FF770A /* bkpublic.h in Resources */,
+				4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */,
 				4C6DAA551761AEE000FF770A /* cspublic.h in Resources */,
 				4C6DAA5A1761AEE000FF770A /* cstypes.h in Resources */,
 				4C6DAA5F1761AEE000FF770A /* ctpublic.h in Resources */,
 				4C6DAA641761AEE000FF770A /* odbcss.h in Resources */,
 				4C6DAA691761AEE000FF770A /* sqldb.h in Resources */,
+				4C4EBFC417EFC2C500D10622 /* destructobeambb_bold.ttf in Resources */,
 				4C6DAA6E1761AEE000FF770A /* sqlfront.h in Resources */,
 				4C6DAA731761AEE000FF770A /* sybdb.h in Resources */,
 				4C6DAA781761AEE000FF770A /* syberror.h in Resources */,
@@ -6077,6 +6094,7 @@
 				4C47577C17B4096700530CAF /* Icon-72-Designer-Modern@2x.png in Resources */,
 				4C94AA3517DCB832000F6FCF /* Icon-76-Viewer-Modern.png in Resources */,
 				4CFA64E017B92B7A0025BE1E /* MADIcon64.png in Resources */,
+				4C4EBFC617EFC2C500D10622 /* destructobeambb_reg.ttf in Resources */,
 				4CFA64E217B92B7A0025BE1E /* MADIcon320.png in Resources */,
 				4C94AA1517DCB5ED000F6FCF /* Icon-40-Viewer-Modern.png in Resources */,
 				4CFA64E817B930090025BE1E /* MADIcon44x58.png in Resources */,

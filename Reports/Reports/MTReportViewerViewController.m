@@ -109,6 +109,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    NSAttributedString *attributedString = [AppDelegate attributedStringMadViewer];
+    [labelMadDesigner setAttributedText:attributedString];
+    [[self navigationItem] setTitleView:labelMadDesigner];
+    [[[self navigationItem] titleView] sizeToFit];
+    [labelMadDesigner release];
+    
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
     _timerLabelTimeSinceRefreh = nil;

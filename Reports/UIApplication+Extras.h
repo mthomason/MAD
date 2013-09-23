@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface UIApplication (Extras)
+
 + (NSString *)version;
++ (BOOL)isMadDesigner;
++ (BOOL)isMadViewer;
+
 @end
