@@ -33,6 +33,7 @@ extern NSString * const MTSegueShowOpenDocument;
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
+        UITextFieldDelegate,
         MTTemplateSelectorDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,

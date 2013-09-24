@@ -12,52 +12,7 @@ NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
-@interface FileRepresentation : NSObject
-
-@property (nonatomic, retain) NSString* fileName;
-@property (nonatomic, retain) NSURL* url;
-@property (nonatomic, retain) NSURL* previewURL;
-
-- (id)initWithFileName:(NSString*)fileName url:(NSURL*)url;
-
-@end
-
-@implementation FileRepresentation
-
-- (void)dealloc {
-    [_fileName release];
-    [_url release];
-    [_previewURL release];
-    [super dealloc];
-}
-
-- (id)initWithFileName:(NSString *)fileName url:(NSURL *)url {
-    self = [super init];
-    if (self) {
-        NSString *f = [[NSString alloc] initWithString:fileName];
-        [self setFileName: f];
-        [f release];
-        
-        NSURL *u = [url retain];
-        [self setUrl:u];
-        [u release];
-                
-    }
-    
-    return self;
-}
-
-+ (id)fileRepresentationWithName:(NSString *)fileName andUrl:(NSURL *)url {
-    return [[[FileRepresentation alloc] initWithFileName:fileName url:url] autorelease];
-}
-
-- (BOOL)isEqual:(FileRepresentation*)object {
-    return [object isKindOfClass:[FileRepresentation class]] && [_fileName isEqual:object.fileName];
-}
-
-@end
-
-@interface MTViewControllerOpenDocument()
+@interface MTViewControllerOpenDocument() <UIAlertViewDelegate, NSFileManagerDelegate>
 
 @property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
@@ -97,7 +52,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [self updateFileList];
+    [self updateFileList:self];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];    
 }
 
@@ -216,47 +171,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
-#pragma mark - UIMenuController required methods
-
-
-
-- (BOOL)canBecomeFirstResponder {
-    return NO;
-}
-
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    BOOL result = NO;
-    /*
-    if (action == @selector(paste:)) {
-        NSURL *urlToDrop = [[UIPasteboard generalPasteboard] URL];
-        if (urlToDrop != nil) {
-            result = [[urlToDrop pathExtension]  isEqualToString:MTDocumentExtentionMobleApplicationDocument];
-        }
-    }*/
-    return result;
-}
-
-- (void)paste:(id)sender {
-    NSURL *url = [[UIPasteboard generalPasteboard] URL];
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
-                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
-    
-    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-    NSError* fileWrittingError = nil;
-    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-    if (fileWrittingError) {
-        fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-    }
-    [self updateFileList];
-    [destinationUrl release];
-    [fileWrapper release];
-    [data release];
-}
-
 #pragma mark - UIViewController Overrides
 
 - (void)viewDidLoad {
@@ -345,7 +259,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
     }];
     
-    [self updateFileList];
+    [self updateFileList:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -407,15 +321,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         BOOL foundUrl = NO;
         if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
-            NSUInteger row = 0;
-            NSURL *url = nil;
-            MTCollectionViewCellDocument *senderCell = sender;
-            row = [[[self collectionView] indexPathForCell:senderCell] row];
-            url = [[self availableFilesCache] objectAtIndex: row];
+            NSURL *url = [[self urlForDocumentCell:sender] retain];
             [self setUrlBeingOpended:url];
+            [url release];
             foundUrl = YES;
         } else if ([sender isKindOfClass:[NSURL class]]) {
-            [self setUrlBeingOpended:(NSURL *)sender];
+            NSURL *url = [sender retain];
+            [self setUrlBeingOpended:url];
+            [url release];
             foundUrl = YES;
         }
 
@@ -431,11 +344,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         BOOL foundUrl = NO;
         if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
 
-            NSUInteger row = 0;
-            NSURL *url = nil;
-            MTCollectionViewCellDocument *senderCell = sender;
-            row = [[[self collectionView] indexPathForCell:senderCell] row];
-            url = [[[self availableFilesCache] objectAtIndex: row] retain];
+            NSURL *url = [[self urlForDocumentCell:sender] retain];
             if (url != nil) {
                 foundUrl = YES;
             }
@@ -443,11 +352,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [url release];
             
         } else if ([sender isKindOfClass:[NSURL class]])  {
-            NSURL *url = (NSURL *)sender;
+            NSURL *url = [sender retain];
             if (url != nil) {
                 [self setUrlBeingOpended:url];
                 foundUrl = YES;
             }
+            [url release];
         }
         if (foundUrl) {
             if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -494,19 +404,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         shouldPerformSegueWithIdentifier = ![self isEditing];
     }
     return shouldPerformSegueWithIdentifier;
-}
-
-#pragma mark - 
-
-- (void)updateFileList {
-
-    NSArray *madFiles = [NSFileManager madFiles];
-    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:madFiles];
-    [self setAvailableFilesCache: a];
-    [a release];
-    
-    [[self collectionView] reloadData];
-
 }
 
 #pragma mark - Delegates
@@ -571,92 +468,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self deleteDocumentAtIndexPath:cellPath];
 }
 
-- (void)rename:(id)sender {
-    
-}
-
-- (void)email:(MTCollectionViewCellDocument *)cell {
-    if ([MFMailComposeViewController canSendMail] == NO) {
-
-        //Display an alert...
-        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Warning", @"Heading of a warning alert message.")
-                                                              message: NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.")
-                                                             delegate: nil
-                                                    cancelButtonTitle: NSLocalizedString(@"OK", @"OK button on an alert message.")
-                                                    otherButtonTitles: nil];
-        [uIAlertView show];
-        [uIAlertView release];
-        
-    } else {
-
-
-        NSIndexPath *cellPath = [[self collectionView] indexPathForCell:cell];
-        NSURL *fileToAttach = [[self availableFilesCache] objectAtIndex:cellPath.item];
-        
-        MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileToAttach];
-        
-        if ([documentReport documentState] != UIDocumentStateClosed) {
-            [documentReport closeWithCompletionHandler:^(BOOL success) {
-                if (success) {
-                    [self email:[[cell retain] autorelease]];
-                }
-            }];
-            
-        } else {
-            
-            [documentReport performAsynchronousFileAccessUsingBlock:^{
-                NSError *fileWrapperError = nil;
-                NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
-                
-                if (fileWrapperError == nil) {
-                    NSData *data = [[fileWrapper serializedRepresentation] retain];
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
-                                                                                                                 @"The attached document can be opened with the Mad Viewer available on iOS.")];
-                        
-                        NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
-                        [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-                        
-                        MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
-                        [mailComposer setMailComposeDelegate: self];
-                        [mailComposer setMessageBody:messageBody isHTML:NO];
-                        [mailComposer setSubject:subject];
-                        
-                        NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
-                        [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
-                        
-                        if ([UIDevice isPad]) {
-                            [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
-                            [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-                            [mailComposer setProvidesPresentationContextTransitionStyle:YES];
-                            [mailComposer setModalInPopover:NO];
-                        }
-                        [self presentViewController:mailComposer animated:YES completion:nil];
-                        
-                        [messageBody release];
-                        
-                    });
-
-                } else {
-                    [fileWrapperError presentErrorToUser];
-                }
-                
-                [fileWrapper release];
-            }];
-        }
-        
-        [documentReport release];
-        
-    }
-
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [error presentErrorToUser];
-}
-
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{ }];
     [self setShouldShowAddDocumentPopover:YES];
@@ -696,6 +507,23 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 #pragma mark - Actions
+
+- (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
+    NSInteger row = [[[self collectionView] indexPathForCell:cellDocument] row];
+    return [[[[self availableFilesCache] objectAtIndex: row] retain] autorelease];
+    
+}
+
+- (IBAction)updateFileList:(id)sender {
+    
+    NSArray *madFiles = [NSFileManager madFiles];
+    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:madFiles];
+    [self setAvailableFilesCache: a];
+    [a release];
+    
+    [[self collectionView] reloadData];
+    
+}
 
 - (IBAction)add:(id)sender { }
 
@@ -894,6 +722,224 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [[self barButtonItemAction] setEnabled:NO];
             break;
     }
+}
+
+- (void)rename:(id)sender {
+    MTCollectionViewCellDocument *cellDocument = [sender retain];
+    NSAssert(cellDocument != nil, @"Null cell.");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
+                                                        message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
+                                                       delegate: self
+                                              cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel")
+                                              otherButtonTitles: NSLocalizedString(@"Rename", @"Rename"), nil
+                              ];
+    [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
+    [alertView setDelegate:self];
+    NSIndexPath *indexPath = [[self collectionView] indexPathForCell:cellDocument];
+    [alertView setTag:[indexPath item]];
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    [textField setText:[[cellDocument labelTitle] text]];
+    [textField setClearButtonMode:UITextFieldViewModeAlways];
+    [textField setDelegate:self];
+    [alertView show];
+    [alertView release];
+    [cellDocument release];
+}
+
+- (void)email:(MTCollectionViewCellDocument *)cell {
+    if ([MFMailComposeViewController canSendMail] == NO) {
+        
+        //Display an alert...
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Warning", @"Heading of a warning alert message.")
+                                                            message: NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.")
+                                                           delegate: nil
+                                                  cancelButtonTitle: NSLocalizedString(@"OK", @"OK button on an alert message.")
+                                                  otherButtonTitles: nil];
+        [alertView show];
+        [alertView release];
+        
+    } else {
+        
+        NSURL *fileToAttach = [self urlForDocumentCell:cell];
+        
+        MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileToAttach];
+        
+        if ([documentReport documentState] != UIDocumentStateClosed) {
+            [documentReport closeWithCompletionHandler:^(BOOL success) {
+                if (success) {
+                    [self email:[[cell retain] autorelease]];
+                }
+            }];
+            
+        } else {
+            
+            [documentReport performAsynchronousFileAccessUsingBlock:^{
+                NSError *fileWrapperError = nil;
+                NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
+                
+                if (fileWrapperError == nil) {
+                    NSData *data = [[fileWrapper serializedRepresentation] retain];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
+                                                                                                                 @"The attached document can be opened with the Mad Viewer available on iOS.")];
+                        
+                        NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
+                        [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
+                        
+                        MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
+                        [mailComposer setMailComposeDelegate: self];
+                        [mailComposer setMessageBody:messageBody isHTML:NO];
+                        [mailComposer setSubject:subject];
+                        
+                        NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
+                        [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
+                        
+                        if ([UIDevice isPad]) {
+                            [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
+                            [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+                            [mailComposer setProvidesPresentationContextTransitionStyle:YES];
+                            [mailComposer setModalInPopover:NO];
+                        }
+                        [self presentViewController:mailComposer animated:YES completion:nil];
+                        
+                        [messageBody release];
+                        
+                    });
+                    
+                } else {
+                    [fileWrapperError presentErrorToUser];
+                }
+                
+                [fileWrapper release];
+            }];
+        }
+        
+        [documentReport release];
+        
+    }
+    
+}
+
+#pragma mark -
+#pragma mark - MFMailComposeViewController delegate protocol
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [error presentErrorToUser];
+}
+
+#pragma mark -
+#pragma mark - NSFileManager delegate protocol
+
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldMoveItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+    return YES;
+}
+
+- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+    
+    //Only allow the thumbnails to proceed to after an error.
+    return [[[dstURL pathExtension] lowercaseString] isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
+}
+
+#pragma mark -
+#pragma mark - UIAlertView delegate protocol
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView cancelButtonIndex] != buttonIndex) {
+        
+        UITextField *textField = [[alertView textFieldAtIndex:0] retain];
+        NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+        [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
+        [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        NSString *text = [[[textField text] componentsSeparatedByCharactersInSet:[characterSet invertedSet]] componentsJoinedByString:@""];
+        if ([text length] == 0) {
+            UIAlertView *validFileName = [[UIAlertView alloc] initWithTitle:@"Validation Error"
+                                                                    message:@"Filename not valid."
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"Dismiss"
+                                                          otherButtonTitles: nil];
+            [validFileName show];
+            [validFileName release];
+        } else {
+            NSURL *urlToRename = nil;
+            if ([alertView tag] < [[self availableFilesCache] count]) {
+                urlToRename = [self availableFilesCache][[alertView tag]];
+                NSString *fileName = [textField text];
+                NSString *filenameWithExtention = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+                NSURL *newUrl = [[[urlToRename URLByDeletingLastPathComponent] URLByAppendingPathComponent:filenameWithExtention isDirectory:NO] retain];
+                NSError *error = nil;
+                [[NSFileManager defaultManager] moveItemAtURL:urlToRename toURL:newUrl error:&error];
+                if (error != nil) {
+                    [error presentErrorToUser];
+                    
+                } else {
+                    
+                    NSFileManager *fileManager = [[NSFileManager alloc] init];
+                    [fileManager setDelegate:self];
+                    NSURL *thumbnailUrlOld = [[MAReportDocument thumbnailUrlForMadUrl:urlToRename] retain];
+                    NSURL *thumbnailUrlNew = [[MAReportDocument thumbnailUrlForMadUrl:newUrl] retain];
+                    [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
+                    [self updateFileList:self];
+                    [fileManager release];
+                    [thumbnailUrlOld release];
+                    [thumbnailUrlNew release];
+                }
+                [newUrl release];
+            }
+        }
+        [characterSet release];
+        [textField release];
+    }
+}
+
+#pragma mark -
+#pragma mark Text Field Delegate Protocol
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+
+    return YES;
+}
+
+#pragma mark -
+#pragma mark - UIMenuController required methods
+
+- (BOOL)canBecomeFirstResponder {
+    return NO;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    BOOL result = NO;
+    /*
+     if (action == @selector(paste:)) {
+     NSURL *urlToDrop = [[UIPasteboard generalPasteboard] URL];
+     if (urlToDrop != nil) {
+     result = [[urlToDrop pathExtension]  isEqualToString:MTDocumentExtentionMobleApplicationDocument];
+     }
+     }*/
+    return result;
+}
+
+- (void)paste:(id)sender {
+    NSURL *url = [[UIPasteboard generalPasteboard] URL];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
+    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
+                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+    
+    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+    NSError* fileWrittingError = nil;
+    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    if (fileWrittingError) {
+        fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    }
+    [self updateFileList:self];
+    [destinationUrl release];
+    [fileWrapper release];
+    [data release];
 }
 
 #pragma mark -
