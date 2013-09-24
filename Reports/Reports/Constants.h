@@ -228,6 +228,7 @@ extern NSString * const MTPersistentStoreAliasUserPreferences;
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
+extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 
