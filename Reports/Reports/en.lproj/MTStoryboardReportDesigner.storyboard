@@ -188,8 +188,6 @@
         <!--Report Viewer Controller - MAD Viewer-->
         <scene sceneID="Ts3-uT-wQ7">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZAZ-sk-cfa" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="jyl-Yq-xKX" userLabel="Exit" sceneMemberID="exit"/>
                 <viewController id="yU8-vi-ajy" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
@@ -244,6 +242,8 @@
                         <outlet property="sliderView" destination="Gna-av-J9z" id="oeo-jl-xB8"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZAZ-sk-cfa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="jyl-Yq-xKX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2982" y="2004"/>
         </scene>
@@ -1170,7 +1170,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="CaN-PA-tPc">
-                        <barButtonItem key="rightBarButtonItem" image="30554786-CD18-498B-9329-F3CF2D85DD63" id="eOp-gA-XQd">
+                        <barButtonItem key="rightBarButtonItem" image="557CBC97-F2DC-4E51-B55A-5D4CBEA9508D" id="eOp-gA-XQd">
                             <connections>
                                 <action selector="done:" destination="xa7-Xt-Nbi" id="Bsi-5N-9UF"/>
                             </connections>
@@ -6749,7 +6749,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="30554786-CD18-498B-9329-F3CF2D85DD63" width="20" height="20">
+        <image name="557CBC97-F2DC-4E51-B55A-5D4CBEA9508D" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -6845,7 +6845,7 @@ MxA4EEAQQxBIEFAQUxBlEGgQbQAAAAAAAAIBAAAAAAAAAEIAAAAAAAAAAAAAAAAAABBvA
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="tIb-WS-gen"/>
-        <segue reference="G3D-As-8XI"/>
+        <segue reference="kPX-hH-DKi"/>
         <segue reference="pfP-rZ-fVf"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
