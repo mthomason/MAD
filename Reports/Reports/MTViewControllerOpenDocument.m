@@ -124,6 +124,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [[[self navigationItem] titleView] sizeToFit];
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     CGPoint touchPoint = [touch locationInView:[self collectionView]];
     NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:touchPoint];

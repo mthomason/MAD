@@ -210,22 +210,25 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    CGRect statusViewBounds;
-    if (self.navigationController.toolbar.frame.size.height < 40.0000f) {
-        if ([UIDevice isModernOS]) {
-            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+    [[[self navigationItem] titleView] sizeToFit];
+    if ([self documentStatusView]) {
+        CGRect statusViewBounds;
+        if (self.navigationController.toolbar.frame.size.height < 40.0000f) {
+            if ([UIDevice isModernOS]) {
+                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
+            } else {
+                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
+            }
         } else {
-            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
+            if ([UIDevice isModernOS]) {
+                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
+            } else {
+                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
+            }
         }
-    } else {
-        if ([UIDevice isModernOS]) {
-            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
-        } else {
-            statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
-        }
+        [[self documentStatusView] setBounds:statusViewBounds];
+        [[self documentStatusView] setNeedsDisplay];
     }
-    [[self documentStatusView] setBounds:statusViewBounds];
-    [[self documentStatusView] setNeedsDisplay];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -612,8 +615,8 @@
             [[result view] setFrame:[[self view] bounds]];
             [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
-            [[result view] setBackgroundColor:[UIColor redColor]];
-            [[self view] setBackgroundColor:[UIColor blueColor]];
+            //[[result view] setBackgroundColor:[UIColor redColor]];
+            //[[self view] setBackgroundColor:[UIColor blueColor]];
 
             [result autorelease];
             
@@ -639,8 +642,8 @@
             [[result view] setFrame:[[self view] bounds]];
             [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
-            [[result view] setBackgroundColor:[UIColor redColor]];
-            [[self view] setBackgroundColor:[UIColor blueColor]];
+            //[[result view] setBackgroundColor:[UIColor redColor]];
+            //[[self view] setBackgroundColor:[UIColor blueColor]];
 
             [result autorelease];
         }
