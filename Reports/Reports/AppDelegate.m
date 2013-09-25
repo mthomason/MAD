@@ -38,14 +38,13 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     //List all fonts
     
-    NSArray *fontFamilies = [UIFont familyNames];
+    //NSArray *fontFamilies = [UIFont familyNames];
     
-    for (int i = 0; i < [fontFamilies count]; i++)
-    {
-        NSString *fontFamily = [fontFamilies objectAtIndex:i];
-        NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
-        NSLog (@"%@: %@", fontFamily, fontNames);
-    }
+    //for (NSInteger i = 0; i < [fontFamilies count]; i++) {
+    //    NSString *fontFamily = [fontFamilies objectAtIndex:i];
+    //    NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
+    //    NSLog (@"%@: %@", fontFamily, fontNames);
+    //}
     
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
