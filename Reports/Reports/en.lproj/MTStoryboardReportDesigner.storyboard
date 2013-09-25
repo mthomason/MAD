@@ -1170,7 +1170,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="CaN-PA-tPc">
-                        <barButtonItem key="rightBarButtonItem" image="FD0149F1-FF1A-4927-847F-8BC723306C7F" id="eOp-gA-XQd">
+                        <barButtonItem key="rightBarButtonItem" image="30554786-CD18-498B-9329-F3CF2D85DD63" id="eOp-gA-XQd">
                             <connections>
                                 <action selector="done:" destination="xa7-Xt-Nbi" id="Bsi-5N-9UF"/>
                             </connections>
@@ -6749,7 +6749,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="FD0149F1-FF1A-4927-847F-8BC723306C7F" width="20" height="20">
+        <image name="30554786-CD18-498B-9329-F3CF2D85DD63" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
