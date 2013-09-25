@@ -114,12 +114,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self view] setBackgroundColor:[UIColor purpleColor]];
+    [[self view] setBackgroundColor:[UIColor clearColor]];
     [[self view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] setClipsToBounds:YES];
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:[[self view] bounds]];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [renderedReportView setBackgroundColor:[UIColor greenColor]];
+    [renderedReportView setBackgroundColor:[UIColor whiteColor]];
     [renderedReportView setDelegate:self];
     [self setRenderedReportView:renderedReportView];
     [renderedReportView release];

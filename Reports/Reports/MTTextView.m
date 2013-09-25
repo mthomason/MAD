@@ -24,7 +24,7 @@
     if (self) {
         // Initialization code
         [self setClipsToBounds:YES];
-        [self setBackgroundColor:[UIColor greenColor]];
+        [self setBackgroundColor:[UIColor clearColor]];
         CGRect textViewFrame = CGRectInset(frame, -4.0000f, -4.0000f);
         [self setInitalFrame:textViewFrame];
         UITextView *textView = [[UITextView alloc] initWithFrame:textViewFrame];
