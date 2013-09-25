@@ -244,16 +244,6 @@ extern NSString * const PDF_PATH_EXTENSION;
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
 
-// MARK: Storyboard References
-
-// MARK: View Controller Identifiers
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderTables;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderLayout;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderDatasource;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderLinks;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderGroups;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate;
-extern NSString * const MNSIdentifierUIViewControllerTableHeaderQuery;
 extern NSString * const MUIViewControllerActivitySpinner;
 
 // MARK: Segue Identifiers

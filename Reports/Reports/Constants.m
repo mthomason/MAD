@@ -115,14 +115,6 @@ CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
 
 
-// MARK: View Controller Identifiers
-NSString * const MNSIdentifierUIViewControllerTableHeaderTables     = @"UIViewControllerTableHeaderTables";
-NSString * const MNSIdentifierUIViewControllerTableHeaderLayout     = @"UIViewControllerTableHeaderLayout";
-NSString * const MNSIdentifierUIViewControllerTableHeaderDatasource = @"UIViewControllerTableHeaderDatasource";
-NSString * const MNSIdentifierUIViewControllerTableHeaderLinks      = @"UIViewControllerTableHeaderLinks";
-NSString * const MNSIdentifierUIViewControllerTableHeaderGroups     = @"UIViewControllerTableHeaderGroups";
-NSString * const MNSIdentifierUIViewControllerTableHeaderPredicate  = @"UIViewControllerTableHeaderPredicate";
-NSString * const MNSIdentifierUIViewControllerTableHeaderQuery      = @"UIViewControllerTableHeaderQuery";
 NSString * const MUIViewControllerActivitySpinner                   = @"MUIViewControllerActivitySpinner";
 
 // MARK: Segue Identifiers
