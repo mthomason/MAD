@@ -168,11 +168,17 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 + (NSAttributedString *)attributedStringMadDesigner {
 
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
     NSString *title = @"MAD Designer";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
 }
@@ -182,8 +188,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSString *title = @"MAD Viewer";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
     return [attributedStringMadDesigner autorelease];
 
 }
@@ -193,8 +199,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSString *title = @"MAD Query";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"DestructoBeamBB" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"CarbonBlock" size:22.0000f] range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
     return [attributedStringMadDesigner autorelease];
 
 }
