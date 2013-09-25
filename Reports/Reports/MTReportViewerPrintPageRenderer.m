@@ -231,8 +231,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 #pragma mark - UIPrintPageRenderer Overrides
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    
+    [[UIColor whiteColor] setFill];
+
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+
+    
     
     NSMutableArray *printableStrings = [[NSMutableArray alloc] init];
     
@@ -249,7 +253,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        [[UIColor whiteColor] setFill];
         
         if (index < [[self cachedLayoutByPage] count]) {
             
@@ -272,7 +275,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     
                     documentSection = [[self document] hasDetailSection];
                     
-                    [[UIColor yellowColor] setFill];
+                    [[UIColor whiteColor] setFill];
                     
                     detailRowsCounter++;
                     
@@ -641,6 +644,62 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [nextGroupLevelKeys release];
         [groupLevelKeys release];
     }
+    
+    if ([[MTStoreKitController sharedObject] verifiedUser] == NO) {
+
+        
+        UIFont *customFont = [[UIFont boldSystemFontOfSize:12.0000f] retain];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
+        [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+        [paragraphStyle setAlignment:NSTextAlignmentCenter];
+        
+        NSDictionary *results = [
+                                 @{NSFontAttributeName : customFont,
+                                   //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
+                                   NSStrokeWidthAttributeName : @(3.0000f),
+                                   NSStrokeColorAttributeName : [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f],
+                                   NSForegroundColorAttributeName : [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f],
+                                   NSParagraphStyleAttributeName: paragraphStyle
+                                   } retain];
+        NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: @"Get MAD Viewer!\nOpen and View MAD Documents" attributes:results];
+
+        NSInteger rowCounter = 0, columnCounter = 0;
+        CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
+        CGSize logoMargin = CGSizeMake(25.0000f, 25.0000f);
+        CGRect logoRect;
+        
+        do {
+            columnCounter = 0;
+            do {
+                
+                
+                
+                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoRect.size.width;
+                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoRect.size.height;
+                logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
+                
+                CGContextSaveGState(ctx);
+                {
+                    static CGFloat angle315Degrees = 7.0000f * M_PI / 4.0000f;
+                    CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
+                    CGContextRotateCTM(ctx, angle315Degrees);
+                    [getMad drawInRect:CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height)];
+                }
+                CGContextRestoreGState(ctx);
+                columnCounter++;
+            } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
+            rowCounter++;
+        } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
+
+    
+        [results release];
+        [customFont release];
+        [paragraphStyle release];
+        [getMad release];
+
+    }
+
     
     [printableStrings release];
 }
