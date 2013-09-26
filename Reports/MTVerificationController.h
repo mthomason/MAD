@@ -27,4 +27,6 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
        onSandboxServer:(BOOL)onSandboxServer
             completion:(MTVerificationControllerVerifyPurchaseCompletion)completion;
 
+- (void)receiptVerificationOS7;
+
 @end

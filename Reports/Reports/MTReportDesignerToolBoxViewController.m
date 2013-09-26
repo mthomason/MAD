@@ -94,6 +94,12 @@
     [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self contentView] bounds]];
     [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
+    
+    //UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[[self view] frame]];
+    //[[self view] setClipsToBounds:YES];
+    //[[self view] setBackgroundColor:[UIColor clearColor]];
+    //[[[self view] layer] insertSublayer:[toolbar layer] atIndex:0];
+    //[toolbar release];
 
 }
 

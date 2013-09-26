@@ -8,10 +8,6 @@
 
 #pragma mark - Layout
 
-#ifndef MTDebugOn
-#define MTDebugOn YES
-#endif
-
 // MARK: Margin
 
 struct MTMargin {

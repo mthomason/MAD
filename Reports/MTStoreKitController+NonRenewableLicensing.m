@@ -19,8 +19,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (YES) {
+    #warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (NO) {
         if ([self verifiedUser]) {
             if ([[self verifiedExperationDate] compare:[NSDate date]] == NSOrderedDescending) {
                 completion(YES, [self verifiedExperationDate]);
@@ -42,8 +42,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
     
-    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (YES) {
+    #warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (NO) {
         NSDate *experationDate = [MTStoreKitController experationDate];
         BOOL isLicensedUser = NO;
         if (experationDate != nil) {

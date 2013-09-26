@@ -236,7 +236,12 @@ static MTStoreKitController *sharedSingleton = nil;
 
                 //MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
                 
-                [[MTVerificationController sharedInstance] verifyPurchase:transaction onSandboxServer:MTDebugOn completion:^(BOOL validTransaction, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate) {
+                BOOL sandboxServer = NO;
+#ifdef DEBUG
+                sandboxServer = YES;
+#endif
+                
+                [[MTVerificationController sharedInstance] verifyPurchase:transaction onSandboxServer:sandboxServer completion:^(BOOL validTransaction, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate) {
                     
                     if (status == 21007) {
                         

@@ -11,7 +11,7 @@
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
-
+#import "evp.h"
 NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
 
@@ -77,6 +77,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore synchronize];
     
+    
+    [[MTVerificationController sharedInstance] receiptVerificationOS7];
     
     /*
     //Setup iCloud Document Management

@@ -1,4 +1,16 @@
 #import "MTVerificationController.h"
+#import "ossl_typ.h"
+#import "pkcs7.h"
+#import "bio.h"
+#import "x509.h"
+#import "x509_vfy.h"
+#import "evp.h"
+
+#import "ReceiptAttribute.h"
+#import "asn_application.h"
+
+//#import "asn_internal.h"
+//#import "ber_decoder.h"
 
 static MTVerificationController *singleton;
 
@@ -8,6 +20,8 @@ static MTVerificationController *singleton;
 @property (nonatomic, copy) NSDictionary *receiptData;
 @property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
+
+@property (nonatomic, assign) BOOL modernReceiptProcess;
 
 @end
 
@@ -65,6 +79,73 @@ static MTVerificationController *singleton;
 
 #pragma mark Receipt Verification
 
+- (void)receiptVerificationOS7 {
+
+    NSURL *receiptURL = nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    if ([bundle respondsToSelector:@selector(appStoreReceiptURL)]) {
+        receiptURL = [bundle performSelector:@selector(appStoreReceiptURL)];
+        if (receiptURL != nil) {
+            
+            NSData *receiptData = [NSData dataWithContentsOfURL:receiptURL];
+            if (receiptData != nil) {
+                
+                NSData *appleIncRootCertificate = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"]];
+
+                OpenSSL_add_all_algorithms();
+                
+                BIO *b_receipt = BIO_new_mem_buf((uint8_t *)receiptData.bytes, receiptData.length);
+                BIO *b_x509 = BIO_new_mem_buf((uint8_t *) appleIncRootCertificate.bytes, appleIncRootCertificate.length);
+                
+                PKCS7 *p7 = d2i_PKCS7_bio(b_receipt, NULL);
+            
+                // Create the certificate store
+                X509_STORE *store = X509_STORE_new();
+                X509 *appleRootCA = d2i_X509_bio(b_x509, NULL);
+                X509_STORE_add_cert(store, appleRootCA);
+                
+                // Verify the Signature
+                BIO *b_receiptPayload = BIO_new(BIO_s_mem());;
+                int result = PKCS7_verify(p7, NULL, store, NULL, b_receiptPayload, 0);
+                if (result == 1)
+                {
+ 
+                    char *pp = NULL;
+                    BUF_MEM *bptr;
+                    BIO_METHOD *bMethod = BIO_s_mem();
+                    size_t s = BIO_get_mem_data(b_receiptPayload, &pp);
+                    BIO_get_mem_ptr(b_receiptPayload, &bptr);
+                    
+                    //asn_TYPE_descriptor_t *typeDescriptor = NULL;
+                    //ReceiptAttribute_t **payloadPointer;
+                    ReceiptAttribute_t *payload;
+
+                    //asn_dec_rval_t rval = asn_DEF_ReceiptAttribute.ber_decoder(NULL, &asn_DEF_ReceiptAttribute, (void **)&payload, bptr->data, bptr->length, 0);
+                    asn_dec_rval_t rval = asn_DEF_ReceiptAttribute.ber_decoder(NULL, &asn_DEF_ReceiptAttribute, (void **)&payload, pp, s, 0);
+                    for (NSInteger i=0; payload->list.count; i++) {
+                        ReceiptAttribute_t *entry = payload->list.array[i];
+                    }
+                    if (rval.code == RC_OK) {
+                        NSLog(@"Got valid receipt data to parse.");
+                        
+                    }
+                    
+                }
+                
+                BIO_free(b_receipt);
+                BIO_free(b_x509);
+                BIO_free(b_receiptPayload);
+                X509_free(appleRootCA);
+                X509_STORE_free(store);
+                 PKCS7_free(p7);
+                EVP_cleanup();
+            }
+
+        }
+    }
+
+}
+
 // This method should be called once a transaction gets to the SKPaymentTransactionStatePurchased or SKPaymentTransactionStateRestored state
 // Call it with the SKPaymentTransaction.transactionReceipt
 - (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction onSandboxServer:(BOOL)onSandboxServer {
@@ -77,12 +158,13 @@ static MTVerificationController *singleton;
         serverURL = ITMS_PROD_VERIFY_RECEIPT_URL;
     }
 
-
     BOOL isOk = [self isTransactionAndItsReceiptValid:transaction];
     if (!isOk) {
         // There was something wrong with the transaction we got back, so no need to call verifyReceipt.
-        return isOk;
+        return NO;
     }
+    
+    [self receiptVerificationOS7];
     
     // The transaction looks ok, so start the verify process.
     
@@ -387,7 +469,6 @@ static MTVerificationController *singleton;
     
     return YES;
 }
-
 
 #pragma mark NSURLConnectionDelegate (for the verifyReceipt connection)
 
