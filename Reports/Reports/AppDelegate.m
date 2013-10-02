@@ -122,25 +122,24 @@ void uncaughtExceptionHandler(NSException *exception) {
     [documentReport release];
 }
 
+const NSInteger MATagNewDocument = 3838;
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 
-    NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:name
-                                                  withExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+    NSString *openDocumentName = [[[url lastPathComponent] stringByDeletingPathExtension] retain];
+    NSString *openDocumentExt = [[url pathExtension] retain];
+    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt] retain];
+    NSString *uniqueName = [[[destinationUrl lastPathComponent] stringByDeletingPathExtension] retain];
     
-    NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-    NSError* fileWrittingError = nil;
-    [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+    NSError *fileWrittingError = nil;
+    [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:&fileWrittingError];
+    BOOL result;
     if (fileWrittingError) {
-        fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-    }
-    
-    BOOL savedUrl = fileWrittingError == nil;
-    if (savedUrl) {
-        
+        result = NO;
+        [fileWrittingError presentErrorToUser];
+    } else {
+        result = YES;
+        /*
         MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
         if (openDocumentViewController != nil) {
             if ([AppDelegate isMadDesigner]) {
@@ -149,14 +148,23 @@ void uncaughtExceptionHandler(NSException *exception) {
                 [openDocumentViewController performSegueWithIdentifier:MTSegueOpenInViewer sender:destinationUrl];
             }
         }
-        
-    } else {
-        [fileWrittingError presentErrorToUser];
+         */
+        UIAlertView *alertView = [[UIAlertView alloc]  initWithTitle:@"New Document"
+                                                             message:[NSString stringWithFormat:@"Added document %@.", uniqueName]
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"Continue"
+                                                   otherButtonTitles:nil];
+        [alertView setTag:MATagNewDocument];
+        [alertView setDelegate:self];
+        [alertView show];
+        [alertView release];
     }
-    [data release];
-    [fileWrapper release];
+    
+    [uniqueName release];
+    [openDocumentName release];
+    [openDocumentExt release];
     [destinationUrl release];
-    return savedUrl;
+    return result;
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
@@ -308,70 +316,14 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
     }
 }
 
-- (void)checkUserICloudPreferenceAndSetupIfNecessary {
-    // Check to see whether the user has previously selected the iCloud storage option.
-    // If so, check the iCloud storage state from previous launch.
-    // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
-    // If no user choice is recorded, use a UIAlert to fetch the user's preference.
-    
-    id currentToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL iCloudPrefsSet = [userDefaults boolForKey:MTICloudUserPrefsSet];
-    BOOL iCloudEnabled = [userDefaults boolForKey:MTICloudUserEnabled];
-    
-    if (iCloudEnabled) {
-        //Check the Ubiquitous Token from the Previous Launch
-        // Fetch a previously stored value for the ubiquity identity token from NSUserDefaults.
-        // That value can be compared to the current token to determine if the iCloud login has changed since the last launch of our application
-        
-        NSData *oldTokenData = [userDefaults objectForKey:MTICloudUbiquityToken];
-        id oldToken = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
-        if (oldTokenData && ![oldToken isEqual:currentToken]) {
-            // If we had a token, we were signed in before.
-            // If the token has change, a signout has occurred - either switching to another account or deleting iCloud entirely.
-            NSString *title = NSLocalizedString(@"iCloud Sign-Out", @"iCloud Sign-Out");
-            NSString *message = NSLocalizedString(@"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents", @"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents");
-            NSString *cancel = NSLocalizedString(@"OK", @"OK");
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancel otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        }
-    }
-    
-    if (currentToken) {
-        if (iCloudPrefsSet == NO) {
-            
-            NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
-            NSString *message = NSLocalizedString(@"Should documents be stored in iCloud or on just this device?", @"Should documents be stored in iCloud or on just this device?");
-            NSString *cancel = NSLocalizedString(@"Local only", @"Local only");
-            NSString *other = NSLocalizedString(@"iCloud", @"iCloud");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:other, nil];
-            [alert show];
-            [alert release];
-        } else {
-            [[MACloudManager sharedManager] setIsCloudEnabled:YES];
-        }
-    } else {
-        [[MACloudManager sharedManager] setIsCloudEnabled:NO];
-        
-        // Since the user is signed out of iCloud, reset the preference to not use iCloud, so if they sign in again we will prompt them to move data
-        [userDefaults removeObjectForKey:MTICloudUserEnabled];
-        [userDefaults removeObjectForKey:MTICloudUserPrefsSet];
-    }
-    
-    [self storeCurrentUbiquityToken:currentToken];
-}
-
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserEnabled];
-        [[MACloudManager sharedManager] setIsCloudEnabled:YES];
+    if ([alertView tag] == MATagNewDocument) {
+        MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
+        if (openDocumentViewController != nil &&
+            [openDocumentViewController respondsToSelector:@selector(updateFileList:)]) {
+            [openDocumentViewController updateFileList:self];
+        }
     }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MTICloudUserEnabled];
-        [[MACloudManager sharedManager] setIsCloudEnabled:NO];
-    }
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MTICloudUserPrefsSet];
 }
 
 - (void)displayWaitingHud {

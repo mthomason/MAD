@@ -41,6 +41,8 @@ extern NSString * const MTSegueShowOpenDocument;
 
 @property (nonatomic, assign) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 
+- (IBAction)updateFileList:(id)sender;
+
 - (IBAction)add:(id)sender;
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;

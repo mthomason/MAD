@@ -462,7 +462,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pHR-HV-kWg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-98" y="437"/>
+            <point key="canvasLocation" x="32" y="437"/>
         </scene>
         <!--Licensing View Controller - Software Licensing-->
         <scene sceneID="W97-CM-fgJ">
@@ -1142,7 +1142,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CoX-2k-Q30" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="KNE-Mb-Hy6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="268" y="437"/>
+            <point key="canvasLocation" x="398" y="437"/>
         </scene>
         <!--Report Designer Object Selector View Controller - Document Objects-->
         <scene sceneID="G1f-va-kdB">
@@ -1169,7 +1169,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="CaN-PA-tPc">
-                        <barButtonItem key="rightBarButtonItem" image="3E5DEA4E-CAB5-4DE0-BEF4-9E2457D84F86" id="eOp-gA-XQd">
+                        <barButtonItem key="rightBarButtonItem" image="57291CCA-95FA-4193-BD52-0443D6B9A1F2" id="eOp-gA-XQd">
                             <connections>
                                 <action selector="done:" destination="xa7-Xt-Nbi" id="Bsi-5N-9UF"/>
                             </connections>
@@ -6752,7 +6752,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="3E5DEA4E-CAB5-4DE0-BEF4-9E2457D84F86" width="20" height="20">
+        <image name="57291CCA-95FA-4193-BD52-0443D6B9A1F2" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -6848,8 +6848,8 @@ MxA4EEAQQxBIEFAQUxBlEGgQbQAAAAAAAAIBAAAAAAAAAEIAAAAAAAAAAAAAAAAAABBvA
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="tIb-WS-gen"/>
-        <segue reference="kPX-hH-DKi"/>
         <segue reference="pfP-rZ-fVf"/>
+        <segue reference="kPX-hH-DKi"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>
