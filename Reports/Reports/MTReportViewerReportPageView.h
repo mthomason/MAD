@@ -13,8 +13,6 @@
 
 @interface MTReportViewerReportPageView : UIView
 
-- (id)initWithFrame:(CGRect)frame;
-
 @property (assign, nonatomic) id <MTPrintingProtocol> delegate;
 
 @end

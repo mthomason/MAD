@@ -13,11 +13,7 @@
 
 @property (nonatomic, assign) NSUInteger pageNumber;
 @property (nonatomic, assign) NSUInteger numberOfPages;
-
-@property (nonatomic, retain) MTReportViewerReportPageView *renderedReportView;
-
 @property (nonatomic, retain) UIView *pageNumberDisplay;
-
 @property (nonatomic, assign) BOOL showPageNumberDisplay;
 @property (nonatomic, retain) NSTimer *timerLabelTimeSinceRefreh;
 @property (nonatomic, retain) UIView *timeSinceRefreshView;
@@ -97,7 +93,6 @@
     }
 
     [_document release];
-    [_renderedReportView release];
     [_pageNumberDisplay release];
     [super dealloc];
 }
@@ -112,27 +107,25 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [[self view] setBackgroundColor:[UIColor clearColor]];
-    [[self view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [[self view] setClipsToBounds:YES];
+- (void)loadView {
+    [super loadView];
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:[[self view] bounds]];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [renderedReportView setTranslatesAutoresizingMaskIntoConstraints:YES];
     [renderedReportView setBackgroundColor:[UIColor whiteColor]];
     [renderedReportView setDelegate:self];
-    [self setRenderedReportView:renderedReportView];
+    [self setView:renderedReportView];
     [renderedReportView release];
     
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (![[self renderedReportView] isDescendantOfView:[self view]]) {
-        [[self view] addSubview:[self renderedReportView]];
-        [[self renderedReportView] setBounds:[[self view] bounds]];
-        [[self renderedReportView] setCenter:[[self view] center]];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -150,9 +143,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if ([[self renderedReportView] isDescendantOfView:[self view]]) {
-        [[self renderedReportView] removeFromSuperview];
-    }
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
@@ -163,8 +153,9 @@
     if ([self timeSinceRefreshView] == nil) {
         CGFloat width = 220.0000f;
         CGFloat height = 23.0000f;
-        CGFloat originX = self.renderedReportView.frame.size.width - width;
-        CGFloat originY = self.renderedReportView.frame.size.height - height;
+        NSLog(@"%@", @(self.topLayoutGuide.length));
+        CGFloat originX = self.view.frame.size.width - width;
+        CGFloat originY = self.view.frame.size.height - height;
         CGRect viewFrame = CGRectMake(originX, originY, width, height);
         __block UIView *view = [[UIView alloc] initWithFrame:viewFrame];
         CGRect labelFrame = CGRectMake(CGPointZero.x, CGPointZero.y, viewFrame.size.width, viewFrame.size.height);
@@ -182,7 +173,7 @@
         [view setAlpha:0.0000f];
         [[view layer] setCornerRadius: 6.0000f];
         
-        [[self renderedReportView] addSubview:view];
+        [[self view] addSubview:view];
         [UIView animateWithDuration:0.3000f animations:^{
             [view setAlpha:1.0000f];
         } completion:^(BOOL finished) {
@@ -223,7 +214,7 @@
     [numberView addSubview:labelView];
     [labelView autorelease];
     [numberView setAlpha:0.0000f];
-    [[self renderedReportView] addSubview:numberView];
+    [[self view] addSubview:numberView];
     
     
     [UIView animateWithDuration:0.3000f animations:^{

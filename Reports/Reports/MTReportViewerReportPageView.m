@@ -18,18 +18,6 @@
     [super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        
-    }
-    return self;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 - (void)drawRect:(CGRect)rect {
     [[self delegate] drawView:self inRect:rect];
 }

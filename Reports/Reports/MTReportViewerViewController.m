@@ -82,6 +82,10 @@
     return self;
 }
 
+//-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    //[self setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height, 0, 0, 0)];
+//}
+
 - (void)loadReport:(MAReportDocument *)report {
     [report retain];
     [self setDocumentReport:report];
@@ -109,6 +113,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setEdgesForExtendedLayout: UIRectEdgeNone];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -345,10 +351,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
