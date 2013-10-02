@@ -25,6 +25,7 @@ extern NSString * const MTBundleIdViewer;
 + (NSString *)bundleId;
 + (BOOL)isMadViewer;
 + (BOOL)isMadDesigner;
++ (NSString *)bundleVersion;
 
 + (NSAttributedString *)attributedStringMadDesigner;
 + (NSAttributedString *)attributedStringMadViewer;

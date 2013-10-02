@@ -126,11 +126,10 @@
                                 </constraints>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
-                                    <barButtonItem systemItem="play" id="aao-dj-CpK"/>
                                     <barButtonItem systemItem="add" id="U4m-Tl-FVb">
                                         <connections>
                                             <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
-                                            <segue destination="MHx-xg-Pj8" kind="modal" identifier="MTSegueShowReportViewer" modalTransitionStyle="coverVertical" id="0zr-qb-4zz"/>
+                                            <segue destination="MHx-xg-Pj8" kind="modal" identifier="showObjects" modalTransitionStyle="coverVertical" id="0zr-qb-4zz"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -1170,7 +1169,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="CaN-PA-tPc">
-                        <barButtonItem key="rightBarButtonItem" image="1B379A34-59FF-4902-992D-5B76C09EEEAA" id="eOp-gA-XQd">
+                        <barButtonItem key="rightBarButtonItem" image="3E5DEA4E-CAB5-4DE0-BEF4-9E2457D84F86" id="eOp-gA-XQd">
                             <connections>
                                 <action selector="done:" destination="xa7-Xt-Nbi" id="Bsi-5N-9UF"/>
                             </connections>
@@ -3070,6 +3069,10 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Join Type" id="DdA-1r-2Cq"/>
+                    <connections>
+                        <outlet property="tableViewCellEquiJoin" destination="cqd-Qp-iCE" id="cpV-fW-2bq"/>
+                        <outlet property="tableViewCellNaturalJoin" destination="jcw-3b-QcD" id="2lw-c1-BOd"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1o-O4-sb0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -6749,7 +6752,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="1B379A34-59FF-4902-992D-5B76C09EEEAA" width="20" height="20">
+        <image name="3E5DEA4E-CAB5-4DE0-BEF4-9E2457D84F86" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

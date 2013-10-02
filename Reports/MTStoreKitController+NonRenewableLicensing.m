@@ -7,6 +7,7 @@
 //
 
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "VerifyStoreReceipt.h"
 
 const NSTimeInterval MTTimeIntervalHour = 60 /*secs*/ * 60 /*minutes*/;
 const NSTimeInterval MTTimeIntervalDay = MTTimeIntervalHour * 24 /*hours*/;
@@ -16,24 +17,18 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 @implementation MTStoreKitController (NonRenewableLicensing)
 
-
-
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    #warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (NO) {
-        if ([self verifiedUser]) {
-            if ([[self verifiedExperationDate] compare:[NSDate date]] == NSOrderedDescending) {
-                completion(YES, [self verifiedExperationDate]);
-            } else {
-                completion(NO, nil);
-            }
-        } else {
-            [MTStoreKitController licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-                [self setVerifiedUser:isLicensedUser];
-                [self setVerifiedExperationDate:experationDate];
-                completion(isLicensedUser, experationDate);
-            }];
-        }
+    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (YES) {
+
+        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        BOOL licensedUser = experationDate != nil &&
+                            [verificationController modernReceiptIsValid] &&
+                            [verificationController modernReceiptProcessLicensed] &&
+                            [experationDate compare:[NSDate date]] == NSOrderedDescending;
+        completion(licensedUser, experationDate);
+
     } else {
         completion(NO, nil);
     }
@@ -42,30 +37,21 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
     
-    #warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (NO) {
-        NSDate *experationDate = [MTStoreKitController experationDate];
-        BOOL isLicensedUser = NO;
-        if (experationDate != nil) {
-            NSDate *now = [NSDate date];
-            NSComparisonResult dateComparesonResult = [now compare:experationDate];
-            switch (dateComparesonResult) {
-                case NSOrderedAscending:
-                    isLicensedUser = YES;   //Only path to redemption
-                    break;
-                case NSOrderedSame:
-                    break;
-                case NSOrderedDescending:
-                    break;
-                default:
-                    break;
-            }
-        }
+    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
+    if (YES) {
         
-        completion(isLicensedUser, experationDate);
+        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        BOOL licensedUser = experationDate != nil &&
+                            [verificationController modernReceiptIsValid] &&
+                            [verificationController modernReceiptProcessLicensed] &&
+                            [experationDate compare:[NSDate date]] == NSOrderedDescending;
+        completion(licensedUser, experationDate);
+        
     } else {
         completion(NO, nil);
     }
+
 }
 
 + (NSDate *)dateFromReceiptString:(NSString *)dateString {
@@ -73,10 +59,122 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
         receiptDateFormatter = dateFormat;
     });
-    return [receiptDateFormatter dateFromString:[dateString stringByReplacingOccurrencesOfString:@"Etc/" withString:@""]];
+    return [receiptDateFormatter dateFromString:dateString];
+}
+
+- (NSDate *)experationDateIOS7 {
+    
+    NSDate *experationDate = nil;
+    
+    if ([[MTVerificationController sharedInstance] modernReceiptIsValid]) {
+        NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+        NSArray *inAppPurchasesReadOnly = obtainInAppPurchases([receiptUrl path]);
+        NSMutableArray *inAppPurchases = [[NSMutableArray alloc] initWithArray: inAppPurchasesReadOnly];
+        
+        NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            NSDictionary *transactionData = evaluatedObject;
+            return ([[transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] length] > 0);
+        }];
+        NSArray *refundedPurchases = [inAppPurchases filteredArrayUsingPredicate:canceledReceipts];
+        
+        NSPredicate *nonRefundedReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            
+            BOOL refunded = NO;
+            NSDictionary *transactionData = evaluatedObject;
+            
+            //Only goes though this if a refunded transaction exist.
+            for (NSDictionary *refundTransaction in refundedPurchases) {
+                
+                // FIXME: Verify the below loop... haven't tested since iOS7 update
+                NSString *refundTransactionOrigionalTransactionId = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptOriginalTransactionId];
+                if (refundTransactionOrigionalTransactionId) {
+                    NSString *origionalTransactionId = [transactionData objectForKey:MTStoreKitIdentifierReceiptTransactionId];
+                    if ([origionalTransactionId isEqualToString:refundTransactionOrigionalTransactionId]) {
+                        NSString *refundTransactionCancelDate = [refundTransaction objectForKey:MTStoreKitIdentifierReceiptCancellationDate];
+                        NSDate *refundDate = nil;
+                        if ([refundTransactionCancelDate length] > 0) {
+                            refundDate = [MTStoreKitController dateFromReceiptString:refundTransactionCancelDate];
+                            if ([refundDate compare:[NSDate date]] == NSOrderedAscending) {
+                                refunded = YES;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if ([[transactionData objectForKey:MTStoreKitIdentifierReceiptCancellationDate] length] > 0) {
+                refunded = YES;
+            }
+            
+            return !refunded;
+        }];
+        [inAppPurchases filterUsingPredicate:nonRefundedReceipts];
+
+        if ([inAppPurchases count] > 0) {
+            
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+            
+            [inAppPurchases sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *transactionA, NSDictionary *transactionB) {
+                NSString *purchaseDateStringA = [transactionA objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSString *purchaseDateStringB = [transactionB objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSDate *purchaseDateA = [dateFormat dateFromString:purchaseDateStringA];
+                NSDate *purchaseDateB = [dateFormat dateFromString:purchaseDateStringB];
+                return [purchaseDateA compare:purchaseDateB];
+            }];
+            
+            //NSString *bundleId = [AppDelegate bundleId];
+            
+            for (NSDictionary *transactionData in inAppPurchases) {
+                //NSString *receiptBundleIdentifier = [transactionData objectForKey:MTStoreKitIdentifierReceiptBid];
+                NSString *receiptBundlePurchaseDate = [transactionData objectForKey:MTStoreKitIdentifierReceiptOriginalPurchaseDate];
+                NSString *receiptBundleProductIdentifier = [transactionData objectForKey:MTStoreKitIdentifierReceiptProductId];
+                
+                NSDate *purchaseDate = [dateFormat dateFromString:receiptBundlePurchaseDate];
+                
+                NSTimeInterval licenseInterval = 0;
+                if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionYear1]) {
+                    licenseInterval = MTTimeIntervalYear;
+                } else if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierDesignerSubscriptionMonth1]) {
+                    licenseInterval = MTTimeIntervalMonth;
+                } else if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionMonth1]) {
+                    licenseInterval = MTTimeIntervalMonth;
+                } else if ([receiptBundleProductIdentifier isEqualToString:MTStoreKitProductIdentifierViewerSubscriptionYear1]) {
+                    licenseInterval = MTTimeIntervalYear;
+                }
+                
+                if (licenseInterval > 0) {
+                    if (experationDate == nil) {    //First license
+                        experationDate = [purchaseDate dateByAddingTimeInterval: licenseInterval];
+                    } else {
+                        
+                        //If there's a gap between the licenses, add to the purchse date...
+                        //  If there's no gap, add to the experation date to calculate a new
+                        //  experation date.
+                        NSComparisonResult dateCompareson = [experationDate compare:purchaseDate];
+                        switch (dateCompareson) {
+                            case NSOrderedAscending:
+                                experationDate = [purchaseDate dateByAddingTimeInterval: licenseInterval];
+                                break;
+                            case NSOrderedDescending:
+                                experationDate = [experationDate dateByAddingTimeInterval: licenseInterval];
+                                break;
+                            case NSOrderedSame:
+                                experationDate = [purchaseDate dateByAddingTimeInterval: licenseInterval];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            [dateFormat release];
+        }
+    }
+    return experationDate;
 }
 
 + (NSDate *)experationDate {
@@ -90,6 +188,7 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     }];
     
     NSArray *refundTransactions = [transactions filteredArrayUsingPredicate:canceledReceipts];
+    
     NSPredicate *nonRefundedReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
 
         BOOL refunded = NO;

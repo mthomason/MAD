@@ -12,6 +12,13 @@
 
 int main(int argc, char *argv[]) {
     @autoreleasepool {
+        
+        //Per WWDC 2013 session 308, at 34:30 minute marker,
+        //  they say to validate the receipt "way before you get
+        //  anywhere near UIApplication... do it in the main run-
+        //  loop."
+        [MTVerificationController sharedInstance];
+        
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }

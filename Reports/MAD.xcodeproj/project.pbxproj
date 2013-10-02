@@ -1569,8 +1569,8 @@
 		4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4CD2FD9B17F40FB00015458B /* libReceiptModuleAsn1c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2FBC117F37EF50015458B /* libReceiptModuleAsn1c.a */; };
-		4CD2FD9C17F40FB80015458B /* libReceiptModuleAsn1c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2FBC117F37EF50015458B /* libReceiptModuleAsn1c.a */; };
+		4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD2FDC317F4CBF20015458B /* VerifyStoreReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4C178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
@@ -2027,20 +2027,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CD98B9B163F7CDD0096D7BC;
 			remoteInfo = MySqlClientObjectiveC;
-		};
-		4CD2FBC017F37EF50015458B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CD2FBBB17F37EF40015458B /* ReceiptModuleAsn1c.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CD2FB9217F37EF40015458B;
-			remoteInfo = ReceiptModuleAsn1c;
-		};
-		4CD2FBC217F37EF50015458B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CD2FBBB17F37EF40015458B /* ReceiptModuleAsn1c.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CD2FBA217F37EF40015458B;
-			remoteInfo = ReceiptModuleAsn1cTests;
 		};
 		4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2965,9 +2951,10 @@
 		4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryLink.m; sourceTree = "<group>"; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FAA817F378CA0015458B /* ReceiptModule.ans1 */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReceiptModule.ans1; sourceTree = "<group>"; };
-		4CD2FBBB17F37EF40015458B /* ReceiptModuleAsn1c.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReceiptModuleAsn1c.xcodeproj; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c.xcodeproj; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
+		4CD2FDC017F4CBF20015458B /* VerifyStoreReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerifyStoreReceipt.h; sourceTree = "<group>"; };
+		4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerifyStoreReceipt.m; sourceTree = "<group>"; };
 		4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeSqlServer.png; sourceTree = "<group>"; };
 		4CD88D021689164100683C01 /* UIView+StringTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+StringTag.h"; sourceTree = "<group>"; };
 		4CD88D031689164100683C01 /* UIView+StringTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+StringTag.m"; sourceTree = "<group>"; };
@@ -3158,7 +3145,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CD2FD9C17F40FB80015458B /* libReceiptModuleAsn1c.a in Frameworks */,
 				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
 				4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */,
 				4CE9F2B21778B489009F11AF /* liblibTdsClient.a in Frameworks */,
@@ -3243,7 +3229,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CD2FD9B17F40FB00015458B /* libReceiptModuleAsn1c.a in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CE9F3181778DCC0009F11AF /* StoreKit.framework in Frameworks */,
@@ -3484,6 +3469,8 @@
 		4C0081E11784968B00874849 /* MTStoreKit */ = {
 			isa = PBXGroup;
 			children = (
+				4CD2FDC017F4CBF20015458B /* VerifyStoreReceipt.h */,
+				4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */,
 				4C0081D31781C33000874849 /* MTStoreKitController.h */,
 				4C0081D41781C33000874849 /* MTStoreKitController.m */,
 				4C0081E917849A4A00874849 /* MTVerificationController.h */,
@@ -3505,7 +3492,6 @@
 				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C5F02D914B9A42200C49BE9 /* Template Files */,
-				4CD2FBBB17F37EF40015458B /* ReceiptModuleAsn1c.xcodeproj */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -4711,15 +4697,6 @@
 			name = Patterns;
 			sourceTree = "<group>";
 		};
-		4CD2FBBC17F37EF40015458B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CD2FBC117F37EF50015458B /* libReceiptModuleAsn1c.a */,
-				4CD2FBC317F37EF50015458B /* ReceiptModuleAsn1cTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */ = {
 			isa = PBXGroup;
 			children = (
@@ -5233,10 +5210,6 @@
 					ProductGroup = 4CEBFA331760EF8B00FFA4F4 /* Products */;
 					ProjectRef = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
 				},
-				{
-					ProductGroup = 4CD2FBBC17F37EF40015458B /* Products */;
-					ProjectRef = 4CD2FBBB17F37EF40015458B /* ReceiptModuleAsn1c.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -5263,20 +5236,6 @@
 			fileType = archive.ar;
 			path = libMySqlClientObjectiveC.a;
 			remoteRef = 4C9962F416401CF800B7BACC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CD2FBC117F37EF50015458B /* libReceiptModuleAsn1c.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReceiptModuleAsn1c.a;
-			remoteRef = 4CD2FBC017F37EF50015458B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CD2FBC317F37EF50015458B /* ReceiptModuleAsn1cTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ReceiptModuleAsn1cTests.xctest;
-			remoteRef = 4CD2FBC217F37EF50015458B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */ = {
@@ -6360,6 +6319,7 @@
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
 				4C0E773D163B5AEC003B951E /* MTViewControllerOpenDocument.m in Sources */,
 				4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */,
+				4CD2FDC317F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
@@ -6936,6 +6896,7 @@
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4CE8A04314C01ABB007C8345 /* MTViewControllerOpenDocument.m in Sources */,
 				4CE8A04614C01C7B007C8345 /* MTDatabaseDriverSelectorViewController.m in Sources */,
+				4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,

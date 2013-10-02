@@ -28,6 +28,7 @@
 
 + (id)databaseForRptqDatabase:(RptqDatabase *)database {
     id result = nil;
+    
     RptqUserCredentals *userCredentals = [database ownedByUser];    
 
     if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
@@ -383,6 +384,10 @@
                 [queryFields addObject:queryFieldRight];
             }
         }
+        
+        [fetchRequestQueryGroup release];
+        [fetchRequestQueryLinks release];
+        [queryLinks release];
         
         NSUInteger fieldCounter = 0;
         for (RptqQueryField *queryField in queryFields) {

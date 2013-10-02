@@ -12,6 +12,9 @@
 #import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
 #import "evp.h"
+
+#import "VerifyStoreReceipt.h"
+
 NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
 
@@ -49,6 +52,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
+    NSAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+
+    NSAssert([[AppDelegate bundleVersion] isEqualToString:global_bundleVersion], @"Bundle version is incorrect.");
+
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: [AppDelegate storyboardName]
@@ -76,9 +83,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore synchronize];
-    
-    
-    [[MTVerificationController sharedInstance] receiptVerificationOS7];
     
     /*
     //Setup iCloud Document Management
@@ -237,7 +241,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     static BOOL _isMadViewer;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *bundleId = [AppDelegate bundleId];
+        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
         _isMadViewer = [bundleId isEqualToString:MTBundleIdMadViewer];
     });
     return _isMadViewer;
@@ -247,7 +251,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     static BOOL _isMadDesigner;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *bundleId = [AppDelegate bundleId];
+        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
         _isMadDesigner = [bundleId isEqualToString:MTBundleIdMadDesigner];
     });
     return _isMadDesigner;
@@ -257,9 +261,22 @@ void uncaughtExceptionHandler(NSException *exception) {
     static NSString *_bundleId;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _bundleId = [[NSBundle mainBundle] bundleIdentifier];
+        if ([AppDelegate isMadDesigner]) {
+            _bundleId = MTBundleIdMadDesigner;
+        } else if ([AppDelegate isMadViewer]) {
+            _bundleId = MTBundleIdMadViewer;
+        }
     });
     return _bundleId;
+}
+
++ (NSString *)bundleVersion {
+    static NSString *_bundleVersion;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _bundleVersion = global_bundleVersion;
+    });
+    return _bundleVersion;
 }
 
 #pragma mark - Document Interaction Controller Delegate

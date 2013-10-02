@@ -250,9 +250,13 @@
     if ([AppDelegate isMadDesigner]) {
         [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
+        [[self buttonBuyNowDesignerOneYear] setHidden:YES];
+        [[self buttonBuyNowDesignerOneMonth] setHidden:YES];
     } else if ([AppDelegate isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:NO];
         [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
+        [[self buttonBuyNowViewerOneYear] setHidden:YES];
+        [[self buttonBuyNowViewerOneMonth] setHidden:YES];
     }
     [[self buttonDone] setEnabled:NO];
     [[self buttonRestore] setEnabled:NO];
@@ -262,9 +266,13 @@
     if ([AppDelegate isMadDesigner]) {
         [[self buttonBuyNowDesignerOneYear] setEnabled:YES];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:YES];
+        [[self buttonBuyNowDesignerOneYear] setHidden:NO];
+        [[self buttonBuyNowDesignerOneMonth] setHidden:NO];
     } else if ([AppDelegate isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:YES];
         [[self buttonBuyNowViewerOneMonth] setEnabled:YES];
+        [[self buttonBuyNowViewerOneYear] setHidden:NO];
+        [[self buttonBuyNowViewerOneMonth] setHidden:NO];
     }
     [[self buttonDone] setEnabled:YES];
     [[self buttonRestore] setEnabled:YES];
@@ -292,13 +300,6 @@
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
     [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
-    if ([AppDelegate isMadDesigner]) {
-        [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
-        [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
-    } else if ([AppDelegate isMadViewer]) {
-        [[self buttonBuyNowViewerOneYear] setEnabled:NO];
-        [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
-    }
     [self disableUserInterface];
     [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
     [[self activityIndicator2] startAnimating];

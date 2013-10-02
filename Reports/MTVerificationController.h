@@ -14,19 +14,20 @@
 
 typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate);
 
-@interface MTVerificationController : NSObject {
-    NSMutableDictionary *transactionsReceiptStorageDictionary;
-}
+@interface MTVerificationController : NSObject
 
 + (MTVerificationController *) sharedInstance;
+
+@property (nonatomic, strong) NSMutableDictionary *transactionsReceiptStorageDictionary;
+
+@property (nonatomic, assign) BOOL modernReceiptIsValid;
+@property (nonatomic, assign) BOOL modernReceiptProcess;
+@property (nonatomic, assign) BOOL modernReceiptProcessLicensed;
+@property (nonatomic, strong) NSDate *modernReceiptProcessExperationDate;
 
 // Checking the results of this is not enough.
 // The final verification happens in the connection:didReceiveData: callback within
 // this class.  So ensure IAP feaures are unlocked from there.
-- (void)verifyPurchase:(SKPaymentTransaction *)transaction
-       onSandboxServer:(BOOL)onSandboxServer
-            completion:(MTVerificationControllerVerifyPurchaseCompletion)completion;
-
-- (void)receiptVerificationOS7;
+- (void)iOS7VerifyReceipt;
 
 @end

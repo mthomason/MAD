@@ -5,23 +5,19 @@
 #import "x509.h"
 #import "x509_vfy.h"
 #import "evp.h"
-
 #import "ReceiptAttribute.h"
-#import "asn_application.h"
-
-//#import "asn_internal.h"
-//#import "ber_decoder.h"
+//#import "asn_application.h"
+#import "VerifyStoreReceipt.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 static MTVerificationController *singleton;
 
-@interface MTVerificationController()
+@interface MTVerificationController() <SKRequestDelegate>
 
 @property (copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
 @property (nonatomic, copy) NSDictionary *receiptData;
 @property (nonatomic, copy) NSDate *purchaseDate;
 @property (nonatomic, strong) NSError *failureReason;
-
-@property (nonatomic, assign) BOOL modernReceiptProcess;
 
 @end
 
@@ -30,21 +26,53 @@ static MTVerificationController *singleton;
 + (MTVerificationController *)sharedInstance {
 	if (singleton == nil) {
 		singleton = [[MTVerificationController alloc] init];
+
+        [singleton iOS7VerifyReceipt];
+        
+        NSMutableDictionary *transactionsReceiptStorageDictionary = [[NSMutableDictionary alloc] init];
+        [singleton setTransactionsReceiptStorageDictionary:transactionsReceiptStorageDictionary];
+        [singleton setReceiptData:nil];
+        [singleton setFailureReason:nil];
+
 	}
 	return singleton;
 }
 
+- (void)iOS7VerifyReceipt {
 
-- (id)init {
-	self = [super init];
-	if (self != nil) {
-        transactionsReceiptStorageDictionary = [[NSMutableDictionary alloc] init];
-        [self setReceiptData:nil];
-        [self setFailureReason:nil];
-	}
-	return self;
+    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    BOOL isValidReceipt = verifyReceiptAtPath([receiptUrl path]);
+    [self setModernReceiptIsValid:isValidReceipt];
+    if (isValidReceipt == NO) {
+        SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+        [request setDelegate:self];
+        [request start];
+    } else {
+        NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
+        [self setModernReceiptProcessLicensed:YES];
+        [self setModernReceiptProcessExperationDate:experationDate];
+    }
 }
 
+#pragma mark
+#pragma mark SKRequestDelegate
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    [self setModernReceiptIsValid:NO];
+    [self setModernReceiptProcessLicensed:NO];
+    [self setModernReceiptProcessExperationDate:nil];
+}
+
+- (void)requestDidFinish:(SKRequest *)request {
+    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    BOOL isValidReceipt = verifyReceiptAtPath([receiptUrl path]);
+    [self setModernReceiptIsValid:isValidReceipt];
+    if (isValidReceipt) {
+        NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];
+        [self setModernReceiptProcessLicensed:YES];
+        [self setModernReceiptProcessExperationDate:experationDate];
+    }
+}
 
 - (NSDictionary *)dictionaryFromPlistData:(NSData *)data {
     NSError *error;
@@ -76,440 +104,20 @@ static MTVerificationController *singleton;
     return dictionaryParsed;
 }
 
-
-#pragma mark Receipt Verification
-
-- (void)receiptVerificationOS7 {
-
-    NSURL *receiptURL = nil;
-    NSBundle *bundle = [NSBundle mainBundle];
-    if ([bundle respondsToSelector:@selector(appStoreReceiptURL)]) {
-        receiptURL = [bundle performSelector:@selector(appStoreReceiptURL)];
-        if (receiptURL != nil) {
-            
-            NSData *receiptData = [NSData dataWithContentsOfURL:receiptURL];
-            if (receiptData != nil) {
-                
-                NSData *appleIncRootCertificate = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"]];
-
-                OpenSSL_add_all_algorithms();
-                
-                BIO *b_receipt = BIO_new_mem_buf((uint8_t *)receiptData.bytes, receiptData.length);
-                BIO *b_x509 = BIO_new_mem_buf((uint8_t *) appleIncRootCertificate.bytes, appleIncRootCertificate.length);
-                
-                PKCS7 *p7 = d2i_PKCS7_bio(b_receipt, NULL);
-            
-                // Create the certificate store
-                X509_STORE *store = X509_STORE_new();
-                X509 *appleRootCA = d2i_X509_bio(b_x509, NULL);
-                X509_STORE_add_cert(store, appleRootCA);
-                
-                // Verify the Signature
-                BIO *b_receiptPayload = BIO_new(BIO_s_mem());;
-                int result = PKCS7_verify(p7, NULL, store, NULL, b_receiptPayload, 0);
-                if (result == 1)
-                {
- 
-                    char *pp = NULL;
-                    BUF_MEM *bptr;
-                    BIO_METHOD *bMethod = BIO_s_mem();
-                    size_t s = BIO_get_mem_data(b_receiptPayload, &pp);
-                    BIO_get_mem_ptr(b_receiptPayload, &bptr);
-                    
-                    //asn_TYPE_descriptor_t *typeDescriptor = NULL;
-                    //ReceiptAttribute_t **payloadPointer;
-                    ReceiptAttribute_t *payload;
-
-                    //asn_dec_rval_t rval = asn_DEF_ReceiptAttribute.ber_decoder(NULL, &asn_DEF_ReceiptAttribute, (void **)&payload, bptr->data, bptr->length, 0);
-                    asn_dec_rval_t rval = asn_DEF_ReceiptAttribute.ber_decoder(NULL, &asn_DEF_ReceiptAttribute, (void **)&payload, pp, s, 0);
-                    for (NSInteger i=0; payload->list.count; i++) {
-                        ReceiptAttribute_t *entry = payload->list.array[i];
-                    }
-                    if (rval.code == RC_OK) {
-                        NSLog(@"Got valid receipt data to parse.");
-                        
-                    }
-                    
-                }
-                
-                BIO_free(b_receipt);
-                BIO_free(b_x509);
-                BIO_free(b_receiptPayload);
-                X509_free(appleRootCA);
-                X509_STORE_free(store);
-                 PKCS7_free(p7);
-                EVP_cleanup();
-            }
-
-        }
-    }
-
-}
-
-// This method should be called once a transaction gets to the SKPaymentTransactionStatePurchased or SKPaymentTransactionStateRestored state
-// Call it with the SKPaymentTransaction.transactionReceipt
-- (BOOL)verifyPurchase:(SKPaymentTransaction *)transaction onSandboxServer:(BOOL)onSandboxServer {
-    
-    // Use ITMS_SANDBOX_VERIFY_RECEIPT_URL while testing against the sandbox.
-    NSString *serverURL;
-    if (YES) {
-        serverURL = ITMS_SANDBOX_VERIFY_RECEIPT_URL;
-    } else {
-        serverURL = ITMS_PROD_VERIFY_RECEIPT_URL;
-    }
-
-    BOOL isOk = [self isTransactionAndItsReceiptValid:transaction];
-    if (!isOk) {
-        // There was something wrong with the transaction we got back, so no need to call verifyReceipt.
-        return NO;
-    }
-    
-    [self receiptVerificationOS7];
-    
-    // The transaction looks ok, so start the verify process.
-    
-    // Encode the receiptData for the itms receipt verification POST request.
-    NSString *jsonObjectString = [self encodeBase64:(uint8_t *)transaction.transactionReceipt.bytes
-                                             length:transaction.transactionReceipt.length];
-    
-    // Create the POST request payload.
-    NSString *payload = [NSString stringWithFormat:@"{\"receipt-data\" : \"%@\", \"password\" : \"%@\"}",
-                         jsonObjectString, ITC_CONTENT_PROVIDER_SHARED_SECRET];
-    
-    NSData *payloadData = [payload dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // Create the POST request to the server.
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:serverURL]];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:payloadData];
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    [conn start];
-    
-    // The transation receipt has not been validated yet.  That is done from the NSURLConnection callback.
-    return isOk;
-}
-
-- (void)verifyPurchase:(SKPaymentTransaction *)transaction onSandboxServer:(BOOL)onSandboxServer completion:(MTVerificationControllerVerifyPurchaseCompletion)completion {
-    [self setVerifyPurchaseCompletion:[completion copy]];
-    BOOL result = [self verifyPurchase:transaction onSandboxServer:onSandboxServer];
-    if (result == NO) {
-        [self verifyPurchaseCompletion](NO, nil, 21004, @{}, nil);
-        [self setVerifyPurchaseCompletion:nil];
-    }
-}
-
-// Check the validity of the receipt.  If it checks out then also ensure the transaction is something
-// we haven't seen before and then decode and save the purchaseInfo from the receipt for later receipt validation.
-- (BOOL)isTransactionAndItsReceiptValid:(SKPaymentTransaction *)transaction {
-    if (!(transaction && transaction.transactionReceipt && [transaction.transactionReceipt length] > 0)) {
-        // Transaction is not valid.
-        return NO;
-    }
-    
-    // Pull the purchase-info out of the transaction receipt, decode it, and save it for later so
-    // it can be cross checked with the verifyReceipt.
-    NSDictionary *receiptDict       = [self dictionaryFromPlistData:transaction.transactionReceipt];
-    NSString *transactionPurchaseInfo = [receiptDict objectForKey:@"purchase-info"];
-    NSString *decodedPurchaseInfo   = [self decodeBase64:transactionPurchaseInfo length:nil];
-    NSDictionary *purchaseInfoDict  = [self dictionaryFromPlistData:[decodedPurchaseInfo dataUsingEncoding:NSUTF8StringEncoding]];
-    [self setReceiptData:[purchaseInfoDict copy]];
-    NSString *transactionId         = [purchaseInfoDict objectForKey:@"transaction-id"];
-    NSString *purchaseDateString    = [purchaseInfoDict objectForKey:@"purchase-date"];
-    NSString *signature             = [receiptDict objectForKey:@"signature"];
-    
-    // Convert the string into a date
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss z"];
-    
-    NSDate *purchaseDate = [dateFormat dateFromString:[purchaseDateString stringByReplacingOccurrencesOfString:@"Etc/" withString:@""]];
-    
-    [self setPurchaseDate:[purchaseDate copy]];
-    
-    //Already validate this transaction?
-    if ([self isTransactionIdUnique:transactionId] == NO) {
-        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Duplicate Transaction" andMessage:@"Transaction already recorded."];
-        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
-        [self setFailureReason:error];
-        return NO;
-    }
-    
-    // Check the authenticity of the receipt response/signature etc.
-
-    BOOL result = checkReceiptSecurity(transactionPurchaseInfo, signature,
-                                       (__bridge CFDateRef)(purchaseDate));
-    
-    if (!result) {
-        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bogus Receipt" andMessage:@"Receipt failed authentication."];
-        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
-        [self setFailureReason:error];
-        return NO;
-    }
-    
-    // Ensure the transaction itself is legit
-    if (![self doTransactionDetailsMatchPurchaseInfo:transaction withPurchaseInfo:purchaseInfoDict]) {
-        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bogus Details" andMessage:@"Transaction details failed sanity check."];
-        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
-        [self setFailureReason:error];
-        return NO;
-    }
-    
-    // Make a note of the fact that we've seen the transaction id already
-    [self saveTransactionId:transactionId];
-    
-    // Save the transaction receipt's purchaseInfo in the transactionsReceiptStorageDictionary.
-    [transactionsReceiptStorageDictionary setObject:purchaseInfoDict forKey:transactionId];
-    
-    return YES;
-}
-
-// Make sure the transaction details actually match the purchase info
-- (BOOL)doTransactionDetailsMatchPurchaseInfo:(SKPaymentTransaction *)transaction withPurchaseInfo:(NSDictionary *)purchaseInfoDict {
-
-    if (!transaction || !purchaseInfoDict) {
-        return NO;
-    }
-    
-    int failCount = 0;
-    
-    if (![transaction.payment.productIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"product-id"]]) {
-        
-        failCount++;
-    }
-    
-    if (transaction.payment.quantity != [[purchaseInfoDict objectForKey:@"quantity"] intValue]) {
-        failCount++;
-    }
-    
-    if (![transaction.transactionIdentifier isEqualToString:[purchaseInfoDict objectForKey:@"transaction-id"]]) {
-        failCount++;
-    }
-    
-    // Optionally check the bid and bvrs match this app's current bundle ID and bundle version.
-    // Optionally check the requestData.
-    // Optionally check the dates.
-    
-    if (failCount != 0) {
-        return NO;
-    }
-    
-    // The transaction and its signed content seem ok.
-    return YES;
-}
-
-
-
-- (BOOL)isTransactionIdUnique:(NSString *)transactionId {
-    NSString *transactionDictionary = KNOWN_TRANSACTIONS_KEY;
-    // Save the transactionId to the standardUserDefaults so we can check against that later
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults synchronize];
-    
-    if (![defaults objectForKey:transactionDictionary]) {
-        [defaults setObject:[[NSMutableDictionary alloc] init] forKey:transactionDictionary];
-        [defaults synchronize];
-    }
-    
-    if (![[defaults objectForKey:transactionDictionary] objectForKey:transactionId]) {
-        return YES;
-    }
-    // The transaction already exists in the defaults.
-    return NO;
-}
-
-
-- (void)saveTransactionId:(NSString *)transactionId {
-    // Save the transactionId to the standardUserDefaults so we can check against that later
-    // If dictionary exists already then retrieve it and add new transactionID
-    // Regardless save transactionID to dictionary which gets saved to NSUserDefaults
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *transactionDictionary = KNOWN_TRANSACTIONS_KEY;
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
-                                       [defaults objectForKey:transactionDictionary]];
-    if (!dictionary) {
-        dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:1], transactionId, nil];
-    } else {
-        [dictionary setObject:[NSNumber numberWithInt:1] forKey:transactionId];
-    }
-    [defaults setObject:dictionary forKey:transactionDictionary];
-    [defaults synchronize];
-}
-
-
-- (BOOL)doesTransactionInfoMatchReceipt:(NSString*)receiptString status:(NSInteger *)receiptStatus; {
-    // Convert the responseString into a dictionary and pull out the receipt data.
-    NSDictionary *verifiedReceiptDictionary = [self dictionaryFromJSONData:[receiptString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // Check the status of the verifyReceipt call
-    id status = [verifiedReceiptDictionary objectForKey:@"status"];
-    if (!status) {
-        NSDictionary *userInfo = [NSError userInfoWithTitle:@"Bad Verification Data" andMessage:@"Bad status data from verification server."];
-        NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:1 userInfo:userInfo];
-        [self setFailureReason:error];
-        return NO;
-    }
-    int verifyReceiptStatus = [status integerValue];
-    *receiptStatus = verifyReceiptStatus;
-    switch (verifyReceiptStatus) {
-        case 0:         //Good
-            break;
-        case 21006:
-            //Good but expired autorenewing subscription
-            
-            break;
-        case 21008:
-            //Trying to verify a production receipt with the sandbox server... don't ship this.
-            //  The code should always try production server first, and then sandbox server.
-            break;
-        case 21000: {
-            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
-            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
-            [self setFailureReason:error];
-            break;
-        }
-        case 21002: {
-            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
-            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
-            [self setFailureReason:error];
-            break;
-        }
-        case 21003: {
-            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"The receipt could not be authenticated."];
-            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
-            [self setFailureReason:error];
-            break;
-        }
-        case 21004: {
-            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"Receipt verification failed."];
-            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
-            [self setFailureReason:error];
-            break;
-        }
-        case 21005: {
-            NSDictionary *userInfo = [NSError userInfoWithTitle:@"Verification Failed" andMessage:@"The receipt server is not currently available. Please try again later."];
-            NSError *error = [NSError errorWithDomain:@"MTVerificationController" code:verifyReceiptStatus userInfo:userInfo];
-            [self setFailureReason:error];
-            break;
-        }
-        case 21007: {
-            //Trying to verify a sandbox receipt with the production server.
-            //  Happens when Apple is testing.  Try to verify with the sandbox server.
-            break;
-        }
-        default:
-            break;
-    }
-    
-    // 21006 = This receipt is valid but the subscription has expired.
-    if (0 != verifyReceiptStatus && 21006 != verifyReceiptStatus) {
-        return NO;
-    }
-    
-    // The receipt is valid, so checked the receipt specifics now.
-    
-    NSDictionary *verifiedReceiptReceiptDictionary  = [verifiedReceiptDictionary objectForKey:@"receipt"];
-    // FIXME: never used: NSString *verifiedReceiptUniqueIdentifier       = [verifiedReceiptReceiptDictionary objectForKey:@"unique_identifier"];
-    NSString *transactionIdFromVerifiedReceipt      = [verifiedReceiptReceiptDictionary objectForKey:@"transaction_id"];
-    
-    // Get the transaction's receipt data from the transactionsReceiptStorageDictionary
-    NSDictionary *purchaseInfoFromTransaction = [transactionsReceiptStorageDictionary objectForKey:transactionIdFromVerifiedReceipt];
-    
-    if (!purchaseInfoFromTransaction) {
-        // We didn't find a receipt for this transaction.
-        return NO;
-    }
-    
-    
-    // NOTE: Instead of counting errors you could just return early.
-    int failCount = 0;
-    
-    // Verify all the receipt specifics to ensure everything matches up as expected
-    if (![[verifiedReceiptReceiptDictionary objectForKey:@"bid"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"bid"]]) {
-        failCount++;
-    }
-    
-    if (![[verifiedReceiptReceiptDictionary objectForKey:@"product_id"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"product-id"]]) {
-        failCount++;
-    }
-    
-    if (![[verifiedReceiptReceiptDictionary objectForKey:@"quantity"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"quantity"]]) {
-        failCount++;
-    }
-    
-    if (![[verifiedReceiptReceiptDictionary objectForKey:@"item_id"]
-          isEqualToString:[purchaseInfoFromTransaction objectForKey:@"item-id"]]) {
-        failCount++;
-    }
-    
-    if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"identifierForVendor")]) {
-        // iOS 6 (or later)
-        NSString *localIdentifier                   = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        NSString *purchaseInfoUniqueVendorId        = [purchaseInfoFromTransaction objectForKey:@"unique-vendor-identifier"];
-        NSString *verifiedReceiptVendorIdentifier   = [verifiedReceiptReceiptDictionary objectForKey:@"unique_vendor_identifier"];
-        
-        
-        if(verifiedReceiptVendorIdentifier)
-        {
-            if (![purchaseInfoUniqueVendorId isEqualToString:verifiedReceiptVendorIdentifier]
-                || ![purchaseInfoUniqueVendorId isEqualToString:localIdentifier])
-            {
-                // Comment this line out to test in the Simulator.
-                failCount++;
-            }
-        }
-    }
-    // Do additional time checks for the transaction and receipt.
-    
-    if(failCount != 0) {
-        return NO;
-    }
-    
-    return YES;
-}
-
 #pragma mark NSURLConnectionDelegate (for the verifyReceipt connection)
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     
-    //Receipt data from iTunes server...
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSInteger status = 0;
-    BOOL isOk = [self doesTransactionInfoMatchReceipt:responseString status:&status];
-    if ([self verifyPurchaseCompletion] != nil) {
-        [self verifyPurchaseCompletion](isOk, [self failureReason], status, [self receiptData], [self purchaseDate]);
-    }
 }
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
 
-    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
-        SecTrustRef trust = [[challenge protectionSpace] serverTrust];
-        NSError *error = nil;
-        BOOL didUseCredential = NO;
-        BOOL isTrusted = [self validateTrust:trust error:&error];
-        if (isTrusted) {
-            NSURLCredential *trust_credential = [NSURLCredential credentialForTrust:trust];
-            if (trust_credential) {
-                [[challenge sender] useCredential:trust_credential forAuthenticationChallenge:challenge];
-                didUseCredential = YES;
-            }
-        }
-        if (!didUseCredential) {
-            [[challenge sender] cancelAuthenticationChallenge:challenge];
-        }
-    } else {
-        [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
-    }
 }
 
 // NOTE: These are needed for 4.x (as willSendRequestForAuthenticationChallenge: is not supported)
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     return [[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
-
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])

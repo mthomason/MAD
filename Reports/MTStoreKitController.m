@@ -9,27 +9,35 @@
 #import "MTStoreKitController.h"
 #import "AppDelegate.h"
 
-NSString * const MTStoreKitTransactionReceipt       = @"MTStoreKitTransactionReceipt";
-NSString * const MTStoreKitTransactionDate          = @"MTStoreKitTransactionDate";
-NSString * const MTStoreKitTransactionIdentifier    = @"MTStoreKitTransactionIdentifier";
-NSString * const MTStoreKitTransactionsIdentifier   = @"MTStoreKitTransactionsIdentifier";
+NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
+NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";
+NSString * const MTStoreKitTransactionIdentifier                        = @"MTStoreKitTransactionIdentifier";
+NSString * const MTStoreKitTransactionsIdentifier                       = @"MTStoreKitTransactionsIdentifier";
+NSString * const MTStoreKitIdentifierReceiptVersion                     = @"version";
+NSString * const MTStoreKitIdentifierReceiptOriginalVersion             = @"ogversion";
+NSString * const MTStoreKitIdentifierReceiptOpaqueValue                 = @"opaquevalue";
+NSString * const MTStoreKitIdentifierReceiptBid                         = @"bid";
+NSString * const MTStoreKitIdentifierReceiptBidData                     = @"bid-data";
+NSString * const MTStoreKitIdentifierReceiptBrvs                        = @"brvs";
+NSString * const MTStoreKitIdentifierReceiptQuantity                    = @"quantity";
+NSString * const MTStoreKitIdentifierReceiptItemId                      = @"item-id";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDate        = @"original-purchase-date";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDateMs      = @"original-purchase-date-ms";
+NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDatePst     = @"original-purchase-date-pst";
+NSString * const MTStoreKitIdentifierReceiptOriginalTransactionId       = @"original-transaction-id";
+NSString * const MTStoreKitIdentifierReceiptProductId                   = @"product-id";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDate                = @"purchase-date";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs              = @"purchase-date-ms";
+NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst             = @"purchase-date-pst";
+NSString * const MTStoreKitIdentifierReceiptTransactionId               = @"transaction-id";
+NSString * const MTStoreKitIdentifierReceiptUniqueId                    = @"unique-identifier";
+NSString * const MTStoreKitIdentifierReceiptCancellationDate            = @"cancellation-date";
+NSString * const MTStoreKitIdentifierReceiptWebOrderLineItemID          = @"web-item-id";
+NSString * const MTStoreKitIdentifierReceiptSubscriptionExpirationDate  = @"experaion-date-subscription";
+NSString * const MTStoreKitIdentifierReceiptExpirationDate              = @"experaion-date";
+NSString * const MTStoreKitIdentifierReceiptHash                        = @"hash";
+NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inapppurchases";
 
-//Keys returned by iTunes
-NSString * const MTStoreKitIdentifierReceiptBid                     = @"bid";
-NSString * const MTStoreKitIdentifierReceiptBrvs                    = @"brvs";
-NSString * const MTStoreKitIdentifierReceiptQuantity                = @"quantity";
-NSString * const MTStoreKitIdentifierReceiptItemId                  = @"item-id";
-NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDate    = @"original-purchase-date";
-NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDateMs  = @"original-purchase-date-ms";
-NSString * const MTStoreKitIdentifierReceiptOriginalPurchaseDatePst = @"original-purchase-date-pst";
-NSString * const MTStoreKitIdentifierReceiptOriginalTransactionId   = @"original-transaction-id";
-NSString * const MTStoreKitIdentifierReceiptProductId               = @"product-id";
-NSString * const MTStoreKitIdentifierReceiptPurchaseDate            = @"purchase-date";
-NSString * const MTStoreKitIdentifierReceiptPurchaseDateMs          = @"purchase-date-ms";
-NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst         = @"purchase-date-pst";
-NSString * const MTStoreKitIdentifierReceiptTransactionId           = @"transaction-id";
-NSString * const MTStoreKitIdentifierReceiptUniqueId                = @"unique-identifier";
-NSString * const MTStoreKitIdentifierReceiptCancellationDate        = @"cancellation-date";
 
 @interface MTStoreKitController ()
     <SKPaymentTransactionObserver, SKProductsRequestDelegate>
@@ -158,49 +166,6 @@ static MTStoreKitController *sharedSingleton = nil;
     return result;
 }
 
-- (void)processTransaction:(SKPaymentTransaction *)transaction validTransaction:(BOOL)validTransaction error:(NSError *)error  status:(NSInteger)status receiptData:(NSDictionary *)receiptData purchaseDate:(NSDate *)purcahseDate {
-    NSMutableDictionary *completeTransactionData = nil;
-    if (validTransaction) {
-        
-        NSDictionary *transactionData = @{MTStoreKitTransactionReceipt      : [transaction transactionReceipt],
-                                          MTStoreKitTransactionDate         : [transaction transactionDate],
-                                          MTStoreKitTransactionIdentifier   : [transaction transactionIdentifier]};
-        
-        completeTransactionData = [[NSMutableDictionary alloc] initWithDictionary:transactionData];
-        [receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            [completeTransactionData setObject:obj forKey:key];
-        }];
-        [MTStoreKitController archiveTransactionData:completeTransactionData];
-        
-        NSString *productId = [completeTransactionData objectForKey:MTStoreKitIdentifierReceiptProductId];
-        SKProduct *product = [self productForIdentifier:productId];
-        if (product != nil) {
-            NSString *messageFormat = NSLocalizedString(@"Succesfully activated \"%@\"", @"Shows the name of the items purchased and activated.");
-            NSString *message = [NSString stringWithFormat:messageFormat, [product localizedDescription]];
-            MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.")
-                                                                message: message
-                                                      cancelButtonTitle:nil otherButtonTitle:@[NSLocalizedString(@"Continue", @"Continue")] onDismiss:nil onCancel:nil];
-            [alertView show];
-            [alertView autorelease];
-        }
-    }
-    
-    if ([self purchasingProduct] && [self purchaseProductWithIdentifierCompletion] != nil) {
-        if ([[[self purchasingProductObject] productIdentifier] isEqualToString:[completeTransactionData objectForKey:MTStoreKitIdentifierReceiptProductId]]) {
-            
-            [self setPurchasingProductObject:nil];
-            [self setPurchasingProduct:NO];
-            [self purchaseProductWithIdentifierCompletion](validTransaction, error);
-            [self setPurchaseProductWithIdentifierCompletion:nil];
-        }
-    }
-    
-    [completeTransactionData release];
-    
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-}
-
-
 #pragma mark - SKRequestDelegate Protocol
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
@@ -236,30 +201,18 @@ static MTStoreKitController *sharedSingleton = nil;
 
                 //MTLog(@"SKPaymentTransactionStatePurchased %@", [[transaction payment] productIdentifier]);
                 
-                BOOL sandboxServer = NO;
-#ifdef DEBUG
-                sandboxServer = YES;
-#endif
+                MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+                [verificationController iOS7VerifyReceipt];
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 
-                [[MTVerificationController sharedInstance] verifyPurchase:transaction onSandboxServer:sandboxServer completion:^(BOOL validTransaction, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate) {
-                    
-                    if (status == 21007) {
-                        
-                        [[MTVerificationController sharedInstance] verifyPurchase:transaction onSandboxServer:YES completion:^(BOOL validTransaction, NSError *error, NSInteger status, NSDictionary *receiptData, NSDate *purcahseDate) {
-                            [self processTransaction:transaction validTransaction:validTransaction error:error status:status receiptData:receiptData purchaseDate:purcahseDate];
-                        }];
-                        
-                    } else {
-                        [self processTransaction:transaction validTransaction:validTransaction error:error status:status receiptData:receiptData purchaseDate:purcahseDate];
-                    }
-                }];
-
 				break;
             }
 
 			case SKPaymentTransactionStateRestored: {
                 //Since the non-renewable subscription is consumable, don't restore... hope it's saved to iCloud.
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];				break;
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                
+                break;
                 
             }
 

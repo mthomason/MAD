@@ -600,6 +600,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                     
                                     [attributedString drawInRect:elementCanvasRect];
                                     [attributes release];
+                                    [attributedString release];
                                 } else {
                                     NSDictionary *attributes = [[self attributesForDocumentObject:item] retain];
                                     

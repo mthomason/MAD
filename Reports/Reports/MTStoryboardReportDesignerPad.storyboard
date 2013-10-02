@@ -1165,7 +1165,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" prompt="Select the type of object you would like to add." id="J7k-nd-Jqg">
-                        <barButtonItem key="rightBarButtonItem" image="9AC9CA36-6734-4823-B6EA-72DE8814F050" id="GFb-Vm-JTj">
+                        <barButtonItem key="rightBarButtonItem" image="76A6ACEB-6044-43B2-AA33-A2BC0A6B2E04" id="GFb-Vm-JTj">
                             <connections>
                                 <action selector="done:" destination="jha-ig-Zgu" id="v6e-NB-X8x"/>
                             </connections>
@@ -6733,7 +6733,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="9AC9CA36-6734-4823-B6EA-72DE8814F050" width="20" height="20">
+        <image name="76A6ACEB-6044-43B2-AA33-A2BC0A6B2E04" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

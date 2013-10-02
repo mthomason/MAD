@@ -149,6 +149,8 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 	MTHorizontalAlignmentNatrual = 4
 };
 
+extern NSString * const global_bundleVersion;
+
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
 

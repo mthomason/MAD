@@ -19,6 +19,11 @@ extern NSString * const MTStoreKitTransactionsIdentifier;
 
 //Keys returned by iTunes Receipt
 extern NSString * const MTStoreKitIdentifierReceiptBid;
+extern NSString * const MTStoreKitIdentifierReceiptBidData;
+extern NSString * const MTStoreKitIdentifierReceiptVersion;
+
+extern NSString * const MTStoreKitIdentifierReceiptOpaqueValue;
+
 extern NSString * const MTStoreKitIdentifierReceiptBrvs;
 extern NSString * const MTStoreKitIdentifierReceiptQuantity;
 extern NSString * const MTStoreKitIdentifierReceiptItemId;
@@ -33,6 +38,12 @@ extern NSString * const MTStoreKitIdentifierReceiptPurchaseDatePst;
 extern NSString * const MTStoreKitIdentifierReceiptTransactionId;
 extern NSString * const MTStoreKitIdentifierReceiptUniqueId;
 extern NSString * const MTStoreKitIdentifierReceiptCancellationDate;
+extern NSString * const MTStoreKitIdentifierReceiptWebOrderLineItemID;
+extern NSString * const MTStoreKitIdentifierReceiptSubscriptionExpirationDate;
+extern NSString * const MTStoreKitIdentifierReceiptHash;
+extern NSString * const MTStoreKitIdentifierReceiptInApp;
+extern NSString * const MTStoreKitIdentifierReceiptOriginalVersion;
+extern NSString * const MTStoreKitIdentifierReceiptExpirationDate;
 
 typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 

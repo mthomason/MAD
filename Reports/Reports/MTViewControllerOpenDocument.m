@@ -681,6 +681,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[self availableFilesCache] removeObjectsAtIndexes:indexSet];
         [[self collectionView] deleteItemsAtIndexPaths:itemsToDelete];
 //        updateFileList
+        [indexSet release];
         [itemsToDelete release];
     }
 }

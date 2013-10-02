@@ -19,6 +19,9 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
+// in your project define those two somewhere as such:
+NSString * const global_bundleVersion                               = @"2.0";
+
 #pragma mark Product Ids
 
 NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1       = @"com.everydayapps.mad.designer.subscription.year";

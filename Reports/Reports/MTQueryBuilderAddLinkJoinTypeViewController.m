@@ -11,15 +11,54 @@
 #import "AppDelegate.h"
 #import "MTActiveDocument.h"
 
+@interface MTQueryBuilderAddLinkJoinTypeViewController ()
+
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellEquiJoin;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
+
+@end
+
 @implementation MTQueryBuilderAddLinkJoinTypeViewController
 
 @synthesize delegate = _delegate;
 
 - (void)dealloc {
+    [_tableViewCellEquiJoin release];
+    [_tableViewCellNaturalJoin release];
     [super dealloc];
 }
 
 #pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:managedObjectContext];
+    RptqUserCredentals *userCredentals = connections[0];
+    NSString *databaseDriverType = [userCredentals database_driver_type];
+
+    if ([databaseDriverType isEqualToString:[MTDatabaseMySql identifier]]) {
+
+        [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
+        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[[self tableViewCellEquiJoin] textLabel] setEnabled:YES];
+        [[self tableViewCellNaturalJoin] setUserInteractionEnabled:YES];
+        [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[[self tableViewCellNaturalJoin] textLabel] setEnabled:YES];
+
+    } else if ([databaseDriverType isEqualToString:[MTDatabaseSqlServer identifier]]) {
+        
+        [[self tableViewCellEquiJoin] setUserInteractionEnabled:NO];
+        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[[self tableViewCellEquiJoin] textLabel] setEnabled:NO];
+        [[self tableViewCellNaturalJoin] setUserInteractionEnabled:NO];
+        [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[[self tableViewCellNaturalJoin] textLabel] setEnabled:NO];
+
+    }
+
+}
 
 #pragma mark - Actions
 

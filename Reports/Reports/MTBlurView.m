@@ -55,6 +55,7 @@
         UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[self bounds]];
         [[self layer] insertSublayer:[toolbar layer] atIndex:0];
         [self setToolbar:toolbar];
+        [toolbar release];
     }
 }
 
