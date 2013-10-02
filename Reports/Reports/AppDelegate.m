@@ -83,23 +83,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore synchronize];
-    
-    /*
-    //Setup iCloud Document Management
-    [self checkUserICloudPreferenceAndSetupIfNecessary];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(willBeginFetchingUbiquitousContainer)
-                                                 name: UbiquitousContainerFetchingWillBeginNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(didEndFetchingUbiquitousContainer)
-                                                 name: UbiquitousContainerFetchingDidEndNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(checkUserICloudPreferenceAndSetupIfNecessary)
-                                                 name: NSUbiquityIdentityDidChangeNotification
-                                               object: nil];
-*/
 
     return YES;
 }
@@ -341,15 +324,6 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
         [[[UIApplication sharedApplication] keyWindow] addSubview:_waitingHudView];
         [label release];
     }
-}
-
-- (void)willBeginFetchingUbiquitousContainer {
-    [self performSelector:@selector(displayWaitingHud) withObject:nil afterDelay:0.15];
-}
-
-- (void)didEndFetchingUbiquitousContainer {
-    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(displayWaitingHud) object:nil];
-    [_waitingHudView removeFromSuperview];
 }
 
 @end
