@@ -316,7 +316,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
-NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
+NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
@@ -325,10 +325,11 @@ NSString * const MTSqlSelectTop100 = @"SELECT TOP 100";
     
     dispatch_async(queuePriorityBackground, ^{
         
-        NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT %@ "
+        //NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT %@ "
+        NSString *sql = [NSString stringWithFormat:@"%@ %@ "
                          @"%@"
-                         @" %@;",
-                         MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name];
+                         @" %@ ORDER BY %@;",
+                         MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name, schemaField.name];
         NSArray *resultStrings = [[self runQuery:sql] retain];
         
         dispatch_async(dispatch_get_main_queue(), ^{
