@@ -12,7 +12,6 @@
 #import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "UITableViewControllerEnterString.h"
 #import "MTActiveDocument.h"
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTTableViewController.h"

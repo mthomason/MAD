@@ -282,10 +282,6 @@
 		4C0E784D163B5AEC003B951E /* UIImageExportTypeCSV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */; };
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
-		4C0EF6D4178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6CC178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard */; };
-		4C0EF6D9178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6CE178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard */; };
-		4C0EF6E2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */; };
-		4C0EF6E7178AA69B007BF2AE /* MTStoryboardReportDesignerOS6.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C0EF6D0178A96BC007BF2AE /* MTStoryboardReportDesignerOS6.storyboard */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; };
 		4C12293116CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; };
@@ -5307,7 +5303,6 @@
 				4C0E77E2163B5AEC003B951E /* UIImagePatternStationary.png in Resources */,
 				4C0E77E3163B5AEC003B951E /* UIImagePatternStationary@2x.png in Resources */,
 				4C0E77E4163B5AEC003B951E /* UIImagePatternAqua.png in Resources */,
-				4C0EF6D9178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard in Resources */,
 				4C0E77E5163B5AEC003B951E /* UIImagePatternAqua@2x.png in Resources */,
 				4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
@@ -5342,7 +5337,6 @@
 				4C0E7802163B5AEC003B951E /* UIImagePatternGoldVellum.png in Resources */,
 				4C0E7803163B5AEC003B951E /* UIImagePatternGoldVellum@2x.png in Resources */,
 				4C0E7804163B5AEC003B951E /* UIImagePatternGraphPaper.png in Resources */,
-				4C0EF6D4178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard in Resources */,
 				4C0E7805163B5AEC003B951E /* UIImagePatternGraphPaper@2x.png in Resources */,
 				4C94AA4217DCBDCC000F6FCF /* LaunchImageModern3_5in.png in Resources */,
 				4C0E7806163B5AEC003B951E /* UIImagePatternGrayGranite.png in Resources */,
@@ -6020,7 +6014,6 @@
 				4CD98D32163F7DE70096D7BC /* mysql_time.h in Resources */,
 				4CD98D36163F7DE70096D7BC /* mysql_version.h in Resources */,
 				4CD98D3A163F7DE70096D7BC /* mysql_version.h.in in Resources */,
-				4C0EF6E2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard in Resources */,
 				4CD98D3E163F7DE70096D7BC /* mysqld_error.h in Resources */,
 				4CD98D42163F7DE70096D7BC /* rijndael.h in Resources */,
 				4CD98D46163F7DE70096D7BC /* mysys_err.h in Resources */,
@@ -6087,7 +6080,6 @@
 				4C81BB94176F644200E7B98C /* File in Resources */,
 				4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
-				4C0EF6E7178AA69B007BF2AE /* MTStoryboardReportDesignerOS6.storyboard in Resources */,
 				4C47574617B4096600530CAF /* Icon-29-Designer-Lagacy.png in Resources */,
 				4C47574817B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png in Resources */,
 				4C47574A17B4096600530CAF /* Icon-29-Designer-Modern.png in Resources */,
@@ -7429,7 +7421,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -7468,7 +7460,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -7711,7 +7703,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",
@@ -7754,7 +7746,7 @@
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Reports\"",

@@ -42,6 +42,15 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
+
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsDocumentGroups;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsDatasource;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsTables;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsLinks;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsGroups;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
+@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsSql;
+
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
@@ -138,6 +147,50 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
+    MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
+    [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
+    [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
+    [viewTableHeaderDocumentGroups release];
+    
+    MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderDatasource labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
+    [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
+    [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
+    [viewTableHeaderDatasource release];
+    
+    MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderTables labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
+    [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+    [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
+    [viewTableHeaderTables release];
+    
+    MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderLinks labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
+    [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+    [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
+    [viewTableHeaderLinks release];
+    
+    MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
+    [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
+    [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
+    [viewTableHeaderGroups release];
+    
+    MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
+    [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
+    [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
+    [viewTableHeaderPredicate release];
+    
+    MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+    [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
+    [[viewTableHeaderSql buttonAdd] setHidden:YES];
+    [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
+    [viewTableHeaderSql release];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -281,7 +334,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
     if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [[segue destinationViewController] retain];
@@ -510,23 +562,32 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 #pragma mark Table Header Actions
 
 - (void)addConnection:(id)sender {
+    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
 }
 
 - (void)addTable:(id)sender {
+    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
 }
 
 - (void)addLink:(id)sender {
+    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
 }
 
 - (void)addPredicate:(id)sender {
+    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
 }
 
 - (void)addGroup:(id)sender {
+    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
+}
+
+- (void)showPopoverWtihController:(UIViewController *)controller fromView:(UIView *)view {
+    
 }
 
 #pragma mark - Modal helper
@@ -1384,66 +1445,54 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     return result;
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *result = nil;
-    if ([UIDevice isPad] == NO || YES) {
-        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f)];
-//        MTViewTableHeader *headerView = [[MTViewTableHeader alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, tableView.frame.size.width, 29.0000f)];
-        //if ([UIDevice isPad]) {
-            //[headerView setBackgroundColor:[UIColor clearColor]];
-        //}
-        section = [self tableSectionTypeForIndexPathSection: section];
-        
-        switch (section) {
-                
-            case MTQuerySectionsDocumentGroups: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
-                [[headerView buttonAdd] setHidden:YES];
-                break;
-            }
-                
-            case MTQuerySectionsDatasource: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
-                [[headerView buttonAdd] setHidden:YES];
-                break;
-            }
-                
-            case MTQuerySectionsTables: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
-                [[headerView buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            }
-                
-            case MTQuerySectionsLinks: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
-                [[headerView buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            }
-                
-            case MTQuerySectionsGroups: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
-                [[headerView buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            }
-                
-            case MTQuerySectionsPredicate: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
-                [[headerView buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            }
-            case MTQuerySectionsSql: {
-                [[headerView labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
-                [[headerView buttonAdd] setHidden:YES];
-                break;
-            }
-            default: {
-                [[headerView labelTitle] setText:@""];
-                [[headerView buttonAdd] setHidden:YES];
-                break;
-            }
-                
+
+    MTViewTableHeader *result = nil;
+    
+    section = [self tableSectionTypeForIndexPathSection: section];
+    
+    switch (section) {
+        case MTQuerySectionsDocumentGroups: {
+            result = [self viewTableHeaderQuerySectionsDocumentGroups];
+            break;
         }
-        result = [headerView autorelease];
+            
+        case MTQuerySectionsDatasource: {
+            result = [self viewTableHeaderQuerySectionsDatasource];
+            break;
+        }
+            
+        case MTQuerySectionsTables: {
+            result = [self viewTableHeaderQuerySectionsTables];
+            break;
+        }
+            
+        case MTQuerySectionsLinks: {
+            result = [self viewTableHeaderQuerySectionsLinks];
+            break;
+        }
+            
+        case MTQuerySectionsGroups: {
+            result = [self viewTableHeaderQuerySectionsGroups];
+            break;
+        }
+            
+        case MTQuerySectionsPredicate: {
+            result = [self viewTableHeaderQuerySectionsPredicate];
+            break;
+        }
+        case MTQuerySectionsSql: {
+            result = [self viewTableHeaderQuerySectionsSql];
+            break;
+        }
+        default: {
+            result = [self viewTableHeaderQuerySectionsDatasource];
+            break;
+        }
     }
     return result;
 }

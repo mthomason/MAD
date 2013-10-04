@@ -12,6 +12,7 @@
 
 @protocol MTCollectionViewCellElementDelegate
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+- (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
 @end
 
 @interface MTCollectionViewCellElement : UICollectionViewCell

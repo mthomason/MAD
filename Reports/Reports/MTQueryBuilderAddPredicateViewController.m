@@ -8,7 +8,6 @@
 
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "UITableViewControllerEnterString.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "AppDelegate.h"
 

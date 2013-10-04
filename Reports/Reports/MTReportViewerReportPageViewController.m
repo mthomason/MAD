@@ -160,12 +160,12 @@
         __block UIView *view = [[UIView alloc] initWithFrame:viewFrame];
         CGRect labelFrame = CGRectMake(CGPointZero.x, CGPointZero.y, viewFrame.size.width, viewFrame.size.height);
         UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
-        [label setFont:[UIFont systemFontOfSize:[UIFont systemFontSize]-2.0000f]];
+        [label setFont:[UIFont systemFontOfSize:[UIFont systemFontSize] - 2.0000f]];
         [label setTextColor:[UIColor whiteColor]];
         [label setTextAlignment:NSTextAlignmentCenter];
         [label setUserInteractionEnabled:NO];
         [view setUserInteractionEnabled:NO];
-        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.7000f];
+        UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
         [view setBackgroundColor:bgColor];
         [label setBackgroundColor:[UIColor clearColor]];
         
@@ -178,7 +178,7 @@
             [view setAlpha:1.0000f];
         } completion:^(BOOL finished) {
             if (finished) {
-                [UIView animateWithDuration:0.30000f delay:5.0000f
+                [UIView animateWithDuration:0.30000f delay:2.0000f
                                     options:UIViewAnimationOptionCurveEaseIn animations:^{
                                         [view setAlpha:0.0000f];
                                     } completion:nil];
@@ -202,10 +202,10 @@
     __block UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
     UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, w, h)];
     [labelView setText:[NSString stringWithFormat:@"%d of %d", pageNumber, numberOfPages]];
-    [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]+1.0000f]];
+    [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f]];
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];
-    UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.7000f];
+    UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
     [numberView setBackgroundColor:bgColor];
     [numberView setUserInteractionEnabled:NO];
     [labelView setUserInteractionEnabled:NO];

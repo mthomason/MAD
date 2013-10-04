@@ -17,8 +17,6 @@ NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentife
 NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectWhitespaceCollectionViewCell = @"MTIdentiferDocumentObjectWhitespaceCollectionViewCell";
 
-NSString * const MTFieldOrFormulaViewControllerIdentifier = @"MTFieldOrFormulaViewControllerIdentifier";
-
 NSInteger const MTViewTagAggregateFunctions = 2003;
 NSInteger const MTViewTagGroupByOptions = 2011;
 NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;

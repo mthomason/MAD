@@ -284,7 +284,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return YES;
+    return NO;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -366,11 +366,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         if (foundUrl) {
             if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-                //if ([UIDevice isPad]) {
-                //    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
-                //    [queryBuilderViewController setDelegateContentController: self];
-                //    [queryBuilderViewController setDelegate:self];
-                //} else {
+                if ([UIDevice isPad]) {
+                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
+                    [queryBuilderViewController setDelegateContentController: self];
+                    [queryBuilderViewController setDelegate:self];
+                } else {
                     MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                     [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
@@ -378,7 +378,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                             [queryBuilderViewController reloadDocument:managedDocument];
                         }
                     }];
-                //}
+                }
                 
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
                 MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];

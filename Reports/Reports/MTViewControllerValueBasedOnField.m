@@ -140,19 +140,23 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     NSString *result = nil;
-    NSDictionary *pickerData = [[self pickerData] objectAtIndex:row];
-    id resultObject = [[pickerData allValues] lastObject];
-    if ([resultObject isKindOfClass:[NSDateComponents class]]) {
-        NSDateComponents *resultDate = resultObject;
-        NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
-        NSDate *newDate = [localCalendar dateFromComponents:resultDate];
-        result = [[self longStyleDateFormatter] stringFromDate:newDate];        
-    } else if ([resultObject isKindOfClass:[NSString class]]) {
-        result = [[resultObject retain] autorelease];
-    } else if ([resultObject isKindOfClass:[NSNumber class]]) {
-        result = [[[(NSNumber *)resultObject stringValue] retain] autorelease];
-    } else if (resultObject == nil) {
-        result = @"NULL";
+    if (row < [[self pickerData] count]) {
+        NSDictionary *pickerData = [[self pickerData] objectAtIndex:row];
+        id resultObject = [[pickerData allValues] lastObject];
+        if ([resultObject isKindOfClass:[NSDateComponents class]]) {
+            NSDateComponents *resultDate = resultObject;
+            NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
+            NSDate *newDate = [localCalendar dateFromComponents:resultDate];
+            result = [[self longStyleDateFormatter] stringFromDate:newDate];
+        } else if ([resultObject isKindOfClass:[NSString class]]) {
+            result = [[resultObject retain] autorelease];
+        } else if ([resultObject isKindOfClass:[NSNumber class]]) {
+            result = [[[(NSNumber *)resultObject stringValue] retain] autorelease];
+        } else if (resultObject == nil) {
+            result = @"NULL";
+        } else {
+            result = @"";
+        }
     } else {
         result = @"";
     }

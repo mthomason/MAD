@@ -1704,6 +1704,10 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
     }];
 }
 
+- (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
+    NSManagedObjectID *objectId = [cell objectIdTag];
+}
+
 #pragma mark -
 #pragma mark Collection View Layout Delegate
 

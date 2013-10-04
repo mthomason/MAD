@@ -93,6 +93,30 @@
 
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if ([self leftView]) {
+        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[[self leftView] subviews]];
+        [subviews addObjectsFromArray:[[self rightView] subviews]];
+        for (UIView *view in subviews) {
+            if ([view isKindOfClass:[UIScrollView class]]) {
+                CGFloat top = self.topLayoutGuide.length;
+                CGFloat bot = self.bottomLayoutGuide.length;
+                [(UIScrollView *)view setContentInset: UIEdgeInsetsMake(top, 0, bot, 0)];
+                [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
+            }
+        }
+    }
+    /*
+    if ([self rightView]) {
+        CGFloat top = self.topLayoutGuide.length;
+        CGFloat bot = self.bottomLayoutGuide.length;
+        [(UITableView *)[self leftView] setContentInset: UIEdgeInsetsMake(top, 0, bot, 0)];
+        [(UITableView *)[self leftView] setScrollIndicatorInsets: [(UITableView *)[self leftView] contentInset]];
+    }
+     */
+}
+
 - (id)leftViewController {
     return [[[[self childViewControllers] objectAtIndex:0] retain] autorelease];
 }
@@ -106,16 +130,16 @@
 }
 
 - (IBAction)showReportDesigner:(id)sender {
-    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
+//    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
 //    [queryBuilderController show]
-    [queryBuilderController release];
+//    [queryBuilderController release];
 }
 
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
     
     [[self queryBuilderController] edit:sender];
     
-    UIBarButtonSystemItem buttonType = [[[self queryBuilderController] tableViewQueryBuilder] isEditing] ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
+    UIBarButtonSystemItem buttonType = [[[self queryBuilderController] tableView] isEditing] ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
                                                                                    target: self
                                                                                    action: @selector(toggleEditModeQueryDesigner:)];
@@ -125,23 +149,6 @@
     [[self toolbarTop] setItems: tbItems];
     [tbItems release];
 
-    /*
-    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
-    BOOL isEditing = ![[queryBuilderController tableViewQueryBuilder] isEditing];
-
-    UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemDone: UIBarButtonSystemItemEdit;
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                   target: self
-                                                                                   action: @selector(toggleEditModeQueryDesigner:)];
-    
-    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbarTop] items]];
-    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
-    [[self toolbarTop] setItems: tbItems];
-    [tbItems release];
-
- 
-    [[queryBuilderController tableViewQueryBuilder] setEditing:isEditing];
-    [queryBuilderController release];*/
 }
 
 - (MTQueryBuilderViewController *)queryBuilderController {
