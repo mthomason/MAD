@@ -55,10 +55,13 @@
         [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
         [mFMailComposeViewController release];
     } else {
-        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", @"Alert title")
-                                                              message:NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.")
+        NSString *title = NSLocalizedString(@"Alert", @"Alert title");
+        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
+        NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
+        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
+                                                              message:message
                                                              delegate:self
-                                                    cancelButtonTitle:NSLocalizedString(@"Continue", @"Continue")
+                                                    cancelButtonTitle:dismiss
                                                     otherButtonTitles:nil];
         [uIAlertView show];
         [uIAlertView release];

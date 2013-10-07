@@ -210,7 +210,7 @@
         NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
         queryField = [[fieldsArray objectAtIndex: [indexPath row]] retain];
         [self setQueryField:queryField];
-        [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
+        //[[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
         [namesAccending release];
     }
     return [queryField autorelease];

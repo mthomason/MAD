@@ -4782,7 +4782,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="ix5-xH-cqq" kind="push" id="dsf-N6-grM"/>
+                                            <segue destination="aNn-Gg-71l" kind="push" id="oHO-Hg-9X5"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="yGo-6M-DRO" detailTextLabel="Mys-v6-GLc" style="IBUITableViewCellStyleValue1" id="q7h-No-dLV">
@@ -5944,62 +5944,6 @@
             </objects>
             <point key="canvasLocation" x="8178" y="1156"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
-        <scene sceneID="zdY-IK-mMJ">
-            <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="ix5-xH-cqq" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Wa6-8z-AFw">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="n8N-cc-hDu" detailTextLabel="pC9-wb-fdk" style="IBUITableViewCellStyleValue1" id="2fj-gC-UAB">
-                                <rect key="frame" x="0.0" y="55" width="540" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2fj-gC-UAB" id="5Ub-Cn-cwD">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="n8N-cc-hDu">
-                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="pC9-wb-fdk">
-                                            <rect key="frame" x="481" y="11" width="44" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="R3v-c4-AlQ" kind="unwind" identifier="MTSegueAggregateFieldSave" unwindAction="unwindToNewAggregateFunction:" id="xhd-Cj-3lU"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="ix5-xH-cqq" id="pEp-qc-ETp"/>
-                            <outlet property="delegate" destination="ix5-xH-cqq" id="yJ5-jh-kD1"/>
-                        </connections>
-                    </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Select Field" id="7TA-72-5BW">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="8ey-Y4-1oO">
-                            <connections>
-                                <segue destination="R3v-c4-AlQ" kind="unwind" unwindAction="unwindToDesigner:" id="N0E-vA-jHd"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lnd-oQ-NfQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="R3v-c4-AlQ" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="8926" y="1156"/>
-        </scene>
         <!--Query Builder Advanced Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
             <objects>
@@ -6272,6 +6216,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rO7-6N-yUZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2534" y="-627"/>
+        </scene>
+        <!--Query Builder Choose Field View Controller - Select Field-->
+        <scene sceneID="W2T-f1-ihk">
+            <objects>
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="aNn-Gg-71l" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="K8U-Af-Sk6">
+                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="eZC-vP-4lz" detailTextLabel="9mv-yu-NmQ" style="IBUITableViewCellStyleValue1" id="UFA-h0-ysW">
+                                <rect key="frame" x="0.0" y="55" width="540" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UFA-h0-ysW" id="MLo-CM-1LA">
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="eZC-vP-4lz">
+                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="9mv-yu-NmQ">
+                                            <rect key="frame" x="481" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="3g8-ia-cMh" kind="unwind" identifier="MTSegueAggregateFieldSave" unwindAction="unwindToNewAggregateFunction:" id="IRv-q5-AtL"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="aNn-Gg-71l" id="UwT-Kb-0CN"/>
+                            <outlet property="delegate" destination="aNn-Gg-71l" id="1Vh-oS-wYz"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="sg1-mt-VNM">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Esq-7x-JPH">
+                            <connections>
+                                <segue destination="3g8-ia-cMh" kind="unwind" unwindAction="unwindToDesigner:" id="WAf-QD-kI7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-zU-5YG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="3g8-ia-cMh" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="8926" y="1156"/>
         </scene>
     </scenes>
     <resources>

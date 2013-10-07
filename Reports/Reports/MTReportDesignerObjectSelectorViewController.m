@@ -330,7 +330,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
         case MTDocumentObjectTypeLabelDynamic:
             
-            [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
+            //[[self objectSelectorDelegate] insertDocumentObjectDataField: field];
             [[self objectSelectorDelegate] viewControllerDidFinish:self];
             
             break;
