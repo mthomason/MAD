@@ -23,6 +23,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemInformation;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemAbout;
 
+@property (nonatomic, retain) UIAlertView *renameAlertView;
+
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemLicensing;
 
@@ -53,13 +55,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [self updateFileList:self];
-    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];    
+    if ([UIDevice isPad] == NO) {
+        [self updateFileList:self];
+    }
+    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
 }
 
 - (void)dealloc {
     [_advancedQueryBuilder release]; _advancedQueryBuilder = nil;
     [_standardQueryBuilder release]; _standardQueryBuilder = nil;
+    [_renameAlertView release];
     [_barButtonItemEditDone release];
     [_previewLoadingOperations release];
     [_tapGestureRecognizer release];
@@ -486,10 +491,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
     [self setShouldShowAddDocumentPopover:YES];
+    if ([[self openDocumentPopoverController] isPopoverVisible]) {
+        [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    }
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    if ([UIDevice isPad]) {
+        [self updateFileList:self];
+    }
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
@@ -784,7 +795,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [textField setText:[[cellDocument labelTitle] text]];
     [textField setClearButtonMode:UITextFieldViewModeAlways];
     [textField setDelegate:self];
-    [alertView show];
+    [self setRenameAlertView:alertView];
+    [[self renameAlertView] show];
     [alertView release];
     [cellDocument release];
 }
@@ -941,7 +953,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark Text Field Delegate Protocol
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-
+    [self alertView:[self renameAlertView] clickedButtonAtIndex:1];
+    [[self renameAlertView] dismissWithClickedButtonIndex:1 animated:YES];
     return YES;
 }
 
