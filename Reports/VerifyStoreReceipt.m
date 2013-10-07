@@ -474,7 +474,7 @@ BOOL verifyReceiptAtPath(NSString *receiptPath) {
 	NSString *bundleIdentifier = [AppDelegate bundleId];
 
 	// avoid making stupid mistakes --> check again
-	NSCAssert([bundleVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]],
+	NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]],
               @"whoops! check the hard-coded CFBundleShortVersionString!");
 	NSCAssert([bundleIdentifier isEqualToString:[[NSBundle mainBundle] bundleIdentifier]],
               @"whoops! check the hard-coded bundle identifier!");

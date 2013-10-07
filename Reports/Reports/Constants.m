@@ -20,7 +20,6 @@ NSString * const MTBundleIdMadDesigner                              = @"com.ever
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
 // in your project define those two somewhere as such:
-NSString * const global_bundleVersion                               = @"2.0";
 
 #pragma mark Product Ids
 

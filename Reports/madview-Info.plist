@@ -125,6 +125,8 @@
 			<string>MADIcon64x64</string>
 		</dict>
 	</array>
+	<key>MADRev</key>
+	<string>660</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 </dict>

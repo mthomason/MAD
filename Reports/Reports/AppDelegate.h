@@ -15,6 +15,9 @@
 
 extern NSString * const MTBundleIdDesigner;
 extern NSString * const MTBundleIdViewer;
+extern NSString * const MTGlobalBundleVersion;
+extern NSString * const MTGlobalBundleShortVersion;
+extern NSString * const MTGlobalBundleRev;
 
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate,

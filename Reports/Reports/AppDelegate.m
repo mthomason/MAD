@@ -15,8 +15,11 @@
 
 #import "VerifyStoreReceipt.h"
 
-NSString * const MTBundleIdDesigner = @"com.everydayapps.mad.designer";
-NSString * const MTBundleIdViewer   = @"com.everydayapps.mad.viewer";
+NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
+NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
+NSString * const MTGlobalBundleVersion                              = @"1.0.39";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.39";
+NSString * const MTGlobalBundleRev                                  = @"660";
 
 @interface AppDelegate()
 
@@ -51,10 +54,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    NSAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
-
-    NSAssert([[AppDelegate bundleVersion] isEqualToString:global_bundleVersion], @"Bundle version is incorrect.");
+    NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev!");
+    NSCAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+    NSCAssert([[AppDelegate bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
+    NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -265,7 +268,7 @@ const NSInteger MATagNewDocument = 3838;
     static NSString *_bundleVersion;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _bundleVersion = global_bundleVersion;
+        _bundleVersion = MTGlobalBundleVersion;
     });
     return _bundleVersion;
 }

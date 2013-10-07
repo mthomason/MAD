@@ -9,12 +9,14 @@
 #import "MTTableViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
 #import "NSError+UserInterface.h"
+#import "AppDelegate.h"
 #import "UIApplication+Extras.h"
 
 @interface MTTableViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, retain) IBOutlet UILabel *labelVersion;
+@property (nonatomic, retain) IBOutlet UILabel *labelBuild;
 
 @end
 
@@ -27,9 +29,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSString *versionTextKey = NSLocalizedString(@"Verison %@", @"Verison %@");
+    NSString *buildTextKey = NSLocalizedString(@"Build %@", @"Build %@");
     NSString *version = [UIApplication version];
     NSString *versionText = [NSString stringWithFormat:versionTextKey, version];
+    NSString *buildText = [NSString stringWithFormat:buildTextKey, MTGlobalBundleRev];
     [[self labelVersion] setText:versionText];
+    [[self labelBuild] setText:buildText];
 }
 
 - (IBAction)cancel:(id)sender {
@@ -75,6 +80,7 @@
 
 - (void)dealloc {
     [_labelVersion release];
+    [_labelBuild release];
     [super dealloc];
 }
 @end
