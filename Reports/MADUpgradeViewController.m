@@ -41,14 +41,14 @@
     
     NSString *lastVersionRunKey = @"lastVersionRun";
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
-    NSInteger currentVersion = 2;
+    NSInteger currentMajorVersion = 2;
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:lastVersionRunKey];
     
     //For testing
     //lastVersionRun = @(1);
     
     if (lastVersionRun == nil) lastVersionRun = @(1);
-    if ([lastVersionRun integerValue] < currentVersion) {
+    if ([lastVersionRun integerValue] < currentMajorVersion) {
         
         if ([lastVersionRun integerValue] == 1) {
             //Upgrade from version 1
@@ -59,7 +59,7 @@
         }
         
     }
-    [standardUserDefault setObject:@(currentVersion) forKey:lastVersionRunKey];
+    [standardUserDefault setObject:@(currentMajorVersion) forKey:lastVersionRunKey];
     
     if (upgradeRequired == NO) {
         [self performSegueWithIdentifier:@"MTSegueUpgradeUnneeded" sender:self];

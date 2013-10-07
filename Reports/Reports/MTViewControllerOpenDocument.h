@@ -46,6 +46,7 @@ extern NSString * const MTSegueShowOpenDocument;
 - (IBAction)add:(id)sender;
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
+@property (nonatomic, retain, readonly) UIPopoverController *aboutPopoverController;
 
 @end
 

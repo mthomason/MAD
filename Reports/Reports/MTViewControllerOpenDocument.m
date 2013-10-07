@@ -29,6 +29,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) IBOutlet MTTitleView *titleView;
 
 @property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
+@property (nonatomic, retain) UIPopoverController *aboutPopoverController;
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
@@ -67,6 +68,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_availableFilesCache release];
     [_titleView release];
     [_openDocumentPopoverController release];
+    [_aboutPopoverController release];
     [_barButtonItemAddNewDocument release];
     [_barButtonItemLicensing release];
     [_collectionViewFlowLayout release];
@@ -80,7 +82,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)awakeFromNib {
-    [self setContentSizeForViewInPopover: CGSizeMake(320.0, 480.0)];
+    //[self setContentSizeForViewInPopover: CGSizeMake(320.0, 480.0)];
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [super awakeFromNib];
@@ -313,6 +315,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         UINavigationController *navigationController = [segue destinationViewController];
         MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
         [aboutViewController setDelegate:self];
+
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [segue destinationViewController];
+            if ([navControl topViewController]) {
+                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                    [self setAboutPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
+                }
+            }
+        }
+
     } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
 
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -493,6 +505,31 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
+}
+
+- (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated {
+    if ([UIDevice isPad]) {
+        [[self aboutPopoverController] dismissPopoverAnimated:animated];
+    }
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
+        [mFMailComposeViewController setMailComposeDelegate:self];
+        [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
+        [mFMailComposeViewController setSubject:@"MAD Designer"];
+        [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
+        [mFMailComposeViewController release];
+    } else {
+        NSString *title = NSLocalizedString(@"Alert", @"Alert title");
+        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
+        NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
+        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
+                                                              message:message
+                                                             delegate:self
+                                                    cancelButtonTitle:dismiss
+                                                    otherButtonTitles:nil];
+        [uIAlertView show];
+        [uIAlertView release];
+    }
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {

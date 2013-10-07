@@ -366,13 +366,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="About" id="yWg-SR-rG1">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="dmi-sw-wpZ">
-                            <connections>
-                                <segue destination="6nz-Hk-vZW" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="eVP-g2-d2P"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="About" id="yWg-SR-rG1"/>
                     <connections>
                         <outlet property="labelVersion" destination="i0Z-TN-arw" id="MkP-e5-LzU"/>
                     </connections>
@@ -654,19 +648,12 @@
                         </sections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Software Licensing" id="bWC-Y3-hS3">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="htQ-yd-wst">
-                            <connections>
-                                <action selector="done:" destination="7Fv-TN-ixy" id="hcR-7b-CZ5"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Software Licensing" id="bWC-Y3-hS3"/>
                     <connections>
                         <outlet property="activityIndicator2" destination="5v7-Cv-yev" id="Snt-Vx-3Fz"/>
                         <outlet property="activityIndicatorDesignerLicenseOneYear" destination="1jC-kX-iDp" id="cGa-ck-suJ"/>
                         <outlet property="buttonBuyNowDesignerOneMonth" destination="rek-Pe-cxP" id="xuX-cR-w2i"/>
                         <outlet property="buttonBuyNowDesignerOneYear" destination="u0j-tI-oUo" id="c9R-lv-TGc"/>
-                        <outlet property="buttonDone" destination="htQ-yd-wst" id="Cws-OE-Z6u"/>
                         <outlet property="labelDesignerKeyActivated" destination="VGn-C6-kFE" id="URp-DH-Xi5"/>
                         <outlet property="labelDesignerKeyExpires" destination="62p-GN-qOs" id="uS2-xA-v5F"/>
                         <outlet property="labelDesignerValueActivated" destination="FOb-wd-0Vs" id="XIn-DR-Aas"/>

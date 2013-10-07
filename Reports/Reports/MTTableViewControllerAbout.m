@@ -11,6 +11,7 @@
 #import "NSError+UserInterface.h"
 #import "AppDelegate.h"
 #import "UIApplication+Extras.h"
+#import "MTViewControllerOpenDocument.h"
 
 @interface MTTableViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
@@ -46,25 +47,28 @@
 }
 
 - (IBAction)composeEmail:(id)sender {
-    
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mFMailComposeViewController setMailComposeDelegate:self];
-        [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
-        [mFMailComposeViewController setSubject:@"MAD Designer"];
-        [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
-        [mFMailComposeViewController release];
+    if ([UIDevice isPad]) {
+        [[self delegate] viewControllerDidRequestComposeEmail:self animated:YES];
     } else {
-        NSString *title = NSLocalizedString(@"Alert", @"Alert title");
-        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
-        NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
-        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
-                                                              message:message
-                                                             delegate:self
-                                                    cancelButtonTitle:dismiss
-                                                    otherButtonTitles:nil];
-        [uIAlertView show];
-        [uIAlertView release];
+        if ([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
+            [mFMailComposeViewController setMailComposeDelegate:self];
+            [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
+            [mFMailComposeViewController setSubject:@"MAD Designer"];
+            [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
+            [mFMailComposeViewController release];
+        } else {
+            NSString *title = NSLocalizedString(@"Alert", @"Alert title");
+            NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
+            NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
+            UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
+                                                                  message:message
+                                                                 delegate:self
+                                                        cancelButtonTitle:dismiss
+                                                        otherButtonTitles:nil];
+            [uIAlertView show];
+            [uIAlertView release];
+        }
     }
 }
 
