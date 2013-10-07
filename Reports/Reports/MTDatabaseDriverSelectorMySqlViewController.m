@@ -13,12 +13,14 @@
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, retain) MTViewControllerActivitySpinner *activitySpinnerViewController;
+@property (nonatomic, retain) UIBarButtonItem *holderButton;
 
 @end
 
 @implementation MTDatabaseDriverSelectorMySqlViewController
 
 - (void)dealloc {
+    [_holderButton release];
     [_activitySpinnerViewController release];
     [_tableViewCellUsername release];
     [_tableViewCellPassword release];
@@ -158,15 +160,21 @@
     
     [sender setEnabled:NO];
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
+  
+    [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-    MTViewControllerActivitySpinner *activitySpinnerViewController = [[storyboard instantiateViewControllerWithIdentifier: MUIViewControllerActivitySpinner] retain];
-    [[activitySpinnerViewController view] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [activitySpinnerViewController setTransitioningDelegate:self];
-    [activitySpinnerViewController setModalPresentationStyle:UIModalPresentationCustom];
-    [activitySpinnerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self setActivitySpinnerViewController:activitySpinnerViewController];
-    [self presentViewController:activitySpinnerViewController animated:YES completion:^{
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicator setColor:[UIColor greenColor]];
+    [activityIndicator startAnimating];
+    [activityIndicator setHidden:NO];
+    [activityIndicator setHidesWhenStopped:NO];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+    [barButtonItem release];
+    [activityIndicator release];
+    
+    
+    //[self presentViewController:activitySpinnerViewController animated:YES completion:^{
 
         //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 
@@ -209,11 +217,11 @@
                                                     [documentReport deleteFromDiskCompletion:^(BOOL success) {
                                                         //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                                             dispatch_sync(dispatch_get_main_queue(), ^{
-                                                                [self dismissViewControllerAnimated:YES completion:^{
+                                                                //[self dismissViewControllerAnimated:YES completion:^{
                                                                     [sender setEnabled:YES];
-                                                                    [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                                                                    //[[[self navigationItem] backBarButtonItem] setEnabled:YES];
                                                                     [[self delegate] viewControllerDidFinish: self];
-                                                                }];
+                                                                //}];
                                                                 
                                                             });
                                                             
@@ -235,11 +243,13 @@
                                                     
                                                     [error presentErrorToUserWithCompletion:^(BOOL success) {
                                                         
-                                                        [self dismissViewControllerAnimated:YES completion:^{
+                                                        //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
                                                             [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+
                                                             [[self delegate] viewControllerDidFinish: self];
-                                                        }];
+                                                        //}];
                                                     }];
                                                     
                                                 } else {
@@ -250,18 +260,20 @@
                                                     
                                                     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
                                                         
-                                                        [self dismissViewControllerAnimated:YES completion:^{
+                                                        //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
                                                             [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        }];
+                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                        //}];
                                                         
                                                         
                                                     } onCancel:^{
                                                         
-                                                        [self dismissViewControllerAnimated:YES completion:^{
+                                                        //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
                                                             [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        }];
+                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                        //}];
                                                         
                                                     }];
                                                     [alertView show];
@@ -300,10 +312,7 @@
             }];
 
         //});
-    }];
-    [activitySpinnerViewController release];
-    
-    
+    //}];    
     
 }
 
