@@ -294,7 +294,11 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
         
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
         //recreate the store like in the  appDelegate method
-        [[[self managedObjectContext] persistentStoreCoordinator] addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
+        
+        NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                   NSInferMappingModelAutomaticallyOption : @YES};
+        
+        [[[self managedObjectContext] persistentStoreCoordinator] addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
     }
     [[self managedObjectContext] unlock];
 

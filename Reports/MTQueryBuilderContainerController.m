@@ -7,6 +7,7 @@
 //
 
 #import "MTQueryBuilderContainerController.h"
+#import "Constants.h"
 
 @interface MTQueryBuilderContainerController ()
 
@@ -55,6 +56,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    //[super prepareForSegue:segue sender:sender];
     if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
             [[segue destinationViewController] setDelegate: self];
@@ -62,6 +64,17 @@
             [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
         }
     }    
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    BOOL leftIsGo = YES, rightIsGo = YES;
+    if ([identifier isEqualToString:@"MTSegueCloseDesigner"]) {
+        leftIsGo = [self leftViewController] == nil ? YES :
+                        [[self leftViewController] shouldPerformSegueWithIdentifier:identifier sender:sender];
+        rightIsGo = [self rightViewController] == nil ? YES :
+                        [[self rightViewController] shouldPerformSegueWithIdentifier:identifier sender:sender];
+    }
+    return leftIsGo && rightIsGo;
 }
 
 - (void)awakeFromNib {

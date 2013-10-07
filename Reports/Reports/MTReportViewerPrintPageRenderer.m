@@ -214,7 +214,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [self drawPageAtIndex:0 inRect:letterRect];
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGFloat imageSize = 64.0000f * [[UIScreen mainScreen] scale];
+    CGFloat imageSize = [UIDevice isPad] == YES ? 124.0000f * [[UIScreen mainScreen] scale] : 64.0000f * [[UIScreen mainScreen] scale];
     
     UIImage *result;
     if ([UIDevice isLagacyOS]) {
@@ -1101,7 +1101,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         for (RptqDocumentSection *sec in enumerator) {
             CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
             [sec setLayoutHeight:@(layoutHight)];
-            [[sec managedObjectContext] save:nil];
+            //[[sec managedObjectContext] save:nil];
         }
         [enumerator release];
         

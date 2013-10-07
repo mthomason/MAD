@@ -114,18 +114,19 @@
 - (NSString *)linkDescription {
     NSString *linkDescription;
 
-    switch ([[self jointype] integerValue]) {
+    // FIXME: Should display the correct algebraic glyphs.
+//    switch ([[self jointype] integerValue]) {
 
-        case MNSLinkTypeLeftOuterJoin:
+//        case MNSLinkTypeLeftOuterJoin:
             linkDescription = [NSString stringWithFormat:@"%@", [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
-            break;
+//            break;
             
-        default:
-            linkDescription = [NSString stringWithFormat:@"%@ (%@)",
-                               [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
-                               [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
-            break;
-    }
+//        default:
+//            linkDescription = [NSString stringWithFormat:@"%@ (%@)",
+//                               [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
+//                               [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
+//            break;
+//    }
     
     return linkDescription;
 }

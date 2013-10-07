@@ -79,6 +79,7 @@
     
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
+    //[[reportDesignerFontSelectorViewController tableView] setBackgroundColor:[UIColor redColor]];
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
     
 }
@@ -210,6 +211,7 @@
         
         [UIView animateWithDuration:0.3000f animations:^{
             [[[self tableViewControllerFontSelector] tableView] setFrame: offScreen];
+            [[[self tableViewControllerTextLayoutSettings] tableView] setAlpha:1.0000f];
         } completion:^(BOOL finished) {
             [[[self tableViewControllerFontSelector] tableView] removeFromSuperview];
         }];
@@ -248,6 +250,7 @@
         [[self contentView] addSubview:[[self tableViewControllerFontSelector] tableView]];        
         
         [UIView animateWithDuration:0.3000f animations:^{
+            [[[self tableViewControllerTextLayoutSettings] tableView] setAlpha:0.0000f];
             [[[self tableViewControllerFontSelector] tableView] setFrame:newRect];
         } completion:^(BOOL finished) {
             

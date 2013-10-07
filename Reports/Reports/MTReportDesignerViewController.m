@@ -154,6 +154,8 @@ NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNe
 NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
 NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
 
+typedef void (^block_insertObject)(UIStoryboardSegue *);
+
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
 
     if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
@@ -163,21 +165,38 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
         [self insertDocumentObjectNewLabel: labelText];
         
     } else if ([[action identifier] isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
-        [self dismissViewControllerAnimated:YES completion:^{
+        
+        block_insertObject insert = ^(UIStoryboardSegue *action) {
             [self insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
-        }];
+        };
+        
+        if ([UIDevice isPad]) {
+            insert(action);
+        } else {
+            [self dismissViewControllerAnimated:YES completion:^{
+                insert(action);
+            }];
+        }
     } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         
-        [self dismissViewControllerAnimated:YES completion:^{
-        MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
-        RptqQueryField *queryField = [dynamicFieldController queryField];
+        block_insertObject insert = ^(UIStoryboardSegue *action) {
+            MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
+            RptqQueryField *queryField = [dynamicFieldController queryField];
+            
+            [self insertDocumentObjectWithDefination:
+             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+               MTDocumentObjectDefinationObject : [queryField objectID]}];
+        };
         
-        [self insertDocumentObjectWithDefination:
-         @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-           MTDocumentObjectDefinationObject : [queryField objectID]}];
+        if ([UIDevice isPad]) {
+            insert(action);
+        } else {
+            [self dismissViewControllerAnimated:YES completion:^{
+                insert(action);
+            }];
+        }
         
-        }];
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
@@ -188,7 +207,8 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
                                                    groupNumber:@([aggregateViewController groupTypeSectionNumber])];
 
     } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
-        [self dismissViewControllerAnimated:YES completion:^{
+        
+        block_insertObject insert = ^(UIStoryboardSegue *action) {
             if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                 [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -196,7 +216,18 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
                 [self presentViewController:imagePicker animated:YES completion:NULL];
                 [imagePicker release];
             }
-        }];
+        };
+        
+        if ([UIDevice isPad]) {
+            insert(action);
+        } else {
+            [self dismissViewControllerAnimated:YES completion:^{
+                insert(action);
+            }];
+        }
+
+    } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
     }
 
 }
@@ -502,7 +533,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
 
         MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
         [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
-        [backgroundView setBackgroundColor:[UIColor edaGreenLight]];
+        //[backgroundView setBackgroundColor:[UIColor edaGreenLight]];
         [backgroundView setBackgroundColor:[UIColor clearColor]];
 
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
@@ -570,7 +601,7 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
             [[collectionView layer] setBorderWidth: 1.0000f];
         } else {
             [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
-            [[collectionView layer] setBorderWidth: 0.5000f];
+            [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
         }
 
         [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
@@ -2095,6 +2126,12 @@ NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdent
             }];
         }
     }
+}
+
+- (void)insertDocumentObjectDataField:(RptqQueryField *)field {
+    [self insertDocumentObjectWithDefination:
+     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+       MTDocumentObjectDefinationObject : [field objectID]}];
 }
 
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType

@@ -116,11 +116,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelIdentifer"]) {
-        //id reportDesignerViewController = [self objectSelectorDelegate];
-        //[[segue destinationViewController] setDelegate: reportDesignerViewController];
+//        id reportDesignerViewController = [self objectSelectorDelegate];
+        [[segue destinationViewController] setDelegate: self];
     }
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
@@ -320,6 +319,43 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [[[viewController navigationController] navigationBar] setHidden:YES];
+}
+
+#pragma mark
+#pragma mark - UITableViewControllerChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+    
+    switch ([[controller view] tag]) {
+            
+        case MTDocumentObjectTypeLabelDynamic:
+            
+            [[self objectSelectorDelegate] insertDocumentObjectDataField: field];
+            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            
+            break;
+            
+        case MTViewTagFieldOrFormulaSelector: {
+            
+            [self setAggregateFunctionInputType: MTAggregateFunctionInputTypeField];
+            NSManagedObjectID *objectId = [field objectID];
+            [self setAggregateInputField: objectId];
+            NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+            NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
+            [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+            [self setFieldSelectionPopPartOneOfTwo:YES];
+            [[self navigationBar] popNavigationItemAnimated:YES];
+            
+            [[self saveButton] setEnabled:YES];
+            
+            break;
+            
+        }
+        default:
+            break;
+            
+    }
+    
 }
 
 #pragma mark

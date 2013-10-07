@@ -1040,11 +1040,6 @@
                     </tableView>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="1Dt-ba-W6h"/>
-                        <barButtonItem title="Info" id="SkE-9y-TZ7">
-                            <connections>
-                                <segue destination="z1J-T1-s6N" kind="modal" modalTransitionStyle="flipHorizontal" id="Uep-Sz-I0p"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem title="SQL" id="zCG-bV-hF6">
                             <connections>
                                 <segue destination="xr3-YA-WVo" kind="modal" identifier="MNSSegueShowSql" id="mgh-mK-T4Y"/>
@@ -4168,7 +4163,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="fLx-Vp-4LB" detailTextLabel="eLo-kE-IRW" style="IBUITableViewCellStyleValue1" id="Cgk-OS-Qnm">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="fLx-Vp-4LB" detailTextLabel="eLo-kE-IRW" style="IBUITableViewCellStyleValue1" id="Cgk-OS-Qnm">
                                         <rect key="frame" x="0.0" y="143" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Cgk-OS-Qnm" id="5FV-Xz-Pce">

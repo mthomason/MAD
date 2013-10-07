@@ -27,6 +27,7 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 
 @protocol MTReportDesignerObjectSelectorDelegate <MTViewControllerProtocol>
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+- (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
                                                inputType:(MTAggregateFunctionInputType)inputType
                                              inputObject:(NSManagedObjectID *)inputObject

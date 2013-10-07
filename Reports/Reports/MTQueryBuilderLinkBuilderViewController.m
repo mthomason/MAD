@@ -17,6 +17,7 @@
 @property (nonatomic, retain) RptqQueryTable *secondTableName;
 @property (nonatomic, retain) RptqQueryField *firstFieldName;
 @property (nonatomic, retain) RptqQueryField *secondFieldName;
+@property (nonatomic, retain) IBOutlet UILabel *labelRightField;
 
 @end
 
@@ -44,6 +45,7 @@
     [_tableViewCellFieldTwo release];
     [_tableViewCellTableFieldOne release];
     [_tableViewCellTableFieldTwo release];
+    [_labelRightField release];
     [super dealloc];
 }
 
@@ -52,6 +54,7 @@
     if (self) {
         [self setCurrentlyEditingPart: MNSLinkNone];
         [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:NO];
+        [[self labelRightField] setEnabled:NO];
     }
     return self;
 }
@@ -61,6 +64,7 @@
     if (self) {
         [self setCurrentlyEditingPart: MNSLinkNone];
         [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:NO];
+        [[self labelRightField] setEnabled:NO];
     }
     return self;
 }
@@ -244,6 +248,8 @@
             [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
             [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:YES];
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setEnabled:YES];
+            [[self labelRightField] setEnabled:YES];
+            [[self labelRightField] setTextColor:[UIColor darkTextColor]];
             
             //[[[self tableViewCellTableFieldTwo] textLabel] setTextColor:[UIColor darkTextColor]];
             NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];

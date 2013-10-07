@@ -43,10 +43,9 @@
         if ((i % 8) == 0) {
             CGRect locationRect = CGRectMake(xPoint - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
             [[NSString stringWithFormat:@"%d", i / 8] drawInRect: locationRect
-                                                    withFont: [UIFont systemFontOfSize: 6.0000f]
-                                               lineBreakMode: NSLineBreakByClipping
-                                                   alignment: NSTextAlignmentCenter];
-            
+                                                        withFont: [UIFont systemFontOfSize: 6.0000f]
+                                                   lineBreakMode: NSLineBreakByClipping
+                                                       alignment: NSTextAlignmentCenter];
             length = 1.0000f;
             CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
         } else if (i % 2) {

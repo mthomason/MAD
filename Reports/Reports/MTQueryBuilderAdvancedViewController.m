@@ -288,7 +288,10 @@
     swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
 
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
-        desiredFrame = [self desiredFrameForTableId:[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId]];
+        
+        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] fromObjectContext:managedObjectContext];
+        desiredFrame = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
         animationType = 1;
         [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
 
@@ -408,13 +411,6 @@
     }
 }
 
-
-- (CGRect)desiredFrameForTableId:(NSManagedObjectID *)objectId {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectId fromObjectContext:managedObjectContext];
-    return CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
-}
-
 - (void)addSchemaViewController:(UIViewController *)viewController {
     [viewController retain];
     CGRect subviewRect = CGRectZero;
@@ -427,7 +423,7 @@
     if ([[table designerInitalLayout] boolValue]) {
         CGFloat originX = 50.0000f * ((([self tableDisplayCounter] + 1) - 9) % 9) + CGPointZero.x;
         CGFloat originY = originX;
-        subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);
+        subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
         [table setDesignerSizeWidth:@(subviewRect.size.width)];
         [table setDesignerOriginY:@(subviewRect.origin.x)];
@@ -437,10 +433,13 @@
     } else {
         subviewRect = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
     }
-    if (CGRectContainsRect([[self scrollView] frame], subviewRect) == NO) {
-        CGFloat originX = 50.0000f + CGPointZero.x;;
-        CGFloat originY = originX;
-        subviewRect = CGRectMake(originX, originY, 200.0000f, 220.0000f);
+    
+    if (CGRectContainsRect([[self view] frame], subviewRect) == NO) {
+        //CGFloat originX = 50.0000f + CGPointZero.x;
+        //CGFloat originY = originX;
+        
+        CGPoint p = [self randomPointInRect:CGRectInset([[self view] frame], 50.0000f, 50.0000f)];
+        subviewRect = CGRectMake(p.x, p.y, 180.0000f, 200.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
         [table setDesignerSizeWidth:@(subviewRect.size.width)];
         [table setDesignerOriginY:@(subviewRect.origin.x)];
@@ -466,6 +465,19 @@
     
     self.tableDisplayCounter++;
     [viewController release];
+}
+- (CGPoint)randomPointInRect:(CGRect)rect {
+    CGFloat maxWidth = rect.origin.x + rect.size.width;
+    CGFloat maxHeight = rect.origin.y + rect.size.height;
+    if (maxWidth == 0) {
+        maxWidth = 1.0000f;
+    }
+    if (maxHeight == 0) {
+        maxHeight = 1.0000f;
+    }
+    CGFloat x = (random() % (int)maxWidth) + (int)rect.origin.x;
+    CGFloat y = (random() % (int)maxHeight) + (int)rect.origin.y;
+    return CGPointMake(x, y);
 }
 
 - (void)removeSchemaViewControllerForTable:(RptqQueryTable *)table {

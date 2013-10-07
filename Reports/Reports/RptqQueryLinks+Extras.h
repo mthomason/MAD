@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeNames [NSArray arrayWithObjects: NSLocalizedString(@"Inner-Join", @"Inner-Join"), NSLocalizedString(@"Equi-Join", @"Equi-Join"), NSLocalizedString(@"Natural Join", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"Left Outer Join", @"Left Outer Join"), NSLocalizedString(@"Right Outer Join", @"Right Outer Join"), NSLocalizedString(@"Full Outer Join", @"Full Outer Join"), nil]
 
-#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
+#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(/*@"⟕"*/@"", @"Inner-Join"), NSLocalizedString(/*@"θ-join"*/@"", @"Equi-Join"), NSLocalizedString(/*@"⋈"*/@"", @"Natural Join"), NSLocalizedString(/*@"Cross Join"*/@"", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(/*@"⟖"*/, @"Right Outer Join"), NSLocalizedString(/*@"⟗"*/, @"Full Outer Join"), nil]
 
 // FIXME: Left outer join and some other symbols are missing.
 

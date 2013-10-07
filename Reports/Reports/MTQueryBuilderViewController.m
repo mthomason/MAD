@@ -148,7 +148,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
     MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
     [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
@@ -484,7 +483,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    BOOL shouldPerformSegueWithIdentifier = YES;
+    BOOL shouldPerformSegueWithIdentifier = [super shouldPerformSegueWithIdentifier:identifier sender:sender];
     if ([identifier isEqualToString:MTSegueCloseDesigner]) {
         NSError *error = nil;
         [[[self activeDocument] managedObjectContext] save:&error];

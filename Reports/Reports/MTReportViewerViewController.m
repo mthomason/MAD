@@ -140,7 +140,7 @@
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
     
-    [[self view] setBackgroundColor:[UIColor scrollViewTexturedBackgroundColor]];
+    [[self view] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     [self setDataSource:self];
     [self setDelegate:self];
     
@@ -406,15 +406,16 @@
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return self;
+    return [UIDevice isPad] ? [self navigationController] : self;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     
-    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
-    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    
+        NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
 }
 
 #pragma mark - Actions
@@ -547,7 +548,7 @@
             [[self barButtonItemDone] setEnabled:YES];
             [[self barButtonItemPrint] setEnabled:YES];
             [[self barButtonItemSendToPdf] setEnabled:YES];
-            UIDocumentInteractionController *c = [UIDocumentInteractionController interactionControllerWithURL:temporaryFile];\
+            UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
             [c setDelegate:self];
             [c presentPreviewAnimated:YES];
         });
