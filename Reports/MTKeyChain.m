@@ -33,8 +33,10 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 @implementation MTKeyChain
 
 static MTKeyChain *sharedSingleton = nil;
-const NSUInteger tagAlertViewSave = 777;
-const NSUInteger tagAlertViewAquire = 666;
+
+const NSUInteger tagAlertViewRemovePassword = 888;
+const NSUInteger tagAlertViewSave           = 777;
+const NSUInteger tagAlertViewAquire         = 666;
 
 + (void)initialize {
     static dispatch_once_t onceToken;
@@ -53,6 +55,7 @@ const NSUInteger tagAlertViewAquire = 666;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
+    //Leaks because of singleton... fine.
     return [[self sharedObject] retain];
 }
 
@@ -111,6 +114,21 @@ const NSUInteger tagAlertViewAquire = 666;
         completion(YES, nil, [[username retain] autorelease], [[password retain] autorelease]);
     }
     
+}
+
+- (void)deleteKey:(NSString *)key {
+    [self setCredentialsKey:key];
+
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
+                                                        message:@"Should we remove the password saved in your keychain?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Keep"
+                                              otherButtonTitles:@"Remove", nil];
+    [alertView setAlertViewStyle:UIAlertViewStyleDefault];
+    [alertView setTag:tagAlertViewRemovePassword];
+    [alertView show];
+    [alertView release];
+
 }
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
@@ -278,13 +296,19 @@ const NSUInteger tagAlertViewAquire = 666;
     return YES;
 }
 
++ (NSString *)keyForServer:(NSString *)server port:(NSInteger)port andDatabase:(NSString *)database {
+    return [[[NSString stringWithFormat:@"[%@:%d]%@", server,  port, database] retain] autorelease];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     BOOL success = NO;
+    BOOL canceled = [alertView cancelButtonIndex] == buttonIndex;
     switch ([alertView tag]) {
+            
         case tagAlertViewAquire: {
             NSString *username = nil;
             NSString *password = nil;
-            if ([alertView cancelButtonIndex] != buttonIndex) {
+            if (canceled == NO) {
                 switch ([alertView alertViewStyle]) {
                     case UIAlertViewStyleSecureTextInput:
                         success = YES;
@@ -310,14 +334,50 @@ const NSUInteger tagAlertViewAquire = 666;
             [self credentialsCompletion](success, nil, username, password, NO);
             break;
         }
+            
         case tagAlertViewSave: {
-            BOOL canceled = [alertView cancelButtonIndex] == buttonIndex;
-            if (!canceled) {
+            if (canceled == NO) {
                 [self saveUsername:[self saveUsername] andPassword:[self savePassword] forKey:[self saveKey]];
             }
             [self saveCompletion](!canceled, nil, [[[self saveUsername] retain] autorelease], [[[self savePassword] retain] autorelease]);
             break;
         }
+            
+        case tagAlertViewRemovePassword: {
+            
+            if (canceled == NO) {
+            
+                NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: [self credentialsKey]];
+                NSDictionary *queryUsername = @{(id)kSecClass : (id)kSecClassGenericPassword,
+                                                (id)kSecAttrService : keyUsername,
+                                                (id)kSecAttrAccount : MTKeyChainUsernameAccountDesc,
+                                                (id)kSecReturnData : @YES};
+                NSData *queryUsernameData = NULL;
+                OSStatus deleteStatus = SecItemCopyMatching((CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+                if (deleteStatus == errSecSuccess) {
+                    
+                    deleteStatus = SecItemDelete((CFDictionaryRef)queryUsername);
+                    
+                    
+                }
+                
+                NSData *queryPasswordData = NULL;
+                NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: [self credentialsKey]];
+                NSDictionary *queryPassword = @{(id)kSecClass : (id)kSecClassGenericPassword,
+                                                (id)kSecAttrService : keyPassword,
+                                                (id)kSecAttrAccount : MTKeyChainPasswordAccountDesc,
+                                                (id)kSecReturnData : @YES};
+                deleteStatus = SecItemCopyMatching((CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
+                
+                if (deleteStatus == errSecSuccess) {
+                    deleteStatus = SecItemDelete((CFDictionaryRef)queryPassword);
+                }
+            }
+//            return deleteStatus;
+            
+            break;
+        }
+            
         default:
             break;
     }
