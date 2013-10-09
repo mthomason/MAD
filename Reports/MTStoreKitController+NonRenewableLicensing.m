@@ -35,6 +35,23 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 
 }
 
++ (BOOL)licensedUser {
+    BOOL result = NO;
+    if (YES) {
+        
+        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
+        BOOL licensedUser = experationDate != nil &&
+            [verificationController modernReceiptIsValid] &&
+            [verificationController modernReceiptProcessLicensed] &&
+            [experationDate compare:[NSDate date]] == NSOrderedDescending;
+        result = licensedUser;
+        
+    }
+    return result;
+
+}
+
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
     
     //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
@@ -173,6 +190,7 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
             }
             [dateFormat release];
         }
+        [inAppPurchases release];
     }
     return experationDate;
 }

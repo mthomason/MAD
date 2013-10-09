@@ -56,13 +56,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>1.0.44</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0</string>
+	<string>1.0.44</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MADRev</key>
+	<string>665</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UIPrerenderedIcon</key>
@@ -125,9 +129,5 @@
 			<string>MADIcon64x64</string>
 		</dict>
 	</array>
-	<key>MADRev</key>
-	<string>660</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 </dict>
 </plist>

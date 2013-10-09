@@ -34,7 +34,7 @@
 - (void)drawRect:(CGRect)rect {
 
     if ([self numberOfRowsInBackground] >= 2) {
-        [[UIColor scrollViewTexturedBackgroundColor] setStroke];
+        [[UIColor groupTableViewBackgroundColor] setStroke];
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         

@@ -58,7 +58,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([UIDevice isPad] == NO) {
         [self updateFileList:self];
     }
-    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    } else {
+        [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    }
 }
 
 - (void)dealloc {
@@ -226,6 +230,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     [self setNeedsEmailMenu:YES];
 
+    NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
+    [toolbarButtons removeObject:[self barButtonItemAction]];
+    [self setToolbarItems:toolbarButtons animated:NO];
+    [toolbarButtons release];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -252,6 +261,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 [menuItem2 release];
                 [menuItems release];
             });
+
+            if ([[self toolbarItems] containsObject:[self barButtonItemAction]] == NO) {
+                NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
+                [toolbarButtons insertObject:[self barButtonItemAction] atIndex:1];
+                [self setToolbarItems:toolbarButtons animated:animated];
+                [toolbarButtons release];
+            }
+            
         } else {
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
@@ -423,6 +440,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [[self barButtonItemAddNewDocument] setEnabled:NO];
         }
     } else if ([identifier isEqualToString:MTSegueShowOpenDocument]) {
+        shouldPerformSegueWithIdentifier = ![self isEditing];
+    } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
         shouldPerformSegueWithIdentifier = ![self isEditing];
     }
     return shouldPerformSegueWithIdentifier;

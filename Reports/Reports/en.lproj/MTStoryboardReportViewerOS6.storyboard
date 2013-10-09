@@ -51,8 +51,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="center" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ju9-2J-UQ5">
-                                            <rect key="frame" x="13" y="18" width="64" height="64"/>
+                                            <rect key="frame" x="35" y="18" width="20" height="64"/>
                                             <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="TcL-9V-ynI"/>
                                                 <constraint firstAttribute="height" constant="64" type="user" id="rHh-NQ-Dib"/>
                                             </constraints>
                                         </imageView>
@@ -179,7 +180,6 @@
                                                     <rect key="frame" x="20" y="305" width="96" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="96" id="DKJ-bD-qgC"/>
-                                                        <constraint firstAttribute="height" constant="21" id="bg5-WW-wXn"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -194,16 +194,13 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Expires:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ha1-5w-Qxu">
-                                                    <rect key="frame" x="20" y="340" width="96" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="JZE-sa-8Fn"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="20" y="339" width="96" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="-" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S0R-XX-EvI">
-                                                    <rect key="frame" x="124" y="340" width="176" height="21"/>
+                                                    <rect key="frame" x="124" y="339" width="176" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -294,13 +291,11 @@
                                             <constraint firstItem="3MO-Af-5U5" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="1yr-Id-eDm"/>
                                             <constraint firstItem="DYK-yQ-DME" firstAttribute="top" secondItem="iqX-Ue-kQL" secondAttribute="top" constant="20" type="default" id="Ahu-g4-yXU"/>
                                             <constraint firstAttribute="bottom" secondItem="ha1-5w-Qxu" secondAttribute="bottom" constant="40" id="Azy-aO-6D9"/>
-                                            <constraint firstItem="kDy-62-pr8" firstAttribute="top" secondItem="btS-mw-9Jt" secondAttribute="top" type="default" id="Cfi-0n-hOr"/>
                                             <constraint firstItem="Yw0-Xv-vqo" firstAttribute="centerX" secondItem="3iJ-67-4Sz" secondAttribute="centerX" type="default" id="Hhr-1o-i43"/>
                                             <constraint firstItem="3MO-Af-5U5" firstAttribute="top" secondItem="3iJ-67-4Sz" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="PKq-Nv-Eyp"/>
                                             <constraint firstItem="btS-mw-9Jt" firstAttribute="baseline" secondItem="kDy-62-pr8" secondAttribute="baseline" type="default" id="Rqm-QE-2PB"/>
                                             <constraint firstItem="DYK-yQ-DME" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="RvE-OM-5v1"/>
                                             <constraint firstItem="ha1-5w-Qxu" firstAttribute="baseline" secondItem="S0R-XX-EvI" secondAttribute="baseline" type="default" id="T5G-pO-w4n"/>
-                                            <constraint firstItem="ha1-5w-Qxu" firstAttribute="top" secondItem="S0R-XX-EvI" secondAttribute="top" type="default" id="WiS-SU-PlR"/>
                                             <constraint firstItem="ha1-5w-Qxu" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="XhU-Js-TFr"/>
                                             <constraint firstItem="3iJ-67-4Sz" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="ZlT-U1-Gkp"/>
                                             <constraint firstItem="kDy-62-pr8" firstAttribute="leading" secondItem="iqX-Ue-kQL" secondAttribute="leading" constant="20" type="default" id="atP-0M-cBH"/>

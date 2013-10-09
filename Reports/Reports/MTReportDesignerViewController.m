@@ -14,6 +14,11 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeSection = 3,
 };
 
+NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
+NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
+
 const CGFloat MTReportDesignerRulerHeight           = 16.0000f;
 const CGFloat MTReportDesignerSectionLabelHeight    = 20.0000f;
 CGFloat MTReportDesignerBorderPadding               =  3.0000f;
@@ -78,7 +83,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
-@property (strong, nonatomic) UIPopoverController *settingsPopoverController;   //Not implemented
 
 @property (nonatomic, retain) MAReportDocument *activeDocument;
 
@@ -130,7 +134,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_sectionControlViews release];
     [_sectionBackgroundViews release];
     [_sectionViews release];
-    [_settingsPopoverController release];
     [_designerScrollView release];
     [_informationButton release];
     [_barButtonItemInfo release];
@@ -146,18 +149,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_layoutConstraintContainerToDesignerCenterY release];
     [_layoutConstraintContainerToDesignerCenterX release];
     [_toolbarBottomHeightConstraint release];
+    [_collectionViewReuseIdentifiers release];
+    [_widthConstraints release];
     [super dealloc];
 }
-
-NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
-NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
-
     if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
         
         MTDocumentObjectNewStaticLabelViewController *staticLabelViewController = [action sourceViewController];
@@ -227,7 +226,18 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
 
     } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
-        [self dismissViewControllerAnimated:YES completion:^{ }];
+        MTReportDesignerViewController *rd = [action destinationViewController];
+        MTReportViewerController *rv = [action sourceViewController];
+        NSLog(@"%lu", (unsigned long)[rd retainCount]);
+        NSLog(@"%lu", (unsigned long)[rv retainCount]);
+        //[[self navigationController] dismissViewControllerAnimated:YES completion:^{
+            
+        //}];
+//        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"%lu", (unsigned long)[rd retainCount]);
+            NSLog(@"%lu", (unsigned long)[rv retainCount]);
+            
+//        }];
     }
 
 }
@@ -841,7 +851,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             viewControllerReportViewer = [segue destinationViewController];
         }
         [viewControllerReportViewer setViewControllerDelegate:self];
-        [viewControllerReportViewer setDocumentReport:[self activeDocument]];
+        //[viewControllerReportViewer setDocumentReport:[self activeDocument]];
         
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
@@ -1061,7 +1071,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 - (void)heightChanged:(CGFloat)newHeight {
     CGSize newSize = CGSizeMake(320.0000f, newHeight);
     [[self popoverControllerInformation] setPopoverContentSize:newSize animated:YES];
-    [[[self popoverControllerInformation] contentViewController] setContentSizeForViewInPopover: newSize];
+    [[[self popoverControllerInformation] contentViewController] setPreferredContentSize:newSize];
 
 }
 
@@ -1572,7 +1582,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             [[self view] layoutIfNeeded];
             
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-                [self setWantsFullScreenLayout:YES];
+                //[self setWantsFullScreenLayout:YES];
                 
                 [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
                 [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
@@ -1736,7 +1746,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    NSManagedObjectID *objectId = [cell objectIdTag];
+    //NSManagedObjectID *objectId = [cell objectIdTag];
 }
 
 #pragma mark -

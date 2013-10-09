@@ -203,7 +203,17 @@ static MTStoreKitController *sharedSingleton = nil;
                 
                 MTVerificationController *verificationController = [MTVerificationController sharedInstance];
                 [verificationController iOS7VerifyReceipt];
+                
+                MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.")
+                                                                    message: NSLocalizedString(@"Software activated.", @"Software activated.")
+                                                          cancelButtonTitle:nil otherButtonTitle:@[NSLocalizedString(@"Continue", @"Continue")] onDismiss:nil onCancel:nil];
+                [alertView show];
+                [alertView autorelease];
+                
+                
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                
+                [self purchaseProductWithIdentifierCompletion](YES, nil);
                 
 				break;
             }

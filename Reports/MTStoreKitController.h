@@ -61,7 +61,7 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
 @property (nonatomic, retain) NSDateFormatter *receiptDateFormatter;
 
-@property (nonatomic, assign) BOOL verifiedUser;
+//@property (nonatomic, assign) BOOL verifiedUser;
 @property (nonatomic, retain) NSDate *verifiedExperationDate;
 
 @end

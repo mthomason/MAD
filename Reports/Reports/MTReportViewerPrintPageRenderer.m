@@ -57,6 +57,24 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @implementation MTReportViewerPrintPageRenderer
 
+- (void)dealloc {
+    
+    [_document release];
+    [_cachedLayoutByPage release];
+    [_cachedSortedSortDescriptorsGroup release];
+    [_cachedDataByPage release];
+    [_cachedDataByGroup release];
+    [_cachedDataByReport release];
+    [_temporaryLayoutByPage release];
+    [_temporaryLayoutForPage release];
+    [_temporaryDataByPage release];
+    [_temporaryDataForPage release];
+    [_temporaryDataByGroup release];
+    [_temporaryDataByReport release];
+    [_sortedQueryGroups release];
+    [super dealloc];
+}
+/*
 - (oneway void)release {
     [_sortedQueryGroups release];
     
@@ -99,7 +117,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [_cachedSortedSortDescriptorsGroup retain];
     }
     return self;
-}
+}*/
 
 - (id)copyWithZone:(NSZone *)zone {
     MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:[self document]];
@@ -249,6 +267,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     RptqDocument *document = [self document];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
+    
     if (query) {
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
@@ -256,413 +275,419 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         if (index < [[self cachedLayoutByPage] count]) {
             
-            NSArray *pageArray = [[[self cachedLayoutByPage] objectAtIndex:index] retain];
-            NSArray *pageSectionsToPrint = [[NSArray alloc] initWithArray:pageArray];
-            [pageArray release];
+            NSArray *pageSectionsToPrint = [[self cachedLayoutByPage] objectAtIndex:index];
             
             CGRect sectionRect = CGRectZero;
             
             for (NSDictionary *pageSection in pageSectionsToPrint) {
                 
-                NSString *pageSectionId = [[NSString alloc] initWithString:[pageSection objectForKey: MTReportSectionType]];
-                id reportSectionValues = nil;
-                
-                NSNumber *groupLevel = nil;
-                
-                RptqDocumentSection *documentSection = nil;
-                
-                if ([MTPageDetail isEqualToString:pageSectionId]) {
+                @autoreleasepool {
                     
-                    documentSection = [[self document] hasDetailSection];
+                    NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
+                    id reportSectionValues = nil;
                     
-                    [[UIColor whiteColor] setFill];
+                    NSNumber *groupLevel = nil;
                     
-                    detailRowsCounter++;
+                    RptqDocumentSection *documentSection = nil;
                     
-                } else if ([MTPageHeader isEqualToString:pageSectionId]) {
-                    
-                    documentSection = [[self document] hasPageHeaderSection];
-                    
-                    if ([self debugMode]) {
-                        [[UIColor yellowColor] set];
-                    } else {
+                    if ([MTPageDetail isEqualToString:pageSectionId]) {
+                        
+                        documentSection = [[self document] hasDetailSection];
+                        
                         [[UIColor whiteColor] setFill];
-                    }
-                    
-                } else if ([MTPageFooter isEqualToString:pageSectionId]) {
-                    
-                    documentSection = [[self document] hasPageFooterSection];
-                    CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
-                    originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
-                    
-                    if ([self debugMode]) {
-                        [[UIColor yellowColor] set];
-                    } else {
-                        [[UIColor whiteColor] setFill];
-                    }
-                    
-                    pageNumber++;
-                    
-                } else if ([MTReportHeader isEqualToString:pageSectionId]) {
-                    
-                    documentSection = [[self document] hasReportHeaderSection];
-                    
-                    [[UIColor whiteColor] setFill];
-                    
-                } else if ([MTReportFooter isEqualToString:pageSectionId]) {
-                    
-                    documentSection = [[self document] hasReportFooterSection];
-                    CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
-                    RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
-                    CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
-                    originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
-                    
-                    [[UIColor whiteColor] setFill];
-                    
-                } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
-                    
-                    groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                    documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
-                    
-                    [[UIColor whiteColor] setFill];
-                    
-                } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
-                    
-                    groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                    
-                    query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                    documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-                    
-                    [[UIColor whiteColor] setFill];
-                    
-                }
-                CGFloat sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
-                sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                
-                [[UIBezierPath bezierPathWithRect:sectionRect] fill];
-                
-                id obj = [pageSection objectForKey:MTReportSectionValues];
-                
-                if ([obj isKindOfClass:[NSDictionary class]]) {
-                    
-                    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                    
-                } else if ([obj isKindOfClass:[NSArray class]]) {
-                    
-                    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                    
-                }
-                
-                NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
-                
-                BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
-                NSInteger nextDetailRowToPrint = detailRowToPrint;
-                NSInteger nextPageIndex = index;
-                if (useNextRowData) {
-                    NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
-                    NSInteger numberOfItemsOnPage = [pageData count];
-                    if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
-                        nextDetailRowToPrint++;
-                    } else {
-                        nextDetailRowToPrint = 0;
-                        nextPageIndex++;
-                    }
-                }
-                NSDictionary *nextRowData = [self rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
-                
-                if (rowData != nil) {
-                    
-                    [groupLevelKeys removeAllObjects];
-                    [nextGroupLevelKeys removeAllObjects];
-                    for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
-                        id sortKey = [rowData objectForKey:[sortDescriptor key]];
-                        if (sortKey == nil) {
-                            sortKey = @"(null)";
+                        
+                        detailRowsCounter++;
+                        
+                    } else if ([MTPageHeader isEqualToString:pageSectionId]) {
+                        
+                        documentSection = [[self document] hasPageHeaderSection];
+                        
+                        if ([self debugMode]) {
+                            [[UIColor yellowColor] set];
+                        } else {
+                            [[UIColor whiteColor] setFill];
                         }
-                        [sortKey retain];
-                        [groupLevelKeys addObject:sortKey];
-                        [sortKey release];
-                        if (nextRowData != nil) {
-                            id sortKeyNext = [nextRowData objectForKey:[sortDescriptor key]];
-                            if (sortKeyNext == nil) {
-                                sortKeyNext = @"(null)";
-                            }
-                            if (sortKeyNext) {
-                                [sortKeyNext retain];
-                                [nextGroupLevelKeys addObject:sortKeyNext];
-                                [sortKeyNext release];
-                            }
+                        
+                    } else if ([MTPageFooter isEqualToString:pageSectionId]) {
+                        
+                        documentSection = [[self document] hasPageFooterSection];
+                        CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
+                        originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
+                        
+                        if ([self debugMode]) {
+                            [[UIColor yellowColor] set];
+                        } else {
+                            [[UIColor whiteColor] setFill];
+                        }
+                        
+                        pageNumber++;
+                        
+                    } else if ([MTReportHeader isEqualToString:pageSectionId]) {
+                        
+                        documentSection = [[self document] hasReportHeaderSection];
+                        
+                        [[UIColor whiteColor] setFill];
+                        
+                    } else if ([MTReportFooter isEqualToString:pageSectionId]) {
+                        
+                        documentSection = [[self document] hasReportFooterSection];
+                        CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
+                        RptqDocumentSection *pageFooterSection = [[self document] hasPageFooterSection];
+                        CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
+                        originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
+                        
+                        [[UIColor whiteColor] setFill];
+                        
+                    } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
+                        
+                        groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                        documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
+                        
+                        [[UIColor whiteColor] setFill];
+                        
+                    } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
+                        
+                        groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                        
+                        query = [[[[[self document] hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+                        documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
+                        
+                        [[UIColor whiteColor] setFill];
+                        
+                    }
+                    CGFloat sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
+                    sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                    
+                    [[UIBezierPath bezierPathWithRect:sectionRect] fill];
+                    
+                    id obj = [pageSection objectForKey:MTReportSectionValues];
+                    
+                    if ([obj isKindOfClass:[NSDictionary class]]) {
+                        
+                        reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                        
+                    } else if ([obj isKindOfClass:[NSArray class]]) {
+                        
+                        reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                        
+                    }
+                    
+                    NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
+                    NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
+                    
+                    BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                    NSInteger nextDetailRowToPrint = detailRowToPrint;
+                    NSInteger nextPageIndex = index;
+                    if (useNextRowData) {
+                        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                        NSInteger numberOfItemsOnPage = [pageData count];
+                        if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
+                            nextDetailRowToPrint++;
+                        } else {
+                            nextDetailRowToPrint = 0;
+                            nextPageIndex++;
                         }
                     }
+                    NSDictionary *nextRowData = [self rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
                     
-                    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
-                        for (RptqDocumentObject *item in [row hasObjects]) {
-                            
-                            NSString *displayString = nil;
-                            id drawingObject = nil;
-                            
-                            switch ([item getType]) {
+                    if (rowData != nil) {
+                        
+                        [groupLevelKeys removeAllObjects];
+                        [nextGroupLevelKeys removeAllObjects];
+                        for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
+                            @autoreleasepool {
+                                
+                                
+                                id sortKey = [rowData objectForKey:[sortDescriptor key]];
+                                if (sortKey == nil) {
+                                    sortKey = @"(null)";
+                                }
+                                //[sortKey retain];
+                                [groupLevelKeys addObject:sortKey];
+                                //[sortKey release];
+                                if (nextRowData != nil) {
+                                    id sortKeyNext = [nextRowData objectForKey:[sortDescriptor key]];
+                                    if (sortKeyNext == nil) {
+                                        sortKeyNext = @"(null)";
+                                    }
+                                    if (sortKeyNext) {
+                                        //[sortKeyNext retain];
+                                        [nextGroupLevelKeys addObject:sortKeyNext];
+                                        //[sortKeyNext release];
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                        for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+                            for (RptqDocumentObject *item in [row hasObjects]) {
+                                
+                                @autoreleasepool {
                                     
-                                case MTDocumentObjectTypeAggregate: {
-                                    RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
                                     
-                                    RptqQueryField *queryField = [aggregateField aggregateField];
+                                    NSString *displayString = nil;
+                                    id drawingObject = nil;
                                     
-                                    NSArray *dataForGroup = nil;
-                                    
-                                    MTAggregateGroupByType aggregateGroupType = [[aggregateField groupType] integerValue];
-                                    
-                                    switch (aggregateGroupType) {
-                                            // FIXME: Check to see which ones of these are correct.
-                                        case MTAggregateGroupByTypePage: {
-                                            //dataForGroup = [[[self cachedDataByPage] objectAtIndex:pageNumber] retain];
+                                    switch ([item getType]) {
                                             
-                                            NSArray *pageIndices = [[self cachedDataByPage] objectAtIndex:index];
-                                            dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
-                                            for (NSNumber *dataIndex in pageIndices) {
-                                                NSInteger i = [dataIndex integerValue];
-                                                id objectToAdd = [[self cachedDataByReport] objectAtIndex: i];
-                                                [(NSMutableArray *)dataForGroup addObject:objectToAdd];
+                                        case MTDocumentObjectTypeAggregate: {
+                                            RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
+                                            
+                                            RptqQueryField *queryField = [aggregateField aggregateField];
+                                            
+                                            NSArray *dataForGroup = nil;
+                                            
+                                            MTAggregateGroupByType aggregateGroupType = [[aggregateField groupType] integerValue];
+                                            
+                                            switch (aggregateGroupType) {
+                                                    // FIXME: Check to see which ones of these are correct.
+                                                case MTAggregateGroupByTypePage: {
+                                                    //dataForGroup = [[[self cachedDataByPage] objectAtIndex:pageNumber] retain];
+                                                    
+                                                    NSArray *pageIndices = [[self cachedDataByPage] objectAtIndex:index];
+                                                    dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
+                                                    for (NSNumber *dataIndex in pageIndices) {
+                                                        NSInteger i = [dataIndex integerValue];
+                                                        id objectToAdd = [[self cachedDataByReport] objectAtIndex: i];
+                                                        [(NSMutableArray *)dataForGroup addObject:objectToAdd];
+                                                    }
+                                                    [dataForGroup autorelease];
+                                                    break;
+                                                }
+                                                case MTAggregateGroupByTypeSection: {
+                                                    BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                                                    if (useNextRowData) {
+                                                        dataForGroup = [self dataForCachedGroupData:[self cachedDataByGroup] andKeys:nextGroupLevelKeys];
+                                                    } else {
+                                                        dataForGroup = [self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys];
+                                                    }
+                                                    break;
+                                                }
+                                                case MTAggregateGroupByTypeReport:
+                                                    dataForGroup = [self cachedDataByReport];
+                                                    break;
+                                                    
+                                                default:
+                                                    dataForGroup = [self cachedDataByReport];
+                                                    break;
                                             }
                                             
+                                            NSString *fieldKey = [queryField toString];
+                                            
+                                            MTDataType aggregateType = [[[queryField databaseSchemaField] dataType] integerValue];
+                                            id aggregateResult = nil;
+                                            switch ([[aggregateField function] integerValue]) {
+                                                    
+                                                case MTAggregateFunctionTypeCount:
+                                                    aggregateResult = @([dataForGroup count]);
+                                                    break;
+                                                    
+                                                case MTAggregateFunctionTypeFirst:
+                                                    aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
+                                                    break;
+                                                    
+                                                case MTAggregateFunctionTypeLast:
+                                                    aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
+                                                    break;
+                                                    
+                                                case MTAggregateFunctionTypeMax: {
+                                                    
+                                                    id result = nil;
+                                                    for (id object in dataForGroup) {
+                                                        id n = [object objectForKey: fieldKey];
+                                                        if ([n compare:result] == NSOrderedDescending) {result = n;}
+                                                    }
+                                                    aggregateResult = result;
+                                                    
+                                                    break;
+                                                }
+                                                    
+                                                case MTAggregateFunctionTypeMean: {
+                                                    
+                                                    
+                                                    id sum = @(0);
+                                                    for (id object in dataForGroup) {
+                                                        id n = [object objectForKey: fieldKey];
+                                                        sum = [self sumObject:sum andObject:n forType:aggregateType];
+                                                        
+                                                    }
+                                                    NSUInteger dataForGroupCount = [dataForGroup count];
+                                                    
+                                                    // FIXME: Should this sum float value be typed with a devideObject as the sumObject above?
+                                                    
+                                                    aggregateResult = @(dataForGroupCount > 0 ? ([sum floatValue] / dataForGroupCount) : dataForGroupCount);
+                                                    
+                                                    
+                                                    break;
+                                                }
+                                                    
+                                                case MTAggregateFunctionTypeMin: {
+                                                    
+                                                    id result = nil;
+                                                    for (id object in dataForGroup) {
+                                                        id n = [object objectForKey: fieldKey];
+                                                        if ([n compare:result] == NSOrderedAscending) {result = n;}
+                                                    }
+                                                    aggregateResult = result;
+                                                    
+                                                    break;
+                                                }
+                                                case MTAggregateFunctionTypeSum: {
+                                                    
+                                                    id sum = @(0);
+                                                    for (id object in dataForGroup) {
+                                                        id n = [object objectForKey: fieldKey];
+                                                        sum = [self sumObject:sum andObject:n forType:aggregateType];
+                                                        
+                                                    }
+                                                    aggregateResult = sum;
+                                                    
+                                                    
+                                                    break;
+                                                }
+                                                default:
+                                                    
+                                                    break;
+                                            }
+                                            
+                                            //[dataForGroup release];
+                                            
+                                            displayString = [item formattedString:aggregateType
+                                                                         forValue:aggregateResult];
                                             break;
                                         }
-                                        case MTAggregateGroupByTypeSection: {
+                                            
+                                        case MTDocumentObjectTypeImage: {
+                                            drawingObject = [[[item isImage] image] retain];
+                                            displayString = @"";
+                                            break;
+                                        }
+                                            
+                                        case MTDocumentObjectTypeLabelDynamic: {
+                                            
+                                            NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
+                                            NSInteger pageIndex = index;
+                                            
                                             BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
-                                                dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:nextGroupLevelKeys] retain];
-                                            } else {
-                                                dataForGroup = [[self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys] retain];
+                                                NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                                                NSInteger numberOfItemsOnPage = [pageData count];
+                                                if (rowToPrint < numberOfItemsOnPage - 1) {
+                                                    rowToPrint++;
+                                                } else {
+                                                    rowToPrint = 0;
+                                                    pageIndex++;
+                                                }
                                             }
+                                            
+                                            //NSDictionary *rowData = [self rowDataForRow: rowToPrint onPage: pageIndex];
+                                            
+                                            NSDictionary *rd = useNextRowData ? nextRowData : rowData;
+                                            RptqQueryField *queryField = [[item isLabelDataField] referencesQueryField];
+                                            NSString *tableFieldKey = [queryField tableFieldKey];
+                                            //NSDictionary *rowData = [self rowDataForRow:rowToPrint onPage:index];
+                                            id value = [rd objectForKey: tableFieldKey];
+                                            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+                                            displayString = [item formattedString:dataType
+                                                                         forValue:value];
                                             break;
                                         }
-                                        case MTAggregateGroupByTypeReport:
-                                            dataForGroup = [[self cachedDataByReport] retain];
-                                            break;
                                             
-                                        default:
-                                            dataForGroup = [[self cachedDataByReport] retain];
+                                        case MTDocumentObjectTypeLabelStatic: {
+                                            displayString = [[item isLabel] text];
                                             break;
+                                        }
+                                            
+                                        default: {
+                                            displayString = @"";
+                                            break;
+                                        }
                                     }
                                     
-                                    NSString *fieldKey = [queryField toString];
+                                    CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;// originX;
+                                    CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;// originY;
+                                    CGRect paddingFrame = [item paddingViewFrame];
+                                    CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, paddingFrame.size.width, paddingFrame.size.height);
                                     
-                                    MTDataType aggregateType = [[[queryField databaseSchemaField] dataType] integerValue];
-                                    id aggregateResult = nil;
-                                    switch ([[aggregateField function] integerValue]) {
-                                            
-                                        case MTAggregateFunctionTypeCount:
-                                            aggregateResult = @([dataForGroup count]);
-                                            break;
-                                            
-                                        case MTAggregateFunctionTypeFirst:
-                                            aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
-                                            break;
-                                            
-                                        case MTAggregateFunctionTypeLast:
-                                            aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
-                                            break;
-                                            
-                                        case MTAggregateFunctionTypeMax: {
-                                            
-                                            id result = nil;
-                                            for (id object in dataForGroup) {
-                                                id n = [object objectForKey: fieldKey];
-                                                if ([n compare:result] == NSOrderedDescending) {result = n;}
-                                            }
-                                            aggregateResult = result;
-                                            
-                                            break;
-                                        }
-                                            
-                                        case MTAggregateFunctionTypeMean: {
+                                    if (drawingObject == nil) {
+                                        
+                                        if ([UIDevice isLagacyOS]) {
                                             
                                             
-                                            id sum = @(0);
-                                            for (id object in dataForGroup) {
-                                                id n = [object objectForKey: fieldKey];
-                                                sum = [self sumObject:sum andObject:n forType:aggregateType];
-                                                
-                                            }
-                                            NSUInteger dataForGroupCount = [dataForGroup count];
+                                            NSDictionary *attributes = [self attributesForDocumentObject:item];
+                                            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:displayString];
                                             
-                                            // FIXME: Should this sum float value be typed with a devideObject as the sumObject above?
+                                            [attributedString setAttributes: attributes range:NSRangeFromString(displayString)];
                                             
-                                            aggregateResult = @(dataForGroupCount > 0 ? ([sum floatValue] / dataForGroupCount) : dataForGroupCount);
+                                            [printableStrings addObject:@{
+                                                                          @"s" : attributedString,
+                                                                          @"r" : NSStringFromCGRect(elementCanvasRect)
+                                                                          }];
                                             
-                                            
-                                            break;
-                                        }
-                                            
-                                        case MTAggregateFunctionTypeMin: {
-                                            
-                                            id result = nil;
-                                            for (id object in dataForGroup) {
-                                                id n = [object objectForKey: fieldKey];
-                                                if ([n compare:result] == NSOrderedAscending) {result = n;}
-                                            }
-                                            aggregateResult = result;
-                                            
-                                            break;
-                                        }
-                                        case MTAggregateFunctionTypeSum: {
-                                            
-                                            id sum = @(0);
-                                            for (id object in dataForGroup) {
-                                                id n = [object objectForKey: fieldKey];
-                                                sum = [self sumObject:sum andObject:n forType:aggregateType];
-                                                
-                                            }
-                                            aggregateResult = sum;
-                                            
-                                            
-                                            break;
-                                        }
-                                        default:
-                                            
-                                            break;
-                                    }
-                                    
-                                    [dataForGroup release];
-                                    
-                                    displayString = [item formattedString:aggregateType
-                                                                 forValue:aggregateResult];
-                                    break;
-                                }
-                                    
-                                case MTDocumentObjectTypeImage: {
-                                    drawingObject = [[[item isImage] image] retain];
-                                    displayString = @"";
-                                    break;
-                                }
-                                    
-                                case MTDocumentObjectTypeLabelDynamic: {
-                                    
-                                    NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                                    NSInteger pageIndex = index;
-                                    
-                                    BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
-                                    if (useNextRowData) {
-                                        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
-                                        NSInteger numberOfItemsOnPage = [pageData count];
-                                        if (rowToPrint < numberOfItemsOnPage - 1) {
-                                            rowToPrint++;
+                                            [attributedString drawInRect:elementCanvasRect];
+                                            [attributedString release];
                                         } else {
-                                            rowToPrint = 0;
-                                            pageIndex++;
+                                            NSDictionary *attributes = [self attributesForDocumentObject:item];
+                                            
+                                            // FIXME: This hack gets around known iOS7 bug.
+                                            //          Want to draw the fucking rect without
+                                            //          having to do a fucking translation.
+                                            
+                                            CGContextSaveGState(ctx);
+                                            {
+                                                CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
+                                                [displayString drawInRect:CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height) withAttributes:attributes];
+                                            }
+                                            CGContextRestoreGState(ctx);
                                         }
+                                        
+                                    } else {
+                                        
+                                        [drawingObject drawInRect:elementCanvasRect];
+                                        
                                     }
                                     
-                                    //NSDictionary *rowData = [self rowDataForRow: rowToPrint onPage: pageIndex];
+                                    [drawingObject release];
+                                    drawingObject = nil;
                                     
-                                    NSDictionary *rd = useNextRowData ? nextRowData : rowData;
-                                    RptqQueryField *queryField = [[item isLabelDataField] referencesQueryField];
-                                    NSString *tableFieldKey = [queryField tableFieldKey];
-                                    //NSDictionary *rowData = [self rowDataForRow:rowToPrint onPage:index];
-                                    id value = [rd objectForKey: tableFieldKey];
-                                    MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-                                    displayString = [item formattedString:dataType
-                                                                 forValue:value];
-                                    break;
-                                }
                                     
-                                case MTDocumentObjectTypeLabelStatic: {
-                                    displayString = [[item isLabel] text];
-                                    break;
-                                }
-                                    
-                                default: {
-                                    displayString = @"";
-                                    break;
                                 }
                             }
-                            
-                            CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;// originX;
-                            CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;// originY;
-                            CGRect paddingFrame = [item paddingViewFrame];
-                            CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, paddingFrame.size.width, paddingFrame.size.height);
-                            
-                            if (drawingObject == nil) {
-                                
-                                if ([UIDevice isLagacyOS]) {
-                                    
-                                    
-                                    NSDictionary *attributes = [[self attributesForDocumentObject:item] retain];
-                                    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:displayString];
-                                    
-                                    [attributedString setAttributes: attributes range:NSRangeFromString(displayString)];
-                                    
-                                    [printableStrings addObject:@{
-                                                                  @"s":attributedString,
-                                                                  @"r":NSStringFromCGRect(elementCanvasRect)
-                                                                  }];
-                                    
-                                    [attributedString drawInRect:elementCanvasRect];
-                                    [attributes release];
-                                    [attributedString release];
-                                } else {
-                                    NSDictionary *attributes = [[self attributesForDocumentObject:item] retain];
-                                    
-                                    // FIXME: This hack gets around known iOS7 bug.
-                                    //          Want to draw the fucking rect without
-                                    //          having to do a fucking translation.
-                                    
-                                    CGContextSaveGState(ctx);
-                                    {
-                                        CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
-                                        [displayString drawInRect:CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height) withAttributes:attributes];
-                                    }
-                                    CGContextRestoreGState(ctx);
-                                    
-                                    
-                                    [attributes release];
-                                }
-                                
-                            } else {
-                                
-                                [drawingObject drawInRect:elementCanvasRect];
-                                
-                            }
-                            
-                            [drawingObject release];
-                            drawingObject = nil;
-                            
                         }
+                        //}
+                        
                     }
                     
+                    originY += sizeHeight;
+                    
+                    [reportSectionValues release];
+                    
                 }
-                
-                originY += sizeHeight;
-                
-                [pageSectionId release];
-                [reportSectionValues release];
-                
             }
-            [pageSectionsToPrint release];
         }
         
         [nextGroupLevelKeys release];
         [groupLevelKeys release];
     }
     
-    if ([[MTStoreKitController sharedObject] verifiedUser] == NO) {
+    
+    if ([MTStoreKitController licensedUser] == NO) {
 
         
-        UIFont *customFont = [[UIFont boldSystemFontOfSize:12.0000f] retain];
+        UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
         [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
         [paragraphStyle setAlignment:NSTextAlignmentCenter];
         
-        NSDictionary *results = [
-                                 @{NSFontAttributeName : customFont,
+        NSDictionary *results = @{NSFontAttributeName : customFont,
                                    //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
                                    NSStrokeWidthAttributeName : @(3.0000f),
                                    NSStrokeColorAttributeName : [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f],
                                    NSForegroundColorAttributeName : [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f],
                                    NSParagraphStyleAttributeName: paragraphStyle
-                                   } retain];
+                                   };
         NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: @"Get MAD Viewer!\nOpen and View MAD Documents" attributes:results];
 
         NSInteger rowCounter = 0, columnCounter = 0;
@@ -676,8 +701,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 
                 
                 
-                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoRect.size.width;
-                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoRect.size.height;
+                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width;
+                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
                 logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
                 
                 CGContextSaveGState(ctx);
@@ -693,9 +718,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             rowCounter++;
         } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
 
-    
-        [results release];
-        [customFont release];
         [paragraphStyle release];
         [getMad release];
 
@@ -1124,7 +1146,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             if (readData) {
                 error = nil;
                 NSPropertyListFormat format;
-                cachedResultsForReportSerialized = [[NSPropertyListSerialization propertyListWithData:readData options:0 format:&format error:&error] retain];
+                cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithData:readData options:0 format:&format error:&error];
             }
             [readData release];
         }
@@ -1215,7 +1237,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setCachedDataByPage: tdbp];
         [tdbp release];
 
-        [cachedResultsForReportSerialized release];
         [cachedResultsForReport release];
         [groupedRows release];
         [sortedResultsByRow release];

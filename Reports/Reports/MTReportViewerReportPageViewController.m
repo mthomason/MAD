@@ -23,6 +23,26 @@
 
 @implementation MTReportViewerReportPageViewController
 
+- (void)dealloc {
+    [_lastCacheDate release];
+    if (_timerLabelTimeSinceRefreh != nil) {
+        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
+            if ([_timerLabelTimeSinceRefreh isValid]) {
+                [_timerLabelTimeSinceRefreh invalidate];
+            }
+        }
+        [_timerLabelTimeSinceRefreh release];
+        _timerLabelTimeSinceRefreh = nil;
+    }
+    [_timeSinceRefreshView release];
+    [_timerLabelTimeSinceRefreh release];
+    [_timeSinceRefrehLabel release];
+    [_document release];
+    [_pageNumberDisplay release];
+    _delegate = nil;
+    [super dealloc];
+}
+
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
         NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
@@ -77,24 +97,6 @@
     [self setTimerLabelTimeSinceRefreh:t];
     [t release];
     
-}
-
-
-- (void)dealloc {
-    [_lastCacheDate release];
-    if (_timerLabelTimeSinceRefreh != nil) {
-        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if ([_timerLabelTimeSinceRefreh isValid]) {
-                [_timerLabelTimeSinceRefreh invalidate];
-            }
-        }
-        [_timerLabelTimeSinceRefreh release];
-        _timerLabelTimeSinceRefreh = nil;
-    }
-
-    [_document release];
-    [_pageNumberDisplay release];
-    [super dealloc];
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
@@ -171,7 +173,7 @@
         
         [view addSubview:label];
         [view setAlpha:0.0000f];
-        [[view layer] setCornerRadius: 6.0000f];
+        //[[view layer] setCornerRadius: 6.0000f];
         
         [[self view] addSubview:view];
         [UIView animateWithDuration:0.3000f animations:^{
@@ -210,7 +212,7 @@
     [numberView setUserInteractionEnabled:NO];
     [labelView setUserInteractionEnabled:NO];
     [labelView setBackgroundColor:[UIColor clearColor]];
-    [[numberView layer] setCornerRadius: 6.0000f];
+    //[[numberView layer] setCornerRadius: 6.0000f];
     [numberView addSubview:labelView];
     [labelView autorelease];
     [numberView setAlpha:0.0000f];

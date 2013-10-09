@@ -34,6 +34,7 @@ static MTActiveDocument *sharedSingleton = nil;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
+    //Leaks because of singleton... fine.
     return [[self sharedDocument] retain];
 }
 

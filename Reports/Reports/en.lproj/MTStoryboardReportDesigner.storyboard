@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -125,7 +125,6 @@
                                     <constraint firstAttribute="height" constant="44" id="ZWu-fI-nqK"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="IHq-i5-4XF"/>
                                     <barButtonItem systemItem="add" id="U4m-Tl-FVb">
                                         <connections>
                                             <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
@@ -243,7 +242,7 @@
                     <navigationItem key="navigationItem" id="hjk-LA-j8h">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="zJA-ug-jW1">
                             <connections>
-                                <segue destination="JTZ-2r-kHL" kind="unwind" unwindAction="unwindToDesigner:" id="6Cv-5m-oe1"/>
+                                <segue destination="JTZ-2r-kHL" kind="unwind" identifier="MTStoryboardSegueUnwindToDesigner" unwindAction="unwindToDesigner:" id="6Cv-5m-oe1"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="ajA-Ys-fgg">
@@ -652,6 +651,9 @@
                                 </cells>
                             </tableViewSection>
                         </sections>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Zyq-uR-47J" appends="YES" id="h9o-Xa-y9b"/>
+                        </connections>
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Software Licensing" id="Fsw-Wm-sA5">
@@ -671,6 +673,7 @@
                         <outlet property="labelDesignerKeyExpires" destination="zMY-DQ-eAN" id="D70-JF-dTS"/>
                         <outlet property="labelDesignerValueActivated" destination="MQt-dO-uR3" id="ium-Nc-y7e"/>
                         <outlet property="labelDesignerValueExpires" destination="Q0f-Aj-UGu" id="zSc-uA-aiR"/>
+                        <outlet property="swipeDone" destination="Zyq-uR-47J" id="GX2-qN-Pga"/>
                         <outlet property="viewBuyButtonsBackground" destination="Xmu-Pc-AkN" id="bQz-LS-3Jh"/>
                         <outletCollection property="labelsHideWhenActivated" destination="SGJ-El-o3Z" id="lsw-Tj-tpf"/>
                         <outletCollection property="labelsHideWhenActivated" destination="bmb-2q-nrv" id="VMv-F1-meM"/>
@@ -681,6 +684,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n6K-vE-N0Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="Zyq-uR-47J">
+                    <connections>
+                        <action selector="done:" destination="z4e-mY-E0I" id="rly-45-JaC"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="268" y="1659"/>
         </scene>
@@ -5291,7 +5299,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="80" height="110"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="0YV-JU-3qm">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="0YV-JU-3qm">
                                             <rect key="frame" x="8" y="9" width="64" height="64"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="770" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="80" translatesAutoresizingMaskIntoConstraints="NO" id="Xld-Tx-Hvx">
@@ -5946,13 +5954,13 @@
         <scene sceneID="vnk-CN-e91">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="Ibv-MJ-tzZ" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="dU3-fL-Oq6">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dU3-fL-Oq6">
                         <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="Z03-T5-FMZ" detailTextLabel="4Ra-A0-T7u" style="IBUITableViewCellStyleValue1" id="8Um-Gp-6e3">
-                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Um-Gp-6e3" id="SjU-JS-OgA">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -6118,9 +6126,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tIb-WS-gen"/>
-        <segue reference="pfP-rZ-fVf"/>
+        <segue reference="3KQ-0K-U1O"/>
         <segue reference="kPX-hH-DKi"/>
+        <segue reference="pfP-rZ-fVf"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

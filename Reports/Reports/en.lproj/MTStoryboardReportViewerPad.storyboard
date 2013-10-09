@@ -1,80 +1,665 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4457.9" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="88I-WU-sVr">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.9"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--View Controller Reports-->
-        <scene sceneID="4">
+        <!--Navigation Controller-->
+        <scene sceneID="82T-pz-3Jv">
             <objects>
-                <viewController id="2" customClass="UIViewControllerReports" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <navigationBar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="13">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <items>
-                                    <navigationItem title="Title" id="14">
-                                        <barButtonItem key="rightBarButtonItem" title="Info" id="15">
-                                            <connections>
-                                                <action selector="togglePopover:" destination="2" id="23"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                        </subviews>
-                        <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="qLC-6t-AOi" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="onV-Nd-aPl">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Tlg-Ls-ISN">
+                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
-                        <segue destination="5" kind="popover" identifier="showAlternate" popoverAnchorBarButtonItem="15" id="22">
-                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                        </segue>
+                        <segue destination="Juv-tI-xhU" kind="relationship" relationship="rootViewController" id="cNF-9H-4a3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sok-DI-hwW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="499" y="-1176"/>
+        </scene>
+        <!--Report Viewer Controller-->
+        <scene sceneID="0fS-g0-LsV">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="Juv-tI-xhU" customClass="MTReportViewerController" sceneMemberID="viewController">
+                    <toolbarItems>
+                        <barButtonItem style="plain" id="DCj-Xd-kyx">
+                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="Mhq-Nd-uTb">
+                                <rect key="frame" x="16" y="6" width="200" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="OjK-xy-8qd">
+                                        <rect key="frame" x="0.0" y="3" width="200" height="29"/>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="OjK-xy-8qd" firstAttribute="leading" secondItem="Mhq-Nd-uTb" secondAttribute="leading" constant="2" id="3bO-hI-aRu"/>
+                                    <constraint firstItem="OjK-xy-8qd" firstAttribute="top" secondItem="Mhq-Nd-uTb" secondAttribute="top" constant="3" id="gda-cE-iF8"/>
+                                    <constraint firstAttribute="centerX" secondItem="OjK-xy-8qd" secondAttribute="centerX" id="xJd-C5-JiO"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Jhr-rH-4JW"/>
+                        <barButtonItem title="Print" id="gwx-Y6-Zca">
+                            <connections>
+                                <action selector="print:" destination="Juv-tI-xhU" id="Xr1-UG-L9g"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="PDF" id="l6f-FP-Ywd">
+                            <connections>
+                                <action selector="sendToPdf:" destination="Juv-tI-xhU" id="12O-k1-T4X"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="oty-L7-akF">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="6OM-G9-12T">
+                            <connections>
+                                <segue destination="9G4-uj-PaY" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="mz7-JT-V4s"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="xzp-cJ-Mou">
+                            <connections>
+                                <action selector="refresh:" destination="Juv-tI-xhU" id="8Df-qV-Ggc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="barButtonItemDone" destination="6OM-G9-12T" id="WBN-0F-ESW"/>
+                        <outlet property="barButtonItemPrint" destination="gwx-Y6-Zca" id="EzW-56-bHT"/>
+                        <outlet property="barButtonItemRefresh" destination="xzp-cJ-Mou" id="b1Q-GH-zlr"/>
+                        <outlet property="barButtonItemSendToPdf" destination="l6f-FP-Ywd" id="TNA-7g-SyM"/>
+                        <outlet property="barButtonItemSliderView" destination="DCj-Xd-kyx" id="NOk-lv-bO6"/>
+                        <outlet property="sliderPagination" destination="OjK-xy-8qd" id="BY7-Vi-4Fx"/>
+                        <outlet property="sliderView" destination="Mhq-Nd-uTb" id="T1q-7u-Goh"/>
+                    </connections>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dGT-Dq-fc5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="9G4-uj-PaY" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1355" y="-1176"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="MPi-a5-NDK">
+            <objects>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="88I-WU-sVr" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="W6N-o3-cH2">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="8qO-Vn-dLd">
+                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="f8b-9C-XbG" kind="relationship" relationship="rootViewController" id="XzC-9o-BaC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LgL-oV-dU3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3537" y="405"/>
+        </scene>
+        <!--Table View Controller About - About-->
+        <scene sceneID="kor-fb-wLD">
+            <objects>
+                <tableViewController title="About" id="bs5-Gf-XbO" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dma-YI-Dwg">
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="RaK-fX-Zgi">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="280" id="efF-R1-Xsa">
+                                        <rect key="frame" x="0.0" y="64" width="540" height="280"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="efF-R1-Xsa" id="hSt-lf-ztS">
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="280"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5zr-pp-m39">
+                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Version1.0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35p-4v-wLW">
+                                                    <rect key="frame" x="20" y="49" width="280" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Copyright © 2012-2013 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="h0H-MI-7uv">
+                                                    <rect key="frame" x="20" y="77" width="280" height="40"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Software by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Agv-f3-GAd">
+                                                    <rect key="frame" x="20" y="126" width="280" height="40"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Artwork by Sean Martin and Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="QUG-x0-58C">
+                                                    <rect key="frame" x="20" y="174" width="280" height="40"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="bs5-Gf-XbO" id="bhh-wL-Wu5"/>
+                            <outlet property="delegate" destination="bs5-Gf-XbO" id="9lO-d7-aMG"/>
+                            <outletCollection property="gestureRecognizers" destination="v83-US-0KA" appends="YES" id="JlW-eR-CHn"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="VQK-Gg-t6h"/>
+                        <barButtonItem systemItem="compose" id="lYY-B8-mnP">
+                            <connections>
+                                <action selector="composeEmail:" destination="bs5-Gf-XbO" id="tSP-PN-t2b"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="About" id="syk-by-0cr"/>
+                    <connections>
+                        <outlet property="labelVersion" destination="35p-4v-wLW" id="GFN-3b-Jwe"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N2p-jp-GXK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="down" id="v83-US-0KA">
+                    <connections>
+                        <segue destination="lHY-eB-4rR" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="zMu-9n-2qw"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <exit id="lHY-eB-4rR" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1384" y="-7"/>
+        </scene>
+        <!--Licensing View Controller - Software Licensing-->
+        <scene sceneID="sYE-3V-CTb">
+            <objects>
+                <tableViewController id="6V5-0U-97X" customClass="MTLicensingViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9RZ-Pk-69J">
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="mfm-6U-YwP">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="441" id="gY1-yz-CGb">
+                                        <rect key="frame" x="0.0" y="64" width="540" height="441"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gY1-yz-CGb" id="Ffe-CF-9di">
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="441"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Activate All Features" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qO9-S7-UM2">
+                                                    <rect key="frame" x="20" y="20" width="199" height="24"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="awH-S2-g7A">
+                                                    <rect key="frame" x="20" y="52" width="500" height="42"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="Foz-tV-003">
+                                                    <rect key="frame" x="20" y="131" width="500" height="21"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Access to future features.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" headIndent="50"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="l0p-7r-F3u">
+                                                    <rect key="frame" x="20" y="102" width="500" height="21"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="•     Query results are unlimited.">
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="HelveticaNeue-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" headIndent="45"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Activated:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxk-ek-1ll">
+                                                    <rect key="frame" x="20" y="302" width="96" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Yes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqF-ef-7dt">
+                                                    <rect key="frame" x="434" y="302" width="86" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Expires:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QyA-2f-neN">
+                                                    <rect key="frame" x="20" y="331" width="96" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="-" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93f-Q2-DAx">
+                                                    <rect key="frame" x="124" y="331" width="396" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5EK-ls-9YC">
+                                                    <rect key="frame" x="0.0" y="160" width="540" height="134"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="96K-XJ-Eco">
+                                                            <rect key="frame" x="428" y="20" width="72" height="36"/>
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseViewerOneYear:" destination="6V5-0U-97X" eventType="touchUpInside" id="e2N-Q9-Gxe"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pUD-Ik-dC8">
+                                                            <rect key="frame" x="428" y="78" width="72" height="36"/>
+                                                            <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="licenseViewerOneMonth:" destination="6V5-0U-97X" eventType="touchUpInside" id="k84-mq-gBl"/>
+                                                            </connections>
+                                                        </button>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IYJ-l3-aAX">
+                                                            <rect key="frame" x="454" y="28" width="20" height="20"/>
+                                                        </activityIndicatorView>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IGM-ZZ-03C">
+                                                            <rect key="frame" x="454" y="86" width="20" height="20"/>
+                                                        </activityIndicatorView>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License for One Year:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KyP-Hw-Ho8">
+                                                            <rect key="frame" x="20" y="28" width="193" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License for One Month:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AqH-cx-iAl">
+                                                            <rect key="frame" x="20" y="85" width="193" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Software Licensing" id="hYt-Rx-RmN"/>
+                    <connections>
+                        <outlet property="activityIndicator2" destination="IGM-ZZ-03C" id="ZNL-AO-YLc"/>
+                        <outlet property="activityIndicatorDesignerLicenseOneYear" destination="IYJ-l3-aAX" id="ObG-UU-ugA"/>
+                        <outlet property="buttonBuyNowViewerOneMonth" destination="pUD-Ik-dC8" id="gZK-mM-zMf"/>
+                        <outlet property="buttonBuyNowViewerOneYear" destination="96K-XJ-Eco" id="58X-kw-F89"/>
+                        <outlet property="labelDesignerKeyActivated" destination="yxk-ek-1ll" id="lmK-hz-8uy"/>
+                        <outlet property="labelDesignerKeyExpires" destination="QyA-2f-neN" id="fhA-Nh-rUg"/>
+                        <outlet property="labelDesignerValueActivated" destination="eqF-ef-7dt" id="gsl-zm-a0i"/>
+                        <outlet property="labelDesignerValueExpires" destination="93f-Q2-DAx" id="hhd-T1-ofp"/>
+                        <outlet property="viewBuyButtonsBackground" destination="5EK-ls-9YC" id="2Ab-oh-siw"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="AqH-cx-iAl" id="sne-U1-Fxh"/>
+                        <outletCollection property="labelsHideWhenActivated" destination="KyP-Hw-Ho8" id="nMF-Jh-65n"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="yxk-ek-1ll" id="hnS-yt-mVI"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="QyA-2f-neN" id="byW-kb-Z2Z"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="eqF-ef-7dt" id="0ig-hP-pZ5"/>
+                        <outletCollection property="labelsShowWhenActivated" destination="93f-Q2-DAx" id="I4G-kr-Wg1"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1pq-L3-5YI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1384" y="731"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="mxx-NU-VRR">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="iqv-wN-FBP" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GUn-hY-vmH">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="6V5-0U-97X" kind="relationship" relationship="rootViewController" id="RLg-3A-2Ha"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mvm-Rf-nPw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="499" y="731"/>
+        </scene>
+        <!--Upgrade View Controller-->
+        <scene sceneID="IQP-mn-Zek">
+            <objects>
+                <viewController id="f8b-9C-XbG" customClass="MADUpgradeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OoT-yb-gcd"/>
+                        <viewControllerLayoutGuide type="bottom" id="zcX-mC-1gb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5N6-Zx-GH8">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Xa1-H6-xF0">
+                                <rect key="frame" x="374" y="516" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updating" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UL6-E5-qld">
+                                <rect key="frame" x="334" y="487" width="100" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="En2-aA-9A5"/>
+                    <connections>
+                        <segue destination="H1x-F3-Wc1" kind="modal" identifier="MTSegueUpgradeUnneeded" animates="NO" id="GmD-LB-2pY"/>
+                        <segue destination="WHj-zS-pnY" kind="push" identifier="MTSegueUpgradeComplete" id="E1y-j2-9ND"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cdp-5u-JL9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-286" y="15"/>
+            <point key="canvasLocation" x="-2626" y="405"/>
         </scene>
-        <!--View Controller Open Document-->
-        <scene sceneID="7">
+        <!--Navigation Controller-->
+        <scene sceneID="KaO-NV-dcS">
             <objects>
-                <viewController id="5" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="9">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <navigationBar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="17">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <items>
-                                    <navigationItem title="Title" id="18">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="19">
-                                            <connections>
-                                                <action selector="done:" destination="5" id="21"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                        </subviews>
-                        <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6" sceneMemberID="firstResponder"/>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="H1x-F3-Wc1" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fgi-KE-CnM">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="pnh-Qa-xRZ">
+                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="WHj-zS-pnY" kind="relationship" relationship="rootViewController" id="MG6-C0-uTA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M6C-MV-QPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="836" y="101"/>
+            <point key="canvasLocation" x="-1558" y="-853"/>
+        </scene>
+        <!--View Controller Open Document - MAD Viewer-->
+        <scene sceneID="ybC-n5-sXd">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="WHj-zS-pnY" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="KE6-pm-tRc">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="y1h-7i-2rO">
+                            <size key="itemSize" width="160" height="220"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="lUy-4R-k4T" customClass="MTCollectionViewCellDocument">
+                                <rect key="frame" x="0.0" y="64" width="160" height="220"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="160" height="220"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="UIImageDocumentBlankPad.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ekg-7k-hJy">
+                                            <rect key="frame" x="16" y="46" width="128" height="128"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="770" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" fixedFrame="YES" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="80" translatesAutoresizingMaskIntoConstraints="NO" id="AIz-wB-zvJ">
+                                            <rect key="frame" x="40" y="182" width="80" height="27"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <size key="customSize" width="160" height="220"/>
+                                <connections>
+                                    <outlet property="imagePreview" destination="Ekg-7k-hJy" id="dX3-TG-Kgb"/>
+                                    <outlet property="labelTitle" destination="AIz-wB-zvJ" id="FdU-YU-pyl"/>
+                                    <segue destination="qLC-6t-AOi" kind="modal" identifier="MTSegueOpenInViewer" modalPresentationStyle="pageSheet" id="dPB-x8-FTJ"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="WHj-zS-pnY" id="aQt-w0-zgT"/>
+                            <outlet property="delegate" destination="WHj-zS-pnY" id="iOa-GB-trz"/>
+                        </connections>
+                    </collectionView>
+                    <toolbarItems>
+                        <barButtonItem enabled="NO" systemItem="trash" id="ScK-gu-VRc">
+                            <connections>
+                                <action selector="delete:" destination="WHj-zS-pnY" id="dQe-ZA-5mF"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem enabled="NO" systemItem="action" id="7RK-0F-BPL">
+                            <connections>
+                                <action selector="activity:" destination="WHj-zS-pnY" id="ZUP-nY-PbS"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="J5V-Ph-gOC"/>
+                        <barButtonItem title="Licensing" id="fmn-qy-twt">
+                            <connections>
+                                <segue destination="iqv-wN-FBP" kind="popover" identifier="MTSegueLicensing" popoverAnchorBarButtonItem="fmn-qy-twt" id="3xA-NU-FkC">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Information" id="DMh-hJ-DcE">
+                            <connections>
+                                <segue destination="wWQ-n4-d4d" kind="popover" identifier="MTSegueDetails" popoverAnchorBarButtonItem="DMh-hJ-DcE" id="VpE-ne-sy2">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="MAD Viewer" id="4PO-LF-Hvb">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="WtC-Pa-3Ck">
+                            <connections>
+                                <action selector="edit:" destination="WHj-zS-pnY" id="ory-CN-HI6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="barButtonItemAction" destination="7RK-0F-BPL" id="zHQ-SI-bd8"/>
+                        <outlet property="barButtonItemEdit" destination="WtC-Pa-3Ck" id="3Ds-Ll-J9W"/>
+                        <outlet property="barButtonItemInformation" destination="DMh-hJ-DcE" id="wJ9-3h-1TY"/>
+                        <outlet property="barButtonItemLicensing" destination="fmn-qy-twt" id="69Q-qK-kWq"/>
+                        <outlet property="barButtonItemTrash" destination="ScK-gu-VRc" id="Re9-Kn-7h6"/>
+                        <outlet property="collectionViewFlowLayout" destination="y1h-7i-2rO" id="tBe-zD-WG8"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UFa-6V-Q2c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-544" y="405"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="n7K-gr-pSb">
+            <objects>
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="jln-0e-UbA" sceneMemberID="viewController">
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="loV-HN-PEf">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gYD-SL-neI">
+                        <rect key="frame" x="0.0" y="576" width="540" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="bs5-Gf-XbO" kind="relationship" relationship="rootViewController" id="cnL-jb-CSi"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IOb-WP-3zP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="499" y="-7"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="EV9-rX-rWK">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="wWQ-n4-d4d" sceneMemberID="viewController">
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QN6-yM-Oay">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="eyf-5n-4WP" kind="relationship" relationship="rootViewController" id="Ing-hE-n1Q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WRt-JT-MNn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="499" y="1480"/>
+        </scene>
+        <!--Table View Controller About - What is MAD?-->
+        <scene sceneID="oOd-gq-CuX">
+            <objects>
+                <tableViewController id="eyf-5n-4WP" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fWs-Wk-5ww">
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="3BX-zX-TmU">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="KYg-eH-xXg">
+                                        <rect key="frame" x="0.0" y="64" width="540" height="600"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KYg-eH-xXg" id="Hmf-rp-Orc">
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Designer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObA-Je-Gg5">
+                                                    <rect key="frame" x="20" y="20" width="500" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="LiG-Lf-aBf">
+                                                    <rect key="frame" x="20" y="49" width="500" height="99"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="MAD">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-LightOblique"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment>
+                                                            <string key="content"> Viewer allows one to open, generate, and view MAD files.  To do this, you must be authorized to access the datasource referenced inside the MAD file.  That datasource must also be available and responsive.</string>
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="eyf-5n-4WP" id="JW0-5f-2Wl"/>
+                            <outlet property="delegate" destination="eyf-5n-4WP" id="YG6-Pz-iYA"/>
+                            <outletCollection property="gestureRecognizers" destination="BH2-sv-atb" appends="YES" id="th3-D4-fxa"/>
+                            <outletCollection property="gestureRecognizers" destination="FrJ-Kf-qWI" appends="YES" id="3uU-bV-cJG"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="What is MAD?" id="RHX-PO-7Nh">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="SME-TF-iCL">
+                            <connections>
+                                <segue destination="XZ6-2f-C0C" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="OF3-uB-zRE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FlF-Rx-sDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="BH2-sv-atb"/>
+                <swipeGestureRecognizer direction="down" id="FrJ-Kf-qWI">
+                    <connections>
+                        <segue destination="XZ6-2f-C0C" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="MvB-Zp-aCj"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <exit id="XZ6-2f-C0C" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1384" y="1480"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="UIImageDocumentBlankPad.png" width="128" height="128"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="MG6-C0-uTA"/>
+    </inferredMetricsTieBreakers>
 </document>

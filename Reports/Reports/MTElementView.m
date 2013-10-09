@@ -292,12 +292,12 @@
                 CGFloat sizeHeight = [[self displayLabel] frame].size.height;
                 
                 [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-                baselineAdjustment = UIBaselineAdjustmentNone;
+                //baselineAdjustment = UIBaselineAdjustmentNone;
                 break;
             }
             case MTVerticalAlignmentCenter: {
                 [[self displayLabel] setFrame:[[self paddingView] frame]];
-                baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+                //baselineAdjustment = UIBaselineAdjustmentAlignCenters;
                 break;
             }
             case MTVerticalAlignmentBottom: {
@@ -308,7 +308,7 @@
                 CGFloat sizeWidth = [[self paddingView] frame].size.width;
                 CGFloat sizeHeight = [[self displayLabel] frame].size.height;
                 [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-                baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+                //baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
                 break;
             }
             default:

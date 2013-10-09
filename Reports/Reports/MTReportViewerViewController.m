@@ -58,6 +58,8 @@
         [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
+    _asyncDelegate = nil;
+    _viewControllerDelegate = nil;
     [_documentStatusView release];
     [_printPageRenderForPrinting release];
     [_printPageRendererReport release];
@@ -71,13 +73,14 @@
     [_barButtonItemDone release];
     [_sliderView release];
     [_barButtonItemSliderView release];
+    [_lastCacheDate release];
     [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self setTitle:@"MAD Viewer"];
+
     }
     return self;
 }
@@ -113,8 +116,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setDocumentReport:[[MTActiveDocument sharedDocument] activeDocument]];
     
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
+    [self setTitle:@"MAD Viewer"];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -163,12 +168,12 @@
     if ((int)sliderIndex != [self currentPageIndex]) {
         //[slider setValue:sliderIndex];               // Sets your slider to this value
         [self setCurrentPageIndex:sliderIndex];
-        NSInteger initIndex;
-        if ([self currentPageIndex] < [self numberOfPages]) {
-            initIndex = [self currentPageIndex] + 1;
-        } else {
-            initIndex = [self numberOfPages] > 0 ? [self numberOfPages] : 0;
-        }
+        //NSInteger initIndex;
+        //if ([self currentPageIndex] < [self numberOfPages]) {
+        //    initIndex = [self currentPageIndex] + 1;
+        //} else {
+        //    initIndex = [self numberOfPages] > 0 ? [self numberOfPages] : 0;
+        //}
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
         [[pageOne view] setFrame:[[self view] bounds]];
         
@@ -436,7 +441,19 @@
             [[self documentStatusView] setActivityState:YES];
             [[self barButtonItemDone] setEnabled:NO];
             dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            
+        
+        
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [activityIndicator setColor:[UIColor blackColor]];
+        [activityIndicator startAnimating];
+        [activityIndicator setHidden:NO];
+        [activityIndicator setHidesWhenStopped:NO];
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+        [barButtonItem release];
+        [activityIndicator release];
+        
+        
             dispatch_async(queuePriorityBackground, ^{
                 
                 [[self documentReport] refresh:^(BOOL success) {
@@ -446,6 +463,7 @@
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             
+                            [[self navigationItem] setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
                             NSDate *lastD = [[NSDate date] retain];
                             [self setLastCacheDate: lastD];
                             [lastD release];
@@ -453,6 +471,7 @@
                         });
                     } else {
                         dispatch_async(dispatch_get_main_queue(), ^{
+                            [[self navigationItem] setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
                             [self resetScreen];
                         });
                     }

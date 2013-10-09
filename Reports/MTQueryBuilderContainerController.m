@@ -119,6 +119,7 @@
                 [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
             }
         }
+        [subviews release];
     }
     /*
     if ([self rightView]) {

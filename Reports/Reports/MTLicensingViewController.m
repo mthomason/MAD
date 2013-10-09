@@ -18,6 +18,7 @@
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonRestore;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonDone;
+@property (nonatomic, retain) IBOutlet UISwipeGestureRecognizer *swipeDone;
 
 @property (nonatomic, retain) IBOutlet UIView *viewBuyButtonsBackground;
 
@@ -45,6 +46,7 @@
 @implementation MTLicensingViewController
 
 - (void)dealloc {
+    [_swipeDone release];
     [_standardCompletion release];
     [_licenseUserCompletion release];
     [_buttonBuyNowDesignerOneYear release];
@@ -67,6 +69,7 @@
     [_labelsShowWhenActivated release];
     [_labelsHideWhenActivated release];
     [_viewBuyButtonsBackground release];
+    [_swipeDone release];
     [super dealloc];
 }
 
@@ -259,6 +262,7 @@
         [[self buttonBuyNowViewerOneMonth] setHidden:YES];
     }
     [[self buttonDone] setEnabled:NO];
+    [[self swipeDone] setEnabled:NO];
     [[self buttonRestore] setEnabled:NO];
 }
 
@@ -275,6 +279,7 @@
         [[self buttonBuyNowViewerOneMonth] setHidden:NO];
     }
     [[self buttonDone] setEnabled:YES];
+    [[self swipeDone] setEnabled:YES];
     [[self buttonRestore] setEnabled:YES];
 }
 

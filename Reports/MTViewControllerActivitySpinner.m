@@ -9,6 +9,7 @@
 #import "MTViewControllerActivitySpinner.h"
 
 @interface MTViewControllerActivitySpinner ()
+
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activitySpinner;
 
 @end

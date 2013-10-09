@@ -1977,6 +1977,7 @@
 		4CF339461693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339471693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4CF339481693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
+		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF61CEE163F81C60065A16C /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
 		4CF61CFF163F831D0065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */; };
@@ -3158,6 +3159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */,
 				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
 				4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */,
 				4CE9F2B21778B489009F11AF /* liblibTdsClient.a in Frameworks */,
@@ -3458,6 +3460,8 @@
 				4CFF3E80164CD7DE0070E880 /* MTDatabase.m */,
 				4CFF3E83164CD86E0070E880 /* MTDatabaseMySql.h */,
 				4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */,
+				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
+				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
 				4CE17E1B164E2BF90002F8EA /* MTDatabaseSalesForce.h */,
 				4CE17E1C164E2BFA0002F8EA /* MTDatabaseSalesForce.m */,
 				4CE17E361658F09F0002F8EA /* MTDatabaseTable.h */,
@@ -3474,8 +3478,6 @@
 				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
 				4CF2F2711754F8F200DC34E3 /* MTPaper.h */,
 				4CF2F2721754F8F200DC34E3 /* MTPaper.m */,
-				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
-				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -5088,6 +5090,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "MAD Viewer" */;
 			buildPhases = (
+				4CF3B6EC18046614004BE0AC /* ShellScript */,
 				4C0E7720163B5AEC003B951E /* Sources */,
 				4C0E779E163B5AEC003B951E /* Frameworks */,
 				4C0E77AF163B5AEC003B951E /* Resources */,
@@ -5196,7 +5199,7 @@
 		4C384E1B14B29789007B4F48 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
 					4C384E2314B29789007B4F48 = {
@@ -6334,6 +6337,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\necho \"Updated build number to $currentvnum\"\n\n/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7680,7 +7696,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -7696,11 +7714,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -7713,7 +7735,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -7722,9 +7746,12 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";

@@ -37,8 +37,7 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    
-    NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
+    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
     
 
@@ -77,6 +76,8 @@
                                 }
                             }
                         }
+                    } else {
+                        [[MTKeyChain sharedObject] deleteKey:key];
                     }
 
                     completion(successConnection, errorConnection, results);
@@ -113,8 +114,9 @@
             [serv setSchema:    [[self databaseConnection] database]];
             [serv setPort:      [[self databaseConnection] port]];
             
-            NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
-            [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
+    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+
+    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
                 
                 if (success) {
                     
@@ -172,6 +174,7 @@
                                 }
                             }
                         } else {
+                            [[MTKeyChain sharedObject] deleteKey:key];
                             [error presentErrorToUser];
                         }
                         [serv release];
@@ -293,61 +296,69 @@
 
 - (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-
-    __block RptqQueryCache *queryCache = nil;
-    RptqQuery *query = [[database hasQueries] anyObject];
-
-    __block MysqlServer *serv = [[MysqlServer alloc] init];
-        
-    [serv setHost:      [[self databaseConnection] server]];
-    [serv setSchema:    [[self databaseConnection] database]];
-    [serv setPort:      [[self databaseConnection] port]];
     
-    NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
+    @autoreleasepool {
         
-        if (success) {
-            [serv setUser:      username];
-            [serv setPassword:  password];
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                NSError *connError = nil;
-                MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
-                if (conn && connError == nil) {
-                    MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
-                    queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-                    
-                    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
-                                                                                    format:NSPropertyListBinaryFormat_v1_0
-                                                                                   options:0
-                                                                                     error:NULL];
-                    
-                    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-                    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
-                    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
-                    if (connError) {
-                        connError = nil;
-                        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        RptqQuery *rquery = [[database hasQueries] anyObject];
+        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+        NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
+        
+        __block RptqQueryCache *queryCache = nil;
+        RptqQuery *query = [[database hasQueries] anyObject];
+        
+        __block MysqlServer *serv = [[MysqlServer alloc] init];
+        
+        [serv setHost:      [[self databaseConnection] server]];
+        [serv setSchema:    [[self databaseConnection] database]];
+        [serv setPort:      [[self databaseConnection] port]];
+        
+        NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+        [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
+            
+            if (success) {
+                [serv setUser:      username];
+                [serv setPassword:  password];
+                [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+                    NSError *connError = nil;
+                    MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
+                    if (conn && connError == nil) {
+                        
+                            @autoreleasepool {
+                                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
+                                queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
+                                
+                                NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
+                                                                                                format:NSPropertyListBinaryFormat_v1_0
+                                                                                               options:0
+                                                                                                 error:NULL];
+                                
+                                NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
+                                NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+                                [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
+                                if (connError) {
+                                    connError = nil;
+                                    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
+                                }
+                                [queryCache setCacheDate:[NSDate date]];
+                                [query setHasQueryCache:queryCache];
+                            }
+                        
+                    } else {
+                        [connError presentErrorToUser];
+                        [[MTKeyChain sharedObject] deleteKey:key];
                     }
-                    [queryCache setCacheDate:[NSDate date]];
-                    [query setHasQueryCache:queryCache];
                     
-                } else {
-                    [connError presentErrorToUser];
-                }
-                
-                [serv release];
-                
-                completion(self, [query hasQueryCache]);
-            }];
-        } else {
-            completion(nil, nil);
-        }
-    }];
+                    [serv release];
+                    
+                    completion(self, [query hasQueryCache]);
+                }];
+            } else {
+                completion(nil, nil);
+            }
+        }];
+    }
 }
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
@@ -365,7 +376,7 @@
             [serv setSchema:    [[self databaseConnection] database]];
             [serv setPort:      [[self databaseConnection] port]];
             
-            NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [[self databaseConnection] server],  [[self databaseConnection] port], [[self databaseConnection] database]];
+            NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
             [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
                 if (success) {
                     [serv setUser:      username];
@@ -383,6 +394,8 @@
                                              schemaField.name, MTSqlFrom, schemaField.inTable.name];
                             fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
                             results = [[fetch results] retain];
+                        } else {
+                            [[MTKeyChain sharedObject] deleteKey:key];
                         }
                         [serv release];
                         completion(successConnection, connError, [results autorelease]);

@@ -21,5 +21,6 @@ extern const NSTimeInterval MTTimeIntervalYear;
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
 - (NSDate *)experationDateIOS7;
 + (NSDate *)experationDate;
++ (BOOL)licensedUser;
 
 @end

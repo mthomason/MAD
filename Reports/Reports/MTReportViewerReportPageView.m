@@ -15,6 +15,7 @@
 @implementation MTReportViewerReportPageView
 
 - (void)dealloc {
+    _delegate = nil;
     [super dealloc];
 }
 

@@ -164,7 +164,7 @@
     [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator setColor:[UIColor greenColor]];
+    [activityIndicator setColor:[UIColor blackColor]];
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
@@ -204,10 +204,10 @@
                     if (database) {
                         //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [documentReport addDatasourceToReport: database completion: ^(BOOL success2, NSError *error) {
+                            [documentReport addDatasourceToReport: database completion: ^(BOOL successAddingDatasource, NSError *error) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                    if (success2) {
+                                    if (successAddingDatasource) {
                                         [documentReport closeWithCompletionHandler:^(BOOL success) {
                                             if (success) {
                                                 [documentReport setSuspended:YES];
@@ -234,10 +234,10 @@
                                         }];
                                         
                                     } else {
-                                        [documentReport closeWithCompletionHandler:^(BOOL success) {
-                                            if (success) {
+                                        [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
+                                            if (successClosingReport) {
                                                 
-                                                [documentReport deleteFromDiskCompletion:^(BOOL success) { }];
+                                                [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
                                                 
                                                 if (error) {
                                                     

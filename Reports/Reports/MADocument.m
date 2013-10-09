@@ -169,16 +169,14 @@ NSString * MTDocumentParentContextName          = @"moc";
         }
         
         if ([self thumbnail] == nil) {
-            UIImage *thumbnail = [[UIImage imageNamed:@"UIImageDocumentBlank"] retain];
-            [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
-            [self setThumbnail:thumbnail];
-            [thumbnail release];
+            [[self extraInformation] setObject:[UIImage imageNamed:@"UIImageDocumentBlank"] forKey:[MADocument thumbnailSaveName]];
+            [self setThumbnail:[UIImage imageNamed:@"UIImageDocumentBlank"]];
         }
         
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
         if (document != nil) {
             MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-            UIImage *thumbnail = [[printPageRender thumbnail] retain];
+            UIImage *thumbnail = [[printPageRender thumbnail] copy];
             [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
             [self setThumbnail:thumbnail];
             [thumbnail release];

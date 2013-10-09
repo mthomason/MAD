@@ -1410,7 +1410,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (void)connectWithCredentals:(MTDatabaseConnection *)credentals completion:(void (^)(DBPROCESS *dbconn, BOOL success, NSError *error))completion {
     
-    NSString *key = [NSString stringWithFormat:@"[%@:%d]%@", [credentals server],  [credentals port], [credentals database]];
+    NSString *key = [MTKeyChain keyForServer:[credentals server] port:[credentals port] andDatabase:[credentals database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
         if (success) {
             [username retain]; [password retain];
@@ -1476,6 +1476,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                             
                             connected = (error == nil);
                             dispatch_sync(dispatch_get_main_queue(), ^{
+                                if (connected == NO) {
+                                    [[MTKeyChain sharedObject] deleteKey:key];
+                                }
                                 completion(dbconn, connected, error);
                             });
                             
