@@ -12,8 +12,8 @@
 @implementation MTCollectionViewCellDocument
 
 - (void)dealloc {
-    [_labelTitle release];
-    [_imagePreview release];
+    //[_labelTitle release];
+    //[_imagePreview release];
     [super dealloc];
 }
 
@@ -30,7 +30,8 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
         if ([UIDevice isLagacyOS]) {
             [[selectedBackground layer] setCornerRadius: 5.0000f];

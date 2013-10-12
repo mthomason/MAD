@@ -11,9 +11,6 @@
 @implementation MTTableViewCellQueryPredicate
 
 - (void)dealloc {
-    [_labelMain release];
-    [_labelDetail release];
-    [_labelOpperator release];
     [_tableID release];
     [super dealloc];
 }

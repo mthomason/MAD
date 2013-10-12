@@ -18,8 +18,8 @@
 
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *labelTitle;
-@property (nonatomic, retain) IBOutlet UIImageView *imagePreview;
+@property (nonatomic, assign) IBOutlet UILabel *labelTitle;
+@property (nonatomic, assign) IBOutlet UIImageView *imagePreview;
 
 @property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
 
