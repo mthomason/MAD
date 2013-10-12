@@ -871,19 +871,17 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         //[viewControllerReportViewer setViewControllerDelegate:self];
         //[viewControllerReportViewer setDocumentReport:activeDocument];
         
+        
+        // Page sheet and form sheet don't seem to unwind using segues.
+        if ([UIDevice isPad]) {
+            MTReportViewerController *viewControllerReportViewer;
+            UINavigationController *d = [segue destinationViewController];
+            viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
+            [viewControllerReportViewer setViewControllerDelegate:self];
+        }
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
-        
-        //MTReportViewerController *viewControllerReportViewer;
-        //if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-        //    UINavigationController *d = [segue destinationViewController];
-        //    viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
-        //} else {
-        //    viewControllerReportViewer = [segue destinationViewController];
-        //}
-        //[viewControllerReportViewer setViewControllerDelegate:self];
-        
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
     }
 }
@@ -2170,6 +2168,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             [[reportDesigner designerContentView] setNeedsLayout];
             [[reportDesigner designerContentView] setNeedsDisplay];
         }];
+    } else if ([sender isKindOfClass:[MTReportViewerController class]]) {
+        if ([UIDevice isPad]) {
+            [self dismissViewControllerAnimated:YES completion:^{}];
+        }
     } else {
         if ([UIDevice isPad]) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {

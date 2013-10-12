@@ -373,7 +373,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    //[[self viewControllerDelegate] viewControllerDidFinish: self];
+    [[self viewControllerDelegate] viewControllerDidFinish: self];
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {

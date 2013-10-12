@@ -21,6 +21,7 @@
         UIDocumentInteractionControllerDelegate, MTPrintingProtocol>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
+@property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
 
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;
