@@ -18,6 +18,19 @@
 
 @implementation MTVertex
 
+- (void)dealloc {
+    [_uniqueIdForStructure release];
+    [_dfsTimestampDiscovered release];
+    [_dfsTimestampFinished release];
+    [_dfsFoundCounter release];
+    [_dfsPredecessor release];
+    [_dfsDistance release];
+    [_bfsPredecessor release];
+    [_bfsDistance release];
+    [_edges release];
+    [super dealloc];
+}
+
 - (id)init {
     return [self initWithID:0];
 }
@@ -80,19 +93,6 @@
 
 - (void)removeEdge:(MTEdge *)edge {
     [[self edges] removeObject: edge];
-}
-
-- (void)dealloc {
-    [_uniqueIdForStructure release];
-    [_dfsTimestampDiscovered release];
-    [_dfsTimestampFinished release];
-    [_dfsFoundCounter release];
-    [_dfsPredecessor release];
-    [_dfsDistance release];
-    [_bfsPredecessor release];
-    [_bfsDistance release];
-    [_edges release];
-    [super dealloc];
 }
 
 #pragma mark - MTProtocolCompare
