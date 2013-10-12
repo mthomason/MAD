@@ -17,6 +17,6 @@
 @interface MTDocumentSectionView : UICollectionView
     <UIGestureRecognizerDelegate>
 
-@property (assign, nonatomic) id <MTDocumentSectionViewDelegate> sectionDelegate;
+@property (nonatomic, assign) id <MTDocumentSectionViewDelegate> sectionDelegate;
 
 @end

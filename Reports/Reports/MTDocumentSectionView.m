@@ -16,7 +16,7 @@
 @end
 
 @implementation MTDocumentSectionView
-
+/*
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -47,7 +47,7 @@
     //[self addGestureRecognizer:pinchGesture];
     //[pinchGesture release];
 }
-
+*/
 - (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
