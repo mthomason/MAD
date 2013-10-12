@@ -52,6 +52,11 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 @implementation MTFont
 
+- (void)dealloc {
+    [_familyName release];
+    [super dealloc];
+}
+
 + (NSArray *)familyNames {
     return @[ MTFontFamilyAmericanTypewriter, MTFontFamilyArial, MTFontFamilyCourierNew, MTFontFamilyCourier, MTFontFamilyGeorgia, MTFontFamilyHelvetica, MTFontFamilyHelveticaNeue, MTFontFamilyTimesNewRoman, MTFontFamilyTrebuchet, MTFontFamilyVerdana, MTFontFamilyZapfino ];
 }
