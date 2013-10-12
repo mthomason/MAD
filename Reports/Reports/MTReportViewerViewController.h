@@ -20,14 +20,10 @@
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MTPrintingProtocol>
 
-@property (nonatomic, retain) MAReportDocument *documentReport;
-@property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
-@property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;
-- (void)loadReport:(MAReportDocument *)report;
-- (void)reloadReportView;
+- (void)reload:(MTReportViewerController *)reportViewer;
 
 @end
