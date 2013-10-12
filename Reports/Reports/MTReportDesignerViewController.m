@@ -84,7 +84,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
 
-@property (nonatomic, retain) MAReportDocument *activeDocument;
+//@property (nonatomic, retain) MAReportDocument *activeDocument;
 
 @property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
 
@@ -111,7 +111,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)dealloc {
     [_rulerView release];
     [_designerContentView release];
-    [_activeDocument release];
     [_reportFooterView release];
     [_navigationControllerSectionLayoutSettings release];
     [_layoutConstraintsReportSectionHeight release];
@@ -157,6 +156,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
+    
     if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
         
         MTDocumentObjectNewStaticLabelViewController *staticLabelViewController = [action sourceViewController];
@@ -165,8 +165,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         
     } else if ([[action identifier] isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
         
+        __block MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
-            [self insertDocumentObjectWithDefination:
+            [reportDesigner insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
         };
         
@@ -179,11 +180,12 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
     } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         
+        __block MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
             MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
             RptqQueryField *queryField = [dynamicFieldController queryField];
             
-            [self insertDocumentObjectWithDefination:
+            [reportDesigner insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
                MTDocumentObjectDefinationObject : [queryField objectID]}];
         };
@@ -207,12 +209,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
     } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
         
+        __block MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
             if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                 [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                 [imagePicker setDelegate: self];
-                [self presentViewController:imagePicker animated:YES completion:NULL];
+                [reportDesigner presentViewController:imagePicker animated:YES completion:NULL];
                 [imagePicker release];
             }
         };
@@ -226,18 +229,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
 
     } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
-        MTReportDesignerViewController *rd = [action destinationViewController];
-        MTReportViewerController *rv = [action sourceViewController];
-        NSLog(@"%lu", (unsigned long)[rd retainCount]);
-        NSLog(@"%lu", (unsigned long)[rv retainCount]);
-        //[[self navigationController] dismissViewControllerAnimated:YES completion:^{
-            
-        //}];
-//        [self dismissViewControllerAnimated:YES completion:^{
-            NSLog(@"%lu", (unsigned long)[rd retainCount]);
-            NSLog(@"%lu", (unsigned long)[rv retainCount]);
-            
-//        }];
     }
 
 }
@@ -256,8 +247,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     
 
     if (selectedImage != nil) {
+        __block MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
-            [self insertDocumentObjectWithDefination:
+            [reportDesigner insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
                MTDocumentObjectDefinationObject : selectedImage}];
         }];
@@ -285,8 +277,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
     //CGFloat toolBarHeight;
     if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
+        __block MTReportDesignerViewController *reportDesigner = self;
         [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
-            [[self toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
+            [[reportDesigner toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
         } completion:NULL];
     }
 
@@ -294,8 +287,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    __block MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [[self rulerView] setNeedsDisplay];
+        [[reportDesigner rulerView] setNeedsDisplay];
     } completion:NULL];
     
     CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
@@ -307,7 +301,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }
     
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
-        [[self toolbarBottomHeightConstraint] setConstant:toolBarHeight];
+        [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolBarHeight];
     } completion:NULL];
 }
 
@@ -383,10 +377,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
      ]];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    [self setActiveDocument:activeDocument];
-    [activeDocument release];
     
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
@@ -445,10 +435,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }
     [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     
-    UICollectionView *lastCollectionView = nil;
+    //UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
     
     NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
@@ -530,150 +520,164 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
+    NSMutableArray *reportSectionKeyTracker = [[NSMutableArray alloc] init];
+    
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
 
-        sectionHeights += MTReportDesignerBorderPaddingVertical;
+        @autoreleasepool {
         
-        [lastCollectionView  release];  //Should be nil on first pass.
-
-        // MARK: Create collection view for report document section.
-        
-        MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
-        [flowLayoutDesignerSection setDelegate:self];
-
-        MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
-        [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
-        //[backgroundView setBackgroundColor:[UIColor edaGreenLight]];
-        [backgroundView setBackgroundColor:[UIColor clearColor]];
-
-        NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
-
-        MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
-        [collectionView setObjectIdTag:[reportSection objectID]];
-
-        NSString *documentElementReuseIdentifier = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
-        [[self collectionViewReuseIdentifiers] setObject:documentElementReuseIdentifier forKey:[reportSection identifier]];
-        [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
-        [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
-        [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:supplmentaryViewReuseIdHeader];
-
-        NSUInteger collectionViewTag = [[reportSection identifier] integerValue];
-        [collectionView setTag: collectionViewTag];
-        [collectionView setDelegate:self];
-        [collectionView setSectionDelegate:self];
-        [collectionView setDataSource:self];
-        [collectionView setBackgroundColor:[UIColor whiteColor]];
-        [collectionView setClipsToBounds:YES];
-        [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
-        [collectionView setAllowsSelection:YES];
-        [collectionView setAllowsMultipleSelection:YES];
-        [collectionView setBackgroundView:backgroundView];
-        [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        
-        
-
-        // MARK: Create label to identify document section.
-        DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[reportSection localizedDisplayName]];
-        if ([UIDevice isLagacyOS]) {
-            [sectionControlView setBackgroundColor:[UIColor edaYellow]];
-        } else {
-            [sectionControlView setBackgroundColor:[UIColor clearColor]];
-        }
-        [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
-
-        
-        if ([UIDevice isLagacyOS]) {
-            [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
-        }
-
-        [[sectionControlView layer] setCornerRadius:MTReportDesignerCornerRadius];
-        [sectionControlView setClipsToBounds:YES];
-        [sectionControlView setTag:sectionCounter];
-        
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSectionControlPanel:)];
-        [tapGestureRecognizer setNumberOfTapsRequired:1];
-        [tapGestureRecognizer setNumberOfTouchesRequired:1];
-        [tapGestureRecognizer setDelegate: self];
-        [sectionControlView addGestureRecognizer:tapGestureRecognizer];
-        [tapGestureRecognizer release];
-        
-        [collectionView     setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisVertical];
-        [collectionView     setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
-        [sectionControlView setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisHorizontal];
-        [sectionControlView setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
-
-        
-        // MARK: Setup vert auto layout
-        NSString *collectionViewKey = [reportSection sectionKey];
-
-        if ([UIDevice isLagacyOS]) {
-            [[collectionView layer] setBorderColor: shadowColor];
-            [[collectionView layer] setBorderWidth: 1.0000f];
-        } else {
-            [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
-            [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
-        }
-
-        [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
-        
-        CGFloat reportSectionHeight = [[reportSection height] floatValue];
-        sectionHeights += reportSectionHeight;
-
-        id constraintItem =  sectionCounter == 0 ? viewRuler : lastCollectionView;
-
-        [[self designerContentView] addSubview:collectionView];
-        
-        
-        if ([UIDevice isModernOS]) {
-            UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-            [xAxis setMaximumRelativeValue:@(10.0000f)];
-            [xAxis setMinimumRelativeValue:@(-10.0000f)];
             
-            UIInterpolatingMotionEffect *yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-            [yAxis setMaximumRelativeValue:@(10.0000f)];
-            [yAxis setMinimumRelativeValue:@(-10.0000f)];
+            sectionHeights += MTReportDesignerBorderPaddingVertical;
             
-            UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
-            [motionGroup setMotionEffects:@[xAxis, yAxis]];
-            [sectionControlView addMotionEffect:motionGroup];
+            //[lastCollectionView  release];  //Should be nil on first pass.
             
-            [motionGroup release];
-            [yAxis release];
-            [xAxis release];
-        }
+            // MARK: Create collection view for report document section.
+            
+            MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
+            [flowLayoutDesignerSection setDelegate:self];
+            
+            MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+            [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
+            //[backgroundView setBackgroundColor:[UIColor edaGreenLight]];
+            [backgroundView setBackgroundColor:[UIColor clearColor]];
+            
+            NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
+            
+            MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+            [collectionView setObjectIdTag:[reportSection objectID]];
+            
+            NSString *documentElementReuseIdentifier = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
+            [[self collectionViewReuseIdentifiers] setObject:documentElementReuseIdentifier forKey:[reportSection identifier]];
+            [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
+            [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
+            [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:supplmentaryViewReuseIdHeader];
+            
+            NSUInteger collectionViewTag = [[reportSection identifier] integerValue];
+            [collectionView setTag: collectionViewTag];
+            [collectionView setDelegate:self];
+            [collectionView setSectionDelegate:self];
+            [collectionView setDataSource:self];
+            [collectionView setBackgroundColor:[UIColor whiteColor]];
+            [collectionView setClipsToBounds:YES];
+            [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
+            [collectionView setAllowsSelection:YES];
+            [collectionView setAllowsMultipleSelection:YES];
+            [collectionView setBackgroundView:backgroundView];
+            [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            
+            
+            
+            // MARK: Create label to identify document section.
+            DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[reportSection localizedDisplayName]];
+            if ([UIDevice isLagacyOS]) {
+                [sectionControlView setBackgroundColor:[UIColor edaYellow]];
+            } else {
+                [sectionControlView setBackgroundColor:[UIColor clearColor]];
+            }
+            [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            
+            
+            if ([UIDevice isLagacyOS]) {
+                [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
+            }
+            
+            [[sectionControlView layer] setCornerRadius:MTReportDesignerCornerRadius];
+            [sectionControlView setClipsToBounds:YES];
+            [sectionControlView setTag:sectionCounter];
+            
+            UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSectionControlPanel:)];
+            [tapGestureRecognizer setNumberOfTapsRequired:1];
+            [tapGestureRecognizer setNumberOfTouchesRequired:1];
+            [tapGestureRecognizer setDelegate: self];
+            [sectionControlView addGestureRecognizer:tapGestureRecognizer];
+            [tapGestureRecognizer release];
+            
+            [collectionView     setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisVertical];
+            [collectionView     setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisVertical];
+            [sectionControlView setContentHuggingPriority:UILayoutPriorityDefaultLow                forAxis:UILayoutConstraintAxisHorizontal];
+            [sectionControlView setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+            
+            
+            // MARK: Setup vert auto layout
+            NSString *collectionViewKey = [reportSection sectionKey];
+            
+            if ([UIDevice isLagacyOS]) {
+                [[collectionView layer] setBorderColor: shadowColor];
+                [[collectionView layer] setBorderWidth: 1.0000f];
+            } else {
+                [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+                [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
+            }
+            
+            [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
+            
+            CGFloat reportSectionHeight = [[reportSection height] floatValue];
+            sectionHeights += reportSectionHeight;
+            
+            NSString *lastKey = [reportSectionKeyTracker lastObject];
+            id constraintItem =  sectionCounter == 0 ? viewRuler : /*lastCollectionView;*/ [[self sectionViews] objectForKey:lastKey];
+            
+            [[self designerContentView] addSubview:collectionView];
+            
+            
+            if ([UIDevice isModernOS]) {
+                UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+                [xAxis setMaximumRelativeValue:@(10.0000f)];
+                [xAxis setMinimumRelativeValue:@(-10.0000f)];
+                
+                UIInterpolatingMotionEffect *yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+                [yAxis setMaximumRelativeValue:@(10.0000f)];
+                [yAxis setMinimumRelativeValue:@(-10.0000f)];
+                
+                UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
+                [motionGroup setMotionEffects:@[xAxis, yAxis]];
+                [sectionControlView addMotionEffect:motionGroup];
+                
+                [motionGroup release];
+                [yAxis release];
+                [xAxis release];
+            }
+            
+            [[self designerContentView] addSubview:sectionControlView];
+            
+            [[self designerContentView] addConstraints:@[
+                                                         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
+                                                         [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
+                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
+                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
+                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
+                                                         ]];
+            
+            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeLeft  relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft  multiplier: 1.0000f constant: MTReportDesignerBorderPadding]];
+            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]];
+            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f]];
+            
+            if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
+                [self setReportFooterView:collectionView];
+            }
+            [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
+            [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
+            
+            
+            [reportSectionKeyTracker addObject:collectionViewKey];
+            
+            [collectionView release];
+            [sectionControlView release];
+            [backgroundView release];
+            [flowLayoutDesignerSection release];
         
-        [[self designerContentView] addSubview:sectionControlView];
-        
-        [[self designerContentView] addConstraints:@[
-         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-         [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
-         ]];
 
-        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeLeft  relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft  multiplier: 1.0000f constant: MTReportDesignerBorderPadding]];
-        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]];
-        [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f]];
-        
-        if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
-            [self setReportFooterView:collectionView];
-        }
-        [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
-        [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
-        
-        lastCollectionView = [collectionView retain];
-        
-        [collectionView release];
-        [sectionControlView release];
-        [backgroundView release];
-        [flowLayoutDesignerSection release];
+            sectionCounter++;
 
-        sectionCounter++;
+        }
+
     }
+    
+    [reportSectionKeyTracker release];
+
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
-    [lastCollectionView release];
+    //[lastCollectionView release];
 
     [self setRulerView:viewRuler];
     [viewRuler release];
@@ -714,11 +718,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
     [[self designerScrollView] flashScrollIndicators];
     
+    [activeDocument release];
     [sectionEnumerator release];
 }
 
 - (CGSize)designerContentViewSize {
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     CGSize designerContentViewSize = CGSizeMake([[self view] bounds].size.width, CGSizeZero.height);
     designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
@@ -727,13 +733,14 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }
     designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
     [sectionEnumerator release];
+    [activeDocument release];
     return designerContentViewSize;
 }
 
 - (void)updateViewConstraints {
     [super updateViewConstraints];
-    
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     CGSize designerContentViewSize = CGSizeMake([[self view] bounds].size.width, CGSizeZero.height);
     designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
@@ -749,6 +756,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [sectionEnumerator release];
 
     [[self layoutConstraintDesignerContentViewHeight] setConstant:designerContentViewSize.height];
+    [activeDocument release];
 
 }
 
@@ -759,9 +767,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [defaultCenter addObserver: self
@@ -788,14 +796,18 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [defaultCenter addObserver: self
                       selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
-                        object: [self activeDocument]];
+                        object: activeDocument];
+
+    [activeDocument release];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     [[self designerScrollView] setZoomScale:1.0000f animated:animated];
     
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [defaultCenter removeObserver: self
@@ -812,7 +824,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                            object: nil];
     [defaultCenter removeObserver: self
                              name: UIDocumentStateChangedNotification
-                           object: [self activeDocument]];
+                           object: activeDocument];
+    [activeDocument release];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -844,30 +857,30 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
     } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
 
-        MTReportViewerController *viewControllerReportViewer;
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewControllerReportViewer = (MTReportViewerController *)[[segue destinationViewController] topViewController];
-        } else {
-            viewControllerReportViewer = [segue destinationViewController];
-        }
-        [viewControllerReportViewer setViewControllerDelegate:self];
-        //[viewControllerReportViewer setDocumentReport:[self activeDocument]];
+        //MTReportViewerController *viewControllerReportViewer;
+        //if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+            //UINavigationController *d = [segue destinationViewController];
+            //viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
+        //} else {
+            //viewControllerReportViewer = [segue destinationViewController];
+        //}
+        //[viewControllerReportViewer setViewControllerDelegate:self];
+        //[viewControllerReportViewer setDocumentReport:activeDocument];
         
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
         
-        MTReportViewerController *viewControllerReportViewer;
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewControllerReportViewer = (MTReportViewerController *)[[segue destinationViewController] topViewController];
-        } else {
-            viewControllerReportViewer = [segue destinationViewController];
-        }
-        [viewControllerReportViewer setViewControllerDelegate:self];
-        [viewControllerReportViewer setDocumentReport:[self activeDocument]];
+        //MTReportViewerController *viewControllerReportViewer;
+        //if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+        //    UINavigationController *d = [segue destinationViewController];
+        //    viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
+        //} else {
+        //    viewControllerReportViewer = [segue destinationViewController];
+        //}
+        //[viewControllerReportViewer setViewControllerDelegate:self];
         
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
-        
     }
 }
 
@@ -894,8 +907,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 #pragma mark - Document State
 
 - (void)documentStateChanged {
-    UIDocumentState state = [[self activeDocument] documentState];
-    switch ([[self activeDocument] documentState]) {
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    UIDocumentState state = [activeDocument documentState];
+    switch ([activeDocument documentState]) {
         case UIDocumentStateClosed:
             [self enableUserInteraction:[self view]];
             break;
@@ -914,6 +928,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             break;
     }
     [[self documentStatusView] setDocumentState: state];
+    [activeDocument release];
 }
 
 - (void)enableUserInteraction:(id)sender {
@@ -928,7 +943,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MAReportDocument *reportDocument = [self activeDocument];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *reportDocument = activeDocument;
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -951,24 +967,27 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [documentSectionView release];
 
     [[self view] setNeedsUpdateConstraints];
+    [activeDocument release];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-    
-    MAReportDocument *reportDocument = [self activeDocument];
+
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *reportDocument = activeDocument;
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setVisibility: isVisible
                        forSectionAtRow: [self lastSelectedSectionControlPanel]
                 inManagedObjectContext: managedObjectContext];
     [managedObjectContext save:nil];
     [reportDocument save:nil];
-    
+    [activeDocument release];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    MAReportDocument *reportDocument = [self activeDocument];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *reportDocument = activeDocument;
     
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1033,6 +1052,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }];
 
     [documentSectionView release];
+    [activeDocument release];
     
 }
 
@@ -1040,8 +1060,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
 
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[documentSectionView objectIdTag] fromObjectContext:managedObjectContext];
     [documentSection setHeight:@([documentSectionView bounds].size.height)];
     
@@ -1049,20 +1070,22 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [self relayoutSectionView:documentSectionView];
     
     [managedObjectContext save:nil];
+    [activeDocument release];
 }
 
 - (void)relayoutSectionView:(MTDocumentSectionView *)documentSectionView {
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
     NSURL *objectIdUrl = [[objectId URIRepresentation] retain];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
 
-    NSManagedObjectContext *managedObjectContect = [[self activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContect = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:objectId fromObjectContext:managedObjectContect];
 
     NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:[objectIdUrl absoluteString]];
     [layoutConstraint setConstant:documentSection.height.floatValue];
     [objectIdUrl release];
     
-
+    [activeDocument release];
     [[self view] setNeedsUpdateConstraints];
 }
 
@@ -1174,7 +1197,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 #pragma mark - MTElementViewDelegate
 
 - (void)sizeChanged:(id)sender {
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[reportSection identifier] integerValue]];
         if ([(UIView *)sender isDescendantOfView: documentSectionView]) {
@@ -1184,6 +1209,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [(MTElementView *)sender updateDisplayLabel];
     [sender setNeedsDisplay];
     [sectionEnumerator release];
+    [activeDocument release];
 }
 
 - (void)didSelectElementView:(id)sender {
@@ -1324,7 +1350,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 
                 [self setLastSelectedSectionControlPanel:[[sender view] tag]];
                 
-                NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+                NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
                 RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
                 RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                 RptqQuery *query = [[database hasQueries] anyObject];
@@ -1346,6 +1373,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 } else {
                     [self showToolbox:MTToolboxTypeSection];
                 }
+                [activeDocument release];
             }
             
         }
@@ -1436,9 +1464,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (NSSet *)elementViews {
     
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     NSMutableSet *results = [[NSMutableSet alloc] init];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:
-                                     [[self activeDocument] managedObjectContext]];
+                                     [activeDocument managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -1459,6 +1488,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
         [documentSectionView release];
     }
+    [activeDocument release];
     [enumerator release];
     return [results autorelease];
 }
@@ -1477,7 +1507,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 - (NSSet *)selectedElementViews {
 
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -1492,7 +1524,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         [documentSectionView release];
     }
     [enumerator release];
-    
+    [activeDocument release];
     return [results autorelease];
 
 }
@@ -1581,16 +1613,18 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         
             [[self view] layoutIfNeeded];
             
+            __block MTReportDesignerViewController *reportDesigner = self;
+
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 //[self setWantsFullScreenLayout:YES];
                 
-                [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
-                [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
+                [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxHidden]];
+                [[reportDesigner view] addConstraints:[self layoutConstraintsToolboxVisiable]];
                 
-                [[self toolbarBottomHeightConstraint] setConstant:0.0000f];
+                [[reportDesigner toolbarBottomHeightConstraint] setConstant:0.0000f];
             
 
-                [[self view] layoutIfNeeded];
+                [[reportDesigner view] layoutIfNeeded];
             } completion:^(BOOL finished) {
                 
                 if (finished) {
@@ -1598,10 +1632,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                     CGRect rectToShow = CGRectZero;
                     
                     if (tooboxType == MTToolboxTypeSection) {
+                        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
                         
-                        MAReportDocument *reportDocument = [self activeDocument];
-                        
-                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
                         RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
@@ -1610,6 +1643,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
                         
                         rectToShow = selectedSectionView.frame;
+                        [activeDocument release];
                         
                     } else if (tooboxType == MTToolboxTypeElement) {
                         rectToShow = [self rectForSelectedElements];
@@ -1619,7 +1653,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         
                         CGFloat offsetPointY = rectToShow.origin.y + rectToShow.size.height + 5.0000f - [[self designerScrollView] frame].size.height;
                         CGPoint offsetPoint = CGPointMake(CGPointZero.x, offsetPointY);
-                        [[self designerScrollView] setContentOffset:offsetPoint animated:YES];
+                        [[reportDesigner designerScrollView] setContentOffset:offsetPoint animated:YES];
                         
                     }
                 }            
@@ -1655,23 +1689,24 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             [[self view] layoutIfNeeded];
             [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
             CGFloat toolboxHeight = self.navigationController.toolbar.frame.size.height;
+            __block MTReportDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-                [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
-                [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
-                [[self toolbarBottomHeightConstraint] setConstant:toolboxHeight];
-                [[self view] layoutIfNeeded];
+                [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
+                [[reportDesigner view] addConstraints:[self layoutConstraintsToolboxHidden]];
+                [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolboxHeight];
+                [[reportDesigner view] layoutIfNeeded];
                 
             } completion:^(BOOL finished) {
                 if (finished) {
-                    if ([[[self navigationControllerSectionLayoutSettings] view] superview] != nil) {
-                        [[[self navigationControllerSectionLayoutSettings] view] removeFromSuperview];
+                    if ([[[reportDesigner navigationControllerSectionLayoutSettings] view] superview] != nil) {
+                        [[[reportDesigner navigationControllerSectionLayoutSettings] view] removeFromSuperview];
                     }
-                    if ([[[self viewControllerToolbox] view] superview] != nil) {
-                        [[[self viewControllerToolbox] view] removeFromSuperview];
+                    if ([[[reportDesigner viewControllerToolbox] view] superview] != nil) {
+                        [[[reportDesigner viewControllerToolbox] view] removeFromSuperview];
                     }
-                    [[self toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
-                    [[self toolbarTop] setItems:[self toolbarTopItems] animated:YES];
-                    [[self informationButton] setEnabled: YES];
+                    [[reportDesigner toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
+                    [[reportDesigner toolbarTop] setItems:[self toolbarTopItems] animated:YES];
+                    [[reportDesigner informationButton] setEnabled: YES];
                 }
             }];
             [self deselectAllElementsAnimated:YES];
@@ -1693,7 +1728,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
     //[self relayoutSectionView:section];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
@@ -1704,10 +1740,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     if (error != nil) {
         [error presentErrorToUser];
     }
-    
     [[self designerContentView] setNeedsLayout];
     [[self view] setNeedsUpdateConstraints];
-
+    [activeDocument release];
 }
 
 #pragma mark - UIPopoverControllerDelegate
@@ -1738,9 +1773,11 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     NSManagedObjectID *objectId = [cell objectIdTag];
     [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
         if (finished) {
-            NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+            MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
             [RptqDocumentObject removeDocumentObject:documentObject];
+            [activeDocument release];
         }
     }];
 }
@@ -1753,10 +1790,12 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 #pragma mark Collection View Layout Delegate
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
+    [activeDocument release];
     return [[documentSection height] floatValue];
 }
 
@@ -1764,7 +1803,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1779,7 +1819,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     } else {
         result = CGSizeZero;
     }
-
+    [activeDocument release];
     return result;
 }
 
@@ -1787,7 +1827,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                                                     layout: (UICollectionViewLayout *)collectionViewLayout
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
 
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1811,13 +1853,14 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         [result setFrame:CGRectZero];
     }
     [result setLastTouchPointValid: NO];
-
+    [activeDocument release];
     return [result autorelease];
 }
 
 - (NSUInteger)collectionView:(UICollectionView *)collectionView
                       layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
 
@@ -1831,6 +1874,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         NSError *error = nil;
         [[documentObject managedObjectContext] save:&error];
     }
+    [activeDocument release];
     return dropIndex;
 }
 
@@ -1839,9 +1883,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
           setDropPoint:(CGPoint)dropPoint
     forItemAtIndexPath:(NSIndexPath *)indexPath {
 
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
@@ -1850,20 +1895,22 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
         
     if ([objects count] > row) {
-        NSError *error;
-
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        [documentObject setDropPointX:@(dropPoint.x)];
-        [documentObject setDropPointY:@(dropPoint.y)];
-        [[documentObject managedObjectContext] save:&error];
+        NSNumber *dropPointX = @(dropPoint.x);
+        NSNumber *dropPointY = @(dropPoint.y);
+        [documentObject setDropPointX:dropPointX];
+        [documentObject setDropPointY:dropPointY];
+        [[documentObject managedObjectContext] save:nil];
     }
+    [activeDocument release];
 }
 
 
 #pragma mark Collection View Data Source
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
@@ -1895,11 +1942,41 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 
                 [cell setBackgroundColor:[UIColor clearColor]];
                 [[cell contentView] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-                MTElementView *elementView = [[self elementViewForObjectId:[documentObject objectID]
-                                                                inContext:managedObjectContext] retain];
+                
+                
+                
+                MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
+                                                                     inObjectContext:managedObjectContext];
+                [elementView setDelegate:self];
+                [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+                
+                if ([UIDevice isLagacyOS]) {
+                    [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
+                    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+                    [[elementView layer] setBorderWidth:1.0000f];
+                }
+                
+                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+                [panGesture setMaximumNumberOfTouches:1];
+                
+                //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchPiece:)];
+                
+                [panGesture setDelegate:self];
+                //[pinchGesture setDelegate:self];
+                
+                
+                [[[self designerScrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
+                //[[[self designerScrollView] pinchGestureRecognizer] requireGestureRecognizerToFail:pinchGesture];
+                
+                [elementView addGestureRecognizer:panGesture];
+                //[elementView addGestureRecognizer:pinchGesture];
+                
+                [panGesture release];
+
+                
                 [elementView setFrame:cellFrame];
-                [elementView setContainer: cell];
-                [elementView setContainerGroup: collectionView];
+                //[elementView setContainer: cell];
+                //[elementView setContainerGroup: collectionView];
                                 
                 [cell setTag:[[documentObject identifier] integerValue] + 3838];
                 [cell setObjectIdTag:[documentObject objectID]];
@@ -1912,41 +1989,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             }
         }
     }
-    
+    [activeDocument release];
     return [cell autorelease];
-}
-
-- (MTElementView *)elementViewForObjectId:(NSManagedObjectID *)objectId inContext:(NSManagedObjectContext *)objectContext {
-    MTElementView *elementView = [[MTElementView alloc] initWithObjectId:objectId
-                                                         inObjectContext:objectContext];
-    [elementView setDelegate:self];
-    [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-
-    if ([UIDevice isLagacyOS]) {
-        [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
-        [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[elementView layer] setBorderWidth:1.0000f];
-    }
-    
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
-    [panGesture setMaximumNumberOfTouches:1];
-
-    //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchPiece:)];
-    
-    [panGesture setDelegate:self];
-    //[pinchGesture setDelegate:self];
-    
-    
-    [[[self designerScrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
-    //[[[self designerScrollView] pinchGestureRecognizer] requireGestureRecognizerToFail:pinchGesture];
-    
-    [elementView addGestureRecognizer:panGesture];
-    //[elementView addGestureRecognizer:pinchGesture];
-    
-    [panGesture release];
-    //[pinchGesture release];
-
-    return [elementView autorelease];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1958,12 +2002,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
     
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    [activeDocument release];
     return [objects count];
 }
 
@@ -1996,15 +2041,19 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[self activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:[activeDocument managedObjectContext]];
+    [activeDocument release];
     return [[documentSection hasRows] count];
 }
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
-                                                                            fromObjectContext:[[self activeDocument] managedObjectContext]];
+                                                                            fromObjectContext:[activeDocument managedObjectContext]];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    [activeDocument release];
     return [objects count];
 }
 
@@ -2051,7 +2100,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (NSSet *)selectedObjectIdsCalculated {
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[[self activeDocument] managedObjectContext]];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     for (RptqDocumentSection *documentSection in enumerator) {
         MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
         
@@ -2060,6 +2110,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         [documentSectionView release];
     }
     [enumerator release];
+    [activeDocument release];
     return [results autorelease];
 }
 
@@ -2073,7 +2124,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     NSInteger row = [indexPath row];
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     
@@ -2081,7 +2133,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
         [self performSelector:action withObject:documentObject];
     }
-    
+    [activeDocument release];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -2108,10 +2160,11 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [[self designerScrollView] setZoomScale:1.0000f animated:NO];
         //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
+        __block MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
-            [[self view] setNeedsUpdateConstraints];
-            [[self designerContentView] setNeedsLayout];
-            [[self designerContentView] setNeedsDisplay];
+            [[reportDesigner view] setNeedsUpdateConstraints];
+            [[reportDesigner designerContentView] setNeedsLayout];
+            [[reportDesigner designerContentView] setNeedsDisplay];
         }];
     } else {
         if ([UIDevice isPad]) {
@@ -2120,19 +2173,21 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             } else {
                 [[self designerScrollView] setZoomScale:1.0000f animated:NO];
                 //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
+                __block MTReportDesignerViewController *reportDesigner = self;
                 [self dismissViewControllerAnimated:YES completion:^{
-                    [[self view] setNeedsUpdateConstraints];
-                    [[self designerContentView] setNeedsLayout];
-                    [[self designerContentView] setNeedsDisplay];
+                    [[reportDesigner view] setNeedsUpdateConstraints];
+                    [[reportDesigner designerContentView] setNeedsLayout];
+                    [[reportDesigner designerContentView] setNeedsDisplay];
                 }];
             }
         } else {
+            __block MTReportDesignerViewController *reportDesigner = self;
             [self dismissViewControllerAnimated:YES completion:^{
                 //[[self designerScrollView] setZoomScale:1.0000f animated:NO];
                 //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
                 //[[self view] setNeedsUpdateConstraints];
                 //[[self designerContentView] setNeedsLayout];
-                [[self designerContentView] setNeedsDisplay];
+                [[reportDesigner designerContentView] setNeedsDisplay];
             }];
         }
     }
@@ -2168,18 +2223,20 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
-
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDocumentSection *section = [document hasDetailSection];
     //NSManagedObjectID *sectionID = [section objectID];
+    [activeDocument release];
     
+    __block MTReportDesignerViewController *reportDesigner = self;
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
-    
+
     [detailSection performBatchUpdates:^{
-        
-        MAReportDocument *reportDocument = [self activeDocument];
-        NSManagedObjectContext *managedObjectContextBlock = [reportDocument managedObjectContext];
+        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+        NSManagedObjectContext *managedObjectContextBlock = [activeDocument managedObjectContext];
         
         
         RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination
@@ -2189,7 +2246,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         NSError *error = nil;
         [managedObjectContextBlock save:&error];
         [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-        
+        [activeDocument release];
         
     } completion:^(BOOL finished) {
         
@@ -2199,10 +2256,12 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             [UIView animateWithDuration:0.3 animations:^{
                 //[[detailSection collectionViewLayout] invalidateLayout];
                 //[detailSection invalidateIntrinsicContentSize];
+                MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
                 RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
-                                                                                        fromObjectContext: [[self activeDocument] managedObjectContext]];
+                                                                                        fromObjectContext: [activeDocument managedObjectContext]];
                 [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
-                [[self designerContentView] setNeedsUpdateConstraints];
+                [[reportDesigner designerContentView] setNeedsUpdateConstraints];
+                [activeDocument release];
                 //NSInteger numberOfRows = [[documentSection numberOfRows] integerValue];
                 //for (NSInteger i=0; i<numberOfRows; i++) {
                 //    NSInteger numberOfItems = [detailSection numberOfItemsInSection:0];
@@ -2219,7 +2278,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }
         
     }];
-    
 }
 
 #pragma mark - Gesture Recognizer Delegate
@@ -2241,8 +2299,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
-    
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
@@ -2272,6 +2330,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         
         if (found) {
             
+            __block MTReportDesignerViewController *reportDesigner = self;
+
             [svSection performBatchUpdates:^{
                 
                 RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
@@ -2287,14 +2347,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 
             } completion:^(BOOL finished) {
                 if (finished) {
-                    [self resizeCollectionView:svSection];
+                    [reportDesigner resizeCollectionView:svSection];
                     if (completion != nil) {
                         completion(YES);
                     }
                 }
             }];
         }
-        
         [hasObjects release];
         if (found) {
             break;
@@ -2302,8 +2361,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         found = NO;     // FIXME: Short circut this?
         deleteSection++;
     }
+    [activeDocument release];
 }
 
+/*
 - (void)pinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible:
@@ -2351,7 +2412,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             break;
         }
         case UIGestureRecognizerStateEnded: {
-            NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[(MTElementView *)[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
             CGFloat sizeWidth = nearbyintf(_currentScaleSize.width * [[documentObject sizewidth] floatValue]);
             CGFloat sizeHeight = nearbyintf(_currentScaleSize.height * [[documentObject sizeheight] floatValue]);
@@ -2377,8 +2438,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             //[cell setNeedsLayout];
             //[cell setNeedsDisplay];
             //[cell release];
+
             dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            
             dispatch_async(queuePriorityBackground, ^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UICollectionView *collectionView = [[elementView containerGroup] retain];
@@ -2395,7 +2456,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             break;
         }
     }
-}
+}*/
 
 - (void)addPointA:(CGPoint)pointA andPointB:(CGPoint)pointB {
     _currentNewPointAX *= previousScaleWeight;
@@ -2476,10 +2537,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             }
             
             if (newSection != nil) {
-
+                __block MTReportDesignerViewController *reportDesigner = self;
                 [newSection performBatchUpdates:^{
-                    
-                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+                    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
                     
                     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
                     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId
@@ -2521,10 +2582,11 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                     [newSection insertItemsAtIndexPaths:indexPaths];
                     
                     [hasObjects release];
+                    [activeDocument release];
                     
                 } completion:^(BOOL finished) {
                     if (finished) {
-                        [self resizeCollectionView:newSection];
+                        [reportDesigner resizeCollectionView:newSection];
                     }
                 }];
                 
@@ -2541,13 +2603,16 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView {
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
-                                                                            fromObjectContext: [[self activeDocument] managedObjectContext]];
+                                                                            fromObjectContext: [activeDocument managedObjectContext]];
     [documentSection setHeight:@([collectionView intrinsicContentSize].height)];
+    __block MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:0.6666f animations:^{
         [collectionView invalidateIntrinsicContentSize];
-        [[self designerContentView] setNeedsUpdateConstraints];
+        [[reportDesigner designerContentView] setNeedsUpdateConstraints];
     }];
+    [activeDocument release];
 }
 
 - (BOOL)checkAndUpdateHeightForSection:(RptqDocumentSection *)documentSection forHeight:(CGFloat)height {
