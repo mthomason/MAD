@@ -339,7 +339,11 @@ const NSUInteger tagAlertViewAquire         = 666;
             if (canceled == NO) {
                 [self saveUsername:[self saveUsername] andPassword:[self savePassword] forKey:[self saveKey]];
             }
-            [self saveCompletion](!canceled, nil, [[[self saveUsername] retain] autorelease], [[[self savePassword] retain] autorelease]);
+            NSString *u = [[self saveUsername] retain];
+            NSString *p = [[self savePassword] retain];
+            [self saveCompletion](!canceled, nil, u, p);
+            [u release];
+            [p release];
             break;
         }
             
