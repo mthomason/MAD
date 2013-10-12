@@ -9,17 +9,14 @@
 #import "UITableViewControllerCoreDataResults.h"
 
 @interface UITableViewControllerCoreDataResults()
+
 @property (nonatomic) BOOL beganUpdates;
+
 @end
 
 @implementation UITableViewControllerCoreDataResults
 
 #pragma mark - Properties
-
-@synthesize fetchedResultsController = _fetchedResultsController;
-@synthesize suspendAutomaticTrackingOfChangesInManagedObjectContext = _suspendAutomaticTrackingOfChangesInManagedObjectContext;
-@synthesize debug = _debug;
-@synthesize beganUpdates = _beganUpdates;
 
 - (void)dealloc {
     [_fetchedResultsController release];

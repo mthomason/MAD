@@ -11,8 +11,6 @@
 
 @implementation UITableViewCellInstruction
 
-@synthesize labelGroupType = _labelGroupType, labelGroupTypeDetail = _labelGroupTypeDetail;
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
