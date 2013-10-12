@@ -58,29 +58,36 @@
                     
                     NSError *errorConnection = nil;
                     MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&errorConnection];
-                    NSMutableArray *results = nil;
                     BOOL successConnection = conn != nil;
                     if (successConnection) {
+                        
                         MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+
+                        NSArray *fetchResults = [fetch results], *fetchFields = [fetch fields];
+                        NSInteger resultsCount = [fetchResults count], fieldsCount = [fetchFields count];
+                        
+                        NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+
                         if (fetch) {
-                            if ([[fetch fields] count] > 0) {
-                                
-                                MysqlFetchField *resultsTableName = [[fetch fields] objectAtIndex:0];
-                                results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
+                            if (fieldsCount > 0) {
+                                MysqlFetchField *resultsTableName = [fetchFields objectAtIndex:0];
                                 
                                 for (NSDictionary *tableName in [fetch results]) {
-                                    NSString *tn = [tableName objectForKey:[resultsTableName name]];
+
+                                    NSString *tableKey = [resultsTableName name];
+                                    NSString *tn = [tableName objectForKey:tableKey];
+                                    
                                     MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
                                     [results addObject: databaseTable];
                                     [databaseTable release];
                                 }
                             }
                         }
+                        completion(successConnection, errorConnection, [results autorelease]);
                     } else {
                         [[MTKeyChain sharedObject] deleteKey:key];
+                        completion(NO, errorConnection, nil);
                     }
-
-                    completion(successConnection, errorConnection, results);
 
                     [serv release];
 

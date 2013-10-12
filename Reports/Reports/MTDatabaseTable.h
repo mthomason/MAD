@@ -15,10 +15,10 @@
 
 - (id)initWithTableName:(NSString *)tableName;
 
-@property (copy) NSString *name;
-@property (copy) NSString *label;
-@property (copy) NSString *labelPlural;
-@property (assign) BOOL queryable;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *label;
+@property (nonatomic, retain) NSString *labelPlural;
+@property (nonatomic, assign) BOOL queryable;
 
 @end
 

@@ -2181,7 +2181,7 @@
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		4C384E3014B29789007B4F48 /* mad-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mad-Info.plist"; sourceTree = "<group>"; };
+		4C384E3014B29789007B4F48 /* mad-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "mad-Info.plist"; path = "Reports/mad-Info.plist"; sourceTree = "<group>"; };
 		4C384E3214B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C384E3414B29789007B4F48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
@@ -3637,6 +3637,8 @@
 			isa = PBXGroup;
 			children = (
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
+				4C384E3014B29789007B4F48 /* mad-Info.plist */,
+				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
 				4CDD5ACD17ECDFB00032DF6E /* UIApplication+Extras.h */,
 				4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */,
 				4C4A68C017EA02D000FD6A73 /* MTViewControllerActivitySpinner.h */,
@@ -3717,8 +3719,6 @@
 		4C384E2F14B29789007B4F48 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3014B29789007B4F48 /* mad-Info.plist */,
-				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
 				4C384E3114B29789007B4F48 /* InfoPlist.strings */,
 				4C384E3414B29789007B4F48 /* main.m */,
 				4C384E3614B29789007B4F48 /* Reports-Prefix.pch */,
