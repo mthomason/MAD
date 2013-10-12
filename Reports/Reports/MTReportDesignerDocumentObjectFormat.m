@@ -28,7 +28,6 @@
 @implementation MTReportDesignerDocumentObjectFormat
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_userSelectedObjectIds release];
     [_tableViewCellDecimals release];
     [_tableViewCellCurrency release];

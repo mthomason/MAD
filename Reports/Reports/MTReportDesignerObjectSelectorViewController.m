@@ -78,7 +78,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @implementation MTReportDesignerObjectSelectorViewController
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_saveButton release];
     [_viewControllerToPush release];
     [_visibleViewController release];

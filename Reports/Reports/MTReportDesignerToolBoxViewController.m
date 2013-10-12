@@ -29,7 +29,6 @@
 @implementation MTReportDesignerToolBoxViewController
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_tableViewControllerDocumentObjectFormat release];
     [_tableViewControllerFontSelector release];
     [_tableViewControllerTextLayoutSettings release];

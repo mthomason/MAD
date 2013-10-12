@@ -28,7 +28,6 @@
 @implementation MTReportDesignerSectionViewLayoutLiquid
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_itemAttributesBySection release];
     [_decorationAttributesBySection release];
     [_invalidatedLayoutArray release];

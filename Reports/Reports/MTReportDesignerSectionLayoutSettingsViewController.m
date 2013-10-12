@@ -26,7 +26,6 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 @implementation MTReportDesignerSectionLayoutSettingsViewController
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_labelHeight release];
     [_labelNumberOfRows release];
     [_heightStepper release];

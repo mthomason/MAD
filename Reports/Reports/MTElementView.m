@@ -44,7 +44,6 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];

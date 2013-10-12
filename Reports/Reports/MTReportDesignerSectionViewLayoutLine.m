@@ -23,7 +23,6 @@
 @implementation MTReportDesignerSectionViewLayoutLine
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_itemAttributesBySection release];
     [_decorationAttributesBySection release];
     [_invalidatedLayoutArray release];

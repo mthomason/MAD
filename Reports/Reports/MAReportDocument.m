@@ -17,7 +17,6 @@
 @implementation MAReportDocument
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_mom release];
     [super dealloc];
 }

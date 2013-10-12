@@ -18,7 +18,6 @@
 @implementation MTReportDesignerFontSelectorViewController
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
     [_initalSelectedFont release];
     [_tableViewCellFontAmericanTypewriter release];
     [_tableViewCellFontArial release];

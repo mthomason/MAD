@@ -57,8 +57,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @implementation MTReportViewerPrintPageRenderer
 
 - (void)dealloc {
-    MTLog(@"Dealloc");
-    //[_document release];
     [_cachedLayoutByPage release];
     [_cachedSortedSortDescriptorsGroup release];
     [_cachedDataByPage release];
