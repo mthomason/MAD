@@ -19,7 +19,7 @@
 @implementation MTAlertView
 
 - (void)dealloc {
-    
+    [_alertView release];
     [_dismissBlock release];
     [_cancelBlock release];
     [super dealloc];
