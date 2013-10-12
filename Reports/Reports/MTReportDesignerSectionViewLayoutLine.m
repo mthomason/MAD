@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerSectionViewLayoutLine.h"
+#import "MTLog.h"
 
 @interface MTReportDesignerSectionViewLayoutLine ()
 
@@ -22,6 +23,7 @@
 @implementation MTReportDesignerSectionViewLayoutLine
 
 - (void)dealloc {
+    MTLog(@"Dealloc");
     [_itemAttributesBySection release];
     [_decorationAttributesBySection release];
     [_invalidatedLayoutArray release];

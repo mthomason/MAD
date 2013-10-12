@@ -186,6 +186,7 @@
                 if (success) {
                     
                     __block MAReportDocument *documentReport = managedDocument;
+                    __block MTDatabaseDriverSelectorMySqlViewController *viewContoller = self;
                     
                     MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
                     [databaseConnection setUsername:    [[self textFieldUsername] text]];
@@ -220,7 +221,7 @@
                                                                 //[self dismissViewControllerAnimated:YES completion:^{
                                                                     [sender setEnabled:YES];
                                                                     //[[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                                    [[self delegate] viewControllerDidFinish: self];
+                                                                    [[viewContoller delegate] viewControllerDidFinish: viewContoller];
                                                                 //}];
                                                                 
                                                             });
@@ -245,10 +246,10 @@
                                                         
                                                         //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
-                                                            [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
 
-                                                            [[self delegate] viewControllerDidFinish: self];
+                                                            [[viewContoller delegate] viewControllerDidFinish: viewContoller];
                                                         //}];
                                                     }];
                                                     
@@ -262,8 +263,8 @@
                                                         
                                                         //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
-                                                            [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
                                                         //}];
                                                         
                                                         
@@ -271,8 +272,8 @@
                                                         
                                                         //[self dismissViewControllerAnimated:YES completion:^{
                                                             [sender setEnabled:YES];
-                                                            [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
                                                         //}];
                                                         
                                                     }];

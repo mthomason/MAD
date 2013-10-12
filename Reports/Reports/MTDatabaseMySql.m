@@ -305,7 +305,7 @@
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
         
-        __block RptqQueryCache *queryCache = nil;
+        
         RptqQuery *query = [[database hasQueries] anyObject];
         
         __block MysqlServer *serv = [[MysqlServer alloc] init];
@@ -320,6 +320,7 @@
             if (success) {
                 [serv setUser:      username];
                 [serv setPassword:  password];
+                
                 [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                     NSError *connError = nil;
                     MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
@@ -327,7 +328,7 @@
                         
                             @autoreleasepool {
                                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
-                                queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
+                                RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
                                 
                                 NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
                                                                                                 format:NSPropertyListBinaryFormat_v1_0
@@ -350,14 +351,15 @@
                         [[MTKeyChain sharedObject] deleteKey:key];
                     }
                     
-                    [serv release];
                     
                     completion(self, [query hasQueryCache]);
                 }];
             } else {
                 completion(nil, nil);
             }
+            
         }];
+        [serv release];
     }
 }
 

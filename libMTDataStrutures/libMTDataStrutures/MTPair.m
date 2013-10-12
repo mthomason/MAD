@@ -42,8 +42,8 @@
 }
 
 + (id)pairWithFormer:(id)former andLatter:(id)latter {
-    MTPair *pair = [[MTPair alloc] initWithFormer:former andLatter:latter];
-    return [pair autorelease];
+    id result = [[self alloc] initWithFormer:former andLatter:latter];
+    return [result autorelease];
 }
 
 - (NSString *)toStringHumanReadable {

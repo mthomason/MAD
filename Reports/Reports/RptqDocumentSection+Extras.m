@@ -296,7 +296,9 @@
             CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
             if (totalHeight > resultHeight) {
                 resultHeight = totalHeight;
-                [section setLayoutHeight:@(resultHeight)];
+                NSNumber *h = [[NSNumber alloc] initWithFloat:resultHeight];
+                [section setLayoutHeight:h];
+                [h release];
             }
         }
     }

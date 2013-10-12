@@ -11,9 +11,9 @@
 
 @interface MTEdge ()
 
-@property(nonatomic, retain) MTPair *vertices;
-@property(nonatomic, retain) NSNumber *weight;
-@property(readwrite, assign) BOOL isDirected;
+@property (nonatomic, retain) MTPair *vertices;
+@property (nonatomic, retain) NSNumber *weight;
+@property (readwrite, assign) BOOL isDirected;
 @property (nonatomic, retain) NSNumber *uniqueIdForStructure;
 
 @end
@@ -21,6 +21,7 @@
 @implementation MTEdge
 
 - (void)dealloc {
+    [_uniqueIdForStructure release];
     [_vertices release];
     [_weight release];
     [super dealloc];

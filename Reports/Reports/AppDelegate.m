@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.46";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.46";
-NSString * const MTGlobalBundleRev                                  = @"667";
+NSString * const MTGlobalBundleVersion                              = @"1.0.60";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.60";
+NSString * const MTGlobalBundleRev                                  = @"681";
 
 @interface AppDelegate()
 
@@ -53,8 +53,16 @@ void uncaughtExceptionHandler(NSException *exception) {
     //    NSLog (@"%@: %@", fontFamily, fontNames);
     //}
     
+    
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    
     NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev!");
     NSCAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
     NSCAssert([[AppDelegate bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
@@ -185,22 +193,24 @@ const NSInteger MATagNewDocument = 3838;
 
 + (NSAttributedString *)attributedStringMadViewer {
 
-    NSString *title = @"MAD Viewer";
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Viewer"];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
+    UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
+    UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     return [attributedStringMadDesigner autorelease];
 
 }
 
 + (NSAttributedString *)attributedStringMadQuery {
 
-    NSString *title = @"MAD Query";
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Query"];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
+    UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
+    UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     return [attributedStringMadDesigner autorelease];
 
 }

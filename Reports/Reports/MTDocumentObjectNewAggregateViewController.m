@@ -10,14 +10,6 @@
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
-
-@interface MTDocumentObjectNewAggregateViewController ()
-
-@end
-
-@implementation MTDocumentObjectNewAggregateViewController
-
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
 NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";
 NSString * const MTSegueAggregateFunctionLast       = @"MTSegueAggregateFunctionLast";
@@ -27,6 +19,22 @@ NSString * const MTSegueAggregateFunctionMinimum    = @"MTSegueAggregateFunction
 NSString * const MTSegueAggregateFunctionSum        = @"MTSegueAggregateFunctionSum";
 NSString * const MTSegueAggregateGroupTypeSave      = @"MTSegueAggregateGroupTypeSave";
 NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSave";
+
+NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
+
+@interface MTDocumentObjectNewAggregateViewController ()
+
+@end
+
+@implementation MTDocumentObjectNewAggregateViewController
+
+- (void)dealloc {
+    [_fieldObjectId release];
+    [_tableViewCellAggrageFunction release];
+    [_tableViewCellAggregateInput release];
+    [_tableViewCellAggregateGroupBy release];
+    [super dealloc];
+}
 
 - (IBAction)unwindToNewAggregateFunction:(UIStoryboardSegue *)action {
 
@@ -132,14 +140,6 @@ NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSav
         
     }
 
-}
-
-- (void)dealloc {
-    [_fieldObjectId release];
-    [_tableViewCellAggrageFunction release];
-    [_tableViewCellAggregateInput release];
-    [_tableViewCellAggregateGroupBy release];
-    [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {

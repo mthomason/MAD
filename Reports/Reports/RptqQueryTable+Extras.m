@@ -51,8 +51,8 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
+    NSString *className = NSStringFromClass([RptqQueryTable class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: className];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"databaseSchemaTable == %@", [databaseSchemaTable objectID]];
     [request setPredicate:predicate];
     NSError *error = nil;
@@ -64,7 +64,10 @@
                                          insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
 
     
-    [queryTable setDropIndex:@(numberOfReferencesToTableInQuery)];
+    NSNumber *dropIndex = [@(numberOfReferencesToTableInQuery) retain];
+    [queryTable setDropIndex:dropIndex];
+    [dropIndex release];
+    
     [queryTable setDatabaseSchemaTable:databaseSchemaTable];
     [queryTable setAlias:[queryTable tableAlias]];
 

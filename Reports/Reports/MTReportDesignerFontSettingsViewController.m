@@ -72,6 +72,7 @@
 
 
 - (void)dealloc {
+    MTLog(@"Dealloc");
     [_userSelectedObjectIds release];
     [_labelFontName release];
     [_segControlFontStyle release];

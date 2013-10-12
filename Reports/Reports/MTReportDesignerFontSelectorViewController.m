@@ -10,23 +10,29 @@
 #import "MTFont.h"
 
 @interface MTReportDesignerFontSelectorViewController()
+
 @property (nonatomic, retain) MTFont *initalSelectedFont;
+
 @end
 
 @implementation MTReportDesignerFontSelectorViewController
 
-@synthesize delegate;
-@synthesize tableViewCellFontAmericanTypewriter;
-@synthesize tableViewCellFontArial;
-@synthesize tableViewCellFontCourierNew;
-@synthesize tableViewCellFontCourier;
-@synthesize tableViewCellFontGeorgia;
-@synthesize tableViewCellFontHelvetica;
-@synthesize tableViewCellFontHelveticaNeue;
-@synthesize tableViewCellFontTimesNewRoman;
-@synthesize tableViewCellFontTrebuchet;
-@synthesize tableViewCellFontVerdana;
-@synthesize tableViewCellFontZapfino;
+- (void)dealloc {
+    MTLog(@"Dealloc");
+    [_initalSelectedFont release];
+    [_tableViewCellFontAmericanTypewriter release];
+    [_tableViewCellFontArial release];
+    [_tableViewCellFontCourierNew release];
+    [_tableViewCellFontCourier release];
+    [_tableViewCellFontGeorgia release];
+    [_tableViewCellFontHelvetica release];
+    [_tableViewCellFontHelveticaNeue release];
+    [_tableViewCellFontTimesNewRoman release];
+    [_tableViewCellFontTrebuchet release];
+    [_tableViewCellFontVerdana release];
+    [_tableViewCellFontZapfino release];
+    [super dealloc];
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -150,19 +156,4 @@
     
 }
 
-- (void)dealloc {
-    [_initalSelectedFont release];
-    [tableViewCellFontAmericanTypewriter release];
-    [tableViewCellFontArial release];
-    [tableViewCellFontCourierNew release];
-    [tableViewCellFontCourier release];
-    [tableViewCellFontGeorgia release];
-    [tableViewCellFontHelvetica release];
-    [tableViewCellFontHelveticaNeue release];
-    [tableViewCellFontTimesNewRoman release];
-    [tableViewCellFontTrebuchet release];
-    [tableViewCellFontVerdana release];
-    [tableViewCellFontZapfino release];
-    [super dealloc];
-}
 @end

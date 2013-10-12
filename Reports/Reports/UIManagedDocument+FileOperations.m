@@ -12,7 +12,7 @@
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler {
 
-    id managedDocumentAtUrl = [[UIManagedDocument alloc] initWithFileURL:url];
+    __block id managedDocumentAtUrl = [[UIManagedDocument alloc] initWithFileURL:url];
 
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                                 NSInferMappingModelAutomaticallyOption : @YES};
@@ -34,7 +34,7 @@
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id, BOOL))completionHandler {
     
-    id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
+    __block id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
     
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                               NSInferMappingModelAutomaticallyOption : @YES};

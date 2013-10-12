@@ -26,7 +26,7 @@
 
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
@@ -50,11 +50,15 @@
     [_controllersForObjectIdsLink release];
     [_scrollView release];
     [_contentView release];
+    
     [_containerViewHeightConstraint release];
     [_containerViewWidthConstraint release];
     [_backgroundContainer release];
     [_toolbarBottom release];
     [_barButtonItemShowSQL release];
+    [_tableIds release];
+    [_reportDocument release];
+    [_showSqlPopoverController release];
     [super dealloc];
 }
 
@@ -672,6 +676,8 @@
     [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
     [self setTableDisplayCounter:0];
 
+    __block MTQueryBuilderAdvancedViewController *viewController = self;
+    
     dispatch_queue_t queuePriorityMain = dispatch_get_main_queue();
     dispatch_queue_t queuePriorityNormal = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
@@ -688,7 +694,7 @@
 
                     NSArray *queryLinks = [[RptqDocument queryLinksForActiveDocument] retain];
                     for (RptqQueryLinks *queryLink in queryLinks) {
-                        [self addLinkViewControllerForQueryLink:queryLink];
+                        [viewController addLinkViewControllerForQueryLink:queryLink];
                     }
                     [queryLinks release];
 

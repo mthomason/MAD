@@ -17,7 +17,6 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontSelector;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
-@property (nonatomic, retain) IBOutlet UIView *backgroundView;
 @property (nonatomic, retain) IBOutlet UIView *contentView;
 @property (nonatomic, retain) IBOutlet UISegmentedControl *sceneSelector;
 
@@ -30,13 +29,15 @@
 @implementation MTReportDesignerToolBoxViewController
 
 - (void)dealloc {
+    MTLog(@"Dealloc");
     [_tableViewControllerDocumentObjectFormat release];
+    [_tableViewControllerFontSelector release];
+    [_tableViewControllerTextLayoutSettings release];
     [_selectedObjectIds release];
     [_navigationBar release];
     [_navigationItemStyle release];
     [_navigationItemFontSelector release];
     [_navigationItemLayout release];
-    [_backgroundView release];
     [_contentView release];
     [_sceneSelector release];
     [super dealloc];

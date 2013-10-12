@@ -23,7 +23,7 @@
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database {
     //RptqUserCredentals *userCredentals = [database ownedByUser];
-    return [MTDatabase databaseForRptqDatabase:database];
+    return [self databaseForRptqDatabase:database];
 }
 
 + (id)databaseForRptqDatabase:(RptqDatabase *)database {
@@ -43,15 +43,17 @@
         //[databaseConnection setPassword:    password];
         //[password release];
         
-        id server = [[userCredentals mysql_host] copy];
-        [databaseConnection setServer:      server];
-        //[server release];
+        NSString *mysqlHost = [[NSString alloc] initWithString:[userCredentals mysql_host]];
+        [databaseConnection setServer:      mysqlHost];
+        [mysqlHost release];
         
-        id database = [[userCredentals mysql_database] copy];
+        NSString *database = [[NSString alloc] initWithString:[userCredentals mysql_database]];
         [databaseConnection setDatabase:    database];
-        //[database release];
+        [database release];
+
         
         [databaseConnection setPort:        [[userCredentals mysql_port] integerValue]];
+        
         MTDatabaseMySql *databaseMySql = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
         result = databaseMySql;
         [databaseMySql autorelease];
@@ -68,17 +70,17 @@
         //[databaseConnection setPassword:    password];
         //[password release];
         
-        id server = [[userCredentals tds_server] copy];
+        NSString *server = [[NSString alloc] initWithString:[userCredentals tds_server]];
         [databaseConnection setServer:      server];
-        //[server release];
+        [server release];
         
-        id host = [[userCredentals tds_host] copy];
+        NSString *host = [[NSString alloc] initWithString:[userCredentals tds_host]];
         [databaseConnection setHost:        host];
-        //[host release];
+        [host release];
         
-        id database = [[userCredentals tds_database] copy];
+        NSString *database = [[NSString alloc] initWithString:[userCredentals tds_database]];
         [databaseConnection setDatabase:    database];
-        //[database release];
+        [database release];
         
         [databaseConnection setPort:        [[userCredentals tds_port] integerValue]];
         MTDatabaseSqlServer *databaseTds = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
@@ -111,9 +113,10 @@
 
     dispatch_semaphore_t semaphoreIsLicensed = dispatch_semaphore_create(0);
     
+    __block MTDatabase *database = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         
-        [self setIsLicensedUser:isLicensedUser];
+        [database setIsLicensedUser:isLicensedUser];
                 
         if ([[query hasQueryTables] count] > 0) {
             

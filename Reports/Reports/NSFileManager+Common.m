@@ -150,13 +150,12 @@
         if (overwrite) {
             fileName = [fileName stringByAppendingPathExtension:extention];
             resultUrl = [[[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO] retain];
-            NSData *data = [[fileWrapper serializedRepresentation] retain];
+            NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
             success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
             if (errorWriting != nil) {
                 MTLog(@"%@", errorWriting);
             }
-            [data release];
         } else {
             resultUrl = [[NSURL uniqueUrlForDocumentWithName:fileName
                                                withExtension:extention] retain];

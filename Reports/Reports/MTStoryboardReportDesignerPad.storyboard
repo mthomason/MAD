@@ -999,13 +999,6 @@
                         <outlet property="barButtonItemEdit" destination="psX-vP-QZq" id="Jft-oE-re6"/>
                         <outlet property="barButtonItemShowSQL" destination="2BA-o0-AgC" id="7Nv-9B-57p"/>
                         <outlet property="navigationItem" destination="p3l-dB-Y3B" id="dZC-x8-vN8"/>
-                        <outlet property="viewTableHeaderQuerySectionsDatasource" destination="fqb-lx-mkf" id="lb5-5R-ntG"/>
-                        <outlet property="viewTableHeaderQuerySectionsDocumentGroups" destination="x6v-HJ-aJC" id="j9n-S5-68s"/>
-                        <outlet property="viewTableHeaderQuerySectionsGroups" destination="lhr-Cq-Zfk" id="DKd-Gn-odl"/>
-                        <outlet property="viewTableHeaderQuerySectionsLinks" destination="WMb-co-Swx" id="dJr-xR-NN7"/>
-                        <outlet property="viewTableHeaderQuerySectionsPredicate" destination="L6y-Kf-c6e" id="s3Y-Ys-7EZ"/>
-                        <outlet property="viewTableHeaderQuerySectionsSql" destination="rqh-tA-xQP" id="3de-Yp-2ue"/>
-                        <outlet property="viewTableHeaderQuerySectionsTables" destination="kso-GA-NQl" id="hih-Or-gtT"/>
                         <segue destination="2dC-f6-Bo7" kind="modal" identifier="showAddLinkViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="lYd-HE-Uoz"/>
                         <segue destination="Lsp-Qu-tcg" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="n84-Cc-Wr0"/>
                         <segue destination="1S4-ip-3dw" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="MH3-rF-td0"/>
@@ -1014,41 +1007,6 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nfM-mZ-Ry6" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="HEo-5z-ths" userLabel="Exit" sceneMemberID="exit"/>
-                <view contentMode="scaleToFill" id="x6v-HJ-aJC" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="fqb-lx-mkf" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="kso-GA-NQl" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="WMb-co-Swx" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="lhr-Cq-Zfk" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="L6y-Kf-c6e" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="rqh-tA-xQP" customClass="MTViewTableHeader">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
             </objects>
             <point key="canvasLocation" x="2534" y="-1803"/>
         </scene>
@@ -3151,7 +3109,6 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="backgroundView" destination="5CF-sg-HyV" id="i3H-KJ-8IC"/>
                         <outlet property="contentView" destination="cCR-jZ-s3J" id="h1a-WM-ILr"/>
                         <outlet property="navigationBar" destination="29J-ix-7UO" id="Q2x-OO-iHF"/>
                         <outlet property="navigationItemFontSelector" destination="b75-AU-eX5" id="NNn-FI-KbK"/>

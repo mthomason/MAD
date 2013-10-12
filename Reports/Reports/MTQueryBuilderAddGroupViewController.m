@@ -21,10 +21,11 @@
 
 - (void)dealloc {
     [_field release];
+    [_fieldId release];
+    [_barButtonItemSave release];
     [_fieldName release];
     [_tableViewCellField release];
     [_tableViewCellSort release];
-    [_barButtonItemSave release];
     [super dealloc];
 }
 

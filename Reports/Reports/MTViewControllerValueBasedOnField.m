@@ -24,6 +24,7 @@
 @implementation MTViewControllerValueBasedOnField
 
 - (void)dealloc {
+    [_schemaFieldObjectId release];
     [_pickerData release];
     [_textField release];
     [_pickerView release];

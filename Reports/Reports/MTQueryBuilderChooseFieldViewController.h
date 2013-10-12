@@ -25,8 +25,10 @@
         UITableViewDelegate,
         SectionHeaderViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderChooseFieldDelegate> delegate;
-@property (retain) NSArray *excludeTables;
+@property (nonatomic, assign) IBOutlet id <MTQueryBuilderChooseFieldDelegate> delegate;
 @property (assign) IBOutlet UITableViewCell *fieldCells;
+
 @property (nonatomic, retain) RptqQueryField *queryField;
+@property (nonatomic, retain) NSArray *excludeTables;
+
 @end

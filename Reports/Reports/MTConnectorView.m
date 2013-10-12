@@ -19,6 +19,7 @@
     [_anchorViewLeft release];
     [_anchorViewRight release];
     [_topLeftToBottomRight release];
+    [_linkDescription release];
     [super dealloc];
 }
 

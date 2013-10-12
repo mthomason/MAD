@@ -19,6 +19,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 @implementation MTGroupByViewController
 
 - (void)dealloc {
+    [_fetchedResultsControllerGroups release];
     [super dealloc];
 }
 

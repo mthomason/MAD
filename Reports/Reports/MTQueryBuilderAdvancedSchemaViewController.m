@@ -22,6 +22,7 @@
 @implementation MTQueryBuilderAdvancedSchemaViewController
 
 - (void)dealloc {
+    [_cachedTableObjectId release];
     [_schemaTableViewController release];
     [_hasFieldsObjectIds release];
     [_titleView release];

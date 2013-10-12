@@ -16,12 +16,12 @@
 // Private TableViewController properties and methods.
 @interface MTQueryBuilderChooseFieldViewController ()
 
-@property (retain) NSMutableArray* sectionInfoArray;
-@property (retain) NSIndexPath* pinchedIndexPath;
-@property (assign) NSInteger openSectionIndex;
-@property (assign) CGFloat initialPinchHeight;
+@property (nonatomic, retain) NSMutableArray *sectionInfoArray;
+@property (nonatomic, retain) NSIndexPath *pinchedIndexPath;
+@property (nonatomic, retain) NSArray *dataTables;
 
-@property (retain) NSArray *dataTables;
+@property (nonatomic, assign) NSInteger openSectionIndex;
+@property (nonatomic, assign) CGFloat initialPinchHeight;
 
 // Use the uniformRowHeight property if the pinch gesture should change all row heights simultaneously.
 @property (nonatomic, assign) NSInteger uniformRowHeight;
@@ -33,19 +33,12 @@
 
 @implementation MTQueryBuilderChooseFieldViewController
 
-@synthesize dataTables=plays_,
-            sectionInfoArray=sectionInfoArray_,
-            fieldCells=newsCell_,
-            pinchedIndexPath=pinchedIndexPath_,
-            uniformRowHeight=rowHeight_,
-            openSectionIndex=openSectionIndex_,
-            initialPinchHeight=initialPinchHeight_;
-@synthesize delegate = _delegate;
-@synthesize excludeTables = _excludeTables;
-
 - (void)dealloc {
     [_queryField release];
     [_excludeTables release];
+    [_dataTables release];
+    [_pinchedIndexPath release];
+    [_sectionInfoArray release];
     [super dealloc];
 }
 
@@ -76,8 +69,8 @@
     
     [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
 
-    rowHeight_ = DEFAULT_ROW_HEIGHT;
-    openSectionIndex_ = NSNotFound;
+    //rowHeight = DEFAULT_ROW_HEIGHT;
+    _openSectionIndex = NSNotFound;
 
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];

@@ -17,7 +17,8 @@
 @implementation RptqDocument (ActiveDocument)
 
 + (RptqDocument *)activeDocument {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    id ad = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [ad managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     return document;
 }

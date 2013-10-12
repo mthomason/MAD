@@ -23,6 +23,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 + (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion;
++ (void)deleteFromDiskQuick:(MADocument *)documentReport completion:(void (^)(BOOL success))completion;
 - (NSString *)name;
 - (NSString *)fileName;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;

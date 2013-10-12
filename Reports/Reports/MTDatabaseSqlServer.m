@@ -118,8 +118,10 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+
+    __block MTDatabaseSqlServer *sqlServer = self;
     
-    [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+    [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
         
         if (success) {
             
@@ -202,7 +204,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 const char *typeDesc = dbprtype(typeBind);
                                 NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
                                                                                      encoding: NSStringEncodingConversionAllowLossy];
-                                NSInteger fieldTypeCalculated = [self dataTypeForNativeType:typeBind];
+                                NSInteger fieldTypeCalculated = [sqlServer dataTypeForNativeType:typeBind];
                                 [databaseField setFieldTypeNative:fieldTypeCalculated];
                                 [databaseField setFieldType:fieldTypeCalculated];
                                 [databaseField setWidth:lengthBind];
@@ -384,10 +386,11 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 - (id)runQuery:(NSString *)sql {
 
     __block NSMutableArray *results = [[NSMutableArray alloc] init];
+    __block MTDatabaseSqlServer *sqlServer = self;
 
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
-    [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+    [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
         
         if (success) {
             
@@ -405,7 +408,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
             NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
             
             NSString *begining = [sql substringToIndex:[sql rangeOfString:MTSqlFrom].location];
-            NSRange rangeOfSelectPart = [begining rangeOfString:[self selectPart]];
+            NSRange rangeOfSelectPart = [begining rangeOfString:[sqlServer selectPart]];
             if (rangeOfSelectPart.location == NSNotFound) {
                 rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
             }

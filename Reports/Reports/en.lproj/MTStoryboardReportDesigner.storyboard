@@ -3183,7 +3183,6 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="backgroundView" destination="UlW-Ox-3aM" id="yez-vP-jME"/>
                         <outlet property="contentView" destination="mx8-vq-sjh" id="iH9-2u-ly0"/>
                         <outlet property="navigationBar" destination="oS4-ua-EcL" id="bjU-sn-wL1"/>
                         <outlet property="navigationItemFontSelector" destination="c4k-Zh-9pw" id="XFp-Ys-EAz"/>

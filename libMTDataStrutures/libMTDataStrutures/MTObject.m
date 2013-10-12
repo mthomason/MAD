@@ -29,8 +29,7 @@
 }
 
 + (id)objectWithObject:(id)object {
-    MTObject *result = [[MTObject alloc] initWithObject:object];
-    return [result autorelease];
+    return [[[self alloc] initWithObject:object] autorelease];
 }
 
 - (void)dealloc {

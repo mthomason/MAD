@@ -11,8 +11,7 @@
 @implementation NSNumber (Extras)
 
 + (NSNumber *)zero {
-    NSNumber *result = [[NSNumber alloc] initWithInteger:0];
-    return [result autorelease];
+    return [[[self alloc] initWithInteger:0] autorelease];
 }
 
 @end

@@ -17,6 +17,7 @@
 @implementation MAReportDocument
 
 - (void)dealloc {
+    MTLog(@"Dealloc");
     [_mom release];
     [super dealloc];
 }
@@ -100,11 +101,14 @@
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    
-    NSString *fileName = [[madUrl lastPathComponent] stringByDeletingPathExtension];
-    fileName = [fileName stringByAppendingString:([UIDevice isRetnaDisplay] ? @"@2x.png": @".png")];
-    NSURL *thumbnailPath = [NSURL fileURLWithPath: NSTemporaryDirectory()];
-    return [thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO];
+    NSString *lastPathComponent = [madUrl lastPathComponent];
+    NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
+    NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
+    fileName = [fileName stringByAppendingString:extention];
+    NSString *tempPath = NSTemporaryDirectory();
+    NSURL *thumbnailPath = [NSURL fileURLWithPath: tempPath];
+    NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO] retain];
+    return [result autorelease];
 }
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
@@ -172,15 +176,18 @@
     
     if (urlToOpen != nil) {
 
-        MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        __block MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
         
-        NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                  NSInferMappingModelAutomaticallyOption : @YES};
+        NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
+        NSNumber *inferMappingModelAutomaticallyOption = @YES;
+        NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                                  NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption};
         
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
         if (fileExist) {
+            
             [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
                 [managedDocumentAtUrl setThumbnailUrl:thumbnailUrl];

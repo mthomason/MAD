@@ -13,10 +13,13 @@
 
 @property (nonatomic, assign) NSUInteger pageNumber;
 @property (nonatomic, assign) NSUInteger numberOfPages;
-@property (nonatomic, retain) UIView *pageNumberDisplay;
 @property (nonatomic, assign) BOOL showPageNumberDisplay;
+
+@property (nonatomic, retain) UIView *pageNumberDisplay;
 @property (nonatomic, retain) NSTimer *timerLabelTimeSinceRefreh;
+
 @property (nonatomic, retain) UIView *timeSinceRefreshView;
+@property (nonatomic, retain) UIView *pageNumberView;
 @property (nonatomic, retain) UILabel *timeSinceRefrehLabel;
 
 @end
@@ -24,7 +27,6 @@
 @implementation MTReportViewerReportPageViewController
 
 - (void)dealloc {
-    [_lastCacheDate release];
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([_timerLabelTimeSinceRefreh isValid]) {
@@ -34,10 +36,10 @@
         [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
+    [_lastCacheDate release];
     [_timeSinceRefreshView release];
-    [_timerLabelTimeSinceRefreh release];
     [_timeSinceRefrehLabel release];
-    [_document release];
+    [_pageNumberView release];
     [_pageNumberDisplay release];
     _delegate = nil;
     [super dealloc];
@@ -45,11 +47,13 @@
 
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        MAReportDocument *rd = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [rd managedObjectContext];
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
-        NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+        RptqQueryCache *queryCache = [query hasQueryCache];
+        NSDate *lastD = [[queryCache cacheDate] retain];
         [self setLastCacheDate: lastD];
         [lastD release];
         if ([self lastCacheDate] == nil) {  //I give up
@@ -83,6 +87,7 @@
             updateLabelInSeconds = 86400;
             break;
     }
+
     if ([self timerLabelTimeSinceRefreh] != nil) {
         if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
             if ([[self timerLabelTimeSinceRefreh] isValid]) {
@@ -91,12 +96,12 @@
         }
         [self setTimerLabelTimeSinceRefreh:nil];
     }
+    
     NSTimer *t = [[NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:self
                                                  selector:@selector(updateLateRefreshedLabel:) userInfo:nil
                                                   repeats:NO] retain];
     [self setTimerLabelTimeSinceRefreh:t];
     [t release];
-    
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
@@ -110,11 +115,12 @@
 }
 
 - (void)loadView {
-    [super loadView];
-    MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:[[self view] bounds]];
+    //[super loadView];
+    MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:CGRectZero];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [renderedReportView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    [renderedReportView setBackgroundColor:[UIColor whiteColor]];
+    UIColor *whiteColor = [UIColor whiteColor];
+    [renderedReportView setBackgroundColor:whiteColor];
     [renderedReportView setDelegate:self];
     [self setView:renderedReportView];
     [renderedReportView release];
@@ -144,7 +150,15 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidAppear:animated];
+    [super viewDidDisappear:animated];
+    if ([self timerLabelTimeSinceRefreh] != nil) {
+        if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+            if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                [[self timerLabelTimeSinceRefreh] invalidate];
+            }
+        }
+        [self setTimerLabelTimeSinceRefreh:nil];
+    }
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
@@ -201,7 +215,8 @@
     CGFloat h = 33.0000f;
     CGFloat y = CGPointZero.y + 10.0000f;
     CGFloat x = CGPointZero.x + self.view.bounds.size.width - w - y;
-    __block UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+    
+    UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
     UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, w, h)];
     [labelView setText:[NSString stringWithFormat:@"%d of %d", pageNumber, numberOfPages]];
     [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f]];
@@ -214,23 +229,33 @@
     [labelView setBackgroundColor:[UIColor clearColor]];
     //[[numberView layer] setCornerRadius: 6.0000f];
     [numberView addSubview:labelView];
-    [labelView autorelease];
     [numberView setAlpha:0.0000f];
     [[self view] addSubview:numberView];
+    [self setPageNumberView:numberView];
     
-    
+    __block MTReportViewerReportPageViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
-        [numberView setAlpha:1.0000f];
+        
+        [[weakSelf pageNumberView] setAlpha:1.0000f];
+
     } completion:^(BOOL finished) {
+        
         if (finished) {
+
             [UIView animateWithDuration:0.30000f delay:1.0000f
                                 options:UIViewAnimationOptionCurveEaseIn animations:^{
-                [numberView setAlpha:0.0000f];
-            } completion:nil ];
+
+                                    [[weakSelf pageNumberView] setAlpha:0.0000f];
+
+                                } completion:^(BOOL finished) {
+                                    
+                                    
+                                }];
         }
     }];
-    
-    return [numberView autorelease];
+    [labelView release];
+    [numberView release];
+    return nil;
 }
 
 @end

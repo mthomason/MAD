@@ -23,21 +23,11 @@
 
 @implementation MTQueryBuilderLinkBuilderViewController
 
-@synthesize delegate = _delegate;
-@synthesize tableViewCellJoinType = _tableViewCellJoinType;
-@synthesize tableViewCellTableOne = _tableViewCellTableOne;
-@synthesize tableViewCellFieldOne = _tableViewCellFieldOne;
-@synthesize tableViewCellTableTwo = _tableViewCellTableTwo;
-@synthesize tableViewCellFieldTwo = _tableViewCellFieldTwo;
-@synthesize tableViewCellTableFieldOne = _tableViewCellTableFieldOne;
-@synthesize tableViewCellTableFieldTwo = _tableViewCellTableFieldTwo;
-@synthesize linkType = _linkType;
-@synthesize currentlyEditingPart = _currentlyEditingPart;
-
 - (void)dealloc {
     [_firstTableName release];
     [_firstFieldName release];
     [_secondTableName release];
+    [_secondFieldName release];
     [_tableViewCellJoinType release];
     [_tableViewCellTableOne release];
     [_tableViewCellFieldOne release];
