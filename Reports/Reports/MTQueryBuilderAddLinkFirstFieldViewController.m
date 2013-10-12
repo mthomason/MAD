@@ -11,8 +11,6 @@
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController
 
-@synthesize delegate = _delegate;
-
 - (void)dealloc {
     [super dealloc];
 }

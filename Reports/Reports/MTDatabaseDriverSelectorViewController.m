@@ -10,6 +10,10 @@
 
 @implementation MTDatabaseDriverSelectorViewController
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -54,10 +58,6 @@
 
 - (void)viewControllerDidCancel:(id)sender {
     [[self delegate] viewControllerDidCancel:self];
-}
-
-- (void)dealloc {
-    [super dealloc];
 }
 
 @end

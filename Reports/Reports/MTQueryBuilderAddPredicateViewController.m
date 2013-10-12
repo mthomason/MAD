@@ -13,14 +13,11 @@
 
 @implementation MTQueryBuilderAddPredicateViewController
 
-@synthesize tableViewCellLeftSide = _tableViewCellLeftSide, tableViewCellRightSide = _tableViewCellRightSide, tableViewCellOperator = _tableViewCellOperator;
-@synthesize currentlyEditingPart = _currentlyEditingPart;
-
 - (void)dealloc {
-    if (_fieldLeft != nil) [_fieldLeft release];
-    if (_fieldRight != nil) [_fieldRight release];
-    if (_leftValue != nil) [_leftValue release];
-    if (_rightValue != nil) [_rightValue release];
+    [_fieldLeft release];
+    [_fieldRight release];
+    [_leftValue release];
+    [_rightValue release];
     [_tableViewCellLeftSide release];
     [_tableViewCellRightSide release];
     [_tableViewCellOperator release];

@@ -308,13 +308,13 @@
                 break;
         }
         
-        if ([self timerLabelTimeSinceRefreh] != nil) {
-            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-                if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                    [[self timerLabelTimeSinceRefreh] invalidate];
+        if ([reportViewer timerLabelTimeSinceRefreh] != nil) {
+            if ([[reportViewer timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+                if ([[reportViewer timerLabelTimeSinceRefreh] isValid]) {
+                    [[reportViewer timerLabelTimeSinceRefreh] invalidate];
                 }
             }
-            [self setTimerLabelTimeSinceRefreh:nil];
+            [reportViewer setTimerLabelTimeSinceRefreh:nil];
         }
         
         NSTimer *t = [[NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:reportViewer
@@ -561,14 +561,14 @@
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             [reportViewer setUpdatingOfTimerIsPaused:NO];
-            [reportViewer updateLateRefreshedLabel:self];
+            [reportViewer updateLateRefreshedLabel:reportViewer];
             [[reportViewer barButtonItemRefresh] setEnabled:YES];
             [[reportViewer barButtonItemDone] setEnabled:YES];
             [[reportViewer barButtonItemPrint] setEnabled:YES];
             [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
             
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
-            [c setDelegate:self];
+            [c setDelegate:reportViewer];
             [c presentPreviewAnimated:YES];
         });
 
@@ -686,8 +686,8 @@
     if (completed || finished) {
         [(MTReportViewerController *)pageViewController setPageIsAnimating:NO];
         if ([[(MTReportViewerController *)pageViewController viewControllers] count] > 0) {
-            MTReportViewerReportPageViewController *pageViewController = [[self viewControllers] objectAtIndex:0];
-            [(MTReportViewerController *)pageViewController setCurrentPageIndex:[pageViewController pageNumber] - 1];
+            MTReportViewerReportPageViewController *viewController = [[pageViewController viewControllers] objectAtIndex:0];
+            [(MTReportViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
             [[(MTReportViewerController *)pageViewController sliderPagination] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];
         }
     }

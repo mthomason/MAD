@@ -13,8 +13,6 @@
 
 @implementation MTQueryBuilderAddLinkFirstTableViewController
 
-@synthesize delegate = _delegate;
-
 - (void)dealloc {
     [super dealloc];
 }

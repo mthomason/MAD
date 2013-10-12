@@ -20,8 +20,6 @@
 
 @implementation MTQueryBuilderAddLinkJoinTypeViewController
 
-@synthesize delegate = _delegate;
-
 - (void)dealloc {
     [_tableViewCellEquiJoin release];
     [_tableViewCellNaturalJoin release];

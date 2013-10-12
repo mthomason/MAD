@@ -11,9 +11,6 @@
 
 @implementation MTQueryBuilderAddTableViewController
 
-@synthesize delegate = _delegate;
-@synthesize excludeResults = _excludeResults;
-
 - (void)dealloc {
     [_excludeResults release];
     [super dealloc];
