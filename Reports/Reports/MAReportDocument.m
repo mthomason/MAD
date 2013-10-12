@@ -41,7 +41,7 @@
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion {
-    
+
     [RptqDocument addDatabase:database toManagedObjectContext:[self managedObjectContext] completion:^(BOOL success, NSError *error) {
         //if (success) {
         //    [self saveToURL:[self fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
@@ -175,12 +175,11 @@
     
     if (urlToOpen != nil) {
 
-        __block MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
         
-        NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
-        NSNumber *inferMappingModelAutomaticallyOption = @YES;
-        NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                                  NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption};
+        NSNumber *migratePersistentStoresAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
+        NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
+        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption, nil];
         
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
@@ -197,8 +196,10 @@
                 completionHandler(managedDocumentAtUrl, success);
             }];
         }
+        [options release];
         [managedDocumentAtUrl release];
-        
+        [migratePersistentStoresAutomaticallyOption release];
+        [inferMappingModelAutomaticallyOption release];
     }
     [urlToOpen release];
     

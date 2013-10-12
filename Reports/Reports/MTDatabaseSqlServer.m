@@ -204,7 +204,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 const char *typeDesc = dbprtype(typeBind);
                                 NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
                                                                                      encoding: NSStringEncodingConversionAllowLossy];
-                                NSInteger fieldTypeCalculated = [sqlServer dataTypeForNativeType:typeBind];
+                                NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
                                 [databaseField setFieldTypeNative:fieldTypeCalculated];
                                 [databaseField setFieldType:fieldTypeCalculated];
                                 [databaseField setWidth:lengthBind];
@@ -233,7 +233,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     }];
 }
 
-- (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
++ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
     MTDataType result;
     switch (nativeType) {
         case SYBDATETIMN:

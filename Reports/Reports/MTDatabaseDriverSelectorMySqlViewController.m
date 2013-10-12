@@ -1,4 +1,4 @@
-t//
+//
 //  UITableViewControllerDataSourceSetupMySql.m
 //  Reports
 //
@@ -160,7 +160,7 @@ t//
     
     [sender setEnabled:NO];
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
-  
+    
     [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -173,148 +173,162 @@ t//
     [barButtonItem release];
     [activityIndicator release];
     
+    __block MTDatabaseDriverSelectorMySqlViewController *blockSelf = self;
     
-    //[self presentViewController:activitySpinnerViewController animated:YES completion:^{
+    UITextField *textFieldServer    = [blockSelf textFieldHost];
+    UITextField *textFieldDatabae   = [blockSelf textFieldDatabase];
+    UITextField *textFieldPort      = [blockSelf textFieldPort];
+    
+    NSString *blockUsername = [[NSString alloc] initWithString:@"bogus"];
+    NSString *blockPassword = [[NSString alloc] initWithString:@"bogus"];
+    NSString *blockServer   = [[NSString alloc] initWithString:[textFieldServer text]];
+    NSString *blockDatabase = [[NSString alloc] initWithString:[textFieldDatabae text]];
+    
+    NSString *textPortText  = [textFieldPort text];
+    NSString *textPort      = [textPortText length] > 0 ? textPortText : @"0";   // FIXME: A very poor guess.
+    NSInteger blockPort     = [textPort integerValue];
+    
+    NSString *databaseType = [[NSString alloc] initWithString:[blockSelf databaseType]];
+    
+    __block id blockSender = sender;
+    
+    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
+                                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
 
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 
-            NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
-                                                                           withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+
+    [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
+        
+        if (success) {
             
-            [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
-                
-                if (success) {
-                    
-                    __block MAReportDocument *documentReport = managedDocument;
-                    __block MTDatabaseDriverSelectorMySqlViewController *viewContoller = self;
-                    
-                    __block MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-                    [databaseConnection setUsername:    [[self textFieldUsername] text]];
-                    [databaseConnection setPassword:    [[self textFieldPassword] text]];
-                    [databaseConnection setServer:      [[self textFieldHost] text]];
-                    [databaseConnection setDatabase:    [[self textFieldDatabase] text]];
-                    [databaseConnection setPort:        [[[self textFieldPort] text] integerValue]];
-                    
-                    id database = nil;
-                    if ([[self databaseType] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
-                        database = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
-                    } else if ([[self databaseType] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
-                        database = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
-                    }
-                    
-                    if (database) {
-                        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [documentReport addDatasourceToReport: database completion: ^(BOOL successAddingDatasource, NSError *error) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                    if (successAddingDatasource) {
-                                        [documentReport closeWithCompletionHandler:^(BOOL success) {
-                                            if (success) {
-                                                [documentReport setSuspended:YES];
-                                                [[documentReport managedObjectContext] lock];
-                                                [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                                                    
-                                                    [documentReport deleteFromDiskCompletion:^(BOOL success) {
-                                                        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                                //[self dismissViewControllerAnimated:YES completion:^{
-                                                                    [sender setEnabled:YES];
-                                                                    //[[[self navigationItem] backBarButtonItem] setEnabled:YES];
-                                                                    [[viewContoller delegate] viewControllerDidFinish: viewContoller];
-                                                                //}];
-                                                                
-                                                            });
-                                                            
-                                                        //});
-                                                        
-                                                    }];
-                                                    
-                                                }];
-                                            }
-                                        }];
-                                        
-                                    } else {
-                                        [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
-                                            if (successClosingReport) {
-                                                
-                                                [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
-                                                
-                                                if (error) {
-                                                    
-                                                    [error presentErrorToUserWithCompletion:^(BOOL success) {
-                                                        
-                                                        //[self dismissViewControllerAnimated:YES completion:^{
-                                                            [sender setEnabled:YES];
-                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+            __block MAReportDocument *documentReport = managedDocument;
+            __block MTDatabaseDriverSelectorMySqlViewController *viewContoller = blockSelf;
+            
+            MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
+            [databaseConnection setUsername:    blockUsername];
+            [databaseConnection setPassword:    blockPassword];
+            [databaseConnection setServer:      blockServer];
+            [databaseConnection setDatabase:    blockDatabase];
+            [databaseConnection setPort:        blockPort];
 
-                                                            [[viewContoller delegate] viewControllerDidFinish: viewContoller];
-                                                        //}];
-                                                    }];
-                                                    
-                                                } else {
-                                                    
-                                                    NSString *connectionProblem = NSLocalizedString(@"Connection Problem", @"Connection Problem");
-                                                    NSString *connectionMessage = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-                                                    NSString *connectionCancel = NSLocalizedString(@"Cancel", @"Cancel");
-                                                    
-                                                    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
-                                                        
-                                                        //[self dismissViewControllerAnimated:YES completion:^{
-                                                            [sender setEnabled:YES];
-                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
-                                                        //}];
-                                                        
-                                                        
-                                                    } onCancel:^{
-                                                        
-                                                        //[self dismissViewControllerAnimated:YES completion:^{
-                                                            [sender setEnabled:YES];
-                                                            [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
-                                                        [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
-                                                        //}];
-                                                        
-                                                    }];
-                                                    [alertView show];
-                                                    [alertView autorelease];
-                                                    
-                                                }
-                                            }
-                                        }];
-                                        
-                                    }
-                                });
-                            }];
-                        //});
-                        });
-                    }
-                    
-                    [database release];
-                    [databaseConnection release];
-                    
-                } else {
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
+            id database = nil;
+            if ([databaseType isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
+
+                database = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+            
+            } else if ([databaseType isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
+
+                database = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
+            }
+            
+            if (database) {
+                //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                    [RptqDocument addDatabase:database toManagedObjectContext:[documentReport managedObjectContext] completion:^(BOOL successAddingDatasource, NSError *error) {
+
                         
-                        MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
-                                                                            message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
-                                                                  cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
-                                                                   otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
-                                                                       
-                                                                   } onCancel:^{
-                                                                       
-                                                                   }];
-                        [alertView show];
-                        [alertView autorelease];
-                    });
-                }
-            }];
-
-        //});
-    //}];    
+                        
+                        
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                            if (successAddingDatasource) {
+                                [documentReport closeWithCompletionHandler:^(BOOL success) {
+                                    if (success) {
+                                        [documentReport setSuspended:YES];
+                                        [[documentReport managedObjectContext] lock];
+                                        [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
+                                            
+                                            [documentReport deleteFromDiskCompletion:^(BOOL success) {
+                                                //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                                    [blockSender setEnabled:YES];
+                                                    [[viewContoller delegate] viewControllerDidFinish: viewContoller];
+                                                    
+                                                });
+                                                
+                                            }];
+                                            
+                                        }];
+                                    }
+                                }];
+                                
+                            } else {
+                                [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
+                                    if (successClosingReport) {
+                                        
+                                        [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
+                                        
+                                        if (error) {
+                                            
+                                            [error presentErrorToUserWithCompletion:^(BOOL success) {
+                                                [blockSender setEnabled:YES];
+                                                [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                [[viewContoller delegate] viewControllerDidFinish: viewContoller];
+                                            }];
+                                            
+                                        } else {
+                                            
+                                            NSString *connectionProblem = NSLocalizedString(@"Connection Problem", @"Connection Problem");
+                                            NSString *connectionMessage = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
+                                            NSString *connectionCancel = NSLocalizedString(@"Cancel", @"Cancel");
+                                            
+                                            MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
+                                                
+                                                [blockSender setEnabled:YES];
+                                                [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                
+                                            } onCancel:^{
+                                                
+                                                [blockSender setEnabled:YES];
+                                                [[[viewContoller navigationItem] backBarButtonItem] setEnabled:YES];
+                                                [[viewContoller navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                                
+                                            }];
+                                            [alertView show];
+                                            [alertView autorelease];
+                                            
+                                        }
+                                    }
+                                }];
+                                
+                            }
+                        });
+                    }];
+                    //});
+                });
+            }
+            
+            [databaseConnection release];
+            [database release];
+            
+        } else {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
+                                                                    message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
+                                                          cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
+                                                           otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
+                                                               
+                                                           } onCancel:^{
+                                                               
+                                                           }];
+                [alertView show];
+                [alertView autorelease];
+            });
+        }
+    }];
     
+    [blockUsername release];
+    [blockPassword release];
+    [blockServer release];
+    [blockDatabase release];
+    [databaseType release];
+
 }
 
 - (IBAction)done:(id)sender {

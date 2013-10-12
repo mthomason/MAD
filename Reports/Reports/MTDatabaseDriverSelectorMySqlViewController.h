@@ -44,7 +44,7 @@
 @property (nonatomic, retain) IBOutlet UITextField *textFieldDatabase;
 @property (nonatomic, retain) IBOutlet UITextField *textFieldReportName;
 
-@property (nonatomic, copy) NSString *databaseType;
+@property (nonatomic, retain) NSString *databaseType;
 
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;

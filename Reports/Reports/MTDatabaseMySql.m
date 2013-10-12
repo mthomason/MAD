@@ -172,7 +172,7 @@
                                         
                                         MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
                                         [databaseField setFieldTypeNative:[field fieldType]];
-                                        [databaseField setFieldType:[self dataTypeForNativeType:[field fieldType]]];
+                                        [databaseField setFieldType:[MTDatabaseMySql dataTypeForNativeType:[field fieldType]]];
                                         [databaseField setWidth:[field width]];
                                         [databaseField setDecimals:[field decimals]];
                                         [databaseField setPrimaryKey:[field primaryKey]];
@@ -207,7 +207,7 @@
     //});
 }
 
-- (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
++ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
     MTDataType result;
     switch (nativeType) {
         case MAX_NO_FIELD_TYPES:
