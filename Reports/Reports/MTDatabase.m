@@ -21,6 +21,10 @@
 
 @implementation MTDatabase
 
+- (void)dealloc {
+    [super dealloc];
+}
+
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database {
     //RptqUserCredentals *userCredentals = [database ownedByUser];
     return [self databaseForRptqDatabase:database];

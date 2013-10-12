@@ -1,4 +1,4 @@
-//
+t//
 //  UITableViewControllerDataSourceSetupMySql.m
 //  Reports
 //
@@ -188,7 +188,7 @@
                     __block MAReportDocument *documentReport = managedDocument;
                     __block MTDatabaseDriverSelectorMySqlViewController *viewContoller = self;
                     
-                    MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
+                    __block MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
                     [databaseConnection setUsername:    [[self textFieldUsername] text]];
                     [databaseConnection setPassword:    [[self textFieldPassword] text]];
                     [databaseConnection setServer:      [[self textFieldHost] text]];

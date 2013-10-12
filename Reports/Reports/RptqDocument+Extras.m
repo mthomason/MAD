@@ -179,7 +179,7 @@
 + (void)addDatabase: (MTDatabase *)database toManagedObjectContext:(NSManagedObjectContext *)objectContext
          completion: (void (^)(BOOL success, NSError *error))completion {
     
-    RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
+    __block RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
     
     if (rptqDocument == nil) {
         rptqDocument = [RptqDocument createMainDocumentForManagedObjectContext:objectContext];
@@ -187,17 +187,19 @@
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
     
-    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: objectContext
+    __block RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: objectContext
                                                                              driverType: [database identifier]
                                                                            connectionId: connectionId];
     
-    RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
+    __block RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
     
     
     [userCredentals setDatabase_driver_type: [database identifier]];
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
+        
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
+
         if (connectionSettings != nil) {
             [userCredentals setMysql_host:      [connectionSettings server]];
             [userCredentals setMysql_database:  [connectionSettings database]];
@@ -208,6 +210,7 @@
 
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
+
         if (connectionSettings != nil) {
             [userCredentals setTds_server:      [connectionSettings server]];
             [userCredentals setTds_host:        [connectionSettings server]];
@@ -216,6 +219,7 @@
             [userCredentals setTds_database:    [connectionSettings database]];
             [userCredentals setTds_port:      @([connectionSettings port])];
         }
+
     }
     
     [rptqDatabase setOwnedByUser: userCredentals];
@@ -229,12 +233,18 @@
         if (success) {
             __block NSUInteger tableCounter = 0;
             NSUInteger numberOfTables = [tables count];
+
             for (MTDatabaseTable *databaseTable in tables) {
-                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext andTable: databaseTable];
-                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument withConnecitonId: connectionId];
+            
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext
+                                                                                                           andTable: databaseTable];
+                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                     withConnecitonId: connectionId];
+
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
                 NSError *error = nil;
                 [[currentDatabase managedObjectContext] save:&error];
+                
                 [database getFieldsForTableSchema:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
                     if (success) {
                         for (MTDatabaseField *objField in fields) {
