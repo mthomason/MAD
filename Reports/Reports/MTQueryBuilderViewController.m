@@ -13,14 +13,20 @@
 
 NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
+NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
+NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
+NSString * const NSFetchedResultsCacheLinks         = @"NSFetchedResultsCacheLinks";
+NSString * const NSFetchedResultsCacheGroups        = @"NSFetchedResultsCacheGroups";
+NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePredicates";
+
 #pragma mark - Private Category
 
 @interface MTQueryBuilderViewController()
 
 //@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerTables;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerLinks;
@@ -28,28 +34,20 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
 @property (nonatomic, retain) UIFont *boldSystemFont;
-@property (nonatomic, retain) NSArray *tableSectionTitles;
 
 @property (nonatomic, assign) BOOL beganUpdates;
 
-@property (nonatomic, retain) NSMutableDictionary *modelWithZeroTables;
-@property (nonatomic, retain) NSMutableDictionary *modelWithOneTable;
-@property (nonatomic, retain) NSMutableDictionary *modelWithTwoOrMoreTables;
-
-@property (nonatomic, retain) MAReportDocument *activeDocument;
+//@property (nonatomic, retain) NSMutableDictionary *modelWithZeroTables;
 
 @property (assign) NSInteger lastSelectedRowNumber;
 
-@property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
-
-
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsDocumentGroups;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsDatasource;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsTables;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsLinks;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsGroups;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
-@property (nonatomic, retain) IBOutlet MTViewTableHeader *viewTableHeaderQuerySectionsSql;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsDocumentGroups;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsDatasource;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsTables;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsLinks;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsGroups;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
+@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsSql;
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
@@ -61,19 +59,25 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 @implementation MTQueryBuilderViewController
 
 - (void)dealloc {
-    [_modelWithZeroTables release];
-    [_modelWithOneTable release];
-    [_modelWithTwoOrMoreTables release];
+
     [_boldSystemFont release];
+    [_barButtonItemShowSQL release];
+    [_barButtonItemEdit release];
+    [_barButtonItemDone release];
+    
+    [_viewTableHeaderQuerySectionsDocumentGroups release];
+    [_viewTableHeaderQuerySectionsDatasource release];
+    [_viewTableHeaderQuerySectionsTables release];
+    [_viewTableHeaderQuerySectionsLinks release];
+    [_viewTableHeaderQuerySectionsGroups release];
+    [_viewTableHeaderQuerySectionsPredicate release];
+    [_viewTableHeaderQuerySectionsSql release];
+
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
     [_fetchedResultsControllerGroups release];
     [_fetchedResultsControllerPredicates release];
-    [_tableSectionTitles release];
-    [_documentStatusView release];
-    [_barButtonItemShowSQL release];
-    [_barButtonItemEdit release];
-    [_barButtonItemDone release];
+    
     [super dealloc];
 }
 
@@ -88,24 +92,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [[[self navigationItem] titleView] sizeToFit];
-    if ([self documentStatusView]) {
-        CGRect statusViewBounds;
-        if (self.navigationController.toolbar.frame.size.height < 40.0000f) {
-            if ([UIDevice isModernOS]) {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
-            } else {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
-            }
-        } else {
-            if ([UIDevice isModernOS]) {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
-            } else {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
-            }
-        }
-        [[self documentStatusView] setBounds:statusViewBounds];
-        [[self documentStatusView] setNeedsDisplay];
-    }
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -113,7 +99,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 }
 
 - (void)documentStateChanged {
-    UIDocumentState state = [[self activeDocument] documentState];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    UIDocumentState state = [reportDocument documentState];
     switch (state) {
         case UIDocumentStateClosed:
             [self disableUserInteraction];
@@ -132,7 +119,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
             [self enableUserInteraction];
             break;
     }
-    [[self documentStatusView] setDocumentState: state];
 }
 
 - (void)enableUserInteraction {
@@ -145,145 +131,71 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 #pragma mark - View lifecycle
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
+        
+        MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
+        [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
+        [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
+        [viewTableHeaderDocumentGroups release];
+        
+        MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderDatasource labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
+        [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
+        [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
+        [viewTableHeaderDatasource release];
+        
+        MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderTables labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
+        [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+        [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
+        [viewTableHeaderTables release];
+        
+        MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderLinks labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
+        [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+        [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
+        [viewTableHeaderLinks release];
+        
+        MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
+        [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
+        [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
+        [viewTableHeaderGroups release];
+        
+        MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
+        [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
+        [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
+        [viewTableHeaderPredicate release];
+        
+        MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
+        [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
+        [[viewTableHeaderSql buttonAdd] setHidden:YES];
+        [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
+        [viewTableHeaderSql release];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
-    MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
-    [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
-    [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
-    [viewTableHeaderDocumentGroups release];
-    
-    MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderDatasource labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
-    [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
-    [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
-    [viewTableHeaderDatasource release];
-    
-    MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderTables labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
-    [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-    [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
-    [viewTableHeaderTables release];
-    
-    MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderLinks labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
-    [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-    [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
-    [viewTableHeaderLinks release];
-    
-    MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
-    [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
-    [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
-    [viewTableHeaderGroups release];
-    
-    MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
-    [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
-    [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
-    [viewTableHeaderPredicate release];
-    
-    MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-    [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
-    [[viewTableHeaderSql buttonAdd] setHidden:YES];
-    [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
-    [viewTableHeaderSql release];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    NSAttributedString *attributedString = [AppDelegate attributedStringMadQuery];
+    NSAttributedString *attributedString = [[AppDelegate attributedStringMadQuery] retain];
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
+    [attributedString release];
     [labelMadDesigner release];
     
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-    //if ([UIDevice isLagacyOS]) {
-    //    [[self tableView] setBackgroundColor: [UIColor paperGraphPaper]];
-    //    [[self tableView] setOpaque: YES];
-    //}
-    
-    //[[self tableView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
-    NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
-    NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
-    NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
-    NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
-    
-    //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
-    
-    NSArray *sections = @[@(MTQuerySectionsDatasource),
-                          @(MTQuerySectionsTables)];
-    
-    NSArray *countRowsForSection = @[@(1), @(-1)];
-    NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-    
-    NSArray *headersSection = @[h2, h3];
-    NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
-    
-    NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight])];
-    NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-    
-    NSDictionary *tableOutline = @{MTTableSectionSectionsKey : sections,
-                                   MTTableHeaderSectionKey : headersSectionDictionary,
-                                   MTTableSectionRowKey : countRowsForSectionDictionary,
-                                   MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-    
-    [self setModelWithZeroTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
-    
-    //Configuration with one schema referenced in the database
-    
-    sections = @[@(MTQuerySectionsDatasource),
-                 @(MTQuerySectionsTables),
-                 @(MTQuerySectionsGroups),
-                 @(MTQuerySectionsPredicate)];
-    
-    countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
-    countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-    
-    headersSection = @[h2, h3, h5, h6];
-    headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
-    
-    heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
-                             @(44.0000f), @(44.0000f)];
-    heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-    
-    tableOutline = @{MTTableSectionSectionsKey : sections,
-                     MTTableHeaderSectionKey : headersSectionDictionary,
-                     MTTableSectionRowKey : countRowsForSectionDictionary,
-                     MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-    
-    //Configuration with two or more schemas referenced in the database
-    
-    [self setModelWithOneTable: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
-    
-    sections = @[@(MTQuerySectionsDatasource),
-                 @(MTQuerySectionsTables),
-                 @(MTQuerySectionsLinks),
-                 @(MTQuerySectionsGroups),
-                 @(MTQuerySectionsPredicate)];
-    
-    countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
-    countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-    
-    headersSection = @[h2, h3, h4, h5, h6];
-    headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys:sections];
-    
-    
-    heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
-                             @(44.0000f), @(44.0000f)];
-    heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-    
-    tableOutline = @{MTTableSectionSectionsKey : sections,
-                     MTTableHeaderSectionKey : headersSectionDictionary,
-                     MTTableSectionRowKey : countRowsForSectionDictionary,
-                     MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-    
-    [self setModelWithTwoOrMoreTables: [NSMutableDictionary dictionaryWithDictionary:tableOutline]];
     [self disableUserInteraction];
 
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
@@ -295,11 +207,12 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(documentStateChanged)
                                                  name:UIDocumentStateChangedNotification
-                                               object:[self activeDocument]];
+                                               object:reportDocument];
 
     if ([self barButtonItemShowSQL] != nil) {   //i.e. iPad version
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
@@ -325,9 +238,10 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
-                                                  object: [self activeDocument]];
+                                                  object: reportDocument];
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
@@ -381,11 +295,12 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 //                    }
 
 //                    [tableNames release];
-                    
+                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[self activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [reportDocument managedObjectContext]
                                                                                             sectionNameKeyPath: nil
-                                                                                                     cacheName: nil];
+                                                                                                     cacheName: NSFetchedResultsCacheName];
                     [tvc setFetchedResultsController: frc];
                     [frc release];
                 }
@@ -440,7 +355,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)[segue destinationViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
-                        NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
@@ -459,26 +375,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
         [[segue destinationViewController] setDelegate: self];
-    } else if ([[segue identifier] isEqualToString:MTSegueCloseDesigner]) {
-/*
-        [[[self activeDocument] managedObjectContext] save:nil];
-        
-        //dispatch_semaphore_t closeWithCompletionHandler = dispatch_semaphore_create(0);
-        //dispatch_async(dispatch_get_main_queue(), ^{
-            [[self activeDocument] closeWithCompletionHandler:^(BOOL success) {
-                //dispatch_semaphore_t deleteFromDisk = dispatch_semaphore_create(0);
-                [MADocument deleteFromDisk:[[self activeDocument] fileURL] completion:^(BOOL success) {
-                    [[MTActiveDocument sharedDocument] setActiveDocument:nil];
-                //    dispatch_semaphore_signal(deleteFromDisk);
-                }];
-                //dispatch_semaphore_wait(deleteFromDisk, DISPATCH_TIME_FOREVER);
-                //dispatch_release(deleteFromDisk);
-                //dispatch_semaphore_signal(closeWithCompletionHandler);
-            }];
-        //});
-//        dispatch_semaphore_wait(closeWithCompletionHandler, DISPATCH_TIME_FOREVER);
-//        dispatch_release(closeWithCompletionHandler);
-        */
     }
 }
 
@@ -486,20 +382,29 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     BOOL shouldPerformSegueWithIdentifier = [super shouldPerformSegueWithIdentifier:identifier sender:sender];
     if ([identifier isEqualToString:MTSegueCloseDesigner]) {
         NSError *error = nil;
-        [[[self activeDocument] managedObjectContext] save:&error];
+        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+
+        [[reportDocument managedObjectContext] save:&error];
         if (error != nil) {
-            [[[self activeDocument] managedObjectContext] save:&error];
+            [[reportDocument managedObjectContext] save:&error];
         }
+    
+        //__block MTQueryBuilderViewController *viewController = self;
+        //__block MAReportDocument *activeDocument = [self activeDocument];
+        //__block NSURL *blockUrl = [[self activeDocument] fileURL];
+/*
         [[self activeDocument] save:^(BOOL success) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 if (success) {
-                    [[self activeDocument] closeWithCompletionHandler:^(BOOL success) {
+                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
                         if (success) {
-                            [[self activeDocument] setSuspended:YES];
-                            [NSFileManager wrapFile:[[self activeDocument] fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                                [MADocument deleteFromDisk:[[self activeDocument] fileURL] completion:^(BOOL success) {
-                                    if ([[[MTActiveDocument sharedDocument] activeDocument] isEqual:[self activeDocument]]) {
+                            [activeDocument setSuspended:YES];
+                            
+                            [NSFileManager wrapFile:blockUrl withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                                
+                                [MADocument deleteFromDisk:blockUrl completion:^(BOOL success) {
+                                    if ([[[MTActiveDocument sharedDocument] activeDocument] isEqual:activeDocument]) {
                                         [[MTActiveDocument sharedDocument] setActiveDocument:nil];
                                     }
                                 }];
@@ -510,7 +415,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                     
                 }
             });
-        }];
+        }];*/
     }
     return shouldPerformSegueWithIdentifier;
 }
@@ -604,7 +509,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
     MTQuerySections result = sec;
-    NSArray *sectionTypes = [[[self datamodel] objectForKey: MTTableSectionSectionsKey] retain];
+    NSDictionary *datamodel = [self datamodel];
+    NSArray *sectionTypes = [[datamodel objectForKey: MTTableSectionSectionsKey] retain];
     if ([sectionTypes count] >= sec) {
         result = [[sectionTypes objectAtIndex:sec] integerValue];
     }
@@ -631,25 +537,28 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
 
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
-            inManagedObjectContext: [[self activeDocument] managedObjectContext]];
-    [[self activeDocument] saveContext];
+            inManagedObjectContext: [reportDocument managedObjectContext]];
+    [reportDocument saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber]
-                inManagedObjectContext: [[self activeDocument] managedObjectContext]];
-    [[self activeDocument] saveContext];
+                inManagedObjectContext: [reportDocument managedObjectContext]];
+    [reportDocument saveContext];
 
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber]
-                  inManagedObjectContext: [[self activeDocument] managedObjectContext]];
-    [[self activeDocument] saveContext];
+                  inManagedObjectContext: [reportDocument managedObjectContext]];
+    [reportDocument saveContext];
 }
 
 #pragma mark - Delegates
@@ -667,14 +576,16 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
     [self dismissViewControllerAnimated:YES completion:^{ }];
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:managedObjectContext];
     [managedObjectContext save:nil];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissViewControllerAnimated:YES completion:^{ }];
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:managedObjectContext];
     [managedObjectContext save:nil];
     NSInteger suspectedSection = 2;
@@ -691,7 +602,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqQueryField *queryField = [RptqQueryField getQueryFieldForObjectID:queryFieldId fromObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
     
@@ -724,7 +636,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     NSIndexSet *indexSetSections = nil;
-    MAReportDocument *reportDocument = [[self activeDocument] retain];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -812,7 +724,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     [oldLayoutSectionTypes release];
     [oldLayout release];
     [newLayout release];
-    [reportDocument release];
     [indexSetSections release];
     [insertedRowIndexPath release];
     [namesAccending release];
@@ -855,13 +766,16 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                 break;
             }
             case MTQuerySectionsPredicate: {
-                numberOfRows = [[[self.fetchedResultsControllerPredicates sections] objectAtIndex: 0] numberOfObjects];
+                NSArray *sections = [[self fetchedResultsControllerPredicates] sections];
+                id sectionData = [sections objectAtIndex: 0];
+                numberOfRows = [sectionData numberOfObjects];
                 //NSLog(@"Predicate Rows: %d", numberOfRows);
                 break;
             }
             case MTQuerySectionsGroups: {
-                numberOfRows = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-                //NSLog(@"Group Rows:     %d", numberOfRows);
+                NSArray *sections = [[self fetchedResultsControllerGroups] sections];
+                id sectionData = [sections objectAtIndex: 0];
+                numberOfRows = [sectionData numberOfObjects];
                 break;
             }
             default:
@@ -900,7 +814,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     
-                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
                     NSArray *deleteRows = nil;
                     NSIndexSet *deleteSections = nil;
@@ -1130,8 +1045,9 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                     UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
                     if (tvcLink) {
                         NSManagedObjectID *objid = [tvcLink tableID];
-                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
-                        [[self activeDocument] saveContext];
+                        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
+                        [reportDocument saveContext];
                     }
                     [tvcLink release];
                     break;
@@ -1140,7 +1056,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                 // MARK: Delete MTQuerySectionsGroups
                 case MTQuerySectionsGroups: {
                     
-                    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
@@ -1204,8 +1121,9 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
                     
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
-                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[[self activeDocument] managedObjectContext]];
-                        [[self activeDocument] saveContext];
+                        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
+                        [reportDocument saveContext];
                     }
                     [tvcPred release];
 
@@ -1277,7 +1195,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
             NSInteger toWeight = [[fromGroup weight] integerValue];
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
-            [[self activeDocument] saveContext];
+            MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+            [reportDocument saveContext];
             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
             MTLog(@"%@->%@", fromIndexPath, toIndexPath);
@@ -1320,7 +1239,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
         case MTQuerySectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
-            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[[self activeDocument] managedObjectContext]];
+            MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[reportDocument managedObjectContext]];
             if (connections) {
                 [connections retain];
                 if ([connections count] >= 1) {
@@ -1456,6 +1376,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     
     switch (section) {
         case MTQuerySectionsDocumentGroups: {
+            
             result = [self viewTableHeaderQuerySectionsDocumentGroups];
             break;
         }
@@ -1493,7 +1414,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
             break;
         }
     }
-    return result;
+    return [[result retain] autorelease];
 }
 
 
@@ -1534,7 +1455,8 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     } else if (section == MTQuerySectionsGroups || section == MTQuerySectionsPredicate) {
         result = 88.0000f;
     } else {
-        NSDictionary *tableMetaHeight = [[self datamodel] objectForKey:MTTableSectionRowHeightKey];
+        NSDictionary *datamodel = [self datamodel];
+        NSDictionary *tableMetaHeight = [datamodel objectForKey:MTTableSectionRowHeightKey];
         if (tableMetaHeight) result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
     }
     return result;
@@ -1563,11 +1485,12 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 #pragma mark - NSFetchedResultsSetup
 
 - (void)reloadDocument:(MAReportDocument *)documentReport {
-    MAReportDocument *doc = [documentReport retain];
-    [self setActiveDocument:doc];
-    [doc release];
-    
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    //MAReportDocument *doc = [documentReport retain];
+    //[self setActiveDocument:doc];
+    //[doc release];
+    MAReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+
+    NSManagedObjectContext *managedObjectContext = [[reportDocument managedObjectContext] retain];
     
     {
         RptqQuery *query = [RptqDocument queryForActiveDocument];
@@ -1580,7 +1503,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
-                                                                                         cacheName: nil];
+                                                                                         cacheName: NSFetchedResultsCacheTables];
         [frc setDelegate:self];
         [self setFetchedResultsControllerTables: frc];
         [self performFetchTables];
@@ -1596,7 +1519,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
-                                                                                         cacheName: nil];
+                                                                                         cacheName: NSFetchedResultsCacheLinks];
         [frc setDelegate:self];
         [self setFetchedResultsControllerLinks: frc];
         [self performFetchLinks];
@@ -1612,7 +1535,7 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
-                                                                                         cacheName: nil];
+                                                                                         cacheName: NSFetchedResultsCacheGroups];
         [frc setDelegate:self];
         [self setFetchedResultsControllerGroups: frc];
         [self performFetchGroups];
@@ -1623,41 +1546,121 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     
     {
         NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"fieldleftpred" ascending:YES];
-        [request setSortDescriptors: @[sortDescriptor]];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fieldleftpred" ascending:YES];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        [request setSortDescriptors: sortDescriptors];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil
-                                                                                         cacheName: nil];
+                                                                                         cacheName: NSFetchedResultsCachePredicates];
         [frc setDelegate:self];
         [self setFetchedResultsControllerPredicates: frc];
         [self performFetchPredicate];
         [frc release];
-        
+        [sortDescriptor release];
+        [sortDescriptors release];
+        [request release];
         frc = nil;
     }
+    [managedObjectContext release];
+    [reportDocument release];
     [[self tableView] reloadData];
 }
 
 - (NSMutableDictionary *)datamodel {
-    NSManagedObjectContext *managedObjectContext = [[self activeDocument] managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
-    return [self datamodelForNumberOfTables:numberOfTablesInQuery];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
+    return [result autorelease];
 }
 
-- (NSMutableDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
-    NSMutableDictionary *result;
+- (NSDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
+
+    NSDictionary *result;
+
+    NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
+    NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
+    NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
+    NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
+    NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
+
     switch (numberOfTables) {
-        case 0:
-            result = [self modelWithZeroTables];
+        case 0: {
+            
+            //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
+            
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                                  @(MTQuerySectionsTables)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
+            
+            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight])];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                                           MTTableHeaderSectionKey : headersSectionDictionary,
+                                           MTTableSectionRowKey : countRowsForSectionDictionary,
+                                           MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+
+            
             break;
-        case 1:
-            result = [self modelWithOneTable];
+        }
+        case 1: {
+            
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                         @(MTQuerySectionsTables),
+                         @(MTQuerySectionsGroups),
+                         @(MTQuerySectionsPredicate)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3, h5, h6];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
+            
+            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
+                                     @(44.0000f), @(44.0000f)];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                             MTTableHeaderSectionKey : headersSectionDictionary,
+                             MTTableSectionRowKey : countRowsForSectionDictionary,
+                             MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+
             break;
-        default:
-            result = [self modelWithTwoOrMoreTables];
+        }
+        default: {
+
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                                  @(MTQuerySectionsTables),
+                                  @(MTQuerySectionsLinks),
+                                  @(MTQuerySectionsGroups),
+                                  @(MTQuerySectionsPredicate)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3, h4, h5, h6];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
+            
+            
+            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
+                                     @(44.0000f), @(44.0000f)];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                             MTTableHeaderSectionKey : headersSectionDictionary,
+                             MTTableSectionRowKey : countRowsForSectionDictionary,
+                             MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            
             break;
+        }
     }
     return result;
 }
@@ -1676,15 +1679,31 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
     if ([controller isEqual:[self fetchedResultsControllerTables]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]]];
+        
+        NSNumber *n = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsTables]];
+        [result addObject: n];
+
     } else if ([controller isEqual:[self fetchedResultsControllerLinks]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]]];
+
+        NSNumber *n = [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsLinks]];
+        [result addObject: n];
+
     } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups]]]; //Once for group header settings
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups]]]; //Once for group footer settings
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsGroups]]];
+
+        NSInteger sectionDocumentGroup = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
+        NSInteger sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
+        NSNumber *numberSectionDocumentGroup = @(sectionDocumentGroup);
+        NSNumber *numberSectionDocumentGroup2 = @(sectionDocumentGroup);
+        NSNumber *numberSectionGroup = @(sectionGroup);
+        [result addObject: numberSectionDocumentGroup]; //Once for group header settings
+        [result addObject: numberSectionDocumentGroup2]; //Once for group footer settings
+        [result addObject: numberSectionGroup];
+    
     } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
-        [result addObject: [NSNumber numberWithInteger: [self sectionPositionForTableSectionType: MTQuerySectionsPredicate]]];
+    
+        NSInteger section = [self sectionPositionForTableSectionType: MTQuerySectionsPredicate];
+        NSNumber *sectionNumber = @(section);
+        [result addObject: sectionNumber];
     }
     
     return [result autorelease];
@@ -1818,9 +1837,6 @@ NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
     if ([self fetchedResultsControllerPredicates]) {
         NSError *error = nil;
         [[self fetchedResultsControllerPredicates] performFetch:&error];
-        if (error != nil) {
-            MTLog(@"%@", error);
-        }
     }
     [[self tableView] reloadData];
 }

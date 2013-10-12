@@ -32,6 +32,12 @@
 #import "MTLog.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
+extern NSString * const NSFetchedResultsCacheName;
+extern NSString * const NSFetchedResultsCacheTables;
+extern NSString * const NSFetchedResultsCacheLinks;
+extern NSString * const NSFetchedResultsCacheGroups;
+extern NSString * const NSFetchedResultsCachePredicates;
+
 @interface MTQueryBuilderViewController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
@@ -45,13 +51,7 @@
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
-@property (assign, nonatomic) IBOutlet UITableViewCellInstruction   *tableViewCellInstruction;
-@property (assign, nonatomic) IBOutlet UITableViewCellTableName     *tableViewCellTableName;
-@property (assign, nonatomic) IBOutlet UITableViewCellQueryLink     *tableViewCellQueryLink;
-@property (assign, nonatomic) IBOutlet UITableViewCellOverride      *tableViewCellOverride;
-@property (assign, nonatomic) IBOutlet UITableViewCellQueryInput    *tableViewCellQueryInput;
-
-@property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+@property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
 @property BOOL debug;
 
