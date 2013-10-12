@@ -41,7 +41,8 @@ static MTVerificationController *singleton;
 - (void)iOS7VerifyReceipt {
 
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
-    BOOL isValidReceipt = verifyReceiptAtPath([receiptUrl path]);
+    NSString *receiptUrlPath = [receiptUrl path];
+    BOOL isValidReceipt = verifyReceiptAtPath(receiptUrlPath);
     [self setModernReceiptIsValid:isValidReceipt];
     if (isValidReceipt == NO) {
         SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
