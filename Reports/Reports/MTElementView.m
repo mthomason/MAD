@@ -30,7 +30,7 @@
 @property (nonatomic, retain) UILabel *displayLabel;    //Display label floats in the padding
 @property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
 @property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
-@property (nonatomic, retain) UIView *marginView;       //[self view]
+//@property (nonatomic, retain) UIView *marginView;       //[self view]
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
@@ -44,17 +44,15 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
+    MTLog(@"Dealloc");
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];
-    [_marginView release];
     [_visibleView release];
     [_displayLabel release];
     [_paddingView release];
     [_imageView release];
     [_managedObjectContext release];
-    [_container release];
-    [_containerGroup release];
 	[super dealloc];
 }
 
@@ -82,7 +80,7 @@
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:alpha];
     UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
-    [[self marginView] setBackgroundColor:labelBackgroundColor];
+    [self setBackgroundColor:labelBackgroundColor];
     [labelBackgroundColor release];
     [[self visibleView] setAlpha:alpha];
     [[self paddingView] setAlpha:alpha];
@@ -113,15 +111,12 @@
         [self setDisplayWobbling: NO];
         [self setDisplayHighlighted: NO];
         
-        UIView *marginView = [self retain];
         if ([UIDevice isLagacyOS]) {
-            [marginView setBackgroundColor:[UIColor whiteColor]];
+            [self setBackgroundColor:[UIColor whiteColor]];
         } else {
-            [marginView setBackgroundColor:[UIColor clearColor]];
+            [self setBackgroundColor:[UIColor clearColor]];
         }
-        [marginView setClipsToBounds:YES];
-        [self setMarginView: marginView];
-        [marginView release];
+        [self setClipsToBounds:YES];
         
         UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
         [visibleView setClipsToBounds:YES];
@@ -133,7 +128,7 @@
             [visibleView setBackgroundColor:[UIColor clearColor]];
         }
         [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[self marginView] addSubview: visibleView];
+        [self addSubview: visibleView];
         [self setVisibleView:visibleView];
         [visibleView release];
         
@@ -203,7 +198,9 @@
     // TODO: Update image when changed.
     
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    [[self imageView] setImage:[[documentObject isImage] image]];
+    if (documentObject != nil) {
+        [[self imageView] setImage:[[documentObject isImage] image]];
+    }
     
     [self updateDisplayLabel];
 
@@ -220,7 +217,7 @@
         CGRect paddingViewFrame = [documentObject paddingViewFrame];
         CGRect elementViewFrame = [documentObject elementViewFrame];
         
-        [[self marginView] setFrame: marginViewFrame];
+        [self setFrame: marginViewFrame];
         [[self visibleView] setFrame: paddingViewFrame];
         [[self paddingView] setFrame: elementViewFrame];
 
@@ -229,7 +226,7 @@
         
         UIFont *displayFont;
         if ([fontName length] == 0) {
-            displayFont = [[UIFont systemFontOfSize:[UIFont systemFontSize]] retain];
+            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         } else {
             MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
             if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
@@ -242,7 +239,6 @@
                 displayFont = [stylizedDisplayFont font];
             }
             [stylizedDisplayFont release];
-            [displayFont retain];
         }
         
         NSString *string = [documentObject designerRepresentationText];
@@ -250,11 +246,12 @@
         NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
         NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
         
+        [displayFont retain];
         NSDictionary *attributes = @{NSFontAttributeName : displayFont,
                                      NSStrikethroughStyleAttributeName : strikeThroughStyle,
                                      NSUnderlineStyleAttributeName : underlineStyle
                                      };
-        
+        [displayFont release];
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
         
         [[self displayLabel] setAttributedText:attributtedString];
@@ -315,7 +312,6 @@
                 baselineAdjustment = UIBaselineAdjustmentNone;
                 break;
         }
-        [displayFont release];
         [attributtedString release];
     
 

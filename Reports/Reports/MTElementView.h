@@ -31,9 +31,6 @@
 
 @property (nonatomic, assign) BOOL displaySelected;
 
-@property (nonatomic, retain) id container;
-@property (nonatomic, retain) id containerGroup;
-
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
 - (BOOL)isSelected;
