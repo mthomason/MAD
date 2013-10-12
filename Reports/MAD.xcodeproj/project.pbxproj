@@ -3637,6 +3637,8 @@
 			isa = PBXGroup;
 			children = (
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
+				4C384E3714B29789007B4F48 /* AppDelegate.h */,
+				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C384E3014B29789007B4F48 /* mad-Info.plist */,
 				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
 				4CDD5ACD17ECDFB00032DF6E /* UIApplication+Extras.h */,
@@ -3658,8 +3660,6 @@
 				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
 				4C76F0F814B5E720005DCE49 /* Constants.h */,
 				4C76F0F914B5E746005DCE49 /* Constants.m */,
-				4C384E3714B29789007B4F48 /* AppDelegate.h */,
-				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4CD2FAA817F378CA0015458B /* ReceiptModule.ans1 */,
 				4C5625DE1758A17D00433E88 /* MACloudManager.h */,
 				4C5625DF1758A17E00433E88 /* MACloudManager.m */,

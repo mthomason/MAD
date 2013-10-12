@@ -39,13 +39,15 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    __block MTDatabaseSqlServer *blockSelf = self;
     
-    //dispatch_async(queuePriorityBackground, ^{
-    //    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    dispatch_async(queuePriorityBackground, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             
 
-            [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+            [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
                 
                 if (success) {
 
@@ -112,16 +114,16 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
             }];
 
-        //});
-    //});
+        });
+    });
 }
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
-    __block MTDatabaseSqlServer *sqlServer = self;
+    //__block MTDatabaseSqlServer *sqlServer = self;
     
-    [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+    [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
         
         if (success) {
             
@@ -1422,6 +1424,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                 
                 if (success) {
+                    __block MTDatabaseConnection *blockCredentals = credentals;
                     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
                     dispatch_async(queuePriorityBackground, ^{
                         
@@ -1451,15 +1454,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                                 error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
                             }
                             
-                            //char *h = (char *)[[credentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
-                            char *s = (char *)[[credentals server] cStringUsingEncoding:NSUTF8StringEncoding];
+                            //char *h = (char *)[[blockCredentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
+                            char *s = (char *)[[blockCredentals server] cStringUsingEncoding:NSUTF8StringEncoding];
                             
                             if (error == nil) {
                                 /* Initialize the login params in the structure */
                                 DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
                                 DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
-                                DBSETLAPP(login, [[credentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
-                                DBSETLDBNAME(login, [[credentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
+                                DBSETLAPP(login, [[blockCredentals appname] cStringUsingEncoding:NSUTF8StringEncoding]);
+                                DBSETLDBNAME(login, [[blockCredentals database] cStringUsingEncoding:NSUTF8StringEncoding]);
                                 
                                 
                                 if (gethostname(hostname, max_len) == 0) {
