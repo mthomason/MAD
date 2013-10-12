@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.68";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.68";
-NSString * const MTGlobalBundleRev                                  = @"689";
+NSString * const MTGlobalBundleVersion                              = @"1.0.69";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.69";
+NSString * const MTGlobalBundleRev                                  = @"690";
 
 @interface AppDelegate()
 
@@ -63,7 +63,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
     
-    NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev!");
+	NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
+	NSCAssert([[AppDelegate bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
+    NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
     NSCAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
     NSCAssert([[AppDelegate bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
