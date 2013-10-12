@@ -1810,33 +1810,33 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark - Fetching
 
 - (void)performFetchTables {
-    if ([self fetchedResultsControllerTables]) {
-        NSError *error = nil;
-        [[self fetchedResultsControllerTables] performFetch:&error];
+    NSFetchedResultsController *controller = [self fetchedResultsControllerTables];
+    if (controller) {
+        [controller performFetch:nil];
     }
     [[self tableView] reloadData];
 }
 
 - (void)performFetchLinks {
-    if ([self fetchedResultsControllerLinks]) {
-        NSError *error = nil;
-        [[self fetchedResultsControllerLinks] performFetch:&error];
+    NSFetchedResultsController *controller = [self fetchedResultsControllerLinks];
+    if (controller) {
+        [controller performFetch:nil];
     }
     [[self tableView] reloadData];
 }
 
 - (void)performFetchGroups {
-    if ([self fetchedResultsControllerGroups]) {
-        NSError *error = nil;
-        [[self fetchedResultsControllerGroups] performFetch:&error];
+    NSFetchedResultsController *controller = [self fetchedResultsControllerGroups];
+    if (controller) {
+        [controller performFetch:nil];
     }
     [[self tableView] reloadData];
 }
 
 - (void)performFetchPredicate {
-    if ([self fetchedResultsControllerPredicates]) {
-        NSError *error = nil;
-        [[self fetchedResultsControllerPredicates] performFetch:&error];
+    NSFetchedResultsController *controller = [self fetchedResultsControllerPredicates];
+    if (controller) {
+        [controller performFetch:nil];
     }
     [[self tableView] reloadData];
 }

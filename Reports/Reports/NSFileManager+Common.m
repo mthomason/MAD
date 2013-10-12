@@ -56,24 +56,24 @@
 
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension {
     NSString *directoryPath = [directory retain];
-    NSMutableArray *result = [[NSMutableArray array] retain];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
-	NSArray *directoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:directory error:&error] retain];
+    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+	NSArray *directoryContents = [defaultFileManager contentsOfDirectoryAtPath:directory error:&error];
     for (NSString *filename in directoryContents) {
-        NSString *fullPath = [directoryPath stringByAppendingPathComponent:filename];
-		NSURL *fileURL = [[NSURL fileURLWithPath:fullPath] retain];
-		BOOL isDirectory;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[fileURL path] isDirectory:&isDirectory]) {
-            if ([[fileURL pathExtension] isEqualToString:extension]) {
-                [result addObject:fileURL];
+        @autoreleasepool {
+            NSString *fullPath = [directoryPath stringByAppendingPathComponent:filename];
+            NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
+            BOOL isDirectory;
+            NSString *filePath = [fileURL path];
+            if ([defaultFileManager fileExistsAtPath:filePath isDirectory:&isDirectory]) {
+                NSString *pathExtension = [fileURL pathExtension];
+                if ([pathExtension isEqualToString:extension]) {
+                    [result addObject:fileURL];
+                }
             }
-            
         }
-        
-        [fileURL release];
     }
-    
-    [directoryContents release];
     [directoryPath release];
     return [result autorelease];
 }

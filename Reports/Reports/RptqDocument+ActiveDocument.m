@@ -29,7 +29,8 @@
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             [error presentErrorToUserWithContinue:^(BOOL success) {
-                NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+                MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
                 NSError *error = nil;
                 [managedObjectContext save:&error];
             }];
@@ -46,24 +47,29 @@
 
 + (RptqQuery *)queryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    NSSet *hasDatabaseSchemas = [document hasDatabaseSchemas];
+    RptqDatabase *database = [hasDatabaseSchemas anyObject];
+    NSSet *hasQueries = [database hasQueries];
+    RptqQuery *query = [hasQueries anyObject];
     return query;
 }
 
 + (NSArray *)tablesForActiveDocument {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    return [[[RptqDatabaseSchemaTable tablesForManagedObjectContext:managedObjectContext] retain] autorelease];
+    NSArray *results = [[RptqDatabaseSchemaTable tablesForManagedObjectContext:managedObjectContext] retain];
+    return [results autorelease];
 }
 
 + (NSArray *)queryTablesForActiveDocument {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    return [[[RptqQueryTable queryTablesForManagedObjectContext:managedObjectContext] retain] autorelease];
+    NSArray *results = [[RptqQueryTable queryTablesForManagedObjectContext:managedObjectContext] retain];
+    return [results autorelease];
 }
 
 + (NSArray *)queryLinksForActiveDocument {
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    return [[[RptqQueryLinks queriesForManagedObjectContext:managedObjectContext] retain] autorelease];
+    NSArray *results = [[RptqQueryLinks queriesForManagedObjectContext:managedObjectContext] retain];
+    return [results autorelease];
 }
 
 @end

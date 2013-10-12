@@ -622,15 +622,19 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             
             if ([UIDevice isModernOS]) {
                 UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-                [xAxis setMaximumRelativeValue:@(10.0000f)];
-                [xAxis setMinimumRelativeValue:@(-10.0000f)];
-                
                 UIInterpolatingMotionEffect *yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-                [yAxis setMaximumRelativeValue:@(10.0000f)];
-                [yAxis setMinimumRelativeValue:@(-10.0000f)];
+
+                NSNumber *maximumRelativeValue = @(10.0000f);
+                NSNumber *minimumRelativeValue = @(-10.0000f);
+                
+                [xAxis setMaximumRelativeValue:maximumRelativeValue];
+                [xAxis setMinimumRelativeValue:minimumRelativeValue];
+                [yAxis setMaximumRelativeValue:maximumRelativeValue];
+                [yAxis setMinimumRelativeValue:minimumRelativeValue];
                 
                 UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
-                [motionGroup setMotionEffects:@[xAxis, yAxis]];
+                NSArray *motionEffects = @[xAxis, yAxis];
+                [motionGroup setMotionEffects:motionEffects];
                 [sectionControlView addMotionEffect:motionGroup];
                 
                 [motionGroup release];

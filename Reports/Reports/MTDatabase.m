@@ -149,7 +149,8 @@
                 MTVertex *vertexOrigin =        [[graph vertexForObject:objectOrigin] retain];
                 MTVertex *vertexDestination =   [[graph vertexForObject:objectDestination] retain];
                 
-                [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
+                NSNumber *weight = @(1);
+                [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:weight];
                 
                 [vertexOrigin release];
                 [vertexDestination release];

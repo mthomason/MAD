@@ -51,7 +51,8 @@
         }
         
     }
-    [standardUserDefault setObject:@(currentMajorVersion) forKey:lastVersionRunKey];
+    NSNumber *majorVersion = @(currentMajorVersion);
+    [standardUserDefault setObject:majorVersion forKey:lastVersionRunKey];
     
     if (upgradeRequired == NO) {
         [self performSegueWithIdentifier:@"MTSegueUpgradeUnneeded" sender:self];

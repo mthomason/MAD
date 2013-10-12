@@ -524,7 +524,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                                             NSInteger pageIndex = index;
                                             
-                                            BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                                            NSNumber *sectionType = [documentSection type];
+                                            BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
                                                 NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
                                                 NSInteger numberOfItemsOnPage = [pageData count];
@@ -539,11 +540,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             //NSDictionary *rowData = [self rowDataForRow: rowToPrint onPage: pageIndex];
                                             
                                             NSDictionary *rd = useNextRowData ? nextRowData : rowData;
-                                            RptqQueryField *queryField = [[item isLabelDataField] referencesQueryField];
+                                            RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
+                                            RptqQueryField *queryField = [labelDataField referencesQueryField];
                                             NSString *tableFieldKey = [queryField tableFieldKey];
                                             //NSDictionary *rowData = [self rowDataForRow:rowToPrint onPage:index];
                                             id value = [rd objectForKey: tableFieldKey];
-                                            MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
+                                            
+                                            RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
+                                            NSNumber *dataTypeNumber = [schemaField dataType];
+                                            MTDataType dataType = [dataTypeNumber integerValue];
                                             displayString = [item formattedString:dataType
                                                                          forValue:value];
                                             break;

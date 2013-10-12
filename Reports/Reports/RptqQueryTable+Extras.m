@@ -81,7 +81,11 @@
 }
 
 - (NSString *)queryAlias {
-    return [NSString stringWithFormat:@"%@_%d", [[self databaseSchemaTable] name], [[self dropIndex] integerValue]];
+    RptqDatabaseSchemaTable *databaseSchemaTable = [self databaseSchemaTable];
+    NSString *tableName = [databaseSchemaTable name];
+    NSNumber *dropIndex = [self dropIndex];
+    NSInteger index = [dropIndex integerValue];
+    return [NSString stringWithFormat:@"%@_%d", tableName, index];
 }
 
 + (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -99,7 +103,8 @@
     RptqQuery *query = [RptqDocument queryForActiveDocument];
     NSSet *queryTablesSet = [query hasQueryTables];
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [[queryTablesSet sortedArrayUsingDescriptors:@[namesAccending]] retain];
+    NSArray *sortDescriptors = @[namesAccending];
+    NSArray *queryTablesArray = [[queryTablesSet sortedArrayUsingDescriptors:sortDescriptors] retain];
     [namesAccending release];
     return [queryTablesArray autorelease];
 }

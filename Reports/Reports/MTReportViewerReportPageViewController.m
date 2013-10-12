@@ -97,11 +97,10 @@
         [self setTimerLabelTimeSinceRefreh:nil];
     }
     
-    NSTimer *t = [[NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:self
-                                                 selector:@selector(updateLateRefreshedLabel:) userInfo:nil
-                                                  repeats:NO] retain];
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
+                                                selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                 repeats: NO];
     [self setTimerLabelTimeSinceRefreh:t];
-    [t release];
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
