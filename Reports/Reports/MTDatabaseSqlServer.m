@@ -368,7 +368,11 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
 
     NSString *name = [activeDocument name];
-    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachesPath = [paths lastObject];
+    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
+    NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
     [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     if (error) {
         error = nil;

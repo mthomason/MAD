@@ -38,33 +38,4 @@
     return [applicationFileUrlWithExtention autorelease];
 }
 
-+ (NSURL *)uniqueTmpUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
-    
-    NSURL *documentsDirectoryURL = [[NSFileManager localTemporaryDirectory] retain];
-    
-    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-    NSURL *baseUrl = [[documentsDirectoryURL URLByAppendingPathComponent: name] retain];
-    NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-    [[baseUrl URLByAppendingPathExtension: extension] retain] :
-    [baseUrl retain];
-    [baseUrl release];
-    
-    NSInteger ctr = 0;
-    while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
-        [applicationFileUrlWithExtention release];
-        
-        NSURL *baseUrlFormatted = [[documentsDirectoryURL
-                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %d", ctr]] retain];
-        
-        
-        applicationFileUrlWithExtention = [[baseUrlFormatted
-                                            URLByAppendingPathExtension: extension] retain];
-        [baseUrlFormatted release];
-        ctr++;
-    }
-    [documentsDirectoryURL release];
-    return [applicationFileUrlWithExtention autorelease];
-}
-
-
 @end

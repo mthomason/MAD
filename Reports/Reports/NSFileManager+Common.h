@@ -12,13 +12,8 @@
 
 + (NSMutableArray *)contentsOfDocumentsDirectory;
 + (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
-+ (NSMutableArray *)contentsOfTemplateDirectoryWithPathExtension:(NSString *)extension;
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension;
 + (NSMutableArray *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension;
-
-+ (NSURL *)applicationDocumentsDirectoryUrl;
-+ (NSURL *)applicationSupportDirectoryUrl;
-+ (NSURL *)applicationLibraryTemplatesDirectoryUrl;
 
 + (NSString *)applicationSupportDirectory;
 + (NSString *)applicationDocumentsDirectory;

@@ -95,9 +95,14 @@
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:[self managedObjectContext]] retain];
     NSError *error = nil;
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:@[] format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    NSArray *emptyArray = @[];
+    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:emptyArray format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
     NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachesPath = [paths lastObject];
+    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
+    NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
     [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     if (error) {
         error = nil;
@@ -139,8 +144,10 @@
     NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
     fileName = [fileName stringByAppendingString:extention];
-    NSString *tempPath = NSTemporaryDirectory();
-    NSURL *thumbnailPath = [NSURL fileURLWithPath: tempPath];
+    
+    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [directoryPaths lastObject];
+    NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
     NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO] retain];
     return [result autorelease];
 }
@@ -153,8 +160,9 @@
         
         //Aquire the destination URL.
         NSString *destinationName = [[[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
-//        NSURL *destinationDirectoryUrl = [[url URLByDeletingLastPathComponent] retain];
         NSURL *destinationDirectoryUrl = [[NSFileManager localTemporaryDirectory] retain];
+        NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
+        [directories lastObject];
         NSURL *destinationUrl = [[destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES] retain];
         
         //Remove existing Core Data File.

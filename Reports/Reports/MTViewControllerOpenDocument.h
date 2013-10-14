@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import "MTQueryBuilderViewController.h"
-#import "MTTemplateSelectorViewController.h"
 #import "NSFileManager+Reports.h"
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
@@ -22,6 +21,7 @@
 #import "UIManagedDocument+FileOperations.h"
 #import "MTViewControllerAsyncProtocol.h"
 #import "MTViewControllerAbout.h"
+#import "MTTableViewCellDocument.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
@@ -34,7 +34,6 @@ extern NSString * const MTSegueShowOpenDocument;
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UITextFieldDelegate,
-        MTTemplateSelectorDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
         MTViewControllerAsyncProtocol>

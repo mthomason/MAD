@@ -343,7 +343,10 @@
                                                                                                  error:NULL];
                                 
                                 NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-                                NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+                                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                                NSString *cachesPath = [paths lastObject];
+                                NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
+                                NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
                                 [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
                                 if (connError) {
                                     connError = nil;

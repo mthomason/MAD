@@ -1106,8 +1106,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
 
         if (name) {
-            NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
-            //NSData *readData = [NSData dataWithContentsOfFile:path];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+            NSString *cachesPath = [paths lastObject];
+            NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
+            NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
             NSData *readData = [[NSData dataWithContentsOfURL:url options:0 error:&error] retain];
             if (readData) {
                 error = nil;
