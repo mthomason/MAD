@@ -65,8 +65,8 @@
 
 #pragma mark - Static
 
-+ (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQuery *query = [RptqDocument queryForManagedObjectContext:managedObjectContext];
++ (NSArray *)queriesForDocument:(RptqDocument *)document {
+    RptqQuery *query = [RptqDocument queryForDocument:document];
     NSSet *queryLinks = [query hasQueryLinks];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
     NSArray *results = [[queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
@@ -106,9 +106,9 @@
     return [queryLinks autorelease];
 }
 
-+ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: [NSSet setWithObject: queryLink]];
++ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoDocument:(RptqDocument *)document {
+    NSSet *linkSet = [NSSet setWithObject: queryLink];
+    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: linkSet];
 }
 
 - (NSString *)linkDescription {

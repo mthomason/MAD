@@ -272,15 +272,6 @@
     return resultSection;
 }
 
-
-// This is the layout height for page rendering... the designer section height is stored in the db
-+ (CGFloat)layoutHeightForSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    return [RptqDocumentSection layoutHeightForSection: [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query]];
-}
-
 // This is the layout height for page rendering... the designer section height is stored in the db
 + (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section {
     CGFloat resultHeight = CGSizeZero.height;
@@ -305,9 +296,8 @@
     return resultHeight;
 }
 
-+ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
@@ -315,9 +305,8 @@
     
 }
 
-+ (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
@@ -325,9 +314,8 @@
     
 }
 
-+ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
@@ -335,9 +323,8 @@
     
 }
 
-+ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
@@ -349,6 +336,7 @@
     } else if (numberOfRows > [[section numberOfRows] integerValue]) {
 
         //Add row
+        NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];

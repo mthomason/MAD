@@ -19,7 +19,7 @@
 + (RptqQuery *)queryForActiveDocument;
 + (NSArray *)queryLinksForActiveDocument;
 + (NSArray *)tablesForActiveDocument;
-+ (RptqQuery *)queryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (RptqQuery *)queryForDocument:(RptqDocument *)document;
 
 @end
 

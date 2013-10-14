@@ -25,14 +25,12 @@
     self = [super init];
     if (self) {
         MTLog(@"Alloc");
-        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        RptqDocument *document = [activeDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         [self setCurrent: 0];
         [self setTotal: [[query hasQueryGroups] count]];
-        [activeDocument release];
     }
     return self;
 }
@@ -42,9 +40,8 @@
 }
 
 - (NSArray *)allObjects {
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     
@@ -57,14 +54,12 @@
             [result addObject:section];
         }
     }
-    [activeDocument release];
     return [result autorelease];
 }
 
 - (id)nextObject {
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
@@ -72,7 +67,6 @@
     id result = [RptqDocumentSection getDocumentSectionForRow: current forQuery: query];
     current++;
     [self setCurrent:current];
-    [activeDocument release];
     return result;
 }
 

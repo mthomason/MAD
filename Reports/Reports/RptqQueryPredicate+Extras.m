@@ -115,10 +115,10 @@
 }
 
 
-+ (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
- 
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:[NSSet setWithObject: predicate]];
++ (void)addPredicate:(RptqQueryPredicate *)predicate toDocument:(RptqDocument *)document {
+
+    NSSet *predicates = [NSSet setWithObject: predicate];
+    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:predicates];
 
 }
 

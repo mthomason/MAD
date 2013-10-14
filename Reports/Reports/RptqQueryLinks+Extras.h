@@ -48,8 +48,8 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
                         rightField:(RptqQueryField *)fieldRight
                        andJoinType:(MNSLinkType)joinType;
 
-+ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (NSArray *)queriesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoDocument:(RptqDocument *)document;
++ (NSArray *)queriesForDocument:(RptqDocument *)document;
 
 - (NSString *)linkDescription;
 

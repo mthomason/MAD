@@ -84,7 +84,7 @@
         RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
                                                                     fromObjectContext: objectContext];
         
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
+        RptqDocument *document = [RptqDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         [mnsDatabase sampleDataForSchemaField:field completion:^(BOOL success, NSError *error, NSArray *resultStrings) {

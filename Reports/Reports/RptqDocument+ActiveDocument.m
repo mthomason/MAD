@@ -18,9 +18,7 @@
 
 + (RptqDocument *)activeDocument {
     id ad = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [ad managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    return document;
+    return [ad activeDocument];
 }
 
 + (void)saveCurrentContext {
@@ -45,8 +43,7 @@
     return query;
 }
 
-+ (RptqQuery *)queryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
++ (RptqQuery *)queryForDocument:(RptqDocument *)document {
     NSSet *hasDatabaseSchemas = [document hasDatabaseSchemas];
     RptqDatabase *database = [hasDatabaseSchemas anyObject];
     NSSet *hasQueries = [database hasQueries];
@@ -67,8 +64,9 @@
 }
 
 + (NSArray *)queryLinksForActiveDocument {
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    NSArray *results = [[RptqQueryLinks queriesForManagedObjectContext:managedObjectContext] retain];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
+    NSArray *results = [[RptqQueryLinks queriesForDocument:document] retain];
     return [results autorelease];
 }
 

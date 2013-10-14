@@ -47,9 +47,8 @@
 
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
-        MAReportDocument *rd = [[MTActiveDocument sharedDocument] activeDocument];
-        NSManagedObjectContext *managedObjectContext = [rd managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         RptqQueryCache *queryCache = [query hasQueryCache];

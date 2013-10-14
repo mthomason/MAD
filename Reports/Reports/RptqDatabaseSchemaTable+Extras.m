@@ -121,12 +121,13 @@
 
 + (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
     
-    RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table] retain];
+    RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table inDocument:document] retain];
     
     NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
     for (RptqDatabaseSchemaField *field in [table hasFields]) {
@@ -146,35 +147,6 @@
     [newQueryFields release];
     [tablesInQuery release];
     return [newQueryTable autorelease];
-    
-/*
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    
-    NSSet *tablesInQuery = [query hasTables];
-    BOOL isTableAlreadyInQuery = NO;
-    for (RptqDatabaseSchemaTable *tableInQuery in tablesInQuery) {
-        if ([[tableInQuery name] isEqualToString:[table name]]) {
-            isTableAlreadyInQuery = YES;
-            break;
-        }
-    }
-    if (!isTableAlreadyInQuery) {
-        [query addHasTablesObject:table];
-    }
-*/
-}
-
-+ (NSArray *)namesForTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    //return [[[[database hasTables] allObjects] retain] autorelease];
-    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[[database hasTables] count]];
-    for (RptqDatabaseSchemaTable *table in [database hasTables]) {
-        [results addObject:[table name]];
-    }
-    return [results autorelease];
 }
 
 #pragma mark - MTProtocolCompare

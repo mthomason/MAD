@@ -38,6 +38,8 @@
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 
+- (RptqDocument *)activeDocument;
+
 @end
 
 #endif

@@ -286,15 +286,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
-//                    NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqDatabaseSchemaTable namesForTablesInQueryForManagedObjectContext: [[self activeDocument] managedObjectContext]]];
-
-                    //NSMutableArray *tableNames = [[NSMutableArray alloc] initWithArray: [RptqQueryTables namesForManagedObjectContext: [[self activeDocument] managedObjectContext]]];
-//                    if ([tableNames count]) {
-//                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT name IN %@", tableNames];
-//                        [request setPredicate: predicate];
-//                    }
-
-//                    [tableNames release];
                     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -355,9 +346,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)[segue destinationViewController];
                     if (tvc) {
                         [tvc setDelegate:self];
-                        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+                        RptqDocument *document = [RptqDocument activeDocument];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
                         RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
@@ -536,28 +525,31 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark - Layout Settings Delegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-
+    
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
-            inManagedObjectContext: [reportDocument managedObjectContext]];
+                        inDocument:document];
     [reportDocument saveContext];
-
+    
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-
+    
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber]
-                inManagedObjectContext: [reportDocument managedObjectContext]];
+                            inDocument:document];
     [reportDocument saveContext];
-
+    
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
-
+    
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber]
-                  inManagedObjectContext: [reportDocument managedObjectContext]];
+                              inDocument:document];
     [reportDocument saveContext];
 }
 
@@ -578,7 +570,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self dismissViewControllerAnimated:YES completion:^{ }];
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    [RptqQueryPredicate addPredicate:predicate forManagedObjectContext:managedObjectContext];
+    [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
     [managedObjectContext save:nil];
 }
 
@@ -586,7 +578,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self dismissViewControllerAnimated:YES completion:^{ }];
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    [RptqQueryLinks insertQueryLink:link intoManagedObjectContext:managedObjectContext];
+    RptqDocument *document = [reportDocument activeDocument];
+    [RptqQueryLinks insertQueryLink:link intoDocument:document];
     [managedObjectContext save:nil];
     NSInteger suspectedSection = 2;
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
@@ -603,11 +596,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqQueryField *queryField = [RptqQueryField getQueryFieldForObjectID:queryFieldId fromObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
-    
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     [query addHasQueryGroupsObject: queryGroup];
@@ -638,7 +630,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSIndexSet *indexSetSections = nil;
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
@@ -819,13 +811,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     NSArray *deleteRows = nil;
                     NSIndexSet *deleteSections = nil;
-                    
-                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
+                    RptqDocument *document = [reportDocument activeDocument];
+                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForDocument:document];
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
                     
                     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
                     NSManagedObjectID *deleatedTableObjectId = [[table objectID] retain];
-                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
@@ -1061,11 +1052,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-                    //NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-                    //NSError *error = nil;
-                    //NSInteger result = [managedObjectContext countForFetchRequest:request error:&error];
-                    //NSInteger numberOfGroups = error ? 0 : result;
+                    RptqDocument *document = [reportDocument activeDocument];
 
                     if (document) {
                         RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
@@ -1570,8 +1557,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (NSMutableDictionary *)datamodel {
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForManagedObjectContext:managedObjectContext];
+    RptqDocument *document = [reportDocument activeDocument];
+    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForDocument:document];
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
     return [result autorelease];
 }

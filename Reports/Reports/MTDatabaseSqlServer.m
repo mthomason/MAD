@@ -349,29 +349,25 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50\n";
 }
 
-- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    //RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
     RptqQuery *query = [[database hasQueries] anyObject];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:managedObjectContext] retain];
 
     id queryResult = [self runQuery:queryString];
     
-    //for (NSDictionary *result in queryResult) {
-        //NSLog(@"%@", result);
-        //id r = result[@"ABBREV_0.Calcium"];
-        //const char *type = [r objCType];
-    //}
-
     NSError *error = nil;
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
 
-    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
+    NSString *name = [activeDocument name];
     NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
     [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     if (error) {

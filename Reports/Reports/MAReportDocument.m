@@ -12,11 +12,17 @@
 
 @property (nonatomic, retain) NSManagedObjectModel *mom;
 
+@property (nonatomic, retain) RptqDocument *document;
+
+@property (nonatomic, retain) NSManagedObjectContext *context;
+
 @end
 
 @implementation MAReportDocument
 
 - (void)dealloc {
+    [_document release];
+    [_context release];
     [_mom release];
     [super dealloc];
 }
@@ -38,29 +44,39 @@
     return MTPersistentStoreAliasMad;
 }
 
+- (RptqDocument *)activeDocument {
+    if ([self document] == nil) {
+        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        if (document == nil) {
+            document = [RptqDocument createMainDocumentForManagedObjectContext:managedObjectContext];
+        }
+        [document retain];
+        [self setDocument:document];
+        [document release];
+    }
+    return [[[self document] retain] autorelease];
+}
+
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion {
 
-    [RptqDocument addDatabase:database toManagedObjectContext:[self managedObjectContext] completion:^(BOOL success, NSError *error) {
-        //if (success) {
-        //    [self saveToURL:[self fileURL] forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-                completion(success, error);
-        //    }];
-        //}
+    RptqDocument *document = [self activeDocument];
+    [RptqDocument addDatabase:database toDocument:document completion:^(BOOL success, NSError *error) {
+        completion(success, error);
     }];
 }
 
 - (void)refresh:(void (^)(BOOL success))completion {
-    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDocument *document = [self activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     if ([sqlSelect length] > 0) {
         //sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 100000", sqlSelect];
-        [mnsDatabase cacheReportQueryForManagedObjectContext: managedObjectContext completion: ^(MTDatabase *database, RptqQueryCache *cache) {
+        [mnsDatabase cacheReportQueryForDocument: document completion: ^(MTDatabase *database, RptqQueryCache *cache) {
             if (database != nil && cache != nil) {
                 completion(YES);
             } else {
@@ -68,14 +84,33 @@
             }
         }];
     } else {
-        [mnsDatabase emptyCacheWithManagedObjectContext:managedObjectContext];
+        [self emptyCache];
         completion(YES);
     }
 }
 
+- (void)emptyCache {
+    RptqDocument *document = [self document];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:[self managedObjectContext]] retain];
+    NSError *error = nil;
+    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:@[] format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
+    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
+    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    if (error) {
+        error = nil;
+        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    }
+    
+    [queryCache setCacheDate:[NSDate date]];
+    [query setHasQueryCache:queryCache];
+    [queryCache release];
+}
+
 - (BOOL)hasCachedData {
-    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDocument *document = [self document];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     return [query hasQueryCache] != nil;

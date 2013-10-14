@@ -12,8 +12,8 @@
 
 @interface RptqQueryTable (Extras) <MTProtocolCompare>
 
-+ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable;
-+ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document;
++ (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document;
 + (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

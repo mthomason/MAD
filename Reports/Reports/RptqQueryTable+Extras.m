@@ -45,9 +45,8 @@
     return result;
 }
 
-+ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable {
++ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document {
 
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: [databaseSchemaTable managedObjectContext]];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
@@ -64,9 +63,8 @@
                                          insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
 
     
-    NSNumber *dropIndex = [@(numberOfReferencesToTableInQuery) retain];
+    NSNumber *dropIndex = @(numberOfReferencesToTableInQuery);
     [queryTable setDropIndex:dropIndex];
-    [dropIndex release];
     
     [queryTable setDatabaseSchemaTable:databaseSchemaTable];
     [queryTable setAlias:[queryTable tableAlias]];
@@ -88,14 +86,11 @@
     return [NSString stringWithFormat:@"%@_%d", tableName, index];
 }
 
-+ (NSUInteger)countOfTablesInQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document {
     NSUInteger result = 0;
-    if (managedObjectContext) {
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
-        result = [[query hasQueryTables] count];
-    }
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    result = [[query hasQueryTables] count];
     return result;
 }
 

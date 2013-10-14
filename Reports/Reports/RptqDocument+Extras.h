@@ -27,13 +27,10 @@
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
-+ (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
-              completion: (void (^)(NSArray *results))completion;
-
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-+ (void)addDatabase: (MTDatabase *)database toManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
          completion: (void (^)(BOOL success, NSError *error))completion;
 
 @end

@@ -169,14 +169,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    id activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDocument *document = [RptqDocument activeDocument];
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
-    [activeDocument release];
-    
+
     [[[self navigationController] toolbar] setNeedsLayout];
     if ([self asyncDelegate]) {
         __block __weak MTReportViewerController *viewController = self;
@@ -189,10 +186,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    //if ([self printPageRendererReport] != nil) {
-    //    [[self printPageRendererReport] release];
-        //[self setPrintPageRendererReport:nil];
-    //}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -204,23 +197,13 @@
 
 - (void)viewDidAppearLogic {
     
-    id activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    RptqDocument *document = [RptqDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     
     BOOL hasCachedData = ([query hasQueryCache] != nil);
     if ([self startedRefresh] == NO && hasCachedData == NO) {
-        if (activeDocument != nil) {
-//            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-//            dispatch_async(queuePriorityBackground, ^{
-//                dispatch_async(dispatch_get_main_queue(), ^{
                     [self refresh:self];
-//                });
-//            });
-        }
-        
     } else {
         NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
         if (lastRefresh != nil) {
@@ -232,7 +215,6 @@
             
         }
     }
-    [activeDocument release];
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
@@ -246,9 +228,7 @@
     
     if ([reportViewer updatingOfTimerIsPaused] == NO) {
         if ([reportViewer lastCacheDate] == nil) {
-            id activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-            RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+            RptqDocument *document = [RptqDocument activeDocument];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
             RptqQuery *query = [[database hasQueries] anyObject];
             NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
@@ -257,7 +237,6 @@
             if ([reportViewer lastCacheDate] == nil) {  //I give up
                 [reportViewer setLastCacheDate:[NSDate date]];
             }
-            [activeDocument release];
         }
         NSDate *lastCacheDate = [reportViewer lastCacheDate];
         MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:lastCacheDate];

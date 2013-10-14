@@ -219,26 +219,6 @@
     return @"";
 }
 
-- (void)emptyCacheWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:managedObjectContext] retain];
-    NSError *error = nil;
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:@[] format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-    NSURL *url = [[NSFileManager  localTemporaryDirectory] URLByAppendingPathComponent:name isDirectory:NO];
-    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    if (error) {
-        error = nil;
-        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    }
-    
-    [queryCache setCacheDate:[NSDate date]];
-    [query setHasQueryCache:queryCache];
-    [queryCache release];
-}
-
 - (NSString *)sqlWhereClauseWithQuery:(RptqQuery *)query {
     
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
@@ -593,7 +573,7 @@
                                  userInfo: nil];
 }
 
-- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForDocument:(RptqDocument *)document
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]

@@ -301,12 +301,11 @@
     return result;
 }
 
-- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
     @autoreleasepool {
         
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
@@ -335,6 +334,7 @@
                         
                             @autoreleasepool {
                                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
+                                NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
                                 RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
                                 
                                 NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]

@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
                      andRightField:(RptqQueryField *)rightField
            forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-+ (void)addPredicate:(RptqQueryPredicate *)predicate forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (void)addPredicate:(RptqQueryPredicate *)predicate toDocument:(RptqDocument *)document;
 + (void)deletePredicateWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (void)deletePredicate:(RptqQueryPredicate *)predicate;
 - (NSString *)symbolForComparson;

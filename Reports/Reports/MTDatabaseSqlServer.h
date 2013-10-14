@@ -31,7 +31,7 @@ extern NSString * const MTDatabaseConnectionAppName;
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
-- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField

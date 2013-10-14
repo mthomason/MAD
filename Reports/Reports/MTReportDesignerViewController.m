@@ -945,15 +945,15 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    MAReportDocument *reportDocument = activeDocument;
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
+    
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                 forQuery: query];
 
-    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inManagedObjectContext: [reportDocument managedObjectContext]];
+    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inDocument:document];
     UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
 
     [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
@@ -969,29 +969,23 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [documentSectionView release];
 
     [[self view] setNeedsUpdateConstraints];
-    [activeDocument release];
     
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    MAReportDocument *reportDocument = activeDocument;
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqDocumentSection setVisibility: isVisible
                        forSectionAtRow: [self lastSelectedSectionControlPanel]
-                inManagedObjectContext: managedObjectContext];
-    [managedObjectContext save:nil];
-    [reportDocument save:nil];
+                inDocument:[activeDocument activeDocument]];
+    [activeDocument saveContext];
     [activeDocument release];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    MAReportDocument *reportDocument = activeDocument;
-    
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[reportDocument managedObjectContext]];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
@@ -1054,7 +1048,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }];
 
     [documentSectionView release];
-    [activeDocument release];
     
 }
 
@@ -1352,9 +1345,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 
                 [self setLastSelectedSectionControlPanel:[[sender view] tag]];
                 
-                MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-                NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-                RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:managedObjectContext];
+                MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                RptqDocument *document = [reportDocument activeDocument];
                 RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                 RptqQuery *query = [[database hasQueries] anyObject];
                 RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
@@ -1375,7 +1367,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                 } else {
                     [self showToolbox:MTToolboxTypeSection];
                 }
-                [activeDocument release];
             }
             
         }
@@ -1634,9 +1625,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                     CGRect rectToShow = CGRectZero;
                     
                     if (tooboxType == MTToolboxTypeSection) {
-                        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-                        
-                        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]];
+                        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        RptqDocument *document = [reportDocument activeDocument];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                         RptqQuery *query = [[database hasQueries] anyObject];
                         RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
@@ -1645,7 +1635,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
                         
                         rectToShow = selectedSectionView.frame;
-                        [activeDocument release];
                         
                     } else if (tooboxType == MTToolboxTypeElement) {
                         rectToShow = [self rectForSelectedElements];
@@ -2230,12 +2219,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
     
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
+    
     RptqDocumentSection *section = [document hasDetailSection];
-    //NSManagedObjectID *sectionID = [section objectID];
-    [activeDocument release];
     
     __block MTReportDesignerViewController *reportDesigner = self;
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];

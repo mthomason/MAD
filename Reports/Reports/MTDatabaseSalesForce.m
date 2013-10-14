@@ -70,7 +70,7 @@ typedef void (^rsltBlk_complete)(MTDatabaseSalesForce *database, BOOL complete);
 
 }
 
-- (void)cacheReportQueryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)cacheReportQueryForDocument:(RptqDocument *)document
       completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
     [self setCurrentQueryType: MTDatabaseQueryTypeGetResults];

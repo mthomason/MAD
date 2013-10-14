@@ -91,8 +91,8 @@
                 if (tvc) {
                     [tvc setDelegate:self];
                     
-                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    RptqDocument *document = [reportDocument activeDocument];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     
@@ -138,8 +138,9 @@
                 if (vcFf) {                
                     [vcFf setDelegate:self];                    
 
-                    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-                    RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+                    RptqDocument *document = [reportDocument activeDocument];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
 
@@ -150,7 +151,7 @@
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name != %@", [[self firstTableName] alias]];
                     [request setPredicate: predicate];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];

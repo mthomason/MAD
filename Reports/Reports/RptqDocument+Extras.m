@@ -58,22 +58,6 @@
 
 #pragma mark - Static
 
-+ (void)queryDatabaseFor: (NSManagedObjectContext *)objectContext
-              completion: (void (^)(NSArray *results))completion {
-    RptqDocument *doc = [[RptqDocument getMainDocumentForManagedObjectContext: objectContext] retain];
-    if (doc) {
-        RptqDatabase *db = [[doc hasDatabaseSchemas] anyObject];
-        if (db) {
-            NSString *driverType = [[db databaseDriverType] retain];
-            if ([driverType isEqualToString: [MTDatabaseMySql identifier]]) {
-
-            }
-            [driverType release];
-        }
-    }
-    [doc release];
-}
-
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
@@ -176,24 +160,17 @@
     return [result autorelease];
 }
 
-+ (void)addDatabase: (MTDatabase *)database toManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
          completion: (void (^)(BOOL success, NSError *error))completion {
     
-    __block RptqDocument *rptqDocument = [RptqDocument getMainDocumentForManagedObjectContext: objectContext];
-    
-    if (rptqDocument == nil) {
-        rptqDocument = [RptqDocument createMainDocumentForManagedObjectContext:objectContext];
-    }
+    __block RptqDocument *rptqDocument = document;
+    __block NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
-    
-    __block RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: objectContext
+    __block RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
                                                                              driverType: [database identifier]
                                                                            connectionId: connectionId];
-    
-    __block RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: objectContext];
-    
-    
+    __block RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
@@ -224,7 +201,9 @@
     
     [rptqDatabase setOwnedByUser: userCredentals];
 
-    [rptqDatabase addHasQueriesObject:[NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqQuery class]) inManagedObjectContext: objectContext]];
+    NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
+    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: managedObjectContext];
+    [rptqDatabase addHasQueriesObject:newQuery];
     
     NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
@@ -236,7 +215,7 @@
 
             for (MTDatabaseTable *databaseTable in tables) {
             
-                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: objectContext
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: managedObjectContext
                                                                                                            andTable: databaseTable];
                 RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                      withConnecitonId: connectionId];
@@ -251,11 +230,11 @@
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                                  withConnecitonId: connectionId];
                             
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForManagedObjectContext: objectContext
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForManagedObjectContext: managedObjectContext
                                                                                               database: currentDatabase
                                                                                           andTableName: [databaseTable name]];
                             
-                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: objectContext
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
                                                                                                                        andField: objField];
                             
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
