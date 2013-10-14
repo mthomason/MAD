@@ -49,20 +49,11 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType {
     _selectedFunctionType = selectedFunctionType;
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
             for (UITableViewCell *tableViewCell in [self tableViewCells]) {
                 if ([tableViewCell tag] == selectedFunctionType) {
                     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
                 }
             }
-            
-        });
-    });
-    
 }
 
 

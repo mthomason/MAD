@@ -34,7 +34,7 @@
 
 @property (nonatomic, assign) BOOL startedRefresh;
 @property (nonatomic, assign) BOOL pageIsAnimating;
-@property (atomic, assign) BOOL isRefreshing;
+@property (atomic,    assign) BOOL isRefreshing;
 @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
 @end
@@ -93,22 +93,11 @@
     
     [self setStartedRefresh:NO];
     
-    //id activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    //NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    //[activeDocument release];
-
-    //RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext] retain];
-
-    //MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-    //[self setPrintPageRendererReport: prtingPageRendererReport];
-    //[prtingPageRendererReport release];
-    
     [[self view] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     [self setDataSource:self];
     [self setDelegate:self];
     
     [self setCurrentPageIndex:0];
-    //[document release];
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
@@ -126,14 +115,7 @@
     UISlider *slider = (UISlider *)sender;
     float sliderIndex = lroundf([slider value]); // Rounds float to an integer
     if ((int)sliderIndex != [self currentPageIndex]) {
-        //[slider setValue:sliderIndex];               // Sets your slider to this value
         [self setCurrentPageIndex:sliderIndex];
-        //NSInteger initIndex;
-        //if ([self currentPageIndex] < [self numberOfPages]) {
-        //    initIndex = [self currentPageIndex] + 1;
-        //} else {
-        //    initIndex = [self numberOfPages] > 0 ? [self numberOfPages] : 0;
-        //}
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:[self currentPageIndex] + 1 ofPages:[self numberOfPages]];
         [[pageOne view] setFrame:[[self view] bounds]];
         
@@ -149,9 +131,8 @@
         }];
         [pageOne release];
     }
-    
-    //[self setViewControllers:<#(NSArray *)#> direction:<#(UIPageViewControllerNavigationDirection)#> animated:YES completion:^(BOOL finished) { }]
 }
+
 - (IBAction)sliderPageDidFinishDrag:(id)sender {
     UISlider *slider = (UISlider *)sender;
     float sliderIndex = lroundf([slider value]); // Rounds float to an integer
@@ -397,6 +378,48 @@
 
 #pragma mark - Actions
 
++ (void)setDisplayActive:(MTReportViewerController *)controller {
+
+    [[controller barButtonItemRefresh] setEnabled:YES];
+    [[controller barButtonItemDone] setEnabled:YES];
+    [[controller barButtonItemPrint] setEnabled:YES];
+    [[controller barButtonItemSendToPdf] setEnabled:YES];
+    
+    [controller setIsRefreshing:NO];
+    [controller setUpdatingOfTimerIsPaused:NO];
+    [[controller barButtonItemRefresh] setEnabled:YES];
+    [[controller labelDateLastRefreshed] setHidden:NO];
+    [[controller labelDateLastRefreshed] setText:@""];
+    [[controller labelDateLastRefreshed] setNeedsDisplay];
+
+    [[controller navigationItem] setRightBarButtonItem:[controller barButtonItemRefresh] animated:YES];
+
+}
+
++ (void)setDisplayInactive:(MTReportViewerController *)controller {
+
+    [controller setIsRefreshing:YES];
+    [[controller barButtonItemRefresh] setEnabled:NO];
+    [[controller barButtonItemDone] setEnabled:NO];
+    [[controller barButtonItemPrint] setEnabled:NO];
+    [[controller barButtonItemSendToPdf] setEnabled:NO];
+    [controller setUpdatingOfTimerIsPaused:YES];
+    [[controller labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
+    [[controller labelDateLastRefreshed] setNeedsDisplay];
+    [[controller barButtonItemDone] setEnabled:NO];
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicator setColor:[UIColor blackColor]];
+    [activityIndicator startAnimating];
+    [activityIndicator setHidden:NO];
+    [activityIndicator setHidesWhenStopped:NO];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [[controller navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+    [barButtonItem release];
+    [activityIndicator release];
+    
+}
+
 - (IBAction)refresh:(id)sender {
     
     __block MTReportViewerController *reportViewer;
@@ -406,30 +429,9 @@
         reportViewer = self;
     }
 
-    NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-
     if ([reportViewer isRefreshing] == NO) {
 
-        [reportViewer setIsRefreshing:YES];
-        [[reportViewer barButtonItemRefresh] setEnabled:NO];
-        [[reportViewer barButtonItemDone] setEnabled:NO];
-        [[reportViewer barButtonItemPrint] setEnabled:NO];
-        [[reportViewer barButtonItemSendToPdf] setEnabled:NO];
-        
-        [reportViewer setUpdatingOfTimerIsPaused:YES];
-        [[reportViewer labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
-        [[reportViewer labelDateLastRefreshed] setNeedsDisplay];
-        [[reportViewer barButtonItemDone] setEnabled:NO];
-        
-        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [activityIndicator setColor:[UIColor blackColor]];
-        [activityIndicator startAnimating];
-        [activityIndicator setHidden:NO];
-        [activityIndicator setHidesWhenStopped:NO];
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
-        [barButtonItem release];
-        [activityIndicator release];
+        [MTReportViewerController setDisplayInactive:reportViewer];
         
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         dispatch_async(queuePriorityBackground, ^{
@@ -438,30 +440,22 @@
 
             [activeDocument refresh:^(BOOL success) {
             
-                NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-
                 if (success) {
-                    
-                    //__block MTReportViewerController *reportViewerBackground = reportViewer;
                     
                     [[reportViewer printPageRendererReport] setDidRefresh:YES];
 
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        [[reportViewer navigationItem] setRightBarButtonItem:[reportViewer barButtonItemRefresh] animated:YES];
+                        [MTReportViewerController setDisplayActive:reportViewer];
                         NSDate *lastD = [[NSDate date] retain];
                         [reportViewer setLastCacheDate: lastD];
                         [lastD release];
                         [reportViewer reload:reportViewer];
-                        [reportViewer resetScreen];
                     });
                 } else {
 
                     dispatch_sync(dispatch_get_main_queue(), ^{
-
-                        [[reportViewer navigationItem] setRightBarButtonItem:[reportViewer barButtonItemRefresh] animated:YES];
+                        [MTReportViewerController setDisplayActive:reportViewer];
                         [reportViewer reload:reportViewer];
-                        [reportViewer resetScreen];
                     });
                 }
             }];
@@ -471,51 +465,37 @@
 
 - (void)reload:(MTReportViewerController *)reportViewer {
     
-    //__block __weak MTReportViewerController *reportViewer = self;
-    //id activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    //if (activeDocument != nil) {
-        CGSize viewBounds = [[reportViewer view] bounds].size;
+    [MTReportViewerController setDisplayInactive:reportViewer];
+    
+    __block MTReportViewerController *blockViewer = reportViewer;
+    CGSize viewBounds = [[reportViewer view] bounds].size;
+    
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(queuePriorityBackground, ^{
         
-        //NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
         
-        //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        //dispatch_async(queuePriorityBackground, ^{
+        [[blockViewer printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
             
-            //NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-    NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-
-            [[reportViewer printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
-    NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-
-            //dispatch_sync(dispatch_get_main_queue(), ^{
-
-                //NSLog(@"retainCount %lu", (unsigned long)reportViewer.retainCount);
-                
-                NSUInteger numberOfPages = [[self printPageRendererReport] numberOfPages];
-                [reportViewer setNumberOfPages:numberOfPages];
-                [[reportViewer sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-
-                NSInteger pageNumber = [reportViewer currentPageIndex] + 1;
-                MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
-                                                                                                                             ofPages:numberOfPages];
-                [[pageOne view] setFrame:[[reportViewer view] bounds]];
-                
-                [pageOne setDelegate:reportViewer];
-        
-                NSArray *viewControllers = @[pageOne];
-                [reportViewer setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-                    if (finished) {
-                        //[[pageOne view] setNeedsDisplay];
-//                        [MTReportViewerController resetScreen:reportViewer];
-                    }
-                }];
-                [pageOne release];
-            //});
-        //});
-    //} else {
-    //    [self resetScreen];
-    //}
-    //[activeDocument release];
+            [MTReportViewerController setDisplayActive:blockViewer];
+            
+            NSUInteger numberOfPages = [[blockViewer printPageRendererReport] numberOfPages];
+            [blockViewer setNumberOfPages:numberOfPages];
+            [[blockViewer sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+            
+            NSInteger pageNumber = [blockViewer currentPageIndex] + 1;
+            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
+                                                                                                                         ofPages:numberOfPages];
+            [[pageOne view] setFrame:[[blockViewer view] bounds]];
+            
+            [pageOne setDelegate:reportViewer];
+            
+            NSArray *viewControllers = @[pageOne];
+            [blockViewer setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
+            [pageOne release];
+        });
+    });
 }
 
 - (void)resetScreen {

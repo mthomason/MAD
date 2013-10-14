@@ -159,7 +159,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
-    //NSLog(@"AURL %@", absoluteURL);
+
     id result;
     if ([self isSuspended]) {
         result = [NSNull null];
@@ -169,22 +169,24 @@ NSString * MTDocumentParentContextName          = @"moc";
             [self setExtraInformation:extraInfo];
             [extraInfo release];
         }
-        
-//        if ([self thumbnail] == nil) {
-//            [[self extraInformation] setObject:[UIImage imageNamed:@"UIImageDocumentBlank"] forKey:[MADocument thumbnailSaveName]];
-//            [self setThumbnail:[UIImage imageNamed:@"UIImageDocumentBlank"]];
-//        }
-        
+
+        __block NSMutableDictionary *blockDictionary = [self extraInformation];
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
-        if (document != nil) {
-            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-            UIImage *thumbnail = [printPageRender thumbnail];
-            [[self extraInformation] setObject:thumbnail forKey:[MADocument thumbnailSaveName]];
-//            [self setThumbnail:thumbnail];
-//            [thumbnail release];
-            [printPageRender release];
-        }
-        [[self extraInformation] setObject:@(1.0) forKey:MTDocumentInfoKeyVersion];
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            
+            if (document != nil) {
+                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+                UIImage *thumbnail = [printPageRender thumbnail];
+                NSString *key = [MADocument thumbnailSaveName];
+                [blockDictionary setObject:thumbnail forKey:key];
+                [printPageRender release];
+            }
+        });
+        
+        NSNumber *dataVersion = @(1.0);
+
+        [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
         [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
         result = [[[self extraInformation] retain] autorelease];
     }
