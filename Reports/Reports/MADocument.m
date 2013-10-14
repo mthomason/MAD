@@ -171,13 +171,17 @@ NSString * MTDocumentParentContextName          = @"moc";
         }
 
         __block NSMutableDictionary *blockDictionary = [self extraInformation];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+        __block NSURL *thumbnailUrl = [self thumbnailUrl];
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
             
             if (document != nil) {
                 MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
                 UIImage *thumbnail = [printPageRender thumbnail];
+                NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+                [pngImage writeToURL:thumbnailUrl atomically:NO];
                 NSString *key = [MADocument thumbnailSaveName];
                 [blockDictionary setObject:thumbnail forKey:key];
                 [printPageRender release];
@@ -208,9 +212,6 @@ NSString * MTDocumentParentContextName          = @"moc";
 
         NSError *filePresenterError = nil;
         
-        UIImage *thumbnail = [[(NSDictionary *)content objectForKey:[MADocument thumbnailSaveName]] retain];
-        [UIImagePNGRepresentation(thumbnail) writeToURL:[self thumbnailUrl] atomically:NO];
-
         NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];
         id version = [content objectForKey:MTDocumentInfoKeyVersion];
         id generator = [content objectForKey:MTDocumentInfoKeyGenerator];
@@ -219,7 +220,6 @@ NSString * MTDocumentParentContextName          = @"moc";
         if (filePresenterError != nil) {
             [filePresenterError presentErrorToUser];
         }
-        [thumbnail release];
  
     } else {
         writeAdditionalContent = NO;
