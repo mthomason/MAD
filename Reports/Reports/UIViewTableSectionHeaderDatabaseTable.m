@@ -64,7 +64,6 @@
         [button addTarget:self action:@selector(toggleOpen:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
         [self setDisclosureButton: button];
-        [button release];
         
         static NSMutableArray *colors = nil;
         if (colors == nil) {
