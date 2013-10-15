@@ -157,6 +157,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
     
+    [[self barButtonItemObjects] setEnabled:YES];
     if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
         
         MTDocumentObjectNewStaticLabelViewController *staticLabelViewController = [action sourceViewController];
@@ -255,10 +256,12 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         }];
     }
 
+    [[self barButtonItemObjects] setEnabled:YES];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:NULL];
+    [[self barButtonItemObjects] setEnabled:YES];
 }
 
 
@@ -849,6 +852,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [popoverSegue popoverController];
             [popoverController setDelegate:self];
+            CGSize popoverSize = CGSizeMake(320.0000f, 420.0000);
+            [popoverController setPopoverContentSize:popoverSize animated:NO];
             [self setPopoverControllerObjectSelector:popoverController];
         }
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
@@ -2192,6 +2197,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
+    [[self barButtonItemObjects] setEnabled:YES];
     [self insertDocumentObjectWithDefination:
      @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
        MTDocumentObjectDefinationObject : [field objectID]}];
@@ -2202,6 +2208,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                                              inputObject:(NSManagedObjectID *)inputObject
                                                groupType:(MTAggregateGroupByType)groupType
                                              groupNumber:(NSNumber *)groupNumber {
+    [[self barButtonItemObjects] setEnabled:YES];
 
     NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
                                                MTDocumentObjectDefinationObject :  @{MTDocumentObjectDefinationAggregateType : @(functionType),
@@ -2214,6 +2221,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
+    [[self barButtonItemObjects] setEnabled:YES];
     [self insertDocumentObjectWithDefination:
         @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelStatic),
            MTDocumentObjectDefinationObject : labelText}];
@@ -2221,7 +2229,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)insertDocumentObjectWithDefination:(NSDictionary *)documentObjectDefination {
-    
+    [[self barButtonItemObjects] setEnabled:YES];
+
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     
