@@ -336,7 +336,7 @@
                                 MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
                                 NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
                                 RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-                                
+
                                 NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
                                                                                                 format:NSPropertyListBinaryFormat_v1_0
                                                                                                options:0

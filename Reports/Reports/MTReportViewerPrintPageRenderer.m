@@ -52,11 +52,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, retain) NSArray *sortedQueryGroups;
 
+@property (nonatomic, retain) NSInputStream *inputStream;
+
 @end
 
 @implementation MTReportViewerPrintPageRenderer
 
 - (void)dealloc {
+    [_inputStream release];
     [_cachedLayoutByPage release];
     [_cachedSortedSortDescriptorsGroup release];
     [_cachedDataByPage release];
@@ -173,6 +176,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (UIImage *)thumbnail {
     CGRect letterRect = [MTPaper rectLetter];
+    
+    // FIXME: Don't cache data for the whole report when just printing the first page for a
+    //          fucking thumbnail.
+    
     [self cachePrintPageRenderDataForSize:letterRect.size];
     //CGFloat scale = 128.0000 / (letterRect.size.height > letterRect.size.width > 0.0f ? letterRect.size.height : (letterRect.size.width == 0.0000f? letterRect.size.width : 1.0000f));
     UIGraphicsBeginImageContextWithOptions(letterRect.size, YES, 0.0000f);
@@ -239,7 +246,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 @autoreleasepool {
                     
                     NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
-                    id reportSectionValues = nil;
+                    //id reportSectionValues = nil;
                     
                     NSNumber *groupLevel = nil;
                     
@@ -315,17 +322,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     
                     [[UIBezierPath bezierPathWithRect:sectionRect] fill];
                     
-                    id obj = [pageSection objectForKey:MTReportSectionValues];
+                    //id obj = [pageSection objectForKey:MTReportSectionValues];
                     
-                    if ([obj isKindOfClass:[NSDictionary class]]) {
+                    //if ([obj isKindOfClass:[NSDictionary class]]) {
                         
-                        reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
+                    //    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
                         
-                    } else if ([obj isKindOfClass:[NSArray class]]) {
+                    //} else if ([obj isKindOfClass:[NSArray class]]) {
                         
-                        reportSectionValues = [[NSArray alloc] initWithArray:obj];
+                    //    reportSectionValues = [[NSArray alloc] initWithArray:obj];
                         
-                    }
+                    //}
                     
                     NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                     NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
@@ -580,10 +587,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             
                                             [attributedString setAttributes: attributes range:NSRangeFromString(displayString)];
                                             
-                                            [printableStrings addObject:@{
-                                                                          @"s" : attributedString,
-                                                                          @"r" : NSStringFromCGRect(elementCanvasRect)
-                                                                          }];
+                                            NSDictionary *psAttributes = @{
+                                                                           @"s" : attributedString,
+                                                                           @"r" : NSStringFromCGRect(elementCanvasRect)
+                                                                           };
+                                            [printableStrings addObject:psAttributes];
                                             
                                             [attributedString drawInRect:elementCanvasRect];
                                             [attributedString release];
@@ -621,7 +629,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     
                     originY += sizeHeight;
                     
-                    [reportSectionValues release];
+                    //[reportSectionValues release];
                     
                 }
             }
@@ -641,14 +649,18 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
         [paragraphStyle setAlignment:NSTextAlignmentCenter];
         
+        UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f];
+        UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f];
+        
         NSDictionary *results = @{NSFontAttributeName : customFont,
                                    //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
                                    NSStrokeWidthAttributeName : @(3.0000f),
-                                   NSStrokeColorAttributeName : [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f],
-                                   NSForegroundColorAttributeName : [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f],
+                                   NSStrokeColorAttributeName : strokeColor,
+                                   NSForegroundColorAttributeName : foregroundColor,
                                    NSParagraphStyleAttributeName: paragraphStyle
                                    };
-        NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: @"Get MAD Viewer!\nOpen and View MAD Documents" attributes:results];
+        NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
+        NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:results];
 
         NSInteger rowCounter = 0, columnCounter = 0;
         CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
@@ -658,8 +670,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         do {
             columnCounter = 0;
             do {
-                
-                
                 
                 CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width;
                 CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
@@ -687,69 +697,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [printableStrings release];
 }
 
-- (void)drawString:(NSString *)displayString forObject:(RptqDocumentObject *)documentObject inRect:(CGRect)rect forContext:(CGContextRef)context {
-    
-    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
-    CTFontRef customFont = [font coreTextFont];
-    NSNumber *underline = [[documentObject underline] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
-    NSNumber *strikethough = [[documentObject strike] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    CTTextAlignment alignment;
-    switch ([[documentObject horizontalAlignment] integerValue]) {
-        case MTHorizontalAlignmentLeft:
-            alignment = kCTLeftTextAlignment;
-            break;
-        case MTHorizontalAlignmentRight:
-            alignment = kCTRightTextAlignment;
-            break;
-        case MTHorizontalAlignmentCenter:
-            alignment = kCTCenterTextAlignment;
-            break;
-        case MTHorizontalAlignmentJustified:
-            alignment = kCTJustifiedTextAlignment;
-            break;
-        case MTHorizontalAlignmentNatrual:
-            alignment = kCTNaturalTextAlignment;
-            break;
-        default:
-            alignment = kCTLeftTextAlignment;
-            break;
-    }
-    
-    CTParagraphStyleSetting altSettings[] =
-    {
-        { kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment},
-    };
-    
-    CTParagraphStyleRef style;
-    style = CTParagraphStyleCreate( altSettings, sizeof(altSettings) / sizeof(CTParagraphStyleSetting) );
-    
-    
-    CFRelease(style);
-    NSDictionary *attributes = @{(NSString *)kCTFontAttributeName : (id)customFont,
-             (NSString *)kCTUnderlineStyleAttributeName : underline,
-             (NSString *)NSStrikethroughStyleAttributeName : strikethough,
-             (NSString *)kCTParagraphStyleAttributeName: [paragraphStyle autorelease]};
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:displayString attributes:attributes];
-    
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedString);
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, rect);
-    CTFrameRef textFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0,0), path, NULL);
-    CTFrameDraw(textFrame, context);
-    CGPathRelease(path);
-    CFRelease(framesetter);
-    CFRelease(textFrame);
-    [font release];
-    CFRelease(customFont);
-    [attributedString release];
-
-}
-
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
-    UIFont *customFont = [[font font] retain];
+    UIFont *customFont = [font font];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
@@ -773,15 +723,18 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [paragraphStyle setAlignment:NSTextAlignmentLeft];
             break;
     }
-
-    NSDictionary *results = [
-                             @{NSFontAttributeName : customFont,
-                               NSBaselineOffsetAttributeName : @(0.0000f),
-                               NSUnderlineStyleAttributeName : [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone),
-                               NSStrikethroughStyleAttributeName : [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone),
-                               NSParagraphStyleAttributeName: paragraphStyle
-                               } retain];
-    [customFont release];
+    
+    NSNumber *baselineOffset = @(0.0000f);
+    NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *strikethroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSDictionary *results = @{
+                              NSFontAttributeName : customFont,
+                              NSBaselineOffsetAttributeName : baselineOffset,
+                              NSUnderlineStyleAttributeName : underlineStyle,
+                              NSStrikethroughStyleAttributeName : strikethroughStyle,
+                              NSParagraphStyleAttributeName: paragraphStyle
+                              };
+    [results retain];
     [paragraphStyle release];
     [font release];
     return [results autorelease];
@@ -1016,9 +969,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     NSDictionary *rowData = [self rowDataForRow:row onPage:page];
     id value = [rowData objectForKey: tableFieldKey];
     MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-    result = [[[documentObjectDataField formattedString:dataType
-                                       forValue:value] retain] autorelease];
-    return result;
+    result = [[documentObjectDataField formattedString:dataType
+                                       forValue:value] retain];
+    return [result autorelease];
 }
 
 - (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys {
@@ -1105,20 +1058,26 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSArray *cachedResultsForReportSerialized = nil;
         NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
 
+    
         if (name) {
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
             NSString *cachesPath = [paths lastObject];
             NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
             NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
-            NSData *readData = [[NSData dataWithContentsOfURL:url options:0 error:&error] retain];
-            if (readData) {
-                error = nil;
-                NSPropertyListFormat format;
-                cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithData:readData options:0 format:&format error:&error];
-            }
-            [readData release];
-        }
 
+            error = nil;
+            NSPropertyListFormat format;
+            NSString *filePath = [url path];
+            NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
+            [inputStream open];
+            cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
+            [self setInputStream:inputStream];
+            if (error) {
+                NSLog(@"error: %@", error);
+            }
+        }
+    
+        
         NSSet *hasQueryGroups = [query hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
@@ -1132,7 +1091,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: [queryGroup fieldNameQuery]
+            NSString *key = [queryGroup fieldNameQuery];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: sortAscending];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];
             [sortDescriptor release];
@@ -1143,8 +1103,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         //Get unique, distinct, and sorted... slowly
         //NSDate *start = [NSDate date];
 
-        NSArray *sortedResultsByRow = [[NSArray alloc] initWithArray:[cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]]];
-        
+        NSArray *sortedArray = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
+//        NSArray *sortedResultsByRow = [[NSArray alloc] initWithArray:sortedArray];
+        NSArray *sortedResultsByRow = [sortedArray retain];
         //start = [NSDate date];
         
         [self setCachedDataByReport:sortedResultsByRow];
@@ -1185,28 +1146,28 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
         [self cachePageFooterWithValueDictionary:groupedRows];
         
-        NSArray *tlfp = [[NSArray alloc] initWithArray:[self temporaryLayoutForPage]];
+        NSArray *tlfp = [[self temporaryLayoutForPage] retain];
         [[self temporaryLayoutByPage] addObject:tlfp];
         [tlfp release];
 
-        NSArray *tdfp = [[NSArray alloc] initWithArray:[self temporaryDataForPage]];
+        NSArray *tdfp = [[self temporaryDataForPage] retain];
         [[self temporaryDataByPage] addObject:tdfp];
         [tdfp release];
         
         id gr;
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {
-            gr = [[NSDictionary alloc] initWithDictionary: groupedRows];
+            gr = [groupedRows retain];
         } else {
-            gr = [[NSArray alloc] initWithArray: groupedRows];
+            gr = [groupedRows retain];
         }
         [self setCachedDataByGroup: gr];
         [gr release];
         
-        NSArray *tlbp = [[NSArray alloc] initWithArray:[self temporaryLayoutByPage]];
+        NSArray *tlbp = [[self temporaryLayoutByPage] retain];
         [self setCachedLayoutByPage: tlbp];
         [tlbp release];
         
-        NSArray *tdbp = [[NSArray alloc] initWithArray:[self temporaryDataByPage]];
+        NSArray *tdbp = [[self temporaryDataByPage] retain];
         [self setCachedDataByPage: tdbp];
         [tdbp release];
 
@@ -1216,6 +1177,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [sortDescriptor release];
 
     }
+    [[self inputStream] close];
 
 }
 
@@ -1229,7 +1191,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
             
             BOOL nullGroupExist = NO;
-            NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys]];
+            NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys] copyItems:NO];
             for (id obj in allKeys) {
                 if ([obj isKindOfClass:[NSString class]]) {
                     NSString *str = (NSString *)obj;
@@ -1248,7 +1210,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSEnumerator *loopEnumerator = nil;
             
             if (sortSelector != nil) {
-                NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector]];
+                NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
                 if (nullGroupExist) {
                     [allKeysSorted insertObject:@"(null)" atIndex:0];
                 }
@@ -1390,7 +1352,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             groupResultIndexForLevel++;
         }
 
-        NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
+        //NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
         if (valueForField != nil) {
             id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                   level: (level + 1)];
@@ -1408,7 +1370,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [resultsDictionary setObject:resultOfNextGroup forKey:key];
         }
         
-        [resultsCopy release];
+        //[resultsCopy release];
         
         [resultsForGroup removeAllObjects];
         [resultsForGroup release];
