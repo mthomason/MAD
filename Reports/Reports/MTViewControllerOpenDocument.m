@@ -435,8 +435,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
                 if ([UIDevice isPad]) {
                     MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
-                    [queryBuilderViewController setDelegateContentController: self];
-                    [queryBuilderViewController setDelegate:self];
+//                    [queryBuilderViewController setDelegate:self];
+                    [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                        if (success) {
+                            [managedDocument retain];
+                            [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                            [[queryBuilderViewController queryBuilderController] reloadDocument:managedDocument];
+                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadDocument:managedDocument];
+                            [managedDocument release];
+                        }
+                    }];
+                    
+                    
                 } else {
                     
                     __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
@@ -452,8 +462,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
                 MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
-                [queryBuilderViewController setDelegateContentController: self];
-                [queryBuilderViewController setDelegate:self];
+                //[queryBuilderViewController setDelegate:self];
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
                 
                 __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
@@ -523,7 +532,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
                     }
                     [standard reloadDocument:managedDocument];
-                    [standard reloadDocument:managedDocument];
+                    [advanced reloadDocument:managedDocument];
                     [managedDocument release];
                 }
             }];

@@ -12,10 +12,14 @@
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTTitleView.h"
 #import "MTViewControllerAsyncProtocol.h"
+#import "MTQueryBuilderAdvancedViewController.h"
 
 @interface MTQueryBuilderContainerController : MTViewController
     <MTViewControllerProtocol>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
+
+- (MTQueryBuilderViewController *)queryBuilderController;
+- (MTQueryBuilderAdvancedViewController *)queryBuilderControllerAdvanced;
 
 @end

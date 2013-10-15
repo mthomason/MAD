@@ -14,14 +14,9 @@
 @property (nonatomic, retain) IBOutlet UIView *leftView;
 @property (nonatomic, retain) IBOutlet UIView *rightView;
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
-@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
 
 @property (nonatomic, assign) BOOL isEditing;
-
-- (MTQueryBuilderViewController *)queryBuilderController;
-- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced;
 
 @end
 
@@ -31,8 +26,6 @@
     [_leftView release];
     [_rightView release];
     [_bogusConstraints release];
-    [_toolbarTop release];
-    [_titleView release];
     [_barButtonItemEdit release];
     [super dealloc];
 }
@@ -50,11 +43,10 @@
     
     [self setIsEditing:NO];
 
-    [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:0]];
-    [[self delegateContentController] displayContentController: [[self childViewControllers] objectAtIndex:1]];
+    NSArray *childViewControllers = [self childViewControllers];
+    [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:0]];
+    [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:1]];
     
-    
-    [[[self titleView] label] setText:NSLocalizedString(@"Query", @"Query")];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -70,7 +62,8 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     BOOL leftIsGo = YES, rightIsGo = YES;
-    if ([identifier isEqualToString:@"MTSegueCloseDesigner"]) {
+    NSString *segueCloseDesignerId = @"MTSegueCloseDesigner";
+    if ([identifier isEqualToString:segueCloseDesignerId]) {
         leftIsGo = [self leftViewController] == nil ? YES :
                         [[self leftViewController] shouldPerformSegueWithIdentifier:identifier sender:sender];
         rightIsGo = [self rightViewController] == nil ? YES :
@@ -85,7 +78,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[self toolbarTop] setTintColor:[UIColor edaBlueDark]];
 
     UIView *leftView = [[self leftView] retain];
     UIView *rightView = [[self rightView] retain];
@@ -180,7 +172,7 @@
     return [[[self rightViewController] retain] autorelease];
 }
 
-- (MTQueryBuilderAdvancedSchemaViewController *)queryBuilderControllerAdvanced {
+- (MTQueryBuilderAdvancedViewController *)queryBuilderControllerAdvanced {
     return [[[self leftViewController] retain] autorelease];
 }
 

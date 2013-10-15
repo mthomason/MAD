@@ -103,9 +103,6 @@
     [super viewDidLoad];
     [self setShowSqlIsVisable:NO];
     UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
-    if ([UIDevice isLagacyOS]) {
-        [containerView setBackgroundColor:[UIColor paperGraphPaper]];
-    }
     [self setContentView:containerView];
     [containerView release];
 
@@ -138,9 +135,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([UIDevice isLagacyOS]) {
-        [[self toolbarBottom] setTintColor:[UIColor edaBlueDark]];
-    }
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
