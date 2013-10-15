@@ -91,12 +91,37 @@
     [super awakeFromNib];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [[self scrollView] setBounds:[[self backgroundContainer] bounds]];
     [[self scrollView] setCenter:[[self backgroundContainer] center]];
     [[self contentView] setBounds:[[self backgroundContainer] bounds]];
     [[self contentView] setCenter:[[self backgroundContainer] center]];
+    NSArray *childViewControlleres = [self childViewControllers];
+    for (id viewController in childViewControlleres) {
+        Class desiredClass = [MTQueryBuilderAdvancedSchemaViewController class];
+        if ([viewController isKindOfClass:desiredClass]) {
+            __block UIView *view = [viewController view];
+            CGRect desiredFrame = [self rectForDesiredRect:[view frame]];
+            [UIView animateWithDuration:0.20000f animations:^{
+                [view setFrame:desiredFrame];
+            }];
+            
+            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[view objectIdTag] fromObjectContext:[self managedObjectContext]];
+            for (RptqQueryLinks *queryLink in [[table inQuery] hasQueryLinks]) {
+                RptqQueryTable *leftTable = [[queryLink hasLeftField] inQueryTable];
+                RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
+                if ([leftTable isEqualTo:table] ||
+                    [rightTable isEqualTo:table]) {
+                    [self layoutQueryLinkViewController:queryLink];
+                }
+            }
+        }
+    }
 }
 
 - (void)viewDidLoad {
@@ -274,6 +299,39 @@
     }
 }
 
+- (CGRect)rectForDesiredRect:(CGRect)desiredFrame {
+    CGRect viewControllerBounds = [[self contentView] bounds];
+    BOOL goodSpot = CGRectContainsRect(viewControllerBounds, desiredFrame);
+    if (goodSpot == NO) {
+        
+        //Is it to the left?
+        if (desiredFrame.origin.x < viewControllerBounds.origin.x) {
+            desiredFrame.origin.x = viewControllerBounds.origin.x + 20.0000f;
+        }
+        
+        //Is it to the right?
+        CGFloat desiredRightFrame = desiredFrame.origin.x + desiredFrame.size.width;
+        CGFloat boundsRightFrame = viewControllerBounds.origin.x + viewControllerBounds.size.width;
+        if (desiredRightFrame > boundsRightFrame) {
+            desiredFrame.origin.x = boundsRightFrame - desiredFrame.size.width - 20.0000f;
+        }
+        
+        //Are you too high?
+        if (desiredFrame.origin.y < viewControllerBounds.origin.y) {
+            desiredFrame.origin.y = viewControllerBounds.origin.y + 20.0000f;
+        }
+        
+        //Is it too low?
+        CGFloat desiredBottomFrame = desiredFrame.origin.y + desiredFrame.size.height;
+        CGFloat boundsBottomFrame = viewControllerBounds.origin.y + viewControllerBounds.size.height;
+        if (desiredBottomFrame > boundsBottomFrame) {
+            desiredFrame.origin.y = boundsBottomFrame - desiredFrame.size.height - 20.0000f;
+        }
+        
+    }
+    return desiredFrame;
+}
+
 - (void)addViewController:(UIViewController *)viewController {
 
     [viewController retain];
@@ -293,6 +351,8 @@
         animationType = 1;
         [[viewController view] setCenter:CGPointMakeRandomOffscreen()];
 
+        desiredFrame = [self rectForDesiredRect:desiredFrame];
+
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
         
         [[viewController view] setBounds:CGRectZero];
@@ -302,7 +362,7 @@
         animationType = 2;
     }
 
-
+    
     [self addChildViewController:viewController];
     if ([[self viewControllers] containsObject:viewController] == NO) {
         [[self viewControllers] addObject:viewController];
@@ -435,8 +495,8 @@
     if (CGRectContainsRect([[self view] frame], subviewRect) == NO) {
         //CGFloat originX = 50.0000f + CGPointZero.x;
         //CGFloat originY = originX;
-        
-        CGPoint p = [self randomPointInRect:CGRectInset([[self view] frame], 50.0000f, 50.0000f)];
+        CGRect contentViewBounds = [[self view] bounds];
+        CGPoint p = [self randomPointInRect:CGRectInset(contentViewBounds, 50.0000f, 50.0000f)];
         subviewRect = CGRectMake(p.x, p.y, 180.0000f, 200.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
         [table setDesignerSizeWidth:@(subviewRect.size.width)];
@@ -732,7 +792,7 @@
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-            CGPoint newCenter = [gestureRecognizer locationInView:[self view]];
+            CGPoint newCenter = [gestureRecognizer locationInView:[self contentView]];
             [[gestureRecognizer view] setCenter: newCenter];
             
             RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:[self managedObjectContext]];
@@ -753,7 +813,7 @@
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
             
             
-            CGPoint gestureLocation = [gestureRecognizer locationInView:[self view]];
+            CGPoint gestureLocation = [gestureRecognizer locationInView:[self contentView]];
             [[gestureRecognizer view] setCenter: gestureLocation];
             
             NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
