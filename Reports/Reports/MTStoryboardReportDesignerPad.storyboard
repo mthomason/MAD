@@ -6098,6 +6098,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemEdit" destination="DZ7-M6-UkL" id="NpK-g4-DAi"/>
                         <outlet property="leftView" destination="KAG-3w-BQz" id="LGr-jg-Xwu"/>
                         <outlet property="rightView" destination="JBm-H0-ZfW" id="e6g-XH-Mes"/>
                         <outletCollection property="bogusConstraints" destination="ffG-e5-XFT" id="3X0-my-fck"/>

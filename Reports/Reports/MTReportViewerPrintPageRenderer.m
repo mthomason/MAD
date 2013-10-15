@@ -180,7 +180,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     // FIXME: Don't cache data for the whole report when just printing the first page for a
     //          fucking thumbnail.
     
-    [self cachePrintPageRenderDataForSize:letterRect.size];
+    [self cachePrintPageRenderDataForSize:letterRect.size onlyFirstPage:YES];
     //CGFloat scale = 128.0000 / (letterRect.size.height > letterRect.size.width > 0.0f ? letterRect.size.height : (letterRect.size.width == 0.0000f? letterRect.size.width : 1.0000f));
     UIGraphicsBeginImageContextWithOptions(letterRect.size, YES, 0.0000f);
     CGMutablePathRef path = CGPathCreateMutable();
@@ -241,6 +241,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             CGRect sectionRect = CGRectZero;
             
+            UIColor *whiteColor = [[UIColor whiteColor] retain];
+
             for (NSDictionary *pageSection in pageSectionsToPrint) {
                 
                 @autoreleasepool {
@@ -256,7 +258,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         
                         documentSection = [document hasDetailSection];
                         
-                        [[UIColor whiteColor] setFill];
+                        [whiteColor setFill];
                         
                         detailRowsCounter++;
                         
@@ -264,11 +266,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         
                         documentSection = [document hasPageHeaderSection];
                         
-                        if ([self debugMode]) {
-                            [[UIColor yellowColor] set];
-                        } else {
-                            [[UIColor whiteColor] setFill];
-                        }
+                            [whiteColor setFill];
                         
                     } else if ([MTPageFooter isEqualToString:pageSectionId]) {
                         
@@ -276,11 +274,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
                         originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
                         
-                        if ([self debugMode]) {
-                            [[UIColor yellowColor] set];
-                        } else {
-                            [[UIColor whiteColor] setFill];
-                        }
+                            [whiteColor setFill];
                         
                         pageNumber++;
                         
@@ -288,7 +282,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         
                         documentSection = [document hasReportHeaderSection];
                         
-                        [[UIColor whiteColor] setFill];
+                        [whiteColor setFill];
                         
                     } else if ([MTReportFooter isEqualToString:pageSectionId]) {
                         
@@ -298,14 +292,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         CGFloat sizeHeightPageFooter = [[pageFooterSection layoutHeight] floatValue];
                         originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter - sizeHeightPageFooter;
                         
-                        [[UIColor whiteColor] setFill];
+                        [whiteColor setFill];
                         
                     } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
                         
                         groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                         documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
                         
-                        [[UIColor whiteColor] setFill];
+                        [whiteColor setFill];
                         
                     } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
                         
@@ -314,30 +308,21 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
                         documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
                         
-                        [[UIColor whiteColor] setFill];
+                        [whiteColor setFill];
                         
                     }
                     CGFloat sizeHeight = [RptqDocumentSection layoutHeightForSection:documentSection];
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
-                    [[UIBezierPath bezierPathWithRect:sectionRect] fill];
+                    UIBezierPath *bezierPathForSection = [UIBezierPath bezierPathWithRect:sectionRect];
                     
-                    //id obj = [pageSection objectForKey:MTReportSectionValues];
-                    
-                    //if ([obj isKindOfClass:[NSDictionary class]]) {
-                        
-                    //    reportSectionValues = [[NSDictionary alloc] initWithDictionary:obj];
-                        
-                    //} else if ([obj isKindOfClass:[NSArray class]]) {
-                        
-                    //    reportSectionValues = [[NSArray alloc] initWithArray:obj];
-                        
-                    //}
+                    [bezierPathForSection fill];
                     
                     NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                     NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
                     
-                    BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
+                    NSNumber *documentSectionType = [documentSection type];
+                    BOOL useNextRowData = ([documentSectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                     NSInteger nextDetailRowToPrint = detailRowToPrint;
                     NSInteger nextPageIndex = index;
                     if (useNextRowData) {
@@ -359,23 +344,19 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
                             @autoreleasepool {
                                 
-                                
-                                id sortKey = [rowData objectForKey:[sortDescriptor key]];
+                                NSString *key = [sortDescriptor key];
+                                id sortKey = [rowData objectForKey:key];
                                 if (sortKey == nil) {
                                     sortKey = @"(null)";
                                 }
-                                //[sortKey retain];
                                 [groupLevelKeys addObject:sortKey];
-                                //[sortKey release];
                                 if (nextRowData != nil) {
-                                    id sortKeyNext = [nextRowData objectForKey:[sortDescriptor key]];
+                                    id sortKeyNext = [nextRowData objectForKey:key];
                                     if (sortKeyNext == nil) {
                                         sortKeyNext = @"(null)";
                                     }
                                     if (sortKeyNext) {
-                                        //[sortKeyNext retain];
                                         [nextGroupLevelKeys addObject:sortKeyNext];
-                                        //[sortKeyNext release];
                                     }
                                 }
                                 
@@ -400,7 +381,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             
                                             NSArray *dataForGroup = nil;
                                             
-                                            MTAggregateGroupByType aggregateGroupType = [[aggregateField groupType] integerValue];
+                                            NSNumber *aggregateFieldGroupType = [aggregateField groupType];
+                                            MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
                                             
                                             switch (aggregateGroupType) {
                                                     // FIXME: Check to see which ones of these are correct.
@@ -437,7 +419,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             
                                             NSString *fieldKey = [queryField toString];
                                             
-                                            MTDataType aggregateType = [[[queryField databaseSchemaField] dataType] integerValue];
+                                            RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
+                                            NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
+                                            MTDataType aggregateType = [databaseSchemaFieldDataType integerValue];
                                             id aggregateResult = nil;
                                             switch ([[aggregateField function] integerValue]) {
                                                     
@@ -544,13 +528,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                 }
                                             }
                                             
-                                            //NSDictionary *rowData = [self rowDataForRow: rowToPrint onPage: pageIndex];
-                                            
                                             NSDictionary *rd = useNextRowData ? nextRowData : rowData;
                                             RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                             RptqQueryField *queryField = [labelDataField referencesQueryField];
                                             NSString *tableFieldKey = [queryField tableFieldKey];
-                                            //NSDictionary *rowData = [self rowDataForRow:rowToPrint onPage:index];
                                             id value = [rd objectForKey: tableFieldKey];
                                             
                                             RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
@@ -572,8 +553,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         }
                                     }
                                     
-                                    CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;// originX;
-                                    CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;// originY;
+                                    CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;
+                                    CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;
                                     CGRect paddingFrame = [item paddingViewFrame];
                                     CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, paddingFrame.size.width, paddingFrame.size.height);
                                     
@@ -623,8 +604,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 }
                             }
                         }
-                        //}
-                        
                     }
                     
                     originY += sizeHeight;
@@ -1004,6 +983,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 //  Data is cached by group, page, and report.
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
+    [self cachePrintPageRenderDataForSize:printableSize onlyFirstPage:NO];
+}
+
+- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage {
 
     RptqDocument *document = [RptqDocument activeDocument];
     
@@ -1125,11 +1108,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [sortedSortDescriptorsGroup release];
 
         BOOL detailPrinted = NO;
-
-        [self cacheGroupLevel:[query firstQueryGroup]
-                  groupedRows:groupedRows
-             groupedRowsLevel:0
-                detailPrinted:&detailPrinted];
+        
+        
+        RptqQueryGroup *firstGroup = [query firstQueryGroup];
+        if (onlyFirstPage) {
+            BOOL firstPageComplete = NO;
+            [self cacheUntilFirstPageStartingWithGroup:firstGroup groupedRows:groupedRows groupedRowsLevel:0 detailPrinted:&detailPrinted firstPageComplete:&firstPageComplete];
+        } else {
+            [self cacheGroupLevel:firstGroup groupedRows:groupedRows groupedRowsLevel:0 detailPrinted:&detailPrinted];
+        }
         
         CGFloat reportFooterHeight = [[[document hasReportFooterSection] layoutHeight] floatValue];
         
@@ -1181,11 +1168,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 }
 
-- (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup
-            groupedRows:(NSDictionary *)groupedRows
-       groupedRowsLevel:(NSUInteger)groupedRowsLevel
-          detailPrinted:(BOOL *)detailPrinted {
+// FIXME: Hack... this shit looks just like cacheGroupLevel
+- (void)cacheUntilFirstPageStartingWithGroup:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted firstPageComplete:(BOOL *)firstPageComplete {
     
+    if (*firstPageComplete == NO) {
+        
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
             
             SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
@@ -1205,7 +1192,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 [allKeys removeObject:@"(null)"];
             }
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-
+            
             
             NSEnumerator *loopEnumerator = nil;
             
@@ -1234,14 +1221,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                 //Group header section
                 for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                        [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
-                                                   groupedRows: groupedRows];
+                        *firstPageComplete = [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
+                                                                        groupedRows: groupedRows];
                         CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection layoutHeight] floatValue];
                         [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
                         break;
                     }
                 }
-
+                
+                //if (*firstPageComplete == NO) {
+                if (*firstPageComplete == NO) {
+                    
                 [self cacheGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
                 
                 
@@ -1255,21 +1245,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         }
                     }
                 }
-
-                //This old method was SLOW!!!!
-                //RptqQueryGroup *nextGroup = [queryGroup next];
-                
-                
-                if (nextGroup != nil) {
-                    [self cacheGroupLevel: nextGroup
-                              groupedRows: obj
-                         groupedRowsLevel: groupedRowsLevel + 1
-                            detailPrinted: detailPrinted];
-                } else {
-                    [self cacheDetailLevelWithDetails:obj
-                                          groupedRows:groupedRows];
-                }
-                
+                    if (nextGroup != nil) {
+                        [self cacheUntilFirstPageStartingWithGroup: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 detailPrinted: detailPrinted firstPageComplete:firstPageComplete];
+                    } else {
+                        [self cacheDetailLevelWithDetails:obj groupedRows:groupedRows];
+                    }
                 //Group footer section
                 for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                     if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
@@ -1280,19 +1260,136 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         break;
                     }
                 }
-
+                
                 [self cacheGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
                 
+                }
+                //}
                 [obj release];
+                if (*firstPageComplete) {
+                    break;
+                }
             }
             [loopEnumerator release];
             [allKeys release];
-
+            
         } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
-
+            
             [self cacheDetailLevelWithDetails:(NSArray *)groupedRows
                                   groupedRows:groupedRows];
         }
+    }
+}
+
+- (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted {
+    
+    if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
+        
+        SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
+        
+        BOOL nullGroupExist = NO;
+        NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys] copyItems:NO];
+        for (id obj in allKeys) {
+            if ([obj isKindOfClass:[NSString class]]) {
+                NSString *str = (NSString *)obj;
+                if ([str isEqualToString: @"(null)"]) {
+                    nullGroupExist = YES;
+                    break;
+                }
+            }
+        }
+        if (nullGroupExist) {
+            [allKeys removeObject:@"(null)"];
+        }
+        NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
+        
+        
+        NSEnumerator *loopEnumerator = nil;
+        
+        if (sortSelector != nil) {
+            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
+            if (nullGroupExist) {
+                [allKeysSorted insertObject:@"(null)" atIndex:0];
+            }
+            
+            if ([desc ascending] == NO) {
+                loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
+            } else {
+                loopEnumerator = [[allKeysSorted objectEnumerator] retain];
+            }
+            [allKeysSorted release];
+        } else {
+            loopEnumerator = [[allKeys objectEnumerator] retain];
+        }
+        
+        [desc release];
+        
+        
+        for (id key in loopEnumerator) {
+            id obj = [[groupedRows objectForKey:key] retain];
+            
+            //Group header section
+            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
+                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+                    [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
+                                               groupedRows: groupedRows];
+                    CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection layoutHeight] floatValue];
+                    [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
+                    break;
+                }
+            }
+            
+            [self cacheGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
+            
+            
+            RptqQueryGroup *nextGroup = nil;
+            if ([[self sortedQueryGroups] count] > groupedRowsLevel + 1) {  //Is there a next group?  Short ciruit
+                if (queryGroup != nil) {
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[queryGroup weight] integerValue] + 1)];
+                    NSArray *filteredGroups = [[self sortedQueryGroups] filteredArrayUsingPredicate:predicate];
+                    if ([filteredGroups count] >= 1) {
+                        nextGroup = [filteredGroups objectAtIndex:0];
+                    }
+                }
+            }
+            
+            //This old method was SLOW!!!!
+            //RptqQueryGroup *nextGroup = [queryGroup next];
+            
+            
+            if (nextGroup != nil) {
+                [self cacheGroupLevel: nextGroup
+                          groupedRows: obj
+                     groupedRowsLevel: groupedRowsLevel + 1
+                        detailPrinted: detailPrinted];
+            } else {
+                [self cacheDetailLevelWithDetails:obj
+                                      groupedRows:groupedRows];
+            }
+            
+            //Group footer section
+            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
+                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+                    [self cachePageBreakWithNextItemHeight: [[documentSection layoutHeight] floatValue]
+                                               groupedRows: groupedRows];
+                    CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + [[documentSection layoutHeight] floatValue];
+                    [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
+                    break;
+                }
+            }
+            
+            [self cacheGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
+            
+            [obj release];
+        }
+        [loopEnumerator release];
+        [allKeys release];
+        
+    } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
+        
+        [self cacheDetailLevelWithDetails:(NSArray *)groupedRows
+                              groupedRows:groupedRows];
+    }
 }
 
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails

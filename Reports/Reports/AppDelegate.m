@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.77";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.77";
-NSString * const MTGlobalBundleRev                                  = @"698";
+NSString * const MTGlobalBundleVersion                              = @"1.0.79";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.79";
+NSString * const MTGlobalBundleRev                                  = @"700";
 
 @interface AppDelegate()
 

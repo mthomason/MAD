@@ -16,6 +16,7 @@
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbarTop;
 @property (nonatomic, retain) IBOutlet MTTitleView *titleView;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
 
 @property (nonatomic, assign) BOOL isEditing;
 
@@ -32,6 +33,7 @@
     [_bogusConstraints release];
     [_toolbarTop release];
     [_titleView release];
+    [_barButtonItemEdit release];
     [super dealloc];
 }
 
@@ -152,15 +154,24 @@
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
     
     [[self queryBuilderController] edit:sender];
-    
-    UIBarButtonSystemItem buttonType = [[[self queryBuilderController] tableView] isEditing] ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                   target: self
-                                                                                   action: @selector(toggleEditModeQueryDesigner:)];
-
-    NSMutableArray *tbItems = [[NSMutableArray alloc] initWithArray:[[self toolbarTop] items]];
-    [tbItems replaceObjectAtIndex:([tbItems count] - 1) withObject: barButtonItem];
-    [[self toolbarTop] setItems: tbItems];
+    BOOL isEditing = [self isEditing];
+    [self setIsEditing: !isEditing];
+    NSArray *items = [[[self navigationController] toolbar] items];
+    NSMutableArray *tbItems = [items mutableCopy];
+    NSUInteger buttonIndex = [tbItems indexOfObject:[self barButtonItemEdit]];
+    if (buttonIndex != NSNotFound) {
+        UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
+        SEL toggleEditModeQueryDesigner = @selector(toggleEditModeQueryDesigner:);
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                       target: self
+                                                                                       action: toggleEditModeQueryDesigner];
+        
+        
+        [tbItems replaceObjectAtIndex:buttonIndex withObject: barButtonItem];
+        [[[self navigationController] toolbar] setItems: tbItems animated:YES];
+        [self setBarButtonItemEdit:barButtonItem];
+        [barButtonItem release];
+    }
     [tbItems release];
 
 }

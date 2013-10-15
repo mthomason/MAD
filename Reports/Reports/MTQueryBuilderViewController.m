@@ -422,12 +422,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = ![[self tableView] isEditing];
+    BOOL editing = [[self tableView] isEditing];
     
     if ([UIDevice isPad] == NO) {
-
-        //UIBarButtonSystemItem buttonType = editing ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
-
         NSMutableArray *barButtonItems = [[self toolbarItems] mutableCopy];
         if (editing) {
             [barButtonItems removeObject:[self barButtonItemEdit]];
@@ -437,19 +434,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [barButtonItems addObject:[self barButtonItemEdit]];
         }
         [self setToolbarItems:barButtonItems animated:YES];
-        /*
-        [[self barButtonItemEdit] :(editing ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit)];
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                       target: self
-                                                                                       action: @selector(edit:)];
-        [[self navigationItem] setRightBarButtonItem:barButtonItem];
-        [barButtonItem release];
-        */
         [barButtonItems release];
 
     }
 
-    [[self tableView] setEditing: editing];
+    [[self tableView] setEditing: !editing];
 }
 
 #pragma mark Table Header Actions
