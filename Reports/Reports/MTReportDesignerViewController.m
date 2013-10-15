@@ -845,10 +845,11 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     if ([[segue identifier] isEqualToString:@"showObjects"]) {
         
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+            [[self barButtonItemObjects] setEnabled:NO];
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
-            UIPopoverController *popoverController = [[popoverSegue popoverController] retain];
+            UIPopoverController *popoverController = [popoverSegue popoverController];
+            [popoverController setDelegate:self];
             [self setPopoverControllerObjectSelector:popoverController];
-            [popoverController release];
         }
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
             UINavigationController *d = [segue destinationViewController];
@@ -1547,6 +1548,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (IBAction)showObjects:(id)sender {
+    [[self barButtonItemObjects] setEnabled:NO];
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showObjects" sender:sender];
     } else {
@@ -1740,6 +1742,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self deselectAllElementsAnimated:YES];
+    [[self barButtonItemObjects] setEnabled:YES];
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
