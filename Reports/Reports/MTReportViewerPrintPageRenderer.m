@@ -1455,36 +1455,48 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)cachePageHeaderWithValueDictionary:(NSDictionary *)values {
     [[self temporaryLayoutForPage] removeAllObjects];
     [[self temporaryDataForPage] removeAllObjects];
-    
-    [[self temporaryLayoutForPage] addObject:  @{MTReportSectionType : MTPageHeader}];
+    NSDictionary *d = @{MTReportSectionType : MTPageHeader};
+    [[self temporaryLayoutForPage] addObject:  d];
 }
 
 - (void)cachePageFooterWithValueDictionary:(NSDictionary *)values {
-    [[self temporaryLayoutForPage] addObject:  @{MTReportSectionType : MTPageFooter}];
+    NSDictionary *d = @{MTReportSectionType : MTPageFooter};
+    [[self temporaryLayoutForPage] addObject: d];
 }
 
 - (void)cacheReportHeaderWithValueDictionary:(NSDictionary *)values {
-    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportHeader}];
+    NSDictionary *d = @{MTReportSectionType : MTReportHeader};
+    [[self temporaryLayoutForPage] addObject: d];
 }
 
 - (void)cacheReportFooterWithValueDictionary:(NSDictionary *)values {
-    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportFooter}];
+    NSDictionary *d = @{MTReportSectionType : MTReportFooter};
+    [[self temporaryLayoutForPage] addObject: d];
 }
 
 - (void)cacheGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
-    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportGroupHeader, MTReportGroupLevel : @(groupLevel)}];
+    NSNumber *level = @(groupLevel);
+    NSDictionary *d = @{MTReportSectionType : MTReportGroupHeader,
+                        MTReportGroupLevel : level};
+    [[self temporaryLayoutForPage] addObject: d];
 }
 
 - (void)cacheGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
-    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTReportGroupFooter, MTReportGroupLevel : gl}];
+    NSDictionary *d = @{MTReportSectionType : MTReportGroupFooter,
+                        MTReportGroupLevel : gl};
+    [[self temporaryLayoutForPage] addObject: d];
     [gl release];
 }
 
 - (void)cacheDetailWithValueDictionary:(NSDictionary *)values {
-    [[self temporaryLayoutForPage] addObject: @{MTReportSectionType : MTPageDetail}];
-    [[self temporaryDataForPage] addObject:@([self temporaryCachedDetailCounter])];
-    self.temporaryCachedDetailCounter++;
+    NSDictionary *detail = @{MTReportSectionType : MTPageDetail};
+    [[self temporaryLayoutForPage] addObject: detail];
+    NSUInteger ctr = [self temporaryCachedDetailCounter];
+    NSNumber *counter = @(ctr);
+    [[self temporaryDataForPage] addObject:counter];
+    ctr++;
+    [self setTemporaryCachedDetailCounter:ctr];
 }
 
 @end
