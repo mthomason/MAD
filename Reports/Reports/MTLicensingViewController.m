@@ -83,6 +83,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
+    
     __block __weak MTLicensingViewController *weakViewController = self;
 
     MTStoreKitNonRenewableLicensedUser licenseUserCompletion = ^(BOOL isLicensedUser, NSDate *experationDate) {
