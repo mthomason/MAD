@@ -160,14 +160,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-        if (isLicensedUser) {
-            NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
-            [toolbarButtons addObject:[self barButtonItemShowSQL]];
-            [[self toolbarBottom] setItems:toolbarButtons animated:animated];
-            [toolbarButtons release];
-        }
-    }];
 
 }
 

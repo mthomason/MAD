@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="yvq-YF-d1q"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ldg-aU-cmB">
-                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eq8-Co-ofV">
-                                <rect key="frame" x="0.0" y="0.0" width="540" height="576"/>
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="556"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -41,19 +41,12 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Generated Query" id="pAq-dE-kx0">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="2AK-8F-3M2">
-                            <connections>
-                                <segue destination="Vgp-Ja-P1s" kind="unwind" unwindAction="unwindToQueryBuilder:" id="Z1d-oK-kRe"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Generated Query" id="pAq-dE-kx0"/>
                     <connections>
                         <outlet property="textView" destination="eq8-Co-ofV" id="zl5-y4-uBh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ysn-d8-7e3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="Vgp-Ja-P1s" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="5443" y="-2851"/>
         </scene>
@@ -971,11 +964,7 @@
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="bJ8-D0-Lxh"/>
                         <barButtonItem title="Info" id="uzi-TN-7de"/>
-                        <barButtonItem title="SQL" id="2BA-o0-AgC">
-                            <connections>
-                                <segue destination="KDn-h6-IuZ" kind="modal" identifier="MNSSegueShowSql" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="M84-qr-Whu"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem title="SQL" id="2BA-o0-AgC"/>
                         <barButtonItem systemItem="edit" id="psX-vP-QZq">
                             <connections>
                                 <action selector="edit:" destination="joU-Nk-1nv" id="aAW-3G-GY8"/>
@@ -1016,7 +1005,7 @@
             <objects>
                 <tableViewController id="EK3-rz-y2j" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Q4Q-11-ZbF">
-                        <rect key="frame" x="0.0" y="64" width="380" height="700"/>
+                        <rect key="frame" x="0.0" y="64" width="380" height="1468"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1242,7 +1231,7 @@
             <objects>
                 <tableViewController id="NkE-c4-ux8" customClass="MTDatabaseDriverSelectorViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="51c-eJ-DWP">
-                        <rect key="frame" x="0.0" y="64" width="380" height="586"/>
+                        <rect key="frame" x="0.0" y="64" width="380" height="1034"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -4927,7 +4916,7 @@
             <objects>
                 <tableViewController id="zYG-bi-IL0" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="6Cd-LV-Fb5">
-                        <rect key="frame" x="0.0" y="64" width="380" height="700"/>
+                        <rect key="frame" x="0.0" y="64" width="380" height="1468"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6024,6 +6013,14 @@
                                 <action selector="toggleEditModeQueryDesigner:" destination="cAm-KY-FCv" id="sVo-yN-PE8"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="cIF-yz-lYa"/>
+                        <barButtonItem title="SQL" id="hAA-Id-nhi">
+                            <connections>
+                                <segue destination="KDn-h6-IuZ" kind="popover" popoverAnchorBarButtonItem="hAA-Id-nhi" id="RdB-YN-q9B">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Query" id="byB-LC-hGH">
                         <barButtonItem key="leftBarButtonItem" title="MAD Files" width="66" id="vVK-F9-9cj">
@@ -6041,6 +6038,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemEdit" destination="DZ7-M6-UkL" id="NpK-g4-DAi"/>
+                        <outlet property="barButtonItemRevealQuery" destination="hAA-Id-nhi" id="Q1e-AB-2LV"/>
                         <outlet property="leftView" destination="KAG-3w-BQz" id="LGr-jg-Xwu"/>
                         <outlet property="rightView" destination="JBm-H0-ZfW" id="e6g-XH-Mes"/>
                         <outletCollection property="bogusConstraints" destination="ffG-e5-XFT" id="3X0-my-fck"/>
@@ -6072,11 +6070,6 @@
                                 <rect key="frame" x="0.0" y="980" width="448" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ZrX-pc-lcy"/>
-                                    <barButtonItem title="SQL" id="71n-0O-R1B">
-                                        <connections>
-                                            <action selector="buttonShowSqlDidTouchUpInside:" destination="RJA-Vn-l2B" id="NbC-UN-ULU"/>
-                                        </connections>
-                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -6093,7 +6086,6 @@
                     <toolbarItems/>
                     <connections>
                         <outlet property="backgroundContainer" destination="jKd-yV-bFM" id="Ucd-TQ-puu"/>
-                        <outlet property="barButtonItemShowSQL" destination="71n-0O-R1B" id="Eaj-LU-BUX"/>
                         <outlet property="toolbarBottom" destination="Qef-MA-0hi" id="Ste-oY-iSF"/>
                     </connections>
                 </viewController>
