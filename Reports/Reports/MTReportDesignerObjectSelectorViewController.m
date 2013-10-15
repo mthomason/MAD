@@ -112,12 +112,24 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     return self;
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    if ([UIDevice isPad]) {
+        CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
+        [self setPreferredContentSize:contentSize];
+    };
+}
+
 #pragma mark - View lifecycle
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelIdentifer"]) {
-//        id reportDesignerViewController = [self objectSelectorDelegate];
-        [[segue destinationViewController] setDelegate: self];
+        id destinationViewController = [segue destinationViewController];
+        [destinationViewController setDelegate: self];
+        if ([UIDevice isPad]) {
+            CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
+            [destinationViewController setPreferredContentSize:contentSize];
+        }
     }
 }
 - (void)viewDidLoad {
@@ -201,7 +213,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     result = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     if ([result selectedBackgroundView] == nil) {
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
-        [selectedBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.30000f alpha:0.50000f]];
+        UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
+        [selectedBackgroundView setBackgroundColor:bgColor];
         [result setSelectedBackgroundView:selectedBackgroundView];
         [selectedBackgroundView release];
     }

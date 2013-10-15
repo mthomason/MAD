@@ -9,6 +9,7 @@
 #import "MTViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
 #import "NSError+UserInterface.h"
+#import "UIDevice+Hack.h"
 
 @interface MTViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
@@ -16,6 +17,10 @@
 @end
 
 @implementation MTViewControllerAbout
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
 
 - (IBAction)cancel:(id)sender {
     [[self delegate] viewControllerDidCancel:self];

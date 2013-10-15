@@ -1444,7 +1444,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 - (BOOL)dismissAllPopovers {
     BOOL result = NO;
     if ([UIDevice isPad]) {
-        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:2];
+        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
         if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
         if ([self popoverControllerSectionSettings] != nil) [allpopovers addObject:[self popoverControllerSectionSettings]];

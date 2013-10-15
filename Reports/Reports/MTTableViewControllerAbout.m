@@ -27,6 +27,13 @@
     
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    if ([UIDevice isPad]) {
+        //[self setPreferredContentSize:CGSizeMake(320.0000f, 420.0000f)];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSString *versionTextKey = NSLocalizedString(@"Verison %@", @"Verison %@");

@@ -32,6 +32,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
 @property (nonatomic, retain) UIPopoverController *aboutPopoverController;
+@property (nonatomic, retain) UIPopoverController *licensingPopoverController;
+
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
@@ -109,6 +111,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [_urlBeingOpended release];
     [_availableFilesCache release];
     [_titleView release];
+    [_licensingPopoverController release];
     [_openDocumentPopoverController release];
     [_aboutPopoverController release];
     [_barButtonItemAddNewDocument release];
@@ -344,6 +347,25 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return NO;
 }
 
+- (BOOL)dismissAllPopovers {
+    BOOL result = NO;
+    if ([UIDevice isPad]) {
+        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
+        if ([self openDocumentPopoverController] != nil) [allpopovers addObject:[self openDocumentPopoverController]];
+        if ([self licensingPopoverController] != nil) [allpopovers addObject:[self licensingPopoverController]];
+        if ([self aboutPopoverController] != nil) [allpopovers addObject:[self aboutPopoverController]];
+        
+        for (UIPopoverController *popoverController in allpopovers) {
+            if ([popoverController isPopoverVisible]) {
+                [popoverController dismissPopoverAnimated:YES];
+                result = YES;
+            }
+        }
+        [allpopovers release];
+    }
+    return result;
+}
+
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
@@ -352,6 +374,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
 
+    [self dismissAllPopovers];
     if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -364,6 +387,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 [(MTViewController *)[navControl topViewController] setDelegate:self];
             }
         }
+
         [[segue destinationViewController] setDelegate:self];
         
     } else if ([[segue identifier] isEqualToString:@"MTSegueDetails"] || [[segue identifier] isEqualToString:@"MTSegueAbout"]) {
@@ -379,7 +403,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
             }
         }
-
+        
+        if ([UIDevice isPad]) {
+            if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
+                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
+            } else {
+                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
+            }
+        }
+        
     } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
 
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
@@ -388,6 +420,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [tvc setDelegate:self];
         }
         [[segue destinationViewController] setDelegate:self];
+        
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = [segue destinationViewController];
+            if ([navControl topViewController]) {
+                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                    [self setLicensingPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
+                }
+            }
+        }
         
     } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
 
