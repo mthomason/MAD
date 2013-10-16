@@ -26,5 +26,6 @@
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;
 - (void)reload:(MTReportViewerController *)reportViewer;
+- (void)reload;
 
 @end

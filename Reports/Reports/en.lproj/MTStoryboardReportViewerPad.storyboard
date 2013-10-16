@@ -119,88 +119,6 @@
             </objects>
             <point key="canvasLocation" x="-3537" y="405"/>
         </scene>
-        <!--Table View Controller About - About-->
-        <scene sceneID="kor-fb-wLD">
-            <objects>
-                <tableViewController title="About" id="bs5-Gf-XbO" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dma-YI-Dwg">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections>
-                            <tableViewSection id="RaK-fX-Zgi">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="280" id="efF-R1-Xsa">
-                                        <rect key="frame" x="0.0" y="64" width="540" height="280"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="efF-R1-Xsa" id="hSt-lf-ztS">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="280"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5zr-pp-m39">
-                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Version1.0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35p-4v-wLW">
-                                                    <rect key="frame" x="20" y="49" width="280" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Copyright © 2012-2013 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="h0H-MI-7uv">
-                                                    <rect key="frame" x="20" y="77" width="280" height="40"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Software by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Agv-f3-GAd">
-                                                    <rect key="frame" x="20" y="126" width="280" height="40"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Artwork by Sean Martin and Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="QUG-x0-58C">
-                                                    <rect key="frame" x="20" y="174" width="280" height="40"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="bs5-Gf-XbO" id="bhh-wL-Wu5"/>
-                            <outlet property="delegate" destination="bs5-Gf-XbO" id="9lO-d7-aMG"/>
-                            <outletCollection property="gestureRecognizers" destination="v83-US-0KA" appends="YES" id="JlW-eR-CHn"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="VQK-Gg-t6h"/>
-                        <barButtonItem systemItem="compose" id="lYY-B8-mnP">
-                            <connections>
-                                <action selector="composeEmail:" destination="bs5-Gf-XbO" id="tSP-PN-t2b"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="About" id="syk-by-0cr"/>
-                    <connections>
-                        <outlet property="labelVersion" destination="35p-4v-wLW" id="GFN-3b-Jwe"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="N2p-jp-GXK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="down" id="v83-US-0KA">
-                    <connections>
-                        <segue destination="lHY-eB-4rR" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="zMu-9n-2qw"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <exit id="lHY-eB-4rR" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="1384" y="-7"/>
-        </scene>
         <!--Licensing View Controller - Software Licensing-->
         <scene sceneID="sYE-3V-CTb">
             <objects>
@@ -538,27 +456,6 @@
             <point key="canvasLocation" x="-544" y="405"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="n7K-gr-pSb">
-            <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="jln-0e-UbA" sceneMemberID="viewController">
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="loV-HN-PEf">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gYD-SL-neI">
-                        <rect key="frame" x="0.0" y="576" width="540" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="bs5-Gf-XbO" kind="relationship" relationship="rootViewController" id="cnL-jb-CSi"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IOb-WP-3zP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="499" y="-7"/>
-        </scene>
-        <!--Navigation Controller-->
         <scene sceneID="EV9-rX-rWK">
             <objects>
                 <navigationController definesPresentationContext="YES" id="wWQ-n4-d4d" sceneMemberID="viewController">
@@ -592,7 +489,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Designer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObA-Je-Gg5">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Viewer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObA-Je-Gg5">
                                                     <rect key="frame" x="20" y="20" width="500" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -607,7 +504,7 @@
                                                             </attributes>
                                                         </fragment>
                                                         <fragment>
-                                                            <string key="content"> Viewer allows one to open, generate, and view MAD files.  To do this, you must be authorized to access the datasource referenced inside the MAD file.  That datasource must also be available and responsive.</string>
+                                                            <string key="content"> Viewer allows one to open and view MAD files.  To do this, you must be authorized to access the datasource referenced inside the MAD file.  That datasource must also be available and responsive.</string>
                                                             <attributes>
                                                                 <font key="NSFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>

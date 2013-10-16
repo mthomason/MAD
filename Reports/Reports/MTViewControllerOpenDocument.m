@@ -446,8 +446,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
 
         if (foundUrl) {
-            MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
-            [viewControllerReportViewer setAsyncDelegate:self];
+            MTReportViewerController *viewControllerReportViewer = [(MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController] retain];
+            [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                if (success) {
+                    [managedDocument retain];
+                    [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
+                    //dispatch_sync(dispatch_get_main_queue(), ^{
+                        //[viewControllerReportViewer reload];
+                    //});
+                    [managedDocument release];
+                }
+            }];
+            [viewControllerReportViewer release];
+            
             //[viewControllerReportViewer setViewControllerDelegate:self];
         } else {
             NSAssert(foundUrl == NO, @"No URL to open.");

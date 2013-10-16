@@ -1055,8 +1055,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [inputStream open];
             cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
             [self setInputStream:inputStream];
-            if (error) {
-                NSLog(@"error: %@", error);
+            if (error || cachedResultsForReportSerialized == nil) {
+                //NSLog(@"error: %@", error);
+                error = nil;
+                cachedResultsForReportSerialized = @[];
             }
         }
     

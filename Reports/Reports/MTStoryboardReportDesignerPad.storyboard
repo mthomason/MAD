@@ -1005,20 +1005,20 @@
             <objects>
                 <tableViewController id="EK3-rz-y2j" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Q4Q-11-ZbF">
-                        <rect key="frame" x="0.0" y="64" width="380" height="1468"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection headerTitle="Document Settings" id="DrV-pc-jiK">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="SpX-PZ-nTc">
-                                        <rect key="frame" x="0.0" y="55" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="55" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SpX-PZ-nTc" id="Lz8-Gg-hIg">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vQh-t1-03w">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vQh-t1-03w">
                                                     <rect key="frame" x="170" y="7" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="vyt-xo-3G0"/>
@@ -1055,13 +1055,13 @@
                             <tableViewSection headerTitle="MySQL Database Settings" id="TiL-eU-DLG">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Uar-K2-UaC">
-                                        <rect key="frame" x="0.0" y="147" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="147" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Uar-K2-UaC" id="VeT-JC-ZCE">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="everydayapps.com" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4FE-ON-fbk">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="everydayapps.com" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4FE-ON-fbk">
                                                     <rect key="frame" x="170" y="6" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="Nlr-d7-Mu0"/>
@@ -1094,13 +1094,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="HI2-QV-kdb">
-                                        <rect key="frame" x="0.0" y="191" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="191" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HI2-QV-kdb" id="0tf-Uv-dyC">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ErN-zl-2m7">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ErN-zl-2m7">
                                                     <rect key="frame" x="170" y="6" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="dLz-4t-CcK"/>
@@ -1133,13 +1133,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="hyA-4F-5yS">
-                                        <rect key="frame" x="0.0" y="235" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="235" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hyA-4F-5yS" id="cNB-BK-5RU">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="quotationary" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Rxn-Tt-q5b">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="quotationary" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Rxn-Tt-q5b">
                                                     <rect key="frame" x="170" y="7" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="LgR-iX-iI1"/>
@@ -1191,7 +1191,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="tableViewCellDatabase" destination="hyA-4F-5yS" id="BF4-gk-IaY"/>
                         <outlet property="tableViewCellHost" destination="Uar-K2-UaC" id="AAX-bF-WZm"/>
@@ -1231,21 +1230,21 @@
             <objects>
                 <tableViewController id="NkE-c4-ux8" customClass="MTDatabaseDriverSelectorViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="51c-eJ-DWP">
-                        <rect key="frame" x="0.0" y="64" width="380" height="1034"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="fzF-DX-1yn">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="73" id="XMs-v5-DLo">
-                                        <rect key="frame" x="0.0" y="0.0" width="380" height="73"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="540" height="73"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XMs-v5-DLo" id="UFE-aw-hGM">
-                                            <rect key="frame" x="0.0" y="0.0" width="347" height="72"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="507" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MySQL Native Driver" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="zNu-cz-mzf">
-                                                    <rect key="frame" x="93" y="25" width="268" height="20"/>
+                                                    <rect key="frame" x="93" y="25" width="428" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1271,14 +1270,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTSegueShowSetUpDatasourceSqlServerIdentifier" rowHeight="73" id="z30-Yp-dH9">
-                                        <rect key="frame" x="0.0" y="73" width="380" height="73"/>
+                                        <rect key="frame" x="0.0" y="73" width="540" height="73"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="z30-Yp-dH9" id="4TK-Xj-EeX">
-                                            <rect key="frame" x="0.0" y="0.0" width="347" height="72"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="507" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SQL Server / TDS" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="CaW-Xe-gfc">
-                                                    <rect key="frame" x="93" y="25" width="268" height="20"/>
+                                                    <rect key="frame" x="93" y="25" width="428" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1320,7 +1319,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Rf-h4-qcj" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="8WO-LY-7pf" userLabel="Exit" sceneMemberID="exit"/>
@@ -4916,20 +4914,20 @@
             <objects>
                 <tableViewController id="zYG-bi-IL0" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="6Cd-LV-Fb5">
-                        <rect key="frame" x="0.0" y="64" width="380" height="1468"/>
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection headerTitle="Document Settings" id="LXC-gi-NHU">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="XeH-lc-l7Q">
-                                        <rect key="frame" x="0.0" y="55" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="55" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XeH-lc-l7Q" id="9ht-EZ-WaW">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Vs-vH-WcZ">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Vs-vH-WcZ">
                                                     <rect key="frame" x="170" y="7" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="k9z-Tz-PUK"/>
@@ -4966,13 +4964,13 @@
                             <tableViewSection headerTitle="SQL Server Database Settings" id="hci-Aw-885">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="5Ov-of-fXH">
-                                        <rect key="frame" x="0.0" y="147" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="147" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Ov-of-fXH" id="psf-Rr-TwF">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0.1.3" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nbx-K2-vSn">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.0.1.3" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nbx-K2-vSn">
                                                     <rect key="frame" x="170" y="7" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="Ugv-ih-Yal"/>
@@ -5028,13 +5026,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ciI-T9-QeA">
-                                        <rect key="frame" x="0.0" y="191" width="380" height="44"/>
+                                        <rect key="frame" x="0.0" y="191" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ciI-T9-QeA" id="YKV-Vw-7FS">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="master" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hNV-Ya-ohq">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="master" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hNV-Ya-ohq">
                                                     <rect key="frame" x="170" y="6" width="340" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="Hfr-WV-uDQ"/>
@@ -5087,7 +5085,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="tableViewCellDatabase" destination="ciI-T9-QeA" id="PVG-2H-UGf"/>
                         <outlet property="tableViewCellDocumentName" destination="XeH-lc-l7Q" id="cKO-fW-Cwg"/>
