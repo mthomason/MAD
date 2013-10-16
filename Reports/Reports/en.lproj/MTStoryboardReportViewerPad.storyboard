@@ -65,7 +65,7 @@
                     <navigationItem key="navigationItem" id="oty-L7-akF">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="6OM-G9-12T">
                             <connections>
-                                <segue destination="9G4-uj-PaY" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="mz7-JT-V4s"/>
+                                <segue destination="9G4-uj-PaY" kind="unwind" identifier="MAReportViewerCloseReportIdentifier" unwindAction="unwindToOpenDocumentViewController:" id="mz7-JT-V4s"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="xzp-cJ-Mou">
@@ -124,33 +124,33 @@
             <objects>
                 <tableViewController id="6V5-0U-97X" customClass="MTLicensingViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9RZ-Pk-69J">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <rect key="frame" x="0.0" y="0.0" width="380" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="mfm-6U-YwP">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="441" id="gY1-yz-CGb">
-                                        <rect key="frame" x="0.0" y="64" width="540" height="441"/>
+                                        <rect key="frame" x="0.0" y="64" width="380" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gY1-yz-CGb" id="Ffe-CF-9di">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="441"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="380" height="441"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Activate All Features" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qO9-S7-UM2">
-                                                    <rect key="frame" x="20" y="20" width="199" height="24"/>
+                                                    <rect key="frame" x="20" y="20" width="340" height="24"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="awH-S2-g7A">
-                                                    <rect key="frame" x="20" y="52" width="500" height="42"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License this software to activate the following features:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="340" translatesAutoresizingMaskIntoConstraints="NO" id="awH-S2-g7A">
+                                                    <rect key="frame" x="20" y="52" width="340" height="42"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="Foz-tV-003">
-                                                    <rect key="frame" x="20" y="131" width="500" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="340" translatesAutoresizingMaskIntoConstraints="NO" id="Foz-tV-003">
+                                                    <rect key="frame" x="20" y="131" width="340" height="21"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Access to future features.">
                                                             <attributes>
@@ -163,8 +163,8 @@
                                                     </attributedString>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="l0p-7r-F3u">
-                                                    <rect key="frame" x="20" y="102" width="500" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="340" translatesAutoresizingMaskIntoConstraints="NO" id="l0p-7r-F3u">
+                                                    <rect key="frame" x="20" y="102" width="340" height="21"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="•     Query results are unlimited.">
                                                             <attributes>
@@ -184,7 +184,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Yes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eqF-ef-7dt">
-                                                    <rect key="frame" x="434" y="302" width="86" height="21"/>
+                                                    <rect key="frame" x="274" y="302" width="86" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -195,15 +195,15 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="-" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93f-Q2-DAx">
-                                                    <rect key="frame" x="124" y="331" width="396" height="21"/>
+                                                    <rect key="frame" x="274" y="331" width="86" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5EK-ls-9YC">
-                                                    <rect key="frame" x="0.0" y="160" width="540" height="134"/>
+                                                    <rect key="frame" x="0.0" y="160" width="380" height="134"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="96K-XJ-Eco">
-                                                            <rect key="frame" x="428" y="20" width="72" height="36"/>
+                                                            <rect key="frame" x="288" y="20" width="72" height="36"/>
                                                             <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
                                                             <state key="normal">
@@ -218,7 +218,7 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pUD-Ik-dC8">
-                                                            <rect key="frame" x="428" y="78" width="72" height="36"/>
+                                                            <rect key="frame" x="288" y="78" width="72" height="36"/>
                                                             <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
                                                             <state key="normal">
@@ -233,10 +233,10 @@
                                                             </connections>
                                                         </button>
                                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IYJ-l3-aAX">
-                                                            <rect key="frame" x="454" y="28" width="20" height="20"/>
+                                                            <rect key="frame" x="314" y="28" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IGM-ZZ-03C">
-                                                            <rect key="frame" x="454" y="86" width="20" height="20"/>
+                                                            <rect key="frame" x="314" y="85" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="License for One Year:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KyP-Hw-Ho8">
                                                             <rect key="frame" x="20" y="28" width="193" height="21"/>
@@ -262,6 +262,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Software Licensing" id="hYt-Rx-RmN"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="activityIndicator2" destination="IGM-ZZ-03C" id="ZNL-AO-YLc"/>
                         <outlet property="activityIndicatorDesignerLicenseOneYear" destination="IYJ-l3-aAX" id="ObG-UU-ugA"/>
@@ -289,7 +290,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="iqv-wN-FBP" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GUn-hY-vmH">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -476,26 +477,26 @@
             <objects>
                 <tableViewController id="eyf-5n-4WP" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fWs-Wk-5ww">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="376"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="3BX-zX-TmU">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="KYg-eH-xXg">
-                                        <rect key="frame" x="0.0" y="64" width="540" height="600"/>
+                                        <rect key="frame" x="0.0" y="64" width="420" height="600"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KYg-eH-xXg" id="Hmf-rp-Orc">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="600"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="420" height="600"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Viewer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObA-Je-Gg5">
-                                                    <rect key="frame" x="20" y="20" width="500" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="380" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="500" translatesAutoresizingMaskIntoConstraints="NO" id="LiG-Lf-aBf">
-                                                    <rect key="frame" x="20" y="49" width="500" height="99"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="380" translatesAutoresizingMaskIntoConstraints="NO" id="LiG-Lf-aBf">
+                                                    <rect key="frame" x="20" y="49" width="380" height="99"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="MAD">
                                                             <attributes>
@@ -522,28 +523,14 @@
                         <connections>
                             <outlet property="dataSource" destination="eyf-5n-4WP" id="JW0-5f-2Wl"/>
                             <outlet property="delegate" destination="eyf-5n-4WP" id="YG6-Pz-iYA"/>
-                            <outletCollection property="gestureRecognizers" destination="BH2-sv-atb" appends="YES" id="th3-D4-fxa"/>
-                            <outletCollection property="gestureRecognizers" destination="FrJ-Kf-qWI" appends="YES" id="3uU-bV-cJG"/>
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="What is MAD?" id="RHX-PO-7Nh">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="SME-TF-iCL">
-                            <connections>
-                                <segue destination="XZ6-2f-C0C" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="OF3-uB-zRE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="What is MAD?" id="RHX-PO-7Nh"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FlF-Rx-sDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="left" id="BH2-sv-atb"/>
-                <swipeGestureRecognizer direction="down" id="FrJ-Kf-qWI">
-                    <connections>
-                        <segue destination="XZ6-2f-C0C" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="MvB-Zp-aCj"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <exit id="XZ6-2f-C0C" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1384" y="1480"/>
         </scene>

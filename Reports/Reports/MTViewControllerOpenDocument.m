@@ -55,46 +55,51 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @implementation MTViewControllerOpenDocument
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
-    if ([[action identifier] isEqualToString:@"MTSegueCloseDesigner"]) {
-
-        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        __block MTViewControllerOpenDocument *blockSelf = self;
-        [[self collectionView] setUserInteractionEnabled: NO];
-
-        [activeDocument save:^(BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (success) {
-        
-                    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                            [activeDocument setSuspended:YES];
+    
+    __block MTViewControllerOpenDocument *blockSelf = self;
+    id closeDocument = ^(BOOL success) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                
+                MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                [activeDocument closeWithCompletionHandler:^(BOOL success) {
+                    if (success) {
+                        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                        [activeDocument setSuspended:YES];
+                        
+                        [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
                             
-                            [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                            
-                                [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
-                                    [[MTActiveDocument sharedDocument] setActiveDocument:nil];
-
-                                    [[blockSelf collectionView] setUserInteractionEnabled: YES];
-                                }];
+                            [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
+                                [[MTActiveDocument sharedDocument] setActiveDocument:nil];
                                 
+                                [[blockSelf collectionView] setUserInteractionEnabled: YES];
                             }];
-                        };
-                    }];
-                    
-                }
-            });
-        }];
+                            
+                        }];
+                    };
+                }];
+            }
+        });
+    };
+    NSString *actionIdentifier = [action identifier];
+    if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
+        [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        [[self collectionView] setUserInteractionEnabled: NO];
+        [activeDocument save:closeDocument];
         
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     if ([UIDevice isPad] == NO) {
         [self updateFileList:self];
+    } else {
     }
     if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
-        [self dismissViewControllerAnimated:YES completion:^{ }];
+        //__block MTViewControllerOpenDocument *blockSelf = self;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [blockSelf updateFileList:blockSelf];
+        }];
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
@@ -406,7 +411,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         if ([UIDevice isPad]) {
             if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
-                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
+                if ([AppDelegate isMadViewer]) {
+                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
+                } else {
+                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
+                }
             } else {
                 [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
             }

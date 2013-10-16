@@ -119,16 +119,20 @@ const NSUInteger tagAlertViewAquire         = 666;
 - (void)deleteKey:(NSString *)key {
     [self setCredentialsKey:key];
 
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
-                                                        message:@"Should we remove the password saved in your keychain?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Keep"
-                                              otherButtonTitles:@"Remove", nil];
-    [alertView setAlertViewStyle:UIAlertViewStyleDefault];
-    [alertView setTag:tagAlertViewRemovePassword];
-    [alertView show];
-    [alertView release];
-
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
+                                                                message:@"Should we remove the password saved in your keychain?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Keep"
+                                                      otherButtonTitles:@"Remove", nil];
+            [alertView setAlertViewStyle:UIAlertViewStyleDefault];
+            [alertView setTag:tagAlertViewRemovePassword];
+            [alertView show];
+            [alertView release];
+        });
+    });
 }
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
