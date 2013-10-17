@@ -183,20 +183,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    NSAttributedString *attributedString = [[AppDelegate attributedStringMadQuery] retain];
-    [labelMadDesigner setAttributedText:attributedString];
-    [[self navigationItem] setTitleView:labelMadDesigner];
-    [[[self navigationItem] titleView] sizeToFit];
-    [attributedString release];
-    [labelMadDesigner release];
+
+    if ([UIDevice isPad] == NO) {
+        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+        [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        NSAttributedString *attributedString = [[AppDelegate attributedStringMadQuery] retain];
+        [labelMadDesigner setAttributedText:attributedString];
+        [[self navigationItem] setTitleView:labelMadDesigner];
+        [[[self navigationItem] titleView] sizeToFit];
+        [attributedString release];
+        [labelMadDesigner release];
+    }
     
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
-    [self disableUserInteraction];
+    //[self disableUserInteraction];
 
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
     [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
