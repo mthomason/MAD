@@ -1017,7 +1017,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setTemporaryCachedDetailCounter:0];
 
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
+        NSSet *hasQueries = [database hasQueries];
+        RptqQuery *query = [hasQueries anyObject];
         //RptqQueryCache *queryCache = [query hasQueryCache];
         
         SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[query managedObjectContext]];

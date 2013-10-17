@@ -38,6 +38,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
 @property (nonatomic, retain) NSMutableDictionary *previewLoadingOperations;
 
+@property (nonatomic, retain) MTReportViewerController *reportViewer;
+
 //@property (nonatomic, retain) MTQueryBuilderAdvancedViewController *advancedQueryBuilder;
 //@property (nonatomic, retain) MTQueryBuilderViewController *standardQueryBuilder;
 
@@ -70,7 +72,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
                             
                             [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
-                                [[MTActiveDocument sharedDocument] setActiveDocument:nil];
+                                //[[MTActiveDocument sharedDocument] setActiveDocument:nil];
                                 
                                 [[blockSelf collectionView] setUserInteractionEnabled: YES];
                             }];
@@ -100,14 +102,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self dismissViewControllerAnimated:YES completion:^{
             [blockSelf updateFileList:blockSelf];
         }];
+    } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
+        [blockSelf updateFileList:blockSelf];    
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    }
+    if ([AppDelegate isMadViewer]) {
+        [self setReportViewer:nil];
     }
 }
 
 - (void)dealloc {
     //[_advancedQueryBuilder release]; _advancedQueryBuilder = nil;
     //[_standardQueryBuilder release]; _standardQueryBuilder = nil;
+    [_reportViewer release];
     [_renameAlertView release];
     [_barButtonItemEditDone release];
     [_previewLoadingOperations release];
@@ -456,19 +464,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         if (foundUrl) {
             MTReportViewerController *viewControllerReportViewer = [(MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController] retain];
+            [viewControllerReportViewer setViewControllerDelegate:self];
+            [self setReportViewer:viewControllerReportViewer];
             [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 if (success) {
                     [managedDocument retain];
                     [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                    //dispatch_sync(dispatch_get_main_queue(), ^{
-                        //[viewControllerReportViewer reload];
-                    //});
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [[self reportViewer] reload];
+                        });
+                    });
                     [managedDocument release];
                 }
             }];
             [viewControllerReportViewer release];
             
-            //[viewControllerReportViewer setViewControllerDelegate:self];
         } else {
             NSAssert(foundUrl == NO, @"No URL to open.");
         }

@@ -294,44 +294,44 @@
             <objects>
                 <tableViewController title="About" id="72w-1X-ndK" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OQs-CU-Y2y">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="lIL-3s-Uny">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="280" id="crB-0G-hAA">
-                                        <rect key="frame" x="0.0" y="64" width="540" height="280"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="200" id="crB-0G-hAA">
+                                        <rect key="frame" x="0.0" y="64" width="320" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="crB-0G-hAA" id="BOF-vd-9xQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="280"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qf8-lI-hWi">
-                                                    <rect key="frame" x="20" y="20" width="114" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Version1.0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EO8-6X-MyI">
-                                                    <rect key="frame" x="20" y="49" width="500" height="20"/>
+                                                    <rect key="frame" x="20" y="49" width="280" height="20"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Build 660" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2O5-9X-lpo">
-                                                    <rect key="frame" x="20" y="77" width="500" height="20"/>
+                                                    <rect key="frame" x="20" y="77" width="280" height="20"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Copyright © 2012-2013 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="1wP-69-KTu">
-                                                    <rect key="frame" x="20" y="105" width="260" height="40"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Copyright © 2012-2013 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="1wP-69-KTu">
+                                                    <rect key="frame" x="20" y="105" width="280" height="40"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Created by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="263" translatesAutoresizingMaskIntoConstraints="NO" id="Bq2-BQ-Pjm">
-                                                    <rect key="frame" x="20" y="154" width="263" height="40"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Created by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Bq2-BQ-Pjm">
+                                                    <rect key="frame" x="20" y="153" width="280" height="40"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -357,6 +357,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="About" id="yWg-SR-rG1"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="labelBuild" destination="2O5-9X-lpo" id="pxF-cB-XwQ"/>
                         <outlet property="labelVersion" destination="EO8-6X-MyI" id="jC4-aM-RlI"/>
@@ -370,7 +371,7 @@
                 </swipeGestureRecognizer>
                 <exit id="6nz-Hk-vZW" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1384" y="-7"/>
+            <point key="canvasLocation" x="1223" y="-7"/>
         </scene>
         <!--Query Builder Navigation Controller-->
         <scene sceneID="BXL-cc-djF">
@@ -660,7 +661,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xjW-eQ-hil" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1384" y="731"/>
+            <point key="canvasLocation" x="1160" y="731"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tGV-wD-tHP">
@@ -5328,11 +5329,11 @@
                         <sections>
                             <tableViewSection id="5gC-ah-REo">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="5tQ-Dp-LY8">
-                                        <rect key="frame" x="0.0" y="64" width="400" height="600"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="430" id="5tQ-Dp-LY8">
+                                        <rect key="frame" x="0.0" y="64" width="400" height="430"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5tQ-Dp-LY8" id="Mtz-X1-9gc">
-                                            <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="430"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hdG-KO-UU9">
@@ -5575,39 +5576,39 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1384" y="1480"/>
+            <point key="canvasLocation" x="1160" y="1480"/>
         </scene>
         <!--Table View Controller About - Getting Started-->
         <scene sceneID="h28-Jy-tWg">
             <objects>
                 <tableViewController id="Eqq-RR-9ms" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q5T-TX-w8m">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="640"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="aRy-s9-5jA">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="640" id="GRz-hb-2Yi">
-                                        <rect key="frame" x="0.0" y="64" width="480" height="640"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="700" id="GRz-hb-2Yi">
+                                        <rect key="frame" x="0.0" y="64" width="400" height="700"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GRz-hb-2Yi" id="b6a-dN-bAZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="640"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="700"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stepping in the Right Direction" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpv-QW-xIj">
-                                                    <rect key="frame" x="20" y="20" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Gettings Started" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UJC-0y-Fop">
-                                                    <rect key="frame" x="20" y="49" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="49" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="a5z-SW-P5n">
-                                                    <rect key="frame" x="20" y="78" width="440" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="a5z-SW-P5n">
+                                                    <rect key="frame" x="20" y="78" width="360" height="40"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="You need access to a MySQL or SQL Server database.">
                                                             <attributes>
@@ -5621,13 +5622,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="The MAD Datasource" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="msL-Na-n6I">
-                                                    <rect key="frame" x="20" y="106" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="126" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="Yn6-Ye-wUF">
-                                                    <rect key="frame" x="20" y="135" width="440" height="98"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="Yn6-Ye-wUF">
+                                                    <rect key="frame" x="20" y="155" width="360" height="118"/>
                                                     <attributedString key="attributedText">
                                                         <fragment>
                                                             <string key="content">Attach your datasource as you are creating a new document.  As the document is being created, you will be prompted for the datasource credentials.  If you choose, these credentials are stored in your keychain; they are never stored inside the MAD file.</string>
@@ -5642,13 +5643,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="The MAD Query" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2tO-5a-5SK">
-                                                    <rect key="frame" x="20" y="241" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="281" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="Flf-ft-XaC">
-                                                    <rect key="frame" x="20" y="270" width="440" height="118"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="Flf-ft-XaC">
+                                                    <rect key="frame" x="20" y="310" width="360" height="137"/>
                                                     <attributedString key="attributedText">
                                                         <fragment>
                                                             <string key="content">Once a MAD file is created, you may design a query for it.  The query builder allows you to add tables, link those tables, group the tables, and add predicates.  This feature requires advanced database or data analysis skills.  The user is required to design queries that are sane and efficient.</string>
@@ -5663,13 +5664,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otJ-A2-UHU">
-                                                    <rect key="frame" x="20" y="396" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="455" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="JB0-l0-Hid">
-                                                    <rect key="frame" x="20" y="425" width="440" height="40"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="JB0-l0-Hid">
+                                                    <rect key="frame" x="20" y="484" width="360" height="40"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="The designer allows the user to layout and format fields from the database query.">
                                                             <attributes>
@@ -5683,13 +5684,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Viewer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kd5-qj-GT6">
-                                                    <rect key="frame" x="20" y="473" width="440" height="21"/>
+                                                    <rect key="frame" x="20" y="532" width="360" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="XH4-Lz-jRL">
-                                                    <rect key="frame" x="20" y="502" width="440" height="40"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="XH4-Lz-jRL">
+                                                    <rect key="frame" x="20" y="561" width="360" height="59"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="The viewer allows you to render and refresh your MAD file.  Once rendered, you may print and send to to PDF.">
                                                             <attributes>
@@ -5761,7 +5762,7 @@
                 </swipeGestureRecognizer>
                 <exit id="eAB-OQ-Meb" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1975" y="1410"/>
+            <point key="canvasLocation" x="1689" y="1480"/>
         </scene>
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="He8-Gl-VvX">

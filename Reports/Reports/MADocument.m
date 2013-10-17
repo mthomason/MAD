@@ -181,7 +181,7 @@ NSString * MTDocumentParentContextName          = @"moc";
                 MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
                 UIImage *thumbnail = [printPageRender thumbnail];
                 NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-                [pngImage writeToURL:thumbnailUrl atomically:NO];
+                [pngImage writeToURL:thumbnailUrl atomically:YES];
                 NSString *key = [MADocument thumbnailSaveName];
                 [blockDictionary setObject:thumbnail forKey:key];
                 [printPageRender release];

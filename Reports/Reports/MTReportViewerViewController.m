@@ -180,7 +180,9 @@
         [[self asyncDelegate] displayContentController:viewController];
     } else {
         //__block MTReportViewerController *reportViewer = self;
-        [self reload:self];
+        if ([AppDelegate isMadDesigner]) {
+            [self reload:self];
+        }
     }
 }
 
