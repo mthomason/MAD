@@ -38,7 +38,14 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
+        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+        [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        NSAttributedString *attributedString = [[AppDelegate attributedStringMadQuery] retain];
+        [labelMadDesigner setAttributedText:attributedString];
+        [[self navigationItem] setTitleView:labelMadDesigner];
+        [[[self navigationItem] titleView] sizeToFit];
+        [attributedString release];
+        [labelMadDesigner release];
     }
     return self;
 }
@@ -54,8 +61,9 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [[[self navigationItem] titleView] sizeToFit];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

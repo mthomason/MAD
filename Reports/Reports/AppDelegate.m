@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.90";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.90";
-NSString * const MTGlobalBundleRev                                  = @"711";
+NSString * const MTGlobalBundleVersion                              = @"1.0.91";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.91";
+NSString * const MTGlobalBundleRev                                  = @"712";
 
 @interface AppDelegate()
 
@@ -176,12 +176,17 @@ const NSInteger MATagNewDocument = 3838;
 
 #pragma mark - Actions
 
-+ (NSAttributedString *)attributedStringMadDesigner {
-
++ (NSParagraphStyle *)paragraphStyleTitleBar {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    return [paragraphStyle autorelease];
+}
+
++ (NSAttributedString *)attributedStringMadDesigner {
+
+    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
     NSString *title = @"MAD Designer";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
@@ -195,24 +200,30 @@ const NSInteger MATagNewDocument = 3838;
 
 + (NSAttributedString *)attributedStringMadViewer {
 
+    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Viewer"];
     NSInteger length = [[attributedStringMadDesigner string] length];
     UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
     UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
 }
 
 + (NSAttributedString *)attributedStringMadQuery {
 
+    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Query"];
     NSInteger length = [[attributedStringMadDesigner string] length];
     UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
     UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
 }
