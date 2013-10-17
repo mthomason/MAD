@@ -126,6 +126,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([UIDevice isPad]) {
+        CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+        UIColor *borderColor = [UIColor lightGrayColor];
+        [[[self backgroundContainer] layer] setBorderWidth:borderWidth];
+        [[[self backgroundContainer] layer] setBorderColor:[borderColor CGColor]];
+    }
     [self setShowSqlIsVisable:NO];
     UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
     [self setContentView:containerView];
