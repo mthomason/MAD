@@ -423,7 +423,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = [[self tableView] isEditing];
+    BOOL editing = ![[self tableView] isEditing];
     
     if ([UIDevice isPad] == NO) {
         NSMutableArray *barButtonItems = [[self toolbarItems] mutableCopy];
@@ -439,7 +439,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     }
 
-    [[self tableView] setEditing: !editing];
+    [[self tableView] setEditing: editing];
 }
 
 #pragma mark Table Header Actions
