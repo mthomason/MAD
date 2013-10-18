@@ -27,10 +27,16 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 @property (nonatomic, retain) NSFileWrapper *fileWrapper;
 @property (nonatomic, retain) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, assign) BOOL weMustSave;
+@property (nonatomic, assign) BOOL quickSaveInProgress;
 
 @end
 
 @implementation MADocument
+
+//- (BOOL)hasUnsavedChanges {
+//    return YES;
+//}
 
 - (void)dealloc {
     [_thumbnailUrl release];
@@ -76,7 +82,17 @@ NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
 - (BOOL)hasUnsavedChanges {
-    return [self isSuspended] ? NO : [super hasUnsavedChanges];
+    BOOL result = NO;
+    if ([self quickSaveInProgress] || [self isSuspended]) {
+        result = NO;
+    } else {
+        if ([self weMustSave]) {
+            result = YES;
+        } else {
+            result = [super hasUnsavedChanges];
+        }
+    }
+    return result;
 }
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
@@ -87,12 +103,14 @@ NSString * MTDocumentParentContextName          = @"moc";
     }
     id result = [super contentsForType:typeName error:outError];
     
-    
+    [self setWeMustSave:NO];
+
     
     return result;
 }
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
+    [self setWeMustSave:NO];
     BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
     return result;
 }
@@ -170,27 +188,33 @@ NSString * MTDocumentParentContextName          = @"moc";
             [extraInfo release];
         }
 
-        NSMutableDictionary *blockDictionary = [self extraInformation];
-        NSURL *thumbnailUrl = [self thumbnailUrl];
+        NSMutableDictionary *blockDictionary = [[self extraInformation] retain];
+        NSURL *thumbnailUrl = [[self thumbnailUrl] retain];
 
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
         
+        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
+        
+        BOOL quickSave = [self quickSaveInProgress];
         //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-            
-            if (document != nil) {
-                if ([thumbnailUrl isKindOfClass:[NSURL class]] &&
-                    [blockDictionary isKindOfClass:[NSMutableDictionary class]]) {
-                    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                    UIImage *thumbnail = [printPageRender thumbnail];
-                    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-                    [pngImage writeToURL:thumbnailUrl atomically:YES];
-                    NSString *key = [MADocument thumbnailSaveName];
-                    [blockDictionary setObject:thumbnail forKey:key];
-                    [printPageRender release];
+            if (quickSave == NO) {
+                if (document != nil) {
+                    if ([thumbnailUrl isKindOfClass:[NSURL class]] &&
+                        [blockDictionary isKindOfClass:[NSMutableDictionary class]]) {
+                        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+                        UIImage *thumbnail = [printPageRender thumbnail];
+                        NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+                        [pngImage writeToURL:thumbnailUrl atomically:YES];
+                        NSString *key = [MADocument thumbnailSaveName];
+                        //[blockDictionary setObject:thumbnail forKey:key];
+                        [printPageRender release];
+                    }
                 }
             }
         //});
         
+        [document release];
+        [blockDictionary release];
+        [thumbnailUrl release];
         NSNumber *dataVersion = @(1.0);
 
         [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
@@ -219,7 +243,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         id version = [content objectForKey:MTDocumentInfoKeyVersion];
         id generator = [content objectForKey:MTDocumentInfoKeyGenerator];
         [(NSDictionary *)@{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator} writeToURL:metaUrl atomically:NO];
-
+        
         if (filePresenterError != nil) {
             [filePresenterError presentErrorToUser];
         }
@@ -245,6 +269,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 - (void)saveContext {
     NSError *error;
+    [self setWeMustSave:YES];
     if ([self managedObjectContext] != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
             [error presentErrorToUserWithContinue:^(BOOL success) {
@@ -254,12 +279,20 @@ NSString * MTDocumentParentContextName          = @"moc";
     }
 }
 
-- (void)save:(void (^)(BOOL success))completion {
-    [self saveToURL: [self fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-        if (completion != nil) {
-            completion(success);
-        }
-  }];
+- (void)quickSave {
+    if ([self quickSaveInProgress] == NO) {
+        [self setQuickSaveInProgress:YES];
+        [self saveToURL: [self fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            
+            [self setSuspended:YES];
+            NSURL *url = [self fileURL];
+            [NSFileManager wrapFile:url withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:nil];
+            [self setSuspended:NO];
+            
+            [self setQuickSaveInProgress:NO];
+            
+        }];
+    }
 }
 
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);

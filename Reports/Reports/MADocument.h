@@ -19,7 +19,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @interface MADocument : UIManagedDocument
 
-- (void)save:(void (^)(BOOL success))completion;
+- (void)quickSave;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 + (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion;
