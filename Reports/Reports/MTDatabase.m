@@ -242,22 +242,16 @@
         NSString *leftValue = nil;
         NSString *rightValue = nil;
         
-        MTDataType leftFieldDataType = MTDataTypeUnknown;
+        //MTDataType leftFieldDataType = MTDataTypeUnknown;
         
         if ([queryPredicate hasLeftField] != nil) {
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
             
-            
-            NSString *queryAlias = [[leftField inQueryTable] queryAlias];
-            NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
-            NSString *name = [[leftField databaseSchemaField] name];
-            NSString *safeName = [self safeIdentifier:name];
-            
-            leftValue = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
+            leftValue = [[self safeQueryField:leftField] retain];
 
-            MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:[leftField databaseSchemaField]];
-            leftFieldDataType = [dbField fieldType];
+            //MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:[leftField databaseSchemaField]];
+            //leftFieldDataType = [dbField fieldType];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
             
@@ -267,15 +261,9 @@
         
         if ([queryPredicate hasRightField] != nil) {
             
-            RptqQueryField *leftField = [queryPredicate hasRightField];
+            RptqQueryField *rightField = [queryPredicate hasRightField];
             
-            
-            NSString *queryAlias = [[leftField inQueryTable] queryAlias];
-            NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
-            NSString *name = [[leftField databaseSchemaField] name];
-            NSString *safeName = [self safeIdentifier:name];
-            
-            rightValue = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
+            rightValue = [[self safeQueryField:rightField] retain];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
@@ -554,22 +542,13 @@
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
-                                    
-                                    NSString *queryAlias = [[leftField inQueryTable] queryAlias];
-                                    NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
-                                    NSString *name = [[leftField databaseSchemaField] name];
-                                    NSString *safeName = [self safeIdentifier:name];
-                                    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
-                                    [result appendString: fieldName];
+                                    NSString *s = [self safeQueryField:leftField];
+                                    [result appendString: s];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    NSString *queryAlias = [[rightField inQueryTable] queryAlias];
-                                    NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
-                                    NSString *name = [[leftField databaseSchemaField] name];
-                                    NSString *safeName = [self safeIdentifier:name];
-                                    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
-                                    [result appendString: fieldName];
+                                    NSString *s = [self safeQueryField:rightField];
+                                    [result appendString: s];
                                 }
                             }
                         }

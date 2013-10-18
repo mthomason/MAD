@@ -36,15 +36,15 @@
 }
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
+    // FIXME: Use backticks `` to make more robust.
     return [[[NSString stringWithFormat:@"`%@`", fieldOrTableName] retain] autorelease];
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    // FIXME: Use backticks `` to make more robust.
     NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *safeQueryTable = [self safeIdentifier:queryTable];
     NSString *fieldName = [[queryField databaseSchemaField] name];
-    NSString *safeFieldName = [self safeIdentifier:fieldName];
-    return [[[NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName] retain] autorelease];
+    return [[[NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName] retain] autorelease];
 }
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {

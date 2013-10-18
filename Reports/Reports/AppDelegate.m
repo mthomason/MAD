@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.97";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.97";
-NSString * const MTGlobalBundleRev                                  = @"718";
+NSString * const MTGlobalBundleVersion                              = @"1.0.98";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.98";
+NSString * const MTGlobalBundleRev                                  = @"719";
 
 @interface AppDelegate()
 
@@ -115,7 +115,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    [documentReport save:nil];
+    [documentReport quickSave];
     [documentReport release];
 }
 

@@ -812,8 +812,9 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [super viewWillDisappear:animated];
     
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    [[self designerScrollView] setZoomScale:1.0000f animated:animated];
     
+    [[self designerScrollView] setZoomScale:1.0000f animated:animated];
+
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
@@ -832,7 +833,12 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [defaultCenter removeObserver: self
                              name: UIDocumentStateChangedNotification
                            object: activeDocument];
+    
+    [activeDocument saveContext];
+    //[activeDocument quickSave];
+    
     [activeDocument release];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -964,7 +970,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
     [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
     [[reportDocument managedObjectContext] save:nil];
-    [reportDocument save:nil];
+    //[reportDocument quickSave];
     
     MTReportDesignerSectionBackgroundView *backgroundView = [[[self sectionBackgroundViews] objectForKey:[documentSection sectionKey]] retain];
     [backgroundView setNeedsDisplay];
@@ -1340,7 +1346,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
                     }
                 } else {
-                    [self hideToolbox:self];
+                    [self hideToolbox];
                 }
                 
             } else {
@@ -1675,6 +1681,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     } else {
         [self hideToolbox:self];
     }
+
 }
 
 - (IBAction)hideToolbox:(id)sender {
@@ -2266,6 +2273,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                                                                                         fromObjectContext: [activeDocument managedObjectContext]];
                 [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
                 [[reportDesigner designerContentView] setNeedsUpdateConstraints];
+                [activeDocument saveContext];
+                [activeDocument quickSave];
                 [activeDocument release];
                 //NSInteger numberOfRows = [[documentSection numberOfRows] integerValue];
                 //for (NSInteger i=0; i<numberOfRows; i++) {

@@ -69,7 +69,8 @@
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
     request.sortDescriptors = [NSArray arrayWithObject: sortDescriptor];
     NSError *error = nil;
-    NSArray *results = [[NSArray alloc] initWithArray:[objectContext executeFetchRequest:request error:&error]];
+    NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
+    NSArray *results = [[NSArray alloc] initWithArray:fetchResults];
     if (error) [error presentErrorToUser];
     [request release];
     return [results autorelease];

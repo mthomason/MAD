@@ -378,34 +378,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         if (error != nil) {
             [[reportDocument managedObjectContext] save:&error];
         }
-    
-        //__block MTQueryBuilderViewController *viewController = self;
-        //__block MAReportDocument *activeDocument = [self activeDocument];
-        //__block NSURL *blockUrl = [[self activeDocument] fileURL];
-/*
-        [[self activeDocument] save:^(BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (success) {
-                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            [activeDocument setSuspended:YES];
-                            
-                            [NSFileManager wrapFile:blockUrl withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                                
-                                [MADocument deleteFromDisk:blockUrl completion:^(BOOL success) {
-                                    if ([[[MTActiveDocument sharedDocument] activeDocument] isEqual:activeDocument]) {
-                                        [[MTActiveDocument sharedDocument] setActiveDocument:nil];
-                                    }
-                                }];
-                                
-                            }];
-                        };
-                    }];
-                    
-                }
-            });
-        }];*/
     }
     return shouldPerformSegueWithIdentifier;
 }
@@ -559,24 +531,24 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
     [self dismissViewControllerAnimated:YES completion:^{ }];
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
-    [managedObjectContext save:nil];
+    [reportDocument saveContext];
+    [reportDocument quickSave];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissViewControllerAnimated:YES completion:^{ }];
     MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [reportDocument activeDocument];
     [RptqQueryLinks insertQueryLink:link intoDocument:document];
-    [managedObjectContext save:nil];
+    [reportDocument saveContext];
     NSInteger suspectedSection = 2;
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
         [[self tableView] reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    [reportDocument quickSave];
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {
@@ -595,21 +567,19 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [query addHasQueryGroupsObject: queryGroup];
 
     
-    NSError *error = nil;
     NSInteger groupCount = [[query hasQueryGroups] count];
     NSInteger weight = groupCount - 1;
     NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
     NSUInteger rowFirstTransaction = weight;
     
-    [managedObjectContext save: &error];
     [[self tableView] beginUpdates];
     [[self tableView] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
                                         withRowAnimation: UITableViewRowAnimationAutomatic];
-    //[[self activeDocument] saveContext];
+    [reportDocument saveContext];
     [[self tableView] endUpdates];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-
+    [reportDocument quickSave];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
@@ -701,6 +671,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [[self tableView] endUpdates];
     }
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+
+    [reportDocument quickSave];
 
     [newLayoutSectionTypes release];
     [oldLayoutSectionTypes release];

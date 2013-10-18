@@ -129,7 +129,11 @@
         }
     }
     [fileWrapper release];
-    completion(success, [resultUrl autorelease]);
+    if (completion != NULL) {
+        completion(success, [resultUrl autorelease]);
+    } else {
+        [resultUrl autorelease];
+    }
 }
 
 @end

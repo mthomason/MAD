@@ -231,10 +231,10 @@
     [[self view] addSubview:numberView];
     [self setPageNumberView:numberView];
     
-    __block MTReportViewerReportPageViewController *weakSelf = self;
+    MTReportViewerReportPageViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
         
-        [[weakSelf pageNumberView] setAlpha:1.0000f];
+        [[self pageNumberView] setAlpha:1.0000f];
 
     } completion:^(BOOL finished) {
         
@@ -242,8 +242,8 @@
 
             [UIView animateWithDuration:0.30000f delay:1.0000f
                                 options:UIViewAnimationOptionCurveEaseIn animations:^{
-
-                                    [[weakSelf pageNumberView] setAlpha:0.0000f];
+                                    
+                                    [[self pageNumberView] setAlpha:0.0000f];
 
                                 } completion:^(BOOL finished) {
                                     

@@ -419,11 +419,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                     break;
                                             }
                                             
-                                            NSString *queryTable = [[queryField inQueryTable] queryAlias];
-                                            NSString *safeQueryTable = [database safeIdentifier:queryTable];
-                                            NSString *fieldName = [[queryField databaseSchemaField] name];
-                                            NSString *safeFieldName = [database safeIdentifier:fieldName];
-                                            NSString *fieldKey = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
+                                            NSString *fieldKey = [database safeQueryField:queryField];
                                             
                                             RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
                                             NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
@@ -507,6 +503,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             
                                             displayString = [item formattedString:aggregateType
                                                                          forValue:aggregateResult];
+                                            if ([displayString isEqualToString:@"(null)"]) {
+                                                displayString = @"";
+                                            }
                                             break;
                                         }
                                             
@@ -544,6 +543,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             MTDataType dataType = [dataTypeNumber integerValue];
                                             displayString = [item formattedString:dataType
                                                                          forValue:value];
+                                            if ([displayString isEqualToString:@"(null)"]) {
+                                                displayString = @"";
+                                            }
                                             break;
                                         }
                                             
@@ -946,18 +948,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return rowData;
 }
 */
-- (NSString *)printDynamicDocumentLabel:(RptqDocumentObjectLabelDataField *)documentObjectDataField forRow:(NSUInteger)row onPage:(NSUInteger)page {
-    NSString *result = @"";
-    RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-    MTDatabase *database = [MTDatabase databaseForRptqDatabase: queryField.inQueryTable.inQuery.inDatabase];
-    NSString *tableFieldKey = [database safeQueryField:queryField];
-    NSDictionary *rowData = [self rowDataForRow:row onPage:page];
-    id value = [rowData objectForKey: tableFieldKey];
-    MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
-    result = [[documentObjectDataField formattedString:dataType
-                                       forValue:value] retain];
-    return [result autorelease];
-}
 
 - (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;

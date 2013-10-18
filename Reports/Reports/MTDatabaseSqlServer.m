@@ -355,10 +355,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
     NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *safeQueryTable = [self safeIdentifier:queryTable];
     NSString *fieldName = [[queryField databaseSchemaField] name];
-    NSString *safeFieldName = [self safeIdentifier:fieldName];
-    return [[[NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName] retain] autorelease];
+    return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
 }
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document

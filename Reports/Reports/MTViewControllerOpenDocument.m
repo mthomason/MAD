@@ -52,6 +52,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, assign) BOOL needsEmailMenu;
 
+@property (nonatomic, assign) BOOL cellsHidden;
+
 @end
 
 @implementation MTViewControllerOpenDocument
@@ -59,36 +61,73 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
     __block MTViewControllerOpenDocument *blockSelf = self;
-    id closeDocument = ^(BOOL success) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (success) {
-                
-                MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                    if (success) {
-                        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                        [activeDocument setSuspended:YES];
-                        
-                        [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                            
-                            [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
-                                //[[MTActiveDocument sharedDocument] setActiveDocument:nil];
-                                
-                                [[blockSelf collectionView] setUserInteractionEnabled: YES];
-                            }];
-                            
-                        }];
-                    };
-                }];
-            }
-        });
-    };
+
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+
+        NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
+        [self setCellsHidden:YES];
+        for (NSInteger i=0; i<numberOfCells; i++) {
+            UICollectionViewCell *cell = [[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+            if (cell != nil) {
+                [[cell contentView] setAlpha:0.7000f];
+                UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                [activityView startAnimating];
+                [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+                [activityView setCenter:[[cell contentView] center]];
+                [[cell contentView] addSubview:activityView];
+                [activityView release];
+            }
+        }
         [[self collectionView] setUserInteractionEnabled: NO];
-        [activeDocument save:closeDocument];
+        
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
+        
+            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+            
+            NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
+            
+            
+            RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
+            
+            // FIXME: Slow... show activity indicator or something.
+            if (document != nil) {
+                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+                UIImage *thumbnail = [printPageRender thumbnail];
+                NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+                [pngImage writeToURL:thumbnailUrl atomically:YES];
+                [printPageRender release];
+            }
+            
+            [document release];
+            [thumbnailUrl release];
+            
+            [activeDocument closeWithCompletionHandler:^(BOOL success) {
+                if (success) {
+                    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                    [activeDocument setSuspended:YES];
+                    
+                    [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                        
+                        [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
+                            [[MTActiveDocument sharedDocument] setActiveDocument:nil];
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [[blockSelf collectionView] setUserInteractionEnabled: YES];
+                                //                            [[blockSelf collectionView] reloadData];
+                                [blockSelf setCellsHidden:NO];
+                                [[blockSelf collectionView] reloadData];
+                            });
+                        }];
+                        
+                    }];
+                };
+            }];
+        
+        });
+
         
     }
     [self setShouldShowAddDocumentPopover:YES];
@@ -240,7 +279,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setCellsHidden:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     NSAttributedString *attributedString = nil;
@@ -1247,7 +1286,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self isEditing]) {
         [result startWobble];
     }
-    
+    if ([[result contentView] alpha] < 0.99999f && [self cellsHidden] == NO) {
+        __block UIView *blockView = [result contentView];
+        __block UIActivityIndicatorView *activityIndicatorView;
+        for (UIView *subview in [[result contentView] subviews]) {
+            if ([subview isKindOfClass:[UIActivityIndicatorView class]]) {
+                activityIndicatorView = (UIActivityIndicatorView *)subview;
+                break;
+            }
+        }
+        [UIView animateWithDuration:1.0000f animations:^{
+            [blockView setAlpha:1.0000f];
+            [activityIndicatorView setAlpha:0.0000f];
+        } completion:^(BOOL finished) {
+            [activityIndicatorView removeFromSuperview];
+        }];
+    }
     return result;
 }
 
