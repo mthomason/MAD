@@ -599,8 +599,11 @@
     CGFloat paddingLeft = 75.0000f;
     RptqQueryField *leftField = [insertedQueryLinks hasLeftField];
     RptqQueryTable *leftTable = [leftField inQueryTable];
+    
     MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
 
+    NSLog(@"rect ltvc %@", NSStringFromCGRect([[leftTableViewController view] frame]));
+    
     CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[leftTableViewController view]];
     CGRect leftTableFrame = [[leftTableViewController schemaTableViewController] frame];
     CGFloat leftTableBottomY = leftTableFrame.origin.y + leftTableFrame.size.height;
@@ -609,7 +612,7 @@
     } else if (leftCellFrameInTable.origin.y < leftTableFrame.origin.y) {
         leftCellFrameInTable = CGRectMake(leftCellFrameInTable.origin.x, leftTableFrame.origin.y, leftCellFrameInTable.size.width, leftCellFrameInTable.size.height);
     }
-    CGRect leftCellFrameInView = [[self view] convertRect:leftCellFrameInTable fromView:[leftTableViewController view]];
+    CGRect leftCellFrameInView = [[self contentView] convertRect:leftCellFrameInTable fromView:[leftTableViewController view]];
     CGPoint leftCellCenterPoint = CGCenterOfRect(leftCellFrameInView);
     
     RptqQueryField *rightField = [insertedQueryLinks hasRightField];
@@ -624,7 +627,7 @@
     } else if (rightCellFrameInTable.origin.y < rightTableFrame.origin.y) {
         rightCellFrameInTable = CGRectMake(rightCellFrameInTable.origin.x, rightTableFrame.origin.y, rightCellFrameInTable.size.width, rightCellFrameInTable.size.height);
     }
-    CGRect rightCellFrameInView = [[self view] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
+    CGRect rightCellFrameInView = [[self contentView] convertRect:rightCellFrameInTable fromView:[rightTableViewController view]];
     CGPoint rightCellCenterPoint = CGCenterOfRect(rightCellFrameInView);    
 
     CGRect connectorFrame;
