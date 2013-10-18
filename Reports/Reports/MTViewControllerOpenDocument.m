@@ -552,6 +552,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
+    });
+    
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if ([UIDevice isPad]) {

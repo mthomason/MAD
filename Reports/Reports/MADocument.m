@@ -170,23 +170,26 @@ NSString * MTDocumentParentContextName          = @"moc";
             [extraInfo release];
         }
 
-        __block NSMutableDictionary *blockDictionary = [self extraInformation];
-        __block NSURL *thumbnailUrl = [self thumbnailUrl];
+        NSMutableDictionary *blockDictionary = [self extraInformation];
+        NSURL *thumbnailUrl = [self thumbnailUrl];
 
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
             
             if (document != nil) {
-                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                UIImage *thumbnail = [printPageRender thumbnail];
-                NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-                [pngImage writeToURL:thumbnailUrl atomically:YES];
-                NSString *key = [MADocument thumbnailSaveName];
-                [blockDictionary setObject:thumbnail forKey:key];
-                [printPageRender release];
+                if ([thumbnailUrl isKindOfClass:[NSURL class]] &&
+                    [blockDictionary isKindOfClass:[NSMutableDictionary class]]) {
+                    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+                    UIImage *thumbnail = [printPageRender thumbnail];
+                    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+                    [pngImage writeToURL:thumbnailUrl atomically:YES];
+                    NSString *key = [MADocument thumbnailSaveName];
+                    [blockDictionary setObject:thumbnail forKey:key];
+                    [printPageRender release];
+                }
             }
-        });
+        //});
         
         NSNumber *dataVersion = @(1.0);
 

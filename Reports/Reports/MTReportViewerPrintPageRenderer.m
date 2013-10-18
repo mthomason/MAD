@@ -226,8 +226,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     
     NSUInteger detailRowsCounter = 0;
     NSUInteger pageNumber = 0;
-    RptqDocument *document = [RptqDocument activeDocument];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
+    MTDatabase *database = [MTDatabase databaseForRptqDatabase: databaseSchemas];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
     if (query) {
@@ -417,7 +419,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                     break;
                                             }
                                             
-                                            NSString *fieldKey = [queryField toString];
+                                            NSString *queryTable = [[queryField inQueryTable] queryAlias];
+                                            NSString *safeQueryTable = [database safeIdentifier:queryTable];
+                                            NSString *fieldName = [[queryField databaseSchemaField] name];
+                                            NSString *safeFieldName = [database safeIdentifier:fieldName];
+                                            NSString *fieldKey = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
                                             
                                             RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
                                             NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
@@ -531,9 +537,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             NSDictionary *rd = useNextRowData ? nextRowData : rowData;
                                             RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                             RptqQueryField *queryField = [labelDataField referencesQueryField];
-                                            NSString *tableFieldKey = [queryField tableFieldKey];
+                                            NSString *tableFieldKey = [database safeQueryField:queryField];
                                             id value = [rd objectForKey: tableFieldKey];
-                                            
                                             RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                             NSNumber *dataTypeNumber = [schemaField dataType];
                                             MTDataType dataType = [dataTypeNumber integerValue];
@@ -944,7 +949,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (NSString *)printDynamicDocumentLabel:(RptqDocumentObjectLabelDataField *)documentObjectDataField forRow:(NSUInteger)row onPage:(NSUInteger)page {
     NSString *result = @"";
     RptqQueryField *queryField = [documentObjectDataField referencesQueryField];
-    NSString * tableFieldKey = [queryField tableFieldKey];
+    MTDatabase *database = [MTDatabase databaseForRptqDatabase: queryField.inQueryTable.inQuery.inDatabase];
+    NSString *tableFieldKey = [database safeQueryField:queryField];
     NSDictionary *rowData = [self rowDataForRow:row onPage:page];
     id value = [rowData objectForKey: tableFieldKey];
     MTDataType dataType = [[[queryField databaseSchemaField] dataType] integerValue];
@@ -988,10 +994,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage {
 
-    RptqDocument *document = [RptqDocument activeDocument];
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    UIManagedDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     BOOL landscape = (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
@@ -1017,6 +1023,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [self setTemporaryCachedDetailCounter:0];
 
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        MTDatabase *madDatabase = [MTDatabase databaseForRptqDatabase:database];
+
         NSSet *hasQueries = [database hasQueries];
         RptqQuery *query = [hasQueries anyObject];
         //RptqQueryCache *queryCache = [query hasQueryCache];
@@ -1077,7 +1085,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
             
             BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-            NSString *key = [queryGroup fieldNameQuery];
+            RptqQueryField *groupField = [queryGroup hasField];
+            
+            NSString *queryTable = [[groupField inQueryTable] queryAlias];
+            NSString *safeQueryTable = [madDatabase safeIdentifier:queryTable];
+            NSString *fieldName = [[groupField databaseSchemaField] name];
+            NSString *safeFieldName = [madDatabase safeIdentifier:fieldName];
+            NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
+
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
                                                                            ascending: sortAscending];
             [sortedSortDescriptorsGroup addObject:sortDescriptor];

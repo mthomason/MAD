@@ -35,6 +35,18 @@
     return @"SELECT\n";
 }
 
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
+    return [[[NSString stringWithFormat:@"`%@`", fieldOrTableName] retain] autorelease];
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *safeQueryTable = [self safeIdentifier:queryTable];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    NSString *safeFieldName = [self safeIdentifier:fieldName];
+    return [[[NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName] retain] autorelease];
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];

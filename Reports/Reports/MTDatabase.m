@@ -25,6 +25,14 @@
     [super dealloc];
 }
 
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return @"";
+}
+
+- (NSString *)safeIdentifier:(NSString *)s {
+    return s;
+}
+
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database {
     //RptqUserCredentals *userCredentals = [database ownedByUser];
     return [self databaseForRptqDatabase:database];
@@ -239,7 +247,15 @@
         if ([queryPredicate hasLeftField] != nil) {
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
-            leftValue = [[leftField toString] retain];
+            
+            
+            NSString *queryAlias = [[leftField inQueryTable] queryAlias];
+            NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
+            NSString *name = [[leftField databaseSchemaField] name];
+            NSString *safeName = [self safeIdentifier:name];
+            
+            leftValue = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
+
             MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:[leftField databaseSchemaField]];
             leftFieldDataType = [dbField fieldType];
             
@@ -250,7 +266,16 @@
         }
         
         if ([queryPredicate hasRightField] != nil) {
-                rightValue = [[[queryPredicate hasRightField] toString] retain];
+            
+            RptqQueryField *leftField = [queryPredicate hasRightField];
+            
+            
+            NSString *queryAlias = [[leftField inQueryTable] queryAlias];
+            NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
+            NSString *name = [[leftField databaseSchemaField] name];
+            NSString *safeName = [self safeIdentifier:name];
+            
+            rightValue = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
@@ -266,10 +291,10 @@
         }
         
         
+        [result appendFormat:@"\t(%@ %@ %@)", leftValue, [queryPredicate symbolForComparson], rightValue];
+        
         [leftValue release];
         [rightValue release];
-        
-        [result appendFormat:@"\t(%@ %@ %@)", leftValue, [queryPredicate symbolForComparson], rightValue];
         
         loopCounter++;
     }
@@ -381,8 +406,11 @@
         for (RptqQueryField *queryField in queryFields) {
             RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
             if (fieldCounter != 0)  [result appendString:@",\n"];
-            NSString *tableAlias = [[[queryField inQueryTable] queryAlias] stringByAppendingString:@"."];
-            NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+            NSString *tableName = [[queryField inQueryTable] queryAlias];
+            NSString *safeTableName = [self safeIdentifier:tableName];
+            NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
+            NSString *fieldName = [self safeIdentifier: [field name]];
+            NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
             fieldCounter++;
         }
@@ -407,13 +435,17 @@
             if (table != nil) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
-                NSString *tableAlias = [[table queryAlias] stringByAppendingString:@"."];
+                NSString *tableName = [table queryAlias];
+                NSString *safeTableName = [self safeIdentifier:tableName];
+                NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
                 for (RptqQueryField *queryField in [table hasQueryFields]) {
                     RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
                     if (fieldCounter != 0)  [result appendString:@",\n"];
-                    NSString *fieldAlias = [tableAlias stringByAppendingString:[field name]];
+                    NSString *fieldName = [field name];
+                    NSString *safeFieldName = [self safeIdentifier:fieldName];
+                    NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
                     [result appendFormat: @"\t%@", fieldAlias];
                     fieldCounter++;
                 }
@@ -450,9 +482,13 @@
                     if ([result length] <= 0) {
                         [result appendString:@"\t"];
                     }
-                    [result appendString:[[table databaseSchemaTable] name]];
+                    NSString *ogTableName = [[table databaseSchemaTable] name];
+                    NSString *safeOgTableName = [self safeIdentifier:ogTableName];
+                    [result appendString:safeOgTableName];
                     [result appendString:@" AS "];
-                    [result appendString:[table queryAlias]];
+                    NSString *tableName = [table queryAlias];
+                    NSString *safeTableName = [self safeIdentifier:tableName];
+                    [result appendString:safeTableName];
                 }
                 
                 [vertexTable setSortVertexColor: MTColorBlack];
@@ -502,9 +538,13 @@
                                 
                                 RptqQueryField *rightField = [queryLink hasRightField];
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
-                                [result appendString:[[rightTable databaseSchemaTable] name]];
+                                NSString *ogTableName = [[rightTable databaseSchemaTable] name];
+                                NSString *safeOgTableName = [self safeIdentifier:ogTableName];
+                                [result appendString:safeOgTableName];
                                 [result appendString:@" AS "];
-                                [result appendString:[rightTable queryAlias]];
+                                NSString *ogRightTable = [rightTable queryAlias];
+                                NSString *safeOgRightTable = [self safeIdentifier:ogRightTable];
+                                [result appendString:safeOgRightTable];
                                 [result appendString:@"\n\t"];
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
                                     [result appendString:@"\t"];
@@ -514,11 +554,22 @@
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
-                                    [result appendString: [leftField toString]];
+                                    
+                                    NSString *queryAlias = [[leftField inQueryTable] queryAlias];
+                                    NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
+                                    NSString *name = [[leftField databaseSchemaField] name];
+                                    NSString *safeName = [self safeIdentifier:name];
+                                    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
+                                    [result appendString: fieldName];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    [result appendString: [rightField toString]];
+                                    NSString *queryAlias = [[rightField inQueryTable] queryAlias];
+                                    NSString *safeQueryAlias = [self safeIdentifier:queryAlias];
+                                    NSString *name = [[leftField databaseSchemaField] name];
+                                    NSString *safeName = [self safeIdentifier:name];
+                                    NSString *fieldName = [[NSString stringWithFormat:@"%@.%@", safeQueryAlias, safeName] retain];
+                                    [result appendString: fieldName];
                                 }
                             }
                         }

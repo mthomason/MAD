@@ -40,6 +40,9 @@ extern NSString * const MTDatabaseConnectionAppName;
 - (NSString *)identifier;
 + (NSString *)identifier;
 
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+- (NSString *)safeQueryField:(RptqQueryField *)queryField;
+
 - (id)connectionSettings;
 
 @end

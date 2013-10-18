@@ -349,6 +349,18 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50\n";
 }
 
+- (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
+    return [[[NSString stringWithFormat:@"[%@]", fieldOrTableName] retain] autorelease];
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *safeQueryTable = [self safeIdentifier:queryTable];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    NSString *safeFieldName = [self safeIdentifier:fieldName];
+    return [[[NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName] retain] autorelease];
+}
+
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     

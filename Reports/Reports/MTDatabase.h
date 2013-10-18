@@ -14,6 +14,7 @@
 #import "RptqQuery+Extras.h"
 #import "MTDatabaseTable.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "RptqQueryField.h"
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
@@ -27,6 +28,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
 + (id)databaseForRptqDatabase:(RptqDatabase *)database;
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
@@ -44,6 +47,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (NSString *)identifier;
 + (NSString *)identifier;
+
+- (NSString *) safeIdentifier:(NSString *)fieldOrTableName;
 
 - (id)connectionSettings;
 
