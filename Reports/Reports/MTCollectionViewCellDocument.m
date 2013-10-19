@@ -32,12 +32,13 @@
     [[[self imagePreview] layer] setShadowRadius:1.0000f];
     [[[self imagePreview] layer] setShadowOpacity:0.5000f];
     [[[self imagePreview] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
-
+/*
     [[[self labelTitle] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    [[[self labelTitle] layer] setShadowRadius:1.0000f];
+    [[[self labelTitle] layer] setShadowRadius:0.5000f];
     [[[self labelTitle] layer] setShadowOpacity:0.5000f];
     [[[self labelTitle] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
-    
+  */
+
     [[self labelTitle] setTextColor:[UIColor tintColor]];
     [[self labelTitle] setClipsToBounds:NO];
     
@@ -54,17 +55,35 @@
 
 - (void)performDeselectionAnimations {
     [[self labelTitle] setTextColor:[UIColor tintColor]];
-    
-
 }
 
+- (void)setText:(NSString *)text {
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
+    NSInteger length = [[attributedString string] length];
+    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:[UIDevice isPad] ? 14.0000f : 12.0000f];
+    NSRange range = NSMakeRange(0, length);
+    [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
+    [attributedString addAttribute:NSFontAttributeName value:fonta range:range];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    //[attributedString addAttribute:NSStrokeWidthAttributeName value:@(1.0) range:range];
+    //[attributedString addAttribute:NSStrokeColorAttributeName value:[UIColor whiteColor] range:range];
+    //[attributedString addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    [[self labelTitle] setAttributedText:attributedString];
+    [paragraphStyle release];
+
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
         if ([UIDevice isLagacyOS]) {
-            [[selectedBackground layer] setCornerRadius: 5.0000f];
+            [[selectedBackground layer] setCornerRadius: 1.0000f];
         }
         [selectedBackground setClipsToBounds:YES];
         if ([UIDevice isModernOS]) {

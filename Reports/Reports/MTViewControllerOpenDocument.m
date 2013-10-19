@@ -294,8 +294,39 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 #pragma mark - UIViewController Overrides
 
+- (void)setLetterpressBackground {
+    UICollectionView *v = (UICollectionView *)[self collectionView];
+    UILabel *bg = [[UILabel alloc] initWithFrame:[v bounds]];
+    [bg setNumberOfLines:1];
+    [bg setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
+    [bg setLineBreakMode:NSLineBreakByClipping];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    
+    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD"];
+    NSInteger length = [[attributedStringMadDesigner string] length];
+    CGFloat fontSize = [UIDevice isPad] ? 400.0000f : 160.0000f;
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+    NSRange range = NSMakeRange(0, length);
+    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:[UIColor lightTextColor] range:range];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:range];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
+    [bg setAttributedText:attributedStringMadDesigner];
+    [v setBackgroundView:bg];
+    [paragraphStyle release];
+    
+    [attributedStringMadDesigner release];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setLetterpressBackground];
+    
     [self setCellsHidden:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -1344,10 +1375,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
         [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
-        [[result labelTitle] setText: [MADocument fileNameForMadUrl:fileUrl]];
+        [result setText: [MADocument fileNameForMadUrl:fileUrl]];
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
-        [[result labelTitle] setText: @"Default Text"];
+        [result setText: @""];
         [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
     }
     if ([self isEditing]) {

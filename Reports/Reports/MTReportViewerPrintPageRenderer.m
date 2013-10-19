@@ -207,12 +207,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 #pragma mark - UIPrintPageRenderer Overrides
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
+
+    
     [[UIColor whiteColor] setFill];
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-
-    
     
     NSMutableArray *printableStrings = [[NSMutableArray alloc] init];
     
@@ -621,9 +620,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [groupLevelKeys release];
     }
     
-    
-    if ([MTStoreKitController licensedUser] == NO) {
+    [self drawWatermarkWithContext:ctx inPageRect:pageRect];
 
+    [printableStrings release];
+}
+
+- (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+    if ([MTStoreKitController licensedUser] == NO) {
+        
         
         UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -635,15 +639,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f];
         
         NSDictionary *results = @{NSFontAttributeName : customFont,
-                                   //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
-                                   NSStrokeWidthAttributeName : @(3.0000f),
-                                   NSStrokeColorAttributeName : strokeColor,
-                                   NSForegroundColorAttributeName : foregroundColor,
-                                   NSParagraphStyleAttributeName: paragraphStyle
-                                   };
+                                  //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
+                                  NSStrokeWidthAttributeName : @(3.0000f),
+                                  NSStrokeColorAttributeName : strokeColor,
+                                  NSForegroundColorAttributeName : foregroundColor,
+                                  NSParagraphStyleAttributeName: paragraphStyle
+                                  };
         NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
         NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:results];
-
+        
         NSInteger rowCounter = 0, columnCounter = 0;
         CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
         CGSize logoMargin = CGSizeMake(25.0000f, 25.0000f);
@@ -669,14 +673,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
             rowCounter++;
         } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
-
+        
         [paragraphStyle release];
         [getMad release];
 
+        
     }
-
-    
-    [printableStrings release];
 }
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {

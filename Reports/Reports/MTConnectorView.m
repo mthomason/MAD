@@ -117,7 +117,7 @@
     rect = CGRectInset(rect, 10.0000f, 10.0000f);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetShadow(currentContext, CGSizeMake(5.0000f, 5.0000f), 5.0000f);
+    CGContextSetShadow(currentContext, CGSizeMake(2.0000f, 2.0000f), 5.0000f);
     CGContextSetLineWidth(currentContext, 3.0000f);
 
     CGRect connectorNobRectOrigin;

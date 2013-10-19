@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.100";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.100";
-NSString * const MTGlobalBundleRev                                  = @"721";
+NSString * const MTGlobalBundleVersion                              = @"1.0.101";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.101";
+NSString * const MTGlobalBundleRev                                  = @"722";
 
 @interface AppDelegate()
 
@@ -190,9 +190,14 @@ const NSInteger MATagNewDocument = 3838;
     NSString *title = @"MAD Designer";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f] range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f] range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
+    NSRange range = NSMakeRange(0, length);
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
+    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
@@ -203,11 +208,14 @@ const NSInteger MATagNewDocument = 3838;
     NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Viewer"];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
+    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
+    NSRange range = NSMakeRange(0, length);
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
@@ -218,11 +226,14 @@ const NSInteger MATagNewDocument = 3838;
     NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Query"];
     NSInteger length = [[attributedStringMadDesigner string] length];
-    UIFont *fonta = [UIFont fontWithName:@"Futura-CondensedMedium" size:18.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:18.0000f];
+    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
+    NSRange range = NSMakeRange(0, length);
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, length)];
+    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];
 
