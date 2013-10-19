@@ -152,6 +152,20 @@
     return [result autorelease];
 }
 
++ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
+    NSString *lastPathComponent = [madUrl lastPathComponent];
+    NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
+    NSString *fileNameWithBorder = [fileName stringByAppendingString:@"WithBorder"];
+    NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
+    fileNameWithBorder = [fileNameWithBorder stringByAppendingString:extention];
+    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [directoryPaths lastObject];
+    NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
+    NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileNameWithBorder isDirectory:NO] retain];
+    return [result autorelease];
+}
+
+
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
     
     NSURL *urlToOpen = nil;
@@ -232,6 +246,8 @@
             [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
                 [managedDocumentAtUrl setThumbnailUrl:thumbnailUrl];
+                NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToOpen];
+                [managedDocumentAtUrl setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
                 completionHandler(managedDocumentAtUrl, success);
             }];
         } else {

@@ -8,6 +8,7 @@
 
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
+#import "UIColor+EverydayApps.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -197,12 +198,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGFloat imageSize = [UIDevice isPad] == YES ? 124.0000f * [[UIScreen mainScreen] scale] : 64.0000f * [[UIScreen mainScreen] scale];
     
     UIImage *result;
-    if ([UIDevice isLagacyOS]) {
-        UIImage *i = [image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow];
-        result = [[UIImage imageWithBorder:i] retain];
-    } else {
-        result = [[image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow] retain];
-    }
+    result = [[image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow] retain];
     UIGraphicsEndImageContext();
 
     return [result autorelease];

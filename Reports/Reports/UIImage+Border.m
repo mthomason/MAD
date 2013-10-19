@@ -7,6 +7,7 @@
 //
 
 #import "UIImage+Border.h"
+#import "UIDevice+Hack.h"
 
 @implementation UIImage (Border)
 
@@ -21,7 +22,11 @@
     [source drawInRect:rect blendMode:kCGBlendModeNormal alpha:1.0000f];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, [color CGColor]);
-    CGContextStrokeRect(context, rect);
+    if ([UIDevice isRetnaDisplay]) {
+        CGContextStrokeRectWithWidth(context, rect, 0.5000f);
+    } else {
+        CGContextStrokeRectWithWidth(context, rect, 1.0000f);
+    }
     UIImage *result =  UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return result;

@@ -69,9 +69,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
         [self setCellsHidden:YES];
         for (NSInteger i=0; i<numberOfCells; i++) {
-            UICollectionViewCell *cell = [[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
             if (cell != nil) {
-                [[cell contentView] setAlpha:0.7000f];
+                [cell performDeselectionAnimations];
+                [[cell contentView] setAlpha:0.9500f];
                 UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
                 [activityView startAnimating];
                 [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
@@ -89,20 +90,27 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
             
             NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
-            
+            NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
             
             RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
             
             // FIXME: Slow... show activity indicator or something.
             if (document != nil) {
                 MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                UIImage *thumbnail = [printPageRender thumbnail];
+                UIImage *thumbnail = [[printPageRender thumbnail] retain];
                 NSData *pngImage = UIImagePNGRepresentation(thumbnail);
                 [pngImage writeToURL:thumbnailUrl atomically:YES];
                 [printPageRender release];
+                
+                UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
+                NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
+                [pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
+                [thumbnailWithBorder release];
+                [thumbnail release];
             }
             
             [document release];
+            [thumbnailWithBorderUrl release];
             [thumbnailUrl release];
             
             [activeDocument closeWithCompletionHandler:^(BOOL success) {
@@ -268,8 +276,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:0]; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
-            UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
+            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
             [cell stopWobble];
+            [cell performDeselectionAnimations];
+            
+            NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+            NSString *path = [url path];
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+            [[cell imagePreview] setImage:image];
+            [image release];
+            
             [cell release];
         }
     }
@@ -813,8 +830,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:0]; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
             [[self collectionView] deselectItemAtIndexPath:indexPath animated:YES];
-            UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
+            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
             [cell stopWobble];
+            [cell performDeselectionAnimations];
+            
+            NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+            NSString *path = [url path];
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+            [[cell imagePreview] setImage:image];
+            [image release];
+
             [cell release];
         }
     }
@@ -1124,10 +1150,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     
                     NSFileManager *fileManager = [[NSFileManager alloc] init];
                     [fileManager setDelegate:self];
+                    
                     NSURL *thumbnailUrlOld = [[MAReportDocument thumbnailUrlForMadUrl:urlToRename] retain];
                     NSURL *thumbnailUrlNew = [[MAReportDocument thumbnailUrlForMadUrl:newUrl] retain];
                     [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
+                    [thumbnailUrlNew release]; [thumbnailUrlOld release];
+                    
+                    thumbnailUrlOld = [[MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToRename] retain];
+                    thumbnailUrlNew = [[MAReportDocument thumbnailWithBorderUrlForMadUrl:newUrl] retain];
+                    [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
+
                     [self updateFileList:self];
+                    
                     [fileManager release];
                     [thumbnailUrlOld release];
                     [thumbnailUrlNew release];
@@ -1196,9 +1230,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self selectionsUpdated];
-}
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger numberOfSections = [[self collectionView] numberOfSections];
@@ -1215,12 +1246,36 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
-}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self selectionsUpdated];
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell performSelectionAnimations];
     
+    NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+    NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
+    NSString *path = [url path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    [[cell imagePreview] setImage:image];
+    [image release];
+    
+    [cell setNeedsDisplay];
+
+
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell performDeselectionAnimations];
+    
+    NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+    NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+    NSString *path = [url path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    [[cell imagePreview] setImage:image];
+    [image release];
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1230,15 +1285,35 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
     }
     [self selectionsUpdated];
+
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell performSelectionAnimations];
+    
+    NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+    NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
+    NSString *path = [url path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    [[cell imagePreview] setImage:image];
+    [image release];
+
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-}
+    [self selectionsUpdated];
+    
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell performDeselectionAnimations];
+    
+    NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
+    NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+    NSString *path = [url path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    [[cell imagePreview] setImage:image];
+    [image release];
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    
 }
+- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -1253,16 +1328,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
--(void)tableView:(UITableView*)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender { }
-
--(BOOL)tableView:(UITableView*)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath*)indexPath withSender:(id)sender {
-    return YES;
-}
-
--(BOOL)tableView:(UITableView*)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath*)indexPath {
+    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell performSelectionAnimations];
     return YES;
 }
 
@@ -1322,7 +1389,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
 
             MTCollectionViewCellDocument *visibleCell = (MTCollectionViewCellDocument *)[[openDocument collectionView] cellForItemAtIndexPath:indexPath];
-            NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
+            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {

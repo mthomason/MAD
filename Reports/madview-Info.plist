@@ -56,15 +56,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.98</string>
+	<string>1.0.100</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.98</string>
+	<string>1.0.100</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADRev</key>
-	<string>719</string>
+	<string>721</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>UIFileSharingEnabled</key>

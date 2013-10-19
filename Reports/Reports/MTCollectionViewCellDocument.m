@@ -26,8 +26,38 @@
     
     //[[[self imagePreview] layer] setBorderWidth:0.50000f];
     
+    
+    
+    [[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
+    [[[self imagePreview] layer] setShadowRadius:1.0000f];
+    [[[self imagePreview] layer] setShadowOpacity:0.5000f];
+    [[[self imagePreview] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
+
+    [[[self labelTitle] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
+    [[[self labelTitle] layer] setShadowRadius:1.0000f];
+    [[[self labelTitle] layer] setShadowOpacity:0.5000f];
+    [[[self labelTitle] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
+    
+    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    [[self labelTitle] setClipsToBounds:NO];
+    
+    [[[self selectedBackgroundView] layer] setCornerRadius:5.0000f];
+    
+    [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+    
     [super awakeFromNib];
 }
+
+- (void)performSelectionAnimations {
+    [[self labelTitle] setTextColor:[UIColor whiteColor]];
+}
+
+- (void)performDeselectionAnimations {
+    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    
+
+}
+
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -38,13 +68,12 @@
         }
         [selectedBackground setClipsToBounds:YES];
         if ([UIDevice isModernOS]) {
-            [selectedBackground setBackgroundColor:[self tintColor]];
+            [selectedBackground setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
         }
         
         [self setSelectedBackgroundView:selectedBackground];
         [selectedBackground release];
         
-        [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
         
     }
     return self;
@@ -60,6 +89,16 @@
 
 //- (void)setSelected:(BOOL)selected {
 //}
+
+- (BOOL)resignFirstResponder {
+    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    return YES;
+}
+
+- (BOOL)becomeFirstResponder {
+    [[self labelTitle] setTextColor:[UIColor whiteColor]];
+    return YES;
+}
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
@@ -79,10 +118,12 @@
 
 - (void)dimTint {
     [[self selectedBackgroundView] setBackgroundColor:[UIColor lightGrayColor]];
+    [[self labelTitle] setTextColor:[UIColor tintColor]];
 }
 
 - (void)normalizeTint {
-    [[self selectedBackgroundView] setBackgroundColor:[self tintColor]];
+    [[self selectedBackgroundView] setBackgroundColor:[UIColor tintColor]];
+    [[self labelTitle] setTextColor:[UIColor whiteColor]];
 }
 
 @end

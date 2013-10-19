@@ -37,6 +37,7 @@
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
++ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 
 - (RptqDocument *)activeDocument;
 

@@ -25,6 +25,8 @@
 
 - (void)dimTint;
 - (void)normalizeTint;
+- (void)performSelectionAnimations;
+- (void)performDeselectionAnimations;
 
 @end
 

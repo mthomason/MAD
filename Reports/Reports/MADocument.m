@@ -10,6 +10,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "MTLog.h"
+#import "UIColor+EverydayApps.h"
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
@@ -39,6 +40,7 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 //}
 
 - (void)dealloc {
+    [_thumbnailUrlWithBorder release];
     [_thumbnailUrl release];
     [_extraInformation release];
     [_thumbnail release];
@@ -99,7 +101,13 @@ NSString * MTDocumentParentContextName          = @"moc";
     if ([self thumbnailUrl] == nil) {
         NSURL *urlSaveMad = [NSURL uniqueUrlForDocumentWithName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]
                               withExtension:MTDocumentExtentionMobleApplicationDocument];
-        [self setThumbnailUrl:[MAReportDocument thumbnailUrlForMadUrl:urlSaveMad]];
+        
+        NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
+        [self setThumbnailUrl:thumbnailUrl];
+
+        NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlSaveMad];
+        [self setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
+        
     }
     id result = [super contentsForType:typeName error:outError];
     
@@ -190,6 +198,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
         NSMutableDictionary *blockDictionary = [[self extraInformation] retain];
         NSURL *thumbnailUrl = [[self thumbnailUrl] retain];
+        NSURL *thumbnailUrlWithBorder = [[self thumbnailUrlWithBorder] retain];
 
         
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
@@ -201,11 +210,17 @@ NSString * MTDocumentParentContextName          = @"moc";
                     if ([thumbnailUrl isKindOfClass:[NSURL class]] &&
                         [blockDictionary isKindOfClass:[NSMutableDictionary class]]) {
                         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                        UIImage *thumbnail = [printPageRender thumbnail];
+                        UIImage *thumbnail = [[printPageRender thumbnail] retain];
                         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
                         [pngImage writeToURL:thumbnailUrl atomically:YES];
-                        NSString *key = [MADocument thumbnailSaveName];
-                        //[blockDictionary setObject:thumbnail forKey:key];
+                        
+                        UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
+                        NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
+                        [pngImageWithBorder writeToURL:thumbnailUrlWithBorder atomically:YES];
+
+                        [thumbnailWithBorder release];
+                    
+                        [thumbnail release];
                         [printPageRender release];
                     }
                 }
@@ -215,6 +230,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         [document release];
         [blockDictionary release];
         [thumbnailUrl release];
+        [thumbnailUrlWithBorder release];
         NSNumber *dataVersion = @(1.0);
 
         [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
