@@ -65,7 +65,7 @@
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     NSInteger length = [[attributedString string] length];
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:[UIDevice isPad] ? 14.0000f : 12.0000f];
+    UIFont *fonta = [UIFont systemFontOfSize:22.0000f];
     NSRange range = NSMakeRange(0, length);
     [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [attributedString addAttribute:NSFontAttributeName value:fonta range:range];

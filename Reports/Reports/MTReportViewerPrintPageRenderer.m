@@ -195,7 +195,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [self drawPageAtIndex:0 inRect:letterRect];
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGFloat imageSize = [UIDevice isPad] == YES ? 124.0000f * [[UIScreen mainScreen] scale] : 64.0000f * [[UIScreen mainScreen] scale];
+    CGFloat imageSize = [UIDevice isPad] == YES ? 256.0000f * [[UIScreen mainScreen] scale] : 128.0000f * [[UIScreen mainScreen] scale];
     
     UIImage *result;
     result = [[image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow] retain];
@@ -1051,12 +1051,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
             [inputStream open];
             cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
-            [self setInputStream:inputStream];
-            if (error || cachedResultsForReportSerialized == nil) {
-                //NSLog(@"error: %@", error);
-                error = nil;
-                cachedResultsForReportSerialized = @[];
-            }
+
         }
     
         

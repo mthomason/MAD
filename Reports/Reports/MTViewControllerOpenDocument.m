@@ -84,7 +84,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[self collectionView] setUserInteractionEnabled: NO];
         
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 
         
             MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
@@ -620,7 +620,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
                 
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
-                MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
+                //MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[segue destinationViewController];
                 //[queryBuilderViewController setDelegate:self];
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
                 
@@ -1374,12 +1374,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
-        [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
+        //[[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
         [result setText: [MADocument fileNameForMadUrl:fileUrl]];
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
         [result setText: @""];
-        [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
+        //[[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
     }
     if ([self isEditing]) {
         [result startWobble];

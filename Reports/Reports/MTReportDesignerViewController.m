@@ -579,11 +579,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             }
             [sectionControlView setTranslatesAutoresizingMaskIntoConstraints:NO];
             
-            
-            if ([UIDevice isLagacyOS]) {
-                [[collectionView layer] setCornerRadius:MTReportDesignerCornerRadius];
-            }
-            
             [[sectionControlView layer] setCornerRadius:MTReportDesignerCornerRadius];
             [sectionControlView setClipsToBounds:YES];
             [sectionControlView setTag:sectionCounter];

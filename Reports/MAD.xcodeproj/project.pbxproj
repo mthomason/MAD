@@ -3315,8 +3315,6 @@
 				4CF8D41F168502D700357B1E /* MTCollectionViewCellElement.m */,
 				4C6CDFC214B85BFC00DABF86 /* MTTableViewCellDocument.h */,
 				4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */,
-				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
-				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
 				4C00815514B6BB9F003DF437 /* UILabelStrikethrough.h */,
 				4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */,
 				4C88A9C514EE23CF0069A0AF /* MTResizeHandleView.h */,
@@ -3870,6 +3868,8 @@
 			children = (
 				4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */,
 				4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */,
+				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
+				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
 				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
 				4CA96E8D17BD94460076F66A /* MTViewControllerAsyncProtocol.h */,
 			);

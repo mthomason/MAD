@@ -70,9 +70,6 @@
     [[self schemaTableViewController] setDataSource:self];
     [[self schemaTableViewController] setDelegate:self];
     [[self schemaTableViewController] reloadData];
-    if ([UIDevice isLagacyOS]) {
-        [[self toolbar] setTintColor:[UIColor edaGreenDark]];
-    }
     [[[self containerView] layer] setCornerRadius: 25.0000f];
     [[self containerView] setClipsToBounds: YES];
     [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
@@ -105,7 +102,9 @@
     [self setCachedTableObjectId:tableObjectId];
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
-    [[[self titleView] label] setText:[table alias]];
+    UILabel *titleLabel = [[self titleView] label];
+    [titleLabel setText:[table alias]];
+    [titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
 
     [[self schemaTableViewController] reloadData];
 }
@@ -130,7 +129,9 @@
     NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
-    [[result detailLabel] setText:[[field databaseSchemaField] name]];
+    UILabel *detailLabel = [result detailLabel];
+    [detailLabel setText:[[field databaseSchemaField] name]];
+    [detailLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
     return result;
 }
 

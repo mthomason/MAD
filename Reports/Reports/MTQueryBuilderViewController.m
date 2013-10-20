@@ -136,44 +136,53 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     if (self) {
         CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
         
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        
         MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
+        [[viewTableHeaderDocumentGroups labelTitle] setFont:font];
         [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
         [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
         [viewTableHeaderDocumentGroups release];
         
         MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderDatasource labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
+        [[viewTableHeaderDatasource labelTitle] setFont:font];
         [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
         [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
         [viewTableHeaderDatasource release];
         
         MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderTables labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
+        [[viewTableHeaderTables labelTitle] setFont:font];
         [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
         [viewTableHeaderTables release];
         
         MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderLinks labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
+        [[viewTableHeaderLinks labelTitle] setFont:font];
         [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
         [viewTableHeaderLinks release];
         
         MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
+        [[viewTableHeaderGroups labelTitle] setFont:font];
         [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
         [viewTableHeaderGroups release];
         
         MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
+        [[viewTableHeaderPredicate labelTitle] setFont:font];
         [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
         [viewTableHeaderPredicate release];
         
         MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
+        [[viewTableHeaderSql labelTitle] setFont:font];
         [[viewTableHeaderSql buttonAdd] setHidden:YES];
         [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
         [viewTableHeaderSql release];
@@ -1194,15 +1203,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 [connections retain];
                 if ([connections count] >= 1) {
                     RptqUserCredentals *connection = [[connections objectAtIndex: 0] retain];
-                    [[result textLabel] setText:[NSString stringWithFormat:@"◦ %@", [connection database_driver_type]]];
-                    [[result textLabel] setFont:[self boldSystemFont]];
+                    [[result textLabel] setText:[NSString stringWithFormat:@"%@", [connection database_driver_type]]];
+                    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                    [[result textLabel] setFont:font];
                     [[result detailTextLabel] setText:@""];
                     [connection release];
                 }
                 [connections release];
             }
-            [[result textLabel] setBackgroundColor:[UIColor clearColor]];
-            [[result detailTextLabel] setBackgroundColor:[UIColor clearColor]];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+            UIColor *clearColor = [UIColor clearColor];
+            [[result textLabel] setBackgroundColor:clearColor];
+            [[result detailTextLabel] setBackgroundColor:clearColor];
+            [[result textLabel] setFont:font];
+            [[result detailTextLabel] setFont:fontCaption];
             break;
         }
 
@@ -1211,8 +1226,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             RptqQueryTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
-            [[resultR textLabel] setText: [NSString stringWithFormat:@"◦ %@", [tablea alias]]];
-            [[resultR textLabel] setFont: [self boldSystemFont]];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            [[resultR textLabel] setText: [NSString stringWithFormat:@"%@", [tablea alias]]];
+            [[resultR textLabel] setFont: font];
             
             [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
             [resultR setIndentationLevel: 1];
@@ -1227,11 +1243,18 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
             
-            [[(UITableViewCellQueryLink *)result labelTableLeft] setText:
-             [NSString stringWithFormat:@"%@.%@", [links tableleft], [links fieldleft]]];
-            [[(UITableViewCellQueryLink *)result labelTableRight] setText:
-             [NSString stringWithFormat:@"%@.%@", [links tableright], [links fieldright]]];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+
+            NSString *leftString = [NSString stringWithFormat:@"%@.%@", [links tableleft], [links fieldleft]];
+            NSString *rightString = [NSString stringWithFormat:@"%@.%@", [links tableright], [links fieldright]];
+            [[(UITableViewCellQueryLink *)result labelTableLeft] setText: leftString];
+            [[(UITableViewCellQueryLink *)result labelTableRight] setText: rightString];
             [[(UITableViewCellQueryLink *)result labelJoinDesc] setText: [links linkDescription]];
+            [[(UITableViewCellQueryLink *)result labelTableLeft] setFont:font];
+            [[(UITableViewCellQueryLink *)result labelTableRight] setFont:font];
+            [[(UITableViewCellQueryLink *)result labelJoinDesc] setFont:fontCaption];
+
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
             [links release];
             break;
@@ -1243,6 +1266,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             [[result backgroundView] setBackgroundColor:[UIColor whiteColor]];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+            [[(UITableViewCellQueryGroup *)result labelMain] setFont:font];
+            [[(UITableViewCellQueryGroup *)result labelDetail] setFont:fontCaption];
             [[(UITableViewCellQueryGroup *)result labelMain] setText: [group fieldNameNice]];
             [[(UITableViewCellQueryGroup *)result labelDetail] setText: [group sortDisplayNice]];
             [(UITableViewCellQueryGroup *) result setTableID:[group objectID]];
@@ -1253,29 +1280,32 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         case MTQuerySectionsPredicate: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryPredicate";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            RptqQueryPredicate *predicate = [[[self fetchedResultsControllerPredicates] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
+            RptqQueryPredicate *predicate = [[self fetchedResultsControllerPredicates] objectAtIndexPath: indexPath];
             
             NSString *leftFieldDisplay = nil, *rightFieldDisplay = nil;
             if ([predicate fieldleftpred] != nil) {
-                leftFieldDisplay = [[predicate fieldleftpred] retain];
+                leftFieldDisplay = [predicate fieldleftpred];
             } else {
-                leftFieldDisplay = [[[predicate hasLeftField] toString] retain];
+                leftFieldDisplay = [[predicate hasLeftField] toString];
             }
             
             if ([predicate fieldrightpred] != nil) {
-                rightFieldDisplay = [[predicate fieldrightpred] retain];
+                rightFieldDisplay = [predicate fieldrightpred];
             } else {
-                rightFieldDisplay = [[[predicate hasRightField] toString] retain];
+                rightFieldDisplay = [[predicate hasRightField] toString];
             }
-            
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             [[(MTTableViewCellQueryPredicate *)result labelOpperator] setText: [predicate symbolForComparson]];
             [[(MTTableViewCellQueryPredicate *)result labelMain] setText: leftFieldDisplay];
             [[(MTTableViewCellQueryPredicate *)result labelDetail] setText: rightFieldDisplay];
+            [[(MTTableViewCellQueryPredicate *)result labelOpperator] setFont: fontCaption];
+            [[(MTTableViewCellQueryPredicate *)result labelMain] setFont: font];
+            [[(MTTableViewCellQueryPredicate *)result labelDetail] setFont: fontCaption];
+
             [(MTTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
             
-            [leftFieldDisplay release];
-            [rightFieldDisplay release];
-            [predicate release];
             break;
         }
         
