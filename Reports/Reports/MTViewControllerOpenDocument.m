@@ -612,7 +612,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 if ([UIDevice isPad]) {
                     UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
-                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
+                    __block MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
                     [queryBuilderViewController setDelegate:self];
 
                     UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
@@ -636,7 +636,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     
                 } else {
                     
-                    __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+                    UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                    UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+                    __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
+                    //[queryBuilderViewController setDelegate:self];
+                    
+                    UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+                    MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+                    [reportDesignerViewController setDelegate:self];
+                    
+                    UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+                    MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+                    [reportViewerViewController setViewControllerDelegate:self];
+                    
                     [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];

@@ -202,6 +202,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [super viewDidLoad];
 
     if ([UIDevice isPad] == NO) {
+        
+        UIColor *barTintColor = [UIColor tintColor];
+        UIColor *tintColor = [UIColor tintColor2];
+        UIToolbar *toolbar = [[self navigationController] toolbar];
+        [toolbar setBarTintColor:barTintColor];
+        [toolbar setTintColor:tintColor];
+        
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         NSAttributedString *attributedString = [[AppDelegate attributedStringMadQuery] retain];
@@ -415,17 +422,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     BOOL editing = ![[self tableView] isEditing];
     
     if ([UIDevice isPad] == NO) {
-        NSMutableArray *barButtonItems = [[self toolbarItems] mutableCopy];
-        if (editing) {
-            [barButtonItems removeObject:[self barButtonItemEdit]];
-            [barButtonItems addObject:[self barButtonItemDone]];
-        } else {
-            [barButtonItems removeObject:[self barButtonItemDone]];
-            [barButtonItems addObject:[self barButtonItemEdit]];
-        }
-        [self setToolbarItems:barButtonItems animated:YES];
-        [barButtonItems release];
-
+        UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
+        SEL toggleEditModeQueryDesigner = @selector(edit:);
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                       target: self
+                                                                                       action: toggleEditModeQueryDesigner];
+        
+        
+        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+        [self setBarButtonItemEdit:barButtonItem];
+        [barButtonItem release];
     }
 
     [[self tableView] setEditing: editing];

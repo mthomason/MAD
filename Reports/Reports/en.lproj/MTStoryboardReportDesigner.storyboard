@@ -55,7 +55,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="soU-uQ-lkM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="e2Q-nD-YXF" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1592" y="470"/>
+            <point key="canvasLocation" x="2944" y="542"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0gM-YA-W6b">
@@ -72,14 +72,18 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qxW-Ro-eBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="470"/>
+            <point key="canvasLocation" x="2500" y="542"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - MAD Designer-->
         <scene sceneID="w7D-aP-uPq">
             <objects>
                 <navigationController definesPresentationContext="YES" id="rCj-aP-1mR" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
+                    <tabBarItem key="tabBarItem" title="MAD Designer" image="UIBarButtonItemMadDesigner.png" id="MvE-qe-wKQ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mrR-aO-68b">
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="d6e-CT-kmt" kind="relationship" relationship="rootViewController" id="vHD-hA-uba"/>
@@ -87,7 +91,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I7B-Jq-sLa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1284" y="1976"/>
+            <point key="canvasLocation" x="1336" y="1620"/>
         </scene>
         <!--Report Designer View Controller - MAD Designer-->
         <scene sceneID="Lfd-iY-3rn">
@@ -124,18 +128,10 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="ZWu-fI-nqK"/>
                                 </constraints>
-                                <items>
-                                    <barButtonItem systemItem="add" id="U4m-Tl-FVb">
-                                        <connections>
-                                            <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
-                                            <segue destination="MHx-xg-Pj8" kind="modal" identifier="showObjects" modalTransitionStyle="coverVertical" id="0zr-qb-4zz"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
+                                <items/>
                             </toolbar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNt-T0-zvD">
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNt-T0-zvD">
                                 <rect key="frame" x="0.0" y="294" width="320" height="186"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -152,16 +148,17 @@
                             <constraint firstItem="lma-we-TIM" firstAttribute="leading" secondItem="cSM-my-rda" secondAttribute="leading" id="wAd-8c-wXt"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="MAD Designer" id="akg-b9-CTJ">
-                        <barButtonItem key="leftBarButtonItem" title="Query" width="66" id="UFx-y1-7e8">
-                            <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="WsX-XK-nVk">
                             <connections>
-                                <action selector="done:" destination="d6e-CT-kmt" id="9hG-fq-hqj"/>
+                                <action selector="done:" destination="d6e-CT-kmt" id="DPC-1d-USA"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="vKG-yA-osd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="U4m-Tl-FVb">
                             <connections>
-                                <segue destination="Owb-NI-G7a" kind="modal" identifier="MTSegueShowReportViewer" id="9cd-H9-IFh"/>
+                                <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
+                                <segue destination="MHx-xg-Pj8" kind="modal" identifier="showObjects" modalTransitionStyle="coverVertical" id="0zr-qb-4zz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -181,17 +178,20 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dta-0E-vs3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1690" y="1976"/>
+            <point key="canvasLocation" x="1742" y="1620"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - MAD Viewer-->
         <scene sceneID="V9N-EE-e2S">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Owb-NI-G7a" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="MAD Viewer" image="UIBarButtonItemMadViewer.png" id="HMm-Q7-BON"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xcf-5t-PGY">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Dxo-n0-xg5">
                         <rect key="frame" x="0.0" y="524" width="320" height="44"/>
@@ -203,7 +203,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tur-qD-yOR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2568" y="2728"/>
+            <point key="canvasLocation" x="1328" y="880"/>
         </scene>
         <!--Report Viewer Controller-->
         <scene sceneID="5uB-Xd-m7k">
@@ -217,6 +217,7 @@
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="az8-gW-1Nn">
                                         <rect key="frame" x="0.0" y="3" width="200" height="29"/>
+                                        <color key="minimumTrackTintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                     </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -265,7 +266,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DFG-2q-898" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="JTZ-2r-kHL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2982" y="2728"/>
+            <point key="canvasLocation" x="1742" y="880"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QxZ-Ah-h4y">
@@ -278,6 +279,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qEc-8J-yoE">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                         </textAttributes>
@@ -307,7 +309,7 @@
                             <tableViewSection id="Vfp-g7-EjQ">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="280" id="vQr-ij-YpU">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="280"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vQr-ij-YpU" id="Wic-dx-dud">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
@@ -384,21 +386,43 @@
             </objects>
             <point key="canvasLocation" x="424" y="1033"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="Dop-Kn-WJG">
+            <objects>
+                <tabBarController definesPresentationContext="YES" id="wbd-ks-ygF" sceneMemberID="viewController">
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="4zZ-zS-Qoc">
+                        <rect key="frame" x="129" y="330" width="163" height="49"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="dE1-Aw-c3W" kind="relationship" relationship="viewControllers" id="aQm-Rg-cMd"/>
+                        <segue destination="rCj-aP-1mR" kind="relationship" relationship="viewControllers" id="Mft-hu-kLJ"/>
+                        <segue destination="Owb-NI-G7a" kind="relationship" relationship="viewControllers" id="AzX-nk-Bjj"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M9w-dq-amQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="59" y="326"/>
+        </scene>
+        <!--Navigation Controller - MAD Query-->
         <scene sceneID="whu-Gh-wLK">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <tabBarItem key="tabBarItem" title="MAD Query" image="UIBarButtonItemDatabase.png" id="gW1-wS-v8A"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ghs-TK-yEm">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="MK9-Pk-5YG">
-                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -407,7 +431,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pHR-HV-kWg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="32" y="437"/>
+            <point key="canvasLocation" x="1304" y="229"/>
         </scene>
         <!--Licensing View Controller - Software Licensing-->
         <scene sceneID="W97-CM-fgJ">
@@ -421,7 +445,7 @@
                             <tableViewSection id="QWz-mT-W12">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="441" id="reF-iw-dOc">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="reF-iw-dOc" id="8o9-ED-uDs">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
@@ -721,7 +745,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2UM-EQ-2YB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-2981"/>
+            <point key="canvasLocation" x="2500" y="-2909"/>
         </scene>
         <!--Query Builder Advanced View Controller-->
         <scene sceneID="b6e-0g-AW4">
@@ -764,19 +788,19 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Zh-qt-c3W" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="MFm-4g-AP5" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1520" y="-2981"/>
+            <point key="canvasLocation" x="2872" y="-2909"/>
         </scene>
         <!--Query Builder View Controller - MAD Query-->
         <scene sceneID="PdD-eD-j8w">
             <objects>
                 <tableViewController id="UDQ-hu-wqs" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ZQj-sf-zU2">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.086274509803921567" green="0.41568627450980389" blue="0.54117647058823526" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellOverride" id="WEe-Rm-SYt" customClass="UITableViewCellOverride">
-                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WEe-Rm-SYt" id="y9F-HR-uv3">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -807,7 +831,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryLink" rowHeight="100" id="ADP-s6-L4d" customClass="UITableViewCellQueryLink">
-                                <rect key="frame" x="0.0" y="99" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="163" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ADP-s6-L4d" id="wbJ-ni-Tls">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
@@ -854,7 +878,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryPredicate" rowHeight="88" id="rq7-ei-pIY" customClass="MTTableViewCellQueryPredicate">
-                                <rect key="frame" x="0.0" y="199" width="320" height="88"/>
+                                <rect key="frame" x="0.0" y="263" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rq7-ei-pIY" id="hrt-bx-D7g">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
@@ -904,7 +928,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="UITableViewCellDataSource" textLabel="yxi-Ma-1qo" detailTextLabel="CVY-Rt-WjK" style="IBUITableViewCellStyleValue1" id="tXn-Ce-wbp">
-                                <rect key="frame" x="0.0" y="287" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="351" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tXn-Ce-wbp" id="MSs-1p-5Ut">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -928,7 +952,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="KZC-oe-tmN" detailTextLabel="cjV-vU-Cfz" style="IBUITableViewCellStyleValue1" id="ZoU-sq-mPj" customClass="UITableViewCellInstruction">
-                                <rect key="frame" x="0.0" y="331" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="395" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZoU-sq-mPj" id="fez-g7-cef">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -956,7 +980,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="UITableViewCellTableName" id="SLe-MF-FFO" customClass="UITableViewCellTableName">
-                                <rect key="frame" x="0.0" y="375" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="439" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SLe-MF-FFO" id="yAb-hE-Xb5">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -980,7 +1004,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" rowHeight="88" id="IJV-kE-ncG" customClass="UITableViewCellQueryGroup">
-                                <rect key="frame" x="0.0" y="419" width="320" height="88"/>
+                                <rect key="frame" x="0.0" y="483" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IJV-kE-ncG" id="K3I-Lj-RTd">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
@@ -1019,7 +1043,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryInput" rowHeight="100" id="EVy-Bl-PRf" customClass="UITableViewCellQueryInput">
-                                <rect key="frame" x="0.0" y="507" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="571" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVy-Bl-PRf" id="x1N-YV-KaA">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
@@ -1054,11 +1078,6 @@
                                 <segue destination="xr3-YA-WVo" kind="modal" identifier="MNSSegueShowSql" id="mgh-mK-T4Y"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem systemItem="edit" id="Xuw-E0-rNv">
-                            <connections>
-                                <action selector="edit:" destination="UDQ-hu-wqs" id="5uk-Ks-g3Y"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem systemItem="done" id="2Rf-ZZ-1E3">
                             <connections>
                                 <action selector="edit:" destination="UDQ-hu-wqs" id="KPe-9U-zYa"/>
@@ -1066,14 +1085,14 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Query" id="WMh-0i-gte">
-                        <barButtonItem key="leftBarButtonItem" title="Documents" id="5gf-wB-pZm">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="5gf-wB-pZm">
                             <connections>
                                 <segue destination="KNE-Mb-Hy6" kind="unwind" identifier="MTSegueCloseDesigner" unwindAction="unwindToOpenDocumentViewController:" id="e7X-8c-frZ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Designer" id="uOC-s3-xa9">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="Xuw-E0-rNv">
                             <connections>
-                                <segue destination="rCj-aP-1mR" kind="modal" identifier="showReportLayout" modalTransitionStyle="crossDissolve" id="gk9-9s-Bg2"/>
+                                <action selector="edit:" destination="UDQ-hu-wqs" id="5uk-Ks-g3Y"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1081,7 +1100,6 @@
                         <outlet property="barButtonItemDone" destination="2Rf-ZZ-1E3" id="mhb-7J-HkZ"/>
                         <outlet property="barButtonItemEdit" destination="Xuw-E0-rNv" id="tbe-VD-BeW"/>
                         <outlet property="barButtonItemShowSQL" destination="zCG-bV-hF6" id="Zyd-LM-39q"/>
-                        <outlet property="navigationItem" destination="WMh-0i-gte" id="n1q-jQ-Ojg"/>
                         <segue destination="bUw-df-pAe" kind="modal" identifier="showAddLinkViewController" id="3Ne-lA-277"/>
                         <segue destination="ouR-uU-io8" kind="modal" identifier="showAddGroupViewController" id="mZA-sy-Kb8"/>
                         <segue destination="yu8-fa-CaA" kind="modal" identifier="showAddPredicateViewController" id="TQR-er-uIZ"/>
@@ -1091,7 +1109,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CoX-2k-Q30" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="KNE-Mb-Hy6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="398" y="437"/>
+            <point key="canvasLocation" x="1742" y="229"/>
         </scene>
         <!--Database Driver Selector My Sql View Controller - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
@@ -1302,7 +1320,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Ccn-3q-IDa">
             <objects>
-                <navigationController definesPresentationContext="YES" id="L7q-hL-LvR" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="L7q-hL-LvR" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -1434,7 +1452,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pzn-bp-uqB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-1522"/>
+            <point key="canvasLocation" x="2500" y="-1450"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="dd7-QV-7gf">
@@ -1450,7 +1468,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Rm-04-Mi7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-173"/>
+            <point key="canvasLocation" x="2500" y="-101"/>
         </scene>
         <!--Query Builder Add Link First Table View Controller - Select First Table-->
         <scene sceneID="4LL-vK-QZK">
@@ -1492,7 +1510,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gsQ-BL-IIG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2536" y="1153"/>
+            <point key="canvasLocation" x="3888" y="1225"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="gRJ-md-9uF">
@@ -1509,7 +1527,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Drk-ys-be5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-842"/>
+            <point key="canvasLocation" x="2500" y="-770"/>
         </scene>
         <!--Report Designer Section Layout Settings View Controller - Layout Settings-->
         <scene sceneID="v2j-Bh-XFX">
@@ -1811,7 +1829,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nci-gr-x4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1592" y="-173"/>
+            <point key="canvasLocation" x="2944" y="-101"/>
         </scene>
         <!--Navigation Controller Model Controllers-->
         <scene sceneID="hWE-8O-gLX">
@@ -1828,7 +1846,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AOv-tb-esK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-2281"/>
+            <point key="canvasLocation" x="2500" y="-2209"/>
         </scene>
         <!--Query Builder Add Table View Controller - Add Table-->
         <scene sceneID="vSz-bH-FXK">
@@ -1873,7 +1891,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N1b-i4-klr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1589" y="-842"/>
+            <point key="canvasLocation" x="2941" y="-770"/>
         </scene>
         <!--Table View Controller Opperators - Choose an Operator-->
         <scene sceneID="hMI-fn-9va">
@@ -2046,7 +2064,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1s2-Wk-e0O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2521" y="-1522"/>
+            <point key="canvasLocation" x="3873" y="-1450"/>
         </scene>
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="upS-Pr-eds">
@@ -2092,7 +2110,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ter-LI-G9J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3466" y="481"/>
+            <point key="canvasLocation" x="4818" y="553"/>
         </scene>
         <!--Query Builder Sort Type View Controller - Sort Orders-->
         <scene sceneID="9NY-IW-ypl">
@@ -2161,7 +2179,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XsF-3H-2sW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rP4-Fn-avi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2072" y="-2281"/>
+            <point key="canvasLocation" x="3424" y="-2209"/>
         </scene>
         <!--Query Builder Add Group View Controller - Add Group-->
         <scene sceneID="RCn-aj-ZyM">
@@ -2258,7 +2276,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0L7-bY-ucZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1534" y="-2281"/>
+            <point key="canvasLocation" x="2886" y="-2209"/>
         </scene>
         <!--Query Builder Predicate Format View Controller - Predicate Format-->
         <scene sceneID="LZp-Pu-coV">
@@ -2332,7 +2350,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0gK-QK-f5R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1589" y="-1522"/>
+            <point key="canvasLocation" x="2941" y="-1450"/>
         </scene>
         <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="RWe-Po-EfT">
@@ -2452,7 +2470,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhV-EG-fB7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2030" y="-1522"/>
+            <point key="canvasLocation" x="3382" y="-1450"/>
         </scene>
         <!--Query Builder Add Link First Field View Controller - Select First Field-->
         <scene sceneID="cPE-Bs-c3D">
@@ -2495,7 +2513,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yij-uv-ODE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3466" y="-190"/>
+            <point key="canvasLocation" x="4818" y="-118"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8SR-Vf-dVE">
@@ -2545,7 +2563,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mv5-WY-ea2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3268" y="1153"/>
+            <point key="canvasLocation" x="4620" y="1225"/>
         </scene>
         <!--Query Builder Add Link Second Field View Controller - Select Second Field-->
         <scene sceneID="Uxo-6R-GU2">
@@ -2587,7 +2605,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l5Y-pQ-a74" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2893" y="1153"/>
+            <point key="canvasLocation" x="4245" y="1225"/>
         </scene>
         <!--Query Builder Add Link Join Type View Controller - Select Join Type-->
         <scene sceneID="tQn-xe-W8i">
@@ -2742,7 +2760,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1o-O4-sb0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2188" y="1153"/>
+            <point key="canvasLocation" x="3540" y="1225"/>
         </scene>
         <!--View Controller Activity Spinner-->
         <scene sceneID="iIb-uV-Wc5">
@@ -2889,7 +2907,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0rb-1C-QWO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2030" y="-842"/>
+            <point key="canvasLocation" x="3382" y="-770"/>
         </scene>
         <!--Report Designer Font Selector View Controller-->
         <scene sceneID="46k-Af-JDc">
@@ -5022,7 +5040,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbk-tB-kXP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2521" y="-853"/>
+            <point key="canvasLocation" x="3873" y="-781"/>
         </scene>
         <!--Database Driver Selector My Sql View Controller - SQL Server-->
         <scene sceneID="uTI-q1-IJ8">
@@ -5263,6 +5281,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="H8I-sn-IQj">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="wDr-Qz-W65">
                         <rect key="frame" x="0.0" y="524" width="320" height="44"/>
@@ -5322,7 +5342,7 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="0YV-JU-3qm" id="ibt-ot-oFF"/>
                                     <outlet property="labelTitle" destination="Xld-Tx-Hvx" id="jir-Ra-YyW"/>
-                                    <segue destination="dE1-Aw-c3W" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="Jqw-pd-Sji"/>
+                                    <segue destination="wbd-ks-ygF" kind="modal" identifier="openDocument" id="otF-6e-WRS"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -5437,7 +5457,7 @@
                             <tableViewSection id="FUA-ti-g4a">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="Db3-iV-SAv">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="600"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Db3-iV-SAv" id="HzD-Hl-iDd">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
@@ -6107,6 +6127,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="UIBarButtonItemDatabase.png" width="32" height="32"/>
+        <image name="UIBarButtonItemMadDesigner.png" width="48" height="32"/>
+        <image name="UIBarButtonItemMadViewer.png" width="48" height="32"/>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>
         <image name="UIImageAlignCenter20.png" width="20" height="20"/>
         <image name="UIImageAlignLeft20.png" width="20" height="20"/>
@@ -6118,7 +6141,7 @@
         <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>
     </resources>
-    <color key="tintColor" red="0.0078431372549019607" green="0.42352941176470588" blue="0.71372549019607845" alpha="1" colorSpace="calibratedRGB"/>
+    <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
@@ -6126,7 +6149,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="3KQ-0K-U1O"/>
-        <segue reference="kPX-hH-DKi"/>
+        <segue reference="G3D-As-8XI"/>
         <segue reference="pfP-rZ-fVf"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
