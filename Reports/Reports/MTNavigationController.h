@@ -10,6 +10,6 @@
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 
-@interface MTQueryBuilderNavigationController : UINavigationController
+@interface MTNavigationController : UINavigationController
 
 @end

@@ -7,15 +7,8 @@
 //
 
 #import "UINavigationControllerModelControllers.h"
+#import "UIColor+EverydayApps.h"
 
 @implementation UINavigationControllerModelControllers
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if ([UIDevice isLagacyOS]) {
-        [[UINavigationBar appearanceWhenContainedIn: [self class], nil]
-         setTintColor: [UIColor edaGreenDark]];
-    }
-}
 
 @end

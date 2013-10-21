@@ -71,15 +71,11 @@
 
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
-            [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-                if (isLicensedUser == NO) {
-                    NSArray *items = [self toolbarItems];
-                    NSMutableArray *mutableItems = [items mutableCopy];
-                    [mutableItems removeObject:[self barButtonItemRevealQuery]];
-                    [self setToolbarItems:mutableItems];
-                    [mutableItems release];
-                }
-            }];
+            NSArray *items = [self toolbarItems];
+            NSMutableArray *mutableItems = [items mutableCopy];
+            [mutableItems removeObject:[self barButtonItemRevealQuery]];
+            [self setToolbarItems:mutableItems];
+            [mutableItems release];
         }
     }];
     
@@ -185,28 +181,48 @@
 
 }
 
+- (IBAction)done:(id)sender {
+    [[self delegate] viewControllerDidFinish:self animated:YES];
+}
+
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
     
-    [[self queryBuilderController] edit:sender];
-    BOOL isEditing = [self isEditing];
-    [self setIsEditing: !isEditing];
-    NSArray *items = [[[self navigationController] toolbar] items];
-    NSMutableArray *tbItems = [items mutableCopy];
-    NSUInteger buttonIndex = [tbItems indexOfObject:[self barButtonItemEdit]];
-    if (buttonIndex != NSNotFound) {
+    if ([UIDevice isPad] == NO) {
+        [[self queryBuilderController] edit:sender];
+        BOOL isEditing = [self isEditing];
+        [self setIsEditing: !isEditing];
+        NSArray *items = [[[self navigationController] toolbar] items];
+        NSMutableArray *tbItems = [items mutableCopy];
+        NSUInteger buttonIndex = [tbItems indexOfObject:[self barButtonItemEdit]];
+        if (buttonIndex != NSNotFound) {
+            UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
+            SEL toggleEditModeQueryDesigner = @selector(toggleEditModeQueryDesigner:);
+            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                           target: self
+                                                                                           action: toggleEditModeQueryDesigner];
+            
+            
+            [tbItems replaceObjectAtIndex:buttonIndex withObject: barButtonItem];
+            [[[self navigationController] toolbar] setItems: tbItems animated:YES];
+            [self setBarButtonItemEdit:barButtonItem];
+            [barButtonItem release];
+        }
+        [tbItems release];
+    } else {
+        [[self queryBuilderController] edit:sender];
+        BOOL isEditing = [self isEditing];
+        [self setIsEditing: !isEditing];
         UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
         SEL toggleEditModeQueryDesigner = @selector(toggleEditModeQueryDesigner:);
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
                                                                                        target: self
                                                                                        action: toggleEditModeQueryDesigner];
         
+        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
         
-        [tbItems replaceObjectAtIndex:buttonIndex withObject: barButtonItem];
-        [[[self navigationController] toolbar] setItems: tbItems animated:YES];
         [self setBarButtonItemEdit:barButtonItem];
         [barButtonItem release];
     }
-    [tbItems release];
 
 }
 
@@ -230,7 +246,8 @@
             }
         }
     }];
-
 }
+
+
 
 @end

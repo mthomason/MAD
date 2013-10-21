@@ -276,14 +276,15 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    
-    CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
-    //CGFloat toolBarHeight;
-    if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
-        __block MTReportDesignerViewController *reportDesigner = self;
-        [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
-            [[reportDesigner toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
-        } completion:NULL];
+    if ([UIDevice isPad] == NO) {
+        CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
+        //CGFloat toolBarHeight;
+        if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
+            __block MTReportDesignerViewController *reportDesigner = self;
+            [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
+                [[reportDesigner toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
+            } completion:NULL];
+        }
     }
 
 }
@@ -487,24 +488,29 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         
     } else if (skipTopBar) {
 
-        NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-        if ([UIDevice isModernOS]) {
-            [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight]];
-        } else {
-            [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarBottomHeight]];
-        }
+        if ([UIDevice isPad] == NO) {
+
+            
+            NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
+            NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+            if ([UIDevice isModernOS]) {
+                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight]];
+            } else {
+                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarBottomHeight]];
+            }
+            
+            NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
+            NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+            [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
+            
+            [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
+                                          [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
+                                          ]];
         
-        NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
-                
-        [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
-            [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
-         ]];
+        }
 
     }
     
@@ -853,6 +859,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [popoverSegue popoverController];
             [popoverController setDelegate:self];
+            //UINavigationController *nav = (UINavigationController *)[popoverController contentViewController];
+            //[[nav toolbar] setBarTintColor:[UIColor greenColor]];
             CGSize popoverSize = CGSizeMake(320.0000f, 420.0000);
             [popoverController setPopoverContentSize:popoverSize animated:NO];
             [self setPopoverControllerObjectSelector:popoverController];

@@ -307,7 +307,7 @@
                             <tableViewSection id="Vfp-g7-EjQ">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="280" id="vQr-ij-YpU">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="280"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vQr-ij-YpU" id="Wic-dx-dud">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
@@ -384,10 +384,10 @@
             </objects>
             <point key="canvasLocation" x="424" y="1033"/>
         </scene>
-        <!--Query Builder Navigation Controller-->
+        <!--Navigation Controller-->
         <scene sceneID="whu-Gh-wLK">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTQueryBuilderNavigationController" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -421,7 +421,7 @@
                             <tableViewSection id="QWz-mT-W12">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="441" id="reF-iw-dOc">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="441"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="reF-iw-dOc" id="8o9-ED-uDs">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
@@ -776,7 +776,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellOverride" id="WEe-Rm-SYt" customClass="UITableViewCellOverride">
-                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WEe-Rm-SYt" id="y9F-HR-uv3">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -807,7 +807,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryLink" rowHeight="100" id="ADP-s6-L4d" customClass="UITableViewCellQueryLink">
-                                <rect key="frame" x="0.0" y="163" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="99" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ADP-s6-L4d" id="wbJ-ni-Tls">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
@@ -854,7 +854,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryPredicate" rowHeight="88" id="rq7-ei-pIY" customClass="MTTableViewCellQueryPredicate">
-                                <rect key="frame" x="0.0" y="263" width="320" height="88"/>
+                                <rect key="frame" x="0.0" y="199" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rq7-ei-pIY" id="hrt-bx-D7g">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
@@ -904,7 +904,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="UITableViewCellDataSource" textLabel="yxi-Ma-1qo" detailTextLabel="CVY-Rt-WjK" style="IBUITableViewCellStyleValue1" id="tXn-Ce-wbp">
-                                <rect key="frame" x="0.0" y="351" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="287" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tXn-Ce-wbp" id="MSs-1p-5Ut">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -928,7 +928,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UITableViewCellInstruction" textLabel="KZC-oe-tmN" detailTextLabel="cjV-vU-Cfz" style="IBUITableViewCellStyleValue1" id="ZoU-sq-mPj" customClass="UITableViewCellInstruction">
-                                <rect key="frame" x="0.0" y="395" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="331" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZoU-sq-mPj" id="fez-g7-cef">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -956,7 +956,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="10" reuseIdentifier="UITableViewCellTableName" id="SLe-MF-FFO" customClass="UITableViewCellTableName">
-                                <rect key="frame" x="0.0" y="439" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="375" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SLe-MF-FFO" id="yAb-hE-Xb5">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -980,7 +980,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryGroup" rowHeight="88" id="IJV-kE-ncG" customClass="UITableViewCellQueryGroup">
-                                <rect key="frame" x="0.0" y="483" width="320" height="88"/>
+                                <rect key="frame" x="0.0" y="419" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IJV-kE-ncG" id="K3I-Lj-RTd">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
@@ -1019,7 +1019,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellQueryInput" rowHeight="100" id="EVy-Bl-PRf" customClass="UITableViewCellQueryInput">
-                                <rect key="frame" x="0.0" y="571" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="507" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVy-Bl-PRf" id="x1N-YV-KaA">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
@@ -5437,7 +5437,7 @@
                             <tableViewSection id="FUA-ti-g4a">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="600" id="Db3-iV-SAv">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="600"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Db3-iV-SAv" id="HzD-Hl-iDd">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>

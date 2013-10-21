@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.102";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.102";
-NSString * const MTGlobalBundleRev                                  = @"723";
+NSString * const MTGlobalBundleVersion                              = @"1.0.103";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.103";
+NSString * const MTGlobalBundleRev                                  = @"724";
 
 @interface AppDelegate()
 
@@ -52,7 +52,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     //    NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
     //    NSLog (@"%@: %@", fontFamily, fontNames);
     //}
-    
     
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
@@ -193,9 +192,12 @@ const NSInteger MATagNewDocument = 3838;
     UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, length);
+    UIColor *foregroundColor = [UIColor tintColor2];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
+    
     //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
@@ -211,9 +213,11 @@ const NSInteger MATagNewDocument = 3838;
     UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, length);
+    UIColor *foregroundColor = [UIColor tintColor2];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
     //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
@@ -229,9 +233,11 @@ const NSInteger MATagNewDocument = 3838;
     UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, length);
+    UIColor *foregroundColor = [UIColor tintColor2];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
     //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];

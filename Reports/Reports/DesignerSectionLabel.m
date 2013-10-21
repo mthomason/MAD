@@ -8,6 +8,7 @@
 
 #import "DesignerSectionLabel.h"
 #import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 
 @interface DesignerSectionLabel ()
 
@@ -31,10 +32,8 @@
         [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
         [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
         [labelSectionIdentifer setFont:[UIFont systemFontOfSize:8.0000f]];
-        if ([UIDevice isModernOS]) {
-            UIColor *tintColor = [self tintColor];
-            [labelSectionIdentifer setTextColor:tintColor];
-        }
+        UIColor *tintColor = [UIColor tintColor];
+        [labelSectionIdentifer setTextColor:tintColor];
         [labelSectionIdentifer setText: displayText];
         [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
@@ -42,19 +41,17 @@
         [self setLabelSectionIdentifer:labelSectionIdentifer];
         [labelSectionIdentifer release];
 
-//        [self setTintColor:[self tintColor]];
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if ([UIDevice isModernOS]) {
-        if ([self selected]) {
-            [[self labelSectionIdentifer] setTextColor:[[self tintColor] colorWithAlphaComponent:0.500f]];
-        } else {
-            [[self labelSectionIdentifer] setTextColor:[self tintColor]];
-        }
+    UIColor *color = [UIColor tintColor];
+    if ([self selected]) {
+        [[self labelSectionIdentifer] setTextColor:[color colorWithAlphaComponent:0.500f]];
+    } else {
+        [[self labelSectionIdentifer] setTextColor:color];
     }
 }
 
@@ -65,14 +62,14 @@
 
 - (void)dimView {
     //[self setTintAdjustmentMode:UIViewTintAdjustmentModeDimmed];
-    [[self labelSectionIdentifer] setTextColor:[[self tintColor] colorWithAlphaComponent:0.500f]];
+    [[self labelSectionIdentifer] setTextColor:[[UIColor tintColor2] colorWithAlphaComponent:0.500f]];
     [self setSelected:YES];
 }
 
 - (void)normalView {
     
     //[self setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [[self labelSectionIdentifer] setTextColor:[self tintColor]];
+    [[self labelSectionIdentifer] setTextColor:[UIColor tintColor2]];
     [self setSelected:NO];
 }
 

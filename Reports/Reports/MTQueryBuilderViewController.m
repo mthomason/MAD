@@ -399,7 +399,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 //Labeled as "Reports"
 - (IBAction)done:(id)sender {
-    //[[self delegate] viewControllerDidFinish: self];
+//    [[self delegate] viewControllerDidFinish: self];
 }
 
 - (IBAction)edit:(id)sender {
@@ -1185,7 +1185,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSInteger numberOfGroups = [[[[self fetchedResultsControllerGroups] sections] objectAtIndex: 0] numberOfObjects];
             NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
             NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
-            [[(UITableViewCellInstruction *) result labelGroupType] setText:[NSString stringWithFormat:@"◦ %@", sectionName]];
+            [[(UITableViewCellInstruction *) result labelGroupType] setText:[NSString stringWithFormat:@"%@", sectionName]];
             [[(UITableViewCellInstruction *) result labelGroupType] setBackgroundColor:[UIColor clearColor]];
             [[(UITableViewCellInstruction *) result labelGroupType] setFont:[self boldSystemFont]];
             [(UITableViewCellInstruction *) result setIndentationLevel: (sectionIndentLevel+1)];

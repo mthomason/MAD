@@ -333,7 +333,7 @@
 - (void)addViewController:(UIViewController *)viewController {
 
     [viewController retain];
-    CGFloat animationDuration = 1.0000f;
+    CGFloat animationDuration = 0.6000f;
     CGRect desiredFrame = [[viewController view] frame];
     CGPoint desiredCenter = [[viewController view] center];
     CGAffineTransform desiredTransform = [[viewController view] transform];
@@ -401,7 +401,7 @@
 
 - (void)removeViewController:(UIViewController *)viewController {
     //NSLog(@"%@", [viewController view]);
-    CGFloat animationDuration = 1.0000f;
+    CGFloat animationDuration = 0.6000f;
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
     swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
 

@@ -29,9 +29,9 @@
     
     
     [[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    [[[self imagePreview] layer] setShadowRadius:1.0000f];
-    [[[self imagePreview] layer] setShadowOpacity:0.5000f];
-    [[[self imagePreview] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
+    [[[self imagePreview] layer] setShadowRadius:5.0000f];
+    [[[self imagePreview] layer] setShadowOpacity:1.0000f];
+    [[[self imagePreview] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
 /*
     [[[self labelTitle] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
     [[[self labelTitle] layer] setShadowRadius:0.5000f];
@@ -65,7 +65,8 @@
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     NSInteger length = [[attributedString string] length];
-    UIFont *fonta = [UIFont systemFontOfSize:22.0000f];
+    CGFloat size = [UIDevice isPad] ? 22.0000f : 12.0000f;
+    UIFont *fonta = [UIFont systemFontOfSize:size];
     NSRange range = NSMakeRange(0, length);
     [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [attributedString addAttribute:NSFontAttributeName value:fonta range:range];

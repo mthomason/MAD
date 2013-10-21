@@ -102,7 +102,7 @@
 		4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
 		4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
-		4C0E7774163B5AEC003B951E /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
+		4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
 		4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */; };
@@ -324,6 +324,14 @@
 		4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */; };
 		4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */; };
+		4C1BB6E31813D1520027C508 /* UIBarButtonItemPaintRoller.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E11813D1520027C508 /* UIBarButtonItemPaintRoller.png */; };
+		4C1BB6E41813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E21813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png */; };
+		4C1BB6E71813D1C70027C508 /* UIBarButtonItemDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E51813D1C70027C508 /* UIBarButtonItemDatabase.png */; };
+		4C1BB6E81813D1C70027C508 /* UIBarButtonItemDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E61813D1C70027C508 /* UIBarButtonItemDatabase@2x.png */; };
+		4C1BB6EB1813D2610027C508 /* UIBarButtonItemMadViewer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E91813D2610027C508 /* UIBarButtonItemMadViewer.png */; };
+		4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6EA1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png */; };
+		4C1BB6EF1813D5110027C508 /* UIBarButtonItemMadDesigner.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */; };
+		4C1BB6F01813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */; };
 		4C202131163DD4090058F869 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C202132163DD4090058F869 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C202133163DD4090058F869 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
@@ -653,7 +661,7 @@
 		4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
 		4C6362B914E6261C005DBBFF /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
-		4C6362BE14E6278D005DBBFF /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
+		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
 		4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */; };
@@ -905,7 +913,7 @@
 		4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
-		4C860B2A167EDE7000AC1904 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
+		4C860B2A167EDE7000AC1904 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4C860B2B167EDE7000AC1904 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
@@ -1278,7 +1286,7 @@
 		4CA16411167EB90D00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
 		4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
-		4CA16416167EB90D00540A14 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
+		4CA16416167EB90D00540A14 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4CA16417167EB90D00540A14 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
@@ -1292,7 +1300,7 @@
 		4CA16434167EB90F00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
 		4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
-		4CA16439167EB90F00540A14 /* MTQueryBuilderNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */; };
+		4CA16439167EB90F00540A14 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4CA1643A167EB90F00540A14 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
@@ -2122,6 +2130,14 @@
 		4C1B7A5E163E0D9400E331AA /* MySqlClientTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySqlClientTest.h; sourceTree = "<group>"; };
 		4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySqlClientTest.m; sourceTree = "<group>"; };
 		4C1B7A61163E0D9400E331AA /* MySqlClientTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MySqlClientTest-Prefix.pch"; sourceTree = "<group>"; };
+		4C1BB6E11813D1520027C508 /* UIBarButtonItemPaintRoller.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemPaintRoller.png; sourceTree = "<group>"; };
+		4C1BB6E21813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemPaintRoller@2x.png"; sourceTree = "<group>"; };
+		4C1BB6E51813D1C70027C508 /* UIBarButtonItemDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemDatabase.png; sourceTree = "<group>"; };
+		4C1BB6E61813D1C70027C508 /* UIBarButtonItemDatabase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemDatabase@2x.png"; sourceTree = "<group>"; };
+		4C1BB6E91813D2610027C508 /* UIBarButtonItemMadViewer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadViewer.png; sourceTree = "<group>"; };
+		4C1BB6EA1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadViewer@2x.png"; sourceTree = "<group>"; };
+		4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadDesigner.png; sourceTree = "<group>"; };
+		4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadDesigner@2x.png"; sourceTree = "<group>"; };
 		4C20212F163DD4090058F869 /* ReportsGeneralTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReportsGeneralTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReportsGeneralTest-Info.plist"; sourceTree = "<group>"; };
@@ -2286,8 +2302,8 @@
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
 		4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationControllerModelControllers.h; sourceTree = "<group>"; };
 		4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationControllerModelControllers.m; sourceTree = "<group>"; };
-		4C6362BC14E6278D005DBBFF /* MTQueryBuilderNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderNavigationController.h; sourceTree = "<group>"; };
-		4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderNavigationController.m; sourceTree = "<group>"; };
+		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
+		4C6362BD14E6278D005DBBFF /* MTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationController.m; sourceTree = "<group>"; };
 		4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
 		4C6362C214E6436C005DBBFF /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageDocument20.png; sourceTree = "<group>"; };
@@ -3509,6 +3525,14 @@
 		4C0EF6C5178A9681007BF2AE /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */,
+				4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */,
+				4C1BB6E91813D2610027C508 /* UIBarButtonItemMadViewer.png */,
+				4C1BB6EA1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png */,
+				4C1BB6E51813D1C70027C508 /* UIBarButtonItemDatabase.png */,
+				4C1BB6E61813D1C70027C508 /* UIBarButtonItemDatabase@2x.png */,
+				4C1BB6E11813D1520027C508 /* UIBarButtonItemPaintRoller.png */,
+				4C1BB6E21813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png */,
 				4C0EF6CB178A9690007BF2AE /* iOS7 */,
 				4C0EF6CA178A9688007BF2AE /* iOS6 */,
 			);
@@ -5011,8 +5035,8 @@
 				4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */,
 				4CF1335316CD1FE200FD0F0B /* MTQueryBuilderAdvancedViewController.h */,
 				4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */,
-				4C6362BC14E6278D005DBBFF /* MTQueryBuilderNavigationController.h */,
-				4C6362BD14E6278D005DBBFF /* MTQueryBuilderNavigationController.m */,
+				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
+				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
 				4C12292E16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.h */,
 				4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */,
 				4CD9CB0D14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.h */,
@@ -5847,11 +5871,13 @@
 				4CCD8D55150385DA002B9E77 /* UIImagePatternAqua@2x.png in Resources */,
 				4CCD8D56150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4CCD8D57150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
+				4C1BB6F01813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png in Resources */,
 				4CCD8D58150385DA002B9E77 /* UIImagePatternBlackWeave.png in Resources */,
 				4CCD8D59150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png in Resources */,
 				4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */,
 				4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */,
 				4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */,
+				4C1BB6E41813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png in Resources */,
 				4CCD8D5C150385DA002B9E77 /* UIImagePatternBlueSpecks.png in Resources */,
 				4C94AA2317DCB71D000F6FCF /* Icon-60-Viewer-Modern@2x.png in Resources */,
 				4CCD8D5D150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png in Resources */,
@@ -5881,6 +5907,7 @@
 				4CCD8D74150385DA002B9E77 /* UIImagePatternGraphPaper.png in Resources */,
 				4CCD8D75150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png in Resources */,
 				4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */,
+				4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */,
 				4CCD8D77150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png in Resources */,
 				4C66355717D5C721004AC646 /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 				4CCD8D78150385DA002B9E77 /* UIImagePatternGreenAndBlack.png in Resources */,
@@ -5907,12 +5934,14 @@
 				4C13392E18025838004F61CA /* Default@2x.png in Resources */,
 				4CCD8D8B150385DA002B9E77 /* UIImagePatternLined@2x.png in Resources */,
 				4C94AA2517DCB71D000F6FCF /* Icon-60-Viewer-Modern.png in Resources */,
+				4C1BB6EB1813D2610027C508 /* UIBarButtonItemMadViewer.png in Resources */,
 				4CCD8D8C150385DA002B9E77 /* UIImagePatternLinen.png in Resources */,
 				4CCD8D8D150385DA002B9E77 /* UIImagePatternLinen@2x.png in Resources */,
 				4CCD8D8E150385DA002B9E77 /* UIImagePatternLinenWeave.png in Resources */,
 				4CCD8D8F150385DA002B9E77 /* UIImagePatternLinenWeave@2x.png in Resources */,
 				4CCD8D90150385DA002B9E77 /* UIImagePatternMarbled.png in Resources */,
 				4CCD8D91150385DA002B9E77 /* UIImagePatternMarbled@2x.png in Resources */,
+				4C1BB6E81813D1C70027C508 /* UIBarButtonItemDatabase@2x.png in Resources */,
 				4CCD8D92150385DA002B9E77 /* UIImagePatternMarbled2.png in Resources */,
 				4CCD8D93150385DA002B9E77 /* UIImagePatternMarbled2@2x.png in Resources */,
 				4CCD8D94150385DA002B9E77 /* UIImagePatternMetallicBlack.png in Resources */,
@@ -5928,6 +5957,7 @@
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
 				4CCD8D9D150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png in Resources */,
 				4CCD8D9E150385DA002B9E77 /* UIImagePatternPinkTextured.png in Resources */,
+				4C1BB6EF1813D5110027C508 /* UIBarButtonItemMadDesigner.png in Resources */,
 				4C94AA2117DCB71D000F6FCF /* Icon-40-Designer-Modern@2x.png in Resources */,
 				4CCD8D9F150385DA002B9E77 /* UIImagePatternPinkTextured@2x.png in Resources */,
 				4CCD8DA0150385DA002B9E77 /* UIImagePatternPinkWithFlecks.png in Resources */,
@@ -6019,6 +6049,7 @@
 				4CD98D32163F7DE70096D7BC /* mysql_time.h in Resources */,
 				4CD98D36163F7DE70096D7BC /* mysql_version.h in Resources */,
 				4CD98D3A163F7DE70096D7BC /* mysql_version.h.in in Resources */,
+				4C1BB6E31813D1520027C508 /* UIBarButtonItemPaintRoller.png in Resources */,
 				4CD98D3E163F7DE70096D7BC /* mysqld_error.h in Resources */,
 				4CD98D42163F7DE70096D7BC /* rijndael.h in Resources */,
 				4CD98D46163F7DE70096D7BC /* mysys_err.h in Resources */,
@@ -6032,6 +6063,7 @@
 				4CD98D5E163F7DE70096D7BC /* sslopt-case.h in Resources */,
 				4CD98D62163F7DE70096D7BC /* sslopt-longopts.h in Resources */,
 				4CD98D66163F7DE70096D7BC /* sslopt-vars.h in Resources */,
+				4C1BB6E71813D1C70027C508 /* UIBarButtonItemDatabase.png in Resources */,
 				4CD98D6A163F7DE70096D7BC /* t_ctype.h in Resources */,
 				4CD98D6E163F7DE70096D7BC /* thr_alarm.h in Resources */,
 				4CD98D72163F7DE70096D7BC /* thr_lock.h in Resources */,
@@ -6376,7 +6408,7 @@
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */,
-				4C0E7774163B5AEC003B951E /* MTQueryBuilderNavigationController.m in Sources */,
+				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
 				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
 				4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */,
 				4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */,
@@ -6603,7 +6635,7 @@
 				4CA16411167EB90D00540A14 /* MTViewController.m in Sources */,
 				4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */,
 				4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */,
-				4CA16416167EB90D00540A14 /* MTQueryBuilderNavigationController.m in Sources */,
+				4CA16416167EB90D00540A14 /* MTNavigationController.m in Sources */,
 				4CA16417167EB90D00540A14 /* UINavigationControllerModelControllers.m in Sources */,
 				4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */,
@@ -6765,7 +6797,7 @@
 				4CA16434167EB90F00540A14 /* MTViewController.m in Sources */,
 				4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */,
 				4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */,
-				4CA16439167EB90F00540A14 /* MTQueryBuilderNavigationController.m in Sources */,
+				4CA16439167EB90F00540A14 /* MTNavigationController.m in Sources */,
 				4CA1643A167EB90F00540A14 /* UINavigationControllerModelControllers.m in Sources */,
 				4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */,
@@ -6941,7 +6973,7 @@
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C6362B914E6261C005DBBFF /* UINavigationControllerModelControllers.m in Sources */,
-				4C6362BE14E6278D005DBBFF /* MTQueryBuilderNavigationController.m in Sources */,
+				4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */,
 				4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */,
 				4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */,
 				4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */,
@@ -7165,7 +7197,7 @@
 				4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */,
 				4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */,
-				4C860B2A167EDE7000AC1904 /* MTQueryBuilderNavigationController.m in Sources */,
+				4C860B2A167EDE7000AC1904 /* MTNavigationController.m in Sources */,
 				4C860B2B167EDE7000AC1904 /* UINavigationControllerModelControllers.m in Sources */,
 				4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */,

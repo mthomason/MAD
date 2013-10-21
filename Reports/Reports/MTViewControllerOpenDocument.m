@@ -58,83 +58,88 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @implementation MTViewControllerOpenDocument
 
-- (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
+- (void)closeReport {
     
     __block MTViewControllerOpenDocument *blockSelf = self;
 
+    NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
+    [self setCellsHidden:YES];
+    for (NSInteger i=0; i<numberOfCells; i++) {
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+        if (cell != nil) {
+            [cell performDeselectionAnimations];
+            [[cell contentView] setAlpha:0.9500f];
+            UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            [activityView startAnimating];
+            [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+            [activityView setCenter:[[cell contentView] center]];
+            [[cell contentView] addSubview:activityView];
+            [activityView release];
+        }
+    }
+    [[self collectionView] setUserInteractionEnabled: NO];
+    
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        
+        NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
+        NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
+        
+        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
+        
+        // FIXME: Slow... show activity indicator or something.
+        if (document != nil) {
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+            UIImage *thumbnail = [[printPageRender thumbnail] retain];
+            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+            [pngImage writeToURL:thumbnailUrl atomically:YES];
+            [printPageRender release];
+            
+            UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
+            NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
+            [pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
+            [thumbnailWithBorder release];
+            [thumbnail release];
+        }
+        
+        [document release];
+        [thumbnailWithBorderUrl release];
+        [thumbnailUrl release];
+        
+        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                [activeDocument setSuspended:YES];
+                
+                [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                    
+                    [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
+                        [[MTActiveDocument sharedDocument] setActiveDocument:nil];
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [[blockSelf collectionView] setUserInteractionEnabled: YES];
+                            //                            [[blockSelf collectionView] reloadData];
+                            [blockSelf setCellsHidden:NO];
+                            [[blockSelf collectionView] reloadData];
+                        });
+                    }];
+                    
+                }];
+            };
+        }];
+        
+    });
+}
+
+- (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
+    
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
 
-        NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
-        [self setCellsHidden:YES];
-        for (NSInteger i=0; i<numberOfCells; i++) {
-            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-            if (cell != nil) {
-                [cell performDeselectionAnimations];
-                [[cell contentView] setAlpha:0.9500f];
-                UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                [activityView startAnimating];
-                [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-                [activityView setCenter:[[cell contentView] center]];
-                [[cell contentView] addSubview:activityView];
-                [activityView release];
-            }
-        }
-        [[self collectionView] setUserInteractionEnabled: NO];
-        
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-
-        
-            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-            
-            NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
-            NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
-            
-            RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
-            
-            // FIXME: Slow... show activity indicator or something.
-            if (document != nil) {
-                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                UIImage *thumbnail = [[printPageRender thumbnail] retain];
-                NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-                [pngImage writeToURL:thumbnailUrl atomically:YES];
-                [printPageRender release];
-                
-                UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
-                NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
-                [pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
-                [thumbnailWithBorder release];
-                [thumbnail release];
-            }
-            
-            [document release];
-            [thumbnailWithBorderUrl release];
-            [thumbnailUrl release];
-            
-            [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                if (success) {
-                    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-                    [activeDocument setSuspended:YES];
-                    
-                    [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                        
-                        [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
-                            [[MTActiveDocument sharedDocument] setActiveDocument:nil];
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [[blockSelf collectionView] setUserInteractionEnabled: YES];
-                                //                            [[blockSelf collectionView] reloadData];
-                                [blockSelf setCellsHidden:NO];
-                                [[blockSelf collectionView] reloadData];
-                            });
-                        }];
-                        
-                    }];
-                };
-            }];
-        
-        });
+        [self closeReport];
 
         
     }
@@ -143,14 +148,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([UIDevice isPad] == NO) {
         [self updateFileList:self];
     } else {
+        
     }
+    
+    __block MTViewControllerOpenDocument *blockSelf = self;
+
     if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
         //__block MTViewControllerOpenDocument *blockSelf = self;
         [self dismissViewControllerAnimated:YES completion:^{
             [blockSelf updateFileList:blockSelf];
         }];
     } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
-        [blockSelf updateFileList:blockSelf];    
+        [self updateFileList:blockSelf];
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
@@ -325,6 +334,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
+    
     [self setLetterpressBackground];
     
     [self setCellsHidden:NO];
@@ -591,10 +607,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [url release];
         }
         if (foundUrl) {
-            if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+            if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]] || [[segue destinationViewController] isKindOfClass: [UITabBarController class]]) {
+
                 if ([UIDevice isPad]) {
-                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[[segue destinationViewController] topViewController];
-//                    [queryBuilderViewController setDelegate:self];
+                    UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                    UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+                    MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
+                    [queryBuilderViewController setDelegate:self];
+
+                    UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+                    MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+                    [reportDesignerViewController setDelegate:self];
+
+                    UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+                    MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+                    [reportViewerViewController setViewControllerDelegate:self];
+                    
                     [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
@@ -728,6 +756,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewControllerDidFinish:(id)sender {
     [self setShouldShowAddDocumentPopover:YES];
+    
+    if ([[MTActiveDocument sharedDocument] activeDocument] != nil) {
+        [self closeReport];
+    }
+    
     if ([[self openDocumentPopoverController] isPopoverVisible]) {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     } else {

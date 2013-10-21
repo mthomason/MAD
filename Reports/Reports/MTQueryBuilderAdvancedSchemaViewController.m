@@ -73,7 +73,7 @@
     [[[self containerView] layer] setCornerRadius: 25.0000f];
     [[self containerView] setClipsToBounds: YES];
     [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    [[[self view] layer] setShadowOpacity:9.0000f];
+    [[[self view] layer] setShadowOpacity:1.0000f];
     [[[self view] layer] setShadowRadius:5.0000f];
     [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
 

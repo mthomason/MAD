@@ -7,6 +7,7 @@
 //
 
 #import "MTLicensingViewController.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTLicensingViewController ()
 
@@ -83,6 +84,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[[self navigationController] navigationBar] setBarTintColor:[UIColor tintColor2]];
+    [[[self navigationController] navigationBar] setTintColor:[UIColor tintColor]];
+    
     [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
      
     __block __weak MTLicensingViewController *weakViewController = self;
@@ -97,13 +101,13 @@
             
             BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
             if ([AppDelegate isMadDesigner]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneYear] setHidden:!allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:!allowPurchase];
             } else if ([AppDelegate isMadViewer]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowViewerOneMonth] setHidden:!allowPurchase];
                 [[weakViewController buttonBuyNowViewerOneYear] setEnabled:allowPurchase];
@@ -112,13 +116,13 @@
         } else {
             [weakViewController hideLicensingDetails];
             if ([AppDelegate isMadDesigner]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:NO];
                 //[[self buttonBuyNowDesignerOneYear] setHidden:YES];
                 //[[self buttonBuyNowDesignerOneMonth] setHidden:YES];
             } else if ([AppDelegate isMadViewer]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowViewerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:NO];
                 //[[self buttonBuyNowViewerOneYear] setHidden:YES];
@@ -147,13 +151,13 @@
                 
                 [weakViewController enableUserInterface];
                 if ([AppDelegate isMadDesigner]) {
-                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                     [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneYear] setHidden:NO];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:NO];
                 } else if ([AppDelegate isMadViewer]) {
-                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor lightGrayColor] : [UIColor lightGrayColor]];
+                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                     [[weakViewController buttonBuyNowViewerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowViewerOneYear] setHidden:NO];
                     [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:success];
@@ -211,9 +215,7 @@
         }
     };
     [self setStandardCompletion:completion];
-    if ([UIDevice isLagacyOS]) {
-        [[[self viewBuyButtonsBackground] layer] setCornerRadius:6.6666f];
-    }
+
     if ([AppDelegate isMadDesigner]) {
         [[[self buttonBuyNowDesignerOneYear] layer] setCornerRadius:6.6666f];
         [[[self buttonBuyNowDesignerOneMonth] layer] setCornerRadius:6.6666f];

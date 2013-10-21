@@ -71,6 +71,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
+    
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
     [self setTitle:@"MAD Viewer"];
     
@@ -389,8 +395,7 @@
     [[controller labelDateLastRefreshed] setNeedsDisplay];
     [[controller barButtonItemDone] setEnabled:NO];
     
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator setColor:[UIColor blackColor]];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
