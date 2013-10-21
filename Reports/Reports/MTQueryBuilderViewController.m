@@ -137,17 +137,20 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
         
         UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        UIColor *color = [UIColor whiteColor];
         
         MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
         [[viewTableHeaderDocumentGroups labelTitle] setFont:font];
         [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
+        [[viewTableHeaderDocumentGroups labelTitle] setTextColor:color];
         [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
         [viewTableHeaderDocumentGroups release];
         
         MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderDatasource labelTitle] setText:NSLocalizedString(@"Datasource", @"Datasource")];
         [[viewTableHeaderDatasource labelTitle] setFont:font];
+        [[viewTableHeaderDatasource labelTitle] setTextColor:color];
         [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
         [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
         [viewTableHeaderDatasource release];
@@ -155,6 +158,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderTables labelTitle] setText:NSLocalizedString(@"Tables", @"Next to the button to add database tables.")];
         [[viewTableHeaderTables labelTitle] setFont:font];
+        [[viewTableHeaderTables labelTitle] setTextColor:color];
         [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
         [viewTableHeaderTables release];
@@ -162,6 +166,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderLinks labelTitle] setText:NSLocalizedString(@"Links", @"Next to the button to add database tables.")];
         [[viewTableHeaderLinks labelTitle] setFont:font];
+        [[viewTableHeaderLinks labelTitle] setTextColor:color];
         [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
         [viewTableHeaderLinks release];
@@ -169,6 +174,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Groups", @"Next to the button to add database tables.")];
         [[viewTableHeaderGroups labelTitle] setFont:font];
+        [[viewTableHeaderGroups labelTitle] setTextColor:color];
         [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
         [viewTableHeaderGroups release];
@@ -176,6 +182,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Predicate", @"Next to the button to add database tables.")];
         [[viewTableHeaderPredicate labelTitle] setFont:font];
+        [[viewTableHeaderPredicate labelTitle] setTextColor:color];
         [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
         [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
         [viewTableHeaderPredicate release];
@@ -183,6 +190,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
         [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
         [[viewTableHeaderSql labelTitle] setFont:font];
+        [[viewTableHeaderSql labelTitle] setTextColor:color];
         [[viewTableHeaderSql buttonAdd] setHidden:YES];
         [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
         [viewTableHeaderSql release];
@@ -791,7 +799,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
-                    
+                    [managedObjectContext deleteObject:table];
+                    NSError *error = nil;
+                    [managedObjectContext save:&error];
                     deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
                     numberOfTables--;
                     

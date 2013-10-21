@@ -341,6 +341,12 @@
 }
 
 - (IBAction)done:(id)sender {
+    NSError *error = nil;
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    [[reportDocument managedObjectContext] save:&error];
+    if (error != nil) {
+        [[reportDocument managedObjectContext] save:&error];
+    }
     [[self viewControllerDelegate] viewControllerDidFinish: self];
 }
 

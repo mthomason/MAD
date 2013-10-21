@@ -84,8 +84,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[[self navigationController] navigationBar] setBarTintColor:[UIColor tintColor2]];
-    [[[self navigationController] navigationBar] setTintColor:[UIColor tintColor]];
+    //[[[self navigationController] navigationBar] setBarTintColor:[UIColor tintColor2]];
+    //[[[self navigationController] navigationBar] setTintColor:[UIColor tintColor]];
     
     [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
      

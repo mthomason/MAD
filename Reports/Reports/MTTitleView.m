@@ -34,7 +34,8 @@
 
 - (void)initalize {
     [self setBackgroundColor:[UIColor clearColor]];
-    CGRect labelBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [self bounds].size.width, [self bounds].size.height - 4.0000f);
+    CGRect bounds = [self bounds];
+    CGRect labelBounds = CGRectMake(CGPointZero.x, CGPointZero.y, bounds.size.width, bounds.size.height - 4.0000f);
     UILabel *label = [[UILabel alloc] initWithFrame:labelBounds];
     if ([UIDevice isLagacyOS]) {
         [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -44,11 +45,14 @@
         [label setTextAlignment:NSTextAlignmentCenter];
         [[label layer] setShadowOpacity:1.0000f];
         [[label layer] setShadowRadius:0.0000f];
+        
         [[label layer] setShadowColor:[[UIColor blackColor] CGColor]];
-        [[label layer] setShadowOffset:CGSizeMake(0.0, ![UIDevice isRetnaDisplay] ? -1 : -1.5)];
+        BOOL retna = [UIDevice isRetnaDisplay];
+        CGSize shadowOffset = CGSizeMake(0.0, !retna ? -1 : -1.5);
+        [[label layer] setShadowOffset:shadowOffset];
     } else {
-        [label setFont:[UIFont boldSystemFontOfSize:20.0000f]];
-        [label setTextColor:[UIColor blackColor]];
+        [label setFont:[UIFont systemFontOfSize:20.0000f]];
+        [label setTextColor:[UIColor whiteColor]];
         [label setTextAlignment:NSTextAlignmentCenter];
     }
     [label setText:@""];

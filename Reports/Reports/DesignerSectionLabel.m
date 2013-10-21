@@ -31,7 +31,7 @@
         UILabel *labelSectionIdentifer = [[UILabel alloc] initWithFrame:frame];
         [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
         [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
-        [labelSectionIdentifer setFont:[UIFont systemFontOfSize:8.0000f]];
+        [labelSectionIdentifer setFont:[UIFont systemFontOfSize:10.0000f]];
         UIColor *tintColor = [UIColor tintColor];
         [labelSectionIdentifer setTextColor:tintColor];
         [labelSectionIdentifer setText: displayText];
@@ -61,15 +61,15 @@
 }
 
 - (void)dimView {
-    //[self setTintAdjustmentMode:UIViewTintAdjustmentModeDimmed];
-    [[self labelSectionIdentifer] setTextColor:[[UIColor tintColor2] colorWithAlphaComponent:0.500f]];
+    UIColor *tintColor = [UIColor tintColor];
+    [[self labelSectionIdentifer] setTextColor:[tintColor colorWithAlphaComponent:0.500f]];
     [self setSelected:YES];
 }
 
 - (void)normalView {
     
-    //[self setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
-    [[self labelSectionIdentifer] setTextColor:[UIColor tintColor2]];
+    UIColor *tintColor = [UIColor tintColor];
+    [[self labelSectionIdentifer] setTextColor:tintColor];
     [self setSelected:NO];
 }
 

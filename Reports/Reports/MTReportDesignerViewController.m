@@ -1546,6 +1546,14 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (IBAction)done:(id)sender {
+    
+    NSError *error = nil;
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    [[reportDocument managedObjectContext] save:&error];
+    if (error != nil) {
+        [[reportDocument managedObjectContext] save:&error];
+    }
+
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(NO)];
     } else {

@@ -21,7 +21,7 @@
         [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
     }
 
-    [self setTitle: NSLocalizedString(@"Datasource Selector", @"Datasource Selector")];
+    [self setTitle: NSLocalizedString(@"Type", @"Type")];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
 }
 

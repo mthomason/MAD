@@ -774,6 +774,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
     [self dismissViewControllerAnimated:YES completion:^{ }];
+    
+    Class queryBuilderClass = [MTQueryBuilderViewController class];
+    Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
+    Class reportDesignerClass = [MTReportDesignerViewController class];
+    Class reportViewerClass = [MTReportViewerController class];
+    
+    if ([sender isKindOfClass: queryBuilderClass] ||
+        [sender isKindOfClass: queryBuilderContainerClass] ||
+        [sender isKindOfClass: reportDesignerClass] ||
+        [sender isKindOfClass: reportViewerClass]) {
+        [self closeReport];
+    }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
