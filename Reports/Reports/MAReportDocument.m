@@ -153,6 +153,8 @@
 }
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
+    return [[[self thumbnailUrlForMadUrl:madUrl] retain] autorelease];
+/*
     NSString *lastPathComponent = [madUrl lastPathComponent];
     NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
     NSString *fileNameWithBorder = [fileName stringByAppendingString:@"WithBorder"];
@@ -163,6 +165,7 @@
     NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
     NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileNameWithBorder isDirectory:NO] retain];
     return [result autorelease];
+ */
 }
 
 

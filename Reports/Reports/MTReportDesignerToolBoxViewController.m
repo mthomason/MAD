@@ -92,8 +92,13 @@
     UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self setSceneSelector:segmentedControl];
-    [[[self tableViewControllerTextLayoutSettings] tableView] setBounds: [[self contentView] bounds]];
-    [[[self tableViewControllerTextLayoutSettings] tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+    UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
+    [tableView setBounds: [[self contentView] bounds]];
+    [tableView setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+    CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
+    
+    UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, -insetOffset, 0.0000f);
+    //[tableView setContentInset: tableInset];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
     
     //UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[[self view] frame]];

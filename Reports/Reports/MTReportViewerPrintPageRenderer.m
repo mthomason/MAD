@@ -54,6 +54,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @property (nonatomic, retain) NSArray *sortedQueryGroups;
 
 @property (nonatomic, retain) NSInputStream *inputStream;
+@property (nonatomic, assign) BOOL showWaterMark;
 
 @end
 
@@ -95,14 +96,15 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     self = [super init];
     if (self) {
         MTLog(@"Init");
-//        RptqDocument *activeDocument = [RptqDocument activeDocument];
-//        [self setDocument:activeDocument];
         [self initCommon];
     }
     return self;
 }
 
 - (void)initCommon {
+    
+    BOOL showWatermark = [MTStoreKitController licensedUser] == NO;
+    [self setShowWaterMark: showWatermark];
 
     NSMutableArray *a1 = [[NSMutableArray alloc] init];
     [self setTemporaryLayoutByPage:a1];
@@ -175,39 +177,127 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     UIGraphicsEndPDFContext();
 }
 
+- (int)getRandomNumberBetween:(int)from to:(int)to {
+    return (int)from + arc4random() % (to-from+1);
+}
+
 - (UIImage *)thumbnail {
-    CGRect letterRect = [MTPaper rectLetter];
     
+    CGRect letterRect = [MTPaper rectLetter];
+
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat imageSizeTrue = [UIDevice isPad] == YES ? 256.0000f * scale :
+                                                        64.0000f * scale;
+    
+    CGFloat imageSizeWidth = (imageSizeTrue * 8.5000f) / 11.0000f;
+    CGSize trueSize = CGSizeMake(imageSizeWidth, imageSizeTrue);
+    CGRect zoomRect = CGRectMake(0.0000f, 0.0000f, trueSize.width, trueSize.height);
+    CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
     // FIXME: Don't cache data for the whole report when just printing the first page for a
     //          fucking thumbnail.
+    CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
+    CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
+    CGFloat topRightPointX = pathRect.origin.x + pathRect.size.width;
+    CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
+    CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
     [self cachePrintPageRenderDataForSize:letterRect.size onlyFirstPage:YES];
-    //CGFloat scale = 128.0000 / (letterRect.size.height > letterRect.size.width > 0.0f ? letterRect.size.height : (letterRect.size.width == 0.0000f? letterRect.size.width : 1.0000f));
-    UIGraphicsBeginImageContextWithOptions(letterRect.size, YES, 0.0000f);
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, letterRect);
+    UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextAddPath(context, path);
-    CGPathRelease(path);
-    
-    [[UIColor whiteColor] setFill];
-    CGContextDrawPath(context, kCGPathFill);
-    [self drawPageAtIndex:0 inRect:letterRect];
 
+    CGFloat cornerSize = 10.0000f * scale;
+    CGMutablePathRef cornerPath = CGPathCreateMutable();
+    CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
+    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
+    CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+    CGContextAddPath(context, cornerPath);
+    CGContextClosePath (context);
+    CGContextClip(context);
+    CGPathRelease(cornerPath);
+
+    CGMutablePathRef zigPath = CGPathCreateMutable();
+    CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
+    //zig
+    CGFloat zigDivisor = 4.0000f;
+    int topRandNumber = 4;
+
+    NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
+    for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
+        int zigNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
+        CGFloat zigDistance = pow(zigNumber, 1.0001) + zigNumber;
+        CGFloat zigX = topRightPoint.x - zigDistance;
+        CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
+        CGPoint zigPoint = CGPointMake(zigX, zigY);
+        NSLog(@"%@", NSStringFromCGPoint(zigPoint));
+        CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
+    }
+    CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+    CGContextClosePath (context);
+    CGContextAddPath(context, zigPath);
+    CGContextClip(context);
+    CGPathRelease(zigPath);
+    
+
+    CGMutablePathRef zagPath = CGPathCreateMutable();
+    CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+    CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
+    CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
+    CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
+    //zag
+    CGFloat zagDivisor = 4.0000f;
+    NSInteger numberOfZags = pathRect.size.height / zagDivisor;
+    for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
+        
+        int zagNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
+
+        CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
+        CGFloat zagDistance = pow(zagNumber, 1.01) + zagNumber;
+        CGFloat zagY = bottomRightPoint.y - zagDistance;
+        CGPoint zagPoint = CGPointMake(zagX, zagY);
+        NSLog(@"%@", NSStringFromCGPoint(zagPoint));
+        CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
+    }
+    CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+    CGContextAddPath(context, zagPath);
+    CGContextClip(context);
+    CGPathRelease(zagPath);
+    
+    CGContextSaveGState(context);
+    
+    [self drawPageAtIndex:0 inRect:letterRect withTransparentBackground:YES];
+    CGContextRestoreGState(context);
+    
+    
+    
+    
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGFloat imageSize = [UIDevice isPad] == YES ? 256.0000f * [[UIScreen mainScreen] scale] : 128.0000f * [[UIScreen mainScreen] scale];
-    
-    UIImage *result;
-    result = [[image thumbnailImage:imageSize interpolationQuality:kCGInterpolationLow] retain];
-    UIGraphicsEndImageContext();
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomRect);
 
-    return [result autorelease];
+    UIImage *croppedImage = [[UIImage imageWithCGImage:imageRef] retain];
+    CGImageRelease(imageRef);
+    return croppedImage;
+    
+    UIGraphicsEndImageContext();
+    
+    
+
+    return [croppedImage autorelease];
 }
 
 #pragma mark - UIPrintPageRenderer Overrides
 
-- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
 
+- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
+    [self drawPageAtIndex:index inRect:pageRect withTransparentBackground:NO];
+}
+
+- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
     
     [[UIColor whiteColor] setFill];
 
@@ -619,66 +709,63 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [nextGroupLevelKeys release];
         [groupLevelKeys release];
     }
-    
-    [self drawWatermarkWithContext:ctx inPageRect:pageRect];
+
+    if ([self showWaterMark]) {
+        [self drawWatermarkWithContext:ctx inPageRect:pageRect];
+    }
 
     [printableStrings release];
 }
 
 - (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
-    if ([MTStoreKitController licensedUser] == NO) {
-        
-        
-        UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
-        [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-        [paragraphStyle setAlignment:NSTextAlignmentCenter];
-        
-        UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f];
-        UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f];
-        
-        NSDictionary *results = @{NSFontAttributeName : customFont,
-                                  //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
-                                  NSStrokeWidthAttributeName : @(3.0000f),
-                                  NSStrokeColorAttributeName : strokeColor,
-                                  NSForegroundColorAttributeName : foregroundColor,
-                                  NSParagraphStyleAttributeName: paragraphStyle
-                                  };
-        NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
-        NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:results];
-        
-        NSInteger rowCounter = 0, columnCounter = 0;
-        CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
-        CGSize logoMargin = CGSizeMake(25.0000f, 25.0000f);
-        CGRect logoRect;
-        
-        do {
-            columnCounter = 0;
-            do {
-                
-                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width;
-                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
-                logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
-                
-                CGContextSaveGState(ctx);
-                {
-                    static CGFloat angle315Degrees = 7.0000f * M_PI / 4.0000f;
-                    CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
-                    CGContextRotateCTM(ctx, angle315Degrees);
-                    [getMad drawInRect:CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height)];
-                }
-                CGContextRestoreGState(ctx);
-                columnCounter++;
-            } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
-            rowCounter++;
-        } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
-        
-        [paragraphStyle release];
-        [getMad release];
 
-        
-    }
+    UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    
+    UIColor *strokeColor = [UIColor colorWithRed:170.0000f/256.0000f green:170.0000f/256.0000f blue:170.0000f/256.0000f alpha:0.8000f];
+    UIColor *foregroundColor = [UIColor colorWithRed:85.0000f/256.0000f green:85.0000f/256.0000f blue:85.0000f/256.0000f alpha:0.8000f];
+    NSNumber *strokeWidth = @(3.0000f);
+    NSDictionary *results = @{NSFontAttributeName : customFont,
+                              //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
+                              NSStrokeWidthAttributeName : strokeWidth,
+                              NSStrokeColorAttributeName : strokeColor,
+                              NSForegroundColorAttributeName : foregroundColor,
+                              NSParagraphStyleAttributeName: paragraphStyle
+                              };
+    NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
+    NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:results];
+    
+    NSInteger rowCounter = 0, columnCounter = 0;
+    CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
+    CGSize logoMargin = CGSizeMake(25.0000f, 25.0000f);
+    CGRect logoRect;
+    
+    do {
+        columnCounter = 0;
+        do {
+            
+            CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width;
+            CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
+            logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
+            
+            CGContextSaveGState(ctx);
+            {
+                static CGFloat angle315Degrees = 7.0000f * M_PI / 4.0000f;
+                CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
+                CGContextRotateCTM(ctx, angle315Degrees);
+                [getMad drawInRect:CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height)];
+            }
+            CGContextRestoreGState(ctx);
+            columnCounter++;
+        } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
+        rowCounter++;
+    } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
+    
+    [paragraphStyle release];
+    [getMad release];
 }
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {

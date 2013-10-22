@@ -41,6 +41,17 @@
 
 @implementation MTReportViewerController
 
+- (IBAction)done:(id)sender {
+    NSError *error = nil;
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    [[reportDocument managedObjectContext] save:&error];
+    if (error != nil) {
+        [[reportDocument managedObjectContext] save:&error];
+    }
+    [[self viewControllerDelegate] viewControllerDidFinish: self];
+
+}
+
 - (void)dealloc {
     [_printPageRendererReport release];
     [_sliderPagination release];
@@ -338,16 +349,6 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self reload:self];
-}
-
-- (IBAction)done:(id)sender {
-    NSError *error = nil;
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    [[reportDocument managedObjectContext] save:&error];
-    if (error != nil) {
-        [[reportDocument managedObjectContext] save:&error];
-    }
-    [[self viewControllerDelegate] viewControllerDidFinish: self];
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {

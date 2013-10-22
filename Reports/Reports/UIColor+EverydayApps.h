@@ -24,5 +24,6 @@
 + (id)tintColor;
 + (id)tintColor2;
 + (id)tintColor3;
++ (id)tintColor4;
 
 @end

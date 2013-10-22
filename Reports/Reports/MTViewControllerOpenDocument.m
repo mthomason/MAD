@@ -7,6 +7,7 @@
 //
 
 #import "MTViewControllerOpenDocument.h"
+#import "MADWatermarkView.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
@@ -86,7 +87,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         
         NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
-        NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
+        //NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
         
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
         
@@ -98,15 +99,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [pngImage writeToURL:thumbnailUrl atomically:YES];
             [printPageRender release];
             
-            UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
-            NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
-            [pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
-            [thumbnailWithBorder release];
-            [thumbnail release];
+            //UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
+            //NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
+            //[pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
+            //[thumbnailWithBorder release];
+            //[thumbnail release];
         }
         
         [document release];
-        [thumbnailWithBorderUrl release];
+        //[thumbnailWithBorderUrl release];
         [thumbnailUrl release];
         
         [activeDocument closeWithCompletionHandler:^(BOOL success) {
@@ -245,6 +246,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[[self navigationItem] titleView] sizeToFit];
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [[[self collectionView] backgroundView] setNeedsDisplay];
+    } completion:NULL];
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     CGPoint touchPoint = [touch locationInView:[self collectionView]];
     NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:touchPoint];
@@ -305,11 +313,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)setLetterpressBackground {
     UICollectionView *v = (UICollectionView *)[self collectionView];
+
+    CGRect bounds = [v bounds];
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame:bounds];
+    [v setBackgroundView:watermarkView];
+    [watermarkView release];
+    /*
     UILabel *bg = [[UILabel alloc] initWithFrame:[v bounds]];
     [bg setNumberOfLines:1];
     [bg setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
     [bg setLineBreakMode:NSLineBreakByClipping];
-    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
@@ -328,8 +341,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [bg setAttributedText:attributedStringMadDesigner];
     [v setBackgroundView:bg];
     [paragraphStyle release];
-    
-    [attributedStringMadDesigner release];
+     [attributedStringMadDesigner release];
+    */
 }
 
 - (void)viewDidLoad {
@@ -342,6 +355,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [toolbar setTintColor:tintColor];
     
     [self setLetterpressBackground];
+    
+    UIColor *bgColor = [UIColor lightGrayColor];
+    [[self collectionView] setBackgroundColor:bgColor];
     
     [self setCellsHidden:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];

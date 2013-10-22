@@ -200,7 +200,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     if ([UIDevice isPad] == NO) {
         
         UIColor *barTintColor = [UIColor tintColor];
@@ -805,9 +805,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
-                    [managedObjectContext deleteObject:table];
-                    NSError *error = nil;
-                    [managedObjectContext save:&error];
                     deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
                     numberOfTables--;
                     

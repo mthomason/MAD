@@ -30,6 +30,7 @@
 + (id)tintColor {vendColor(13.0000f, 158.0000f, 215.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 + (id)tintColor2 {vendColor(222.0000f, 36.0000f, 72.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 + (id)tintColor3 {vendColor(164.0000f, 157.0000f, 26.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
++ (id)tintColor4 {vendColor(138.0000f, 131.0000f, 1.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 
 //vendColor(6.0000f, 156.0000f, 217.0000f);}
 

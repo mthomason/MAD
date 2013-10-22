@@ -102,6 +102,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, assign) CGFloat currentNewPointBY;
 @property (nonatomic, assign) CGSize currentScaleSize;
 
+@property (nonatomic, assign) BOOL toolbarBottomZero;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -289,6 +291,16 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 }
 
+- (CGFloat)toolbarBottomHeight {
+    CGFloat toolbarHeight;
+    if ([self toolbarBottomZero]) {
+        toolbarHeight = 0.0000f;
+    } else {
+        toolbarHeight = self.navigationController.toolbar.frame.size.height;
+    }
+    return toolbarHeight;
+}
+
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     __block MTReportDesignerViewController *reportDesigner = self;
@@ -296,14 +308,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         [[reportDesigner rulerView] setNeedsDisplay];
     } completion:NULL];
     
-    CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
-    CGFloat toolBarHeight;
-    if (navigationToolbarFrame.size.height < 40.0000f) {
-        toolBarHeight = 44.0000f;
-    } else {
-        toolBarHeight = 32.0000f;
-    }
-    
+    CGFloat toolBarHeight = [self toolbarBottomHeight];
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
         [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolBarHeight];
     } completion:NULL];
@@ -342,6 +347,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setToolbarBottomZero:YES];
 
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -358,13 +365,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
         MTReportDesignerBorderPadding = 0.0000f;
         MTReportDesignerCornerRadius = 0.0000f;
     }
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    CGFloat toolBarHeight;
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        toolBarHeight = 32.0000f;
-    } else {
-        toolBarHeight = 44.0000f;
-    }
+    CGFloat toolBarHeight = [self toolbarBottomHeight];
     [[self toolbarBottomHeightConstraint] setConstant:toolBarHeight];
     
     if ([[[self designerContentView] constraints] count] > 0) {
@@ -1587,7 +1588,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 - (IBAction)showToolbox:(MTToolboxType)tooboxType {
     
     UIViewController *viewController;
-
     switch (tooboxType) {
 
         case MTToolboxTypeElement:
@@ -1704,12 +1704,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             
             [[self view] layoutIfNeeded];
             [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
-            CGFloat toolboxHeight = self.navigationController.toolbar.frame.size.height;
+
+            CGFloat toolBarHeight = [self toolbarBottomHeight];
             __block MTReportDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[reportDesigner view] addConstraints:[self layoutConstraintsToolboxHidden]];
-                [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolboxHeight];
+                [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolBarHeight];
                 [[reportDesigner view] layoutIfNeeded];
                 
             } completion:^(BOOL finished) {

@@ -105,7 +105,9 @@ NSString * MTDocumentParentContextName          = @"moc";
         NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
         [self setThumbnailUrl:thumbnailUrl];
 
-        NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlSaveMad];
+        // FIXME: Add border using paths maybe.
+        NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
+        //[MAReportDocument thumbnailWithBorderUrlForMadUrl:urlSaveMad];
         [self setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
         
     }
@@ -198,7 +200,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
         NSMutableDictionary *blockDictionary = [[self extraInformation] retain];
         NSURL *thumbnailUrl = [[self thumbnailUrl] retain];
-        NSURL *thumbnailUrlWithBorder = [[self thumbnailUrlWithBorder] retain];
+        //NSURL *thumbnailUrlWithBorder = [[self thumbnailUrlWithBorder] retain];
 
         
         RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
@@ -214,11 +216,12 @@ NSString * MTDocumentParentContextName          = @"moc";
                         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
                         [pngImage writeToURL:thumbnailUrl atomically:YES];
                         
-                        UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
-                        NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
-                        [pngImageWithBorder writeToURL:thumbnailUrlWithBorder atomically:YES];
-
-                        [thumbnailWithBorder release];
+                        // FIXME: Add border using path maybe.
+                        
+                        //UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
+                        //NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
+                        //[pngImageWithBorder writeToURL:thumbnailUrlWithBorder atomically:YES];
+                        //[thumbnailWithBorder release];
                     
                         [thumbnail release];
                         [printPageRender release];
@@ -230,7 +233,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         [document release];
         [blockDictionary release];
         [thumbnailUrl release];
-        [thumbnailUrlWithBorder release];
+        //[thumbnailUrlWithBorder release];
         NSNumber *dataVersion = @(1.0);
 
         [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];

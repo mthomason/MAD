@@ -465,6 +465,8 @@
 		4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
 		4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
 		4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
+		4C5029EA1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
+		4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
 		4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */; };
 		4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m */; };
 		4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
@@ -1403,6 +1405,8 @@
 		4CA92ADD17DAFF1700D654C7 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
+		4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
+		4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */; };
@@ -2268,6 +2272,8 @@
 		4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
 		4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
 		4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarbonBlock.ttf; sourceTree = "<group>"; };
+		4C5029E81816440100C88CD4 /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADWatermarkView.h; sourceTree = "<group>"; };
+		4C5029E91816440100C88CD4 /* MADWatermarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADWatermarkView.m; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
@@ -2671,6 +2677,8 @@
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
 		4CAB178F150FE38400BA0A9B /* MTRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTRulerView.h; sourceTree = "<group>"; };
 		4CAB1790150FE38400BA0A9B /* MTRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTRulerView.m; sourceTree = "<group>"; };
+		4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationControllerHideBottomBarUnlicensed.h; sourceTree = "<group>"; };
+		4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
 		4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
 		4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
 		4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTToolboxViewControllerProtocol.h; path = Reports/MTToolboxViewControllerProtocol.h; sourceTree = "<group>"; };
@@ -3637,6 +3645,8 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C5029E81816440100C88CD4 /* MADWatermarkView.h */,
+				4C5029E91816440100C88CD4 /* MADWatermarkView.m */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 				4C384E3714B29789007B4F48 /* AppDelegate.h */,
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
@@ -5037,6 +5047,8 @@
 				4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */,
 				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
 				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
+				4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
+				4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C12292E16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.h */,
 				4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */,
 				4CD9CB0D14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.h */,
@@ -6383,6 +6395,7 @@
 				4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */,
 				4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */,
 				4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */,
+				4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */,
 				4C0E775C163B5AEC003B951E /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */,
@@ -6551,6 +6564,7 @@
 				4CA238FC17AEF8280066FEAF /* RptqDatabaseSchemaTable.m in Sources */,
 				4CA2390017AEF8280066FEAF /* RptqDocumentObjectImage.m in Sources */,
 				4CA2390417AEF8280066FEAF /* RptqDocument.m in Sources */,
+				4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */,
 				4CA2390817AEF8280066FEAF /* RptqDocumentObject.m in Sources */,
 				4CA2390C17AEF8280066FEAF /* RptqDocumentObjectLabelLink.m in Sources */,
 				4CA2391017AEF8280066FEAF /* RptqDocumentObjectLabel.m in Sources */,
@@ -6948,6 +6962,7 @@
 				4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */,
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
+				4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
 				4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */,
 				4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
@@ -7116,6 +7131,7 @@
 				4CA238FB17AEF8280066FEAF /* RptqDatabaseSchemaTable.m in Sources */,
 				4CA238FF17AEF8280066FEAF /* RptqDocumentObjectImage.m in Sources */,
 				4CA2390317AEF8280066FEAF /* RptqDocument.m in Sources */,
+				4C5029EA1816440100C88CD4 /* MADWatermarkView.m in Sources */,
 				4CA2390717AEF8280066FEAF /* RptqDocumentObject.m in Sources */,
 				4CA2390B17AEF8280066FEAF /* RptqDocumentObjectLabelLink.m in Sources */,
 				4CA2390F17AEF8280066FEAF /* RptqDocumentObjectLabel.m in Sources */,

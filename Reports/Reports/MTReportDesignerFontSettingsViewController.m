@@ -191,6 +191,16 @@
     }
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if ([UIDevice isPad] == NO) {
+        //CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
+        UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
+        [[self tableView] setContentInset:tableInset];
+        [[self tableView] setScrollIndicatorInsets:tableInset];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateDisplay];
