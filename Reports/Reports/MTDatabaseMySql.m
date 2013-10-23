@@ -400,7 +400,11 @@
             [serv setSchema:    [[self databaseConnection] database]];
             [serv setPort:      [[self databaseConnection] port]];
             
-            NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+            NSString *server = [[self databaseConnection] server];
+            NSString *database = [[self databaseConnection] database];
+            NSInteger port = [[self databaseConnection] port];
+
+            NSString *key = [MTKeyChain keyForServer:server port:port andDatabase:database];
             [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
                 if (success) {
                     [serv setUser:      username];

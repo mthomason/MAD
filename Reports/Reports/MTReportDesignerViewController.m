@@ -723,7 +723,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
     [[self designerScrollView] setDelegate:self];
     [[self designerScrollView] setUserInteractionEnabled:YES];
-    [[self designerScrollView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    [[self designerScrollView] setBackgroundColor:[UIColor lightGrayColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
     [[self designerScrollView] flashScrollIndicators];
     
@@ -771,7 +771,8 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    [[self designerScrollView] setZoomScale:1.4000f animated:animated];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -808,11 +809,13 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
                         object: activeDocument];
 
     [activeDocument release];
+    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     
     [[self designerScrollView] setZoomScale:1.0000f animated:animated];

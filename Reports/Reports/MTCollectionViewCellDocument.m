@@ -18,26 +18,13 @@
 }
 
 - (void)awakeFromNib {
-    
-    //[[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    //[[[self imagePreview] layer] setShadowOffset:CGSizeMake(0.0000f, -1.0000f)];
-    
-    //[[[self imagePreview] layer] setBorderColor:[[UIColor darkGrayColor] CGColor]];
-    
-    //[[[self imagePreview] layer] setBorderWidth:0.50000f];
-    
-    
+    CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
     
     [[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    [[[self imagePreview] layer] setShadowRadius:5.0000f];
+    [[[self imagePreview] layer] setShadowRadius:2.0000f];
     [[[self imagePreview] layer] setShadowOpacity:1.0000f];
-    [[[self imagePreview] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
-/*
-    [[[self labelTitle] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    [[[self labelTitle] layer] setShadowRadius:0.5000f];
-    [[[self labelTitle] layer] setShadowOpacity:0.5000f];
-    [[[self labelTitle] layer] setShadowOffset:CGSizeMake(1.0000f, 1.0000f)];
-  */
+    CGSize offsetSize = CGSizeMake(offset, offset);
+    [[[self imagePreview] layer] setShadowOffset:offsetSize];
 
     [[self labelTitle] setTextColor:[UIColor tintColor]];
     [[self labelTitle] setClipsToBounds:NO];
