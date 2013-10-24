@@ -80,7 +80,37 @@
     return directoryGood;
 }
 
-+ (NSString *)applicationSupportDirectory {
+//The application support directory must be created as a sub directory.
++ (NSURL *)applicationSupportDirectory {
+
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    NSArray *possibleUrls = [defaultManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+    NSURL *appSupportDirectory = nil;
+    NSURL *appSupportDirectoryForApp = nil;
+    if ([possibleUrls count] >= 1) {
+        appSupportDirectory = [possibleUrls objectAtIndex:0];
+        
+        BOOL isDirectory;
+        BOOL fileExist = [defaultManager fileExistsAtPath:[appSupportDirectory path] isDirectory:&isDirectory];
+        if (fileExist == NO) {
+            NSError *error = nil;
+            [defaultManager createDirectoryAtURL:appSupportDirectory withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+        
+        NSString *appBundleID = [mainBundle bundleIdentifier];
+        appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:appBundleID];
+        
+        fileExist = [defaultManager fileExistsAtPath:[appSupportDirectoryForApp path] isDirectory:&isDirectory];
+        if (fileExist == NO) {
+            NSError *error = nil;
+            [defaultManager createDirectoryAtURL:appSupportDirectoryForApp withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+    }
+    return [[appSupportDirectoryForApp retain] autorelease];
+}
+
++ (NSString *)applicationSupportDirectoryPath {
 	return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
 }
 

@@ -9,6 +9,14 @@
 #pragma mark - Layout
 
 // MARK: Margin
+#ifdef FALSE
+#undef FALSE
+#endif
+#ifdef TRUE
+#undef TRUE
+#endif
+#define FALSE 0
+#define TRUE  1
 
 struct MTMargin {
     CGFloat left;
@@ -163,6 +171,7 @@ extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 
 extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
+extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
 extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
 extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 extern NSString * const MTSegueLicensing;

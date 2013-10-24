@@ -771,7 +771,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self designerScrollView] setZoomScale:1.4000f animated:animated];
+    //[[self designerScrollView] setZoomScale:1.4000f animated:animated];
 
 }
 

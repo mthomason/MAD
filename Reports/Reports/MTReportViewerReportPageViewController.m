@@ -231,7 +231,6 @@
     [[self view] addSubview:numberView];
     [self setPageNumberView:numberView];
     
-    MTReportViewerReportPageViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
         
         [[self pageNumberView] setAlpha:1.0000f];

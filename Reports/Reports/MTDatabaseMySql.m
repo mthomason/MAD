@@ -47,6 +47,13 @@
     return [[[NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName] retain] autorelease];
 }
 
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
+    return [[[NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName] retain] autorelease];
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
@@ -120,6 +127,10 @@
     }];
 }
 
+- (NSString *)tableAliasConnector {
+    return @" AS ";
+}
+
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
@@ -182,9 +193,14 @@
                                     
                                     for (MysqlFetchField *field in [fetch2 fields]) {
                                         
-                                        MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[field name]] retain];
+                                        MTDataType dataType = [MTDatabaseMySql dataTypeForNativeType:[field fieldType]];
+                                        NSString *fieldNameKey = [field name];
+                                        NSArray *fieldNameParts = [fieldNameKey componentsSeparatedByString:@"."];
+                                        NSString *fieldNameKeyLastPart = [fieldNameParts lastObject];
+                                        NSString *fieldName = [fieldNameKeyLastPart stringByReplacingOccurrencesOfString:@"`" withString:@""];
+                                        MTDatabaseField *databaseField = [[resultsDictionary objectForKey:fieldName] retain];
                                         [databaseField setFieldTypeNative:[field fieldType]];
-                                        [databaseField setFieldType:[MTDatabaseMySql dataTypeForNativeType:[field fieldType]]];
+                                        [databaseField setFieldType:dataType];
                                         [databaseField setWidth:[field width]];
                                         [databaseField setDecimals:[field decimals]];
                                         [databaseField setPrimaryKey:[field primaryKey]];
@@ -416,10 +432,12 @@
                         MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
                         BOOL successConnection = conn != nil;
                         if (successConnection) {
+                            NSString *safeField = [self safeQuerySchemaField:schemaField];
+                            NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
                             NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
-                                             @"%@ %@ "
-                                             @"LIMIT 100;",
-                                             schemaField.name, MTSqlFrom, schemaField.inTable.name];
+                                                                        @"%@ %@ "
+                                                                        @"LIMIT 100;",
+                                                                        safeField, MTSqlFrom, safeTable];
                             fetch = [[[MysqlFetch fetchWithCommand:sql onConnection:conn] retain] autorelease];
                             results = [[fetch results] retain];
                         } else {

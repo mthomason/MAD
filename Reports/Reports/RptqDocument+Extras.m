@@ -7,6 +7,7 @@
 //
 
 #import "RptqDocument+Extras.h"
+#import "MTDatabaseSqlite3.h"
 
 @implementation RptqDocument (Extras)
 
@@ -197,6 +198,16 @@
             [userCredentals setTds_port:      @([connectionSettings port])];
         }
 
+    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+
+        MTDatabaseConnection *connectionSettings = [database connectionSettings];
+        if (connectionSettings != nil) {
+            // FIXME: Storing Sqlite3 database url in mysql holder.
+            NSString *path = [[connectionSettings databaseUrl] path];
+            NSString *filename = [path lastPathComponent];
+            [userCredentals setMysql_database:      filename];
+        }
+        
     }
     
     [rptqDatabase setOwnedByUser: userCredentals];

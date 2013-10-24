@@ -37,6 +37,10 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return self;
 }
 
+- (NSString *)tableAliasConnector {
+    return @" AS ";
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;
@@ -329,11 +333,13 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     
     dispatch_async(queuePriorityBackground, ^{
         
-        //NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT %@ "
+        NSString *safeField = [self safeQuerySchemaField:schemaField];
+        NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+
         NSString *sql = [NSString stringWithFormat:@"%@ %@ "
                          @"%@"
                          @" %@ ORDER BY %@;",
-                         MTSqlSelectTop100, schemaField.name, MTSqlFrom, schemaField.inTable.name, schemaField.name];
+                         MTSqlSelectTop100, safeField, MTSqlFrom, safeTable, safeField];
         NSArray *resultStrings = [[self runQuery:sql] retain];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -356,6 +362,13 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
     NSString *queryTable = [[queryField inQueryTable] queryAlias];
     NSString *fieldName = [[queryField databaseSchemaField] name];
+    return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
+}
+
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
     return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
 }
 

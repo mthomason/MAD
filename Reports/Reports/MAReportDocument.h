@@ -23,6 +23,7 @@
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
 #import "MADocument.h"
+#import "MTDatabaseConnection.h"
 
 @interface MAReportDocument : MADocument
 
@@ -40,6 +41,8 @@
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 
 - (RptqDocument *)activeDocument;
+
++ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion;
 
 @end
 

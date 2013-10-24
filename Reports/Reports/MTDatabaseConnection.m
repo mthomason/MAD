@@ -12,6 +12,8 @@
 @implementation MTDatabaseConnection
 
 - (void)dealloc {
+    [_databaseTypeIdentifier release];
+    [_databaseUrl release];
     [_username release];
     [_password release];
     [_server release];

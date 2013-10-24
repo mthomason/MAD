@@ -31,6 +31,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 #pragma mark Storyboard Segues
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier          = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier        = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
 NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier     = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier      = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 NSString * const MTSegueLicensing                                   = @"MTSegueLicensing";

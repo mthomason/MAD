@@ -7,6 +7,7 @@
 //
 
 #import "MAReportDocument.h"
+#import "MTDatabaseSqlite3.h"
 
 @interface MAReportDocument ()
 
@@ -211,23 +212,29 @@
         [fileManager release];
         
         //Load MAD File
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        
-        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-        NSError* fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-        if (fileWrittingError) {
-            fileWrittingError = nil;
+        BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
+        if (fileexist) {
+            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+            NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+            NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+            NSError* fileWrittingError = nil;
             [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+            if (fileWrittingError) {
+                fileWrittingError = nil;
+                [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+            }
+            if (fileWrittingError == nil) {
+                urlToOpen = [destinationUrl retain];
+            }
+            [fileWrapper release];
+            [data release];
+        } else {
+            urlToOpen = [url retain];
         }
-        if (fileWrittingError == nil) {
-            urlToOpen = [destinationUrl retain];
-        }
+        
+        
         [destinationName release];
         [destinationDirectoryUrl release];
-        [data release];
-        [fileWrapper release];
         [destinationUrl release];
     } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
         urlToOpen = [url retain];
@@ -264,6 +271,119 @@
         [inferMappingModelAutomaticallyOption release];
     }
     [urlToOpen release];
+    
+}
+
++ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion {
+    
+    [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
+        
+        if (success) {
+            
+            __block MAReportDocument *documentReport = managedDocument;
+            [databaseConnection retain];
+            id database = nil;
+            NSString *databaseId = [databaseConnection databaseTypeIdentifier];
+            if ([databaseId isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
+                
+                database = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
+                
+            } else if ([databaseId isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
+                
+                database = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
+                
+            } else if ([databaseId isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+                
+                database = [[MTDatabaseSqlite3 alloc] initWithConnectionSettings:databaseConnection];
+            }
+            
+            if (database) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [RptqDocument addDatabase:database toDocument:[documentReport activeDocument] completion:^(BOOL successAddingDatasource, NSError *error) {
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (successAddingDatasource) {
+                                [documentReport closeWithCompletionHandler:^(BOOL success) {
+                                    if (success) {
+                                        [documentReport setSuspended:YES];
+                                        [[documentReport managedObjectContext] lock];
+                                        [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
+                                            
+                                            [documentReport deleteFromDiskCompletion:^(BOOL success) {
+                                                //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                                    completion(YES);
+                                                    
+                                                });
+                                                
+                                            }];
+                                            
+                                        }];
+                                    }
+                                }];
+                                
+                            } else {
+                                [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
+                                    if (successClosingReport) {
+                                        
+                                        [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
+                                        
+                                        if (error) {
+                                            
+                                            [error presentErrorToUserWithCompletion:^(BOOL success) {
+                                                completion(NO);
+                                            }];
+                                            
+                                        } else {
+                                            
+                                            NSString *connectionProblem = NSLocalizedString(@"Connection Problem", @"Connection Problem");
+                                            NSString *connectionMessage = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
+                                            NSString *connectionCancel = NSLocalizedString(@"Cancel", @"Cancel");
+                                            
+                                            MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
+                                                
+                                                completion(NO);
+                                                
+                                            } onCancel:^{
+                                                
+                                                completion(NO);
+                                                
+                                            }];
+                                            [alertView show];
+                                            [alertView autorelease];
+                                            
+                                        }
+                                    }
+                                }];
+                                
+                            }
+                        });
+                    }];
+                });
+            }
+            
+            [databaseConnection release];
+            [database release];
+            
+        } else {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
+                                                                    message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
+                                                          cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
+                                                           otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
+                                                               
+                                                           } onCancel:^{
+                                                               
+                                                           }];
+                [alertView show];
+                [alertView autorelease];
+            });
+        }
+    }];
     
 }
 

@@ -45,11 +45,6 @@
 		4C0081ED17849A4A00874849 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* MTVerificationController.m */; };
 		4C0081EE17849A4A00874849 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* MTVerificationController.m */; };
 		4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
-		4C0AFC3A16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
-		4C0AFC3B16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
-		4C0AFC3C16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
-		4C0AFC3D16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
-		4C0AFC3E16B1C2750007964D /* MTSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFC3916B1C2750007964D /* MTSqlite3.m */; };
 		4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
 		4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
 		4C0AFCE716B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
@@ -119,7 +114,6 @@
 		4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */; };
 		4C0E7799163B5AEC003B951E /* MTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAB1790150FE38400BA0A9B /* MTRulerView.m */; };
 		4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
-		4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4C0E77A2163B5AEC003B951E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
@@ -467,6 +461,16 @@
 		4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
 		4C5029EA1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
 		4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
+		4C5029F21817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */; };
+		4C5029F31817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */; };
+		4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
+		4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
+		4C502A3D1818960200C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
+		4C502A3E1818960300C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
+		4C502A3F1818960400C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
+		4C502A401818965D00C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
+		4C502A4418189CBD00C88CD4 /* liblibSqlite3.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C502A311818931E00C88CD4 /* liblibSqlite3.8.a */; };
+		4C502A461818A4F600C88CD4 /* liblibSqlite3.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C502A311818931E00C88CD4 /* liblibSqlite3.8.a */; };
 		4C507B1114D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */; };
 		4C507B1214D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0C14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.m */; };
 		4C507B1314D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
@@ -924,7 +928,6 @@
 		4C860B32167EDE7000AC1904 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4C860B34167EDE7000AC1904 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
 		4C860B36167EDE7000AC1904 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
-		4C860B44167EDE7000AC1904 /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */; };
 		4C860B45167EDE7000AC1904 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C860B46167EDE7000AC1904 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C860B47167EDE7000AC1904 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
@@ -938,7 +941,6 @@
 		4C860B4F167EDE7000AC1904 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C860B50167EDE7000AC1904 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4C860B51167EDE7000AC1904 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
-		4C860B52167EDE7000AC1904 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C860B53167EDE7000AC1904 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4C860B54167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
 		4C860B55167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
@@ -1155,7 +1157,6 @@
 		4C94AE3F17C35D9500037FCB /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AE3717C358C000037FCB /* Default-Portrait@2x~ipad.png */; };
 		4C94AE4017C35D9500037FCB /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AE3517C358B200037FCB /* Default-Portrait~ipad.png */; };
 		4C94AE4217C35D9500037FCB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AE3117C3581E00037FCB /* Default.png */; };
-		4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -1312,7 +1313,6 @@
 		4CA16446167EB91900540A14 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4CA16447167EB91A00540A14 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4CA16448167EB98F00540A14 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
-		4CA16449167EB99C00540A14 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4CA1644B167EB9BC00540A14 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4CA16452167EB9EA00540A14 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4CA16453167EB9EA00540A14 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
@@ -1331,7 +1331,6 @@
 		4CA16460167EB9EB00540A14 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4CA16461167EB9EB00540A14 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4CA16462167EB9F100540A14 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
-		4CA16463167EB9F500540A14 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9514ED15108206004AF941 /* libsqlite3.dylib */; };
 		4CA16464167EBA0300540A14 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4CA16469167EBAD700540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
 		4CA1646A167EBAD800540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
@@ -1972,8 +1971,6 @@
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF61CEE163F81C60065A16C /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
 		4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */; };
-		4CF61CFF163F831D0065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */; };
-		4CF61D01163F83200065A16C /* libMySqlClientObjectiveC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */; };
 		4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670C16D72E0900F716A8 /* MTScrollViewCenter.m */; };
@@ -2023,6 +2020,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4C4C6EFC167635B8004A3B04;
 			remoteInfo = libMTDataStrutures;
+		};
+		4C502A301818931E00C88CD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C502A021818931D00C88CD4;
+			remoteInfo = libSqlite3.8;
+		};
+		4C502A321818931E00C88CD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C502A121818931D00C88CD4;
+			remoteInfo = libSqlite3.8Tests;
 		};
 		4C9962F416401CF800B7BACC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2081,8 +2092,6 @@
 		4C0081E917849A4A00874849 /* MTVerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVerificationController.h; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
-		4C0AFC3816B1C2750007964D /* MTSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSqlite3.h; sourceTree = "<group>"; };
-		4C0AFC3916B1C2750007964D /* MTSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSqlite3.m; sourceTree = "<group>"; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewTableHeader.m; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2274,6 +2283,11 @@
 		4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C5029E81816440100C88CD4 /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADWatermarkView.h; sourceTree = "<group>"; };
 		4C5029E91816440100C88CD4 /* MADWatermarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADWatermarkView.m; sourceTree = "<group>"; };
+		4C5029F01817A64900C88CD4 /* MTDatabaseSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSqlite3.h; sourceTree = "<group>"; };
+		4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSqlite3.m; sourceTree = "<group>"; };
+		4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
+		4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libSqlite3.8.xcodeproj; path = libSqlite3.8/libSqlite3.8.xcodeproj; sourceTree = "<group>"; };
+		4C502A4518189ED200C88CD4 /* libSqlite3_8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libSqlite3_8.h; path = libSqlite3.8/libSqlite3.8/libSqlite3_8.h; sourceTree = "<group>"; };
 		4C507B0914D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkFirstFieldViewController.h; sourceTree = "<group>"; };
 		4C507B0A14D07CA300DE67E3 /* MTQueryBuilderAddLinkFirstFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddLinkFirstFieldViewController.m; sourceTree = "<group>"; };
 		4C507B0B14D07CA300DE67E3 /* MTQueryBuilderAddLinkJoinTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddLinkJoinTypeViewController.h; sourceTree = "<group>"; };
@@ -2612,7 +2626,6 @@
 		4C94AE3717C358C000037FCB /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		4C94AE3917C358E900037FCB /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		4C94AE3B17C358FB00037FCB /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
-		4C9514ED15108206004AF941 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
 		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
@@ -3119,10 +3132,7 @@
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMySqlClientObjectiveC.xcodeproj; path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC.xcodeproj; sourceTree = "<group>"; };
-		4CF61CFA163F83110065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
 		4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
-		4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
-		4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMySqlClientObjectiveC.a; path = "../libMySqlClientObjectiveC/build/Release-iphoneos/libMySqlClientObjectiveC.a"; sourceTree = "<group>"; };
 		4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoLayoutTableViewCell.h; sourceTree = "<group>"; };
 		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTScrollViewCenter.h; sourceTree = "<group>"; };
@@ -3157,6 +3167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C502A4418189CBD00C88CD4 /* liblibSqlite3.8.a in Frameworks */,
 				4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */,
 				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
 				4CE9F3191778DCCA009F11AF /* StoreKit.framework in Frameworks */,
@@ -3164,7 +3175,6 @@
 				4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F2A167643C9004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4CF61CFD163F83180065A16C /* libMySqlClientObjectiveC.a in Frameworks */,
-				4C0E779F163B5AEC003B951E /* libsqlite3.dylib in Frameworks */,
 				4C0E77A0163B5AEC003B951E /* QuartzCore.framework in Frameworks */,
 				4C0E77A1163B5AEC003B951E /* libxml2.dylib in Frameworks */,
 				4C0E77A2163B5AEC003B951E /* Security.framework in Frameworks */,
@@ -3187,10 +3197,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CA1644B167EB9BC00540A14 /* libxml2.dylib in Frameworks */,
-				4CA16449167EB99C00540A14 /* libsqlite3.dylib in Frameworks */,
 				4CA16448167EB98F00540A14 /* libMTDataStrutures.a in Frameworks */,
-				4CF61D01163F83200065A16C /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */,
+				4C502A3E1818960300C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4CF61CEE163F81C60065A16C /* libmysqlclient.a in Frameworks */,
 				4C8EEE001644EB7500FAB2F3 /* libRestKit.a in Frameworks */,
 				4CA16452167EB9EA00540A14 /* QuartzCore.framework in Frameworks */,
@@ -3215,9 +3224,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C860BC1167EE4CF00AC1904 /* libMTDataStrutures.a in Frameworks */,
-				4CF61CFF163F831D0065A16C /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C202131163DD4090058F869 /* SenTestingKit.framework in Frameworks */,
 				4C202132163DD4090058F869 /* UIKit.framework in Frameworks */,
+				4C502A3D1818960200C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C202133163DD4090058F869 /* Foundation.framework in Frameworks */,
 				4C8EEDFF1644EB7500FAB2F3 /* libRestKit.a in Frameworks */,
 				4C8EEFA61644EC5300FAB2F3 /* libSalesforceCommonUtils.a in Frameworks */,
@@ -3229,7 +3238,6 @@
 				4CA16460167EB9EB00540A14 /* CoreData.framework in Frameworks */,
 				4CA16461167EB9EB00540A14 /* CoreGraphics.framework in Frameworks */,
 				4CA16462167EB9F100540A14 /* libxml2.dylib in Frameworks */,
-				4CA16463167EB9F500540A14 /* libsqlite3.dylib in Frameworks */,
 				4CA16464167EBA0300540A14 /* libmysqlclient.a in Frameworks */,
 				4CA1646A167EBAD800540A14 /* libSalesforceSDK.a in Frameworks */,
 				4CA1646C167EBAE100540A14 /* libSalesforceOAuth.a in Frameworks */,
@@ -3242,6 +3250,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C502A461818A4F600C88CD4 /* liblibSqlite3.8.a in Frameworks */,
+				4C502A401818965D00C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
 				4CE9F3181778DCC0009F11AF /* StoreKit.framework in Frameworks */,
@@ -3249,7 +3259,6 @@
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
 				4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */,
 				4C8EEC8C1644E8D100FAB2F3 /* libMySqlClientObjectiveC.a in Frameworks */,
-				4C9514EE15108206004AF941 /* libsqlite3.dylib in Frameworks */,
 				4C1A586C14E247C700184445 /* QuartzCore.framework in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,
 				4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */,
@@ -3272,9 +3281,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C860BC0167EE4C600AC1904 /* libMTDataStrutures.a in Frameworks */,
-				4C860B44167EDE7000AC1904 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C860B45167EDE7000AC1904 /* SenTestingKit.framework in Frameworks */,
 				4C860B46167EDE7000AC1904 /* UIKit.framework in Frameworks */,
+				4C502A3F1818960400C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C860B47167EDE7000AC1904 /* Foundation.framework in Frameworks */,
 				4C860B48167EDE7000AC1904 /* libRestKit.a in Frameworks */,
 				4C860B49167EDE7000AC1904 /* libSalesforceCommonUtils.a in Frameworks */,
@@ -3286,7 +3295,6 @@
 				4C860B4F167EDE7000AC1904 /* CoreData.framework in Frameworks */,
 				4C860B50167EDE7000AC1904 /* CoreGraphics.framework in Frameworks */,
 				4C860B51167EDE7000AC1904 /* libxml2.dylib in Frameworks */,
-				4C860B52167EDE7000AC1904 /* libsqlite3.dylib in Frameworks */,
 				4C860B53167EDE7000AC1904 /* libmysqlclient.a in Frameworks */,
 				4C860B54167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */,
 				4C860B55167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */,
@@ -3456,6 +3464,8 @@
 				4CFF3E80164CD7DE0070E880 /* MTDatabase.m */,
 				4CFF3E83164CD86E0070E880 /* MTDatabaseMySql.h */,
 				4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */,
+				4C5029F01817A64900C88CD4 /* MTDatabaseSqlite3.h */,
+				4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */,
 				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
 				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
 				4CE17E1B164E2BF90002F8EA /* MTDatabaseSalesForce.h */,
@@ -3468,8 +3478,6 @@
 				4C68B71316600245002682CB /* MTDatabaseConnection.m */,
 				4CF339421693E5B400390B3A /* MTFont.h */,
 				4CF339431693E5B400390B3A /* MTFont.m */,
-				4C0AFC3816B1C2750007964D /* MTSqlite3.h */,
-				4C0AFC3916B1C2750007964D /* MTSqlite3.m */,
 				4CE9BC2316EF59CB00B0808C /* MTActiveDocument.h */,
 				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
 				4CF2F2711754F8F200DC34E3 /* MTPaper.h */,
@@ -3497,6 +3505,7 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */,
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
 				4C94AA3717DCB88A000F6FCF /* Images.xcassets */,
 				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
@@ -3702,6 +3711,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C502A4518189ED200C88CD4 /* libSqlite3_8.h */,
 				4C4A68B417E75D3F00FD6A73 /* CoreText.framework */,
 				4C2213AD17D7947800BD36F5 /* Accelerate.framework */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
@@ -3709,7 +3719,6 @@
 				4C4C6F1C1676424C004A3B04 /* MTDataStructures */,
 				4CD98AB7163F7A630096D7BC /* MySqlClient */,
 				4CD98AB6163F7A0B0096D7BC /* MySqlClientLibraryObjectiveC */,
-				4C9514ED15108206004AF941 /* libsqlite3.dylib */,
 				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
 				4C1A586B14E247C700184445 /* QuartzCore.framework */,
 				4CF2F27817564C8000DC34E3 /* MessageUI.framework */,
@@ -3742,6 +3751,7 @@
 			isa = PBXGroup;
 			children = (
 				4CC72EBF17C5094200B3666C /* openssl */,
+				4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */,
 				4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */,
 				4C8EEF891644EC5300FAB2F3 /* SalesforceCommonUtils */,
 				4C8EED071644EB7500FAB2F3 /* RestKit */,
@@ -3847,6 +3857,15 @@
 				4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		4C502A2C1818931D00C88CD4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C502A311818931E00C88CD4 /* liblibSqlite3.8.a */,
+				4C502A331818931E00C88CD4 /* libSqlite3.8Tests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4C5F02D914B9A42200C49BE9 /* Template Files */ = {
@@ -4735,10 +4754,7 @@
 		4CD98AB6163F7A0B0096D7BC /* MySqlClientLibraryObjectiveC */ = {
 			isa = PBXGroup;
 			children = (
-				4CF61D00163F83200065A16C /* libMySqlClientObjectiveC.a */,
-				4CF61CFE163F831D0065A16C /* libMySqlClientObjectiveC.a */,
 				4CF61CFC163F83180065A16C /* libMySqlClientObjectiveC.a */,
-				4CF61CFA163F83110065A16C /* libMySqlClientObjectiveC.a */,
 			);
 			name = MySqlClientLibraryObjectiveC;
 			sourceTree = "<group>";
@@ -5231,6 +5247,10 @@
 					ProjectRef = 4CF61CF9163F828B0065A16C /* libMySqlClientObjectiveC.xcodeproj */;
 				},
 				{
+					ProductGroup = 4C502A2C1818931D00C88CD4 /* Products */;
+					ProjectRef = 4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */;
+				},
+				{
 					ProductGroup = 4CEBFA331760EF8B00FFA4F4 /* Products */;
 					ProjectRef = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
 				},
@@ -5253,6 +5273,20 @@
 			fileType = archive.ar;
 			path = libMTDataStrutures.a;
 			remoteRef = 4C4C6F11167635B9004A3B04 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C502A311818931E00C88CD4 /* liblibSqlite3.8.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibSqlite3.8.a;
+			remoteRef = 4C502A301818931E00C88CD4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C502A331818931E00C88CD4 /* libSqlite3.8Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = libSqlite3.8Tests.xctest;
+			remoteRef = 4C502A321818931E00C88CD4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4C9962F516401CF800B7BACC /* libMySqlClientObjectiveC.a */ = {
@@ -5526,6 +5560,7 @@
 				4CD98D83163F7DE70096D7BC /* wqueue.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C13392B18025838004F61CA /* MTLaunchImageGenericLandscapePad@2x.png in Resources */,
+				4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4C4C6F25167642D9004A3B04 /* MTGraph.h in Resources */,
 				4C4C6F28167642D9004A3B04 /* MTVertex.h in Resources */,
 				4C2279A9167712D600B1150D /* MTObject.h in Resources */,
@@ -6129,6 +6164,7 @@
 				4C81BB94176F644200E7B98C /* File in Resources */,
 				4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
+				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4C47574617B4096600530CAF /* Icon-29-Designer-Lagacy.png in Resources */,
 				4C47574817B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png in Resources */,
 				4C47574A17B4096600530CAF /* Icon-29-Designer-Modern.png in Resources */,
@@ -6480,7 +6516,6 @@
 				4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8F16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4CDBCB6716AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
-				4C0AFC3B16B1C2750007964D /* MTSqlite3.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
@@ -6545,6 +6580,7 @@
 				4C76B6D31776191D004AA7F9 /* RptqQueryGroup.m in Sources */,
 				4C76B6DA1776191D004AA7F9 /* RptqQueryLinks.m in Sources */,
 				4C76B6E11776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
+				4C5029F31817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */,
 				4C76B6E81776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6EF1776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
 				4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
@@ -6680,7 +6716,6 @@
 				4CF339471693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143A16952E3B00114431 /* MTTextView.m in Sources */,
 				4CDBCB6916AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
-				4C0AFC3D16B1C2750007964D /* MTSqlite3.m in Sources */,
 				4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CC182CE16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4C515DDB174131290004A664 /* MTAggregateFunctionsViewController.m in Sources */,
@@ -6840,7 +6875,6 @@
 				4CDBED26168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339461693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143916952E3B00114431 /* MTTextView.m in Sources */,
-				4C0AFC3C16B1C2750007964D /* MTSqlite3.m in Sources */,
 				4C0AFCE716B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CC182CD16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4C515DDC174131340004A664 /* MTAggregateFunctionsViewController.m in Sources */,
@@ -7047,7 +7081,6 @@
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4CDBCB6616AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
-				4C0AFC3A16B1C2750007964D /* MTSqlite3.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C50DF8F16B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
@@ -7112,6 +7145,7 @@
 				4C76B6D21776191D004AA7F9 /* RptqQueryGroup.m in Sources */,
 				4C76B6D91776191D004AA7F9 /* RptqQueryLinks.m in Sources */,
 				4C76B6E01776191D004AA7F9 /* RptqQueryPredicate.m in Sources */,
+				4C5029F21817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */,
 				4C76B6E71776191E004AA7F9 /* RptqQuerySort.m in Sources */,
 				4C76B6EE1776191E004AA7F9 /* RptqUserCredentals.m in Sources */,
 				4CE9F31C177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
@@ -7230,7 +7264,6 @@
 				4CF339481693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143B16952E3B00114431 /* MTTextView.m in Sources */,
 				4CDBCB6A16AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
-				4C0AFC3E16B1C2750007964D /* MTSqlite3.m in Sources */,
 				4C0AFCE916B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CC182CF16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4C515DD6174131140004A664 /* MTAggregateFunctionsViewController.m in Sources */,
@@ -7562,17 +7595,18 @@
 				INFOPLIST_FILE = "MySqlClientTest/MySqlClientTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7598,17 +7632,18 @@
 				INFOPLIST_FILE = "MySqlClientTest/MySqlClientTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -7633,17 +7668,18 @@
 				INFOPLIST_FILE = "ReportsGeneralTest/ReportsGeneralTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7669,17 +7705,18 @@
 				INFOPLIST_FILE = "ReportsGeneralTest/ReportsGeneralTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -7776,18 +7813,9 @@
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../StaticLibraries/openssl/lib\"",
+					/Users/mthomason/Desktop/Reports/StaticLibraries/,
+					/Users/mthomason/Desktop/Reports/StaticLibraries/RestKit/,
+					/Users/mthomason/Desktop/Reports/StaticLibraries/openssl/lib/,
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7820,17 +7848,18 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Release/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Release\"",
-					"\"$(SRCROOT)/../StaticLibraries/openssl/lib\"",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Release/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Release\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/openssl/lib\\\"",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7862,17 +7891,18 @@
 				INFOPLIST_FILE = "MTDataStructuresTest/MTDataStructuresTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "MTDataStructures Test";
@@ -7898,17 +7928,18 @@
 				INFOPLIST_FILE = "MTDataStructuresTest/MTDataStructuresTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\"",
-					"\"$(SRCROOT)/../libMTDataStrutures/",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/../..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceCommonUtils/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceOAuth/Debug/Libraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/SalesforceSDK/Debug\\\"",
+					"\\\"$(SRCROOT)/../libMTDataStrutures/",
+					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				PRODUCT_NAME = "MTDataStructures Test";
 				SDKROOT = iphoneos;

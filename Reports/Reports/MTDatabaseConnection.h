@@ -14,11 +14,13 @@
 
 @interface MTDatabaseConnection : NSObject
 
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
-@property (nonatomic, retain) NSString *server;
-@property (nonatomic, retain) NSString *database;
-@property (nonatomic, retain) NSString *host;
+@property (nonatomic, retain) NSString  *databaseTypeIdentifier;
+@property (nonatomic, retain) NSURL     *databaseUrl;
+@property (nonatomic, retain) NSString  *username;
+@property (nonatomic, retain) NSString  *password;
+@property (nonatomic, retain) NSString  *server;
+@property (nonatomic, retain) NSString  *database;
+@property (nonatomic, retain) NSString  *host;
 @property (nonatomic, assign) NSInteger port;
 
 - (NSString *)appname;

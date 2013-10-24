@@ -8,6 +8,7 @@
 
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlite3.h"
 //#import "MTDatabaseSalesForce.h"
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
@@ -100,7 +101,26 @@
         [databaseTds autorelease];
         [databaseConnection release];
         
+    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+        
+        MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
+        // FIXME: Storing Sqlite3 database url in mysql holder.
+        NSString *databaseFilename = [userCredentals mysql_database];
+        // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
+        //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
+        //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
+        NSURL *appSupportDirectory = [NSFileManager applicationSupportDirectory];
+        NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent:databaseFilename isDirectory:NO];
+        NSString *databasePath = [dbUrl path];
+        NSURL *databaseUrl = [NSURL fileURLWithPath:databasePath];
+        [databaseConnection setDatabaseUrl: databaseUrl];
+        MTDatabaseSqlite3 *databaseSqlite3 = [[MTDatabaseSqlite3 alloc] initWithConnectionSettings:databaseConnection];
+        result = databaseSqlite3;
+        [databaseSqlite3 autorelease];
+        [databaseConnection release];
+
     }
+    
     return result;
 }
 
@@ -473,7 +493,7 @@
                     NSString *ogTableName = [[table databaseSchemaTable] name];
                     NSString *safeOgTableName = [self safeIdentifier:ogTableName];
                     [result appendString:safeOgTableName];
-                    [result appendString:@" AS "];
+                    [result appendString:[self tableAliasConnector]];
                     NSString *tableName = [table queryAlias];
                     NSString *safeTableName = [self safeIdentifier:tableName];
                     [result appendString:safeTableName];
@@ -529,7 +549,7 @@
                                 NSString *ogTableName = [[rightTable databaseSchemaTable] name];
                                 NSString *safeOgTableName = [self safeIdentifier:ogTableName];
                                 [result appendString:safeOgTableName];
-                                [result appendString:@" AS "];
+                                [result appendString:[self tableAliasConnector]];
                                 NSString *ogRightTable = [rightTable queryAlias];
                                 NSString *safeOgRightTable = [self safeIdentifier:ogRightTable];
                                 [result appendString:safeOgRightTable];

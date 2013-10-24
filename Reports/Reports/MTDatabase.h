@@ -53,6 +53,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (id)connectionSettings;
 
 - (NSString *)selectPart;
+- (NSString *)tableAliasConnector;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
