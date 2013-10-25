@@ -467,7 +467,7 @@
     }
 }
 
-- (void)addSchemaViewController:(UIViewController *)viewController {
+- (void)addSchemaViewController:(MTQueryBuilderAdvancedSchemaViewController *)viewController {
     [viewController retain];
     CGRect subviewRect = CGRectZero;
     NSManagedObjectID *objectId = [[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] retain];
@@ -505,17 +505,19 @@
     }
     [[viewController view] setFrame: subviewRect];
     
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
-    [panGesture setMaximumNumberOfTouches:1];
-    [panGesture setDelegate:self];
-    [[viewController view] addGestureRecognizer:panGesture];
-    [panGesture release];
-    
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPiece:)];
     [tapGesture setDelegate:self];
     [tapGesture setNumberOfTapsRequired:1];
     [[viewController view] addGestureRecognizer:tapGesture];
     [tapGesture release];
+
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
+    [panGesture setMaximumNumberOfTouches:1];
+    [panGesture setDelegate:self];
+    [[[self scrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
+    [tapGesture requireGestureRecognizerToFail:panGesture];
+    [[viewController view] addGestureRecognizer:panGesture];
+    [panGesture release];
     
     [self addViewController:viewController];
     
@@ -777,12 +779,11 @@
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-    
     switch ([gestureRecognizer state]) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             UIView *gestureRecognizerView = [gestureRecognizer view];
-            CGPoint gestureLocation = [gestureRecognizer locationInView:[self view]];
+            CGPoint gestureLocation = [gestureRecognizer locationInView:[self contentView]];
             [gestureRecognizerView setCenter: gestureLocation];
             [[self contentView] bringSubviewToFront:gestureRecognizerView];
             for (UIView *view in [[self contentView] subviews]) {

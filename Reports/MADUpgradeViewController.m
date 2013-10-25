@@ -16,7 +16,7 @@
 #import "MTDatabaseSqlite3.h"
 #import "MAReportDocument.h"
 
-#define MADUPGRADE_CREATE_SAMPLE TRUE
+#define MADUPGRADE_CREATE_SAMPLE FALSE
 
 @interface MADUpgradeViewController ()
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Show Sql View Controller - Generated Query-->
@@ -202,7 +202,7 @@
                                 <rect key="frame" x="16" y="6" width="200" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jvQ-RC-rI9">
+                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jvQ-RC-rI9">
                                         <rect key="frame" x="0.0" y="3" width="200" height="29"/>
                                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                     </slider>
@@ -264,9 +264,10 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xi7-o2-Mp3">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="xi7-o2-Mp3">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392156862744" green="0.61960784313725492" blue="0.84313725490196079" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
@@ -4186,7 +4187,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewStaticLabelViewControllerIdentifier" id="1Yf-BV-N7y" customClass="MTDocumentObjectNewStaticLabelViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2027" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="pFo-cs-ONu">
-                        <rect key="frame" x="0.0" y="64" width="320" height="2152"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="2216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4244,7 +4245,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="ZoW-XN-PPC" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="F4y-6F-Bug">
-                        <rect key="frame" x="0.0" y="44" width="320" height="1176"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="1572"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4666,7 +4667,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="lu5-Jf-OXi" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2017" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="0xH-rH-oI2">
-                        <rect key="frame" x="0.0" y="44" width="320" height="1572"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="1616"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4835,7 +4836,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="Wvw-aD-3hr" customClass="MTGroupByViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="6Ce-Iq-MdZ">
-                        <rect key="frame" x="0.0" y="44" width="320" height="1176"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="1572"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -5211,7 +5212,7 @@
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="vf8-ag-wzC" customClass="MTNavigationController" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Q9S-0w-JAb">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="Q9S-0w-JAb">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -5367,7 +5368,7 @@
                         <color key="barTintColor" red="0.050980392156862744" green="0.61960784313725492" blue="0.84313725490196079" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="UPa-fo-su7">
-                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                        <rect key="frame" x="0.0" y="1044" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -5851,7 +5852,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldDataObject" id="Tzz-Jy-fth" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="a1b-Tz-bfG">
-                        <rect key="frame" x="0.0" y="64" width="320" height="2212"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="2276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -6169,7 +6170,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="aNn-Gg-71l" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="K8U-Af-Sk6">
-                        <rect key="frame" x="0.0" y="44" width="320" height="1176"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="1572"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -6245,7 +6246,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="En2-cS-5pQ"/>
         <segue reference="7pZ-CD-6UY"/>
-        <segue reference="glj-Nb-BHS"/>
         <segue reference="zUp-ku-ep4"/>
+        <segue reference="glj-Nb-BHS"/>
     </inferredMetricsTieBreakers>
 </document>
