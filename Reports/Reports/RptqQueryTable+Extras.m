@@ -49,13 +49,18 @@
 
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-
-    NSString *className = NSStringFromClass([RptqQueryTable class]);
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: className];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"databaseSchemaTable == %@", [databaseSchemaTable objectID]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSUInteger numberOfReferencesToTableInQuery = [[databaseSchemaTable managedObjectContext] countForFetchRequest:request error:&error];
+    
+    for (RptqDatabaseSchemaTable *t in [database hasTables]) {
+        NSLog(@"T: %@", [t name]);
+    }
+    
+    NSSet *queryTables = [query hasQueryTables];
+    NSInteger dupeCtr = 0;
+    for (RptqQueryTable *queryTable in queryTables) {
+        if ([[[queryTable databaseSchemaTable] objectID] isEqual:[databaseSchemaTable objectID]]) {
+            dupeCtr++;
+        }
+    }
     
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class])
                                                    inManagedObjectContext: [databaseSchemaTable managedObjectContext]];
@@ -63,7 +68,7 @@
                                          insertIntoManagedObjectContext: [databaseSchemaTable managedObjectContext]];
 
     
-    NSNumber *dropIndex = @(numberOfReferencesToTableInQuery);
+    NSNumber *dropIndex = @(dupeCtr);
     [queryTable setDropIndex:dropIndex];
     
     [queryTable setDatabaseSchemaTable:databaseSchemaTable];
