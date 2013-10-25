@@ -146,11 +146,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    if ([UIDevice isPad] == NO) {
-        [self updateFileList:self];
-    } else {
-        
-    }
+    [self updateFileList:self];
     
     __block MTViewControllerOpenDocument *blockSelf = self;
 
@@ -160,13 +156,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [blockSelf updateFileList:blockSelf];
         }];
     } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
-        [self updateFileList:blockSelf];
+        //[self updateFileList:blockSelf];
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
     if ([AppDelegate isMadViewer]) {
         [self setReportViewer:nil];
     }
+
 }
 
 - (void)dealloc {
@@ -461,6 +458,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:0]; item++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
+        [[self collectionView] deselectItemAtIndexPath:indexPath animated:YES];
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
+        [cell performDeselectionAnimations];
+        [cell release];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -817,6 +822,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    
 }
 
 
