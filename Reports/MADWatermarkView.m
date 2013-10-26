@@ -68,6 +68,7 @@
         [self setDisplayString2:getDesigner];
         
         [getMad release];
+        [getDesigner release];
         [paragraphStart release];
         [paragraphEnd release];
         

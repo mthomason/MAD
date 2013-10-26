@@ -17,7 +17,7 @@
 #import "MTTitleView.h"
 
 @protocol MTQueryBuilderAdvancedSchemaDelegate
-- (void)didMoveFieldRect:(id)sender;
+- (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController

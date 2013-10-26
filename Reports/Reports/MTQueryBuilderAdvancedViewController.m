@@ -11,6 +11,8 @@
 
 #import "MTQueryBuilderAdvancedViewController.h"
 
+typedef void(^MTBlockResultVoid)(void);
+
 @interface MTQueryBuilderAdvancedViewController ()
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
@@ -30,7 +32,7 @@
 
 @property (nonatomic, assign) BOOL didRemoveViewControllers;
 
-@property (nonatomic, retain) MAReportDocument *reportDocument;
+//@property (nonatomic, retain) MAReportDocument *reportDocument;
 
 @property (nonatomic, retain) UIPopoverController *showSqlPopoverController;
 @property (nonatomic, assign) BOOL showSqlIsVisable;
@@ -57,7 +59,7 @@
     [_toolbarBottom release];
     [_barButtonItemShowSQL release];
     [_tableIds release];
-    [_reportDocument release];
+//    [_reportDocument release];
     [_showSqlPopoverController release];
     [super dealloc];
 }
@@ -117,7 +119,7 @@
                 RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
                 if ([leftTable isEqualTo:table] ||
                     [rightTable isEqualTo:table]) {
-                    [self layoutQueryLinkViewController:queryLink];
+                    [self layoutQueryLinkViewController:queryLink animated:YES];
                 }
             }
         }
@@ -171,14 +173,18 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self scrollView] flashScrollIndicators];
+    if (animated) {
+        [[self scrollView] flashScrollIndicators];
+    }
+    MAReportDocument *doc = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     if ([UIDevice isPad] == NO) {   //Pad displays this in container
-        [self reloadDocument:[[MTActiveDocument sharedDocument] activeDocument]];
+        [self reloadDocument:doc animated:animated];
     } else {
         if ([self didRemoveViewControllers]) {
-            [self reloadDocument:[self reportDocument]];
+            [self reloadDocument:doc animated:animated];
         }
     }
+    [doc release];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -227,13 +233,13 @@
         if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
         
             RptqQueryLinks *insertedQueryLinks = [insertedObject retain];
-            [self addLinkViewControllerForQueryLink: insertedQueryLinks];
+            [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
             [insertedQueryLinks release];
 
         } else if ([insertedObject isKindOfClass:[RptqQueryTable class]]) {
 
             RptqQueryTable *insertedQueryTable = [insertedObject retain];
-            [self addSchemaViewControllerForTable: insertedQueryTable];
+            [self addSchemaViewControllerForTable: insertedQueryTable animated:YES];
             [insertedQueryTable release];
 
         }
@@ -257,7 +263,7 @@
     
     if (updatedQuery && updatedTable) {
         if ([[updatedTable inQuery] isEqualTo:updatedQuery]) {
-            [self addSchemaViewControllerForTable:updatedTable];
+            [self addSchemaViewControllerForTable:updatedTable animated:YES];
         } else {
             [self removeSchemaViewControllerForTable:updatedTable];
         }
@@ -293,7 +299,7 @@
 
 - (void)addViewControllers:(NSSet *)viewControllers {
     for (UIViewController *viewController in viewControllers) {
-        [self addViewController:viewController];
+        [self addViewController:viewController animated:NO];
     }
 }
 
@@ -330,16 +336,18 @@
     return desiredFrame;
 }
 
-- (void)addViewController:(UIViewController *)viewController {
+- (void)addViewController:(UIViewController *)viewController animated:(BOOL)animated {
 
     [viewController retain];
-    CGFloat animationDuration = 0.6000f;
+    CGFloat animationDuration = 0.3000f;
     CGRect desiredFrame = [[viewController view] frame];
     CGPoint desiredCenter = [[viewController view] center];
     CGAffineTransform desiredTransform = [[viewController view] transform];
     NSUInteger animationType = 0;
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
-    swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
+    if (animated) {
+        swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
+    }
 
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
         
@@ -355,7 +363,9 @@
         
         [[viewController view] setBounds:CGRectZero];
         [[viewController view] setCenter:desiredCenter];
-        [[viewController view] setTransform:swingTransform];
+        if (animated) {
+            [[viewController view] setTransform:swingTransform];
+        }
 
         animationType = 2;
     }
@@ -368,21 +378,38 @@
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
 
+    MTBlockResultVoid animateOne = ^() {
+        [[viewController view] setFrame:desiredFrame];
+    };
+    MTBlockResultVoid animateTwo = ^() {
+        [[viewController view] setFrame:desiredFrame];
+        [[viewController view] setTransform:desiredTransform];
+    };
+    
     switch (animationType) {
         case 1:
-
-            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [[viewController view] setFrame:desiredFrame];
-                //[[viewController view] setTransform:desiredTransform];
-            } completion:^(BOOL finished) {}];
-
+            if (animated) {
+                [UIView animateWithDuration:animationDuration
+                                      delay:0.0000f
+                                    options:UIViewAnimationOptionCurveEaseInOut
+                                 animations:animateOne
+                                 completion:NULL];
+            } else {
+                animateOne();
+            }
+            
             break;
         case 2:
-            
-            [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [[viewController view] setFrame:desiredFrame];
-                [[viewController view] setTransform:desiredTransform];
-            } completion:^(BOOL finished) {}];
+            if (animated) {
+                
+                [UIView animateWithDuration:animationDuration
+                                      delay:0.0000f
+                                    options:UIViewAnimationOptionCurveEaseInOut
+                                 animations:animateTwo
+                                 completion:NULL];
+            } else {
+                animateTwo();
+            }
             
             break;
             
@@ -401,7 +428,7 @@
 
 - (void)removeViewController:(UIViewController *)viewController {
     //NSLog(@"%@", [viewController view]);
-    CGFloat animationDuration = 0.6000f;
+    CGFloat animationDuration = 0.3000f;
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
     swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
 
@@ -467,7 +494,7 @@
     }
 }
 
-- (void)addSchemaViewController:(MTQueryBuilderAdvancedSchemaViewController *)viewController {
+- (void)addSchemaViewController:(MTQueryBuilderAdvancedSchemaViewController *)viewController animated:(BOOL)animated {
     [viewController retain];
     CGRect subviewRect = CGRectZero;
     NSManagedObjectID *objectId = [[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] retain];
@@ -519,7 +546,7 @@
     [[viewController view] addGestureRecognizer:panGesture];
     [panGesture release];
     
-    [self addViewController:viewController];
+    [self addViewController:viewController animated:animated];
     
     self.tableDisplayCounter++;
     [viewController release];
@@ -544,17 +571,17 @@
     [viewController release];
 }
 
-- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table {
+- (void)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
     UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
     MTQueryBuilderAdvancedSchemaViewController *viewController = [[sb instantiateViewControllerWithIdentifier:@"MTQueryBuilderAdvancedSchemaViewControllerIdentifier"] retain];
     [viewController setDelegate:self];
     [viewController setTableObjectId:[table objectID]];
-    [self addSchemaViewController:viewController];
+    [self addSchemaViewController:viewController animated:animated];
     [sb release];
     [viewController release];
 }
 
-- (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link {
+- (void)addLinkViewControllerForQueryLink:(RptqQueryLinks *)link animated:(BOOL)animated {
     NSManagedObjectID *objectId = [[link objectID] retain];
     MTConnectorView *connectorView = [[MTConnectorView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 100.0000f, 100.0000f)];
     [connectorView setUserInteractionEnabled:NO];
@@ -572,12 +599,19 @@
     
     UIViewController *connectorViewController = [[UIViewController alloc] init];
     [connectorViewController setView:connectorView];
-    
-    [self addViewController:connectorViewController];
+
     [[self controllersForObjectIds] setObject:connectorViewController forKey:objectId];
     [[self controllersForObjectIdsLink] setObject:connectorViewController forKey:objectId];
+
+    if (animated == NO) {
+        [self layoutQueryLinkViewController:link animated:animated];
+    }
     
-    [self layoutQueryLinkViewController:link];
+    [self addViewController:connectorViewController animated:animated];
+
+    if (animated) {
+        [self layoutQueryLinkViewController:link animated:animated];
+    }
     
     [leftTableView release];
     [leftTableViewController release];
@@ -594,7 +628,7 @@
     [viewController release];
 }
 
-- (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink {
+- (void)layoutQueryLinkViewController:(RptqQueryLinks *)queryLink animated:(BOOL)animated {
     RptqQueryLinks *insertedQueryLinks = [queryLink retain];
     UIViewController *controller = [[[self controllersForObjectIdsLink] objectForKey:[queryLink objectID]] retain];
     MTConnectorView *connectorView = [(MTConnectorView *)[controller view] retain];
@@ -694,12 +728,21 @@
         lastConnectorPositionB == [connectorView connectorPositionB]) {
         [connectorView setFrame: connectorFrame];
     } else {
-        [UIView animateWithDuration:0.5000f delay:0.0000f options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [connectorView setFrame: connectorFrame];
-                         } completion:^(BOOL finished) {
-                             
-                         }];
+        
+        __block UIView *blockConnectorView = connectorView;
+        MTBlockResultVoid setFrame = ^() {
+            [blockConnectorView setFrame: connectorFrame];
+        };
+        
+        if (animated == NO) {
+            setFrame();
+        } else {
+            UIViewAnimationOptions options = UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut;
+            [UIView animateWithDuration:0.3000f
+                                  delay:0.0000f
+                                options:options
+                             animations:setFrame completion:NULL];
+        }
     }
     
     [leftTableViewController release];
@@ -711,11 +754,7 @@
 
 #pragma mark Reload document view controllers
 
-- (void)reloadDocument:(MAReportDocument *)documentReport {
-    
-    MAReportDocument *reportDocument = [documentReport retain];
-    [self setReportDocument:reportDocument];
-    [reportDocument release];
+- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
 
     NSManagedObjectContext *managedObjectContext = [[documentReport managedObjectContext] retain];
     [self setManagedObjectContext:managedObjectContext];
@@ -743,7 +782,7 @@
             
             RptqQuery *query = [RptqDocument queryForActiveDocument];
             for (RptqQueryTable *table in [query hasQueryTables]) {
-                [self addSchemaViewControllerForTable:table];
+                [self addSchemaViewControllerForTable:table animated:animated];
             }
             
             dispatch_async(queuePriorityNormal, ^{
@@ -751,7 +790,7 @@
 
                     NSArray *queryLinks = [[RptqDocument queryLinksForActiveDocument] retain];
                     for (RptqQueryLinks *queryLink in queryLinks) {
-                        [viewController addLinkViewControllerForQueryLink:queryLink];
+                        [viewController addLinkViewControllerForQueryLink:queryLink animated:animated];
                     }
                     [queryLinks release];
 
@@ -803,7 +842,7 @@
                 RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
                 if ([leftTable isEqualTo:table] ||
                     [rightTable isEqualTo:table]) {
-                    [self layoutQueryLinkViewController:queryLink];
+                    [self layoutQueryLinkViewController:queryLink animated:YES];
                 }
             }
             break;
@@ -889,7 +928,7 @@
 
 #pragma mark - MTQueryBuilderAdvancedSchemaViewControllerDelegate
 
-- (void)didMoveFieldRect:(id)sender {
+- (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
     if ([sender isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
         MTQueryBuilderAdvancedSchemaViewController *controller = (MTQueryBuilderAdvancedSchemaViewController *)sender;
         RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[controller tableObjectId] fromObjectContext:[self managedObjectContext]];
@@ -898,7 +937,7 @@
             RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
             if ([leftTable isEqualTo:queryTable] ||
                 [rightTable isEqualTo:queryTable]) {
-                [self layoutQueryLinkViewController:queryLink];
+                [self layoutQueryLinkViewController:queryLink animated:animated];
             }
         }
 

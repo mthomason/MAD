@@ -187,7 +187,7 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [[self delegate] didMoveFieldRect:self];
+    [[self delegate] didMoveFieldRect:self animated:YES];
 }
 
 @end

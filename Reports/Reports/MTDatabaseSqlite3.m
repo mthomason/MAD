@@ -155,7 +155,7 @@
                     [lowerCaseString rangeOfString:@"floa"].location != NSNotFound ||
                     [lowerCaseString rangeOfString:@"doub"].location != NSNotFound;
                 if (isReal == NO) {
-                    isNumeric = YES;
+                    isNumeric = YES;        //Not read
                 }
             }
 

@@ -28,6 +28,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @interface MTReportDesignerViewController()
 
+@property (nonatomic, retain) NSArray *sectionViewsArray;
+@property (nonatomic, retain) NSArray *sectionControlViewsArray;
+
+@property (nonatomic, retain) NSArray *viewDidAppearDesignerScrollViewConstraints;
+@property (nonatomic, retain) NSArray *viewDidAppearDesignerContentViewConstraints;
+
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
 
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *toolbarBottomHeightConstraint;
@@ -104,6 +110,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, assign) BOOL toolbarBottomZero;
 
+
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -111,6 +119,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_sectionViewsArray release];
+    [_sectionControlViewsArray release];
+    [_viewDidAppearDesignerScrollViewConstraints release];
+    [_viewDidAppearDesignerContentViewConstraints release];
     [_rulerView release];
     [_designerContentView release];
     [_reportFooterView release];
@@ -235,37 +247,6 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }
 
 }
-
-#pragma mark - UIImagePickerControllerDelegate
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    BOOL editedImageExist = [info objectForKey:UIImagePickerControllerEditedImage] != nil;
-    UIImage *selectedImage = nil;
-    if (editedImageExist) {
-        selectedImage = [[info objectForKey:UIImagePickerControllerEditedImage] retain];
-    } else {
-        selectedImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
-    }
-    
-
-    if (selectedImage != nil) {
-        __block MTReportDesignerViewController *reportDesigner = self;
-        [self dismissViewControllerAnimated:YES completion:^{
-            [reportDesigner insertDocumentObjectWithDefination:
-             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
-               MTDocumentObjectDefinationObject : selectedImage}];
-        }];
-    }
-
-    [[self barButtonItemObjects] setEnabled:YES];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    [[self barButtonItemObjects] setEnabled:YES];
-}
-
 
 #pragma mark - UIViewController
 
@@ -402,6 +383,61 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
     [viewControllerSectionLayoutSettings release];
 
+    
+    if ([self layoutConstraintsToRemove] != nil) {
+        [[self view] removeConstraints:[self layoutConstraintsToRemove]];
+    }
+    
+    BOOL skipLayout = [UIDevice isModernOS] || [UIDevice isPad] == NO;
+    BOOL skipTopBar = [UIDevice isPad] == NO || [UIDevice isModernOS];
+    if (skipLayout == NO) {
+        
+        NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+        
+        [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight]];
+        
+        NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+        
+        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden]];
+        
+        [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
+                                      [NSLayoutConstraint constraintWithItem: [self toolbarTop]         attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                      [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                      [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                      [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
+                                      ]];
+        
+    } else if (skipTopBar) {
+        
+        if ([UIDevice isPad] == NO) {
+            
+            
+            NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
+            NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+            if ([UIDevice isModernOS]) {
+                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight]];
+            } else {
+                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarBottomHeight]];
+            }
+            
+            NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
+            NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
+            [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
+            
+            [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
+                                          [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
+                                          [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
+                                          ]];
+            
+        }
+        
+    }
+
+    
     if ([UIDevice isPad]) {
         UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:[self viewControllerToolbox]];
         [popoverControllerInformation setDelegate:self];
@@ -424,118 +460,108 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     [self setToolbarBottomItems:[[self toolbarBottom] items]];
     [self setToolboxIsVisible:NO];
 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidChange:)
+                          name: NSManagedObjectContextObjectsDidChangeNotification
+                        object: managedObjectContext];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(managedObjectContextDidSave:)
+                          name: NSManagedObjectContextDidSaveNotification
+                        object: managedObjectContext];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(didHideMenuNotification:)
+                          name: UIMenuControllerDidHideMenuNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(didShowMenuNotification:)
+                          name: UIMenuControllerDidShowMenuNotification
+                        object: nil];
+    
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(documentStateChanged)
+                          name: UIDocumentStateChangedNotification
+                        object: activeDocument];
+    
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
     CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-
+    
     if ([UIDevice isLagacyOS]) {
         [[viewRuler layer] setCornerRadius: MTReportDesignerCornerRadius];
         [[viewRuler layer] setMasksToBounds: YES];
         [[viewRuler layer] setBorderColor: shadowColor];
         [[viewRuler layer] setBorderWidth: 1.0000f];
     } else {
-
+        
         [[viewRuler layer] setBorderWidth: 0.5000f];
         [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
-    
+        
     }
     [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
-
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
     
     //UICollectionView *lastCollectionView = nil;
     NSInteger sectionCounter = 0;
+    UInt16 numberOfSections = [sectionEnumerator count];
     
-    NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     [self setLayoutConstraintsReportSectionHeight:layoutConstraintsReportSectionHeight];
     [layoutConstraintsReportSectionHeight release];
     
-    NSMutableDictionary *dictionarySectionBackgroundViews = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    NSMutableDictionary *dictionarySectionBackgroundViews = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     [self setSectionBackgroundViews:dictionarySectionBackgroundViews];
     [dictionarySectionBackgroundViews release];
     
-    NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     [self setSectionViews: dictionarySections];
     [dictionarySections release];
     
-    NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     [self setSectionControlViews:dictionarySectionControls];
     [dictionarySectionControls release];
-
-    if ([self layoutConstraintsToRemove] != nil) {
-        [[self view] removeConstraints:[self layoutConstraintsToRemove]];
-    }
     
-    BOOL skipLayout = [UIDevice isModernOS] || [UIDevice isPad] == NO;
-    BOOL skipTopBar = [UIDevice isPad] == NO || [UIDevice isModernOS];
-    if (skipLayout == NO) {
-
-        NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-        
-        [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight]];
-        
-        NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
-        NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-        
-        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden]];
-        
-        [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
-            [NSLayoutConstraint constraintWithItem: [self toolbarTop]         attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-            [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
-         ]];
-        
-    } else if (skipTopBar) {
-
-        if ([UIDevice isPad] == NO) {
-
-            
-            NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
-            NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-            if ([UIDevice isModernOS]) {
-                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight]];
-            } else {
-                [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarBottomHeight]];
-            }
-            
-            NSLayoutConstraint *layoutConstraintToolbarBottomHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
-            NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
-            [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
-            
-            [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
-                                          [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
-                                          ]];
-        
-        }
-
-    }
-    
-    NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:[sectionEnumerator count]];
+    NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
     [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
     [collectionViewReuseIdentifiers release];
     
     [[self designerContentView] addSubview:viewRuler];
-
-    [[self designerScrollView] addConstraints:
-     @[[NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil                        attribute:NSLayoutAttributeNotAnAttribute multiplier: 1.0000f constant: MTReportDesignerRulerHeight],
-       [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop            multiplier: 1.0000f constant: MTReportDesignerBorderPaddingVertical],
-       [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft           multiplier: 1.0000f constant: MTReportDesignerBorderPadding],
-       [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight          multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]
-       ]];
-
+    
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil                        attribute:NSLayoutAttributeNotAnAttribute multiplier: 1.0000f constant: MTReportDesignerRulerHeight];
+    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop            multiplier: 1.0000f constant: MTReportDesignerBorderPaddingVertical];
+    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft           multiplier: 1.0000f constant: MTReportDesignerBorderPadding];
+    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:viewRuler attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight          multiplier: 1.0000f constant: -MTReportDesignerBorderPadding];
+    
+    NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
+    NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
+    
+    NSArray *rulerConstraints = @[constraint1, constraint2, constraint3, constraint4];
+    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:rulerConstraints];
+    [[self designerScrollView] addConstraints:rulerConstraints];
+    
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     NSMutableArray *reportSectionKeyTracker = [[NSMutableArray alloc] init];
     
+    NSMutableArray *sectionControlViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    NSMutableArray *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+    
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
-
-        @autoreleasepool {
         
+        @autoreleasepool {
+            
             
             sectionHeights += MTReportDesignerBorderPaddingVertical;
             
@@ -628,7 +654,7 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             if ([UIDevice isModernOS]) {
                 UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
                 UIInterpolatingMotionEffect *yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-
+                
                 NSNumber *maximumRelativeValue = @(10.0000f);
                 NSNumber *minimumRelativeValue = @(-10.0000f);
                 
@@ -649,21 +675,30 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             
             [[self designerContentView] addSubview:sectionControlView];
             
-            [[self designerContentView] addConstraints:@[
-                                                         [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-                                                         [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight],
-                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical],
-                                                         [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight]
-                                                         ]];
             
-            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeLeft  relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft  multiplier: 1.0000f constant: MTReportDesignerBorderPadding]];
-            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -MTReportDesignerBorderPadding]];
-            [[self designerScrollView] addConstraint:[NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f]];
+            NSLayoutConstraint *lc1a = [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical];
+            NSLayoutConstraint *lc1b = [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight];
+            NSLayoutConstraint *lc1c = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeRight  relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeRight          multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical];
+            NSLayoutConstraint *lc1d = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeBottom         multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical];
+            NSLayoutConstraint *lc1e = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual              toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: MTReportDesignerSectionLabelHeight];
+            NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
+            [[self designerContentView] addConstraints:designerContentViewConstraints];
+            [viewDidAppearDesignerContentViewConstraints addObjectsFromArray:designerContentViewConstraints];
+            
+            
+            NSLayoutConstraint *lc2a = [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeLeft  relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeLeft  multiplier: 1.0000f constant: MTReportDesignerBorderPadding];
+            NSLayoutConstraint *lc2b = [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeRight relatedBy: NSLayoutRelationEqual toItem: [self designerContentView] attribute: NSLayoutAttributeRight multiplier: 1.0000f constant: -MTReportDesignerBorderPadding];
+            NSLayoutConstraint *lc2c = [NSLayoutConstraint constraintWithItem: sectionControlView attribute: NSLayoutAttributeWidth relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: [self designerContentView] attribute: NSLayoutAttributeWidth multiplier: 0.2000f constant: 0.0000f];
+            NSArray *collectionViewConstraints = @[lc2a, lc2b, lc2c];
+            [[self designerScrollView] addConstraints:collectionViewConstraints];
+            [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:collectionViewConstraints];
+            
             
             if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
                 [self setReportFooterView:collectionView];
             }
+            [sectionViewsArray addObject:collectionView];
+            [sectionControlViewsArray addObject:sectionControlView];
             [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
             [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
             
@@ -674,23 +709,27 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
             [sectionControlView release];
             [backgroundView release];
             [flowLayoutDesignerSection release];
-        
-
+            
+            
             sectionCounter++;
-
+            
         }
-
+        
     }
+    [self setSectionViewsArray: sectionViewsArray];
+    [self setSectionControlViewsArray:sectionControlViewsArray];
+    [sectionControlViewsArray release];
+    [sectionViewsArray release];
     
     [reportSectionKeyTracker release];
-
+    
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
     //[lastCollectionView release];
-
+    
     [self setRulerView:viewRuler];
     [viewRuler release];
-
+    
     for (NSLayoutConstraint *layoutConstraint in [[self designerContentView] constraints]) {
         if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
             [layoutConstraint secondItem] == nil &&
@@ -709,11 +748,20 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     
     NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:sectionHeights];
     [self setLayoutConstraintDesignerContentViewHeight:layoutConstraintDesignerContentViewHeight];
-    [[self designerScrollView] addConstraint: layoutConstraintDesignerContentViewHeight];
-    [[self designerScrollView] addConstraint: [NSLayoutConstraint constraintWithItem:[self designerScrollView] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f]];
+    NSLayoutConstraint *layoutConstraint23 = [NSLayoutConstraint constraintWithItem:[self designerScrollView] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
+    NSArray *endScrollViewConstraints = @[layoutConstraintDesignerContentViewHeight, layoutConstraint23];
+    
+    [[self designerScrollView] addConstraints:endScrollViewConstraints];
+    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:endScrollViewConstraints];
+    
+    [self setViewDidAppearDesignerScrollViewConstraints:viewDidAppearDesignerScrollViewConstraints];
+    [self setViewDidAppearDesignerContentViewConstraints:viewDidAppearDesignerContentViewConstraints];
+    
+    [viewDidAppearDesignerContentViewConstraints release];
+    [viewDidAppearDesignerScrollViewConstraints release];
     
     if ([self layoutConstraintContainerToDesignerCenterY] != nil && [self layoutConstraintContainerToDesignerCenterX] != nil && [self layoutConstraintContainerToDesignerVertSpace] != nil) {
-
+        
         NSArray *someCenterConstraints = @[[self layoutConstraintContainerToDesignerCenterY], [self layoutConstraintContainerToDesignerCenterX], [self layoutConstraintContainerToDesignerVertSpace]];
         
         [[self designerScrollView] removeConstraints: someCenterConstraints];
@@ -729,6 +777,80 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     
     [activeDocument release];
     [sectionEnumerator release];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    
+    //[[self designerScrollView] setZoomScale:1.0000f animated:animated];
+    
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidHideMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidShowMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
+                           object: activeDocument];
+    
+    [activeDocument saveContext];
+    [activeDocument release];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    if (animated) {
+        
+        CGFloat animationDuration = 0.2222f;
+        CGFloat delay = 0.0000f;
+        
+        [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [[self rulerView] removeFromSuperview];
+        } completion:NULL];
+        
+        for (UIView *view in [self sectionViewsArray]) {
+            __block UIView *bview = view;
+            [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [bview removeFromSuperview];
+            } completion:NULL];
+        }
+        for (UIView *view in [self sectionControlViewsArray]) {
+            __block UIView *bview = view;
+            [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [bview removeFromSuperview];
+            } completion:NULL];
+        }
+        
+    } else {
+        [[self rulerView] removeFromSuperview];
+        for (UIView *view in [self sectionViewsArray]) {
+            [view removeFromSuperview];
+        }
+        for (UIView *view in [self sectionControlViewsArray]) {
+            [view removeFromSuperview];
+        }
+    }
+    
+    [[self designerScrollView] removeConstraints:[self viewDidAppearDesignerScrollViewConstraints]];
+    [[self designerScrollView] removeConstraints:[self viewDidAppearDesignerContentViewConstraints]];
 }
 
 - (CGSize)designerContentViewSize {
@@ -763,91 +885,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
     }
     designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
     [sectionEnumerator release];
-
+    
     [[self layoutConstraintDesignerContentViewHeight] setConstant:designerContentViewSize.height];
     [activeDocument release];
-
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    //[[self designerScrollView] setZoomScale:1.4000f animated:animated];
-
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(managedObjectContextDidChange:)
-                          name: NSManagedObjectContextObjectsDidChangeNotification
-                        object: managedObjectContext];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(managedObjectContextDidSave:)
-                          name: NSManagedObjectContextDidSaveNotification
-                        object: managedObjectContext];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(didHideMenuNotification:)
-                          name: UIMenuControllerDidHideMenuNotification
-                        object: nil];
-    
-    [defaultCenter addObserver: self
-                      selector: @selector(didShowMenuNotification:)
-                          name: UIMenuControllerDidShowMenuNotification
-                        object: nil];
-    
-
-    [defaultCenter addObserver: self
-                      selector: @selector(documentStateChanged)
-                          name: UIDocumentStateChangedNotification
-                        object: activeDocument];
-
-    [activeDocument release];
-    
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    
-    [[self designerScrollView] setZoomScale:1.0000f animated:animated];
-
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextDidSaveNotification
-                           object: managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidHideMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidShowMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIDocumentStateChangedNotification
-                           object: activeDocument];
-    
-    [activeDocument saveContext];
-    //[activeDocument quickSave];
-    
-    [activeDocument release];
-    
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -916,12 +957,10 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
-    //[[self view] setNeedsUpdateConstraints];
     [[self rulerView] setNeedsDisplay];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    //[[self view] setNeedsUpdateConstraints];
     [[self rulerView] setNeedsDisplay];
 }
 
@@ -1331,6 +1370,36 @@ typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 - (void)didHighlightElementView:(id)sender { }
 - (void)didUnhighlightElementView:(id)sender { }
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    BOOL editedImageExist = [info objectForKey:UIImagePickerControllerEditedImage] != nil;
+    UIImage *selectedImage = nil;
+    if (editedImageExist) {
+        selectedImage = [[info objectForKey:UIImagePickerControllerEditedImage] retain];
+    } else {
+        selectedImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
+    }
+    
+    
+    if (selectedImage != nil) {
+        __block MTReportDesignerViewController *reportDesigner = self;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [reportDesigner insertDocumentObjectWithDefination:
+             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
+               MTDocumentObjectDefinationObject : selectedImage}];
+        }];
+    }
+    
+    [[self barButtonItemObjects] setEnabled:YES];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    [[self barButtonItemObjects] setEnabled:YES];
+}
 
 #pragma mark - Actions
 

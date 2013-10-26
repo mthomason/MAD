@@ -253,12 +253,13 @@
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
         if (fileExist) {
             
-            [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
+            __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+            [blockManagedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
-                [managedDocumentAtUrl setThumbnailUrl:thumbnailUrl];
+                [blockManagedDocumentAtUrl setThumbnailUrl:thumbnailUrl];
                 NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToOpen];
-                [managedDocumentAtUrl setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
-                completionHandler(managedDocumentAtUrl, success);
+                [blockManagedDocumentAtUrl setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
+                completionHandler(blockManagedDocumentAtUrl, success);
             }];
         } else {
             [managedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {

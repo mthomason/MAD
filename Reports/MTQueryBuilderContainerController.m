@@ -1,6 +1,6 @@
 //
-//  ViewController.m
-//  MTSplitViewController
+//  MTQueryBuilderContainerController.m
+//  MTQueryBuilderContainerController
 //
 //  Created by Michael Thomason on 2/13/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
@@ -17,6 +17,8 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRevealQuery;
 
+@property (nonatomic, retain) NSArray *constraintsViewWillAppear;
+
 @property (nonatomic, retain) UIPopoverController *popover;
 
 @property (nonatomic, assign) BOOL isEditing;
@@ -26,6 +28,7 @@
 @implementation MTQueryBuilderContainerController
 
 - (void)dealloc {
+    [_constraintsViewWillAppear release];
     [_leftView release];
     [_rightView release];
     [_bogusConstraints release];
@@ -59,6 +62,17 @@
     [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:0]];
     [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:1]];
     
+    [[self view] removeConstraints:[self bogusConstraints]];
+    
+    UIView *leftView = [self leftView];
+    UIView *rightView = [self rightView];
+    NSString *constraintAsciiArtHorizontal = @"H:|-(==0.0000)-[leftView(==320.0000)]-(==0.0000)-[rightView]-(==0.0000)-|";
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(leftView, rightView);
+    NSArray *constraintsHorizontal = [NSLayoutConstraint constraintsWithVisualFormat:constraintAsciiArtHorizontal
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:viewsDictionary];
+    [self setConstraintsViewWillAppear:constraintsHorizontal];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -68,35 +82,24 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    __block MTQueryBuilderContainerController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
             NSArray *items = [self toolbarItems];
             NSMutableArray *mutableItems = [items mutableCopy];
-            [mutableItems removeObject:[self barButtonItemRevealQuery]];
-            [self setToolbarItems:mutableItems];
+            [mutableItems removeObject:[blockSelf barButtonItemRevealQuery]];
+            [blockSelf setToolbarItems:mutableItems];
             [mutableItems release];
         }
     }];
     
-    UIView *leftView = [[self leftView] retain];
-    UIView *rightView = [[self rightView] retain];
+    [[self view] addConstraints:[self constraintsViewWillAppear]];
     
-    [[self view] removeConstraints:[self bogusConstraints]];
-    
-    NSString *constraintAsciiArtHorizontal = @"H:|-(==0.0000)-[leftView(==320.0000)]-(==0.0000)-[rightView]-(==0.0000)-|";
-    
-    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(leftView, rightView);
-    
-    
-    NSArray *constraintsHorizontal = [NSLayoutConstraint constraintsWithVisualFormat:constraintAsciiArtHorizontal
-                                                                             options:0
-                                                                             metrics:nil
-                                                                               views:viewsDictionary];
-    [[self view] addConstraints:constraintsHorizontal];
-    
-    [leftView release];
-    [rightView release];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[self view] removeConstraints:[self constraintsViewWillAppear]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

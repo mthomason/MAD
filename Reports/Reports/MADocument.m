@@ -83,7 +83,7 @@ NSString * MTDocumentVersionFileName            = @"ver";
 NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
-- (BOOL)hasUnsavedChanges {
+/*- (BOOL)hasUnsavedChanges {
     BOOL result = NO;
     if ([self quickSaveInProgress] || [self isSuspended]) {
         result = NO;
@@ -95,7 +95,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         }
     }
     return result;
-}
+}*/
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     if ([self thumbnailUrl] == nil) {
@@ -291,8 +291,9 @@ NSString * MTDocumentParentContextName          = @"moc";
     [self setWeMustSave:YES];
     if ([self managedObjectContext] != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
+            __block MADocument *blockSelf = self;
             [error presentErrorToUserWithContinue:^(BOOL success) {
-                [self saveContext];
+                [blockSelf saveContext];
             }];
         }
     }
@@ -301,14 +302,16 @@ NSString * MTDocumentParentContextName          = @"moc";
 - (void)quickSave {
     if ([self quickSaveInProgress] == NO) {
         [self setQuickSaveInProgress:YES];
-        [self saveToURL: [self fileURL] forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        NSURL *url = [self fileURL];
+        __block MADocument *blockSelf = self;
+        [blockSelf saveToURL: url forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             
-            [self setSuspended:YES];
-            NSURL *url = [self fileURL];
+            [blockSelf setSuspended:YES];
+            NSURL *url = [blockSelf fileURL];
             [NSFileManager wrapFile:url withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:nil];
-            [self setSuspended:NO];
+            [blockSelf setSuspended:NO];
             
-            [self setQuickSaveInProgress:NO];
+            [blockSelf setQuickSaveInProgress:NO];
             
         }];
     }

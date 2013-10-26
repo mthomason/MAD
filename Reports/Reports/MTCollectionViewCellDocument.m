@@ -62,6 +62,7 @@
     //[attributedString addAttribute:NSStrokeColorAttributeName value:[UIColor whiteColor] range:range];
     //[attributedString addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [[self labelTitle] setAttributedText:attributedString];
+    [attributedString release];
     [paragraphStyle release];
 
 }

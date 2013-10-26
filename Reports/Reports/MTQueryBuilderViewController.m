@@ -98,37 +98,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
-- (void)documentStateChanged {
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    UIDocumentState state = [reportDocument documentState];
-    switch (state) {
-        case UIDocumentStateClosed:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateInConflict:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateSavingError:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateEditingDisabled:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateNormal:
-        default:
-            [self enableUserInteraction];
-            break;
-    }
-}
-
-- (void)enableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:YES];
-}
-
-- (void)disableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:NO];
-}
-
 #pragma mark - View lifecycle
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -232,24 +201,27 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(documentStateChanged)
-                                                 name:UIDocumentStateChangedNotification
-                                               object:reportDocument];
+    MAReportDocument *reportDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    if (reportDocument) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(documentStateChanged)
+                                                     name:UIDocumentStateChangedNotification
+                                                   object:reportDocument];
+    }
 
     if ([self barButtonItemShowSQL] != nil) {   //i.e. iPad version
+        __block MTQueryBuilderViewController *blockSelf = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
-                NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
+                NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
-                [toolbarButtons insertObject:[self barButtonItemShowSQL] atIndex:index];
-                [self setToolbarItems:toolbarButtons animated:animated];
+                [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index];
+                [blockSelf setToolbarItems:toolbarButtons animated:animated];
                 [toolbarButtons release];
             }
         }];
     }
+    [reportDocument release];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -406,7 +378,36 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return shouldPerformSegueWithIdentifier;
 }
 
+- (void)documentStateChanged {
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    UIDocumentState state = [reportDocument documentState];
+    switch (state) {
+        case UIDocumentStateClosed:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateInConflict:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateSavingError:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateEditingDisabled:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateNormal:
+        default:
+            [self enableUserInteraction];
+            break;
+    }
+}
 
+- (void)enableUserInteraction {
+    [[self tableView] setUserInteractionEnabled:YES];
+}
+
+- (void)disableUserInteraction {
+    [[self tableView] setUserInteractionEnabled:NO];
+}
 
 #pragma mark - Toolbar Actions
 

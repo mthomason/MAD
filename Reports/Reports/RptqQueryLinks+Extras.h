@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeSymbolsDesired [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
-#define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"EQUI JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
+#define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
 
 
 @interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>

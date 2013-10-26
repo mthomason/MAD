@@ -132,7 +132,7 @@
     
     if ([[self topLeftToBottomRight] boolValue]) {
         
-        [(UIColor *)[UIColor edaBlueDark] set];
+        [(UIColor *)[UIColor tintColor2] set];
         
         origin = CGPointMake(rect.origin.x, rect.origin.y);
         destination = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
@@ -148,7 +148,7 @@
         tangent[1] = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
 
     } else {
-        [(UIColor *)[UIColor edaBlueDark] set];
+        [(UIColor *)[UIColor tintColor2] set];
 
         origin = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
         destination = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
@@ -167,7 +167,7 @@
     CGContextAddEllipseInRect(currentContext, connectorNobRectOrigin);
     CGContextAddEllipseInRect(currentContext, connectorNobRectDestination);
 
-    [(UIColor *)[UIColor edaBlueDark] set];
+    [(UIColor *)[UIColor tintColor2] set];
     CGContextMoveToPoint(currentContext, origin.x, origin.y);
     CGContextAddCurveToPoint(currentContext, tangent[0].x, tangent[0].y, tangent[1].x, tangent[1].y, destination.x, destination.y);
 

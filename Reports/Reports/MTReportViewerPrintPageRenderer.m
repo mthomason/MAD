@@ -304,6 +304,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGPathRef path = CGPathCreateWithRect(pageRect, NULL);
     CGContextAddPath(ctx, path);
     CGContextDrawPath(ctx, kCGPathFill);
+    CGPathRelease(path);
     
     NSMutableArray *printableStrings = [[NSMutableArray alloc] init];
     

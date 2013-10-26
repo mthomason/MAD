@@ -98,7 +98,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSData *pngImage = UIImagePNGRepresentation(thumbnail);
             [pngImage writeToURL:thumbnailUrl atomically:YES];
             [printPageRender release];
-            
+            [thumbnail release];
             //UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
             //NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
             //[pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
@@ -649,7 +649,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                             [managedDocument retain];
                             [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
                             [[queryBuilderViewController queryBuilderController] reloadDocument:managedDocument];
-                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadDocument:managedDocument];
+                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadDocument:managedDocument animated:YES];
                             [managedDocument release];
                         }
                     }];
@@ -758,7 +758,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
                     }
                     [standard reloadDocument:managedDocument];
-                    [advanced reloadDocument:managedDocument];
+                    [advanced reloadDocument:managedDocument animated:YES];
                     [managedDocument release];
                 }
             }];

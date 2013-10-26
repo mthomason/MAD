@@ -637,6 +637,12 @@
                                  userInfo: nil];
 }
 
+- (NSString *)tableAliasConnector {
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
+                                 userInfo: nil];
+}
+
 - (NSString *)identifier {
     return [MTDatabase identifier];
 }
