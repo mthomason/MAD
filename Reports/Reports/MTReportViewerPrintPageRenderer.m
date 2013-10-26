@@ -234,13 +234,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         CGFloat zigX = topRightPoint.x - zigDistance;
         CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
         CGPoint zigPoint = CGPointMake(zigX, zigY);
-        NSLog(@"%@", NSStringFromCGPoint(zigPoint));
         CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
     }
     CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-    CGContextClosePath (context);
+    //CGContextClosePath (context);
     CGContextAddPath(context, zigPath);
-    //CGContextDrawPath(context, kCGPathFill);
     CGContextClip(context);
     CGPathRelease(zigPath);
     
@@ -250,6 +248,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
     CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
     CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
+
     //zag
     CGFloat zagDivisor = 4.0000f;
     NSInteger numberOfZags = pathRect.size.height / zagDivisor;
@@ -261,14 +260,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         CGFloat zagDistance = pow(zagNumber, 1.01) + zagNumber;
         CGFloat zagY = bottomRightPoint.y - zagDistance;
         CGPoint zagPoint = CGPointMake(zagX, zagY);
-        NSLog(@"%@", NSStringFromCGPoint(zagPoint));
         CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
     }
     CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
     CGContextAddPath(context, zagPath);
     CGContextClip(context);
-//    [[UIColor whiteColor] setFill];
-//    CGContextDrawPath(context, kCGPathFill);
     CGPathRelease(zagPath);
     
     CGContextSaveGState(context);
@@ -281,12 +277,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     UIImage *croppedImage = [[UIImage imageWithCGImage:imageRef] retain];
     CGImageRelease(imageRef);
-//    return croppedImage;
-    
     UIGraphicsEndImageContext();
-    
-    
-
     return [croppedImage autorelease];
 }
 
@@ -824,8 +815,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSDictionary *)coreTextAttributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    //NSString *fontname = [documentObject fontname];
-    //NSLog(@"%@", fontname);
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
     CTFontRef customFont = [font coreTextFont];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

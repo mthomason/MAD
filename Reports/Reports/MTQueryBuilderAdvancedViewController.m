@@ -52,14 +52,12 @@ typedef void(^MTBlockResultVoid)(void);
     [_controllersForObjectIdsLink release];
     [_scrollView release];
     [_contentView release];
-    
     [_containerViewHeightConstraint release];
     [_containerViewWidthConstraint release];
     [_backgroundContainer release];
     [_toolbarBottom release];
     [_barButtonItemShowSQL release];
     [_tableIds release];
-//    [_reportDocument release];
     [_showSqlPopoverController release];
     [super dealloc];
 }
@@ -89,41 +87,34 @@ typedef void(^MTBlockResultVoid)(void);
     return self;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self layoutContent];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [[self scrollView] setBounds:[[self backgroundContainer] bounds]];
-    [[self scrollView] setCenter:[[self backgroundContainer] center]];
-    [[self contentView] setBounds:[[self backgroundContainer] bounds]];
-    [[self contentView] setCenter:[[self backgroundContainer] center]];
-    NSArray *childViewControlleres = [self childViewControllers];
-    for (id viewController in childViewControlleres) {
-        Class desiredClass = [MTQueryBuilderAdvancedSchemaViewController class];
-        if ([viewController isKindOfClass:desiredClass]) {
-            __block UIView *view = [viewController view];
-            CGRect desiredFrame = [self rectForDesiredRect:[view frame]];
-            [UIView animateWithDuration:0.20000f animations:^{
-                [view setFrame:desiredFrame];
-            }];
-            
-            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[view objectIdTag] fromObjectContext:[self managedObjectContext]];
-            for (RptqQueryLinks *queryLink in [[table inQuery] hasQueryLinks]) {
-                RptqQueryTable *leftTable = [[queryLink hasLeftField] inQueryTable];
-                RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
-                if ([leftTable isEqualTo:table] ||
-                    [rightTable isEqualTo:table]) {
-                    [self layoutQueryLinkViewController:queryLink animated:YES];
+- (void)layoutContent {
+    [UIView animateWithDuration:0.20000f animations:^{
+        [[self contentView] layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        for (UIViewController *subviewController in [self childViewControllers]) {
+            if ([subviewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+                MTQueryBuilderAdvancedSchemaViewController *controller = (MTQueryBuilderAdvancedSchemaViewController *)subviewController;
+                RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[controller tableObjectId] fromObjectContext:[self managedObjectContext]];
+                
+                for (RptqQueryLinks *queryLink in [[queryTable inQuery] hasQueryLinks]) {
+                    RptqQueryTable *leftTable = [[queryLink hasLeftField] inQueryTable];
+                    RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
+                    if ([leftTable isEqualTo:queryTable] ||
+                        [rightTable isEqualTo:queryTable]) {
+                        [self layoutQueryLinkViewController:queryLink animated:YES];
+                    }
                 }
+                
+                
+                
             }
         }
-    }
+    }];
 }
 
 - (void)viewDidLoad {
@@ -135,14 +126,15 @@ typedef void(^MTBlockResultVoid)(void);
         [[[self backgroundContainer] layer] setBorderColor:[borderColor CGColor]];
     }
     [self setShowSqlIsVisable:NO];
-    UIView *containerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
-    [self setContentView:containerView];
-    [containerView release];
+    UIView *containerView = [[UIView alloc] initWithFrame:[[self backgroundContainer] bounds]];
 
-    MTScrollViewCenter *scrollView = [[MTScrollViewCenter alloc] initWithFrame:[[self view] bounds]];
+    UIViewAutoresizing autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [containerView setAutoresizingMask:autoresizingMask];
+    [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    MTScrollViewCenter *scrollView = [[MTScrollViewCenter alloc] initWithFrame:[[self backgroundContainer] bounds]];
     [scrollView setShowsHorizontalScrollIndicator:YES];
     [scrollView setShowsVerticalScrollIndicator:YES];
-    [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [scrollView setAutoresizingMask:autoresizingMask];
     [scrollView setContentOffset:CGPointZero];
     [scrollView setMaximumZoomScale:1.0000f];
     [scrollView setMinimumZoomScale:1.0000f];
@@ -154,11 +146,24 @@ typedef void(^MTBlockResultVoid)(void);
     [scrollView setBouncesZoom:YES];
     [scrollView setDelegate:self];
     [scrollView setBackgroundColor:[UIColor clearColor]];
-    [scrollView addSubview:[self contentView]];
+    [scrollView addSubview:containerView];
+    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [self setScrollView:scrollView];
     [scrollView release];
-    
+    //[[self backgroundContainer] setAutoresizingMask:autoresizingMask];
+    //[[self view] setAutoresizingMask:autoresizingMask];
     [[self backgroundContainer] addSubview:[self scrollView]];
+
+    NSLayoutConstraint *leftBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[self backgroundContainer] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:0.0000f];
+    NSLayoutConstraint *rightBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[self backgroundContainer] attribute:NSLayoutAttributeRight multiplier:1.0000f constant:0.0000f];
+    NSLayoutConstraint *topBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[self backgroundContainer] attribute:NSLayoutAttributeTop multiplier:1.0000f constant:0.0000f];
+    NSLayoutConstraint *bottomBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[self backgroundContainer] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
+    NSArray *constraints = @[leftBorder, rightBorder, topBorder, bottomBorder];
+    [[self backgroundContainer] addConstraints:constraints];
+
+    [self setContentView:containerView];
+    [containerView release];
 
     NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
     [toolbarButtons removeObject:[self barButtonItemShowSQL]];
@@ -176,29 +181,6 @@ typedef void(^MTBlockResultVoid)(void);
     if (animated) {
         [[self scrollView] flashScrollIndicators];
     }
-    MAReportDocument *doc = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    if ([UIDevice isPad] == NO) {   //Pad displays this in container
-        [self reloadDocument:doc animated:animated];
-    } else {
-        if ([self didRemoveViewControllers]) {
-            [self reloadDocument:doc animated:animated];
-        }
-    }
-    [doc release];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if ([[self viewControllers] count] > 0) {
-        [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
-        [[self viewControllers] removeAllObjects];
-        [self setDidRemoveViewControllers:YES];
-    }
-    //NSLog(@"View Controller Count %d", [[self viewControllers] count]);
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
@@ -349,6 +331,8 @@ typedef void(^MTBlockResultVoid)(void);
         swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
     }
 
+    NSArray *constraints = nil;
+    
     if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
         
         NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
@@ -359,6 +343,32 @@ typedef void(^MTBlockResultVoid)(void);
 
         desiredFrame = [self rectForDesiredRect:desiredFrame];
 
+        NSLayoutConstraint *leftBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:20.0000f];
+        NSLayoutConstraint *rightBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeRight multiplier:1.0000f constant:-20.0000f];
+        NSLayoutConstraint *topBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant:20.0000f];
+        NSLayoutConstraint *bottomBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationLessThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:-200.0000f];
+        [rightBorder setPriority:1000];
+        [leftBorder setPriority:1000];
+        [topBorder setPriority:1000];
+        [bottomBorder setPriority:1000];
+        
+        NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.width];
+        NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.height];
+        [width setPriority:1000];
+        [height setPriority:1000];
+        
+        
+        NSLayoutConstraint *leftFrame = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[self contentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:desiredFrame.origin.x];
+        NSLayoutConstraint *topFrame = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[self contentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant:desiredFrame.origin.y];
+        [leftFrame setPriority:999];
+        [topFrame setPriority:999];
+        [(MTQueryBuilderAdvancedSchemaViewController *)viewController setLayoutConstraintX:leftFrame];
+        [(MTQueryBuilderAdvancedSchemaViewController *)viewController setLayoutConstraintY:topFrame];
+        //constraints = @[rightBorder, width, height, leftFrame, topFrame];
+        //constraints = @[];
+        [[viewController view] setTranslatesAutoresizingMaskIntoConstraints:NO];
+        constraints = @[bottomBorder, topBorder, leftBorder, rightBorder, width, height, leftFrame, topFrame];
+
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
         
         [[viewController view] setBounds:CGRectZero];
@@ -368,6 +378,7 @@ typedef void(^MTBlockResultVoid)(void);
         }
 
         animationType = 2;
+        constraints = @[];
     }
 
     
@@ -375,9 +386,13 @@ typedef void(^MTBlockResultVoid)(void);
     if ([[self viewControllers] containsObject:viewController] == NO) {
         [[self viewControllers] addObject:viewController];
     }
+    
+    
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
 
+    [[self contentView] addConstraints:constraints];
+    
     MTBlockResultVoid animateOne = ^() {
         [[viewController view] setFrame:desiredFrame];
     };
@@ -410,9 +425,7 @@ typedef void(^MTBlockResultVoid)(void);
             } else {
                 animateTwo();
             }
-            
             break;
-            
         default:
             break;
     }
@@ -427,7 +440,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (void)removeViewController:(UIViewController *)viewController {
-    //NSLog(@"%@", [viewController view]);
     CGFloat animationDuration = 0.3000f;
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
     swingTransform = CGAffineTransformRotate(swingTransform, DEGREES_TO_RADIANS(180.0000f));
@@ -638,8 +650,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
 
-    NSLog(@"rect ltvc %@", NSStringFromCGRect([[leftTableViewController view] frame]));
-    
     CGRect leftCellFrameInTable = [leftTableViewController rectForFieldWithObjectId:[leftField objectID] inView:[leftTableViewController view]];
     CGRect leftTableFrame = [[leftTableViewController schemaTableViewController] frame];
     CGFloat leftTableBottomY = leftTableFrame.origin.y + leftTableFrame.size.height;
@@ -817,13 +827,39 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
+    //Adjust the anchor point
+    
+    CGPoint result = CGPointZero;
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint locationInView = [gestureRecognizer locationInView:[self contentView]];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:[self contentView].superview];
+        
+        CGPoint anchorPoint = CGPointMake(locationInView.x / [self contentView].bounds.size.width, locationInView.y / [self contentView].bounds.size.height);
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            [self contentView].layer.anchorPoint = anchorPoint;
+            [self contentView].center = locationInSuperview;
+        }
+        result = locationInSuperview;
+    }
+
+    
     [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+
+    CGFloat halfWidth = [gestureRecognizer view].bounds.size.width / 2.0000f;
+    CGFloat halfHeight = [gestureRecognizer view].bounds.size.height / 2.0000f;
+
     switch ([gestureRecognizer state]) {
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             UIView *gestureRecognizerView = [gestureRecognizer view];
-            CGPoint gestureLocation = [gestureRecognizer locationInView:[self contentView]];
-            [gestureRecognizerView setCenter: gestureLocation];
+            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
+            MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[[gestureRecognizer view] objectIdTag]];
+            if (viewController) {
+                [[viewController layoutConstraintX] setConstant:newOrigin.x - halfWidth];
+                [[viewController layoutConstraintY] setConstant:newOrigin.y - halfHeight];
+            }
+            [[viewController view] setNeedsLayout];
             [[self contentView] bringSubviewToFront:gestureRecognizerView];
             for (UIView *view in [[self contentView] subviews]) {
                 if ([view isKindOfClass:[MTConnectorView class]]) {
@@ -833,8 +869,15 @@ typedef void(^MTBlockResultVoid)(void);
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-            CGPoint newCenter = [gestureRecognizer locationInView:[self contentView]];
-            [[gestureRecognizer view] setCenter: newCenter];
+            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
+            MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[[gestureRecognizer view] objectIdTag]];
+            if (viewController) {
+                [[viewController layoutConstraintX] setConstant:newOrigin.x - [viewController view].bounds.size.width / 2.0000f];
+                [[viewController layoutConstraintY] setConstant:newOrigin.y - [viewController view].bounds.size.height / 2.0000f];
+            }
+            [[viewController view] setNeedsLayout];
+//            MTQueryBuilderAdvancedSchemaViewController * [gestureRecognizer view];
+//            [[gestureRecognizer view] setCenter: newCenter];
             
             RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:[self managedObjectContext]];
             for (RptqQueryLinks *queryLink in [[table inQuery] hasQueryLinks]) {
@@ -854,9 +897,14 @@ typedef void(^MTBlockResultVoid)(void);
         case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
             
             
-            CGPoint gestureLocation = [gestureRecognizer locationInView:[self contentView]];
-            [[gestureRecognizer view] setCenter: gestureLocation];
-            
+            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
+            MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[[gestureRecognizer view] objectIdTag]];
+            if (viewController) {
+                [[viewController layoutConstraintX] setConstant:newOrigin.x - [viewController view].bounds.size.width / 2.0000f];
+                [[viewController layoutConstraintY] setConstant:newOrigin.y - [viewController view].bounds.size.height / 2.0000f];
+            }
+            [[viewController view] setNeedsLayout];
+
             NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
             RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
             [queryTable setDesignerSizeHeight:@([[gestureRecognizer view] frame].size.height)];
@@ -865,6 +913,7 @@ typedef void(^MTBlockResultVoid)(void);
             [queryTable setDesignerOriginX:@([[gestureRecognizer view] frame].origin.x)];
             NSError *error;
             [managedObjectContext save:&error];
+            [self layoutContent];
             break;
         }
         default:
@@ -874,53 +923,31 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    
-}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate { }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
-    
-}
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale { }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-
-}
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
     return YES;
 }
 
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    
-}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView { }
 
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-    
-}
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view { }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    
-}
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset { }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return [[[self contentView] retain] autorelease];
@@ -940,7 +967,6 @@ typedef void(^MTBlockResultVoid)(void);
                 [self layoutQueryLinkViewController:queryLink animated:animated];
             }
         }
-
     }
 }
 

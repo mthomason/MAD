@@ -167,7 +167,6 @@
     if ([self timeSinceRefreshView] == nil) {
         CGFloat width = 220.0000f;
         CGFloat height = 23.0000f;
-        NSLog(@"%@", @(self.topLayoutGuide.length));
         CGFloat originX = self.view.frame.size.width - width;
         CGFloat originY = self.view.frame.size.height - height;
         CGRect viewFrame = CGRectMake(originX, originY, width, height);

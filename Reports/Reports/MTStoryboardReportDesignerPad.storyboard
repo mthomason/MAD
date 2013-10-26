@@ -6145,15 +6145,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="448" height="1024"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1024" id="feq-Rc-7tM"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="jKd-yV-bFM" firstAttribute="leading" secondItem="peB-b4-yAa" secondAttribute="leading" id="Hok-9O-GuA"/>
-                            <constraint firstItem="jKd-yV-bFM" firstAttribute="trailing" secondItem="peB-b4-yAa" secondAttribute="trailing" id="K6J-hx-PvQ"/>
-                            <constraint firstItem="jKd-yV-bFM" firstAttribute="top" secondItem="peB-b4-yAa" secondAttribute="top" id="rcO-OX-EAw"/>
+                            <constraint firstItem="jKd-yV-bFM" firstAttribute="leading" secondItem="peB-b4-yAa" secondAttribute="leading" id="9DC-Rx-XqX"/>
+                            <constraint firstAttribute="bottom" secondItem="jKd-yV-bFM" secondAttribute="bottom" id="LLj-zl-pEz"/>
+                            <constraint firstItem="jKd-yV-bFM" firstAttribute="top" secondItem="peB-b4-yAa" secondAttribute="top" id="NfJ-f0-PCW"/>
+                            <constraint firstAttribute="trailing" secondItem="jKd-yV-bFM" secondAttribute="trailing" id="bQl-me-dLl"/>
                         </constraints>
                     </view>
                     <toolbarItems/>

@@ -22,6 +22,8 @@
 @implementation MTQueryBuilderAdvancedSchemaViewController
 
 - (void)dealloc {
+    [_layoutConstraintX release];
+    [_layoutConstraintY release];
     [_cachedTableObjectId release];
     [_schemaTableViewController release];
     [_hasFieldsObjectIds release];
@@ -76,21 +78,6 @@
     [[[self view] layer] setShadowOpacity:1.0000f];
     [[[self view] layer] setShadowRadius:5.0000f];
     [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
-
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    //NSLog(@"%@", NSStringFromCGRect([self view].bounds));
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (NSManagedObjectID *)tableObjectId {

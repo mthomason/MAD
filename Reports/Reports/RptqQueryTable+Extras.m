@@ -50,9 +50,9 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     
-    for (RptqDatabaseSchemaTable *t in [database hasTables]) {
-        NSLog(@"T: %@", [t name]);
-    }
+    //for (RptqDatabaseSchemaTable *t in [database hasTables]) {
+    //    NSLog(@"T: %@", [t name]);
+    //}
     
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;

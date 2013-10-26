@@ -27,6 +27,9 @@
 @property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
+@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintX;
+@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintY;
+
 - (NSManagedObjectID *)tableObjectId;
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;
 - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID;
