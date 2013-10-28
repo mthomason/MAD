@@ -120,11 +120,7 @@
                 CGContextTranslateCTM(ctx, -2.0000f, -yt);
                 CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
                 [[self displayString] drawInRect:rect1];
-                
-                
-
             }
-
             CGContextRestoreGState(ctx);
             columnCounter++;
         } while (logoRect.origin.x + logoRect.size.width < rect.size.width);
