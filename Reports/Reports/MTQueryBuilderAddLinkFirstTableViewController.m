@@ -48,36 +48,7 @@
     [[cell textLabel] setText: [tablea alias]];
     [[cell detailTextLabel] setText: @""];
     [tablea release];
-/*
-    switch ([self sectionCounter]) {
-        case 0: {
-            break;
-        }
-        case 1: {
-            RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-            [[cell textLabel] setText: [field name]];
-            [[cell detailTextLabel] setText: [[field inTable] name]];
-            [field release];
-            break;
-        }
-        case 2: {
-            RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-            [[cell textLabel] setText: [tablea name]];
-            [[cell detailTextLabel] setText: @""];
-            [tablea release];
-            break;
-        }
-        case 3: {
-            RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
-            [[cell textLabel] setText: [field name]];
-            [[cell detailTextLabel] setText: [[field inTable] name]];
-            [field release];
-            break;
-        }
-        default:
-            break;
-    }
-    */
+
     return cell;
 }
 

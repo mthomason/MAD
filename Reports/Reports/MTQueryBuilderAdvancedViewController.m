@@ -45,7 +45,8 @@ typedef void(^MTBlockResultVoid)(void);
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:[self managedObjectContext]];
-    [self removeViewControllers:[NSSet setWithArray:_viewControllers]];
+    NSSet *setToRemove = [NSSet setWithArray:_viewControllers];
+    [self removeViewControllers:setToRemove];
     [_managedObjectContext release];
     [_viewControllers release];
     [_controllersForObjectIds release];

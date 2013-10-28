@@ -41,9 +41,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, retain) MTReportViewerController *reportViewer;
 
-//@property (nonatomic, retain) MTQueryBuilderAdvancedViewController *advancedQueryBuilder;
-//@property (nonatomic, retain) MTQueryBuilderViewController *standardQueryBuilder;
-
 @property (nonatomic, retain) UILongPressGestureRecognizer *longPressGestureRecognizer;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureRecognizer;
 
@@ -141,8 +138,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)dealloc {
-    //[_advancedQueryBuilder release]; _advancedQueryBuilder = nil;
-    //[_standardQueryBuilder release]; _standardQueryBuilder = nil;
     [_reportViewer release];
     [_renameAlertView release];
     [_barButtonItemEditDone release];
@@ -168,7 +163,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)awakeFromNib {
-    //[self setContentSizeForViewInPopover: CGSizeMake(320.0, 480.0)];
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [super awakeFromNib];
