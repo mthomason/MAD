@@ -85,30 +85,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        
-        NSURL *thumbnailUrl = [[activeDocument thumbnailUrl] retain];
-        //NSURL *thumbnailWithBorderUrl = [[activeDocument thumbnailUrlWithBorder] retain];
-        
-        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[activeDocument managedObjectContext]] retain];
-        
-        // FIXME: Slow... show activity indicator or something.
-        if (document != nil) {
-            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-            UIImage *thumbnail = [[printPageRender thumbnail] retain];
-            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-            [pngImage writeToURL:thumbnailUrl atomically:YES];
-            [printPageRender release];
-            [thumbnail release];
-            //UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
-            //NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
-            //[pngImageWithBorder writeToURL:thumbnailWithBorderUrl atomically:YES];
-            //[thumbnailWithBorder release];
-            //[thumbnail release];
-        }
-        
-        [document release];
-        //[thumbnailWithBorderUrl release];
-        [thumbnailUrl release];
+        [activeDocument regenThumbnail];
         
         [activeDocument closeWithCompletionHandler:^(BOOL success) {
             if (success) {
@@ -139,10 +116,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-
         [self closeReport];
-
-        
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];

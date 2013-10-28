@@ -28,6 +28,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (NSString *)fileName;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSString *)thumbnailSaveName;
+- (void)regenThumbnail;
 
 @property (nonatomic, retain) NSURL *thumbnailUrl;
 @property (nonatomic, retain) NSURL *thumbnailUrlWithBorder;

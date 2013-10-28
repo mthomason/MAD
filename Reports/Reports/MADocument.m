@@ -189,6 +189,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
 
     id result;
+
     if ([self isSuspended]) {
         result = [NSNull null];
     } else {
@@ -197,51 +198,28 @@ NSString * MTDocumentParentContextName          = @"moc";
             [self setExtraInformation:extraInfo];
             [extraInfo release];
         }
-
-        NSMutableDictionary *blockDictionary = [[self extraInformation] retain];
-        NSURL *thumbnailUrl = [[self thumbnailUrl] retain];
-        //NSURL *thumbnailUrlWithBorder = [[self thumbnailUrlWithBorder] retain];
-
-        
-        RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
-        
-        BOOL quickSave = [self quickSaveInProgress];
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-            if (quickSave == NO) {
-                if (document != nil) {
-                    if ([thumbnailUrl isKindOfClass:[NSURL class]] &&
-                        [blockDictionary isKindOfClass:[NSMutableDictionary class]]) {
-                        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-                        UIImage *thumbnail = [[printPageRender thumbnail] retain];
-                        NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-                        [pngImage writeToURL:thumbnailUrl atomically:YES];
-                        
-                        // FIXME: Add border using path maybe.
-                        
-                        //UIImage *thumbnailWithBorder = [[UIImage imageWithBorder:thumbnail usingColor:[UIColor tintColor]] retain];
-                        //NSData *pngImageWithBorder = UIImagePNGRepresentation(thumbnailWithBorder);
-                        //[pngImageWithBorder writeToURL:thumbnailUrlWithBorder atomically:YES];
-                        //[thumbnailWithBorder release];
-                    
-                        [thumbnail release];
-                        [printPageRender release];
-                    }
-                }
-            }
-        //});
-        
-        [document release];
-        [blockDictionary release];
-        [thumbnailUrl release];
-        //[thumbnailUrlWithBorder release];
         NSNumber *dataVersion = @(1.0);
-
         [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
         [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
         result = [[[self extraInformation] retain] autorelease];
     }
 
     return result;
+}
+
+- (void)regenThumbnail {
+    RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
+    if (document != nil) {
+        if ([[self thumbnailUrl] isKindOfClass:[NSURL class]] &&
+            [[self extraInformation] isKindOfClass:[NSMutableDictionary class]]) {
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+            UIImage *thumbnail = [printPageRender thumbnail];
+            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+            [pngImage writeToURL:[self thumbnailUrl] atomically:YES];
+            [printPageRender release];
+        }
+    }
+    [document release];
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
