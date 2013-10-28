@@ -665,6 +665,7 @@
 		4C5626071759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5CD398181E3937005FC6DD /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C752E0C16EA3A0C001FDAA3 /* README.txt */; };
 		4C5CD399181E3937005FC6DD /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4C752E0C16EA3A0C001FDAA3 /* README.txt */; };
+		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
@@ -3502,6 +3503,7 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
 				4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */,
 				4C752E0C16EA3A0C001FDAA3 /* README.txt */,
@@ -3509,7 +3511,6 @@
 				4CCBDAC717603DEB003E9E1D /* README-libsybdb.txt */,
 				4C5482741672D4A800CA24EB /* TODO.txt */,
 				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
-				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
@@ -3566,6 +3567,8 @@
 		4C0EF6CA178A9688007BF2AE /* iOS6 */ = {
 			isa = PBXGroup;
 			children = (
+				4C94ADFE17C3514200037FCB /* MTStoryboardLaunchImagesOS6.storyboard */,
+				4C94AE0117C3514200037FCB /* MTStoryboardLaunchImagesPadOS6.storyboard */,
 				4C0EF6D0178A96BC007BF2AE /* MTStoryboardReportDesignerOS6.storyboard */,
 				4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */,
 				4C0EF6CC178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard */,
@@ -3577,6 +3580,8 @@
 		4C0EF6CB178A9690007BF2AE /* iOS7 */ = {
 			isa = PBXGroup;
 			children = (
+				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
+				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 				4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */,
 				4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */,
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
@@ -4277,12 +4282,8 @@
 		4C94ADEC17C3514200037FCB /* MAD Launch Images */ = {
 			isa = PBXGroup;
 			children = (
-				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
-				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 				4C94ADF517C3514200037FCB /* AppDelegate.h */,
 				4C94ADF617C3514200037FCB /* AppDelegate.m */,
-				4C94ADFE17C3514200037FCB /* MTStoryboardLaunchImagesOS6.storyboard */,
-				4C94AE0117C3514200037FCB /* MTStoryboardLaunchImagesPadOS6.storyboard */,
 				4C94AE0417C3514200037FCB /* ViewController.h */,
 				4C94AE0517C3514200037FCB /* ViewController.m */,
 				4C94ADED17C3514200037FCB /* Supporting Files */,
@@ -7348,6 +7349,7 @@
 			files = (
 				4C94ADF317C3514200037FCB /* main.m in Sources */,
 				4C94ADF717C3514200037FCB /* AppDelegate.m in Sources */,
+				4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */,
 				4C94AE0617C3514200037FCB /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7451,6 +7453,7 @@
 				4C94AA3A17DCBB01000F6FCF /* en */,
 			);
 			name = MTStoryboardLaunchImagesPadOS7.storyboard;
+			path = "MAD Launch Images";
 			sourceTree = "<group>";
 		};
 		4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */ = {
@@ -7459,6 +7462,7 @@
 				4C94AA3C17DCBB01000F6FCF /* en */,
 			);
 			name = MTStoryboardLaunchImagesOS7.storyboard;
+			path = "MAD Launch Images";
 			sourceTree = "<group>";
 		};
 		4C94ADEF17C3514200037FCB /* InfoPlist.strings */ = {
@@ -7475,6 +7479,7 @@
 				4C94ADFF17C3514200037FCB /* en */,
 			);
 			name = MTStoryboardLaunchImagesOS6.storyboard;
+			path = "MAD Launch Images";
 			sourceTree = "<group>";
 		};
 		4C94AE0117C3514200037FCB /* MTStoryboardLaunchImagesPadOS6.storyboard */ = {
@@ -7483,6 +7488,7 @@
 				4C94AE0217C3514200037FCB /* en */,
 			);
 			name = MTStoryboardLaunchImagesPadOS6.storyboard;
+			path = "MAD Launch Images";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

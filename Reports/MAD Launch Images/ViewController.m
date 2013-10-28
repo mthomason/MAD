@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "UIColor+EverydayApps.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIColor *barTintColor = [UIColor tintColor];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [[[self navigationController] navigationBar] setTintColor:barTintColor];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

@@ -463,7 +463,6 @@
             [self reload:self];
         });
     });
-    
 }
 
 - (void)reload:(MTReportViewerController *)reportViewer {
