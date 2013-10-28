@@ -1,37 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="aw6-BB-GId">
     <dependencies>
-        <deployment version="1792" defaultVersion="1552" identifier="iOS"/>
+        <deployment version="1792" defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
-        <!--View Controller Open Document-->
-        <scene sceneID="cvo-k7-B73">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qHD-q4-mn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="kRn-SB-HiB" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="8h0-zw-Fmk">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OrF-DV-Gcz">
-                            <size key="itemSize" width="150" height="100"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <cells/>
-                        <connections>
-                            <outlet property="dataSource" destination="kRn-SB-HiB" id="P7l-8X-Ana"/>
-                            <outlet property="delegate" destination="kRn-SB-HiB" id="rVi-gA-nqj"/>
-                        </connections>
-                    </collectionView>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="eo4-Ct-LHu"/>
-                </collectionViewController>
-            </objects>
-            <point key="canvasLocation" x="-4173" y="-1490"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="AWj-Xm-eEB">
             <objects>
@@ -49,11 +22,30 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="kRn-SB-HiB" kind="relationship" relationship="rootViewController" id="5wa-Nd-fQz"/>
+                        <segue destination="fkg-DC-cSM" kind="relationship" relationship="rootViewController" id="ySQ-tP-H12"/>
                     </connections>
                 </navigationController>
             </objects>
             <point key="canvasLocation" x="-5070" y="-1490"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zE1-MQ-dMK">
+            <objects>
+                <viewController id="fkg-DC-cSM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NoE-18-cYu"/>
+                        <viewControllerLayoutGuide type="bottom" id="8UV-je-1Qb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cbn-M6-ecm" customClass="MADWatermarkView">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="LGY-MN-ieM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OMu-JU-OPJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3939" y="-1532"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>

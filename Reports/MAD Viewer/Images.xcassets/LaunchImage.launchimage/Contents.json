@@ -5,14 +5,14 @@
       "idiom" : "iphone",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "Default@2x-1.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.05 PM.png",
       "scale" : "2x"
     },
     {
       "extent" : "full-screen",
       "idiom" : "iphone",
       "subtype" : "retina4",
-      "filename" : "iOS Simulator Screen shot Oct 6, 2013 11.00.51 PM.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.30 PM.png",
       "minimum-system-version" : "7.0",
       "orientation" : "portrait",
       "scale" : "2x"
@@ -22,7 +22,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "LaunchModernPad.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.45 PM.png",
       "scale" : "1x"
     },
     {
@@ -30,7 +30,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "LaunchModernPadLandscape.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.26.15 PM-1.png",
       "scale" : "1x"
     },
     {
@@ -38,7 +38,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "LaunchModernPadRetina.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.57 PM-1.png",
       "scale" : "2x"
     },
     {
@@ -46,7 +46,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "MTLaunchImageGenericLandscapePad@2x-1.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.26.26 PM-1.png",
       "scale" : "2x"
     },
     {
@@ -82,7 +82,7 @@
       "orientation" : "portrait",
       "idiom" : "ipad",
       "extent" : "full-screen",
-      "filename" : "LaunchModernPad-1.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.45 PM-1.png",
       "scale" : "1x"
     },
     {
@@ -90,6 +90,13 @@
       "idiom" : "ipad",
       "extent" : "to-status-bar",
       "filename" : "Default-Landscape~ipad.png",
+      "scale" : "1x"
+    },
+    {
+      "orientation" : "landscape",
+      "idiom" : "ipad",
+      "extent" : "full-screen",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.25.57 PM.png",
       "scale" : "1x"
     },
     {
@@ -103,7 +110,7 @@
       "orientation" : "portrait",
       "idiom" : "ipad",
       "extent" : "full-screen",
-      "filename" : "LaunchModernPadRetina-1.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.26.15 PM.png",
       "scale" : "2x"
     },
     {
@@ -117,7 +124,7 @@
       "orientation" : "landscape",
       "idiom" : "ipad",
       "extent" : "full-screen",
-      "filename" : "LaunchModernPadRetinaLandscape.png",
+      "filename" : "iOS Simulator Screen shot Oct 28, 2013 12.26.26 PM.png",
       "scale" : "2x"
     }
   ],

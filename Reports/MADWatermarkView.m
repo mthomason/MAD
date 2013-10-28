@@ -23,57 +23,68 @@
     [super dealloc];
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-    
-        UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-        [self setBackgroundColor: bgColor];
-        
-        NSMutableParagraphStyle *paragraphStart = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStart setLineBreakMode:NSLineBreakByWordWrapping];
-        [paragraphStart setBaseWritingDirection:NSWritingDirectionLeftToRight];
-        [paragraphStart setAlignment:NSTextAlignmentCenter];
-
-        NSMutableParagraphStyle *paragraphEnd = [[NSMutableParagraphStyle alloc] init];
-        [paragraphEnd setLineBreakMode:NSLineBreakByWordWrapping];
-        [paragraphEnd setBaseWritingDirection:NSWritingDirectionLeftToRight];
-        [paragraphEnd setAlignment:NSTextAlignmentCenter];
-        
-        CGFloat fontSize = 100.0000f;
-        UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-        CGFloat fontSize2 = 44.5000f;
-        UIFont *customFont2 = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize2];
-        UIColor *foregroundColor = [UIColor lightTextColor];
-
-        NSDictionary *attributes = @{
-                                  //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
-                                  NSForegroundColorAttributeName : foregroundColor,
-                                  NSFontAttributeName : customFont
-                                  };
-        NSDictionary *attributes2 = @{
-                                     //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
-                                     NSForegroundColorAttributeName : foregroundColor,
-                                     NSFontAttributeName : customFont2
-                                     };
-        
-        NSString *getMadS = @"MAD";
-        NSString *getMadD = [AppDelegate isMadDesigner] ? @"DESIGNER" : @"";
-        
-        NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:attributes];
-        NSAttributedString *getDesigner = [[NSAttributedString alloc] initWithString: getMadD attributes:attributes2];
-    
-        
-        [self setDisplayString:getMad];
-        [self setDisplayString2:getDesigner];
-        
-        [getMad release];
-        [getDesigner release];
-        [paragraphStart release];
-        [paragraphEnd release];
-        
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit {
+    UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
+    [self setBackgroundColor: bgColor];
+    
+    NSMutableParagraphStyle *paragraphStart = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStart setLineBreakMode:NSLineBreakByWordWrapping];
+    [paragraphStart setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStart setAlignment:NSTextAlignmentCenter];
+    
+    NSMutableParagraphStyle *paragraphEnd = [[NSMutableParagraphStyle alloc] init];
+    [paragraphEnd setLineBreakMode:NSLineBreakByWordWrapping];
+    [paragraphEnd setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphEnd setAlignment:NSTextAlignmentCenter];
+    
+    CGFloat fontSize = 100.0000f;
+    UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+    CGFloat fontSize2 = 44.5000f;
+    UIFont *customFont2 = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize2];
+    UIColor *foregroundColor = [UIColor lightTextColor];
+    
+    NSDictionary *attributes = @{
+                                 //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
+                                 NSForegroundColorAttributeName : foregroundColor,
+                                 NSFontAttributeName : customFont
+                                 };
+    NSDictionary *attributes2 = @{
+                                  //NSTextEffectAttributeName : NSTextEffectLetterpressStyle,
+                                  NSForegroundColorAttributeName : foregroundColor,
+                                  NSFontAttributeName : customFont2
+                                  };
+    
+    NSString *getMadS = @"MAD";
+    NSString *getMadD = [AppDelegate isMadDesigner] ? @"DESIGNER" : @"";
+    
+    NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:attributes];
+    NSAttributedString *getDesigner = [[NSAttributedString alloc] initWithString: getMadD attributes:attributes2];
+    
+    
+    [self setDisplayString:getMad];
+    [self setDisplayString2:getDesigner];
+    
+    [getMad release];
+    [getDesigner release];
+    [paragraphStart release];
+    [paragraphEnd release];
+    
 }
 
 - (void)drawRect:(CGRect)rect {
