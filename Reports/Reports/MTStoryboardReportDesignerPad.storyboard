@@ -2567,8 +2567,26 @@
                         <sections>
                             <tableViewSection id="B31-JH-yg5">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeInnerJoin" textLabel="y1r-ex-R2J" style="IBUITableViewCellStyleDefault" id="P7g-Z3-pak">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeLeftOuterJoin" textLabel="May-ug-2Id" style="IBUITableViewCellStyleDefault" id="MF5-WY-Pqt">
                                         <rect key="frame" x="0.0" y="35" width="540" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MF5-WY-Pqt" id="ER3-ST-WNO">
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Left Outer Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="May-ug-2Id">
+                                                    <rect key="frame" x="15" y="0.0" width="510" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeInnerJoin" textLabel="y1r-ex-R2J" style="IBUITableViewCellStyleDefault" id="P7g-Z3-pak">
+                                        <rect key="frame" x="0.0" y="79" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P7g-Z3-pak" id="ObV-om-vvp">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
@@ -2586,31 +2604,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeEquiJoin" textLabel="XQP-1Z-YYE" style="IBUITableViewCellStyleDefault" id="TDD-iF-z3k">
-                                        <rect key="frame" x="0.0" y="79" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="123" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TDD-iF-z3k" id="YPE-qL-wfI">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Equi-Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="XQP-1Z-YYE">
-                                                    <rect key="frame" x="15" y="0.0" width="510" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeNaturalJoin" textLabel="x0m-2H-eXM" style="IBUITableViewCellStyleDefault" id="jrf-nn-eZd">
-                                        <rect key="frame" x="0.0" y="123" width="540" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jrf-nn-eZd" id="NxF-FL-Pp3">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Natural Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="x0m-2H-eXM">
                                                     <rect key="frame" x="15" y="0.0" width="510" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -2639,26 +2639,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeLeftOuterJoin" textLabel="May-ug-2Id" style="IBUITableViewCellStyleDefault" id="MF5-WY-Pqt">
-                                        <rect key="frame" x="0.0" y="211" width="540" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MF5-WY-Pqt" id="ER3-ST-WNO">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Left Outer Join" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="May-ug-2Id">
-                                                    <rect key="frame" x="15" y="0.0" width="510" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeRightOuterJoin" textLabel="hrP-Lh-hLK" style="IBUITableViewCellStyleDefault" id="NbB-vm-sHU">
-                                        <rect key="frame" x="0.0" y="255" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="211" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NbB-vm-sHU" id="JmI-oC-6Of">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
@@ -2676,7 +2658,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MNSJoinTypeFullOuterJoin" textLabel="bE4-rF-xyk" style="IBUITableViewCellStyleDefault" id="vtT-ES-fpA">
-                                        <rect key="frame" x="0.0" y="299" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="255" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vtT-ES-fpA" id="xRR-T6-0dP">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
@@ -2704,7 +2686,7 @@
                     <navigationItem key="navigationItem" title="Select Join Type" id="xvK-mw-QOs"/>
                     <connections>
                         <outlet property="tableViewCellEquiJoin" destination="TDD-iF-z3k" id="fh7-a5-021"/>
-                        <outlet property="tableViewCellNaturalJoin" destination="jrf-nn-eZd" id="g4B-Ib-fcT"/>
+                        <outlet property="tableViewCellFullOuterJoin" destination="vtT-ES-fpA" id="5i0-BR-J7p"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RAQ-go-gPg" userLabel="First Responder" sceneMemberID="firstResponder"/>

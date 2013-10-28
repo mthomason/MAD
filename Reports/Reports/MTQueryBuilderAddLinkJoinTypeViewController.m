@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellEquiJoin;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
 
 @end
 
@@ -23,6 +24,7 @@
 - (void)dealloc {
     [_tableViewCellEquiJoin release];
     [_tableViewCellNaturalJoin release];
+    [_tableViewCellFullOuterJoin release];
     [super dealloc];
 }
 
@@ -44,12 +46,17 @@
         [[self tableViewCellNaturalJoin] setUserInteractionEnabled:YES];
         [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
         [[[self tableViewCellNaturalJoin] textLabel] setEnabled:YES];
+        [[self tableViewCellFullOuterJoin] setUserInteractionEnabled:NO];
+        [[self tableViewCellFullOuterJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[[self tableViewCellFullOuterJoin] textLabel] setEnabled:NO];
 
+
+        
     } else if ([databaseDriverType isEqualToString:[MTDatabaseSqlServer identifier]]) {
         
-        [[self tableViewCellEquiJoin] setUserInteractionEnabled:NO];
-        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[[self tableViewCellEquiJoin] textLabel] setEnabled:NO];
+        [[self tableViewCellEquiJoin] setUserInteractionEnabled:YES];
+        [[self tableViewCellEquiJoin] setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [[[self tableViewCellEquiJoin] textLabel] setEnabled:YES];
         [[self tableViewCellNaturalJoin] setUserInteractionEnabled:NO];
         [[self tableViewCellNaturalJoin] setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[[self tableViewCellNaturalJoin] textLabel] setEnabled:NO];
