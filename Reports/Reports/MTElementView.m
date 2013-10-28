@@ -26,8 +26,8 @@
 @interface MTElementView ()
 
 // This element view is made of four total views.
-@property (nonatomic, retain) UIImageView *imageView;   //Display image preview for image objects
-@property (nonatomic, retain) UILabel *displayLabel;    //Display label floats in the padding
+@property (nonatomic, readwrite, retain) UIImageView *imageView;   //Display image preview for image objects
+@property (nonatomic, readwrite, retain) UILabel *displayLabel;    //Display label floats in the padding
 @property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
 @property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
 //@property (nonatomic, retain) UIView *marginView;       //[self view]

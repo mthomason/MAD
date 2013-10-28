@@ -95,7 +95,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)init {
     self = [super init];
     if (self) {
-        MTLog(@"Init");
         [self initCommon];
     }
     return self;
@@ -152,8 +151,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
     self = [super init];
     if (self) {
-        MTLog(@"Init");
-        
         [self initCommon];
         [self setPrintableSize:printableAreaSize];
         

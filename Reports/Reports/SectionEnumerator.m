@@ -24,7 +24,6 @@
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     self = [super init];
     if (self) {
-        MTLog(@"Alloc");
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         RptqDocument *document = [activeDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
