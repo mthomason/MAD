@@ -47,14 +47,19 @@
     //For testing
     //lastVersionRun = @(1);
     
-//    NSNumber *chinookInstalled = [standardUserDefault objectForKey:chinookInstalledKey];
-    NSURL *chinookUrl = [self chinookDbUrl];
-    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:[chinookUrl path] isDirectory:NO];
-    if (gotChinook == NO) {
-        self.installChinook = YES;
-    } else {
-        self.installChinook = NO;
-    }
+    //NSNumber *chinookInstalled = [standardUserDefault objectForKey:chinookInstalledKey];
+    //if (chinookInstalled == nil) {
+        NSURL *chinookUrl = [self chinookDbUrl];
+        BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:[chinookUrl path] isDirectory:NO];
+        if (gotChinook == NO) {
+            self.installChinook = YES;
+        } else {
+            self.installChinook = NO;
+        }
+
+    //} else {
+    //    [self setInstallChinook: ![chinookInstalled boolValue]];
+    //}
     
     if (lastVersionRun == nil) lastVersionRun = @(1);
     if ([lastVersionRun integerValue] < currentMajorVersion) {

@@ -41,17 +41,6 @@
 
 @implementation MTReportViewerController
 
-- (IBAction)done:(id)sender {
-    NSError *error = nil;
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    [[reportDocument managedObjectContext] save:&error];
-    if (error != nil) {
-        [[reportDocument managedObjectContext] save:&error];
-    }
-    [[self viewControllerDelegate] viewControllerDidFinish: self];
-
-}
-
 - (void)dealloc {
     [_printPageRendererReport release];
     [_sliderPagination release];
@@ -66,7 +55,7 @@
         [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
-
+    
     [_barButtonItemRefresh release];
     [_barButtonItemPrint release];
     [_barButtonItemSendToPdf release];
@@ -128,6 +117,71 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    RptqDocument *document = [RptqDocument activeDocument];
+    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+    [self setPrintPageRendererReport: prtingPageRendererReport];
+    [prtingPageRendererReport release];
+    
+    [[[self navigationController] toolbar] setNeedsLayout];
+    if ([self asyncDelegate]) {
+        __block __weak MTReportViewerController *viewController = self;
+        [[self asyncDelegate] displayContentController:viewController];
+    } else {
+        //__block MTReportViewerController *reportViewer = self;
+        if ([AppDelegate isMadDesigner]) {
+            [self reload:self];
+        }
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([self asyncDelegate] == nil) {
+        RptqDocument *document = [RptqDocument activeDocument];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        RptqQuery *query = [[database hasQueries] anyObject];
+        
+        BOOL hasCachedData = ([query hasQueryCache] != nil);
+        if ([self startedRefresh] == NO && hasCachedData == NO) {
+            [self refresh:self];
+        } else {
+            NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
+            if (lastRefresh != nil) {
+                
+                NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+                [self setLastCacheDate: lastD];
+                [lastD release];
+                [self updateLateRefreshedLabel:self];
+                
+            }
+        }
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    // FIXME: This has to be cleared, or the cache grows, and grows.
+    [self setPrintPageRendererReport:nil];
+    
+    if ([self timerLabelTimeSinceRefreh] != nil) {
+        if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+            if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                [[self timerLabelTimeSinceRefreh] invalidate];
+            }
+        }
+        [self setTimerLabelTimeSinceRefreh:nil];
+    }
+
+}
+
 - (void)sliderChangedPage:(id)sender {
     UISlider *slider = (UISlider *)sender;
     float sliderIndex = lroundf([slider value]); // Rounds float to an integer
@@ -183,57 +237,15 @@
     [[[self navigationItem] titleView] sizeToFit];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    RptqDocument *document = [RptqDocument activeDocument];
-    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-    [self setPrintPageRendererReport: prtingPageRendererReport];
-    [prtingPageRendererReport release];
-
-    [[[self navigationController] toolbar] setNeedsLayout];
-    if ([self asyncDelegate]) {
-        __block __weak MTReportViewerController *viewController = self;
-        [[self asyncDelegate] displayContentController:viewController];
-    } else {
-        //__block MTReportViewerController *reportViewer = self;
-        if ([AppDelegate isMadDesigner]) {
-            [self reload:self];
-        }
+- (IBAction)done:(id)sender {
+    NSError *error = nil;
+    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    [[reportDocument managedObjectContext] save:&error];
+    if (error != nil) {
+        [[reportDocument managedObjectContext] save:&error];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    if ([self asyncDelegate] == nil) {
-        [self viewDidAppearLogic];
-    }
-}
-
-- (void)viewDidAppearLogic {
+    [[self viewControllerDelegate] viewControllerDidFinish: self];
     
-    RptqDocument *document = [RptqDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    
-    BOOL hasCachedData = ([query hasQueryCache] != nil);
-    if ([self startedRefresh] == NO && hasCachedData == NO) {
-                    [self refresh:self];
-    } else {
-        NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
-        if (lastRefresh != nil) {
-            
-            NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
-            [self setLastCacheDate: lastD];
-            [lastD release];
-            [self updateLateRefreshedLabel:self];
-            
-        }
-    }
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
@@ -302,18 +314,6 @@
         [reportViewer setTimerLabelTimeSinceRefreh:t];
         [t release];
         
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if ([self timerLabelTimeSinceRefreh] != nil) {
-        if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-            if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                [[self timerLabelTimeSinceRefreh] invalidate];
-            }
-        }
-        [self setTimerLabelTimeSinceRefreh:nil];
     }
 }
 

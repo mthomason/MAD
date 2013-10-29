@@ -300,8 +300,8 @@
                         NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
                         [resultsForRow setObject:value forKey:fieldName];
                     }
-                    [results addObject:resultsForRow];
                 }
+                [results addObject:resultsForRow];
                 [resultsForRow release];
 
             }
