@@ -203,7 +203,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     
     CGContextRef context = UIGraphicsGetCurrentContext();
 
-    CGFloat cornerSize = isPad ? 10.0000f : 5.0000f * scale;
+    CGFloat cornerSize = (isPad ? 10.0000f : 5.0000f) * scale;
     CGMutablePathRef cornerPath = CGPathCreateMutable();
     CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
     CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
@@ -227,7 +227,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
     for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
         int zigNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
-        CGFloat zigDistance = pow(zigNumber, 1.0001) + zigNumber;
+        CGFloat zigReal = zigNumber / scale;
+        CGFloat zigDistance = pow(zigNumber, 1.0001) + zigReal;
         CGFloat zigX = topRightPoint.x - zigDistance;
         CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
         CGPoint zigPoint = CGPointMake(zigX, zigY);
@@ -252,9 +253,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
         
         int zagNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
-
+        CGFloat zagReal = zagNumber / scale;
         CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
-        CGFloat zagDistance = pow(zagNumber, 1.01) + zagNumber;
+        CGFloat zagDistance = pow(zagNumber, 1.0001) + zagReal;
         CGFloat zagY = bottomRightPoint.y - zagDistance;
         CGPoint zagPoint = CGPointMake(zagX, zagY);
         CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);

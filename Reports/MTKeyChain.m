@@ -28,6 +28,9 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
 @property (nonatomic, retain) UIAlertView *firstAlertView;
 
+@property (nonatomic, retain) UITextField *textFieldOne;
+@property (nonatomic, retain) UITextField *textFieldTwo;
+
 @end
 
 @implementation MTKeyChain
@@ -259,35 +262,48 @@ const NSUInteger tagAlertViewAquire         = 666;
         }
         case stateGetPassword: {
             //Username found.  What about password?
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                NSString *username = [[[NSString alloc] initWithData:queryUsernameData
-                                                            encoding:NSUTF8StringEncoding] autorelease];
-                [self setCredentialsUsername:username];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password"
-                                                                    message:@"Please enter your password."
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"Cancel"
-                                                          otherButtonTitles:@"Continue", nil];
-                [alertView setAlertViewStyle:UIAlertViewStyleSecureTextInput];
-                [alertView setTag:tagAlertViewAquire];
-                [alertView show];
-                [alertView release];
-            //});
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSString *username = [[[NSString alloc] initWithData:queryUsernameData
+                                                                encoding:NSUTF8StringEncoding] autorelease];
+                    [self setCredentialsUsername:username];
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password"
+                                                                        message:@"Please enter your password."
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"Cancel"
+                                                              otherButtonTitles:@"Continue", nil];
+                    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+                    [alertView setTag:tagAlertViewAquire];
+                    [alertView setDelegate:self];
+                    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
+                    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
+                    [alertView show];
+                    [alertView release];
+
+                
+                });
+            });
             break;
         }
         case stateGetUsernameAndPassword: {
             //Username found.  What about password?
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
-                                                                    message:@"Please enter your credentials."
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"Cancel"
-                                                          otherButtonTitles:@"Continue", nil];
-                [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-                [alertView setTag:tagAlertViewAquire];
-                [alertView show];
-                [alertView release];
-            //});
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
+                                                                        message:@"Please enter your credentials."
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"Cancel"
+                                                              otherButtonTitles:@"Continue", nil];
+                    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+                    [alertView setDelegate:self];
+                    [alertView setTag:tagAlertViewAquire];
+                    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
+                    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
+                    [alertView show];
+                    [alertView release];
+                });
+            });
             break;
         }
         default:
@@ -389,7 +405,9 @@ const NSUInteger tagAlertViewAquire         = 666;
         default:
             break;
     }
-    
+    [self setTextFieldOne:nil];
+    [self setTextFieldTwo:nil];
+
 }
 
 - (void)alertViewCancel:(UIAlertView *)alertView {

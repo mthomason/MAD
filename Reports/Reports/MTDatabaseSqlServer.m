@@ -1440,9 +1440,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     
     NSString *key = [MTKeyChain keyForServer:[credentals server] port:[credentals port] andDatabase:[credentals database]];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
+        
         if (success) {
             [username retain]; [password retain];
-            
             
             [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                 
@@ -1517,10 +1517,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     completion(nil, success, error);
                 }
             }];
+
             [username release]; [password release];
         } else {
             completion(nil, NO, connectionError);
         }
+
     }];
     
 }

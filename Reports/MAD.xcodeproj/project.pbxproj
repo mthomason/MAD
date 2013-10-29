@@ -3390,12 +3390,12 @@
 		4C0EF6CB178A9690007BF2AE /* iOS7 */ = {
 			isa = PBXGroup;
 			children = (
-				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
-				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 				4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */,
 				4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */,
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
 				4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */,
+				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
+				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 			);
 			name = iOS7;
 			sourceTree = "<group>";
