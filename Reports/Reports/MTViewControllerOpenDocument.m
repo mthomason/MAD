@@ -123,9 +123,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
     if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
         //__block MTViewControllerOpenDocument *blockSelf = self;
-        [self dismissViewControllerAnimated:YES completion:^{
+        //[self dismissViewControllerAnimated:YES completion:^{
             [blockSelf updateFileList:blockSelf];
-        }];
+        //}];
     } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
         //[self updateFileList:blockSelf];
     } else {
