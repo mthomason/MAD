@@ -367,7 +367,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
+        if (menuItems == nil) {
+            menuItems = [[NSMutableArray alloc] init];
+        }
+        UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
+                                                          action: @selector(rename:)];
+        [menuItems addObject:menuItem];
+        [menu setMenuItems:menuItems];
+        [menuItem release];
+        [menuItems release];
+    });
+
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             static dispatch_once_t onceToken;
@@ -379,14 +394,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
                 UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
                                                                   action: @selector(email:)];
-                UIMenuItem *menuItem2 = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
-                                                                  action: @selector(rename:)];
-
                 [menuItems addObject:menuItem];
-                [menuItems addObject:menuItem2];
                 [menu setMenuItems:menuItems];
                 [menuItem release];
-                [menuItem2 release];
                 [menuItems release];
             });
 
@@ -398,20 +408,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             }
             
         } else {
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                UIMenuController *menu = [UIMenuController sharedMenuController];
-                NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
-                if (menuItems == nil) {
-                    menuItems = [[NSMutableArray alloc] init];
-                }
-                UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
-                                                                  action: @selector(rename:)];
-                [menuItems addObject:menuItem];
-                [menu setMenuItems:menuItems];
-                [menuItem release];
-                [menuItems release];
-            });
 
         }
     }];
@@ -1119,11 +1115,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         } else {
             
             [documentReport performAsynchronousFileAccessUsingBlock:^{
-                NSError *fileWrapperError = nil;
-                NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL:[documentReport fileURL] options:NSFileWrapperReadingImmediate | NSFileWrapperReadingWithoutMapping error:&fileWrapperError];
-                
-                if (fileWrapperError == nil) {
-                    NSData *data = [[fileWrapper serializedRepresentation] retain];
+                NSData *data = [NSData dataWithContentsOfURL:[documentReport fileURL]];
+                if (data) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         
                         NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
@@ -1151,12 +1144,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         [messageBody release];
                         
                     });
-                    
-                } else {
-                    [fileWrapperError presentErrorToUser];
                 }
-                
-                [fileWrapper release];
             }];
         }
         

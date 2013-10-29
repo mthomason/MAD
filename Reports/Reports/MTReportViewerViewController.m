@@ -196,7 +196,11 @@
         [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
             if (finished) {
                 [[pageOne view] setNeedsDisplay];
-                [MTReportViewerController resetScreen:reportViewer];
+                [[reportViewer labelDateLastRefreshed] setHidden:NO];
+                [reportViewer setUpdatingOfTimerIsPaused:NO];
+                //[sender updateLateRefreshedLabel:sender];
+                [reportViewer setIsRefreshing:NO];
+
             }
             
         }];
@@ -500,25 +504,6 @@
     });
 }
 
-- (void)resetScreen {
-    [MTReportViewerController resetScreen:self];
-}
-
-+ (void)resetScreen:(MTReportViewerController *)sender {
-    
-    [[sender barButtonItemRefresh] setEnabled:YES];
-    [[sender barButtonItemDone] setEnabled:YES];
-    [[sender barButtonItemPrint] setEnabled:YES];
-    [[sender barButtonItemSendToPdf] setEnabled:YES];
-    
-    [[sender labelDateLastRefreshed] setHidden:NO];
-    [sender setUpdatingOfTimerIsPaused:NO];
-    //[sender updateLateRefreshedLabel:sender];
-    [sender setIsRefreshing:NO];
-    [[sender barButtonItemRefresh] setEnabled:YES];
-    
-}
-
 - (IBAction)sendToPdf:(id)sender {
     
 
@@ -530,9 +515,12 @@
     [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Exporting data.", @"Exporting data.")];
     [[self labelDateLastRefreshed] setNeedsDisplay];
     
+    for (UITabBarItem *i in [[[self tabBarController] tabBar] items]) {
+        [i setEnabled:NO];
+    }
     __block MTReportViewerController *reportViewer = self;
 
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queuePriorityBackground, ^{
         
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
@@ -540,17 +528,20 @@
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
         [printPageRender writeToPdf:temporaryFile];
         [printPageRender release];
-        
+        __block MTReportViewerController *blockReportViewer = reportViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [reportViewer setUpdatingOfTimerIsPaused:NO];
-            [reportViewer updateLateRefreshedLabel:reportViewer];
-            [[reportViewer barButtonItemRefresh] setEnabled:YES];
-            [[reportViewer barButtonItemDone] setEnabled:YES];
-            [[reportViewer barButtonItemPrint] setEnabled:YES];
-            [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
+            [blockReportViewer setUpdatingOfTimerIsPaused:NO];
+            [blockReportViewer updateLateRefreshedLabel:reportViewer];
+            [[blockReportViewer barButtonItemRefresh] setEnabled:YES];
+            [[blockReportViewer barButtonItemDone] setEnabled:YES];
+            [[blockReportViewer barButtonItemPrint] setEnabled:YES];
+            [[blockReportViewer barButtonItemSendToPdf] setEnabled:YES];
             
+            for (UITabBarItem *i in [[[blockReportViewer tabBarController] tabBar] items]) {
+                [i setEnabled:YES];
+            }
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
-            [c setDelegate:reportViewer];
+            [c setDelegate:blockReportViewer];
             [c presentPreviewAnimated:YES];
         });
 

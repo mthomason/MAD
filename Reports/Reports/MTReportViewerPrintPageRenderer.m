@@ -1037,18 +1037,22 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     if ([data isKindOfClass:[NSArray class]]) {
         resultData = [data retain];
     } else {
-        id subData = [[data objectForKey:[keys objectAtIndex:0]] retain];
-        NSArray *subKeys = nil;
-        if ([keys count] > 1) {
-            NSRange range = NSMakeRange(1, [keys count] - 1);
-            subKeys = [[[keys objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]] retain] autorelease];
-            resultData = [[self dataForCachedGroupData:subData andKeys:subKeys] retain];
-        } else if ([keys count] == 1) {
-            resultData = [subData retain];
+        if ([keys count] > 0) {
+            id subData = [[data objectForKey:[keys objectAtIndex:0]] retain];
+            NSArray *subKeys = nil;
+            if ([keys count] > 1) {
+                NSRange range = NSMakeRange(1, [keys count] - 1);
+                subKeys = [[[keys objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]] retain] autorelease];
+                resultData = [[self dataForCachedGroupData:subData andKeys:subKeys] retain];
+            } else if ([keys count] == 1) {
+                resultData = [subData retain];
+            } else {
+                resultData = [subData retain];
+            }
+            [subData release];
         } else {
-            resultData = [subData retain];
+            resultData = @[];
         }
-        [subData release];
     }
     return [resultData autorelease];
 }

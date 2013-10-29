@@ -893,6 +893,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         if (querySection == MTQuerySectionsLinks) {
                             
                             NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
+                            NSFetchedResultsController *fetchedLinkes = [[self fetchedResultsControllerLinks] retain];
                             for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
                                 NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
                                 NSError *error = nil;
@@ -902,7 +903,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                     object = [[[managedObjectContext existingObjectWithID:[tableViewCellLink tableID] error:&error] retain] autorelease];
                                 } else {
                                     NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    object = [[[[self fetchedResultsControllerLinks] objectAtIndexPath:testLinkIndexPath] retain] autorelease];
+                                    
+                                    object = [[[fetchedLinkes objectAtIndexPath:testLinkIndexPath] retain] autorelease];
                                 }
                                 if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
                                     RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
@@ -912,12 +914,15 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                         [tableRightObjectId isEqual:deleatedTableObjectId]
                                         ) {
                                         [RptqQueryLinks deleteLinkWithID:[queryLink objectID] fromObjectContext:managedObjectContext];
-                                        [managedObjectContext save:&error];
                                         [cellsToDelete addObject:linkIndexPath];
                                     }
                                 }
                                 [tableViewCellLink release];
                             }
+                            NSError *error = nil;
+                            [managedObjectContext save:&error];
+
+                            [fetchedLinkes release];
                             
                         } else if (querySection == MTQuerySectionsGroups) {
                             
