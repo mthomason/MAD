@@ -114,7 +114,14 @@
                 [[weakViewController buttonBuyNowViewerOneYear] setHidden:!allowPurchase];
             }
         } else {
-            [weakViewController hideLicensingDetails];
+            
+            [[weakViewController labelsShowWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [obj setHidden: YES];
+            }];
+            [[weakViewController labelsHideWhenActivated] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [obj setHidden: NO];
+            }];
+
             if ([AppDelegate isMadDesigner]) {
                 [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:NO];

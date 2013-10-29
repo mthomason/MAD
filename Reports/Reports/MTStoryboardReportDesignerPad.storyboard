@@ -660,7 +660,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xjW-eQ-hil" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="770" y="2468"/>
+            <point key="canvasLocation" x="684" y="2507"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tGV-wD-tHP">
@@ -5228,10 +5228,10 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="HXO-EB-fZN" customClass="MTCollectionViewCellDocument">
-                                <rect key="frame" x="0.0" y="64" width="320" height="360"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="325"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="360"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="325"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlankPad.png" translatesAutoresizingMaskIntoConstraints="NO" id="IDP-Ob-Mrd">
@@ -5260,7 +5260,7 @@
                                     <constraint firstItem="W2j-8j-Cpg" firstAttribute="centerX" secondItem="IDP-Ob-Mrd" secondAttribute="centerX" id="hYX-ON-oit"/>
                                     <constraint firstItem="W2j-8j-Cpg" firstAttribute="top" secondItem="IDP-Ob-Mrd" secondAttribute="bottom" constant="8" id="qc7-Ex-lSD"/>
                                 </constraints>
-                                <size key="customSize" width="320" height="360"/>
+                                <size key="customSize" width="320" height="325"/>
                                 <connections>
                                     <outlet property="imagePreview" destination="IDP-Ob-Mrd" id="7Zz-cE-gaQ"/>
                                     <outlet property="labelTitle" destination="W2j-8j-Cpg" id="ugV-XC-9If"/>

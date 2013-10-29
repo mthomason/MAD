@@ -16,7 +16,7 @@
 #import "MTDatabaseSqlite3.h"
 #import "MAReportDocument.h"
 
-#define MADUPGRADE_CREATE_SAMPLE FALSE
+#define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
 @interface MADUpgradeViewController ()
 
@@ -38,8 +38,8 @@
     BOOL upgradeVersion1 = NO;
     BOOL upgradeVersion2 = NO;
     
-    NSString *lastVersionRunKey = @"lastVersionRun";
-    NSString *chinookInstalledKey = @"chinookInstalled";
+    static NSString *lastVersionRunKey = @"lastVersionRun";
+    static NSString *chinookInstalledKey = @"chinookInstalled";
     NSUserDefaults *standardUserDefault = [NSUserDefaults standardUserDefaults];
     NSInteger currentMajorVersion = 2;
     NSNumber *lastVersionRun = [standardUserDefault objectForKey:lastVersionRunKey];
@@ -47,12 +47,14 @@
     //For testing
     //lastVersionRun = @(1);
     
-    NSNumber *chinookInstalled = [standardUserDefault objectForKey:chinookInstalledKey];
-    if (chinookInstalled == nil) {
-        chinookInstalled = @NO;
+//    NSNumber *chinookInstalled = [standardUserDefault objectForKey:chinookInstalledKey];
+    NSURL *chinookUrl = [self chinookDbUrl];
+    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:[chinookUrl path] isDirectory:NO];
+    if (gotChinook == NO) {
         self.installChinook = YES;
+    } else {
+        self.installChinook = NO;
     }
-    //self.installChinook = YES;
     
     if (lastVersionRun == nil) lastVersionRun = @(1);
     if ([lastVersionRun integerValue] < currentMajorVersion) {
@@ -79,7 +81,10 @@
     
 }
 
-
+- (NSURL *)chinookDbUrl {
+    NSURL *appSupportDirectory = [NSFileManager applicationSupportDirectory];
+    return [appSupportDirectory URLByAppendingPathComponent:@"chinook.sqlite3" isDirectory:NO];
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -99,12 +104,14 @@
         
         if (chinookAppSupportUrl != nil) {
             NSError *error = nil;
-            [defaultManager moveItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
+            [defaultManager copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
             BOOL fileExist = [defaultManager fileExistsAtPath:[chinookAppSupportUrl path]];
             if (fileExist) {
                 NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
                 [standardUserDefaults setObject:@YES forKey:@"chinookInstalled"];
                 [standardUserDefaults synchronize];
+            } else {
+                [defaultManager copyItemAtPath:[fileUrl path] toPath:[chinookAppSupportUrl path] error:&error]; //Try again?!?!
             }
         }
         

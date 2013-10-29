@@ -344,9 +344,9 @@ typedef void(^MTBlockResultVoid)(void);
 
         desiredFrame = [self rectForDesiredRect:desiredFrame];
 
-        NSLayoutConstraint *leftBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:20.0000f];
-        NSLayoutConstraint *rightBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeRight multiplier:1.0000f constant:-20.0000f];
-        NSLayoutConstraint *topBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant:20.0000f];
+        NSLayoutConstraint *leftBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:5.0000f];
+        NSLayoutConstraint *rightBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeRight multiplier:1.0000f constant:-5.0000f];
+        NSLayoutConstraint *topBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeTop multiplier:1.0000f constant:5.0000f];
         NSLayoutConstraint *bottomBorder = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationLessThanOrEqual toItem:[self contentView] attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:-200.0000f];
         [rightBorder setPriority:1000];
         [leftBorder setPriority:1000];
@@ -872,11 +872,13 @@ typedef void(^MTBlockResultVoid)(void);
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
             CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
             MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[[gestureRecognizer view] objectIdTag]];
+            [[viewController view] setCenter:newOrigin];
+            /*
             if (viewController) {
                 [[viewController layoutConstraintX] setConstant:newOrigin.x - [viewController view].bounds.size.width / 2.0000f];
                 [[viewController layoutConstraintY] setConstant:newOrigin.y - [viewController view].bounds.size.height / 2.0000f];
-            }
-            [[viewController view] setNeedsLayout];
+            }*/
+            //[[viewController view] setNeedsLayout];
 //            MTQueryBuilderAdvancedSchemaViewController * [gestureRecognizer view];
 //            [[gestureRecognizer view] setCenter: newCenter];
             
@@ -904,7 +906,7 @@ typedef void(^MTBlockResultVoid)(void);
                 [[viewController layoutConstraintX] setConstant:newOrigin.x - [viewController view].bounds.size.width / 2.0000f];
                 [[viewController layoutConstraintY] setConstant:newOrigin.y - [viewController view].bounds.size.height / 2.0000f];
             }
-            [[viewController view] setNeedsLayout];
+           // [[viewController view] setNeedsLayout];
 
             NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
             RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];

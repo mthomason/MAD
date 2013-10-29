@@ -56,6 +56,31 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @implementation MTViewControllerOpenDocument
 
+- (void)dealloc {
+    [_reportViewer release];
+    [_renameAlertView release];
+    [_barButtonItemEditDone release];
+    [_previewLoadingOperations release];
+    [_tapGestureRecognizer release];
+    [_longPressGestureRecognizer release];
+    [_urlBeingOpended release];
+    [_availableFilesCache release];
+    [_titleView release];
+    [_licensingPopoverController release];
+    [_openDocumentPopoverController release];
+    [_aboutPopoverController release];
+    [_barButtonItemAddNewDocument release];
+    [_barButtonItemLicensing release];
+    [_collectionViewFlowLayout release];
+    [_barButtonItemTitle release];
+    [_barButtonItemEdit release];
+    [_barButtonItemTrash release];
+    [_barButtonItemAction release];
+    [_barButtonItemInformation release];
+    [_barButtonItemAbout release];
+    [super dealloc];
+}
+
 - (void)closeReport {
     
     __block MTViewControllerOpenDocument *blockSelf = self;
@@ -119,15 +144,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [self updateFileList:self];
     
-    __block MTViewControllerOpenDocument *blockSelf = self;
-
     if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
-        //__block MTViewControllerOpenDocument *blockSelf = self;
-        //[self dismissViewControllerAnimated:YES completion:^{
-            [blockSelf updateFileList:blockSelf];
-        //}];
+
     } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
-        //[self updateFileList:blockSelf];
+    
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
@@ -135,31 +155,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self setReportViewer:nil];
     }
 
-}
-
-- (void)dealloc {
-    [_reportViewer release];
-    [_renameAlertView release];
-    [_barButtonItemEditDone release];
-    [_previewLoadingOperations release];
-    [_tapGestureRecognizer release];
-    [_longPressGestureRecognizer release];
-    [_urlBeingOpended release];
-    [_availableFilesCache release];
-    [_titleView release];
-    [_licensingPopoverController release];
-    [_openDocumentPopoverController release];
-    [_aboutPopoverController release];
-    [_barButtonItemAddNewDocument release];
-    [_barButtonItemLicensing release];
-    [_collectionViewFlowLayout release];
-    [_barButtonItemTitle release];
-    [_barButtonItemEdit release];
-    [_barButtonItemTrash release];
-    [_barButtonItemAction release];
-    [_barButtonItemInformation release];
-    [_barButtonItemAbout release];
-    [super dealloc];
 }
 
 - (void)awakeFromNib {

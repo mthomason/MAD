@@ -167,10 +167,10 @@ NSData *appleRootCert(void) {
 
     NSData *cert;
 //    if (YES) {
-        cert = [NSData dataWithBytes:iTS_intermediate_cert_der length:iTS_intermediate_cert_der_len];
+//        cert = [NSData dataWithBytes:iTS_intermediate_cert_der length:iTS_intermediate_cert_der_len];
 //    } else {
         //Read from file:
-//        cert = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"]];
+        cert = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"]];
 //    }
     return cert;
 }

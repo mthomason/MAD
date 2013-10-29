@@ -331,6 +331,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
 }
 
 - (void)viewWillLayoutSubviews {
