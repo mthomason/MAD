@@ -647,41 +647,31 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 
                                 CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;
                                 CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;
-                                CGRect paddingFrame = [item paddingViewFrame];
-                                CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, paddingFrame.size.width, paddingFrame.size.height);
+                                
+                                CGFloat originPointXPadding = originPointX + [[item paddingLeft] floatValue] + [[item marginLeft] floatValue];
+                                CGFloat originPointYPadding = originPointY + [[item paddingTop] floatValue] + [[item marginTop] floatValue];
+
+                                CGFloat sizeWidthPadding = originPointX + [[item sizewidth] floatValue] + [[item paddingRight] floatValue] + [[item marginRight] floatValue];
+                                CGFloat sizeHeightPadding = originPointY + [[item sizeheight] floatValue] + [[item paddingBottom] floatValue] + [[item marginBottom] floatValue];
+
+                                
+                                //CGRect paddingFrame = [item paddingViewFrame];
+                                CGRect elementCanvasRect = CGRectMake(originPointXPadding, originPointYPadding, sizeWidthPadding, sizeHeightPadding);
                                 
                                 if (drawingObject == nil) {
                                     
-                                    if ([UIDevice isLagacyOS]) {
-                                        
-                                        
-                                        NSDictionary *attributes = [self attributesForDocumentObject:item];
-                                        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:displayString];
-                                        
-                                        [attributedString setAttributes: attributes range:NSRangeFromString(displayString)];
-                                        
-                                        NSDictionary *psAttributes = @{
-                                                                       @"s" : attributedString,
-                                                                       @"r" : NSStringFromCGRect(elementCanvasRect)
-                                                                       };
-                                        [printableStrings addObject:psAttributes];
-                                        
-                                        [attributedString drawInRect:elementCanvasRect];
-                                        [attributedString release];
-                                    } else {
-                                        NSDictionary *attributes = [self attributesForDocumentObject:item];
-                                        
-                                        // FIXME: This hack gets around known iOS7 bug.
-                                        //          Want to draw the fucking rect without
-                                        //          having to do a fucking translation.
-                                        
-                                        CGContextSaveGState(ctx);
-                                        {
-                                            CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
-                                            [displayString drawInRect:CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height) withAttributes:attributes];
-                                        }
-                                        CGContextRestoreGState(ctx);
+                                    NSDictionary *attributes = [self attributesForDocumentObject:item];
+                                    
+                                    // FIXME: This hack gets around known iOS7 bug.
+                                    //          Want to draw the fucking rect without
+                                    //          having to do a fucking translation.
+                                    
+                                    CGContextSaveGState(ctx);
+                                    {
+                                        CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
+                                        [displayString drawInRect:CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height) withAttributes:attributes];
                                     }
+                                    CGContextRestoreGState(ctx);
                                     
                                 } else {
                                     
